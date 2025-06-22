@@ -1,4 +1,5 @@
 
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Search, Package, MapPin, User, LogOut } from "lucide-react";
@@ -14,13 +15,15 @@ const Index = () => {
       {/* Header */}
       <header className="p-4 sm:p-6 text-center border-b bg-white/80 backdrop-blur-sm">
         <div className="flex items-center justify-between mb-4 sm:mb-6">
-          <div className="flex items-center gap-4">
+          <div className="flex-1"></div>
+          
+          <div className="flex items-center gap-4 justify-center">
             <img 
               src="/lovable-uploads/23312658-5ff6-4d89-a7cb-c0fbf631cd1c.png" 
               alt="PartMatch Logo" 
               className="h-16 w-auto sm:h-20 lg:h-24"
             />
-            <div className="text-left">
+            <div className="text-center">
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-playfair font-bold text-gray-900">PartMatch</h1>
               <p className="text-sm sm:text-base lg:text-lg font-crimson italic text-gray-600">Automotive Excellence</p>
             </div>
@@ -129,3 +132,4 @@ const Index = () => {
 };
 
 export default Index;
+
