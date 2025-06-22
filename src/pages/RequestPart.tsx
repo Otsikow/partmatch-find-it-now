@@ -6,11 +6,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Upload, CheckCircle } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 const RequestPart = () => {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     make: '',
     model: '',
@@ -21,19 +24,60 @@ const RequestPart = () => {
     location: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Simulate submission
-    console.log('Part request submitted:', formData);
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to submit a part request.",
+        variant: "destructive"
+      });
+      navigate('/auth');
+      return;
+    }
+
+    setLoading(true);
     
-    // Show success state
-    setSubmitted(true);
-    
-    toast({
-      title: "Request Submitted!",
-      description: "We'll contact you when a supplier is found.",
-    });
+    try {
+      const { error } = await supabase
+        .from('part_requests')
+        .insert([
+          {
+            owner_id: user.id,
+            car_make: formData.make,
+            car_model: formData.model,
+            car_year: parseInt(formData.year),
+            part_needed: formData.part,
+            description: formData.description,
+            location: formData.location,
+            phone: formData.phone
+          }
+        ]);
+
+      if (error) {
+        throw error;
+      }
+
+      setSubmitted(true);
+      
+      toast({
+        title: "Request Submitted!",
+        description: "We'll contact you when a supplier is found.",
+      });
+    } catch (error: any) {
+      console.error('Error submitting request:', error);
+      toast({
+        title: "Submission Failed",
+        description: error.message || "Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -185,8 +229,12 @@ const RequestPart = () => {
               </div>
             </div>
 
-            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 py-2.5 sm:py-3 text-base sm:text-lg rounded-xl mt-6">
-              Send Request
+            <Button 
+              type="submit" 
+              className="w-full bg-blue-600 hover:bg-blue-700 py-2.5 sm:py-3 text-base sm:text-lg rounded-xl mt-6"
+              disabled={loading}
+            >
+              {loading ? 'Submitting...' : 'Send Request'}
             </Button>
           </form>
         </Card>

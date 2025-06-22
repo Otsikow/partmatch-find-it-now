@@ -9,7 +9,308 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      notifications: {
+        Row: {
+          created_at: string | null
+          id: string
+          message: string
+          recipient: string
+          sent: boolean | null
+          sent_at: string | null
+          type: Database["public"]["Enums"]["notification_type"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          message: string
+          recipient: string
+          sent?: boolean | null
+          sent_at?: string | null
+          type: Database["public"]["Enums"]["notification_type"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          message?: string
+          recipient?: string
+          sent?: boolean | null
+          sent_at?: string | null
+          type?: Database["public"]["Enums"]["notification_type"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      offers: {
+        Row: {
+          contact_unlocked: boolean | null
+          created_at: string | null
+          id: string
+          message: string | null
+          photo_url: string | null
+          price: number
+          request_id: string
+          status: Database["public"]["Enums"]["offer_status"] | null
+          supplier_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          contact_unlocked?: boolean | null
+          created_at?: string | null
+          id?: string
+          message?: string | null
+          photo_url?: string | null
+          price: number
+          request_id: string
+          status?: Database["public"]["Enums"]["offer_status"] | null
+          supplier_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          contact_unlocked?: boolean | null
+          created_at?: string | null
+          id?: string
+          message?: string | null
+          photo_url?: string | null
+          price?: number
+          request_id?: string
+          status?: Database["public"]["Enums"]["offer_status"] | null
+          supplier_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "offers_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "part_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "offers_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      part_requests: {
+        Row: {
+          car_make: string
+          car_model: string
+          car_year: number
+          created_at: string | null
+          description: string | null
+          id: string
+          location: string
+          owner_id: string
+          part_needed: string
+          phone: string
+          photo_url: string | null
+          status: Database["public"]["Enums"]["request_status"] | null
+          updated_at: string | null
+        }
+        Insert: {
+          car_make: string
+          car_model: string
+          car_year: number
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          location: string
+          owner_id: string
+          part_needed: string
+          phone: string
+          photo_url?: string | null
+          status?: Database["public"]["Enums"]["request_status"] | null
+          updated_at?: string | null
+        }
+        Update: {
+          car_make?: string
+          car_model?: string
+          car_year?: number
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          location?: string
+          owner_id?: string
+          part_needed?: string
+          phone?: string
+          photo_url?: string | null
+          status?: Database["public"]["Enums"]["request_status"] | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "part_requests_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payments: {
+        Row: {
+          amount: number
+          created_at: string | null
+          currency: string | null
+          id: string
+          offer_id: string | null
+          payer_id: string
+          payment_method: string | null
+          payment_reference: string | null
+          status: Database["public"]["Enums"]["payment_status"] | null
+          updated_at: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          offer_id?: string | null
+          payer_id: string
+          payment_method?: string | null
+          payment_reference?: string | null
+          status?: Database["public"]["Enums"]["payment_status"] | null
+          updated_at?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          offer_id?: string | null
+          payer_id?: string
+          payment_method?: string | null
+          payment_reference?: string | null
+          status?: Database["public"]["Enums"]["payment_status"] | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_offer_id_fkey"
+            columns: ["offer_id"]
+            isOneToOne: false
+            referencedRelation: "offers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_payer_id_fkey"
+            columns: ["payer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          first_name: string | null
+          id: string
+          is_blocked: boolean | null
+          is_verified: boolean | null
+          last_name: string | null
+          location: string | null
+          phone: string | null
+          rating: number | null
+          total_ratings: number | null
+          updated_at: string | null
+          user_type: Database["public"]["Enums"]["user_type"]
+        }
+        Insert: {
+          created_at?: string | null
+          first_name?: string | null
+          id: string
+          is_blocked?: boolean | null
+          is_verified?: boolean | null
+          last_name?: string | null
+          location?: string | null
+          phone?: string | null
+          rating?: number | null
+          total_ratings?: number | null
+          updated_at?: string | null
+          user_type?: Database["public"]["Enums"]["user_type"]
+        }
+        Update: {
+          created_at?: string | null
+          first_name?: string | null
+          id?: string
+          is_blocked?: boolean | null
+          is_verified?: boolean | null
+          last_name?: string | null
+          location?: string | null
+          phone?: string | null
+          rating?: number | null
+          total_ratings?: number | null
+          updated_at?: string | null
+          user_type?: Database["public"]["Enums"]["user_type"]
+        }
+        Relationships: []
+      }
+      ratings: {
+        Row: {
+          comment: string | null
+          created_at: string | null
+          id: string
+          rated_id: string
+          rater_id: string
+          rating: number
+          request_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string | null
+          id?: string
+          rated_id: string
+          rater_id: string
+          rating: number
+          request_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string | null
+          id?: string
+          rated_id?: string
+          rater_id?: string
+          rating?: number
+          request_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ratings_rated_id_fkey"
+            columns: ["rated_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ratings_rater_id_fkey"
+            columns: ["rater_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ratings_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "part_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -18,7 +319,16 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      notification_type: "sms" | "whatsapp" | "email"
+      offer_status: "pending" | "accepted" | "rejected" | "expired"
+      payment_status: "pending" | "completed" | "failed" | "refunded"
+      request_status:
+        | "pending"
+        | "offer_received"
+        | "contact_unlocked"
+        | "completed"
+        | "cancelled"
+      user_type: "owner" | "supplier" | "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -133,6 +443,18 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      notification_type: ["sms", "whatsapp", "email"],
+      offer_status: ["pending", "accepted", "rejected", "expired"],
+      payment_status: ["pending", "completed", "failed", "refunded"],
+      request_status: [
+        "pending",
+        "offer_received",
+        "contact_unlocked",
+        "completed",
+        "cancelled",
+      ],
+      user_type: ["owner", "supplier", "admin"],
+    },
   },
 } as const

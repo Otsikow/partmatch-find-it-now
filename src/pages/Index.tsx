@@ -1,20 +1,47 @@
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Search, Package, MapPin } from "lucide-react";
+import { Search, Package, MapPin, User, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
+  const { user, signOut } = useAuth();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
       {/* Header */}
       <header className="p-4 sm:p-6 text-center border-b bg-white/80 backdrop-blur-sm">
-        <div className="flex items-center justify-center gap-3 mb-3">
-          <img 
-            src="/lovable-uploads/23312658-5ff6-4d89-a7cb-c0fbf631cd1c.png" 
-            alt="PartMatch Logo" 
-            className="h-12 w-auto sm:h-16"
-          />
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-3">
+            <img 
+              src="/lovable-uploads/23312658-5ff6-4d89-a7cb-c0fbf631cd1c.png" 
+              alt="PartMatch Logo" 
+              className="h-12 w-auto sm:h-16"
+            />
+          </div>
+          
+          {user ? (
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-600">Welcome back!</span>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={signOut}
+                className="text-gray-600 hover:text-gray-800"
+              >
+                <LogOut className="h-4 w-4 mr-1" />
+                Sign Out
+              </Button>
+            </div>
+          ) : (
+            <Link to="/auth">
+              <Button variant="outline" size="sm">
+                <User className="h-4 w-4 mr-1" />
+                Sign In
+              </Button>
+            </Link>
+          )}
         </div>
         <p className="text-gray-600 text-sm sm:text-base max-w-md mx-auto">
           Connect with trusted local car part suppliers
@@ -83,11 +110,13 @@ const Index = () => {
         </div>
 
         {/* Admin Access */}
-        <div className="mt-6 sm:mt-8 text-center">
-          <Link to="/admin" className="text-xs sm:text-sm text-gray-500 hover:text-gray-700">
-            Admin Dashboard
-          </Link>
-        </div>
+        {user && (
+          <div className="mt-6 sm:mt-8 text-center">
+            <Link to="/admin" className="text-xs sm:text-sm text-gray-500 hover:text-gray-700">
+              Admin Dashboard
+            </Link>
+          </div>
+        )}
       </main>
     </div>
   );
