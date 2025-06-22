@@ -1,5 +1,3 @@
-
-
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Search, Package, MapPin, User, LogOut } from "lucide-react";
@@ -19,12 +17,12 @@ const Index = () => {
           {user ? (
             <div className="flex items-center gap-2">
               <NotificationBell />
-              <span className="text-sm font-crimson text-gray-600">Welcome back!</span>
+              <span className="text-base sm:text-lg font-crimson text-gray-600">Welcome back!</span>
               <Button 
                 variant="ghost" 
                 size="sm"
                 onClick={signOut}
-                className="text-gray-600 hover:text-gray-800 font-inter hover:bg-white/50"
+                className="text-gray-600 hover:text-gray-800 font-inter hover:bg-white/50 text-base"
               >
                 <LogOut className="h-4 w-4 mr-1" />
                 Sign Out
@@ -32,7 +30,7 @@ const Index = () => {
             </div>
           ) : (
             <Link to="/auth">
-              <Button variant="outline" size="sm" className="font-inter border-blue-200 hover:bg-blue-50">
+              <Button variant="outline" size="sm" className="font-inter border-blue-200 hover:bg-blue-50 text-base">
                 <User className="h-4 w-4 mr-1" />
                 Sign In
               </Button>
@@ -46,20 +44,20 @@ const Index = () => {
             <img 
               src="/lovable-uploads/23312658-5ff6-4d89-a7cb-c0fbf631cd1c.png" 
               alt="PartMatch Logo" 
-              className="h-20 w-auto sm:h-24 lg:h-28 drop-shadow-lg"
+              className="h-24 w-auto sm:h-28 lg:h-32 drop-shadow-lg"
             />
             <div className="text-center">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-playfair font-bold bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-700 bg-clip-text text-transparent">
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-playfair font-bold bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-700 bg-clip-text text-transparent">
                 PartMatch
               </h1>
-              <p className="text-base sm:text-lg lg:text-xl font-crimson italic bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              <p className="text-xl sm:text-2xl lg:text-3xl font-crimson italic bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                 Automotive Excellence
               </p>
             </div>
           </div>
         </div>
         
-        <p className="text-gray-700 text-sm sm:text-base max-w-md mx-auto font-crimson leading-relaxed text-center">
+        <p className="text-gray-700 text-base sm:text-lg max-w-md mx-auto font-crimson leading-relaxed text-center">
           Connect with trusted local car part suppliers — with automated notifications and secure payments
         </p>
       </header>
@@ -145,4 +143,3 @@ const Index = () => {
 };
 
 export default Index;
-
