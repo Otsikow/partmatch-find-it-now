@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Search, Package, MapPin, User, LogOut } from "lucide-react";
@@ -12,16 +13,16 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white font-inter">
       {/* Header */}
       <header className="p-4 sm:p-6 text-center border-b bg-white/80 backdrop-blur-sm">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
+          <div className="flex items-center gap-4">
             <img 
               src="/lovable-uploads/23312658-5ff6-4d89-a7cb-c0fbf631cd1c.png" 
               alt="PartMatch Logo" 
-              className="h-12 w-auto sm:h-16"
+              className="h-16 w-auto sm:h-20 lg:h-24"
             />
             <div className="text-left">
-              <h1 className="text-2xl sm:text-3xl font-playfair font-bold text-gray-900">PartMatch</h1>
-              <p className="text-xs sm:text-sm font-crimson italic text-gray-600">Automotive Excellence</p>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-playfair font-bold text-gray-900">PartMatch</h1>
+              <p className="text-sm sm:text-base lg:text-lg font-crimson italic text-gray-600">Automotive Excellence</p>
             </div>
           </div>
           
