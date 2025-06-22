@@ -1,9 +1,9 @@
-
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Search, Package, MapPin, User, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import NotificationBell from "@/components/NotificationBell";
 
 const Index = () => {
   const { user, signOut } = useAuth();
@@ -23,6 +23,7 @@ const Index = () => {
           
           {user ? (
             <div className="flex items-center gap-2">
+              <NotificationBell />
               <span className="text-sm text-gray-600">Welcome back!</span>
               <Button 
                 variant="ghost" 
@@ -44,7 +45,7 @@ const Index = () => {
           )}
         </div>
         <p className="text-gray-600 text-sm sm:text-base max-w-md mx-auto">
-          Connect with trusted local car part suppliers
+          Connect with trusted local car part suppliers - with automated notifications and secure payments
         </p>
       </header>
 

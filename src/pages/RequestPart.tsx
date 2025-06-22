@@ -10,6 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { checkAntiSpam, triggerNotification } from "@/utils/antiSpam";
 
 const RequestPart = () => {
   const [submitted, setSubmitted] = useState(false);
@@ -43,7 +44,29 @@ const RequestPart = () => {
     setLoading(true);
     
     try {
-      const { error } = await supabase
+      // Anti-spam check
+      const spamCheck = await checkAntiSpam(
+        formData.phone,
+        user.id,
+        {
+          car_make: formData.make,
+          car_model: formData.model,
+          part_needed: formData.part,
+          description: formData.description
+        }
+      );
+
+      if (!spamCheck.allowed) {
+        toast({
+          title: "Request Blocked",
+          description: spamCheck.message || "Your request was blocked by our spam filter.",
+          variant: "destructive"
+        });
+        setLoading(false);
+        return;
+      }
+
+      const { data: request, error } = await supabase
         .from('part_requests')
         .insert([
           {
@@ -56,17 +79,22 @@ const RequestPart = () => {
             location: formData.location,
             phone: formData.phone
           }
-        ]);
+        ])
+        .select()
+        .single();
 
       if (error) {
         throw error;
       }
 
+      // Trigger automated notifications to suppliers
+      await triggerNotification('new_request', { requestId: request.id });
+
       setSubmitted(true);
       
       toast({
         title: "Request Submitted!",
-        description: "We'll contact you when a supplier is found.",
+        description: "We're notifying suppliers in your area. You'll hear from them soon.",
       });
     } catch (error: any) {
       console.error('Error submitting request:', error);
@@ -89,9 +117,9 @@ const RequestPart = () => {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center p-4">
         <Card className="w-full max-w-sm sm:max-w-md p-6 sm:p-8 text-center">
           <CheckCircle className="h-12 w-12 sm:h-16 sm:w-16 text-green-600 mx-auto mb-4" />
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3">Thank You!</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3">Request Sent!</h2>
           <p className="text-gray-600 text-sm sm:text-base mb-6">
-            We're finding your part. You'll be contacted via WhatsApp soon.
+            We've automatically notified suppliers in your area. You'll receive offers via WhatsApp soon.
           </p>
           <Link to="/">
             <Button className="w-full bg-blue-600 hover:bg-blue-700">
@@ -127,7 +155,7 @@ const RequestPart = () => {
         <Card className="p-4 sm:p-6">
           <div className="text-center mb-4 sm:mb-6">
             <h2 className="text-lg sm:text-xl font-semibold mb-2">Tell us what you need</h2>
-            <p className="text-gray-600 text-sm">We'll connect you with local suppliers</p>
+            <p className="text-gray-600 text-sm">We'll automatically notify suppliers in your area</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
