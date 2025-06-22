@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -118,75 +117,83 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-100 font-inter">
       {/* Header */}
-      <header className="p-4 flex items-center gap-3 bg-white/80 backdrop-blur-sm border-b">
+      <header className="p-4 sm:p-6 flex items-center gap-3 bg-gradient-to-r from-white/90 via-purple-50/80 to-white/90 backdrop-blur-lg shadow-lg border-b">
         <Link to="/">
-          <Button variant="ghost" size="icon">
-            <ArrowLeft className="h-5 w-5" />
+          <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 hover:bg-white/50">
+            <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
         </Link>
-        <div className="flex items-center gap-2">
-          <Users className="h-6 w-6 text-purple-600" />
-          <h1 className="text-xl font-bold">Admin Dashboard</h1>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Users className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600" />
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">Admin Dashboard</h1>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-6 max-w-6xl">
+      <main className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-6xl">
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <Card className="p-4 text-center">
-            <Clock className="h-8 w-8 text-yellow-600 mx-auto mb-2" />
-            <p className="text-2xl font-bold">{requests.filter(r => r.status === 'pending').length}</p>
-            <p className="text-sm text-gray-600">Pending Requests</p>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+          <Card className="p-4 sm:p-6 text-center bg-gradient-to-br from-white/90 to-yellow-50/50 backdrop-blur-sm shadow-lg border-0 hover:shadow-xl transition-all duration-300">
+            <div className="bg-gradient-to-br from-yellow-500 to-amber-600 rounded-full p-3 w-fit mx-auto mb-3 shadow-lg">
+              <Clock className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
+            </div>
+            <p className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-yellow-600 to-amber-700 bg-clip-text text-transparent">{requests.filter(r => r.status === 'pending').length}</p>
+            <p className="text-sm sm:text-base text-gray-600 font-crimson">Pending Requests</p>
           </Card>
-          <Card className="p-4 text-center">
-            <Users className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-            <p className="text-2xl font-bold">{requests.filter(r => r.status === 'matched').length}</p>
-            <p className="text-sm text-gray-600">Matched</p>
+          <Card className="p-4 sm:p-6 text-center bg-gradient-to-br from-white/90 to-blue-50/50 backdrop-blur-sm shadow-lg border-0 hover:shadow-xl transition-all duration-300">
+            <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full p-3 w-fit mx-auto mb-3 shadow-lg">
+              <Users className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
+            </div>
+            <p className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent">{requests.filter(r => r.status === 'matched').length}</p>
+            <p className="text-sm sm:text-base text-gray-600 font-crimson">Matched</p>
           </Card>
-          <Card className="p-4 text-center">
-            <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
-            <p className="text-2xl font-bold">{requests.filter(r => r.status === 'completed').length}</p>
-            <p className="text-sm text-gray-600">Completed</p>
+          <Card className="p-4 sm:p-6 text-center bg-gradient-to-br from-white/90 to-green-50/50 backdrop-blur-sm shadow-lg border-0 hover:shadow-xl transition-all duration-300">
+            <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-full p-3 w-fit mx-auto mb-3 shadow-lg">
+              <CheckCircle className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
+            </div>
+            <p className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-700 bg-clip-text text-transparent">{requests.filter(r => r.status === 'completed').length}</p>
+            <p className="text-sm sm:text-base text-gray-600 font-crimson">Completed</p>
           </Card>
-          <Card className="p-4 text-center">
-            <Package className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-            <p className="text-2xl font-bold">{requests.length}</p>
-            <p className="text-sm text-gray-600">Total Requests</p>
+          <Card className="p-4 sm:p-6 text-center bg-gradient-to-br from-white/90 to-purple-50/50 backdrop-blur-sm shadow-lg border-0 hover:shadow-xl transition-all duration-300">
+            <div className="bg-gradient-to-br from-purple-500 to-pink-600 rounded-full p-3 w-fit mx-auto mb-3 shadow-lg">
+              <Package className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
+            </div>
+            <p className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-700 bg-clip-text text-transparent">{requests.length}</p>
+            <p className="text-sm sm:text-base text-gray-600 font-crimson">Total Requests</p>
           </Card>
         </div>
 
         <Tabs defaultValue="requests" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="requests">All Requests</TabsTrigger>
-            <TabsTrigger value="offers">Supplier Offers</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 bg-gradient-to-r from-white/90 to-purple-50/50 backdrop-blur-sm">
+            <TabsTrigger value="requests" className="text-base font-inter">All Requests</TabsTrigger>
+            <TabsTrigger value="offers" className="text-base font-inter">Supplier Offers</TabsTrigger>
           </TabsList>
 
           <TabsContent value="requests" className="mt-6">
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Customer Requests</h2>
+            <div className="space-y-4 sm:space-y-6">
+              <h2 className="text-xl sm:text-2xl font-playfair font-semibold bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">Customer Requests</h2>
               
               {requests.map(request => (
-                <Card key={request.id} className="p-6">
-                  <div className="flex justify-between items-start mb-4">
+                <Card key={request.id} className="p-6 sm:p-8 bg-gradient-to-br from-white/90 to-purple-50/30 backdrop-blur-sm border-0 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                  <div className="flex justify-between items-start mb-4 sm:mb-6">
                     <div>
-                      <h3 className="font-semibold text-lg">
+                      <h3 className="font-playfair font-semibold text-lg sm:text-xl">
                         {request.make} {request.model} {request.year}
                       </h3>
-                      <p className="text-gray-600">Part: {request.part}</p>
-                      <p className="text-sm text-gray-500">Customer: {request.customer}</p>
+                      <p className="text-gray-600 font-crimson text-base sm:text-lg">Part: {request.part}</p>
+                      <p className="text-sm sm:text-base text-gray-500 font-inter">Customer: {request.customer}</p>
                     </div>
                     <div className="text-right">
-                      <Badge className={`${getStatusColor(request.status)} flex items-center gap-1`}>
+                      <Badge className={`${getStatusColor(request.status)} flex items-center gap-1 text-sm sm:text-base`}>
                         {getStatusIcon(request.status)}
                         {request.status}
                       </Badge>
-                      <p className="text-xs text-gray-500 mt-1">{request.timestamp}</p>
+                      <p className="text-xs sm:text-sm text-gray-500 mt-1 font-inter">{request.timestamp}</p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
+                  <div className="flex items-center gap-4 text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 font-crimson">
                     <div className="flex items-center gap-1">
                       <MapPin className="h-4 w-4" />
                       {request.location}
@@ -197,11 +204,11 @@ const AdminDashboard = () => {
                     </div>
                   </div>
 
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 flex-wrap">
                     {request.status === 'pending' && (
                       <Button 
                         size="sm"
-                        className="bg-blue-600 hover:bg-blue-700"
+                        className="bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-base shadow-lg hover:shadow-xl transition-all duration-300"
                         onClick={() => handleMatchSupplier(request.id, '1')}
                       >
                         Match with Supplier
@@ -210,7 +217,7 @@ const AdminDashboard = () => {
                     {request.status === 'matched' && (
                       <Button 
                         size="sm"
-                        className="bg-green-600 hover:bg-green-700"
+                        className="bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-base shadow-lg hover:shadow-xl transition-all duration-300"
                         onClick={() => handleCompleteRequest(request.id)}
                       >
                         Mark Complete
@@ -220,6 +227,7 @@ const AdminDashboard = () => {
                       size="sm" 
                       variant="outline"
                       onClick={() => window.open(`tel:${request.phone}`, '_self')}
+                      className="text-base border-purple-200 hover:bg-purple-50"
                     >
                       Call Customer
                     </Button>
@@ -230,27 +238,27 @@ const AdminDashboard = () => {
           </TabsContent>
 
           <TabsContent value="offers" className="mt-6">
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Supplier Offers</h2>
+            <div className="space-y-4 sm:space-y-6">
+              <h2 className="text-xl sm:text-2xl font-playfair font-semibold bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">Supplier Offers</h2>
               
               {offers.map(offer => {
                 const relatedRequest = requests.find(r => r.id === offer.requestId);
                 return (
-                  <Card key={offer.id} className="p-6">
-                    <div className="flex justify-between items-start mb-4">
+                  <Card key={offer.id} className="p-6 sm:p-8 bg-gradient-to-br from-white/90 to-purple-50/30 backdrop-blur-sm border-0 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div className="flex justify-between items-start mb-4 sm:mb-6">
                       <div>
-                        <h3 className="font-semibold text-lg">
+                        <h3 className="font-playfair font-semibold text-lg sm:text-xl">
                           {relatedRequest?.make} {relatedRequest?.model} - {relatedRequest?.part}
                         </h3>
-                        <p className="text-gray-600">Supplier: {offer.supplier}</p>
-                        <p className="text-lg font-semibold text-green-600">{offer.price}</p>
+                        <p className="text-gray-600 font-crimson text-base sm:text-lg">Supplier: {offer.supplier}</p>
+                        <p className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-green-600 to-emerald-700 bg-clip-text text-transparent">{offer.price}</p>
                       </div>
-                      <Badge className={getStatusColor(offer.status)}>
+                      <Badge className={`${getStatusColor(offer.status)} text-sm sm:text-base`}>
                         {offer.status}
                       </Badge>
                     </div>
 
-                    <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
+                    <div className="flex items-center gap-4 text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 font-crimson">
                       <div className="flex items-center gap-1">
                         <Phone className="h-4 w-4" />
                         {offer.phone}
@@ -258,10 +266,10 @@ const AdminDashboard = () => {
                     </div>
 
                     {offer.status === 'pending' && (
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 flex-wrap">
                         <Button 
                           size="sm"
-                          className="bg-green-600 hover:bg-green-700"
+                          className="bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-base shadow-lg hover:shadow-xl transition-all duration-300"
                           onClick={() => handleMatchSupplier(offer.requestId, offer.id)}
                         >
                           Accept Offer
@@ -270,6 +278,7 @@ const AdminDashboard = () => {
                           size="sm" 
                           variant="outline"
                           onClick={() => window.open(`tel:${offer.phone}`, '_self')}
+                          className="text-base border-purple-200 hover:bg-purple-50"
                         >
                           Call Supplier
                         </Button>

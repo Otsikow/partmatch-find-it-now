@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -114,15 +113,17 @@ const RequestPart = () => {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center p-4">
-        <Card className="w-full max-w-sm sm:max-w-md p-6 sm:p-8 text-center">
-          <CheckCircle className="h-12 w-12 sm:h-16 sm:w-16 text-green-600 mx-auto mb-4" />
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3">Request Sent!</h2>
-          <p className="text-gray-600 text-sm sm:text-base mb-6">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 flex items-center justify-center p-4 font-inter">
+        <Card className="w-full max-w-sm sm:max-w-md p-6 sm:p-8 text-center bg-gradient-to-br from-white/90 to-blue-50/50 backdrop-blur-sm shadow-2xl border-0">
+          <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-full p-4 w-fit mx-auto mb-6 shadow-lg">
+            <CheckCircle className="h-12 w-12 sm:h-16 sm:w-16 text-white" />
+          </div>
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-green-600 to-emerald-700 bg-clip-text text-transparent mb-3 sm:mb-4">Request Sent!</h2>
+          <p className="text-gray-600 text-sm sm:text-base lg:text-lg mb-6 sm:mb-8 font-crimson leading-relaxed">
             We've automatically notified suppliers in your area. You'll receive offers via WhatsApp soon.
           </p>
           <Link to="/">
-            <Button className="w-full bg-blue-600 hover:bg-blue-700">
+            <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 py-3 sm:py-4 text-base sm:text-lg rounded-xl font-inter font-medium shadow-lg hover:shadow-xl transition-all duration-300">
               Back to Home
             </Button>
           </Link>
@@ -132,11 +133,11 @@ const RequestPart = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 font-inter">
       {/* Header */}
-      <header className="p-4 sm:p-6 flex items-center gap-3 bg-white/80 backdrop-blur-sm border-b">
+      <header className="p-4 sm:p-6 flex items-center gap-3 bg-gradient-to-r from-white/90 via-blue-50/80 to-white/90 backdrop-blur-lg shadow-lg border-b">
         <Link to="/">
-          <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10">
+          <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 hover:bg-white/50">
             <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
         </Link>
@@ -146,47 +147,47 @@ const RequestPart = () => {
             alt="PartMatch Logo" 
             className="h-6 w-auto sm:h-8"
           />
-          <h1 className="text-lg sm:text-xl font-bold">Request a Part</h1>
+          <h1 className="text-lg sm:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">Request a Part</h1>
         </div>
       </header>
 
       {/* Form */}
       <main className="container mx-auto px-4 sm:px-6 py-4 sm:py-6 max-w-sm sm:max-w-md lg:max-w-lg">
-        <Card className="p-4 sm:p-6">
-          <div className="text-center mb-4 sm:mb-6">
-            <h2 className="text-lg sm:text-xl font-semibold mb-2">Tell us what you need</h2>
-            <p className="text-gray-600 text-sm">We'll automatically notify suppliers in your area</p>
+        <Card className="p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-white/90 to-blue-50/50 backdrop-blur-sm shadow-2xl border-0">
+          <div className="text-center mb-4 sm:mb-6 lg:mb-8">
+            <h2 className="text-lg sm:text-xl lg:text-2xl font-playfair font-semibold mb-2 sm:mb-3 bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">Tell us what you need</h2>
+            <p className="text-gray-600 text-sm sm:text-base font-crimson">We'll automatically notify suppliers in your area</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4 lg:space-y-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
-                <Label htmlFor="make" className="text-sm">Car Make *</Label>
+                <Label htmlFor="make" className="text-sm sm:text-base font-inter">Car Make *</Label>
                 <Input
                   id="make"
                   placeholder="e.g. Toyota"
                   value={formData.make}
                   onChange={(e) => handleInputChange('make', e.target.value)}
                   required
-                  className="mt-1"
+                  className="mt-1 text-base border-blue-200 focus:border-blue-400"
                 />
               </div>
 
               <div>
-                <Label htmlFor="model" className="text-sm">Model *</Label>
+                <Label htmlFor="model" className="text-sm sm:text-base font-inter">Model *</Label>
                 <Input
                   id="model"
                   placeholder="e.g. Corolla"
                   value={formData.model}
                   onChange={(e) => handleInputChange('model', e.target.value)}
                   required
-                  className="mt-1"
+                  className="mt-1 text-base border-blue-200 focus:border-blue-400"
                 />
               </div>
             </div>
 
             <div>
-              <Label htmlFor="year" className="text-sm">Year *</Label>
+              <Label htmlFor="year" className="text-sm sm:text-base font-inter">Year *</Label>
               <Input
                 id="year"
                 type="number"
@@ -194,49 +195,49 @@ const RequestPart = () => {
                 value={formData.year}
                 onChange={(e) => handleInputChange('year', e.target.value)}
                 required
-                className="mt-1"
+                className="mt-1 text-base border-blue-200 focus:border-blue-400"
               />
             </div>
 
             <div>
-              <Label htmlFor="part" className="text-sm">Part Needed *</Label>
+              <Label htmlFor="part" className="text-sm sm:text-base font-inter">Part Needed *</Label>
               <Input
                 id="part"
                 placeholder="e.g. Alternator, Brake Pads"
                 value={formData.part}
                 onChange={(e) => handleInputChange('part', e.target.value)}
                 required
-                className="mt-1"
+                className="mt-1 text-base border-blue-200 focus:border-blue-400"
               />
             </div>
 
             <div>
-              <Label htmlFor="description" className="text-sm">Additional Details</Label>
+              <Label htmlFor="description" className="text-sm sm:text-base font-inter">Additional Details</Label>
               <Textarea
                 id="description"
                 placeholder="Any specific details about the part..."
                 value={formData.description}
                 onChange={(e) => handleInputChange('description', e.target.value)}
                 rows={3}
-                className="mt-1 resize-none"
+                className="mt-1 resize-none text-base border-blue-200 focus:border-blue-400"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               <div>
-                <Label htmlFor="location" className="text-sm">Your Location *</Label>
+                <Label htmlFor="location" className="text-sm sm:text-base font-inter">Your Location *</Label>
                 <Input
                   id="location"
                   placeholder="e.g. Accra, Kumasi"
                   value={formData.location}
                   onChange={(e) => handleInputChange('location', e.target.value)}
                   required
-                  className="mt-1"
+                  className="mt-1 text-base border-blue-200 focus:border-blue-400"
                 />
               </div>
 
               <div>
-                <Label htmlFor="phone" className="text-sm">Phone/WhatsApp *</Label>
+                <Label htmlFor="phone" className="text-sm sm:text-base font-inter">Phone/WhatsApp *</Label>
                 <Input
                   id="phone"
                   type="tel"
@@ -244,22 +245,22 @@ const RequestPart = () => {
                   value={formData.phone}
                   onChange={(e) => handleInputChange('phone', e.target.value)}
                   required
-                  className="mt-1"
+                  className="mt-1 text-base border-blue-200 focus:border-blue-400"
                 />
               </div>
             </div>
 
             <div>
-              <Label className="text-sm">Upload Photo (Optional)</Label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 sm:p-6 text-center hover:border-gray-400 transition-colors cursor-pointer mt-1">
-                <Upload className="h-6 w-6 sm:h-8 sm:w-8 text-gray-400 mx-auto mb-2" />
-                <p className="text-xs sm:text-sm text-gray-600">Tap to upload a photo of the part</p>
+              <Label className="text-sm sm:text-base font-inter">Upload Photo (Optional)</Label>
+              <div className="border-2 border-dashed border-blue-300 rounded-lg p-4 sm:p-6 text-center hover:border-blue-400 transition-colors cursor-pointer mt-1 bg-gradient-to-br from-white/50 to-blue-50/30">
+                <Upload className="h-6 w-6 sm:h-8 sm:w-8 text-blue-400 mx-auto mb-2" />
+                <p className="text-xs sm:text-sm text-gray-600 font-crimson">Tap to upload a photo of the part</p>
               </div>
             </div>
 
             <Button 
               type="submit" 
-              className="w-full bg-blue-600 hover:bg-blue-700 py-2.5 sm:py-3 text-base sm:text-lg rounded-xl mt-6"
+              className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 py-2.5 sm:py-3 lg:py-4 text-base sm:text-lg rounded-xl mt-6 font-inter font-medium shadow-lg hover:shadow-xl transition-all duration-300"
               disabled={loading}
             >
               {loading ? 'Submitting...' : 'Send Request'}

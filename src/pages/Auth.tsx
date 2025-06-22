@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -58,32 +57,36 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 font-inter">
       {/* Header */}
-      <header className="p-4 flex items-center gap-3 bg-white/80 backdrop-blur-sm border-b">
+      <header className="p-4 sm:p-6 flex items-center gap-3 bg-gradient-to-r from-white/90 via-blue-50/80 to-white/90 backdrop-blur-lg shadow-lg border-b">
         <Link to="/">
-          <Button variant="ghost" size="icon">
-            <ArrowLeft className="h-5 w-5" />
+          <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 hover:bg-white/50">
+            <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
         </Link>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 sm:gap-3">
           <img 
             src="/lovable-uploads/23312658-5ff6-4d89-a7cb-c0fbf631cd1c.png" 
             alt="PartMatch Logo" 
-            className="h-6 w-auto"
+            className="h-6 w-auto sm:h-8"
           />
-          <h1 className="text-xl font-bold">{isLogin ? 'Sign In' : 'Create Account'}</h1>
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
+            {isLogin ? 'Sign In' : 'Create Account'}
+          </h1>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-6 max-w-md">
-        <Card className="p-6">
-          <div className="text-center mb-6">
-            <User className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-            <h2 className="text-xl font-semibold mb-2">
+      <main className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-md">
+        <Card className="p-6 sm:p-8 bg-gradient-to-br from-white/90 to-blue-50/50 backdrop-blur-sm shadow-2xl border-0">
+          <div className="text-center mb-6 sm:mb-8">
+            <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full p-4 w-fit mx-auto mb-4 sm:mb-6 shadow-lg">
+              <User className="h-10 w-10 sm:h-12 sm:w-12 text-white" />
+            </div>
+            <h2 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-semibold mb-2 sm:mb-3 bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
               {isLogin ? 'Welcome Back' : 'Join PartMatch'}
             </h2>
-            <p className="text-gray-600 text-sm">
+            <p className="text-gray-600 text-sm sm:text-base font-crimson">
               {isLogin 
                 ? 'Sign in to your account' 
                 : 'Create an account to get started'
@@ -91,38 +94,38 @@ const Auth = () => {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
             {!isLogin && (
               <>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <Label htmlFor="firstName" className="text-sm">First Name *</Label>
+                    <Label htmlFor="firstName" className="text-sm sm:text-base font-inter">First Name *</Label>
                     <Input
                       id="firstName"
                       placeholder="John"
                       value={formData.firstName}
                       onChange={(e) => handleInputChange('firstName', e.target.value)}
                       required={!isLogin}
-                      className="mt-1"
+                      className="mt-1 text-base border-blue-200 focus:border-blue-400"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="lastName" className="text-sm">Last Name *</Label>
+                    <Label htmlFor="lastName" className="text-sm sm:text-base font-inter">Last Name *</Label>
                     <Input
                       id="lastName"
                       placeholder="Doe"
                       value={formData.lastName}
                       onChange={(e) => handleInputChange('lastName', e.target.value)}
                       required={!isLogin}
-                      className="mt-1"
+                      className="mt-1 text-base border-blue-200 focus:border-blue-400"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <Label htmlFor="userType" className="text-sm">I am a *</Label>
+                  <Label htmlFor="userType" className="text-sm sm:text-base font-inter">I am a *</Label>
                   <Select value={formData.userType} onValueChange={(value) => handleInputChange('userType', value)}>
-                    <SelectTrigger className="mt-1">
+                    <SelectTrigger className="mt-1 text-base border-blue-200 focus:border-blue-400">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -133,7 +136,7 @@ const Auth = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="phone" className="text-sm">Phone/WhatsApp *</Label>
+                  <Label htmlFor="phone" className="text-sm sm:text-base font-inter">Phone/WhatsApp *</Label>
                   <div className="relative">
                     <Phone className="h-4 w-4 absolute left-3 top-3 text-gray-400" />
                     <Input
@@ -143,13 +146,13 @@ const Auth = () => {
                       value={formData.phone}
                       onChange={(e) => handleInputChange('phone', e.target.value)}
                       required={!isLogin}
-                      className="mt-1 pl-10"
+                      className="mt-1 pl-10 text-base border-blue-200 focus:border-blue-400"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <Label htmlFor="location" className="text-sm">Location *</Label>
+                  <Label htmlFor="location" className="text-sm sm:text-base font-inter">Location *</Label>
                   <div className="relative">
                     <MapPin className="h-4 w-4 absolute left-3 top-3 text-gray-400" />
                     <Input
@@ -158,7 +161,7 @@ const Auth = () => {
                       value={formData.location}
                       onChange={(e) => handleInputChange('location', e.target.value)}
                       required={!isLogin}
-                      className="mt-1 pl-10"
+                      className="mt-1 pl-10 text-base border-blue-200 focus:border-blue-400"
                     />
                   </div>
                 </div>
@@ -166,7 +169,7 @@ const Auth = () => {
             )}
 
             <div>
-              <Label htmlFor="email" className="text-sm">Email *</Label>
+              <Label htmlFor="email" className="text-sm sm:text-base font-inter">Email *</Label>
               <div className="relative">
                 <Mail className="h-4 w-4 absolute left-3 top-3 text-gray-400" />
                 <Input
@@ -176,13 +179,13 @@ const Auth = () => {
                   value={formData.email}
                   onChange={(e) => handleInputChange('email', e.target.value)}
                   required
-                  className="mt-1 pl-10"
+                  className="mt-1 pl-10 text-base border-blue-200 focus:border-blue-400"
                 />
               </div>
             </div>
 
             <div>
-              <Label htmlFor="password" className="text-sm">Password *</Label>
+              <Label htmlFor="password" className="text-sm sm:text-base font-inter">Password *</Label>
               <div className="relative">
                 <Lock className="h-4 w-4 absolute left-3 top-3 text-gray-400" />
                 <Input
@@ -192,25 +195,25 @@ const Auth = () => {
                   value={formData.password}
                   onChange={(e) => handleInputChange('password', e.target.value)}
                   required
-                  className="mt-1 pl-10"
+                  className="mt-1 pl-10 text-base border-blue-200 focus:border-blue-400"
                 />
               </div>
             </div>
 
             <Button 
               type="submit" 
-              className="w-full bg-blue-600 hover:bg-blue-700 py-3 text-lg rounded-xl"
+              className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 py-3 sm:py-4 text-base sm:text-lg rounded-xl font-inter font-medium shadow-lg hover:shadow-xl transition-all duration-300"
               disabled={loading}
             >
               {loading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Create Account')}
             </Button>
           </form>
 
-          <div className="text-center mt-6">
+          <div className="text-center mt-6 sm:mt-8">
             <button
               type="button"
               onClick={() => setIsLogin(!isLogin)}
-              className="text-blue-600 hover:underline text-sm"
+              className="text-blue-600 hover:text-blue-800 hover:underline text-sm sm:text-base font-crimson transition-colors duration-300"
             >
               {isLogin 
                 ? "Don't have an account? Sign up" 
