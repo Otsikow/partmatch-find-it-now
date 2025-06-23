@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Search, Package, MapPin, User, LogOut } from "lucide-react";
@@ -39,22 +38,17 @@ const Index = () => {
           )}
         </div>
         
-        {/* Centered logo and brand name */}
+        {/* Centered logo at the top */}
         <div className="flex flex-col items-center justify-center mb-4 sm:mb-6">
-          <div className="flex items-center gap-4 mb-3">
-            <img 
-              src="/lovable-uploads/846aa041-c3b2-42f1-8842-2348e4ced1a4.png" 
-              alt="PartMatch Logo" 
-              className="h-24 w-auto sm:h-28 lg:h-32 drop-shadow-lg"
-            />
-            <div className="text-center">
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-playfair font-bold bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-700 bg-clip-text text-transparent">
-                PartMatch
-              </h1>
-              <p className="text-xl sm:text-2xl lg:text-3xl font-crimson italic bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                Automotive Excellence
-              </p>
-            </div>
+          <img 
+            src="/lovable-uploads/846aa041-c3b2-42f1-8842-2348e4ced1a4.png" 
+            alt="PartMatch Logo" 
+            className="h-36 w-auto sm:h-40 lg:h-48 drop-shadow-lg mb-4"
+          />
+          <div className="text-center">
+            <p className="text-2xl sm:text-3xl lg:text-4xl font-crimson italic bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              Automotive Excellence
+            </p>
           </div>
         </div>
         
