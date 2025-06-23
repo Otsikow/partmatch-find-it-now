@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Search, Package, MapPin, User, LogOut } from "lucide-react";
@@ -43,7 +44,7 @@ const Index = () => {
           <img 
             src="/lovable-uploads/846aa041-c3b2-42f1-8842-2348e4ced1a4.png" 
             alt="PartMatch Logo" 
-            className="h-36 w-auto sm:h-40 lg:h-48 drop-shadow-lg mb-4"
+            className="h-36 w-auto sm:h-40 lg:h-48 drop-shadow-lg"
           />
           <div className="text-center">
             <p className="text-2xl sm:text-3xl lg:text-4xl font-crimson italic bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
