@@ -65,7 +65,7 @@ const PaymentModal = ({ isOpen, onClose, offerId, amount, onPaymentSuccess }: Pa
 
       if (error) throw error;
 
-      const response = data as PaymentResponse;
+      const response = data as unknown as PaymentResponse;
 
       if (response.success) {
         // Simulate payment processing (in real app, integrate with Paystack/Flutterwave)
