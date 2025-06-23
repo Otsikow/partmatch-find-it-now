@@ -11,6 +11,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { checkAntiSpam, triggerNotification, triggerAiReview } from "@/utils/antiSpam";
 import PhotoUpload from "@/components/PhotoUpload";
+import type { Database } from "@/integrations/supabase/types";
+
+type RequestStatus = Database['public']['Enums']['request_status'];
 
 const RequestPart = () => {
   const [submitted, setSubmitted] = useState(false);
@@ -125,7 +128,7 @@ const RequestPart = () => {
     }
   };
 
-  const createRequest = async (status: string = 'pending') => {
+  const createRequest = async (status: RequestStatus = 'pending') => {
     // Upload photo if provided
     let photoUrl = null;
     if (photo) {
