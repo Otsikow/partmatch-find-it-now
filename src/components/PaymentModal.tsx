@@ -19,6 +19,14 @@ interface PaymentModalProps {
   onPaymentSuccess: () => void;
 }
 
+interface PaymentResponse {
+  success: boolean;
+  error?: string;
+  payment_id?: string;
+  amount?: number;
+  payment_method?: string;
+}
+
 const PaymentModal = ({ isOpen, onClose, offerId, amount, onPaymentSuccess }: PaymentModalProps) => {
   const [paymentMethod, setPaymentMethod] = useState<string>("");
   const [mobileProvider, setMobileProvider] = useState<string>("");
@@ -57,7 +65,9 @@ const PaymentModal = ({ isOpen, onClose, offerId, amount, onPaymentSuccess }: Pa
 
       if (error) throw error;
 
-      if (data.success) {
+      const response = data as PaymentResponse;
+
+      if (response.success) {
         // Simulate payment processing (in real app, integrate with Paystack/Flutterwave)
         setTimeout(() => {
           // Update offer to unlock contact
@@ -80,7 +90,7 @@ const PaymentModal = ({ isOpen, onClose, offerId, amount, onPaymentSuccess }: Pa
           description: "Please wait while we process your payment...",
         });
       } else {
-        throw new Error(data.error);
+        throw new Error(response.error || 'Payment processing failed');
       }
     } catch (error: any) {
       console.error('Payment error:', error);
