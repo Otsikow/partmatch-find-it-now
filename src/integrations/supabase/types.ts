@@ -47,6 +47,27 @@ export type Database = {
           },
         ]
       }
+      ghana_regions: {
+        Row: {
+          created_at: string | null
+          id: string
+          major_cities: string[]
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          major_cities: string[]
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          major_cities?: string[]
+          name?: string
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           created_at: string | null
@@ -90,6 +111,7 @@ export type Database = {
       }
       offers: {
         Row: {
+          contact_unlock_fee: number | null
           contact_unlocked: boolean | null
           created_at: string | null
           id: string
@@ -102,6 +124,7 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
+          contact_unlock_fee?: number | null
           contact_unlocked?: boolean | null
           created_at?: string | null
           id?: string
@@ -114,6 +137,7 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
+          contact_unlock_fee?: number | null
           contact_unlocked?: boolean | null
           created_at?: string | null
           id?: string
@@ -204,6 +228,8 @@ export type Database = {
           created_at: string | null
           currency: string | null
           id: string
+          mobile_money_number: string | null
+          mobile_money_provider: string | null
           offer_id: string | null
           payer_id: string
           payment_method: string | null
@@ -216,6 +242,8 @@ export type Database = {
           created_at?: string | null
           currency?: string | null
           id?: string
+          mobile_money_number?: string | null
+          mobile_money_provider?: string | null
           offer_id?: string | null
           payer_id: string
           payment_method?: string | null
@@ -228,6 +256,8 @@ export type Database = {
           created_at?: string | null
           currency?: string | null
           id?: string
+          mobile_money_number?: string | null
+          mobile_money_provider?: string | null
           offer_id?: string | null
           payer_id?: string
           payment_method?: string | null
@@ -266,6 +296,8 @@ export type Database = {
           total_ratings: number | null
           updated_at: string | null
           user_type: Database["public"]["Enums"]["user_type"]
+          verification_documents: string[] | null
+          verified_at: string | null
         }
         Insert: {
           created_at?: string | null
@@ -280,6 +312,8 @@ export type Database = {
           total_ratings?: number | null
           updated_at?: string | null
           user_type?: Database["public"]["Enums"]["user_type"]
+          verification_documents?: string[] | null
+          verified_at?: string | null
         }
         Update: {
           created_at?: string | null
@@ -294,6 +328,8 @@ export type Database = {
           total_ratings?: number | null
           updated_at?: string | null
           user_type?: Database["public"]["Enums"]["user_type"]
+          verification_documents?: string[] | null
+          verified_at?: string | null
         }
         Relationships: []
       }
@@ -354,7 +390,24 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      process_contact_unlock_payment: {
+        Args: {
+          offer_id_param: string
+          payment_method_param: string
+          mobile_money_provider_param?: string
+          mobile_money_number_param?: string
+          payment_reference_param?: string
+        }
+        Returns: Json
+      }
+      update_supplier_verification: {
+        Args: {
+          supplier_id_param: string
+          is_verified_param: boolean
+          documents_param?: string[]
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       notification_type: "sms" | "whatsapp" | "email"

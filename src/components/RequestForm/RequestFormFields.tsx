@@ -3,6 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import PhotoUpload from "@/components/PhotoUpload";
+import LocationSelector from "@/components/LocationSelector";
 import { RequestFormData } from "./RequestFormData";
 
 interface RequestFormFieldsProps {
@@ -80,14 +81,10 @@ const RequestFormFields = ({ formData, photo, onInputChange, onPhotoChange }: Re
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         <div>
-          <Label htmlFor="location" className="text-sm sm:text-base font-inter">Your Location *</Label>
-          <Input
-            id="location"
-            placeholder="e.g. Accra, Kumasi"
+          <LocationSelector
             value={formData.location}
-            onChange={(e) => onInputChange('location', e.target.value)}
+            onChange={(value) => onInputChange('location', value)}
             required
-            className="mt-1 text-base border-blue-200 focus:border-blue-400"
           />
         </div>
 
