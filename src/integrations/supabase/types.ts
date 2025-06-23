@@ -9,6 +9,44 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      ai_reviews: {
+        Row: {
+          ai_reasoning: string | null
+          confidence_score: number | null
+          created_at: string
+          id: string
+          request_id: string
+          review_status: string
+          reviewed_at: string
+        }
+        Insert: {
+          ai_reasoning?: string | null
+          confidence_score?: number | null
+          created_at?: string
+          id?: string
+          request_id: string
+          review_status: string
+          reviewed_at?: string
+        }
+        Update: {
+          ai_reasoning?: string | null
+          confidence_score?: number | null
+          created_at?: string
+          id?: string
+          request_id?: string
+          review_status?: string
+          reviewed_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_reviews_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "part_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           created_at: string | null
