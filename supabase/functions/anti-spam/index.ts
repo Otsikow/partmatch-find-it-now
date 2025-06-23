@@ -15,7 +15,7 @@ const supabase = createClient(
 interface SpamCheckRequest {
   phone: string;
   userId: string;
-  requestData: any;
+  content: any;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -24,12 +24,12 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { phone, userId, requestData }: SpamCheckRequest = await req.json();
+    const { phone, userId, content }: SpamCheckRequest = await req.json();
     
     console.log(`Checking for spam: ${phone}`);
 
     // Check for duplicate requests
-    const duplicateCheck = await checkDuplicateRequests(phone, requestData);
+    const duplicateCheck = await checkDuplicateRequests(phone, content);
     if (duplicateCheck.isDuplicate) {
       return new Response(
         JSON.stringify({ 
@@ -61,13 +61,14 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     // Check for suspicious patterns
-    const suspiciousCheck = await checkSuspiciousPatterns(phone, requestData);
+    const suspiciousCheck = await checkSuspiciousPatterns(phone, content);
     if (suspiciousCheck.isSuspicious) {
       return new Response(
         JSON.stringify({ 
           allowed: false, 
           reason: 'suspicious_activity',
-          message: 'Request flagged for manual review'
+          message: 'Request flagged for AI review',
+          requiresReview: true
         }),
         { 
           status: 200, 

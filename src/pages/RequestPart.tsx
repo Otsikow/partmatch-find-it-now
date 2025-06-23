@@ -59,7 +59,7 @@ const RequestPart = () => {
       );
 
       if (!spamCheck.allowed) {
-        // If it requires review, show AI review UI
+        // If it requires review, show AI review UI and process
         if (spamCheck.requiresReview) {
           setAiReviewing(true);
           toast({
@@ -67,8 +67,8 @@ const RequestPart = () => {
             description: "Our AI is reviewing your request for approval...",
           });
 
-          // Continue with request creation but with flagged status
-          const requestData = await createRequest();
+          // Create request with pending status
+          const requestData = await createRequest('pending');
           if (requestData) {
             // Trigger AI review
             const aiApproved = await triggerAiReview(requestData.id);
@@ -87,6 +87,8 @@ const RequestPart = () => {
                 description: "Your request is being reviewed by our team. You'll be notified once approved.",
                 variant: "destructive"
               });
+              // Still show success but different message
+              setSubmitted(true);
             }
           }
         } else {
@@ -101,7 +103,7 @@ const RequestPart = () => {
       }
 
       // Normal flow for approved requests
-      const requestData = await createRequest();
+      const requestData = await createRequest('pending');
       if (requestData) {
         await triggerNotification('new_request', { requestId: requestData.id });
         setSubmitted(true);
@@ -123,7 +125,7 @@ const RequestPart = () => {
     }
   };
 
-  const createRequest = async () => {
+  const createRequest = async (status: string = 'pending') => {
     // Upload photo if provided
     let photoUrl = null;
     if (photo) {
@@ -161,7 +163,8 @@ const RequestPart = () => {
           description: formData.description,
           location: formData.location,
           phone: formData.phone,
-          photo_url: photoUrl
+          photo_url: photoUrl,
+          status: status
         }
       ])
       .select()
