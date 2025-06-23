@@ -1,19 +1,22 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Upload, CheckCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { checkAntiSpam, triggerNotification } from "@/utils/antiSpam";
+import PhotoUpload from "@/components/PhotoUpload";
 
 const RequestPart = () => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [photo, setPhoto] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     make: '',
     model: '',
@@ -65,6 +68,31 @@ const RequestPart = () => {
         return;
       }
 
+      // Upload photo if provided
+      let photoUrl = null;
+      if (photo) {
+        const fileExt = photo.name.split('.').pop();
+        const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+        
+        const { error: uploadError } = await supabase.storage
+          .from('part-photos')
+          .upload(fileName, photo);
+
+        if (uploadError) {
+          console.error('Photo upload error:', uploadError);
+          toast({
+            title: "Photo Upload Failed",
+            description: "We couldn't upload your photo, but we'll still process your request.",
+            variant: "destructive"
+          });
+        } else {
+          const { data: { publicUrl } } = supabase.storage
+            .from('part-photos')
+            .getPublicUrl(fileName);
+          photoUrl = publicUrl;
+        }
+      }
+
       const { data: request, error } = await supabase
         .from('part_requests')
         .insert([
@@ -76,7 +104,8 @@ const RequestPart = () => {
             part_needed: formData.part,
             description: formData.description,
             location: formData.location,
-            phone: formData.phone
+            phone: formData.phone,
+            photo_url: photoUrl
           }
         ])
         .select()
@@ -109,6 +138,10 @@ const RequestPart = () => {
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handlePhotoChange = (file: File | null) => {
+    setPhoto(file);
   };
 
   if (submitted) {
@@ -252,9 +285,11 @@ const RequestPart = () => {
 
             <div>
               <Label className="text-sm sm:text-base font-inter">Upload Photo (Optional)</Label>
-              <div className="border-2 border-dashed border-blue-300 rounded-lg p-4 sm:p-6 text-center hover:border-blue-400 transition-colors cursor-pointer mt-1 bg-gradient-to-br from-white/50 to-blue-50/30">
-                <Upload className="h-6 w-6 sm:h-8 sm:w-8 text-blue-400 mx-auto mb-2" />
-                <p className="text-xs sm:text-sm text-gray-600 font-crimson">Tap to upload a photo of the part</p>
+              <div className="mt-1">
+                <PhotoUpload
+                  currentPhoto={photo}
+                  onPhotoChange={handlePhotoChange}
+                />
               </div>
             </div>
 
