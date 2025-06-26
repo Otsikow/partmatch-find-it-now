@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useMemo, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -39,7 +40,24 @@ const SearchPartsWithMap = () => {
     if (viewMode === 'map' && map.current) {
       updateMapMarkers();
     }
+
+    // Clean up map when switching away from map view
+    if (viewMode !== 'map' && map.current) {
+      map.current.remove();
+      map.current = null;
+      markers.current = [];
+    }
   }, [viewMode, parts]);
+
+  // Clean up map on component unmount
+  useEffect(() => {
+    return () => {
+      if (map.current) {
+        map.current.remove();
+        map.current = null;
+      }
+    };
+  }, []);
 
   const fetchParts = async () => {
     try {
@@ -67,6 +85,8 @@ const SearchPartsWithMap = () => {
 
   const initializeMap = () => {
     if (!mapContainer.current) return;
+
+    console.log("Initializing map...");
 
     // Use the working Mapbox token
     mapboxgl.accessToken = 'pk.eyJ1IjoibG92YWJsZS1kZXYiLCJhIjoiY2x6dzZkdXZiMDEyMzJqcGEwMzQyM2xlMSJ9.UKvTlBGGqFXJ9kEF7Q6GnA';
@@ -335,7 +355,7 @@ const SearchPartsWithMap = () => {
             ))}
           </div>
         ) : (
-          <div className="h-[calc(100vh-300px)]">
+          <div className="min-h-[400px] h-[60vh]">
             <div ref={mapContainer} className="w-full h-full rounded-lg shadow-lg" />
           </div>
         )}
