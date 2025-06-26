@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -33,7 +32,15 @@ const MyPartsTab = ({ onRefresh }: MyPartsTabProps) => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setParts(data || []);
+      
+      // Type assert the data to match our CarPart interface
+      const typedParts = (data || []).map(part => ({
+        ...part,
+        condition: part.condition as 'New' | 'Used' | 'Refurbished',
+        status: part.status as 'available' | 'sold' | 'hidden' | 'pending'
+      }));
+      
+      setParts(typedParts);
     } catch (error) {
       console.error('Error fetching parts:', error);
       toast({
@@ -56,7 +63,7 @@ const MyPartsTab = ({ onRefresh }: MyPartsTabProps) => {
       if (error) throw error;
 
       setParts(prev => prev.map(part => 
-        part.id === partId ? { ...part, status: newStatus as any } : part
+        part.id === partId ? { ...part, status: newStatus as 'available' | 'sold' | 'hidden' | 'pending' } : part
       ));
 
       toast({
