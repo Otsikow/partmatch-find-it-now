@@ -117,7 +117,7 @@ const Index = () => {
             </Card>
           </Link>
 
-          <Link to="/auth" className="block group">
+          <Link to="/supplier" className="block group">
             <Card className="text-center shadow-lg hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-green-50/50 group-hover:scale-105 cursor-pointer">
               <CardContent className="p-8">
                 <div className="w-16 h-16 bg-gradient-to-r from-green-600 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
@@ -151,7 +151,7 @@ const Index = () => {
               </Button>
             </Link>
             
-            <Link to="/auth" className="w-full sm:w-auto">
+            <Link to="/supplier" className="w-full sm:w-auto">
               <Button size="lg" variant="outline" className="w-full border-white text-white hover:bg-white/10 shadow-lg">
                 <Users className="mr-2 h-5 w-5" />
                 <span className="font-medium">Become a Supplier</span>
