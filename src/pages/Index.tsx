@@ -17,7 +17,7 @@ const Index = () => {
           <img 
             src="/lovable-uploads/23312658-5ff6-4d89-a7cb-c0fbf631cd1c.png" 
             alt="PartMatch Logo" 
-            className="h-8 w-auto"
+            className="h-12 w-auto"
           />
           <h1 className="text-xl sm:text-2xl font-playfair font-bold bg-gradient-to-r from-red-600 to-green-700 bg-clip-text text-transparent">
             PartMatch Ghana
