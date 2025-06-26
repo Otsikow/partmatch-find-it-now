@@ -1,141 +1,144 @@
+
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Search, Package, MapPin, User, LogOut } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Search, Package, MapPin, Users, Wrench, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
-import NotificationBell from "@/components/NotificationBell";
 import Footer from "@/components/Footer";
 
 const Index = () => {
-  const { user, signOut } = useAuth();
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 font-inter">
-      {/* Header */}
-      <header className="p-3 sm:p-4 md:p-6 border-b bg-gradient-to-r from-white/90 via-blue-50/80 to-white/90 backdrop-blur-lg shadow-lg">
-        {/* Top row with user actions */}
-        <div className="flex items-center justify-end mb-3 sm:mb-4 md:mb-6">
-          {user ? (
-            <div className="flex items-center gap-1 sm:gap-2">
-              <NotificationBell />
-              <span className="text-sm sm:text-base md:text-lg font-crimson text-gray-600 hidden sm:inline">Welcome back!</span>
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={signOut}
-                className="text-gray-600 hover:text-gray-800 font-inter hover:bg-white/50 text-xs sm:text-sm md:text-base px-2 sm:px-3"
-              >
-                <LogOut className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-                <span className="hidden xs:inline">Sign Out</span>
-              </Button>
-            </div>
-          ) : (
-            <Link to="/auth">
-              <Button variant="outline" size="sm" className="font-inter border-blue-200 hover:bg-blue-50 text-xs sm:text-sm md:text-base px-2 sm:px-3">
-                <User className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-                <span className="hidden xs:inline">Sign In</span>
-              </Button>
-            </Link>
-          )}
-        </div>
-        
-        {/* Centered logo at the top */}
-        <div className="flex flex-col items-center justify-center mb-3 sm:mb-4 md:mb-6">
-          <img 
-            src="/lovable-uploads/846aa041-c3b2-42f1-8842-2348e4ced1a4.png" 
-            alt="PartMatch Logo" 
-            className="h-24 w-auto sm:h-32 md:h-40 lg:h-48 drop-shadow-lg"
-          />
-          <div className="text-center mt-1 sm:mt-2">
-            <p className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-crimson italic bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              Automotive Excellence
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50 to-green-100 font-inter">
+      {/* Hero Section */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-600/20 to-green-600/20"></div>
+        <div className="relative container mx-auto px-4 py-16 sm:py-24">
+          <div className="text-center max-w-4xl mx-auto">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-playfair font-bold bg-gradient-to-r from-emerald-700 to-green-700 bg-clip-text text-transparent mb-6">
+              Ghana's Premier Car Parts Marketplace
+            </h1>
+            <p className="text-lg sm:text-xl text-gray-700 mb-8 leading-relaxed">
+              Connect with trusted suppliers across Ghana. Find the exact car parts you need or list your inventory to reach thousands of customers.
             </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto">
+              <Link to="/request" className="w-full sm:w-auto">
+                <Button size="lg" className="w-full bg-gradient-to-r from-emerald-600 to-green-700 hover:from-emerald-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl transition-all duration-300">
+                  <Search className="mr-2 h-5 w-5" />
+                  Find Parts
+                </Button>
+              </Link>
+              
+              <Link to="/search-map" className="w-full sm:w-auto">
+                <Button size="lg" variant="outline" className="w-full border-emerald-600 text-emerald-700 hover:bg-emerald-50 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <MapPin className="mr-2 h-5 w-5" />
+                  Browse with Map
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
-        
-        <p className="text-gray-700 text-sm sm:text-base md:text-lg max-w-xs sm:max-w-md md:max-w-lg mx-auto font-crimson leading-relaxed text-center px-2">
-          Connect with trusted local car part suppliers — with automated notifications and secure payments
-        </p>
-      </header>
+      </div>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-12 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
-        <div className="text-center mb-6 sm:mb-8 md:mb-10">
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-playfair font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent mb-2 sm:mb-3 md:mb-4 px-2">
-            Need a car part? We'll find it for you!
+      {/* Features Section */}
+      <div className="container mx-auto px-4 py-16">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl sm:text-4xl font-playfair font-bold text-gray-900 mb-4">
+            How It Works
           </h2>
-          <p className="text-gray-700 text-xs sm:text-sm md:text-base lg:text-lg px-3 sm:px-2 font-crimson leading-relaxed">
-            Connect with verified local suppliers or browse available parts
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Whether you're looking for parts or selling them, our platform makes it simple and secure.
           </p>
         </div>
 
-        {/* Action Cards */}
-        <div className="space-y-3 sm:space-y-4 md:space-y-6">
-          {/* Customer Actions */}
-          <Card className="p-4 sm:p-6 md:p-8 hover:shadow-2xl transition-all duration-300 border-0 bg-gradient-to-br from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 transform hover:-translate-y-1">
-            <div className="text-center">
-              <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-full p-3 sm:p-4 w-fit mx-auto mb-3 sm:mb-4 md:mb-6 shadow-lg">
-                <Package className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 text-white" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <Card className="text-center shadow-lg hover:shadow-xl transition-shadow duration-300 border-0 bg-gradient-to-br from-white to-emerald-50/50">
+            <CardContent className="p-8">
+              <div className="w-16 h-16 bg-gradient-to-r from-emerald-600 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Search className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-playfair font-semibold mb-2 sm:mb-3 bg-gradient-to-r from-blue-700 to-blue-600 bg-clip-text text-transparent">Need a Part?</h3>
-              <p className="text-gray-600 text-xs sm:text-sm md:text-base lg:text-lg mb-3 sm:mb-4 md:mb-6 font-crimson px-2">
-                Tell us what you need and we'll find it for you
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Request Parts</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Tell us what you need and get multiple competitive offers from verified suppliers near you.
               </p>
-              <Link to="/request">
-                <Button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-2 sm:py-3 md:py-4 text-sm sm:text-base md:text-lg rounded-xl font-inter font-medium shadow-lg hover:shadow-xl transition-all duration-300">
-                  Request a Part
-                </Button>
-              </Link>
-            </div>
+            </CardContent>
           </Card>
 
-          <Card className="p-4 sm:p-6 md:p-8 hover:shadow-2xl transition-all duration-300 border-0 bg-gradient-to-br from-emerald-50 to-green-50 hover:from-emerald-100 hover:to-green-100 transform hover:-translate-y-1">
-            <div className="text-center">
-              <div className="bg-gradient-to-br from-emerald-500 to-green-600 rounded-full p-3 sm:p-4 w-fit mx-auto mb-3 sm:mb-4 md:mb-6 shadow-lg">
-                <Search className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 text-white" />
+          <Card className="text-center shadow-lg hover:shadow-xl transition-shadow duration-300 border-0 bg-gradient-to-br from-white to-emerald-50/50">
+            <CardContent className="p-8">
+              <div className="w-16 h-16 bg-gradient-to-r from-emerald-600 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <MapPin className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-playfair font-semibold mb-2 sm:mb-3 bg-gradient-to-r from-emerald-700 to-green-600 bg-clip-text text-transparent">Browse Parts</h3>
-              <p className="text-gray-600 text-xs sm:text-sm md:text-base lg:text-lg mb-3 sm:mb-4 md:mb-6 font-crimson px-2">
-                Search available parts from local suppliers
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Find Nearby</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Use our interactive map to discover parts and suppliers in your area for quick pickup.
               </p>
-              <Link to="/search">
-                <Button className="w-full bg-gradient-to-r from-emerald-600 to-green-700 hover:from-emerald-700 hover:to-green-800 text-white py-2 sm:py-3 md:py-4 text-sm sm:text-base md:text-lg rounded-xl font-inter font-medium shadow-lg hover:shadow-xl transition-all duration-300">
-                  Search Parts
-                </Button>
-              </Link>
-            </div>
+            </CardContent>
           </Card>
 
-          {/* Supplier Actions */}
-          <Card className="p-4 sm:p-6 md:p-8 hover:shadow-2xl transition-all duration-300 border-0 bg-gradient-to-br from-amber-50 to-orange-50 hover:from-amber-100 hover:to-orange-100 transform hover:-translate-y-1">
-            <div className="text-center">
-              <div className="bg-gradient-to-br from-amber-500 to-orange-600 rounded-full p-3 sm:p-4 w-fit mx-auto mb-3 sm:mb-4 md:mb-6 shadow-lg">
-                <MapPin className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 text-white" />
+          <Card className="text-center shadow-lg hover:shadow-xl transition-shadow duration-300 border-0 bg-gradient-to-br from-white to-emerald-50/50">
+            <CardContent className="p-8">
+              <div className="w-16 h-16 bg-gradient-to-r from-emerald-600 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Package className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-playfair font-semibold mb-2 sm:mb-3 bg-gradient-to-r from-amber-700 to-orange-600 bg-clip-text text-transparent">Are you a Supplier?</h3>
-              <p className="text-gray-600 text-xs sm:text-sm md:text-base lg:text-lg mb-3 sm:mb-4 md:mb-6 font-crimson px-2">
-                Manage your parts inventory and fulfill requests
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Sell Parts</h3>
+              <p className="text-gray-600 leading-relaxed">
+                List your inventory and reach customers across Ghana. Simple, secure, and profitable.
               </p>
-              <Link to="/supplier">
-                <Button className="w-full bg-gradient-to-r from-amber-600 to-orange-700 hover:from-amber-700 hover:to-orange-800 text-white py-2 sm:py-3 md:py-4 text-sm sm:text-base md:text-lg rounded-xl font-inter font-medium shadow-lg hover:shadow-xl transition-all duration-300">
-                  Supplier Dashboard
-                </Button>
-              </Link>
-            </div>
+            </CardContent>
           </Card>
         </div>
+      </div>
 
-        {/* Admin Access */}
-        {user && (
-          <div className="mt-6 sm:mt-8 md:mt-10 text-center">
-            <Link to="/admin" className="text-xs sm:text-sm text-gray-500 hover:text-indigo-600 font-crimson italic transition-colors duration-300">
-              Admin Dashboard
+      {/* CTA Section */}
+      <div className="bg-gradient-to-r from-emerald-600 to-green-700 text-white py-16">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl sm:text-4xl font-playfair font-bold mb-6">
+            Ready to Get Started?
+          </h2>
+          <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
+            Join thousands of satisfied customers and suppliers across Ghana.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto">
+            <Link to="/request" className="w-full sm:w-auto">
+              <Button size="lg" variant="secondary" className="w-full bg-white text-emerald-700 hover:bg-emerald-50 shadow-lg">
+                <Search className="mr-2 h-5 w-5" />
+                Request Parts Now
+              </Button>
+            </Link>
+            
+            <Link to="/auth" className="w-full sm:w-auto">
+              <Button size="lg" variant="outline" className="w-full border-white text-white hover:bg-white/10 shadow-lg">
+                <Users className="mr-2 h-5 w-5" />
+                Become a Supplier
+              </Button>
             </Link>
           </div>
-        )}
-      </main>
+        </div>
+      </div>
 
-      {/* Footer */}
+      {/* Stats Section */}
+      <div className="container mx-auto px-4 py-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div>
+            <div className="text-3xl sm:text-4xl font-bold text-emerald-600 mb-2">1000+</div>
+            <div className="text-gray-600">Happy Customers</div>
+          </div>
+          <div>
+            <div className="text-3xl sm:text-4xl font-bold text-emerald-600 mb-2">500+</div>
+            <div className="text-gray-600">Verified Suppliers</div>
+          </div>
+          <div>
+            <div className="text-3xl sm:text-4xl font-bold text-emerald-600 mb-2">10,000+</div>
+            <div className="text-gray-600">Parts Listed</div>
+          </div>
+          <div>
+            <div className="text-3xl sm:text-4xl font-bold text-emerald-600 mb-2">16</div>
+            <div className="text-gray-600">Regions Covered</div>
+          </div>
+        </div>
+      </div>
+
       <Footer />
     </div>
   );

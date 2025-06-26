@@ -49,12 +49,15 @@ export type Database = {
       }
       car_parts: {
         Row: {
+          address: string | null
           condition: string
           created_at: string | null
           currency: string
           description: string | null
           id: string
           images: string[] | null
+          latitude: number | null
+          longitude: number | null
           make: string
           model: string
           part_type: string
@@ -66,12 +69,15 @@ export type Database = {
           year: number
         }
         Insert: {
+          address?: string | null
           condition: string
           created_at?: string | null
           currency?: string
           description?: string | null
           id?: string
           images?: string[] | null
+          latitude?: number | null
+          longitude?: number | null
           make: string
           model: string
           part_type: string
@@ -83,12 +89,15 @@ export type Database = {
           year: number
         }
         Update: {
+          address?: string | null
           condition?: string
           created_at?: string | null
           currency?: string
           description?: string | null
           id?: string
           images?: string[] | null
+          latitude?: number | null
+          longitude?: number | null
           make?: string
           model?: string
           part_type?: string
@@ -346,13 +355,16 @@ export type Database = {
       }
       profiles: {
         Row: {
+          address: string | null
           created_at: string | null
           first_name: string | null
           id: string
           is_blocked: boolean | null
           is_verified: boolean | null
           last_name: string | null
+          latitude: number | null
           location: string | null
+          longitude: number | null
           phone: string | null
           rating: number | null
           total_ratings: number | null
@@ -362,13 +374,16 @@ export type Database = {
           verified_at: string | null
         }
         Insert: {
+          address?: string | null
           created_at?: string | null
           first_name?: string | null
           id: string
           is_blocked?: boolean | null
           is_verified?: boolean | null
           last_name?: string | null
+          latitude?: number | null
           location?: string | null
+          longitude?: number | null
           phone?: string | null
           rating?: number | null
           total_ratings?: number | null
@@ -378,13 +393,16 @@ export type Database = {
           verified_at?: string | null
         }
         Update: {
+          address?: string | null
           created_at?: string | null
           first_name?: string | null
           id?: string
           is_blocked?: boolean | null
           is_verified?: boolean | null
           last_name?: string | null
+          latitude?: number | null
           location?: string | null
+          longitude?: number | null
           phone?: string | null
           rating?: number | null
           total_ratings?: number | null

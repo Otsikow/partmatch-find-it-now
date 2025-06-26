@@ -10,6 +10,7 @@ import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import PhotoUpload from "@/components/PhotoUpload";
+import LocationPicker from "@/components/LocationPicker";
 import { X } from "lucide-react";
 
 interface PostPartModalProps {
@@ -34,6 +35,12 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
     price: "",
     currency: "GHS"
   });
+
+  const [location, setLocation] = useState<{
+    lat: number;
+    lng: number;
+    address: string;
+  } | null>(null);
 
   const handlePhotoChange = (file: File | null) => {
     if (file) {
@@ -66,6 +73,15 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
     e.preventDefault();
     if (!user) return;
 
+    if (!location) {
+      toast({
+        title: "Location Required",
+        description: "Please select a location on the map.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -76,7 +92,7 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
         imageUrls.push(url);
       }
 
-      // Insert part data
+      // Insert part data with location
       const { error } = await supabase
         .from('car_parts')
         .insert({
@@ -91,6 +107,9 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
           price: parseFloat(formData.price),
           currency: formData.currency,
           images: imageUrls.length > 0 ? imageUrls : null,
+          latitude: location.lat,
+          longitude: location.lng,
+          address: location.address,
           status: 'available'
         });
 
@@ -114,6 +133,7 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
         currency: "GHS"
       });
       setPhotos([]);
+      setLocation(null);
       onPartPosted();
       onClose();
 
@@ -131,12 +151,12 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Post New Part for Sale</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="title">Title *</Label>
@@ -246,6 +266,16 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
               placeholder="Describe the part condition, compatibility, etc."
               rows={3}
             />
+          </div>
+
+          <div>
+            <Label>Location *</Label>
+            <LocationPicker onLocationSelect={setLocation} />
+            {location && (
+              <p className="text-sm text-gray-600 mt-2">
+                Selected: {location.address}
+              </p>
+            )}
           </div>
 
           <div>

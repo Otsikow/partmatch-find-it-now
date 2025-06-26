@@ -12,6 +12,7 @@ import RequestPart from "./pages/RequestPart";
 import SupplierDashboard from "./pages/SupplierDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import SearchParts from "./pages/SearchParts";
+import SearchPartsWithMap from "./pages/SearchPartsWithMap";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,31 +22,34 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <AuthProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <AuthProvider>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/request" element={
-              <ProtectedRoute>
-                <RequestPart />
-              </ProtectedRoute>
-            } />
-            <Route path="/supplier" element={
-              <ProtectedRoute>
-                <SupplierDashboard />
-              </ProtectedRoute>
-            } />
-            <Route path="/admin" element={
-              <ProtectedRoute>
-                <AdminDashboard />
-              </ProtectedRoute>
-            } />
+            <Route path="/request" element={<RequestPart />} />
             <Route path="/search" element={<SearchParts />} />
+            <Route path="/search-map" element={<SearchPartsWithMap />} />
+            <Route 
+              path="/supplier" 
+              element={
+                <ProtectedRoute>
+                  <SupplierDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin" 
+              element={
+                <ProtectedRoute>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              } 
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </BrowserRouter>
-      </AuthProvider>
+        </AuthProvider>
+      </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
 );

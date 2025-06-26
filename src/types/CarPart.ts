@@ -12,6 +12,9 @@ export interface CarPart {
   price: number;
   currency: string;
   images?: string[];
+  latitude?: number;
+  longitude?: number;
+  address?: string;
   created_at: string;
   updated_at: string;
   status: 'available' | 'sold' | 'hidden' | 'pending';
