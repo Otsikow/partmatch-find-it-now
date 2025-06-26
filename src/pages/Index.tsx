@@ -152,7 +152,7 @@ const Index = () => {
             </Link>
             
             <Link to="/auth" className="w-full sm:w-auto">
-              <Button size="lg" variant="outline" className="w-full border-2 border-white text-white hover:bg-white hover:text-red-700 shadow-lg font-semibold">
+              <Button size="lg" variant="outline" className="w-full border-2 border-white text-white hover:bg-white/20 hover:text-white hover:border-white shadow-lg font-semibold">
                 <Users className="mr-2 h-5 w-5" />
                 Become a Supplier
               </Button>
