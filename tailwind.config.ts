@@ -19,6 +19,9 @@ export default {
 			}
 		},
 		extend: {
+			screens: {
+				'xs': '475px',
+			},
 			fontFamily: {
 				'playfair': ['Playfair Display', 'serif'],
 				'crimson': ['Crimson Text', 'serif'],
