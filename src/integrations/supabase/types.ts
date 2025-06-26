@@ -47,6 +47,68 @@ export type Database = {
           },
         ]
       }
+      car_parts: {
+        Row: {
+          condition: string
+          created_at: string | null
+          currency: string
+          description: string | null
+          id: string
+          images: string[] | null
+          make: string
+          model: string
+          part_type: string
+          price: number
+          status: string
+          supplier_id: string
+          title: string
+          updated_at: string | null
+          year: number
+        }
+        Insert: {
+          condition: string
+          created_at?: string | null
+          currency?: string
+          description?: string | null
+          id?: string
+          images?: string[] | null
+          make: string
+          model: string
+          part_type: string
+          price: number
+          status?: string
+          supplier_id: string
+          title: string
+          updated_at?: string | null
+          year: number
+        }
+        Update: {
+          condition?: string
+          created_at?: string | null
+          currency?: string
+          description?: string | null
+          id?: string
+          images?: string[] | null
+          make?: string
+          model?: string
+          part_type?: string
+          price?: number
+          status?: string
+          supplier_id?: string
+          title?: string
+          updated_at?: string | null
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "car_parts_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ghana_regions: {
         Row: {
           created_at: string | null
