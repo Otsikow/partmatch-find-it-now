@@ -2,7 +2,7 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Mail, Lock, Phone, MapPin } from "lucide-react";
+import { Mail, Lock, Phone, MapPin, User } from "lucide-react";
 
 interface FormData {
   email: string;
@@ -50,15 +50,28 @@ const AuthFormFields = ({ isLogin, formData, onInputChange }: AuthFormFieldsProp
             </div>
           </div>
 
-          <div>
-            <Label htmlFor="userType" className="text-sm sm:text-base font-inter">I am a *</Label>
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
+            <Label htmlFor="userType" className="text-sm sm:text-base font-inter font-semibold text-blue-800 flex items-center gap-2">
+              <User className="h-4 w-4" />
+              I want to register as *
+            </Label>
             <Select value={formData.userType} onValueChange={(value) => onInputChange('userType', value)}>
-              <SelectTrigger className="mt-1 text-base border-blue-200 focus:border-blue-400">
-                <SelectValue />
+              <SelectTrigger className="mt-2 text-base border-blue-200 focus:border-blue-400 bg-white">
+                <SelectValue placeholder="Choose your account type" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="buyer">Buyer</SelectItem>
-                <SelectItem value="seller">Seller</SelectItem>
+              <SelectContent className="bg-white border border-blue-200 shadow-lg">
+                <SelectItem value="buyer" className="hover:bg-blue-50">
+                  <div className="flex flex-col">
+                    <span className="font-medium">Buyer</span>
+                    <span className="text-sm text-gray-600">I want to find and buy car parts</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="seller" className="hover:bg-orange-50">
+                  <div className="flex flex-col">
+                    <span className="font-medium">Seller</span>
+                    <span className="text-sm text-gray-600">I want to sell car parts</span>
+                  </div>
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
