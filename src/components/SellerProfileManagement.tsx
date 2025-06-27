@@ -142,7 +142,28 @@ const SellerProfileManagement = () => {
         console.error('Error deleting offers:', offersError);
       }
 
-      // Sign out the user immediately
+      // Get the current session token for authentication
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session?.access_token) {
+        throw new Error('No valid session found');
+      }
+
+      // Call the Edge Function to delete the user from Auth
+      const { error: deleteUserError } = await supabase.functions.invoke('delete-user', {
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
+      });
+
+      if (deleteUserError) {
+        console.error('Error calling delete-user function:', deleteUserError);
+        throw deleteUserError;
+      }
+
+      console.log('User successfully deleted from Auth system');
+
+      // Sign out the user locally
       await supabase.auth.signOut();
 
       toast({
