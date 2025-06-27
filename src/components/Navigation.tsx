@@ -65,70 +65,81 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="p-4 sm:p-6 flex items-center justify-between bg-gradient-to-r from-white/90 via-yellow-50/80 to-white/90 backdrop-blur-lg shadow-lg border-b">
-      <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+    <nav className="px-6 py-4 flex items-center justify-between bg-white shadow-sm border-b border-gray-100">
+      <Link to="/" className="flex items-center gap-4 hover:opacity-80 transition-opacity">
         <img 
           src="/lovable-uploads/23312658-5ff6-4d89-a7cb-c0fbf631cd1c.png" 
           alt="PartMatch Logo" 
-          className="h-12 w-auto"
+          className="h-10 w-auto"
         />
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <Home className="h-5 w-5 text-green-700" />
-          <h1 className="text-xl sm:text-2xl font-playfair font-bold bg-gradient-to-r from-red-600 to-green-700 bg-clip-text text-transparent">
+          <h1 className="text-2xl font-playfair font-bold bg-gradient-to-r from-red-600 to-green-700 bg-clip-text text-transparent">
             PartMatch Ghana
           </h1>
         </div>
       </Link>
       
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-6">
         {user ? (
-          <div className="flex items-center gap-3">
-            <span className="text-sm text-gray-600 hidden sm:block">
+          <div className="flex items-center gap-6">
+            <span className="text-sm text-gray-600 font-medium hidden sm:block">
               Welcome, {user.email}
             </span>
             <Link to={getDashboardLink()}>
-              <Button variant="outline" size="sm" className="border-green-600 text-green-700 hover:bg-green-50">
+              <Button 
+                variant="outline" 
+                size="default" 
+                className="border-green-600 text-green-700 hover:bg-green-50 font-medium px-6 py-2 h-10"
+              >
                 {getDashboardLabel()}
               </Button>
             </Link>
             <Button 
               variant="ghost" 
-              size="sm" 
+              size="default" 
               onClick={handleSignOut}
-              className="text-gray-700 hover:text-red-700 hover:bg-red-50/50 font-medium"
+              className="text-gray-700 hover:text-red-700 hover:bg-red-50/50 font-medium px-4 py-2 h-10"
             >
               Sign Out
             </Button>
           </div>
         ) : (
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-4">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-gray-700 hover:text-green-700 hover:bg-green-50/50 font-medium">
+                <Button 
+                  variant="ghost" 
+                  size="default" 
+                  className="text-gray-700 hover:text-green-700 hover:bg-green-50/50 font-medium px-4 py-2 h-10"
+                >
                   Sign In
-                  <ChevronDown className="h-4 w-4 ml-1" />
+                  <ChevronDown className="h-4 w-4 ml-2" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuContent align="end" className="w-56 mt-2">
                 <DropdownMenuItem asChild>
-                  <Link to="/buyer-auth" className="w-full cursor-pointer">
+                  <Link to="/buyer-auth" className="w-full cursor-pointer py-3 px-4">
                     Sign In as Buyer
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/seller-auth" className="w-full cursor-pointer">
+                  <Link to="/seller-auth" className="w-full cursor-pointer py-3 px-4">
                     Sign In as Seller
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/admin-auth" className="w-full cursor-pointer">
+                  <Link to="/admin-auth" className="w-full cursor-pointer py-3 px-4">
                     Sign In as Administrator
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <Link to="/auth">
-              <Button size="sm" className="bg-gradient-to-r from-red-600 to-green-700 hover:from-red-700 hover:to-green-800 text-white shadow-md font-medium">
+              <Button 
+                size="default" 
+                className="bg-gradient-to-r from-red-600 to-green-700 hover:from-red-700 hover:to-green-800 text-white shadow-md font-medium px-6 py-2 h-10"
+              >
                 Join Now
               </Button>
             </Link>
