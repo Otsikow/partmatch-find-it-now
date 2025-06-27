@@ -6,8 +6,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
-import { Clock, Phone, MapPin, Package, TrendingUp, CheckCircle, User } from "lucide-react";
+import { Clock, Phone, MapPin, Package, TrendingUp, CheckCircle, User, Plus } from "lucide-react";
 import SellerProfileManagement from "./SellerProfileManagement";
+import SellCarPartsTab from "./SellCarPartsTab";
 
 interface Request {
   id: string;
@@ -104,10 +105,14 @@ const SupplierTabs = ({
 
   return (
     <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
-      <TabsList className="grid w-full grid-cols-3 mb-8">
+      <TabsList className="grid w-full grid-cols-4 mb-8">
+        <TabsTrigger value="sell-parts" className="flex items-center gap-2">
+          <Plus className="h-4 w-4" />
+          Sell Parts
+        </TabsTrigger>
         <TabsTrigger value="requests" className="flex items-center gap-2">
           <Package className="h-4 w-4" />
-          Part Requests ({requests.length})
+          Requests ({requests.length})
         </TabsTrigger>
         <TabsTrigger value="offers" className="flex items-center gap-2">
           <TrendingUp className="h-4 w-4" />
@@ -118,6 +123,14 @@ const SupplierTabs = ({
           Profile
         </TabsTrigger>
       </TabsList>
+
+      <TabsContent value="sell-parts" className="space-y-6">
+        <div className="text-center mb-6">
+          <h3 className="text-xl font-semibold text-orange-700 mb-2">Sell Car Parts</h3>
+          <p className="text-gray-600">Manage your verification and post car parts for sale</p>
+        </div>
+        <SellCarPartsTab />
+      </TabsContent>
 
       <TabsContent value="requests" className="space-y-6">
         <div className="text-center mb-6">

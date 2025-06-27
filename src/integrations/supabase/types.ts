@@ -465,6 +465,87 @@ export type Database = {
           },
         ]
       }
+      seller_verifications: {
+        Row: {
+          admin_notes: string | null
+          business_address: string
+          business_name: string | null
+          business_registration_number: string | null
+          business_registration_url: string | null
+          created_at: string
+          date_of_birth: string
+          email: string
+          email_verified: boolean | null
+          full_name: string
+          government_id_url: string | null
+          id: string
+          latitude: number | null
+          longitude: number | null
+          phone: string
+          phone_verified: boolean | null
+          profile_photo_url: string | null
+          proof_of_address_url: string | null
+          seller_type: string
+          updated_at: string
+          user_id: string
+          verification_status: string
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          business_address: string
+          business_name?: string | null
+          business_registration_number?: string | null
+          business_registration_url?: string | null
+          created_at?: string
+          date_of_birth: string
+          email: string
+          email_verified?: boolean | null
+          full_name: string
+          government_id_url?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          phone: string
+          phone_verified?: boolean | null
+          profile_photo_url?: string | null
+          proof_of_address_url?: string | null
+          seller_type: string
+          updated_at?: string
+          user_id: string
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          business_address?: string
+          business_name?: string | null
+          business_registration_number?: string | null
+          business_registration_url?: string | null
+          created_at?: string
+          date_of_birth?: string
+          email?: string
+          email_verified?: boolean | null
+          full_name?: string
+          government_id_url?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          phone?: string
+          phone_verified?: boolean | null
+          profile_photo_url?: string | null
+          proof_of_address_url?: string | null
+          seller_type?: string
+          updated_at?: string
+          user_id?: string
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
