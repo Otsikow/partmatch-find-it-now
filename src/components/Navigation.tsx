@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -17,6 +18,14 @@ const Navigation = () => {
       }
 
       try {
+        // First check user metadata
+        const metadataUserType = user.user_metadata?.user_type;
+        if (metadataUserType) {
+          setUserType(metadataUserType);
+          return;
+        }
+
+        // Fallback to profile query
         const { data: profile } = await supabase
           .from('profiles')
           .select('user_type')
@@ -35,6 +44,12 @@ const Navigation = () => {
 
   const handleSignOut = async () => {
     await signOut();
+  };
+
+  const getDashboardLink = () => {
+    if (userType === 'admin') return '/admin';
+    if (userType === 'supplier') return '/supplier';
+    return '/buyer-dashboard';
   };
 
   return (
@@ -59,7 +74,7 @@ const Navigation = () => {
             <span className="text-sm text-gray-600 hidden sm:block">
               Welcome, {user.email}
             </span>
-            <Link to="/buyer-dashboard">
+            <Link to={getDashboardLink()}>
               <Button variant="outline" size="sm" className="border-green-600 text-green-700 hover:bg-green-50">
                 Dashboard
               </Button>

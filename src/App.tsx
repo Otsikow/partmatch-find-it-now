@@ -9,7 +9,10 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import SellerProtectedRoute from "@/components/SellerProtectedRoute";
 import AdminProtectedRoute from "@/components/AdminProtectedRoute";
 import Index from "./pages/Index";
-import Auth from "./pages/Auth";
+import AuthTypeSelector from "@/components/AuthTypeSelector";
+import AdminAuth from "./pages/AdminAuth";
+import BuyerAuth from "./pages/BuyerAuth";
+import SellerAuth from "./pages/SellerAuth";
 import BuyerDashboard from "./pages/BuyerDashboard";
 import RequestPart from "./pages/RequestPart";
 import SupplierDashboard from "./pages/SupplierDashboard";
@@ -35,7 +38,10 @@ const App = () => (
         <AuthProvider>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<Auth />} />
+            <Route path="/auth" element={<AuthTypeSelector />} />
+            <Route path="/admin-auth" element={<AdminAuth />} />
+            <Route path="/buyer-auth" element={<BuyerAuth />} />
+            <Route path="/seller-auth" element={<SellerAuth />} />
             <Route 
               path="/buyer-dashboard" 
               element={
