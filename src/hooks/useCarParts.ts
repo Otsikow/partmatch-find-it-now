@@ -54,6 +54,7 @@ export const useCarParts = () => {
       const transformedParts: CarPart[] = (data || []).map(part => ({
         ...part,
         condition: part.condition as 'New' | 'Used' | 'Refurbished',
+        status: part.status as 'available' | 'sold' | 'hidden' | 'pending',
         profiles: part.profiles
       }));
 
