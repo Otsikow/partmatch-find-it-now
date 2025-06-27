@@ -63,7 +63,14 @@ const SellCarPartsTab = () => {
         throw error;
       }
 
-      setVerification(data);
+      // Type cast the verification_status to ensure it matches our interface
+      if (data) {
+        const typedData: VerificationStatus = {
+          ...data,
+          verification_status: data.verification_status as 'pending' | 'approved' | 'rejected'
+        };
+        setVerification(typedData);
+      }
     } catch (error) {
       console.error('Error fetching verification:', error);
     } finally {
