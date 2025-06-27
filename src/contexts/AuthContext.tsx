@@ -87,11 +87,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         description: error.message,
         variant: "destructive"
       });
-    } else {
-      toast({
-        title: "Account Created!",
-        description: "Please check your email to verify your account.",
-      });
     }
     
     return { error };

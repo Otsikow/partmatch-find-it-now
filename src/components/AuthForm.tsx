@@ -6,6 +6,7 @@ import { User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRedirect } from "@/hooks/useUserRedirect";
 import AuthFormFields from "./AuthFormFields";
+import { toast } from "@/hooks/use-toast";
 
 interface AuthFormProps {
   isLogin: boolean;
@@ -38,13 +39,21 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
         await signIn(formData.email, formData.password);
       } else {
         console.log('AuthForm: Signing up with user_type:', formData.userType);
-        await signUp(formData.email, formData.password, {
+        const { error } = await signUp(formData.email, formData.password, {
           first_name: formData.firstName,
           last_name: formData.lastName,
           phone: formData.phone,
           location: formData.location,
           user_type: formData.userType
         });
+        
+        if (!error) {
+          toast({
+            title: "Account Created!",
+            description: "Please check your email to verify your account, then sign in below.",
+          });
+          setIsLogin(true);
+        }
       }
     } finally {
       setLoading(false);

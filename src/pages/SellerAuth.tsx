@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -33,10 +32,6 @@ const SellerAuth = () => {
         const { error } = await signIn(formData.email, formData.password);
         if (!error) {
           navigate('/supplier');
-          toast({
-            title: "Welcome back, Seller!",
-            description: "Access your seller dashboard to manage your parts and offers.",
-          });
         }
       } else {
         const { error } = await signUp(formData.email, formData.password, {
@@ -49,8 +44,9 @@ const SellerAuth = () => {
         if (!error) {
           toast({
             title: "Seller Account Created!",
-            description: "Please check your email to verify your account.",
+            description: "Please check your email to verify your account, then sign in below.",
           });
+          setIsLogin(true);
         }
       }
     } finally {

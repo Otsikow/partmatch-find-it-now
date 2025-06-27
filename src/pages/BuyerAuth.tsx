@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -33,10 +32,6 @@ const BuyerAuth = () => {
         const { error } = await signIn(formData.email, formData.password);
         if (!error) {
           navigate('/buyer-dashboard');
-          toast({
-            title: "Welcome back, Buyer!",
-            description: "Find the car parts you need from our network of verified sellers.",
-          });
         }
       } else {
         const { error } = await signUp(formData.email, formData.password, {
@@ -49,8 +44,9 @@ const BuyerAuth = () => {
         if (!error) {
           toast({
             title: "Buyer Account Created!",
-            description: "Please check your email to verify your account.",
+            description: "Please check your email to verify your account, then sign in below.",
           });
+          setIsLogin(true);
         }
       }
     } finally {

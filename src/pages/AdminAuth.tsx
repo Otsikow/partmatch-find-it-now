@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -33,10 +32,6 @@ const AdminAuth = () => {
         const { error } = await signIn(formData.email, formData.password);
         if (!error) {
           navigate('/admin');
-          toast({
-            title: "Welcome back, Administrator!",
-            description: "Access your admin dashboard to manage the platform.",
-          });
         }
       } else {
         const { error } = await signUp(formData.email, formData.password, {
@@ -49,8 +44,9 @@ const AdminAuth = () => {
         if (!error) {
           toast({
             title: "Admin Account Created!",
-            description: "Please check your email to verify your account.",
+            description: "Please check your email to verify your account, then sign in below.",
           });
+          setIsLogin(true);
         }
       }
     } finally {
