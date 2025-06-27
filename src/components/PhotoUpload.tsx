@@ -97,21 +97,23 @@ const PhotoUpload = ({ onPhotoChange, currentPhoto }: PhotoUploadProps) => {
         </div>
       )}
 
-      {/* Hidden file inputs */}
+      {/* Hidden file input for gallery upload */}
       <input
         ref={fileInputRef}
         type="file"
         accept="image/*"
         onChange={handleFileInputChange}
-        className="hidden"
+        style={{ display: "none" }}
       />
+      
+      {/* Hidden file input for camera capture */}
       <input
         ref={cameraInputRef}
         type="file"
         accept="image/*"
         capture="environment"
         onChange={handleFileInputChange}
-        className="hidden"
+        style={{ display: "none" }}
       />
     </div>
   );
