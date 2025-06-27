@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { Upload, FileText, MapPin } from 'lucide-react';
+import { Upload, FileText, MapPin, Store } from 'lucide-react';
 
 interface VerificationFormData {
   fullName: string;
@@ -24,6 +24,7 @@ interface VerificationFormData {
   businessRegistration: File | null;
   proofOfAddress: File | null;
   profilePhoto: File | null;
+  businessLocationPhoto: File | null;
 }
 
 const SellerVerificationForm = ({ onVerificationSubmitted }: { onVerificationSubmitted: () => void }) => {
@@ -42,6 +43,7 @@ const SellerVerificationForm = ({ onVerificationSubmitted }: { onVerificationSub
     businessRegistration: null,
     proofOfAddress: null,
     profilePhoto: null,
+    businessLocationPhoto: null,
   });
 
   const handleInputChange = (field: keyof VerificationFormData, value: string) => {
@@ -131,6 +133,14 @@ const SellerVerificationForm = ({ onVerificationSubmitted }: { onVerificationSub
         );
       }
 
+      let businessLocationPhotoPath = null;
+      if (formData.businessLocationPhoto) {
+        businessLocationPhotoPath = await uploadFile(
+          formData.businessLocationPhoto,
+          `${userFolder}/business-location-${timestamp}.${formData.businessLocationPhoto.name.split('.').pop()}`
+        );
+      }
+
       // Save verification data
       const { error } = await supabase
         .from('seller_verifications')
@@ -148,6 +158,7 @@ const SellerVerificationForm = ({ onVerificationSubmitted }: { onVerificationSub
           business_registration_url: businessRegistrationPath,
           proof_of_address_url: proofOfAddressPath,
           profile_photo_url: profilePhotoPath,
+          business_location_photo_url: businessLocationPhotoPath,
         });
 
       if (error) throw error;
@@ -175,21 +186,33 @@ const SellerVerificationForm = ({ onVerificationSubmitted }: { onVerificationSub
     required, 
     file, 
     onChange, 
-    accept = "image/*,.pdf" 
+    accept = "image/*,.pdf",
+    helpText,
+    icon: Icon = FileText
   }: { 
     label: string; 
     required?: boolean; 
     file: File | null; 
     onChange: (file: File | null) => void;
     accept?: string;
+    helpText?: string;
+    icon?: React.ComponentType<any>;
   }) => (
     <div>
       <Label className="text-sm font-medium text-gray-700">
         {label} {required && <span className="text-red-500">*</span>}
       </Label>
+      {helpText && (
+        <div className="mt-1 mb-2 p-3 bg-blue-50 border border-blue-200 rounded-md">
+          <p className="text-sm text-blue-700 flex items-start gap-2">
+            <Store className="h-4 w-4 mt-0.5 flex-shrink-0" />
+            {helpText}
+          </p>
+        </div>
+      )}
       <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md hover:border-orange-400 transition-colors">
         <div className="space-y-1 text-center">
-          <FileText className="mx-auto h-12 w-12 text-gray-400" />
+          <Icon className="mx-auto h-12 w-12 text-gray-400" />
           <div className="flex text-sm text-gray-600">
             <label className="relative cursor-pointer bg-white rounded-md font-medium text-orange-600 hover:text-orange-500">
               <span>{file ? file.name : 'Upload a file'}</span>
@@ -206,6 +229,8 @@ const SellerVerificationForm = ({ onVerificationSubmitted }: { onVerificationSub
       </div>
     </div>
   );
+
+  const showBusinessLocationMessage = formData.sellerType === 'Garage/Shop' || formData.sellerType === 'Supplier/Importer';
 
   return (
     <Card className="max-w-4xl mx-auto">
@@ -353,6 +378,15 @@ const SellerVerificationForm = ({ onVerificationSubmitted }: { onVerificationSub
               file={formData.profilePhoto}
               onChange={(file) => handleFileChange('profilePhoto', file)}
               accept="image/*"
+            />
+
+            <FileUploadField
+              label="Shop, Garage, or Business Location Photo (Optional, but recommended for shops and garages)"
+              file={formData.businessLocationPhoto}
+              onChange={(file) => handleFileChange('businessLocationPhoto', file)}
+              accept="image/*"
+              helpText={showBusinessLocationMessage ? "Uploading a photo of your shop helps buyers trust your business." : undefined}
+              icon={Store}
             />
           </div>
 
