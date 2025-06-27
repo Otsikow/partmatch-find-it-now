@@ -58,6 +58,12 @@ const Navigation = () => {
     return '/buyer-dashboard';
   };
 
+  const getDashboardLabel = () => {
+    if (userType === 'admin') return 'Admin Dashboard';
+    if (userType === 'supplier') return 'Seller Dashboard';
+    return 'Buyer Dashboard';
+  };
+
   return (
     <nav className="p-4 sm:p-6 flex items-center justify-between bg-gradient-to-r from-white/90 via-yellow-50/80 to-white/90 backdrop-blur-lg shadow-lg border-b">
       <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
@@ -82,17 +88,9 @@ const Navigation = () => {
             </span>
             <Link to={getDashboardLink()}>
               <Button variant="outline" size="sm" className="border-green-600 text-green-700 hover:bg-green-50">
-                Dashboard
+                {getDashboardLabel()}
               </Button>
             </Link>
-            {userType === 'admin' && (
-              <Link to="/admin">
-                <Button variant="outline" size="sm" className="border-purple-600 text-purple-700 hover:bg-purple-50">
-                  <Shield className="h-4 w-4 mr-1" />
-                  Admin
-                </Button>
-              </Link>
-            )}
             <Button 
               variant="ghost" 
               size="sm" 
