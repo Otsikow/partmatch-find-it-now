@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Search, MapPin, Package, Zap } from "lucide-react";
+import { Search, MapPin, Package, Zap, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const HeroSection = () => {
@@ -26,10 +26,10 @@ const HeroSection = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-lg mx-auto">
-          <Link to="/search" className="w-full sm:w-auto">
+          <Link to="/request" className="w-full sm:w-auto">
             <Button size="lg" className="w-full bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700 text-white shadow-lg font-semibold">
-              <Search className="mr-2 h-5 w-5" />
-              Find Car Parts
+              <MessageSquare className="mr-2 h-5 w-5" />
+              Request Car Parts
             </Button>
           </Link>
           
