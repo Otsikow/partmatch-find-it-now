@@ -48,17 +48,30 @@ const Index = () => {
 
       {/* Hero Section */}
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-red-600/20 via-yellow-500/20 to-green-600/20"></div>
+        {/* Background Image Layer */}
+        <div className="absolute inset-0 bg-gradient-to-r from-red-600/10 via-yellow-500/10 to-green-600/10">
+          <img 
+            src="/lovable-uploads/51b54b15-6e34-4aaf-a27e-c96742783d07.png" 
+            alt="PartMatch Background" 
+            className="w-full h-full object-cover opacity-5 mix-blend-multiply"
+            loading="lazy"
+          />
+        </div>
+        
         <div className="relative container mx-auto px-4 py-16 sm:py-24">
           <div className="text-center max-w-4xl mx-auto">
-            {/* Hero Image */}
-            <div className="mb-8 flex justify-center">
-              <img 
-                src="/lovable-uploads/51b54b15-6e34-4aaf-a27e-c96742783d07.png" 
-                alt="PartMatch - Car Parts Marketplace" 
-                className="max-w-lg w-full h-auto object-contain drop-shadow-lg filter brightness-105 contrast-110"
-                loading="lazy"
-              />
+            {/* Hero Image - Now as overlay */}
+            <div className="mb-8 flex justify-center relative">
+              <div className="relative">
+                <img 
+                  src="/lovable-uploads/51b54b15-6e34-4aaf-a27e-c96742783d07.png" 
+                  alt="PartMatch - Car Parts Marketplace" 
+                  className="max-w-2xl w-full h-auto object-contain opacity-90 drop-shadow-2xl filter brightness-110 contrast-120"
+                  loading="lazy"
+                />
+                {/* Subtle glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-red-200/20 via-yellow-200/20 to-green-200/20 blur-3xl -z-10"></div>
+              </div>
             </div>
             
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-playfair font-bold bg-gradient-to-r from-red-600 via-yellow-600 to-green-600 bg-clip-text text-transparent mb-6">
