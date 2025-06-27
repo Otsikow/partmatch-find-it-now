@@ -3,6 +3,10 @@ import { useState, useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Search, Package, Plus } from "lucide-react";
+import { Link } from "react-router-dom";
 import SupplierHeader from "@/components/SupplierHeader";
 import SupplierStats from "@/components/SupplierStats";
 import SupplierTabs from "@/components/SupplierTabs";
@@ -45,6 +49,7 @@ const SupplierDashboard = () => {
   const [myOffers, setMyOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(true);
   const [submittingOffer, setSubmittingOffer] = useState<string | null>(null);
+  const [showMainDashboard, setShowMainDashboard] = useState(true);
 
   // Stats
   const [stats, setStats] = useState({
@@ -172,21 +177,115 @@ const SupplierDashboard = () => {
       <SupplierHeader />
 
       <main className="container mx-auto px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8 max-w-full sm:max-w-2xl md:max-w-4xl lg:max-w-6xl">
-        <SupplierStats
-          totalOffers={stats.totalOffers}
-          pendingOffers={stats.pendingOffers}
-          acceptedOffers={stats.acceptedOffers}
-        />
+        {showMainDashboard ? (
+          <>
+            {/* Welcome Section */}
+            <div className="text-center mb-8 sm:mb-12">
+              <div className="bg-gradient-to-br from-orange-500 to-red-600 rounded-full p-4 w-fit mx-auto mb-6 shadow-lg">
+                <Package className="h-12 w-12 text-white" />
+              </div>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-playfair font-bold mb-4 bg-gradient-to-r from-orange-700 to-red-700 bg-clip-text text-transparent">
+                Seller Dashboard
+              </h2>
+              <p className="text-gray-600 text-lg font-crimson">
+                What would you like to do?
+              </p>
+            </div>
 
-        <SupplierTabs
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-          requests={requests}
-          offers={myOffers}
-          onOfferSubmit={handleMakeOffer}
-          onWhatsAppContact={handleWhatsAppContact}
-          isSubmittingOffer={submittingOffer !== null}
-        />
+            {/* Action Cards */}
+            <div className="grid md:grid-cols-3 gap-6 sm:gap-8 mb-8">
+              {/* Sell Car Parts */}
+              <Card className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 bg-gradient-to-br from-white/90 to-orange-50/50 backdrop-blur-sm border-0 shadow-lg">
+                <CardContent className="p-6 sm:p-8 text-center">
+                  <div className="bg-gradient-to-br from-orange-500 to-red-600 rounded-full p-4 w-fit mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <Plus className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-playfair font-semibold mb-4 text-orange-700">
+                    Sell Car Parts
+                  </h3>
+                  <p className="text-gray-600 mb-6 font-crimson">
+                    Manage your inventory, offers, and customer requests
+                  </p>
+                  <Button 
+                    onClick={() => setShowMainDashboard(false)}
+                    className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                  >
+                    Go to Seller Tools
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Browse Car Parts */}
+              <Card className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 bg-gradient-to-br from-white/90 to-emerald-50/50 backdrop-blur-sm border-0 shadow-lg">
+                <CardContent className="p-6 sm:p-8 text-center">
+                  <div className="bg-gradient-to-br from-emerald-500 to-green-600 rounded-full p-4 w-fit mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <Search className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-playfair font-semibold mb-4 text-emerald-700">
+                    Browse Car Parts
+                  </h3>
+                  <p className="text-gray-600 mb-6 font-crimson">
+                    Search through available car parts from other sellers
+                  </p>
+                  <Link to="/search">
+                    <Button className="w-full bg-gradient-to-r from-emerald-600 to-green-700 hover:from-emerald-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl transition-all duration-300">
+                      Start Browsing
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+
+              {/* Request Car Parts */}
+              <Card className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 bg-gradient-to-br from-white/90 to-blue-50/50 backdrop-blur-sm border-0 shadow-lg">
+                <CardContent className="p-6 sm:p-8 text-center">
+                  <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full p-4 w-fit mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <Package className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-playfair font-semibold mb-4 text-blue-700">
+                    Request Car Parts
+                  </h3>
+                  <p className="text-gray-600 mb-6 font-crimson">
+                    Can't find what you need? Request it and other sellers will reach out
+                  </p>
+                  <Link to="/request">
+                    <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white shadow-lg hover:shadow-xl transition-all duration-300">
+                      Make Request
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </div>
+          </>
+        ) : (
+          <>
+            {/* Back Button */}
+            <div className="mb-6">
+              <Button 
+                variant="outline" 
+                onClick={() => setShowMainDashboard(true)}
+                className="flex items-center gap-2 hover:bg-orange-50"
+              >
+                ← Back to Dashboard
+              </Button>
+            </div>
+
+            <SupplierStats
+              totalOffers={stats.totalOffers}
+              pendingOffers={stats.pendingOffers}
+              acceptedOffers={stats.acceptedOffers}
+            />
+
+            <SupplierTabs
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+              requests={requests}
+              offers={myOffers}
+              onOfferSubmit={handleMakeOffer}
+              onWhatsAppContact={handleWhatsAppContact}
+              isSubmittingOffer={submittingOffer !== null}
+            />
+          </>
+        )}
       </main>
     </div>
   );
