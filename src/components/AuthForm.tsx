@@ -20,7 +20,7 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
     lastName: '',
     phone: '',
     location: '',
-    userType: 'owner'
+    userType: 'buyer'
   });
   const [loading, setLoading] = useState(false);
   
@@ -67,7 +67,7 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
           <p className="text-gray-600 text-sm sm:text-base font-crimson">
             {isLogin 
               ? 'Sign in to your account' 
-              : 'Create an account to start buying or selling car parts'
+              : 'Create an account as a Buyer or Seller'
             }
           </p>
         </div>

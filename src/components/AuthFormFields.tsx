@@ -57,8 +57,8 @@ const AuthFormFields = ({ isLogin, formData, onInputChange }: AuthFormFieldsProp
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="owner">Car Owner</SelectItem>
-                <SelectItem value="supplier">Parts Supplier</SelectItem>
+                <SelectItem value="buyer">Buyer</SelectItem>
+                <SelectItem value="seller">Seller</SelectItem>
               </SelectContent>
             </Select>
           </div>
