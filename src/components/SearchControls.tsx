@@ -26,9 +26,25 @@ const SearchControls = ({
   selectedYear,
   setSelectedYear
 }: SearchControlsProps) => {
+  // Popular car brands in Ghana
+  const popularMakesInGhana = [
+    'Toyota', 'Honda', 'Nissan', 'Hyundai', 'Kia', 'Ford', 'Chevrolet',
+    'Volkswagen', 'Mercedes-Benz', 'BMW', 'Audi', 'Peugeot', 'Renault',
+    'Mazda', 'Mitsubishi', 'Suzuki', 'Subaru', 'Lexus', 'Acura', 'Infiniti',
+    'Land Rover', 'Jeep', 'Volvo', 'Jaguar', 'Porsche', 'Bentley',
+    'Rolls-Royce', 'Ferrari', 'Lamborghini', 'Maserati', 'Cadillac',
+    'Lincoln', 'Buick', 'GMC', 'Dodge', 'Chrysler', 'Ram', 'Fiat',
+    'Alfa Romeo', 'Lancia', 'Skoda', 'Seat', 'Opel', 'Vauxhall',
+    'Citroen', 'DS', 'Dacia', 'Lada', 'Tata', 'Mahindra', 'Maruti',
+    'Great Wall', 'Chery', 'BYD', 'Geely', 'MG', 'Proton', 'Perodua'
+  ];
+
   const uniqueMakes = getUniqueMakes(mockParts);
-  const uniqueModels = getUniqueModels(mockParts, selectedMake);
+  const uniqueModels = getUniqueModels(  mockParts, selectedMake);
   const uniqueYears = getUniqueYears(mockParts, selectedMake, selectedModel);
+
+  // Combine database makes with popular makes, removing duplicates and sorting
+  const allMakes = Array.from(new Set([...uniqueMakes, ...popularMakesInGhana])).sort();
 
   const handleMakeChange = (make: string) => {
     setSelectedMake(make);
@@ -56,22 +72,22 @@ const SearchControls = ({
         {/* Make Filter */}
         <div>
           <p className="text-sm font-medium text-gray-700 mb-2">Make</p>
-          <div className="flex gap-1 sm:gap-2 flex-wrap">
+          <div className="flex gap-1 sm:gap-2 flex-wrap max-h-32 overflow-y-auto">
             <Button
               variant={selectedMake === '' ? 'default' : 'outline'}
               size="sm"
               onClick={() => handleMakeChange('')}
-              className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 ${selectedMake === '' ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
+              className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 flex-shrink-0 ${selectedMake === '' ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
             >
               All Makes
             </Button>
-            {uniqueMakes.map(make => (
+            {allMakes.map(make => (
               <Button
                 key={make}
                 variant={selectedMake === make ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => handleMakeChange(make)}
-                className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 ${selectedMake === make ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
+                className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 flex-shrink-0 ${selectedMake === make ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
               >
                 {make}
               </Button>
