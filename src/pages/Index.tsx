@@ -54,9 +54,9 @@ const Index = () => {
             {/* Hero Image */}
             <div className="mb-8 flex justify-center">
               <img 
-                src="/lovable-uploads/09d873ac-f3ba-4897-b31b-1e17af4db4d7.png" 
+                src="/lovable-uploads/51b54b15-6e34-4aaf-a27e-c96742783d07.png" 
                 alt="PartMatch - Car Parts Marketplace" 
-                className="max-w-md w-full h-auto object-contain opacity-90"
+                className="max-w-lg w-full h-auto object-contain drop-shadow-lg filter brightness-105 contrast-110"
                 loading="lazy"
               />
             </div>
