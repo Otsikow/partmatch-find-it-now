@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -28,22 +27,23 @@ const SearchControls = ({
 }: SearchControlsProps) => {
   // Popular car brands in Ghana
   const popularMakesInGhana = [
-    'Toyota', 'Honda', 'Nissan', 'Hyundai', 'Kia', 'Ford', 'Chevrolet',
-    'Volkswagen', 'Mercedes-Benz', 'BMW', 'Audi', 'Peugeot', 'Renault',
-    'Mazda', 'Mitsubishi', 'Suzuki', 'Subaru', 'Lexus', 'Acura', 'Infiniti',
-    'Land Rover', 'Jeep', 'Volvo', 'Jaguar', 'Porsche', 'Bentley',
-    'Rolls-Royce', 'Ferrari', 'Lamborghini', 'Maserati', 'Cadillac',
-    'Lincoln', 'Buick', 'GMC', 'Dodge', 'Chrysler', 'Ram', 'Fiat',
-    'Alfa Romeo', 'Lancia', 'Skoda', 'Seat', 'Opel', 'Vauxhall',
-    'Citroen', 'DS', 'Dacia', 'Lada', 'Tata', 'Mahindra', 'Maruti',
-    'Great Wall', 'Chery', 'BYD', 'Geely', 'MG', 'Proton', 'Perodua'
+    'Acura', 'Alfa Romeo', 'Audi', 'Bentley', 'BMW', 'Buick', 'BYD', 
+    'Cadillac', 'Chevrolet', 'Chery', 'Chrysler', 'Citroen', 'Dacia', 
+    'Dodge', 'DS', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'GMC', 
+    'Great Wall', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 
+    'Kia', 'Lada', 'Lamborghini', 'Lancia', 'Land Rover', 'Lexus', 
+    'Lincoln', 'Mahindra', 'Maruti', 'Maserati', 'Mazda', 'Mercedes-Benz', 
+    'MG', 'Mitsubishi', 'Nissan', 'Opel', 'Perodua', 'Peugeot', 
+    'Porsche', 'Proton', 'Ram', 'Renault', 'Rolls-Royce', 'Seat', 
+    'Skoda', 'Subaru', 'Suzuki', 'Tata', 'Toyota', 'Vauxhall', 
+    'Volkswagen', 'Volvo'
   ];
 
   const uniqueMakes = getUniqueMakes(mockParts);
-  const uniqueModels = getUniqueModels(  mockParts, selectedMake);
+  const uniqueModels = getUniqueModels(mockParts, selectedMake);
   const uniqueYears = getUniqueYears(mockParts, selectedMake, selectedModel);
 
-  // Combine database makes with popular makes, removing duplicates and sorting
+  // Combine database makes with popular makes, removing duplicates and sorting alphabetically
   const allMakes = Array.from(new Set([...uniqueMakes, ...popularMakesInGhana])).sort();
 
   const handleMakeChange = (make: string) => {
