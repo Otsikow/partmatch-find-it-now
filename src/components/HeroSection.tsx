@@ -22,7 +22,7 @@ const HeroSection = () => {
           </h1>
         </div>
         <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-          Connect with trusted suppliers across Ghana. Get competitive prices for quality car parts delivered to your location.
+          The easiest way to find and order car parts in Ghana. Compare prices from trusted suppliers and get quality parts delivered to your door.
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-lg mx-auto">
