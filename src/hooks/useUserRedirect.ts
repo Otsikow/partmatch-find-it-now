@@ -39,7 +39,7 @@ export const useUserRedirect = () => {
             
             const newProfile = {
               id: user.id,
-              user_type: 'owner',
+              user_type: 'owner' as const,
               first_name: user.user_metadata?.first_name || '',
               last_name: user.user_metadata?.last_name || '',
               phone: user.user_metadata?.phone || ''

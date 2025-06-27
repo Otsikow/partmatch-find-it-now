@@ -46,7 +46,7 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
             
             const newProfile = {
               id: user.id,
-              user_type: 'owner',
+              user_type: 'supplier' as const,
               first_name: user.user_metadata?.first_name || '',
               last_name: user.user_metadata?.last_name || '',
               phone: user.user_metadata?.phone || ''
@@ -64,22 +64,22 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
               console.log('SellerProtectedRoute: Profile created successfully');
             }
             
-            setUserType('owner');
-            console.log('SellerProtectedRoute: Set userType to owner (default)');
+            setUserType('supplier');
+            console.log('SellerProtectedRoute: Set userType to supplier (default)');
           } else {
-            setUserType('owner'); // Default fallback
-            console.log('SellerProtectedRoute: Set userType to owner (fallback)');
+            setUserType('supplier'); // Default fallback
+            console.log('SellerProtectedRoute: Set userType to supplier (fallback)');
           }
         } else {
           console.log('SellerProtectedRoute: User profile found:', profile);
-          const detectedUserType = profile?.user_type || 'owner';
+          const detectedUserType = profile?.user_type || 'supplier';
           setUserType(detectedUserType);
           console.log('SellerProtectedRoute: Set userType to:', detectedUserType);
         }
       } catch (error) {
         console.error('SellerProtectedRoute: Unexpected error fetching user profile:', error);
-        setUserType('owner');
-        console.log('SellerProtectedRoute: Set userType to owner (catch error)');
+        setUserType('supplier');
+        console.log('SellerProtectedRoute: Set userType to supplier (catch error)');
       } finally {
         setProfileLoading(false);
         setHasCheckedProfile(true);
