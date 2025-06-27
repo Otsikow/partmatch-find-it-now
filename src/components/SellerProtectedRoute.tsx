@@ -18,6 +18,7 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       if (!user) {
+        console.log('SellerProtectedRoute: No user, setting loading to false');
         setProfileLoading(false);
         setHasCheckedProfile(true);
         return;
@@ -25,13 +26,16 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
 
       try {
         console.log('SellerProtectedRoute: Fetching user profile for:', user.id);
+        console.log('SellerProtectedRoute: User metadata:', user.user_metadata);
         
         // First check if profile exists
         const { data: profile, error } = await supabase
           .from('profiles')
-          .select('user_type')
+          .select('user_type, first_name, last_name, phone')
           .eq('id', user.id)
           .single();
+
+        console.log('SellerProtectedRoute: Profile query result:', { profile, error });
 
         if (error) {
           console.error('SellerProtectedRoute: Error fetching user profile:', error);
@@ -39,43 +43,67 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
           // If profile doesn't exist, create it with default user_type
           if (error.code === 'PGRST116') {
             console.log('SellerProtectedRoute: Profile not found, creating default profile');
+            
+            const newProfile = {
+              id: user.id,
+              user_type: 'owner',
+              first_name: user.user_metadata?.first_name || '',
+              last_name: user.user_metadata?.last_name || '',
+              phone: user.user_metadata?.phone || ''
+            };
+            
+            console.log('SellerProtectedRoute: Creating profile with data:', newProfile);
+            
             const { error: insertError } = await supabase
               .from('profiles')
-              .insert({
-                id: user.id,
-                user_type: 'owner',
-                first_name: user.user_metadata?.first_name || '',
-                last_name: user.user_metadata?.last_name || '',
-                phone: user.user_metadata?.phone || ''
-              });
+              .insert(newProfile);
             
             if (insertError) {
               console.error('SellerProtectedRoute: Error creating profile:', insertError);
+            } else {
+              console.log('SellerProtectedRoute: Profile created successfully');
             }
             
             setUserType('owner');
+            console.log('SellerProtectedRoute: Set userType to owner (default)');
           } else {
             setUserType('owner'); // Default fallback
+            console.log('SellerProtectedRoute: Set userType to owner (fallback)');
           }
         } else {
           console.log('SellerProtectedRoute: User profile found:', profile);
-          setUserType(profile?.user_type || 'owner');
+          const detectedUserType = profile?.user_type || 'owner';
+          setUserType(detectedUserType);
+          console.log('SellerProtectedRoute: Set userType to:', detectedUserType);
         }
       } catch (error) {
         console.error('SellerProtectedRoute: Unexpected error fetching user profile:', error);
         setUserType('owner');
+        console.log('SellerProtectedRoute: Set userType to owner (catch error)');
       } finally {
         setProfileLoading(false);
         setHasCheckedProfile(true);
+        console.log('SellerProtectedRoute: Profile check completed');
       }
     };
 
     if (!hasCheckedProfile) {
+      console.log('SellerProtectedRoute: Starting profile check...');
       fetchUserProfile();
     }
   }, [user, hasCheckedProfile]);
 
+  console.log('SellerProtectedRoute: Current state:', {
+    loading,
+    profileLoading,
+    hasCheckedProfile,
+    userType,
+    userId: user?.id,
+    userEmail: user?.email
+  });
+
   if (loading || profileLoading || !hasCheckedProfile) {
+    console.log('SellerProtectedRoute: Still loading...');
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white flex items-center justify-center">
         <div className="text-center">
@@ -93,6 +121,7 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
 
   if (userType !== 'supplier') {
     console.log('SellerProtectedRoute: User is not a supplier, userType:', userType);
+    console.log('SellerProtectedRoute: Expected userType: supplier, got:', userType);
     toast({
       title: "Access Denied",
       description: "Only sellers can access this dashboard. Please register as a seller to continue.",
