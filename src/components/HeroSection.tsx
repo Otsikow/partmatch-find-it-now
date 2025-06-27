@@ -33,7 +33,7 @@ const HeroSection = () => {
             </Button>
           </Link>
           
-          <Link to="/search-with-map" className="w-full sm:w-auto">
+          <Link to="/search-map" className="w-full sm:w-auto">
             <Button size="lg" variant="outline" className="w-full border-2 border-green-600 text-green-700 hover:bg-green-50 shadow-lg font-semibold">
               <MapPin className="mr-2 h-5 w-5" />
               Browse Car Parts
