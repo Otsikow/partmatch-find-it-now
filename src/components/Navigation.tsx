@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -29,7 +28,7 @@ const Navigation = () => {
             <span className="text-sm text-gray-600 hidden sm:block">
               Welcome, {user.email}
             </span>
-            <Link to="/supplier">
+            <Link to="/dashboard">
               <Button variant="outline" size="sm" className="border-green-600 text-green-700 hover:bg-green-50">
                 Dashboard
               </Button>
@@ -63,4 +62,3 @@ const Navigation = () => {
 };
 
 export default Navigation;
-
