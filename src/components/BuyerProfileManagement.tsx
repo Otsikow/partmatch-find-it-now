@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -132,15 +133,6 @@ const BuyerProfileManagement = () => {
         console.error('Error deleting part requests:', requestsError);
       }
 
-      // Delete the auth user account - this is the correct way for users to delete their own accounts
-      const { error: authError } = await supabase.auth.updateUser({
-        data: { deleted: true }
-      });
-
-      if (authError) {
-        console.error('Error marking user as deleted:', authError);
-      }
-
       // Sign out the user
       await supabase.auth.signOut();
 
@@ -160,41 +152,6 @@ const BuyerProfileManagement = () => {
       });
     } finally {
       setDeleting(false);
-    }
-  };
-
-  useEffect(() => {
-    if (user) {
-      fetchProfile();
-    }
-  }, [user]);
-
-  const fetchProfile = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('first_name, last_name, phone, location, address')
-        .eq('id', user?.id)
-        .single();
-
-      if (error) throw error;
-
-      if (data) {
-        setProfileData({
-          first_name: data.first_name || '',
-          last_name: data.last_name || '',
-          phone: data.phone || '',
-          location: data.location || '',
-          address: data.address || ''
-        });
-      }
-    } catch (error) {
-      console.error('Error fetching profile:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load profile data.",
-        variant: "destructive"
-      });
     }
   };
 
