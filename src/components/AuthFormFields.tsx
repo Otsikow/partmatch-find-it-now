@@ -60,13 +60,13 @@ const AuthFormFields = ({ isLogin, formData, onInputChange }: AuthFormFieldsProp
                 <SelectValue placeholder="Choose your account type" />
               </SelectTrigger>
               <SelectContent className="bg-white border border-blue-200 shadow-lg">
-                <SelectItem value="buyer" className="hover:bg-blue-50">
+                <SelectItem value="owner" className="hover:bg-blue-50">
                   <div className="flex flex-col">
                     <span className="font-medium">Buyer</span>
                     <span className="text-sm text-gray-600">I want to find and buy car parts</span>
                   </div>
                 </SelectItem>
-                <SelectItem value="seller" className="hover:bg-orange-50">
+                <SelectItem value="supplier" className="hover:bg-orange-50">
                   <div className="flex flex-col">
                     <span className="font-medium">Seller</span>
                     <span className="text-sm text-gray-600">I want to sell car parts</span>

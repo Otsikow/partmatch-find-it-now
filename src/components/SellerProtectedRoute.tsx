@@ -30,13 +30,13 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
 
         if (error) {
           console.error('Error fetching user profile:', error);
-          setUserType('buyer'); // Default to buyer on error
+          setUserType('owner'); // Default to buyer on error
         } else {
-          setUserType(profile?.user_type || 'buyer');
+          setUserType(profile?.user_type || 'owner');
         }
       } catch (error) {
         console.error('Error fetching user profile:', error);
-        setUserType('buyer');
+        setUserType('owner');
       } finally {
         setProfileLoading(false);
       }
@@ -60,7 +60,7 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
     return <Navigate to="/auth" replace />;
   }
 
-  if (userType !== 'seller') {
+  if (userType !== 'supplier') {
     toast({
       title: "Access Denied",
       description: "Only sellers can access this dashboard. Please register as a seller to continue.",

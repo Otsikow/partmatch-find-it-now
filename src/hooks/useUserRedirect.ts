@@ -29,7 +29,7 @@ export const useUserRedirect = () => {
         }
 
         // Redirect based on user type
-        if (profile?.user_type === 'seller') {
+        if (profile?.user_type === 'supplier') {
           navigate('/supplier');
           toast({
             title: "Welcome back!",
