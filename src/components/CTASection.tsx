@@ -26,9 +26,9 @@ const CTASection = () => {
           </Link>
           
           <Link to="/auth" className="w-full sm:w-auto">
-            <Button size="lg" variant="outline" className="w-full border-2 border-white text-white hover:bg-white hover:text-red-700 shadow-lg font-semibold">
+            <Button size="lg" className="w-full bg-white text-gray-900 hover:bg-gray-50 shadow-lg font-semibold border-2 border-white">
               <Users className="mr-2 h-5 w-5" />
-              Become a Supplier
+              Become a Seller
             </Button>
           </Link>
 
