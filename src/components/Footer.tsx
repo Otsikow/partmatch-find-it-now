@@ -13,7 +13,9 @@ import {
   Package,
   Shield,
   Users,
-  Wrench
+  Wrench,
+  Home,
+  Search
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -83,7 +85,7 @@ const Footer = () => {
                   to="/" 
                   className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
                 >
-                  <Package className="h-3 w-3" />
+                  <Home className="h-3 w-3" />
                   <span>Home</span>
                 </Link>
               </li>
@@ -124,25 +126,28 @@ const Footer = () => {
               <li>
                 <Link 
                   to="/search" 
-                  className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson"
+                  className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
                 >
-                  Search Parts
+                  <Search className="h-3 w-3" />
+                  <span>Search Parts</span>
                 </Link>
               </li>
               <li>
                 <Link 
                   to="/search-map" 
-                  className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson"
+                  className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
                 >
-                  Find Parts Near You
+                  <MapPin className="h-3 w-3" />
+                  <span>Find Parts Near You</span>
                 </Link>
               </li>
               <li>
                 <Link 
                   to="/request" 
-                  className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson"
+                  className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
                 >
-                  Request Parts
+                  <Package className="h-3 w-3" />
+                  <span>Request Parts</span>
                 </Link>
               </li>
               <li>
