@@ -53,6 +53,7 @@ export const useUserRedirect = () => {
         
         // Redirect based on user type
         if (profile?.user_type === 'supplier') {
+          console.log('Redirecting supplier to supplier dashboard');
           navigate('/supplier');
           toast({
             title: "Welcome back!",
@@ -65,6 +66,7 @@ export const useUserRedirect = () => {
             description: "Access your admin dashboard to manage the platform.",
           });
         } else {
+          // For 'owner' and any other user types, go to buyer dashboard
           navigate('/buyer-dashboard');
           toast({
             title: "Welcome back!",

@@ -24,7 +24,7 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
       }
 
       try {
-        console.log('Fetching user profile for:', user.id);
+        console.log('SellerProtectedRoute: Fetching user profile for:', user.id);
         
         // First check if profile exists
         const { data: profile, error } = await supabase
@@ -34,11 +34,11 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
           .single();
 
         if (error) {
-          console.error('Error fetching user profile:', error);
+          console.error('SellerProtectedRoute: Error fetching user profile:', error);
           
           // If profile doesn't exist, create it with default user_type
           if (error.code === 'PGRST116') {
-            console.log('Profile not found, creating default profile');
+            console.log('SellerProtectedRoute: Profile not found, creating default profile');
             const { error: insertError } = await supabase
               .from('profiles')
               .insert({
@@ -50,7 +50,7 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
               });
             
             if (insertError) {
-              console.error('Error creating profile:', insertError);
+              console.error('SellerProtectedRoute: Error creating profile:', insertError);
             }
             
             setUserType('owner');
@@ -58,11 +58,11 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
             setUserType('owner'); // Default fallback
           }
         } else {
-          console.log('User profile found:', profile);
+          console.log('SellerProtectedRoute: User profile found:', profile);
           setUserType(profile?.user_type || 'owner');
         }
       } catch (error) {
-        console.error('Unexpected error fetching user profile:', error);
+        console.error('SellerProtectedRoute: Unexpected error fetching user profile:', error);
         setUserType('owner');
       } finally {
         setProfileLoading(false);
@@ -87,10 +87,12 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
   }
 
   if (!user) {
+    console.log('SellerProtectedRoute: No user, redirecting to auth');
     return <Navigate to="/auth" replace />;
   }
 
   if (userType !== 'supplier') {
+    console.log('SellerProtectedRoute: User is not a supplier, userType:', userType);
     toast({
       title: "Access Denied",
       description: "Only sellers can access this dashboard. Please register as a seller to continue.",
@@ -99,6 +101,7 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
     return <Navigate to="/buyer-dashboard" replace />;
   }
 
+  console.log('SellerProtectedRoute: User is a supplier, allowing access');
   return <>{children}</>;
 };
 
