@@ -60,15 +60,19 @@ const Index = () => {
         
         <div className="relative container mx-auto px-4 py-8 sm:py-12">
           <div className="text-center max-w-4xl mx-auto">
-            {/* Hero Image - Now with transparent background and moved up */}
+            {/* Hero Image - Now with truly transparent background */}
             <div className="mb-4 flex justify-center relative -mt-4">
               <div className="relative">
                 <img 
                   src="/lovable-uploads/51b54b15-6e34-4aaf-a27e-c96742783d07.png" 
                   alt="PartMatch - Car Parts Marketplace" 
-                  className="max-w-2xl w-full h-auto object-contain opacity-95 drop-shadow-2xl filter brightness-110 contrast-120 bg-transparent"
+                  className="max-w-2xl w-full h-auto object-contain opacity-95 drop-shadow-2xl mix-blend-multiply"
                   loading="lazy"
-                  style={{ backgroundColor: 'transparent' }}
+                  style={{ 
+                    backgroundColor: 'transparent',
+                    background: 'none',
+                    backdropFilter: 'none'
+                  }}
                 />
                 {/* Subtle glow effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-red-200/20 via-yellow-200/20 to-green-200/20 blur-3xl -z-10"></div>
