@@ -1,11 +1,37 @@
-
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { Home } from "lucide-react";
+import { Home, Shield } from "lucide-react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const Navigation = () => {
   const { user, signOut } = useAuth();
+  const [userType, setUserType] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUserType = async () => {
+      if (!user) {
+        setUserType(null);
+        return;
+      }
+
+      try {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('user_type')
+          .eq('id', user.id)
+          .single();
+
+        setUserType(profile?.user_type || null);
+      } catch (error) {
+        console.error('Error fetching user type:', error);
+        setUserType(null);
+      }
+    };
+
+    fetchUserType();
+  }, [user]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -38,6 +64,14 @@ const Navigation = () => {
                 Dashboard
               </Button>
             </Link>
+            {userType === 'admin' && (
+              <Link to="/admin">
+                <Button variant="outline" size="sm" className="border-purple-600 text-purple-700 hover:bg-purple-50">
+                  <Shield className="h-4 w-4 mr-1" />
+                  Admin
+                </Button>
+              </Link>
+            )}
             <Button 
               variant="ghost" 
               size="sm" 
