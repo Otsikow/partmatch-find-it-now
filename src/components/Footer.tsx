@@ -65,7 +65,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-2 text-sm text-gray-300">
                 <Phone className="h-4 w-4 text-orange-500 flex-shrink-0" />
-                <span>+1 (555) 123-PART</span>
+                <span>+233 55 123-PART</span>
               </div>
               <div className="flex items-center space-x-2 text-sm text-gray-300">
                 <Mail className="h-4 w-4 text-orange-500 flex-shrink-0" />
@@ -89,20 +89,60 @@ const Footer = () => {
               </li>
               <li>
                 <Link 
-                  to="/search" 
+                  to="/about" 
+                  className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
+                >
+                  <Users className="h-3 w-3" />
+                  <span>About Us</span>
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/services" 
                   className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
                 >
                   <Wrench className="h-3 w-3" />
-                  <span>Browse Parts</span>
+                  <span>Our Services</span>
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/contact" 
+                  className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
+                >
+                  <Mail className="h-3 w-3" />
+                  <span>Contact Us</span>
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Browse & Shop */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-playfair font-semibold text-white">Browse & Shop</h3>
+            <ul className="space-y-3">
+              <li>
+                <Link 
+                  to="/search" 
+                  className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson"
+                >
+                  Search Parts
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/search-map" 
+                  className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson"
+                >
+                  Find Parts Near You
                 </Link>
               </li>
               <li>
                 <Link 
                   to="/request" 
-                  className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
+                  className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson"
                 >
-                  <Users className="h-3 w-3" />
-                  <span>Request Parts</span>
+                  Request Parts
                 </Link>
               </li>
               <li>
@@ -114,19 +154,6 @@ const Footer = () => {
                   <span>Seller Dashboard</span>
                 </Link>
               </li>
-            </ul>
-          </div>
-
-          {/* Services */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-playfair font-semibold text-white">Our Services</h3>
-            <ul className="space-y-3">
-              <li className="text-gray-300 text-sm font-crimson">Part Sourcing & Matching</li>
-              <li className="text-gray-300 text-sm font-crimson">Verified Seller Network</li>
-              <li className="text-gray-300 text-sm font-crimson">Secure Payment Processing</li>
-              <li className="text-gray-300 text-sm font-crimson">Quality Assurance</li>
-              <li className="text-gray-300 text-sm font-crimson">Customer Support</li>
-              <li className="text-gray-300 text-sm font-crimson">Mobile Notifications</li>
             </ul>
           </div>
 
@@ -204,24 +231,24 @@ const Footer = () => {
             © {new Date().getFullYear()} PartMatch. All rights reserved. Built with automotive excellence in mind.
           </div>
           <div className="flex flex-wrap justify-center md:justify-end space-x-6 text-sm">
-            <button 
-              onClick={() => toast({ title: "Privacy Policy", description: "Privacy policy page coming soon." })}
+            <Link 
+              to="/privacy-policy"
               className="text-gray-400 hover:text-orange-400 transition-colors duration-200 font-crimson"
             >
               Privacy Policy
-            </button>
-            <button 
-              onClick={() => toast({ title: "Terms of Service", description: "Terms of service page coming soon." })}
+            </Link>
+            <Link 
+              to="/terms-of-service"
               className="text-gray-400 hover:text-orange-400 transition-colors duration-200 font-crimson"
             >
               Terms of Service
-            </button>
-            <button 
-              onClick={() => toast({ title: "Cookie Policy", description: "Cookie policy page coming soon." })}
+            </Link>
+            <Link 
+              to="/cookie-policy"
               className="text-gray-400 hover:text-orange-400 transition-colors duration-200 font-crimson"
             >
               Cookie Policy
-            </button>
+            </Link>
           </div>
         </div>
       </div>

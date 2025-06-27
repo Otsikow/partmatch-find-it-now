@@ -16,6 +16,12 @@ import SupplierDashboard from "./pages/SupplierDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import SearchParts from "./pages/SearchParts";
 import SearchPartsWithMap from "./pages/SearchPartsWithMap";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Services from "./pages/Services";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
+import CookiePolicy from "./pages/CookiePolicy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -49,6 +55,12 @@ const App = () => (
             <Route path="/request" element={<RequestPart />} />
             <Route path="/search" element={<SearchParts />} />
             <Route path="/search-map" element={<SearchPartsWithMap />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
+            <Route path="/cookie-policy" element={<CookiePolicy />} />
             <Route 
               path="/supplier" 
               element={
