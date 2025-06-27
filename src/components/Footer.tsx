@@ -56,7 +56,7 @@ const Footer = () => {
               </span>
             </div>
             <p className="text-gray-300 text-sm leading-relaxed font-crimson">
-              Your trusted partner for automotive parts. Connecting customers with verified local suppliers for quality parts and exceptional service.
+              Your trusted partner for automotive parts. Connecting customers with verified local sellers for quality parts and exceptional service.
             </p>
             <div className="space-y-2">
               <div className="flex items-center space-x-2 text-sm text-gray-300">
@@ -111,7 +111,7 @@ const Footer = () => {
                   className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
                 >
                   <Shield className="h-3 w-3" />
-                  <span>Supplier Dashboard</span>
+                  <span>Seller Dashboard</span>
                 </Link>
               </li>
             </ul>
@@ -122,7 +122,7 @@ const Footer = () => {
             <h3 className="text-lg font-playfair font-semibold text-white">Our Services</h3>
             <ul className="space-y-3">
               <li className="text-gray-300 text-sm font-crimson">Part Sourcing & Matching</li>
-              <li className="text-gray-300 text-sm font-crimson">Verified Supplier Network</li>
+              <li className="text-gray-300 text-sm font-crimson">Verified Seller Network</li>
               <li className="text-gray-300 text-sm font-crimson">Secure Payment Processing</li>
               <li className="text-gray-300 text-sm font-crimson">Quality Assurance</li>
               <li className="text-gray-300 text-sm font-crimson">Customer Support</li>
@@ -134,7 +134,7 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="text-lg font-playfair font-semibold text-white">Stay Updated</h3>
             <p className="text-gray-300 text-sm font-crimson">
-              Subscribe to our newsletter for the latest updates on new suppliers and special offers.
+              Subscribe to our newsletter for the latest updates on new sellers and special offers.
             </p>
             <form onSubmit={handleNewsletterSubmit} className="space-y-3">
               <Input

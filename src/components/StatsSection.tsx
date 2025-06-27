@@ -9,7 +9,7 @@ const StatsSection = () => {
         </div>
         <div>
           <div className="text-3xl sm:text-4xl font-bold text-yellow-600 mb-2">500+</div>
-          <div className="text-gray-600">Verified Suppliers</div>
+          <div className="text-gray-600">Verified Sellers</div>
         </div>
         <div>
           <div className="text-3xl sm:text-4xl font-bold text-green-600 mb-2">10,000+</div>

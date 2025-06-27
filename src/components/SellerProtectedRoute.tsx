@@ -60,7 +60,7 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
     return <Navigate to="/auth" replace />;
   }
 
-  if (userType !== 'seller') {
+  if (userType !== 'supplier') {
     toast({
       title: "Access Denied",
       description: "Only sellers can access this dashboard. Please register as a seller to continue.",

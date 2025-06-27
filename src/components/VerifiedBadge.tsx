@@ -16,7 +16,7 @@ const VerifiedBadge = ({ isVerified, className = "" }: VerifiedBadgeProps) => {
       className={`bg-blue-100 text-blue-800 hover:bg-blue-200 ${className}`}
     >
       <CheckCircle className="h-3 w-3 mr-1" />
-      Verified Supplier
+      Verified Seller
     </Badge>
   );
 };

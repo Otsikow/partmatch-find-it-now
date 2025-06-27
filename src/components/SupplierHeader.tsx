@@ -15,7 +15,7 @@ const SupplierHeader = () => {
       <div className="flex items-center gap-1 sm:gap-2 md:gap-3 min-w-0 flex-1">
         <Package className="h-5 w-5 sm:h-6 sm:w-6 md:h-8 md:w-8 text-orange-600 flex-shrink-0" />
         <h1 className="text-base sm:text-lg md:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-orange-700 to-red-700 bg-clip-text text-transparent truncate">
-          Supplier Dashboard
+          Seller Dashboard
         </h1>
         <VerifiedBadge isVerified={true} className="hidden sm:flex" />
       </div>
