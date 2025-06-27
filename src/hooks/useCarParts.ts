@@ -50,7 +50,14 @@ export const useCarParts = () => {
         return;
       }
 
-      setParts(data || []);
+      // Transform the data to match our CarPart interface
+      const transformedParts: CarPart[] = (data || []).map(part => ({
+        ...part,
+        condition: part.condition as 'New' | 'Used' | 'Refurbished',
+        profiles: part.profiles
+      }));
+
+      setParts(transformedParts);
     } catch (err) {
       console.error('Unexpected error:', err);
       setError('An unexpected error occurred');
