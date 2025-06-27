@@ -51,6 +51,16 @@ const Index = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-red-600/20 via-yellow-500/20 to-green-600/20"></div>
         <div className="relative container mx-auto px-4 py-16 sm:py-24">
           <div className="text-center max-w-4xl mx-auto">
+            {/* Hero Image */}
+            <div className="mb-8 flex justify-center">
+              <img 
+                src="/lovable-uploads/09d873ac-f3ba-4897-b31b-1e17af4db4d7.png" 
+                alt="PartMatch - Car Parts Marketplace" 
+                className="max-w-md w-full h-auto object-contain opacity-90"
+                loading="lazy"
+              />
+            </div>
+            
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-playfair font-bold bg-gradient-to-r from-red-600 via-yellow-600 to-green-600 bg-clip-text text-transparent mb-6">
               Ghana's Premier Car Parts Marketplace
             </h1>
