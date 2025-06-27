@@ -18,8 +18,6 @@ export const useUserRedirect = () => {
 
       try {
         console.log('useUserRedirect: Checking user redirect for:', user.id);
-        console.log('useUserRedirect: User metadata:', user.user_metadata);
-        console.log('useUserRedirect: User email:', user.email);
         
         // Get user profile to determine user type
         const { data: profile, error } = await supabase
@@ -67,19 +65,19 @@ export const useUserRedirect = () => {
         console.log('useUserRedirect: User profile for redirect:', profile);
         console.log('useUserRedirect: User type detected:', profile?.user_type);
         
-        // Redirect based on user type
+        // Redirect based on user type with role-specific messaging
         if (profile?.user_type === 'supplier') {
           console.log('useUserRedirect: Redirecting supplier to supplier dashboard');
           navigate('/supplier');
           toast({
-            title: "Welcome back!",
+            title: "Welcome back, Seller!",
             description: "Access your seller dashboard to manage your parts and offers.",
           });
         } else if (profile?.user_type === 'admin') {
           console.log('useUserRedirect: Redirecting admin to admin dashboard');
           navigate('/admin');
           toast({
-            title: "Welcome back, Admin!",
+            title: "Welcome back, Administrator!",
             description: "Access your admin dashboard to manage the platform.",
           });
         } else {
@@ -87,8 +85,8 @@ export const useUserRedirect = () => {
           console.log('useUserRedirect: Redirecting to buyer dashboard, user_type:', profile?.user_type);
           navigate('/buyer-dashboard');
           toast({
-            title: "Welcome back!",
-            description: "Choose what you'd like to do from the options below.",
+            title: "Welcome back, Buyer!",
+            description: "Find the car parts you need from our network of verified sellers.",
           });
         }
       } catch (error) {

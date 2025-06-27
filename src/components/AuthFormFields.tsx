@@ -53,7 +53,7 @@ const AuthFormFields = ({ isLogin, formData, onInputChange }: AuthFormFieldsProp
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
             <Label htmlFor="userType" className="text-sm sm:text-base font-inter font-semibold text-blue-800 flex items-center gap-2">
               <User className="h-4 w-4" />
-              I want to register as *
+              Select Your Account Type *
             </Label>
             <Select value={formData.userType} onValueChange={(value) => onInputChange('userType', value)}>
               <SelectTrigger className="mt-2 text-base border-blue-200 focus:border-blue-400 bg-white">
@@ -62,14 +62,20 @@ const AuthFormFields = ({ isLogin, formData, onInputChange }: AuthFormFieldsProp
               <SelectContent className="bg-white border border-blue-200 shadow-lg">
                 <SelectItem value="owner" className="hover:bg-blue-50">
                   <div className="flex flex-col">
-                    <span className="font-medium">Buyer</span>
-                    <span className="text-sm text-gray-600">I want to find and buy car parts</span>
+                    <span className="font-medium text-blue-700">🛒 Buyer</span>
+                    <span className="text-sm text-gray-600">Find and purchase car parts</span>
                   </div>
                 </SelectItem>
                 <SelectItem value="supplier" className="hover:bg-orange-50">
                   <div className="flex flex-col">
-                    <span className="font-medium">Seller</span>
-                    <span className="text-sm text-gray-600">I want to sell car parts</span>
+                    <span className="font-medium text-orange-700">🏪 Seller</span>
+                    <span className="text-sm text-gray-600">Sell and supply car parts</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="admin" className="hover:bg-purple-50">
+                  <div className="flex flex-col">
+                    <span className="font-medium text-purple-700">⚙️ Administrator</span>
+                    <span className="text-sm text-gray-600">Manage platform and users</span>
                   </div>
                 </SelectItem>
               </SelectContent>

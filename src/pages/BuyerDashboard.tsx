@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, Search, Package, User } from "lucide-react";
+import { ArrowLeft, Search, Package, User, ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -35,6 +35,9 @@ const BuyerDashboard = () => {
         </div>
         
         <div className="flex items-center gap-3">
+          <div className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
+            Buyer Account
+          </div>
           <span className="text-sm text-gray-600 hidden sm:block">
             {user?.email}
           </span>
@@ -53,13 +56,13 @@ const BuyerDashboard = () => {
       <main className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-4xl">
         <div className="text-center mb-8 sm:mb-12">
           <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full p-4 w-fit mx-auto mb-6 shadow-lg">
-            <User className="h-12 w-12 text-white" />
+            <ShoppingCart className="h-12 w-12 text-white" />
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-playfair font-bold mb-4 bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
-            What would you like to do?
+            Find Your Car Parts
           </h2>
           <p className="text-gray-600 text-lg font-crimson">
-            Choose an option below to get started as a buyer
+            Browse and request car parts from verified sellers across Ghana
           </p>
         </div>
 
@@ -71,10 +74,10 @@ const BuyerDashboard = () => {
                 <Search className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-xl sm:text-2xl font-playfair font-semibold mb-4 text-emerald-700">
-                Browse Car Parts
+                Browse Available Parts
               </h3>
               <p className="text-gray-600 mb-6 font-crimson">
-                Search through available car parts from verified sellers
+                Search through thousands of car parts from verified sellers
               </p>
               <Link to="/search">
                 <Button className="w-full bg-gradient-to-r from-emerald-600 to-green-700 hover:from-emerald-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl transition-all duration-300">
@@ -91,10 +94,10 @@ const BuyerDashboard = () => {
                 <Package className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-xl sm:text-2xl font-playfair font-semibold mb-4 text-blue-700">
-                Request Car Parts
+                Request Specific Parts
               </h3>
               <p className="text-gray-600 mb-6 font-crimson">
-                Can't find what you need? Request it and sellers will reach out
+                Can't find what you need? Request it and sellers will contact you
               </p>
               <Link to="/request">
                 <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white shadow-lg hover:shadow-xl transition-all duration-300">
@@ -103,6 +106,30 @@ const BuyerDashboard = () => {
               </Link>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Buyer Benefits Section */}
+        <div className="mt-12 bg-gradient-to-r from-white/80 to-blue-50/60 rounded-xl p-6 border">
+          <h3 className="text-lg font-playfair font-semibold text-center text-gray-800 mb-4">
+            Why Choose PartMatch as a Buyer?
+          </h3>
+          <div className="grid md:grid-cols-3 gap-4 text-center">
+            <div className="p-4">
+              <div className="text-2xl mb-2">🔍</div>
+              <h4 className="font-semibold text-gray-700">Easy Search</h4>
+              <p className="text-sm text-gray-600">Find parts quickly with our advanced search</p>
+            </div>
+            <div className="p-4">
+              <div className="text-2xl mb-2">✅</div>
+              <h4 className="font-semibold text-gray-700">Verified Sellers</h4>
+              <p className="text-sm text-gray-600">All sellers are verified for your safety</p>
+            </div>
+            <div className="p-4">
+              <div className="text-2xl mb-2">💬</div>
+              <h4 className="font-semibold text-gray-700">Direct Contact</h4>
+              <p className="text-sm text-gray-600">Connect directly with sellers for the best deals</p>
+            </div>
+          </div>
         </div>
       </main>
     </div>

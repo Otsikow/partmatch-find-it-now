@@ -20,7 +20,7 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
     lastName: '',
     phone: '',
     location: '',
-    userType: 'buyer'
+    userType: 'owner'
   });
   const [loading, setLoading] = useState(false);
   
@@ -54,6 +54,15 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const getRoleDisplayName = (userType: string) => {
+    switch (userType) {
+      case 'owner': return 'Buyer';
+      case 'supplier': return 'Seller';
+      case 'admin': return 'Administrator';
+      default: return 'User';
+    }
+  };
+
   return (
     <main className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-md">
       <Card className="p-6 sm:p-8 bg-gradient-to-br from-white/90 to-blue-50/50 backdrop-blur-sm shadow-2xl border-0">
@@ -66,10 +75,15 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
           </h2>
           <p className="text-gray-600 text-sm sm:text-base font-crimson">
             {isLogin 
-              ? 'Sign in to your account' 
-              : 'Create an account as a Buyer or Seller'
+              ? 'Sign in to access your dashboard' 
+              : `Create your ${getRoleDisplayName(formData.userType)} account`
             }
           </p>
+          {!isLogin && (
+            <div className="mt-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium inline-block">
+              Registering as: {getRoleDisplayName(formData.userType)}
+            </div>
+          )}
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
@@ -84,7 +98,7 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
             className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 py-3 sm:py-4 text-base sm:text-lg rounded-xl font-inter font-medium shadow-lg hover:shadow-xl transition-all duration-300"
             disabled={loading}
           >
-            {loading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Create Account')}
+            {loading ? 'Please wait...' : (isLogin ? 'Sign In' : `Create ${getRoleDisplayName(formData.userType)} Account`)}
           </Button>
         </form>
 
