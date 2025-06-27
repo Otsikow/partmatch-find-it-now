@@ -1,12 +1,12 @@
+
 import { useState, useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Package } from "lucide-react";
 import { Link } from "react-router-dom";
 import SearchControls from "@/components/SearchControls";
-import PartsList from "@/components/PartsList";
-import { mockParts } from "@/data/mockParts";
-import { filterParts } from "@/utils/partFilters";
+import CarPartsList from "@/components/CarPartsList";
+import { useCarParts } from "@/hooks/useCarParts";
 import Footer from "@/components/Footer";
 
 const SearchParts = () => {
@@ -15,9 +15,24 @@ const SearchParts = () => {
   const [selectedModel, setSelectedModel] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
 
+  const { parts, loading, error } = useCarParts();
+
+  // Filter parts based on search criteria
   const filteredParts = useMemo(() => {
-    return filterParts(mockParts, searchTerm, selectedMake, selectedModel, selectedYear);
-  }, [searchTerm, selectedMake, selectedModel, selectedYear]);
+    return parts.filter(part => {
+      const matchesSearch = searchTerm === "" || 
+        part.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        part.make.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        part.model.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        part.part_type.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      const matchesMake = selectedMake === "" || part.make.toLowerCase() === selectedMake.toLowerCase();
+      const matchesModel = selectedModel === "" || part.model.toLowerCase() === selectedModel.toLowerCase();
+      const matchesYear = selectedYear === "" || part.year.toString() === selectedYear;
+
+      return matchesSearch && matchesMake && matchesModel && matchesYear;
+    });
+  }, [parts, searchTerm, selectedMake, selectedModel, selectedYear]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50 to-green-100 font-inter">
@@ -50,7 +65,11 @@ const SearchParts = () => {
               selectedYear={selectedYear}
               setSelectedYear={setSelectedYear}
             />
-            <PartsList parts={filteredParts} />
+            <CarPartsList 
+              parts={filteredParts} 
+              loading={loading}
+              error={error}
+            />
           </CardContent>
         </Card>
       </main>
