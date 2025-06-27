@@ -59,19 +59,17 @@ const Index = () => {
         
         <div className="relative container mx-auto px-4 py-8 sm:py-12">
           <div className="text-center max-w-4xl mx-auto">
-            {/* Hero Image - Seamlessly blended */}
+            {/* Hero Image - Restored to original state */}
             <div className="mb-4 flex justify-center relative -mt-4">
               <div className="relative">
                 <img 
                   src="/lovable-uploads/51b54b15-6e34-4aaf-a27e-c96742783d07.png" 
                   alt="PartMatch - Car Parts Marketplace" 
-                  className="max-w-2xl w-full h-auto object-contain opacity-80 mix-blend-screen filter saturate-110"
+                  className="max-w-2xl w-full h-auto object-contain opacity-80 mix-blend-multiply filter saturate-110"
                   loading="lazy"
                   style={{ 
                     backgroundColor: 'transparent',
-                    background: 'transparent',
-                    maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 70%)',
-                    WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, transparent 70%)'
+                    background: 'transparent'
                   }}
                 />
               </div>
