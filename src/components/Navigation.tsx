@@ -4,7 +4,11 @@ import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Navigation = () => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
 
   return (
     <nav className="p-4 sm:p-6 flex items-center justify-between bg-gradient-to-r from-white/90 via-yellow-50/80 to-white/90 backdrop-blur-lg shadow-lg border-b">
@@ -30,6 +34,14 @@ const Navigation = () => {
                 Dashboard
               </Button>
             </Link>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={handleSignOut}
+              className="text-gray-700 hover:text-red-700 hover:bg-red-50/50 font-medium"
+            >
+              Sign Out
+            </Button>
           </div>
         ) : (
           <div className="flex items-center gap-2 sm:gap-3">
@@ -51,3 +63,4 @@ const Navigation = () => {
 };
 
 export default Navigation;
+
