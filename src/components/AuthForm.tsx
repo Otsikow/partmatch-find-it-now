@@ -37,6 +37,7 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
       if (isLogin) {
         await signIn(formData.email, formData.password);
       } else {
+        console.log('AuthForm: Signing up with user_type:', formData.userType);
         await signUp(formData.email, formData.password, {
           first_name: formData.firstName,
           last_name: formData.lastName,

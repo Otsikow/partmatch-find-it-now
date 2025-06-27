@@ -31,13 +31,16 @@ export const useUserRedirect = () => {
         if (error) {
           console.error('useUserRedirect: Error fetching user profile for redirect:', error);
           
-          // If profile doesn't exist, create it with default user_type
+          // If profile doesn't exist, check user metadata for user_type
           if (error.code === 'PGRST116') {
-            console.log('useUserRedirect: Profile not found, creating default profile for redirect');
+            console.log('useUserRedirect: Profile not found, creating profile based on metadata');
+            
+            const userTypeFromMetadata = user.user_metadata?.user_type || 'owner';
+            console.log('useUserRedirect: User type from metadata:', userTypeFromMetadata);
             
             const newProfile = {
               id: user.id,
-              user_type: 'owner' as const,
+              user_type: userTypeFromMetadata,
               first_name: user.user_metadata?.first_name || '',
               last_name: user.user_metadata?.last_name || '',
               phone: user.user_metadata?.phone || ''
@@ -53,6 +56,25 @@ export const useUserRedirect = () => {
               console.error('useUserRedirect: Error creating profile for redirect:', insertError);
             } else {
               console.log('useUserRedirect: Profile created successfully');
+            }
+            
+            // Redirect based on the metadata user_type
+            if (userTypeFromMetadata === 'supplier') {
+              console.log('useUserRedirect: Redirecting supplier to supplier dashboard');
+              navigate('/supplier');
+              toast({
+                title: "Welcome back, Seller!",
+                description: "Access your seller dashboard to manage your parts and offers.",
+              });
+              return;
+            } else if (userTypeFromMetadata === 'admin') {
+              console.log('useUserRedirect: Redirecting admin to admin dashboard');
+              navigate('/admin');
+              toast({
+                title: "Welcome back, Administrator!",
+                description: "Access your admin dashboard to manage the platform.",
+              });
+              return;
             }
           }
           
