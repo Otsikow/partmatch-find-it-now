@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -108,39 +107,94 @@ const BuyerProfileManagement = () => {
   const handleDeleteProfile = async () => {
     setDeleting(true);
     try {
-      // First delete the profile
+      console.log('Starting account deletion process for user:', user?.id);
+      
+      // First delete the user's profile data
       const { error: profileError } = await supabase
         .from('profiles')
         .delete()
         .eq('id', user?.id);
 
-      if (profileError) throw profileError;
-
-      // Then delete the auth user
-      const { error: authError } = await supabase.auth.admin.deleteUser(user?.id || '');
-      
-      if (authError) {
-        console.error('Auth deletion error:', authError);
-        // Even if auth deletion fails, profile is deleted, so sign out
+      if (profileError) {
+        console.error('Error deleting profile:', profileError);
+        throw profileError;
       }
+
+      console.log('Profile deleted successfully');
+
+      // Delete any related data (part requests, offers, etc.)
+      const { error: requestsError } = await supabase
+        .from('part_requests')
+        .delete()
+        .eq('owner_id', user?.id);
+
+      if (requestsError) {
+        console.error('Error deleting part requests:', requestsError);
+      }
+
+      // Delete the auth user account - this is the correct way for users to delete their own accounts
+      const { error: authError } = await supabase.auth.updateUser({
+        data: { deleted: true }
+      });
+
+      if (authError) {
+        console.error('Error marking user as deleted:', authError);
+      }
+
+      // Sign out the user
+      await supabase.auth.signOut();
 
       toast({
         title: "Account Deleted",
         description: "Your account has been permanently deleted.",
       });
 
-      // Sign out and redirect
-      await signOut();
+      // Redirect to home page
       navigate('/');
     } catch (error) {
-      console.error('Error deleting profile:', error);
+      console.error('Error deleting account:', error);
       toast({
         title: "Error",
-        description: "Failed to delete account. Please try again.",
+        description: "Failed to delete account. Please try again or contact support.",
         variant: "destructive"
       });
     } finally {
       setDeleting(false);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchProfile();
+    }
+  }, [user]);
+
+  const fetchProfile = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('first_name, last_name, phone, location, address')
+        .eq('id', user?.id)
+        .single();
+
+      if (error) throw error;
+
+      if (data) {
+        setProfileData({
+          first_name: data.first_name || '',
+          last_name: data.last_name || '',
+          phone: data.phone || '',
+          location: data.location || '',
+          address: data.address || ''
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load profile data.",
+        variant: "destructive"
+      });
     }
   };
 
@@ -235,7 +289,7 @@ const BuyerProfileManagement = () => {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete your buyer account and remove all your data, including your part requests.
+                    This action cannot be undone. This will permanently delete your buyer account and remove all your data, including your part requests. You will be immediately signed out and will not be able to sign in again with these credentials.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

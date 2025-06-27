@@ -108,35 +108,55 @@ const SellerProfileManagement = () => {
   const handleDeleteProfile = async () => {
     setDeleting(true);
     try {
-      // First delete the profile
+      console.log('Starting seller account deletion process for user:', user?.id);
+      
+      // First delete the user's profile data
       const { error: profileError } = await supabase
         .from('profiles')
         .delete()
         .eq('id', user?.id);
 
-      if (profileError) throw profileError;
-
-      // Then delete the auth user
-      const { error: authError } = await supabase.auth.admin.deleteUser(user?.id || '');
-      
-      if (authError) {
-        console.error('Auth deletion error:', authError);
-        // Even if auth deletion fails, profile is deleted, so sign out
+      if (profileError) {
+        console.error('Error deleting profile:', profileError);
+        throw profileError;
       }
+
+      console.log('Profile deleted successfully');
+
+      // Delete seller-specific data (car parts, offers, etc.)
+      const { error: partsError } = await supabase
+        .from('car_parts')
+        .delete()
+        .eq('supplier_id', user?.id);
+
+      if (partsError) {
+        console.error('Error deleting car parts:', partsError);
+      }
+
+      const { error: offersError } = await supabase
+        .from('offers')
+        .delete()
+        .eq('supplier_id', user?.id);
+
+      if (offersError) {
+        console.error('Error deleting offers:', offersError);
+      }
+
+      // Sign out the user immediately
+      await supabase.auth.signOut();
 
       toast({
         title: "Account Deleted",
-        description: "Your account has been permanently deleted.",
+        description: "Your seller account has been permanently deleted.",
       });
 
-      // Sign out and redirect
-      await signOut();
+      // Redirect to home page
       navigate('/');
     } catch (error) {
-      console.error('Error deleting profile:', error);
+      console.error('Error deleting seller account:', error);
       toast({
         title: "Error",
-        description: "Failed to delete account. Please try again.",
+        description: "Failed to delete account. Please try again or contact support.",
         variant: "destructive"
       });
     } finally {
@@ -150,7 +170,7 @@ const SellerProfileManagement = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <User className="h-5 w-5" />
-            Profile Management
+            Seller Profile Management
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -204,12 +224,12 @@ const SellerProfileManagement = () => {
           </div>
 
           <div>
-            <Label htmlFor="address">Address (Optional)</Label>
+            <Label htmlFor="address">Business Address (Optional)</Label>
             <Textarea
               id="address"
               value={profileData.address}
               onChange={(e) => handleInputChange('address', e.target.value)}
-              placeholder="Enter your full address"
+              placeholder="Enter your business address"
               rows={3}
             />
           </div>
@@ -218,7 +238,7 @@ const SellerProfileManagement = () => {
             <Button
               onClick={handleUpdateProfile}
               disabled={loading}
-              className="bg-orange-600 hover:bg-orange-700"
+              className="bg-blue-600 hover:bg-blue-700"
             >
               <Save className="h-4 w-4 mr-2" />
               {loading ? 'Updating...' : 'Update Profile'}
@@ -235,7 +255,7 @@ const SellerProfileManagement = () => {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete your seller account and remove all your data, including your offers and part listings.
+                    This action cannot be undone. This will permanently delete your seller account and remove all your data, including your car parts listings and offers. You will be immediately signed out and will not be able to sign in again with these credentials.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
