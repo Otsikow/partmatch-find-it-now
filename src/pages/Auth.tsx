@@ -5,9 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, User, Mail, Lock, Phone, MapPin } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { useEffect } from "react";
+import { useUserRedirect } from "@/hooks/useUserRedirect";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -22,14 +22,10 @@ const Auth = () => {
   });
   const [loading, setLoading] = useState(false);
   
-  const { signUp, signIn, user } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (user) {
-      navigate('/');
-    }
-  }, [user, navigate]);
+  const { signUp, signIn } = useAuth();
+  
+  // Use the redirect hook to handle post-authentication routing
+  useUserRedirect();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,7 +68,7 @@ const Auth = () => {
             className="h-6 w-auto sm:h-8"
           />
           <h1 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
-            {isLogin ? 'Sign In' : 'Create Account'}
+            {isLogin ? 'Sign In' : 'Join PartMatch Ghana'}
           </h1>
         </div>
       </header>
@@ -84,12 +80,12 @@ const Auth = () => {
               <User className="h-10 w-10 sm:h-12 sm:w-12 text-white" />
             </div>
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-semibold mb-2 sm:mb-3 bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
-              {isLogin ? 'Welcome Back' : 'Join PartMatch'}
+              {isLogin ? 'Welcome Back' : 'Join PartMatch Ghana'}
             </h2>
             <p className="text-gray-600 text-sm sm:text-base font-crimson">
               {isLogin 
                 ? 'Sign in to your account' 
-                : 'Create an account to get started'
+                : 'Create an account to start buying or selling car parts'
               }
             </p>
           </div>
@@ -216,7 +212,7 @@ const Auth = () => {
               className="text-blue-600 hover:text-blue-800 hover:underline text-sm sm:text-base font-crimson transition-colors duration-300"
             >
               {isLogin 
-                ? "Don't have an account? Sign up" 
+                ? "Don't have an account? Join now" 
                 : "Already have an account? Sign in"
               }
             </button>

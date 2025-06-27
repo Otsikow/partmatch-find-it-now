@@ -36,11 +36,18 @@ const Index = () => {
               </Link>
             </div>
           ) : (
-            <Link to="/auth">
-              <Button variant="outline" size="sm" className="border-green-600 text-green-700 hover:bg-green-50">
-                Sign In
-              </Button>
-            </Link>
+            <div className="flex items-center gap-2 sm:gap-3">
+              <Link to="/auth">
+                <Button variant="ghost" size="sm" className="text-gray-700 hover:text-green-700 hover:bg-green-50/50 font-medium">
+                  Sign In
+                </Button>
+              </Link>
+              <Link to="/auth">
+                <Button size="sm" className="bg-gradient-to-r from-red-600 to-green-700 hover:from-red-700 hover:to-green-800 text-white shadow-md font-medium">
+                  Join Now
+                </Button>
+              </Link>
+            </div>
           )}
         </div>
       </nav>
