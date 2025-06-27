@@ -7,6 +7,14 @@ const HeroSection = () => {
   return (
     <div className="relative min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-red-50 via-yellow-50 to-green-50">
       <div className="container mx-auto px-4 text-center">
+        <div className="mb-8">
+          <img 
+            src="/lovable-uploads/abc7bc58-f2e2-45a1-a524-3f34a3356819.png" 
+            alt="PartMatch - Find Car Parts in Ghana" 
+            className="w-64 h-auto mx-auto mb-6 drop-shadow-lg"
+          />
+        </div>
+        
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-playfair font-bold text-gray-900 mb-6 leading-tight">
           Find Car Parts in Ghana
         </h1>
