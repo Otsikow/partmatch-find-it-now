@@ -40,7 +40,7 @@ const HeroSection = () => {
             </Button>
           </Link>
 
-          <Link to="/auth" className="w-full sm:w-auto">
+          <Link to="/supplier" className="w-full sm:w-auto">
             <Button size="lg" className="w-full bg-gradient-to-r from-green-600 to-red-600 hover:from-green-700 hover:to-red-700 text-white shadow-lg font-semibold">
               <Package className="mr-2 h-5 w-5" />
               Sell Car Parts
