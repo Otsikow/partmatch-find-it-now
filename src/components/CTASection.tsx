@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Search, Users, Package } from "lucide-react";
+import { Search, Users, Package, Rocket } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -10,9 +10,12 @@ const CTASection = () => {
   return (
     <div className="bg-gradient-to-r from-red-600 via-yellow-600 to-green-600 text-white py-16">
       <div className="container mx-auto px-4 text-center">
-        <h2 className="text-3xl sm:text-4xl font-playfair font-bold mb-6 text-white drop-shadow-lg">
-          Ready to Get Started?
-        </h2>
+        <div className="flex items-center justify-center space-x-3 mb-6">
+          <Rocket className="h-8 w-8 text-white" />
+          <h2 className="text-3xl sm:text-4xl font-playfair font-bold text-white drop-shadow-lg">
+            Ready to Get Started?
+          </h2>
+        </div>
         <p className="text-xl mb-8 text-white/95 max-w-2xl mx-auto drop-shadow-md">
           Join thousands of satisfied customers and suppliers across Ghana.
         </p>

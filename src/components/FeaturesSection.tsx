@@ -1,15 +1,18 @@
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Search, Package, MapPin } from "lucide-react";
+import { Search, Package, MapPin, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const FeaturesSection = () => {
   return (
     <div className="container mx-auto px-4 py-16">
       <div className="text-center mb-12">
-        <h2 className="text-3xl sm:text-4xl font-playfair font-bold text-gray-900 mb-4">
-          How It Works
-        </h2>
+        <div className="flex items-center justify-center space-x-3 mb-4">
+          <Zap className="h-8 w-8 text-orange-500" />
+          <h2 className="text-3xl sm:text-4xl font-playfair font-bold text-gray-900">
+            How It Works
+          </h2>
+        </div>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
           Whether you're looking for parts or selling them, our platform makes it simple and secure.
         </p>

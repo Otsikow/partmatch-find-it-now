@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { MapPin, Phone, Mail, Clock, MessageCircle } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, MessageCircle, Send } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -55,7 +55,10 @@ const Contact = () => {
           {/* Contact Form */}
           <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-blue-50/50">
             <CardContent className="p-8">
-              <h2 className="text-2xl font-playfair font-bold text-gray-800 mb-6">Send us a Message</h2>
+              <div className="flex items-center space-x-3 mb-6">
+                <Send className="h-6 w-6 text-blue-500" />
+                <h2 className="text-2xl font-playfair font-bold text-gray-800">Send us a Message</h2>
+              </div>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
@@ -137,6 +140,7 @@ const Contact = () => {
                   type="submit"
                   className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium py-3"
                 >
+                  <Send className="mr-2 h-4 w-4" />
                   Send Message
                 </Button>
               </form>

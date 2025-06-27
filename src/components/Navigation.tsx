@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { Home } from "lucide-react";
 
 const Navigation = () => {
   const { user, signOut } = useAuth();
@@ -12,16 +13,19 @@ const Navigation = () => {
 
   return (
     <nav className="p-4 sm:p-6 flex items-center justify-between bg-gradient-to-r from-white/90 via-yellow-50/80 to-white/90 backdrop-blur-lg shadow-lg border-b">
-      <div className="flex items-center gap-3">
+      <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
         <img 
           src="/lovable-uploads/23312658-5ff6-4d89-a7cb-c0fbf631cd1c.png" 
           alt="PartMatch Logo" 
           className="h-12 w-auto"
         />
-        <h1 className="text-xl sm:text-2xl font-playfair font-bold bg-gradient-to-r from-red-600 to-green-700 bg-clip-text text-transparent">
-          PartMatch Ghana
-        </h1>
-      </div>
+        <div className="flex items-center gap-2">
+          <Home className="h-5 w-5 text-green-700" />
+          <h1 className="text-xl sm:text-2xl font-playfair font-bold bg-gradient-to-r from-red-600 to-green-700 bg-clip-text text-transparent">
+            PartMatch Ghana
+          </h1>
+        </div>
+      </Link>
       
       <div className="flex items-center gap-3">
         {user ? (

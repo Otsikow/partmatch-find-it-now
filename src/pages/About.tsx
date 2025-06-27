@@ -2,7 +2,7 @@
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent } from "@/components/ui/card";
-import { Package, Users, Shield, Award, MapPin, Mail, Phone } from "lucide-react";
+import { Package, Users, Shield, Award, MapPin, Mail, Phone, Target, Eye, Star, CheckCircle, Clock } from "lucide-react";
 
 const About = () => {
   return (
@@ -28,7 +28,7 @@ const About = () => {
           <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-orange-50/50">
             <CardContent className="p-8">
               <div className="flex items-center space-x-3 mb-4">
-                <Award className="h-8 w-8 text-orange-500" />
+                <Target className="h-8 w-8 text-orange-500" />
                 <h2 className="text-2xl font-playfair font-bold text-gray-800">Our Mission</h2>
               </div>
               <p className="text-gray-600 font-crimson leading-relaxed">
@@ -40,7 +40,7 @@ const About = () => {
           <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-green-50/50">
             <CardContent className="p-8">
               <div className="flex items-center space-x-3 mb-4">
-                <Users className="h-8 w-8 text-green-500" />
+                <Eye className="h-8 w-8 text-green-500" />
                 <h2 className="text-2xl font-playfair font-bold text-gray-800">Our Vision</h2>
               </div>
               <p className="text-gray-600 font-crimson leading-relaxed">
@@ -53,7 +53,10 @@ const About = () => {
         {/* Our Story */}
         <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-slate-50/50 mb-16">
           <CardContent className="p-8">
-            <h2 className="text-3xl font-playfair font-bold text-gray-800 mb-6 text-center">Our Story</h2>
+            <div className="flex items-center justify-center space-x-3 mb-6">
+              <Star className="h-8 w-8 text-blue-500" />
+              <h2 className="text-3xl font-playfair font-bold text-gray-800">Our Story</h2>
+            </div>
             <div className="max-w-4xl mx-auto space-y-6 text-gray-600 font-crimson leading-relaxed">
               <p>
                 PartMatch was born from a simple observation: finding quality automotive parts in Ghana was unnecessarily complicated and time-consuming. Car owners often struggled to locate the right parts, while parts sellers had difficulty reaching potential customers.
@@ -70,7 +73,10 @@ const About = () => {
 
         {/* Why Choose Us */}
         <div className="mb-16">
-          <h2 className="text-3xl font-playfair font-bold text-gray-800 mb-8 text-center">Why Choose PartMatch?</h2>
+          <div className="flex items-center justify-center space-x-3 mb-8">
+            <CheckCircle className="h-8 w-8 text-green-500" />
+            <h2 className="text-3xl font-playfair font-bold text-gray-800">Why Choose PartMatch?</h2>
+          </div>
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-blue-50/50">
               <CardContent className="p-6 text-center">
@@ -101,7 +107,10 @@ const About = () => {
         {/* Contact Information */}
         <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-slate-50/50">
           <CardContent className="p-8">
-            <h2 className="text-3xl font-playfair font-bold text-gray-800 mb-8 text-center">Get In Touch</h2>
+            <div className="flex items-center justify-center space-x-3 mb-8">
+              <Mail className="h-8 w-8 text-blue-500" />
+              <h2 className="text-3xl font-playfair font-bold text-gray-800">Get In Touch</h2>
+            </div>
             <div className="grid md:grid-cols-3 gap-8 text-center">
               <div className="space-y-3">
                 <MapPin className="h-8 w-8 text-orange-500 mx-auto" />

@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Search, MapPin, Package } from "lucide-react";
+import { Search, MapPin, Package, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const HeroSection = () => {
@@ -15,9 +15,12 @@ const HeroSection = () => {
           />
         </div>
         
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-playfair font-bold text-gray-900 mb-6 leading-tight">
-          Find Car Parts in Ghana
-        </h1>
+        <div className="flex items-center justify-center space-x-3 mb-6">
+          <Zap className="h-8 w-8 text-yellow-500" />
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-playfair font-bold text-gray-900 leading-tight">
+            Find Car Parts in Ghana
+          </h1>
+        </div>
         <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
           Connect with trusted suppliers across Ghana. Get competitive prices for quality car parts delivered to your location.
         </p>

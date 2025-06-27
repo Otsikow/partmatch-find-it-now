@@ -5,6 +5,7 @@ import HeroSection from "@/components/HeroSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import CTASection from "@/components/CTASection";
 import StatsSection from "@/components/StatsSection";
+import { Car } from "lucide-react";
 
 const Index = () => {
   return (

@@ -2,7 +2,7 @@
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent } from "@/components/ui/card";
-import { Shield, Eye, Lock, FileText } from "lucide-react";
+import { Shield, Eye, Lock, FileText, UserCheck, Cookie, Phone, Clock } from "lucide-react";
 
 const PrivacyPolicy = () => {
   return (
@@ -115,7 +115,10 @@ const PrivacyPolicy = () => {
           {/* Your Rights */}
           <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-red-50/50">
             <CardContent className="p-8">
-              <h2 className="text-2xl font-playfair font-bold text-gray-800 mb-6">Your Rights</h2>
+              <div className="flex items-center space-x-3 mb-6">
+                <UserCheck className="h-8 w-8 text-red-500" />
+                <h2 className="text-2xl font-playfair font-bold text-gray-800">Your Rights</h2>
+              </div>
               <div className="space-y-4 text-gray-600 font-crimson">
                 <p>You have the right to:</p>
                 <ul className="list-disc list-inside space-y-2">
@@ -133,7 +136,10 @@ const PrivacyPolicy = () => {
           {/* Cookies and Tracking */}
           <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-teal-50/50">
             <CardContent className="p-8">
-              <h2 className="text-2xl font-playfair font-bold text-gray-800 mb-6">Cookies and Tracking</h2>
+              <div className="flex items-center space-x-3 mb-6">
+                <Cookie className="h-8 w-8 text-teal-500" />
+                <h2 className="text-2xl font-playfair font-bold text-gray-800">Cookies and Tracking</h2>
+              </div>
               <div className="space-y-4 text-gray-600 font-crimson">
                 <p>We use cookies and similar technologies to:</p>
                 <ul className="list-disc list-inside space-y-2">
@@ -150,7 +156,10 @@ const PrivacyPolicy = () => {
           {/* Contact Information */}
           <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-gray-50/50">
             <CardContent className="p-8">
-              <h2 className="text-2xl font-playfair font-bold text-gray-800 mb-6">Contact Us</h2>
+              <div className="flex items-center space-x-3 mb-6">
+                <Phone className="h-8 w-8 text-gray-500" />
+                <h2 className="text-2xl font-playfair font-bold text-gray-800">Contact Us</h2>
+              </div>
               <div className="space-y-4 text-gray-600 font-crimson">
                 <p>If you have questions about this Privacy Policy or our data practices, please contact us:</p>
                 <ul className="space-y-2">
@@ -165,7 +174,10 @@ const PrivacyPolicy = () => {
           {/* Updates */}
           <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-yellow-50/50">
             <CardContent className="p-8">
-              <h2 className="text-2xl font-playfair font-bold text-gray-800 mb-6">Policy Updates</h2>
+              <div className="flex items-center space-x-3 mb-6">
+                <Clock className="h-8 w-8 text-yellow-500" />
+                <h2 className="text-2xl font-playfair font-bold text-gray-800">Policy Updates</h2>
+              </div>
               <div className="space-y-4 text-gray-600 font-crimson">
                 <p>
                   We may update this Privacy Policy from time to time. We will notify you of any material changes by posting the new policy on this page and updating the "Last updated" date. We encourage you to review this policy periodically to stay informed about how we protect your information.
