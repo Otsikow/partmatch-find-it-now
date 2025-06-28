@@ -1,15 +1,44 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowLeft, Search, Package, Plus, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const UserDashboard = () => {
   const { user, signOut } = useAuth();
+  const [firstName, setFirstName] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (!user) return;
+
+      try {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('first_name')
+          .eq('id', user.id)
+          .single();
+
+        if (profile) {
+          setFirstName(profile.first_name);
+        }
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      }
+    };
+
+    fetchUserProfile();
+  }, [user]);
 
   const handleSignOut = async () => {
     await signOut();
+  };
+
+  const getDisplayName = () => {
+    if (firstName) return firstName;
+    return user?.email || 'User';
   };
 
   return (
@@ -36,7 +65,7 @@ const UserDashboard = () => {
         
         <div className="flex items-center gap-3">
           <span className="text-sm text-gray-600 hidden sm:block">
-            {user?.email}
+            {getDisplayName()}
           </span>
           <Button 
             variant="ghost" 

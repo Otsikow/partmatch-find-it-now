@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -16,13 +15,15 @@ import { useIsMobile } from "@/hooks/use-mobile";
 const Navigation = () => {
   const { user, signOut } = useAuth();
   const [userType, setUserType] = useState<string | null>(null);
+  const [firstName, setFirstName] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    const fetchUserType = async () => {
+    const fetchUserData = async () => {
       if (!user) {
         setUserType(null);
+        setFirstName(null);
         return;
       }
 
@@ -31,24 +32,28 @@ const Navigation = () => {
         const metadataUserType = user.user_metadata?.user_type;
         if (metadataUserType) {
           setUserType(metadataUserType);
-          return;
         }
 
-        // Fallback to profile query
+        // Fetch profile data for first name and user type
         const { data: profile } = await supabase
           .from('profiles')
-          .select('user_type')
+          .select('user_type, first_name')
           .eq('id', user.id)
           .single();
 
-        setUserType(profile?.user_type || null);
+        if (profile) {
+          // Use metadata user_type if available, otherwise use profile user_type
+          setUserType(metadataUserType || profile.user_type || null);
+          setFirstName(profile.first_name);
+        }
       } catch (error) {
-        console.error('Error fetching user type:', error);
+        console.error('Error fetching user data:', error);
         setUserType(null);
+        setFirstName(null);
       }
     };
 
-    fetchUserType();
+    fetchUserData();
   }, [user]);
 
   const handleSignOut = async () => {
@@ -66,6 +71,11 @@ const Navigation = () => {
     if (userType === 'admin') return 'Admin Dashboard';
     if (userType === 'supplier') return 'Seller Dashboard';
     return 'Buyer Dashboard';
+  };
+
+  const getDisplayName = () => {
+    if (firstName) return firstName;
+    return user?.email || 'User';
   };
 
   const closeMobileMenu = () => {
@@ -98,7 +108,7 @@ const Navigation = () => {
         {user ? (
           <div className="flex items-center gap-4 xl:gap-6">
             <span className="text-sm text-gray-600 font-medium hidden xl:block">
-              Welcome, {user.email}
+              Welcome, {getDisplayName()}
             </span>
             <Link to={getDashboardLink()}>
               <Button 
@@ -180,7 +190,7 @@ const Navigation = () => {
             {user ? (
               <div className="space-y-4">
                 <div className="text-sm text-gray-600 font-medium border-b border-gray-100 pb-3">
-                  Welcome, {user.email}
+                  Welcome, {getDisplayName()}
                 </div>
                 <Link to={getDashboardLink()} onClick={closeMobileMenu}>
                   <Button 
