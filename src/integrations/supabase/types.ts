@@ -499,6 +499,7 @@ export type Database = {
         Row: {
           admin_notes: string | null
           business_address: string
+          business_location_photo_url: string | null
           business_name: string | null
           business_registration_number: string | null
           business_registration_url: string | null
@@ -525,6 +526,7 @@ export type Database = {
         Insert: {
           admin_notes?: string | null
           business_address: string
+          business_location_photo_url?: string | null
           business_name?: string | null
           business_registration_number?: string | null
           business_registration_url?: string | null
@@ -551,6 +553,7 @@ export type Database = {
         Update: {
           admin_notes?: string | null
           business_address?: string
+          business_location_photo_url?: string | null
           business_name?: string | null
           business_registration_number?: string | null
           business_registration_url?: string | null
