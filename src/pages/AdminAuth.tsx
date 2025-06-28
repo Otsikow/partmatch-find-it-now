@@ -9,7 +9,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { supabase } from "@/integrations/supabase/client";
 
 const AdminAuth = () => {
   const [formData, setFormData] = useState({
@@ -33,61 +32,11 @@ const AdminAuth = () => {
     
     try {
       if (isLogin) {
-        // Check if email is authorized using database function
-        const { data: isAuthorized } = await supabase.rpc('is_authorized_admin_email', {
-          email_to_check: formData.email
-        });
-
-        if (!isAuthorized) {
-          // Log unauthorized login attempt
-          await supabase.rpc('log_admin_security_event', {
-            event_type: 'UNAUTHORIZED_ACCESS',
-            event_details: {
-              email: formData.email,
-              details: 'Attempted admin login with unauthorized email',
-              timestamp: new Date().toISOString()
-            }
-          });
-
-          toast({
-            title: "Unauthorized Access",
-            description: "This email is not authorized for admin access.",
-            variant: "destructive"
-          });
-          setLoading(false);
-          return;
-        }
-
         const { error } = await signIn(formData.email, formData.password);
         if (!error) {
           navigate('/admin');
         }
       } else {
-        // Check if email is authorized for registration using database function
-        const { data: isAuthorized } = await supabase.rpc('is_authorized_admin_email', {
-          email_to_check: formData.email
-        });
-
-        if (!isAuthorized) {
-          // Log unauthorized registration attempt
-          await supabase.rpc('log_admin_security_event', {
-            event_type: 'UNAUTHORIZED_ACCESS',
-            event_details: {
-              email: formData.email,
-              details: 'Attempted admin registration with unauthorized email',
-              timestamp: new Date().toISOString()
-            }
-          });
-
-          toast({
-            title: "Registration Not Allowed",
-            description: "Admin registration is restricted to authorized emails only.",
-            variant: "destructive"
-          });
-          setLoading(false);
-          return;
-        }
-
         const { error } = await signUp(formData.email, formData.password, {
           first_name: formData.firstName,
           last_name: formData.lastName,
@@ -147,22 +96,21 @@ const AdminAuth = () => {
               <Shield className="h-10 w-10 sm:h-12 sm:w-12 text-white" />
             </div>
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-semibold mb-2 sm:mb-3 bg-gradient-to-r from-purple-700 to-indigo-700 bg-clip-text text-transparent">
-              {isLogin ? 'Secure Admin Access' : 'Admin Registration'}
+              {isLogin ? 'Admin Access' : 'Admin Registration'}
             </h2>
             <p className="text-gray-600 text-sm sm:text-base font-crimson">
               {isLogin 
-                ? 'Authorized personnel only - Database-secured access' 
-                : 'Restricted to pre-authorized emails only'
+                ? 'Development mode - any email allowed' 
+                : 'Create your admin account'
               }
             </p>
           </div>
 
           {!isLogin && (
-            <Alert className="mb-6 border-amber-200 bg-amber-50">
-              <AlertTriangle className="h-4 w-4 text-amber-600" />
-              <AlertDescription className="text-amber-800">
-                Admin registration is restricted to pre-authorized email addresses only. 
-                Database constraints prevent unauthorized access.
+            <Alert className="mb-6 border-blue-200 bg-blue-50">
+              <AlertTriangle className="h-4 w-4 text-blue-600" />
+              <AlertDescription className="text-blue-800">
+                Development mode: Email restrictions are disabled. Any email can be used for admin registration.
               </AlertDescription>
             </Alert>
           )}
@@ -223,13 +171,13 @@ const AdminAuth = () => {
             )}
 
             <div>
-              <Label htmlFor="email" className="text-sm sm:text-base font-inter">Authorized Email *</Label>
+              <Label htmlFor="email" className="text-sm sm:text-base font-inter">Email *</Label>
               <div className="relative">
                 <Mail className="h-4 w-4 absolute left-3 top-3 text-gray-400" />
                 <Input
                   id="email"
                   type="email"
-                  placeholder="authorized@partmatch.com"
+                  placeholder="your-email@example.com"
                   value={formData.email}
                   onChange={(e) => handleInputChange('email', e.target.value)}
                   required
@@ -249,13 +197,12 @@ const AdminAuth = () => {
                   value={formData.password}
                   onChange={(e) => handleInputChange('password', e.target.value)}
                   required
-                  minLength={12}
                   className="mt-1 pl-10 text-base border-purple-200 focus:border-purple-400"
                 />
               </div>
               {!isLogin && (
                 <p className="text-xs text-gray-500 mt-1">
-                  Min 12 chars, uppercase, lowercase, numbers & special characters required
+                  Use a secure password for your admin account
                 </p>
               )}
             </div>
@@ -265,7 +212,7 @@ const AdminAuth = () => {
               className="w-full bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 py-3 sm:py-4 text-base sm:text-lg rounded-xl font-inter font-medium shadow-lg hover:shadow-xl transition-all duration-300"
               disabled={loading}
             >
-              {loading ? 'Verifying...' : (isLogin ? 'Secure Sign In' : 'Create Admin Account')}
+              {loading ? 'Processing...' : (isLogin ? 'Sign In' : 'Create Admin Account')}
             </Button>
           </form>
 
@@ -279,7 +226,7 @@ const AdminAuth = () => {
                 }}
                 className="text-purple-600 hover:text-purple-800 hover:underline text-sm sm:text-base font-crimson transition-colors duration-300"
               >
-                Need admin access? Contact administrator
+                Need to create an admin account?
               </button>
             </div>
           )}

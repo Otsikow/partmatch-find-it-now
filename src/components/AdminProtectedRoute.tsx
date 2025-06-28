@@ -3,7 +3,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { toast } from '@/hooks/use-toast';
 
 interface AdminProtectedRouteProps {
   children: React.ReactNode;
@@ -13,7 +12,6 @@ const AdminProtectedRoute = ({ children }: AdminProtectedRouteProps) => {
   const { user, loading } = useAuth();
   const [userType, setUserType] = useState<string | null>(null);
   const [profileLoading, setProfileLoading] = useState(true);
-  const [isAuthorizedEmail, setIsAuthorizedEmail] = useState(false);
 
   useEffect(() => {
     const checkAdminAccess = async () => {
@@ -25,34 +23,8 @@ const AdminProtectedRoute = ({ children }: AdminProtectedRouteProps) => {
       console.log('AdminProtectedRoute: Checking admin access for user:', user.id);
       console.log('AdminProtectedRoute: User email:', user.email);
 
-      // Check if the email is authorized using database function
       try {
-        const { data: emailAuthorized } = await supabase.rpc('is_authorized_admin_email', {
-          email_to_check: user.email || ''
-        });
-        
-        setIsAuthorizedEmail(emailAuthorized || false);
-
-        if (!emailAuthorized) {
-          console.log('AdminProtectedRoute: Email not authorized for admin access');
-          
-          // Log unauthorized access attempt
-          await supabase.rpc('log_admin_security_event', {
-            event_type: 'UNAUTHORIZED_ACCESS',
-            event_details: {
-              email: user.email,
-              user_id: user.id,
-              details: 'Attempted access to admin area with unauthorized email',
-              timestamp: new Date().toISOString()
-            }
-          });
-          
-          setUserType('unauthorized');
-          setProfileLoading(false);
-          return;
-        }
-
-        // Check user metadata for admin role
+        // Check user metadata for admin role first
         const metadataUserType = user.user_metadata?.user_type;
         console.log('AdminProtectedRoute: Metadata user_type:', metadataUserType);
 
@@ -77,23 +49,7 @@ const AdminProtectedRoute = ({ children }: AdminProtectedRouteProps) => {
           setUserType('unauthorized');
         } else {
           console.log('AdminProtectedRoute: Profile user_type:', profile?.user_type);
-          // Only allow admin access if both email is authorized AND user_type is admin
-          if (profile.user_type === 'admin') {
-            setUserType('admin');
-            
-            // Log successful admin access
-            await supabase.rpc('log_admin_security_event', {
-              event_type: 'ADMIN_ACTION',
-              event_details: {
-                email: user.email,
-                user_id: user.id,
-                details: 'Admin accessed protected area',
-                timestamp: new Date().toISOString()
-              }
-            });
-          } else {
-            setUserType('unauthorized');
-          }
+          setUserType(profile.user_type || 'unauthorized');
         }
       } catch (error) {
         console.error('AdminProtectedRoute: Unexpected error:', error);
@@ -110,7 +66,6 @@ const AdminProtectedRoute = ({ children }: AdminProtectedRouteProps) => {
     loading,
     profileLoading,
     userType,
-    isAuthorizedEmail,
     userId: user?.id,
     userEmail: user?.email
   });
@@ -131,13 +86,8 @@ const AdminProtectedRoute = ({ children }: AdminProtectedRouteProps) => {
     return <Navigate to="/admin-auth" replace />;
   }
 
-  if (!isAuthorizedEmail || userType !== 'admin') {
-    console.log('AdminProtectedRoute: Access denied, userType:', userType, 'emailAuthorized:', isAuthorizedEmail);
-    toast({
-      title: "Access Denied", 
-      description: "You are not authorized to access the admin dashboard. Contact system administrator.",
-      variant: "destructive"
-    });
+  if (userType !== 'admin') {
+    console.log('AdminProtectedRoute: Access denied, userType:', userType);
     return <Navigate to="/" replace />;
   }
 
