@@ -1,12 +1,14 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Shield, ArrowLeft, Mail, Lock } from "lucide-react";
+import { Shield, ArrowLeft, Mail, Lock, AlertTriangle } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const AdminAuth = () => {
   const [formData, setFormData] = useState({
@@ -19,9 +21,17 @@ const AdminAuth = () => {
   });
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [showRegistration, setShowRegistration] = useState(false);
   
   const { signUp, signIn } = useAuth();
   const navigate = useNavigate();
+
+  // Authorized admin emails (should be moved to environment variables in production)
+  const AUTHORIZED_ADMIN_EMAILS = [
+    'admin@partmatch.com',
+    'administrator@partmatch.com'
+    // Add your specific admin emails here
+  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,11 +39,33 @@ const AdminAuth = () => {
     
     try {
       if (isLogin) {
+        // Check if email is authorized before attempting login
+        if (!AUTHORIZED_ADMIN_EMAILS.includes(formData.email)) {
+          toast({
+            title: "Unauthorized Access",
+            description: "This email is not authorized for admin access.",
+            variant: "destructive"
+          });
+          setLoading(false);
+          return;
+        }
+
         const { error } = await signIn(formData.email, formData.password);
         if (!error) {
           navigate('/admin');
         }
       } else {
+        // Registration is heavily restricted
+        if (!AUTHORIZED_ADMIN_EMAILS.includes(formData.email)) {
+          toast({
+            title: "Registration Not Allowed",
+            description: "Admin registration is restricted to authorized emails only.",
+            variant: "destructive"
+          });
+          setLoading(false);
+          return;
+        }
+
         const { error } = await signUp(formData.email, formData.password, {
           first_name: formData.firstName,
           last_name: formData.lastName,
@@ -47,6 +79,7 @@ const AdminAuth = () => {
             description: "Please check your email to verify your account, then sign in below.",
           });
           setIsLogin(true);
+          setShowRegistration(false);
         }
       }
     } finally {
@@ -85,18 +118,28 @@ const AdminAuth = () => {
               <Shield className="h-10 w-10 sm:h-12 sm:w-12 text-white" />
             </div>
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-semibold mb-2 sm:mb-3 bg-gradient-to-r from-purple-700 to-indigo-700 bg-clip-text text-transparent">
-              {isLogin ? 'Administrator Access' : 'Create Admin Account'}
+              {isLogin ? 'Secure Admin Access' : 'Admin Registration'}
             </h2>
             <p className="text-gray-600 text-sm sm:text-base font-crimson">
               {isLogin 
-                ? 'Sign in to access the admin dashboard' 
-                : 'Register as a platform administrator'
+                ? 'Authorized personnel only' 
+                : 'Restricted to authorized emails'
               }
             </p>
           </div>
 
+          {!isLogin && (
+            <Alert className="mb-6 border-amber-200 bg-amber-50">
+              <AlertTriangle className="h-4 w-4 text-amber-600" />
+              <AlertDescription className="text-amber-800">
+                Admin registration is restricted to pre-authorized email addresses only. 
+                Contact the system administrator if you need access.
+              </AlertDescription>
+            </Alert>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
-            {!isLogin && (
+            {!isLogin && showRegistration && (
               <>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
@@ -151,13 +194,13 @@ const AdminAuth = () => {
             )}
 
             <div>
-              <Label htmlFor="email" className="text-sm sm:text-base font-inter">Email *</Label>
+              <Label htmlFor="email" className="text-sm sm:text-base font-inter">Authorized Email *</Label>
               <div className="relative">
                 <Mail className="h-4 w-4 absolute left-3 top-3 text-gray-400" />
                 <Input
                   id="email"
                   type="email"
-                  placeholder="admin@partmatch.com"
+                  placeholder="authorized@partmatch.com"
                   value={formData.email}
                   onChange={(e) => handleInputChange('email', e.target.value)}
                   required
@@ -177,6 +220,7 @@ const AdminAuth = () => {
                   value={formData.password}
                   onChange={(e) => handleInputChange('password', e.target.value)}
                   required
+                  minLength={8}
                   className="mt-1 pl-10 text-base border-purple-200 focus:border-purple-400"
                 />
               </div>
@@ -187,22 +231,39 @@ const AdminAuth = () => {
               className="w-full bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 py-3 sm:py-4 text-base sm:text-lg rounded-xl font-inter font-medium shadow-lg hover:shadow-xl transition-all duration-300"
               disabled={loading}
             >
-              {loading ? 'Please wait...' : (isLogin ? 'Sign In as Admin' : 'Create Admin Account')}
+              {loading ? 'Verifying...' : (isLogin ? 'Secure Sign In' : 'Create Admin Account')}
             </Button>
           </form>
 
-          <div className="text-center mt-6 sm:mt-8">
-            <button
-              type="button"
-              onClick={() => setIsLogin(!isLogin)}
-              className="text-purple-600 hover:text-purple-800 hover:underline text-sm sm:text-base font-crimson transition-colors duration-300"
-            >
-              {isLogin 
-                ? "Need an admin account? Register here" 
-                : "Already have an account? Sign in"
-              }
-            </button>
-          </div>
+          {isLogin && (
+            <div className="text-center mt-6 sm:mt-8">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsLogin(false);
+                  setShowRegistration(true);
+                }}
+                className="text-purple-600 hover:text-purple-800 hover:underline text-sm sm:text-base font-crimson transition-colors duration-300"
+              >
+                Need admin access? Contact administrator
+              </button>
+            </div>
+          )}
+
+          {showRegistration && !isLogin && (
+            <div className="text-center mt-6 sm:mt-8">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsLogin(true);
+                  setShowRegistration(false);
+                }}
+                className="text-purple-600 hover:text-purple-800 hover:underline text-sm sm:text-base font-crimson transition-colors duration-300"
+              >
+                Back to sign in
+              </button>
+            </div>
+          )}
         </Card>
       </main>
     </div>

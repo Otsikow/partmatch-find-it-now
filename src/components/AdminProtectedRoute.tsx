@@ -13,18 +13,37 @@ const AdminProtectedRoute = ({ children }: AdminProtectedRouteProps) => {
   const { user, loading } = useAuth();
   const [userType, setUserType] = useState<string | null>(null);
   const [profileLoading, setProfileLoading] = useState(true);
+  const [isAuthorizedEmail, setIsAuthorizedEmail] = useState(false);
+
+  // List of authorized admin emails (should be moved to environment variables in production)
+  const AUTHORIZED_ADMIN_EMAILS = [
+    'admin@partmatch.com',
+    'administrator@partmatch.com'
+    // Add your specific admin emails here
+  ];
 
   useEffect(() => {
-    const checkUserAccess = async () => {
+    const checkAdminAccess = async () => {
       if (!user) {
         setProfileLoading(false);
         return;
       }
 
-      console.log('AdminProtectedRoute: Checking access for user:', user.id);
-      console.log('AdminProtectedRoute: User metadata:', user.user_metadata);
+      console.log('AdminProtectedRoute: Checking admin access for user:', user.id);
+      console.log('AdminProtectedRoute: User email:', user.email);
 
-      // First check user metadata directly
+      // First check if the email is in the authorized list
+      const emailAuthorized = AUTHORIZED_ADMIN_EMAILS.includes(user.email || '');
+      setIsAuthorizedEmail(emailAuthorized);
+
+      if (!emailAuthorized) {
+        console.log('AdminProtectedRoute: Email not authorized for admin access');
+        setUserType('unauthorized');
+        setProfileLoading(false);
+        return;
+      }
+
+      // Check user metadata for admin role
       const metadataUserType = user.user_metadata?.user_type;
       console.log('AdminProtectedRoute: Metadata user_type:', metadataUserType);
 
@@ -35,7 +54,7 @@ const AdminProtectedRoute = ({ children }: AdminProtectedRouteProps) => {
         return;
       }
 
-      // If no metadata, check profile table
+      // Check profile table as fallback
       try {
         const { data: profile, error } = await supabase
           .from('profiles')
@@ -45,29 +64,34 @@ const AdminProtectedRoute = ({ children }: AdminProtectedRouteProps) => {
 
         console.log('AdminProtectedRoute: Profile query result:', { profile, error });
 
-        if (error) {
-          console.error('AdminProtectedRoute: Error fetching profile:', error);
-          // No profile found and no admin metadata - deny access
-          setUserType('not_admin');
+        if (error || !profile) {
+          console.error('AdminProtectedRoute: Error fetching profile or no profile found:', error);
+          setUserType('unauthorized');
         } else {
           console.log('AdminProtectedRoute: Profile user_type:', profile?.user_type);
-          setUserType(profile?.user_type || 'not_admin');
+          // Only allow admin access if both email is authorized AND user_type is admin
+          if (profile.user_type === 'admin') {
+            setUserType('admin');
+          } else {
+            setUserType('unauthorized');
+          }
         }
       } catch (error) {
         console.error('AdminProtectedRoute: Unexpected error:', error);
-        setUserType('not_admin');
+        setUserType('unauthorized');
       } finally {
         setProfileLoading(false);
       }
     };
 
-    checkUserAccess();
+    checkAdminAccess();
   }, [user]);
 
   console.log('AdminProtectedRoute: Current state:', {
     loading,
     profileLoading,
     userType,
+    isAuthorizedEmail,
     userId: user?.id,
     userEmail: user?.email
   });
@@ -77,28 +101,28 @@ const AdminProtectedRoute = ({ children }: AdminProtectedRouteProps) => {
       <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-gray-600">Verifying admin access...</p>
         </div>
       </div>
     );
   }
 
   if (!user) {
-    console.log('AdminProtectedRoute: No user, redirecting to auth');
-    return <Navigate to="/auth" replace />;
+    console.log('AdminProtectedRoute: No user, redirecting to admin auth');
+    return <Navigate to="/admin-auth" replace />;
   }
 
-  if (userType !== 'admin') {
-    console.log('AdminProtectedRoute: Access denied, userType:', userType);
+  if (!isAuthorizedEmail || userType !== 'admin') {
+    console.log('AdminProtectedRoute: Access denied, userType:', userType, 'emailAuthorized:', isAuthorizedEmail);
     toast({
       title: "Access Denied", 
-      description: "Only administrators can access this dashboard.",
+      description: "You are not authorized to access the admin dashboard. Contact system administrator.",
       variant: "destructive"
     });
-    return <Navigate to="/buyer-dashboard" replace />;
+    return <Navigate to="/" replace />;
   }
 
-  console.log('AdminProtectedRoute: Access granted for admin');
+  console.log('AdminProtectedRoute: Admin access granted');
   return <>{children}</>;
 };
 
