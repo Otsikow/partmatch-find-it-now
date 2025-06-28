@@ -34,22 +34,29 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      async (event, session) => {
         console.log('AuthProvider: Auth state changed:', event, {
           userId: session?.user?.id,
           userEmail: session?.user?.email,
           userMetadata: session?.user?.user_metadata
         });
         
-        // Log admin-related auth events
+        // Log admin-related auth events using database function
         if (session?.user?.email && isAuthorizedAdminEmail(session.user.email)) {
           if (event === 'SIGNED_IN') {
-            logAdminSecurityEvent({
-              type: 'LOGIN_SUCCESS',
-              email: session.user.email,
-              userId: session.user.id,
-              details: 'Admin user signed in successfully'
-            });
+            try {
+              await supabase.rpc('log_admin_security_event', {
+                event_type: 'LOGIN_SUCCESS',
+                event_details: {
+                  email: session.user.email,
+                  user_id: session.user.id,
+                  details: 'Admin user signed in successfully',
+                  timestamp: new Date().toISOString()
+                }
+              });
+            } catch (error) {
+              console.error('Failed to log admin security event:', error);
+            }
           }
         }
         
@@ -83,21 +90,34 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     
     // Enhanced security for admin signups
     if (userData.user_type === 'admin') {
-      // Check if email is authorized
-      if (!isAuthorizedAdminEmail(email)) {
-        logAdminSecurityEvent({
-          type: 'UNAUTHORIZED_ACCESS',
-          email,
-          details: 'Attempted admin signup with unauthorized email'
+      // Check if email is authorized using database function
+      try {
+        const { data: isAuthorized } = await supabase.rpc('is_authorized_admin_email', {
+          email_to_check: email
         });
         
-        const error = new Error('This email is not authorized for admin registration');
-        toast({
-          title: "Registration Denied",
-          description: "This email is not authorized for admin access.",
-          variant: "destructive"
-        });
-        return { error };
+        if (!isAuthorized) {
+          await supabase.rpc('log_admin_security_event', {
+            event_type: 'UNAUTHORIZED_ACCESS',
+            event_details: {
+              email,
+              details: 'Attempted admin signup with unauthorized email',
+              timestamp: new Date().toISOString()
+            }
+          });
+          
+          const error = new Error('This email is not authorized for admin registration');
+          toast({
+            title: "Registration Denied",
+            description: "This email is not authorized for admin access.",
+            variant: "destructive"
+          });
+          return { error };
+        }
+      } catch (error) {
+        console.error('Error checking admin email authorization:', error);
+        const authError = new Error('Unable to verify admin authorization');
+        return { error: authError };
       }
       
       // Validate password strength for admin accounts
@@ -129,11 +149,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (error) {
       // Log admin signup failures
       if (userData.user_type === 'admin') {
-        logAdminSecurityEvent({
-          type: 'LOGIN_FAILED',
-          email,
-          details: `Admin signup failed: ${error.message}`
-        });
+        try {
+          await supabase.rpc('log_admin_security_event', {
+            event_type: 'LOGIN_FAILED',
+            event_details: {
+              email,
+              details: `Admin signup failed: ${error.message}`,
+              timestamp: new Date().toISOString()
+            }
+          });
+        } catch (logError) {
+          console.error('Failed to log admin security event:', logError);
+        }
       }
       
       toast({
@@ -151,11 +178,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     
     // Log admin login attempts
     if (isAuthorizedAdminEmail(email)) {
-      logAdminSecurityEvent({
-        type: 'LOGIN_ATTEMPT',
-        email,
-        details: 'Admin login attempt'
-      });
+      try {
+        await supabase.rpc('log_admin_security_event', {
+          event_type: 'LOGIN_ATTEMPT',
+          event_details: {
+            email,
+            details: 'Admin login attempt',
+            timestamp: new Date().toISOString()
+          }
+        });
+      } catch (error) {
+        console.error('Failed to log admin security event:', error);
+      }
     }
     
     const { error } = await supabase.auth.signInWithPassword({
@@ -168,11 +202,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (error) {
       // Log failed admin login attempts
       if (isAuthorizedAdminEmail(email)) {
-        logAdminSecurityEvent({
-          type: 'LOGIN_FAILED',
-          email,
-          details: `Admin login failed: ${error.message}`
-        });
+        try {
+          await supabase.rpc('log_admin_security_event', {
+            event_type: 'LOGIN_FAILED',
+            event_details: {
+              email,
+              details: `Admin login failed: ${error.message}`,
+              timestamp: new Date().toISOString()
+            }
+          });
+        } catch (logError) {
+          console.error('Failed to log admin security event:', logError);
+        }
       }
       
       toast({
@@ -190,12 +231,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     
     // Log admin signouts
     if (user?.email && isAuthorizedAdminEmail(user.email)) {
-      logAdminSecurityEvent({
-        type: 'ADMIN_ACTION',
-        email: user.email,
-        userId: user.id,
-        details: 'Admin user signed out'
-      });
+      try {
+        await supabase.rpc('log_admin_security_event', {
+          event_type: 'ADMIN_ACTION',
+          event_details: {
+            email: user.email,
+            user_id: user.id,
+            details: 'Admin user signed out',
+            timestamp: new Date().toISOString()
+          }
+        });
+      } catch (error) {
+        console.error('Failed to log admin security event:', error);
+      }
     }
     
     const { error } = await supabase.auth.signOut();

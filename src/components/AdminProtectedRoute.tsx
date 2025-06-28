@@ -15,13 +15,6 @@ const AdminProtectedRoute = ({ children }: AdminProtectedRouteProps) => {
   const [profileLoading, setProfileLoading] = useState(true);
   const [isAuthorizedEmail, setIsAuthorizedEmail] = useState(false);
 
-  // List of authorized admin emails (should be moved to environment variables in production)
-  const AUTHORIZED_ADMIN_EMAILS = [
-    'admin@partmatch.com',
-    'administrator@partmatch.com'
-    // Add your specific admin emails here
-  ];
-
   useEffect(() => {
     const checkAdminAccess = async () => {
       if (!user) {
@@ -32,30 +25,45 @@ const AdminProtectedRoute = ({ children }: AdminProtectedRouteProps) => {
       console.log('AdminProtectedRoute: Checking admin access for user:', user.id);
       console.log('AdminProtectedRoute: User email:', user.email);
 
-      // First check if the email is in the authorized list
-      const emailAuthorized = AUTHORIZED_ADMIN_EMAILS.includes(user.email || '');
-      setIsAuthorizedEmail(emailAuthorized);
-
-      if (!emailAuthorized) {
-        console.log('AdminProtectedRoute: Email not authorized for admin access');
-        setUserType('unauthorized');
-        setProfileLoading(false);
-        return;
-      }
-
-      // Check user metadata for admin role
-      const metadataUserType = user.user_metadata?.user_type;
-      console.log('AdminProtectedRoute: Metadata user_type:', metadataUserType);
-
-      if (metadataUserType === 'admin') {
-        console.log('AdminProtectedRoute: User is admin based on metadata');
-        setUserType('admin');
-        setProfileLoading(false);
-        return;
-      }
-
-      // Check profile table as fallback
+      // Check if the email is authorized using database function
       try {
+        const { data: emailAuthorized } = await supabase.rpc('is_authorized_admin_email', {
+          email_to_check: user.email || ''
+        });
+        
+        setIsAuthorizedEmail(emailAuthorized || false);
+
+        if (!emailAuthorized) {
+          console.log('AdminProtectedRoute: Email not authorized for admin access');
+          
+          // Log unauthorized access attempt
+          await supabase.rpc('log_admin_security_event', {
+            event_type: 'UNAUTHORIZED_ACCESS',
+            event_details: {
+              email: user.email,
+              user_id: user.id,
+              details: 'Attempted access to admin area with unauthorized email',
+              timestamp: new Date().toISOString()
+            }
+          });
+          
+          setUserType('unauthorized');
+          setProfileLoading(false);
+          return;
+        }
+
+        // Check user metadata for admin role
+        const metadataUserType = user.user_metadata?.user_type;
+        console.log('AdminProtectedRoute: Metadata user_type:', metadataUserType);
+
+        if (metadataUserType === 'admin') {
+          console.log('AdminProtectedRoute: User is admin based on metadata');
+          setUserType('admin');
+          setProfileLoading(false);
+          return;
+        }
+
+        // Check profile table as fallback
         const { data: profile, error } = await supabase
           .from('profiles')
           .select('user_type')
@@ -72,6 +80,17 @@ const AdminProtectedRoute = ({ children }: AdminProtectedRouteProps) => {
           // Only allow admin access if both email is authorized AND user_type is admin
           if (profile.user_type === 'admin') {
             setUserType('admin');
+            
+            // Log successful admin access
+            await supabase.rpc('log_admin_security_event', {
+              event_type: 'ADMIN_ACTION',
+              event_details: {
+                email: user.email,
+                user_id: user.id,
+                details: 'Admin accessed protected area',
+                timestamp: new Date().toISOString()
+              }
+            });
           } else {
             setUserType('unauthorized');
           }

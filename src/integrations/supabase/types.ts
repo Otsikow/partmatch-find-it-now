@@ -9,6 +9,36 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      admin_audit_logs: {
+        Row: {
+          action: string
+          created_at: string
+          details: Json | null
+          id: string
+          ip_address: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       ai_reviews: {
         Row: {
           ai_reasoning: string | null
@@ -551,6 +581,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      is_authorized_admin_email: {
+        Args: { email_to_check: string }
+        Returns: boolean
+      }
+      log_admin_security_event: {
+        Args: {
+          event_type: string
+          event_details?: Json
+          target_user_id?: string
+        }
+        Returns: undefined
+      }
       process_contact_unlock_payment: {
         Args: {
           offer_id_param: string
