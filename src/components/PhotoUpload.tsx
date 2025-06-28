@@ -10,8 +10,11 @@ interface PhotoUploadProps {
 
 const PhotoUpload = ({ onPhotoChange, currentPhoto }: PhotoUploadProps) => {
   const [preview, setPreview] = useState<string | null>(null);
+  const [isCapturing, setIsCapturing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const cameraInputRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
 
   const handleFileSelect = (file: File | null) => {
     if (file) {
@@ -36,16 +39,99 @@ const PhotoUpload = ({ onPhotoChange, currentPhoto }: PhotoUploadProps) => {
     fileInputRef.current?.click();
   };
 
-  const handleCameraClick = () => {
-    cameraInputRef.current?.click();
+  const startCamera = async () => {
+    try {
+      setIsCapturing(true);
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { 
+          facingMode: 'environment',
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        }
+      });
+      
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.play();
+      }
+    } catch (error) {
+      console.error('Error accessing camera:', error);
+      alert('Unable to access camera. Please check permissions or use the upload option.');
+      setIsCapturing(false);
+    }
+  };
+
+  const capturePhoto = () => {
+    if (!videoRef.current || !canvasRef.current) return;
+
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
+
+    if (!context) return;
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    context.drawImage(video, 0, 0);
+
+    canvas.toBlob((blob) => {
+      if (blob) {
+        const file = new File([blob], 'camera-photo.jpg', { type: 'image/jpeg' });
+        handleFileSelect(file);
+      }
+    }, 'image/jpeg', 0.8);
+
+    stopCamera();
+  };
+
+  const stopCamera = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current = null;
+    }
+    setIsCapturing(false);
   };
 
   const handleRemovePhoto = () => {
     setPreview(null);
     onPhotoChange(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
-    if (cameraInputRef.current) cameraInputRef.current.value = '';
   };
+
+  if (isCapturing) {
+    return (
+      <div className="space-y-3">
+        <div className="relative bg-black rounded-lg overflow-hidden">
+          <video
+            ref={videoRef}
+            className="w-full h-64 object-cover"
+            autoPlay
+            playsInline
+            muted
+          />
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-3">
+            <Button
+              type="button"
+              onClick={capturePhoto}
+              className="bg-white text-black hover:bg-gray-100 rounded-full h-12 w-12 p-0"
+            >
+              <Camera className="h-6 w-6" />
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={stopCamera}
+              className="bg-white/90 text-black hover:bg-white rounded-full h-12 w-12 p-0"
+            >
+              <X className="h-6 w-6" />
+            </Button>
+          </div>
+        </div>
+        <canvas ref={canvasRef} className="hidden" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-3">
@@ -70,7 +156,7 @@ const PhotoUpload = ({ onPhotoChange, currentPhoto }: PhotoUploadProps) => {
               type="button"
               variant="outline"
               size="sm"
-              onClick={handleCameraClick}
+              onClick={startCamera}
               className="flex items-center gap-2 text-xs sm:text-sm"
             >
               <Camera className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -102,16 +188,6 @@ const PhotoUpload = ({ onPhotoChange, currentPhoto }: PhotoUploadProps) => {
         ref={fileInputRef}
         type="file"
         accept="image/*"
-        onChange={handleFileInputChange}
-        style={{ display: "none" }}
-      />
-      
-      {/* Hidden file input for camera capture */}
-      <input
-        ref={cameraInputRef}
-        type="file"
-        accept="image/*"
-        capture="environment"
         onChange={handleFileInputChange}
         style={{ display: "none" }}
       />
