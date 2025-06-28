@@ -1,8 +1,9 @@
-
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Mail, Lock, Phone, MapPin, User } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Mail, Lock, Phone, MapPin, User, Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 
 interface FormData {
   email: string;
@@ -21,6 +22,8 @@ interface AuthFormFieldsProps {
 }
 
 const AuthFormFields = ({ isLogin, formData, onInputChange }: AuthFormFieldsProps) => {
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <>
       {!isLogin && (
@@ -137,13 +140,22 @@ const AuthFormFields = ({ isLogin, formData, onInputChange }: AuthFormFieldsProp
           <Lock className="h-4 w-4 absolute left-3 top-3 text-gray-400" />
           <Input
             id="password"
-            type="password"
+            type={showPassword ? "text" : "password"}
             placeholder="••••••••"
             value={formData.password}
             onChange={(e) => onInputChange('password', e.target.value)}
             required
-            className="mt-1 pl-10 text-base border-blue-200 focus:border-blue-400"
+            className="mt-1 pl-10 pr-10 text-base border-blue-200 focus:border-blue-400"
           />
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="absolute right-1 top-1 h-8 w-8 text-gray-400 hover:text-gray-600"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+          </Button>
         </div>
       </div>
     </>
