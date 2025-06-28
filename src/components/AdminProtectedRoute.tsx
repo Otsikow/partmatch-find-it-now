@@ -49,7 +49,8 @@ const AdminProtectedRoute = ({ children }: AdminProtectedRouteProps) => {
           setUserType('unauthorized');
         } else {
           console.log('AdminProtectedRoute: Profile user_type:', profile?.user_type);
-          setUserType(profile.user_type || 'unauthorized');
+          // Only use profile user_type if it's admin, otherwise deny access
+          setUserType(profile.user_type === 'admin' ? 'admin' : 'unauthorized');
         }
       } catch (error) {
         console.error('AdminProtectedRoute: Unexpected error:', error);
