@@ -7,7 +7,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useUserRedirect } from "@/hooks/useUserRedirect";
 import AuthFormFields from "./AuthFormFields";
 import PasswordReset from "./PasswordReset";
+import SetNewPassword from "./SetNewPassword";
 import { toast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 interface AuthFormProps {
   isLogin: boolean;
@@ -27,7 +29,8 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
   const [loading, setLoading] = useState(false);
   const [showPasswordReset, setShowPasswordReset] = useState(false);
   
-  const { signUp, signIn } = useAuth();
+  const { signUp, signIn, isPasswordReset } = useAuth();
+  const navigate = useNavigate();
   
   // Use the redirect hook to handle post-authentication routing
   useUserRedirect();
@@ -80,10 +83,17 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
     setIsLogin(true);
   };
 
+  const handlePasswordResetSuccess = () => {
+    // Redirect based on user type or to a default page
+    navigate('/');
+  };
+
   return (
     <main className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-md">
       <Card className="p-6 sm:p-8 bg-gradient-to-br from-white/90 to-blue-50/50 backdrop-blur-sm shadow-2xl border-0">
-        {showPasswordReset ? (
+        {isPasswordReset ? (
+          <SetNewPassword onSuccess={handlePasswordResetSuccess} />
+        ) : showPasswordReset ? (
           <PasswordReset onBack={handleBackToLogin} />
         ) : (
           <>

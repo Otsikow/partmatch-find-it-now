@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -9,6 +10,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import PasswordReset from "@/components/PasswordReset";
+import SetNewPassword from "@/components/SetNewPassword";
 
 const AdminAuth = () => {
   const [formData, setFormData] = useState({
@@ -25,7 +27,7 @@ const AdminAuth = () => {
   const [showRegistration, setShowRegistration] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   
-  const { signUp, signIn } = useAuth();
+  const { signUp, signIn, isPasswordReset } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -77,6 +79,10 @@ const AdminAuth = () => {
     setShowRegistration(false);
   };
 
+  const handlePasswordResetSuccess = () => {
+    navigate('/admin');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-100 font-inter">
       <header className="p-4 sm:p-6 flex items-center gap-3 bg-gradient-to-r from-white/90 via-purple-50/80 to-white/90 backdrop-blur-lg shadow-lg border-b">
@@ -92,14 +98,22 @@ const AdminAuth = () => {
             className="h-6 w-auto sm:h-8"
           />
           <h1 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-purple-700 to-indigo-700 bg-clip-text text-transparent">
-            Admin {showPasswordReset ? 'Password Reset' : (isLogin ? 'Sign In' : 'Registration')}
+            Admin {isPasswordReset ? 'Password Reset' : showPasswordReset ? 'Password Reset' : (isLogin ? 'Sign In' : 'Registration')}
           </h1>
         </div>
       </header>
 
       <main className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-md">
         <Card className="p-6 sm:p-8 bg-gradient-to-br from-white/90 to-purple-50/50 backdrop-blur-sm shadow-2xl border-0">
-          {showPasswordReset ? (
+          {isPasswordReset ? (
+            <SetNewPassword 
+              onSuccess={handlePasswordResetSuccess}
+              borderColor="border-purple-200"
+              focusColor="focus:border-purple-400"
+              buttonGradient="from-purple-600 to-indigo-700"
+              buttonHoverGradient="hover:from-purple-700 hover:to-indigo-800"
+            />
+          ) : showPasswordReset ? (
             <PasswordReset 
               onBack={handleBackToLogin}
               borderColor="border-purple-200"

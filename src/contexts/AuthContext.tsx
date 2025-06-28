@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -8,10 +7,12 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
+  isPasswordReset: boolean;
   signUp: (email: string, password: string, userData: any) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: any }>;
+  updatePassword: (password: string) => Promise<{ error: any }>;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -28,9 +29,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isPasswordReset, setIsPasswordReset] = useState(false);
 
   useEffect(() => {
     console.log('AuthProvider: Setting up auth state listener');
+    
+    // Check URL for password reset
+    const urlParams = new URLSearchParams(window.location.search);
+    const accessToken = urlParams.get('access_token');
+    const refreshToken = urlParams.get('refresh_token');
+    
+    if (accessToken && refreshToken) {
+      setIsPasswordReset(true);
+      // Set the session from URL params
+      supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: refreshToken
+      });
+    }
     
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -40,6 +56,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           userEmail: session?.user?.email,
           userMetadata: session?.user?.user_metadata
         });
+        
+        // Check if this is a password recovery session
+        if (event === 'PASSWORD_RECOVERY') {
+          setIsPasswordReset(true);
+        } else if (event === 'SIGNED_IN' && isPasswordReset) {
+          // Keep password reset mode active during password reset flow
+          setIsPasswordReset(true);
+        } else if (event === 'SIGNED_OUT') {
+          setIsPasswordReset(false);
+        }
         
         // Log admin-related auth events (simplified for development)
         if (session?.user?.email && session?.user?.user_metadata?.user_type === 'admin') {
@@ -83,7 +109,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.log('AuthProvider: Cleaning up auth subscription');
       subscription.unsubscribe();
     };
-  }, []);
+  }, [isPasswordReset]);
 
   const signUp = async (email: string, password: string, userData: any) => {
     console.log('AuthProvider: SignUp attempt:', { email, userData });
@@ -184,21 +210,50 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return { error };
   };
 
+  const updatePassword = async (password: string) => {
+    console.log('AuthProvider: Password update attempt');
+    
+    const { error } = await supabase.auth.updateUser({
+      password: password
+    });
+    
+    console.log('AuthProvider: Password update result:', { error });
+    
+    if (error) {
+      toast({
+        title: "Password Update Error",
+        description: error.message,
+        variant: "destructive"
+      });
+    } else {
+      toast({
+        title: "Password Updated Successfully",
+        description: "Your password has been updated successfully.",
+      });
+      setIsPasswordReset(false);
+    }
+    
+    return { error };
+  };
+
   const value = {
     user,
     session,
     loading,
+    isPasswordReset,
     signUp,
     signIn,
     signOut,
-    resetPassword
+    resetPassword,
+    updatePassword
   };
 
   console.log('AuthProvider: Current auth state:', {
     userId: user?.id,
     userEmail: user?.email,
     loading,
-    hasSession: !!session
+    hasSession: !!session,
+    isPasswordReset
   });
 
   return (
