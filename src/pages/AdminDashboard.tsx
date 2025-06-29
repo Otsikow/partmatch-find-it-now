@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Users } from "lucide-react";
+import { ArrowLeft, Users, Building2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -19,12 +20,15 @@ interface SellerVerification {
   business_address: string;
   phone: string;
   email: string;
+  date_of_birth: string;
   verification_status: 'pending' | 'approved' | 'rejected';
   created_at: string;
   admin_notes?: string;
   government_id_url?: string;
   business_registration_url?: string;
   proof_of_address_url?: string;
+  profile_photo_url?: string;
+  business_location_photo_url?: string;
 }
 
 interface Request {
