@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -46,6 +45,16 @@ const AdminAuth = () => {
     // Prevent double submission
     if (loading) return;
 
+    // Basic validation
+    if (!formData.email || !formData.password) {
+      toast({
+        title: "Missing Information",
+        description: "Please enter both email and password.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     // Validate password strength for registration
     if (!isLogin) {
       const validation = validateAdminPassword(formData.password);
@@ -60,25 +69,30 @@ const AdminAuth = () => {
     }
     
     setLoading(true);
+    console.log('AdminAuth: Starting', isLogin ? 'sign in' : 'sign up', 'for:', formData.email);
     
     try {
       if (isLogin) {
-        console.log('AdminAuth: Attempting sign in for:', formData.email);
         const { error } = await signIn(formData.email, formData.password);
         if (error) {
           console.error('AdminAuth: Sign in error:', error);
-          // Don't show detailed error for security reasons on admin login
           toast({
             title: "Authentication Failed",
-            description: "Invalid credentials or access denied.",
+            description: "Invalid credentials or access denied. Please check your email and password.",
             variant: "destructive"
           });
         } else {
           console.log('AdminAuth: Sign in successful, navigating to admin dashboard');
-          navigate('/admin');
+          toast({
+            title: "Sign In Successful",
+            description: "Welcome back! Redirecting to admin dashboard...",
+          });
+          // Small delay to ensure state is updated before navigation
+          setTimeout(() => {
+            navigate('/admin', { replace: true });
+          }, 100);
         }
       } else {
-        console.log('AdminAuth: Attempting sign up for:', formData.email);
         const { error } = await signUp(formData.email, formData.password, {
           first_name: formData.firstName,
           last_name: formData.lastName,
@@ -90,7 +104,7 @@ const AdminAuth = () => {
           console.error('AdminAuth: Sign up error:', error);
           toast({
             title: "Registration Failed",
-            description: error.message || "Failed to create admin account.",
+            description: error.message || "Failed to create admin account. Please check your information and try again.",
             variant: "destructive"
           });
         } else {
@@ -100,6 +114,15 @@ const AdminAuth = () => {
           });
           setIsLogin(true);
           setShowRegistration(false);
+          // Clear form data except email
+          setFormData(prev => ({
+            ...prev,
+            password: '',
+            firstName: '',
+            lastName: '',
+            phone: '',
+            location: ''
+          }));
         }
       }
     } catch (error) {
@@ -332,7 +355,14 @@ const AdminAuth = () => {
                   className="w-full bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 py-3 sm:py-4 text-base sm:text-lg rounded-xl font-inter font-medium shadow-lg hover:shadow-xl transition-all duration-300"
                   disabled={loading || (!isLogin && !passwordValidation.valid)}
                 >
-                  {loading ? 'Processing...' : (isLogin ? 'Sign In' : 'Create Admin Account')}
+                  {loading ? (
+                    <div className="flex items-center gap-2">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      {isLogin ? 'Signing In...' : 'Creating Account...'}
+                    </div>
+                  ) : (
+                    isLogin ? 'Sign In' : 'Create Admin Account'
+                  )}
                 </Button>
               </form>
 

@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -68,25 +69,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setIsPasswordReset(false);
         }
         
-        // Log admin-related auth events (simplified for development)
-        if (session?.user?.email && session?.user?.user_metadata?.user_type === 'admin') {
-          if (event === 'SIGNED_IN') {
-            try {
-              await supabase.rpc('log_admin_security_event', {
-                event_type: 'LOGIN_SUCCESS',
-                event_details: {
-                  email: session.user.email,
-                  user_id: session.user.id,
-                  details: 'Admin user signed in successfully',
-                  timestamp: new Date().toISOString()
-                }
-              });
-            } catch (error) {
-              console.error('Failed to log admin security event:', error);
-            }
-          }
-        }
-        
+        // Update session and user state
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
@@ -139,31 +122,41 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     
     const redirectUrl = `${window.location.origin}/`;
     
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectUrl,
-        data: userData
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: redirectUrl,
+          data: userData
+        }
+      });
+      
+      console.log('AuthProvider: SignUp result:', { error });
+      
+      if (error) {
+        toast({
+          title: "Sign Up Error",
+          description: error.message,
+          variant: "destructive"
+        });
+      } else if (userData.user_type === 'admin') {
+        toast({
+          title: "Admin Account Created!",
+          description: "Please check your email to verify your account, then sign in.",
+        });
       }
-    });
-    
-    console.log('AuthProvider: SignUp result:', { error });
-    
-    if (error) {
+      
+      return { error };
+    } catch (error: any) {
+      console.error('AuthProvider: SignUp unexpected error:', error);
       toast({
         title: "Sign Up Error",
-        description: error.message,
+        description: "An unexpected error occurred during sign up.",
         variant: "destructive"
       });
-    } else if (userData.user_type === 'admin') {
-      toast({
-        title: "Admin Account Created!",
-        description: "Please check your email to verify your account, then sign in.",
-      });
+      return { error };
     }
-    
-    return { error };
   };
 
   const signIn = async (email: string, password: string) => {
@@ -192,40 +185,50 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     }
     
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
-    
-    console.log('AuthProvider: SignIn result:', { error });
-    
-    if (error) {
-      toast({
-        title: "Sign In Error",
-        description: error.message,
-        variant: "destructive"
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
       });
       
-      // Log failed login attempts for admin routes
-      if (urlPath.includes('admin')) {
-        logAdminSecurityEvent({
-          type: 'LOGIN_FAILED',
-          email: email,
-          details: `Failed admin login attempt: ${error.message}`
+      console.log('AuthProvider: SignIn result:', { error });
+      
+      if (error) {
+        toast({
+          title: "Sign In Error",
+          description: error.message,
+          variant: "destructive"
         });
+        
+        // Log failed login attempts for admin routes
+        if (urlPath.includes('admin')) {
+          logAdminSecurityEvent({
+            type: 'LOGIN_FAILED',
+            email: email,
+            details: `Failed admin login attempt: ${error.message}`
+          });
+        }
+      } else {
+        // Log successful admin logins
+        if (urlPath.includes('admin')) {
+          logAdminSecurityEvent({
+            type: 'LOGIN_SUCCESS',
+            email: email,
+            details: 'Successful admin login'
+          });
+        }
       }
-    } else {
-      // Log successful admin logins
-      if (urlPath.includes('admin')) {
-        logAdminSecurityEvent({
-          type: 'LOGIN_SUCCESS',
-          email: email,
-          details: 'Successful admin login'
-        });
-      }
+      
+      return { error };
+    } catch (error: any) {
+      console.error('AuthProvider: SignIn unexpected error:', error);
+      toast({
+        title: "Sign In Error",
+        description: "An unexpected error occurred during sign in.",
+        variant: "destructive"
+      });
+      return { error };
     }
-    
-    return { error };
   };
 
   const signOut = async () => {
@@ -260,52 +263,72 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const resetPassword = async (email: string) => {
     console.log('AuthProvider: Password reset attempt:', { email });
     
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth`
-    });
-    
-    console.log('AuthProvider: Password reset result:', { error });
-    
-    if (error) {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth`
+      });
+      
+      console.log('AuthProvider: Password reset result:', { error });
+      
+      if (error) {
+        toast({
+          title: "Password Reset Error",
+          description: error.message,
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Password Reset Email Sent",
+          description: "Please check your email for password reset instructions.",
+        });
+      }
+      
+      return { error };
+    } catch (error: any) {
+      console.error('AuthProvider: Password reset unexpected error:', error);
       toast({
         title: "Password Reset Error",
-        description: error.message,
+        description: "An unexpected error occurred during password reset.",
         variant: "destructive"
       });
-    } else {
-      toast({
-        title: "Password Reset Email Sent",
-        description: "Please check your email for password reset instructions.",
-      });
+      return { error };
     }
-    
-    return { error };
   };
 
   const updatePassword = async (password: string) => {
     console.log('AuthProvider: Password update attempt');
     
-    const { error } = await supabase.auth.updateUser({
-      password: password
-    });
-    
-    console.log('AuthProvider: Password update result:', { error });
-    
-    if (error) {
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: password
+      });
+      
+      console.log('AuthProvider: Password update result:', { error });
+      
+      if (error) {
+        toast({
+          title: "Password Update Error",
+          description: error.message,
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Password Updated Successfully",
+          description: "Your password has been updated successfully.",
+        });
+        setIsPasswordReset(false);
+      }
+      
+      return { error };
+    } catch (error: any) {
+      console.error('AuthProvider: Password update unexpected error:', error);
       toast({
         title: "Password Update Error",
-        description: error.message,
+        description: "An unexpected error occurred during password update.",
         variant: "destructive"
       });
-    } else {
-      toast({
-        title: "Password Updated Successfully",
-        description: "Your password has been updated successfully.",
-      });
-      setIsPasswordReset(false);
+      return { error };
     }
-    
-    return { error };
   };
 
   const value = {
