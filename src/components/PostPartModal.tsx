@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -133,12 +134,6 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
         price: typeof insertData.price,
         year: typeof insertData.year
       });
-
-      // First, let's verify we can check auth.uid()
-      const { data: authCheck, error: authError } = await supabase
-        .rpc('auth.uid');
-      
-      console.log('Auth UID check:', authCheck, authError);
 
       // Insert part data with location
       const { data: insertedData, error } = await supabase
