@@ -1,128 +1,37 @@
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Shield, ArrowLeft, Mail, Lock, AlertTriangle, Eye, EyeOff } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { toast } from "@/hooks/use-toast";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useNavigate } from "react-router-dom";
+import AdminAuthHeader from "@/components/AdminAuthHeader";
+import AdminAuthForm from "@/components/AdminAuthForm";
+import AdminSecurityAlert from "@/components/AdminSecurityAlert";
 import PasswordReset from "@/components/PasswordReset";
 import SetNewPassword from "@/components/SetNewPassword";
-import { ADMIN_SECURITY_CONFIG, validateAdminPassword } from "@/utils/adminSecurity";
 
 const AdminAuth = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    firstName: '',
-    lastName: '',
-    phone: '',
-    location: ''
-  });
-  const [isLogin, setIsLogin] = useState(true);
   const [showPasswordReset, setShowPasswordReset] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [passwordValidation, setPasswordValidation] = useState<{valid: boolean; errors: string[]}>({valid: true, errors: []});
-  
-  const { signIn, isPasswordReset } = useAuth();
+  const { isPasswordReset } = useAuth();
   const navigate = useNavigate();
-
-  const handlePasswordChange = (password: string) => {
-    setFormData(prev => ({ ...prev, password }));
-    if (password) {
-      const validation = validateAdminPassword(password);
-      setPasswordValidation(validation);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Prevent double submission
-    if (loading) return;
-
-    // Basic validation
-    if (!formData.email || !formData.password) {
-      toast({
-        title: "Missing Information",
-        description: "Please enter both email and password.",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    setLoading(true);
-    console.log('AdminAuth: Starting admin sign in for:', formData.email);
-    
-    try {
-      console.log('AdminAuth: Attempting admin sign in...');
-      const { error } = await signIn(formData.email, formData.password);
-      if (error) {
-        console.error('AdminAuth: Sign in error:', error);
-        // Error handling and toast are already handled in AuthContext
-      } else {
-        console.log('AdminAuth: Sign in successful, navigating to admin dashboard');
-        toast({
-          title: "Sign In Successful",
-          description: "Welcome back! Redirecting to admin dashboard...",
-        });
-        // Small delay to ensure state is updated before navigation
-        setTimeout(() => {
-          navigate('/admin', { replace: true });
-        }, 100);
-      }
-    } catch (error) {
-      console.error('AdminAuth: Unexpected error:', error);
-      toast({
-        title: "Authentication Error",
-        description: "An unexpected error occurred. Please try again.",
-        variant: "destructive"
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleInputChange = (field: string, value: string) => {
-    if (field === 'password') {
-      handlePasswordChange(value);
-    } else {
-      setFormData(prev => ({ ...prev, [field]: value }));
-    }
-  };
 
   const handleBackToLogin = () => {
     setShowPasswordReset(false);
-    setIsLogin(true);
   };
 
   const handlePasswordResetSuccess = () => {
     navigate('/admin');
   };
 
+  const handlePasswordResetClick = () => {
+    setShowPasswordReset(true);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-100 font-inter">
-      <header className="p-4 sm:p-6 flex items-center gap-3 bg-gradient-to-r from-white/90 via-purple-50/80 to-white/90 backdrop-blur-lg shadow-lg border-b">
-        <Link to="/">
-          <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 hover:bg-white/50">
-            <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
-          </Button>
-        </Link>
-        <div className="flex items-center gap-2 sm:gap-3">
-          <img 
-            src="/lovable-uploads/23312658-5ff6-4d89-a7cb-c0fbf631cd1c.png" 
-            alt="PartMatch Logo" 
-            className="h-6 w-auto sm:h-8"
-          />
-          <h1 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-purple-700 to-indigo-700 bg-clip-text text-transparent">
-            Admin {isPasswordReset ? 'Password Reset' : showPasswordReset ? 'Password Reset' : 'Sign In'}
-          </h1>
-        </div>
-      </header>
+      <AdminAuthHeader 
+        isPasswordReset={isPasswordReset}
+        showPasswordReset={showPasswordReset}
+      />
 
       <main className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-md">
         <Card className="p-6 sm:p-8 bg-gradient-to-br from-white/90 to-purple-50/50 backdrop-blur-sm shadow-2xl border-0">
@@ -144,99 +53,8 @@ const AdminAuth = () => {
             />
           ) : (
             <>
-              <div className="text-center mb-6 sm:mb-8">
-                <div className="bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full p-4 w-fit mx-auto mb-4 sm:mb-6 shadow-lg">
-                  <Shield className="h-10 w-10 sm:h-12 sm:w-12 text-white" />
-                </div>
-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-semibold mb-2 sm:mb-3 bg-gradient-to-r from-purple-700 to-indigo-700 bg-clip-text text-transparent">
-                  Admin Access
-                </h2>
-                <p className="text-gray-600 text-sm sm:text-base font-crimson">
-                  Secure admin portal access
-                </p>
-              </div>
-
-              <Alert className="mb-6 border-red-200 bg-red-50">
-                <AlertTriangle className="h-4 w-4 text-red-600" />
-                <AlertDescription className="text-red-800">
-                  <strong>🔒 SECURE ACCESS:</strong> Only authorized admin emails can access this portal. All login attempts are monitored and logged.
-                </AlertDescription>
-              </Alert>
-
-              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
-                <div>
-                  <Label htmlFor="email" className="text-sm sm:text-base font-inter">Admin Email *</Label>
-                  <div className="relative">
-                    <Mail className="h-4 w-4 absolute left-3 top-3 text-gray-400" />
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="admin@partmatchgh.com"
-                      value={formData.email}
-                      onChange={(e) => handleInputChange('email', e.target.value)}
-                      required
-                      className="mt-1 pl-10 text-base border-purple-200 focus:border-purple-400"
-                      disabled={loading}
-                    />
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Only pre-authorized admin emails are allowed
-                  </p>
-                </div>
-
-                <div>
-                  <Label htmlFor="password" className="text-sm sm:text-base font-inter">Password *</Label>
-                  <div className="relative">
-                    <Lock className="h-4 w-4 absolute left-3 top-3 text-gray-400" />
-                    <Input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="••••••••"
-                      value={formData.password}
-                      onChange={(e) => handleInputChange('password', e.target.value)}
-                      required
-                      className="mt-1 pl-10 pr-10 text-base border-purple-200 focus:border-purple-400"
-                      disabled={loading}
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      className="absolute right-1 top-1 h-8 w-8 text-gray-400 hover:text-gray-600"
-                      onClick={() => setShowPassword(!showPassword)}
-                      disabled={loading}
-                    >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </Button>
-                  </div>
-                </div>
-
-                <Button 
-                  type="submit" 
-                  className="w-full bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 py-3 sm:py-4 text-base sm:text-lg rounded-xl font-inter font-medium shadow-lg hover:shadow-xl transition-all duration-300"
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <div className="flex items-center gap-2">
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                      Signing In...
-                    </div>
-                  ) : (
-                    'Sign In to Admin Portal'
-                  )}
-                </Button>
-              </form>
-
-              <div className="text-center mt-4">
-                <button
-                  type="button"
-                  onClick={() => setShowPasswordReset(true)}
-                  className="text-purple-600 hover:text-purple-800 hover:underline text-sm font-crimson transition-colors duration-300"
-                  disabled={loading}
-                >
-                  Forgot your password?
-                </button>
-              </div>
+              <AdminSecurityAlert />
+              <AdminAuthForm onPasswordResetClick={handlePasswordResetClick} />
             </>
           )}
         </Card>
