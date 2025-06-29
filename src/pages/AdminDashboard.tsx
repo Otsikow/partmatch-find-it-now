@@ -111,9 +111,15 @@ const AdminDashboard = () => {
         status: offer.status
       }));
 
+      // Transform verifications data with proper type casting
+      const transformedVerifications: SellerVerification[] = (verificationsData || []).map(verification => ({
+        ...verification,
+        verification_status: verification.verification_status as 'pending' | 'approved' | 'rejected'
+      }));
+
       setRequests(transformedRequests);
       setOffers(transformedOffers);
-      setVerifications(verificationsData || []);
+      setVerifications(transformedVerifications);
     } catch (error) {
       console.error('Error fetching data:', error);
       toast({
