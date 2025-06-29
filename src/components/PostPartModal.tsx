@@ -91,6 +91,7 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
     }
 
     setIsSubmitting(true);
+    console.log('PostPartModal: Starting part submission for user:', user.id);
 
     try {
       // Upload images first
@@ -100,40 +101,54 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
           const url = await uploadImage(photo);
           imageUrls.push(url);
         } catch (imageError) {
-          console.error('Image upload failed:', imageError);
+          console.error('PostPartModal: Image upload failed:', imageError);
           throw imageError;
         }
       }
 
-      // Prepare the data for insertion
+      // Prepare the data for insertion - ensure all required fields are present
       const insertData = {
-        supplier_id: user.id,
-        title: formData.title,
-        description: formData.description || null,
-        make: formData.make,
-        model: formData.model,
-        year: formData.year,
-        part_type: formData.part_type,
+        supplier_id: user.id, // This is the key field for RLS
+        title: formData.title.trim(),
+        description: formData.description?.trim() || null,
+        make: formData.make.trim(),
+        model: formData.model.trim(),
+        year: parseInt(formData.year.toString()),
+        part_type: formData.part_type.trim(),
         condition: formData.condition,
         price: parseFloat(formData.price),
         currency: formData.currency,
         images: imageUrls.length > 0 ? imageUrls : null,
-        latitude: location.lat,
-        longitude: location.lng,
-        address: location.address,
+        latitude: parseFloat(location.lat.toString()),
+        longitude: parseFloat(location.lng.toString()),
+        address: location.address.trim(),
         status: 'available'
       };
 
-      // Insert the car part
+      console.log('PostPartModal: Preparing to insert data:', {
+        supplier_id: insertData.supplier_id,
+        title: insertData.title,
+        user_id: user.id,
+        auth_uid: user.id
+      });
+
+      // Insert the car part with explicit RLS compliance
       const { data: insertedData, error: insertError } = await supabase
         .from('car_parts')
         .insert([insertData])
         .select();
 
       if (insertError) {
-        console.error('Insert error:', insertError);
+        console.error('PostPartModal: Insert error details:', {
+          message: insertError.message,
+          details: insertError.details,
+          hint: insertError.hint,
+          code: insertError.code
+        });
         throw insertError;
       }
+
+      console.log('PostPartModal: Part inserted successfully:', insertedData);
 
       toast({
         title: "Part Posted!",
@@ -158,11 +173,17 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
       onClose();
 
     } catch (error: any) {
-      console.error('Error posting part:', error);
+      console.error('PostPartModal: Error posting part:', {
+        error: error,
+        message: error?.message,
+        details: error?.details,
+        hint: error?.hint,
+        code: error?.code
+      });
       
       toast({
-        title: "Error",
-        description: error.message || "Failed to post part. Please try again.",
+        title: "Error Posting Part",
+        description: error?.message || "Failed to post part. Please try again.",
         variant: "destructive"
       });
     } finally {
