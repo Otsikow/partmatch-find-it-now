@@ -232,6 +232,12 @@ export const useAdminActions = (refetchData: () => Promise<void>) => {
       console.log('Refreshing data after user approval...');
       await refetchData();
       
+      // Add a small delay to ensure state updates
+      setTimeout(async () => {
+        await refetchData();
+        console.log('Second refresh completed');
+      }, 1000);
+      
       toast({
         title: "User Approved!",
         description: "The user has been approved and verified.",

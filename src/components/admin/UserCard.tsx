@@ -68,7 +68,17 @@ const UserCard = ({ user, onApprove, onSuspend, onDelete, onUnblock, onViewDetai
     switch (userType) {
       case 'supplier': return 'bg-blue-100 text-blue-800';
       case 'admin': return 'bg-purple-100 text-purple-800';
+      case 'owner': return 'bg-green-100 text-green-800';
       default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getUserTypeDisplayName = (userType: string) => {
+    switch (userType) {
+      case 'supplier': return 'Seller';
+      case 'owner': return 'Buyer';
+      case 'admin': return 'Admin';
+      default: return userType;
     }
   };
 
@@ -111,7 +121,7 @@ const UserCard = ({ user, onApprove, onSuspend, onDelete, onUnblock, onViewDetai
               {getStatusText(user.is_blocked, user.is_verified)}
             </Badge>
             <Badge className={`${getUserTypeColor(user.user_type)} text-sm`}>
-              {user.user_type === 'supplier' ? 'Seller' : user.user_type}
+              {getUserTypeDisplayName(user.user_type)}
             </Badge>
           </div>
           
