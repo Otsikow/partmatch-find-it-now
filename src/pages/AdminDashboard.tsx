@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -10,6 +11,7 @@ import AdminStats from "@/components/admin/AdminStats";
 import RequestCard from "@/components/admin/RequestCard";
 import OfferCard from "@/components/admin/OfferCard";
 import VerificationCard from "@/components/admin/VerificationCard";
+import UserCard from "@/components/admin/UserCard";
 import AdminNotificationBell from "@/components/admin/AdminNotificationBell";
 
 interface SellerVerification {
@@ -54,10 +56,26 @@ interface Offer {
   status: 'pending' | 'accepted' | 'rejected' | 'expired';
 }
 
+interface UserProfile {
+  id: string;
+  first_name?: string;
+  last_name?: string;
+  phone?: string;
+  location?: string;
+  user_type: 'owner' | 'supplier' | 'admin';
+  is_verified: boolean;
+  is_blocked: boolean;
+  created_at: string;
+  rating?: number;
+  total_ratings?: number;
+  email?: string;
+}
+
 const AdminDashboard = () => {
   const [requests, setRequests] = useState<Request[]>([]);
   const [offers, setOffers] = useState<Offer[]>([]);
   const [verifications, setVerifications] = useState<SellerVerification[]>([]);
+  const [users, setUsers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -93,6 +111,27 @@ const AdminDashboard = () => {
         .order('created_at', { ascending: false });
 
       if (verificationsError) throw verificationsError;
+
+      // Fetch users with their auth emails
+      const { data: usersData, error: usersError } = await supabase
+        .from('profiles')
+        .select(`
+          *,
+          auth_users:id (email)
+        `)
+        .order('created_at', { ascending: false });
+
+      if (usersError) {
+        console.error('Error fetching users:', usersError);
+        setUsers([]);
+      } else {
+        const transformedUsers: UserProfile[] = (usersData || []).map(user => ({
+          ...user,
+          email: user.auth_users?.email || undefined,
+          user_type: user.user_type as 'owner' | 'supplier' | 'admin'
+        }));
+        setUsers(transformedUsers);
+      }
 
       // Transform requests data
       const transformedRequests: Request[] = (requestsData || []).map(req => ({
@@ -334,6 +373,174 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleApproveUser = async (userId: string) => {
+    try {
+      console.log('Approving user:', userId);
+      
+      const { error } = await supabase
+        .from('profiles')
+        .update({ 
+          is_verified: true,
+          verified_at: new Date().toISOString()
+        })
+        .eq('id', userId);
+
+      if (error) {
+        console.error('Error approving user:', error);
+        throw error;
+      }
+
+      console.log('Successfully approved user');
+
+      // Refresh data
+      await fetchData();
+      
+      toast({
+        title: "User Approved!",
+        description: "The user has been approved and verified.",
+      });
+    } catch (error: any) {
+      console.error('Error approving user:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to approve user. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleSuspendUser = async (userId: string, reason: string) => {
+    try {
+      console.log('Suspending user:', userId, 'Reason:', reason);
+      
+      const { error } = await supabase
+        .from('profiles')
+        .update({ 
+          is_blocked: true,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', userId);
+
+      if (error) {
+        console.error('Error suspending user:', error);
+        throw error;
+      }
+
+      console.log('Successfully suspended user');
+
+      // Log the action
+      await supabase
+        .from('admin_audit_logs')
+        .insert({
+          action: 'USER_SUSPENDED',
+          user_id: userId,
+          details: { reason, suspended_by: (await supabase.auth.getUser()).data.user?.id }
+        });
+
+      // Refresh data
+      await fetchData();
+      
+      toast({
+        title: "User Suspended!",
+        description: "The user has been suspended.",
+      });
+    } catch (error: any) {
+      console.error('Error suspending user:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to suspend user. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleDeleteUser = async (userId: string, reason: string) => {
+    try {
+      console.log('Deleting user:', userId, 'Reason:', reason);
+      
+      // Log the action before deletion
+      await supabase
+        .from('admin_audit_logs')
+        .insert({
+          action: 'USER_DELETED',
+          user_id: userId,
+          details: { reason, deleted_by: (await supabase.auth.getUser()).data.user?.id }
+        });
+
+      // Call the delete user edge function
+      const { data, error } = await supabase.functions.invoke('delete-user', {
+        body: { userId }
+      });
+
+      if (error) {
+        console.error('Error deleting user:', error);
+        throw error;
+      }
+
+      console.log('Successfully deleted user');
+
+      // Refresh data
+      await fetchData();
+      
+      toast({
+        title: "User Deleted!",
+        description: "The user account has been permanently deleted.",
+      });
+    } catch (error: any) {
+      console.error('Error deleting user:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to delete user. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleUnblockUser = async (userId: string) => {
+    try {
+      console.log('Unblocking user:', userId);
+      
+      const { error } = await supabase
+        .from('profiles')
+        .update({ 
+          is_blocked: false,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', userId);
+
+      if (error) {
+        console.error('Error unblocking user:', error);
+        throw error;
+      }
+
+      console.log('Successfully unblocked user');
+
+      // Log the action
+      await supabase
+        .from('admin_audit_logs')
+        .insert({
+          action: 'USER_UNBLOCKED',
+          user_id: userId,
+          details: { unblocked_by: (await supabase.auth.getUser()).data.user?.id }
+        });
+
+      // Refresh data
+      await fetchData();
+      
+      toast({
+        title: "User Unblocked!",
+        description: "The user has been unblocked.",
+      });
+    } catch (error: any) {
+      console.error('Error unblocking user:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to unblock user. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-100 flex items-center justify-center">
@@ -377,10 +584,11 @@ const AdminDashboard = () => {
         />
 
         <Tabs defaultValue="requests" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 bg-gradient-to-r from-white/90 to-purple-50/50 backdrop-blur-sm">
+          <TabsList className="grid w-full grid-cols-4 bg-gradient-to-r from-white/90 to-purple-50/50 backdrop-blur-sm">
             <TabsTrigger value="requests" className="text-base font-inter">All Requests</TabsTrigger>
             <TabsTrigger value="offers" className="text-base font-inter">Seller Offers</TabsTrigger>
             <TabsTrigger value="verifications" className="text-base font-inter">Seller Verifications</TabsTrigger>
+            <TabsTrigger value="users" className="text-base font-inter">User Management</TabsTrigger>
           </TabsList>
 
           <TabsContent value="requests" className="mt-6">
@@ -436,6 +644,35 @@ const AdminDashboard = () => {
                     onApprove={(id) => handleVerificationAction(id, 'approve')}
                     onReject={handleVerificationAction}
                     onViewDocument={viewDocument}
+                  />
+                ))
+              )}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="users" className="mt-6">
+            <div className="space-y-4 sm:space-y-6">
+              <h2 className="text-xl sm:text-2xl font-playfair font-semibold bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">
+                User Management
+              </h2>
+              
+              {users.length === 0 ? (
+                <Card className="p-8 text-center bg-gradient-to-br from-white/90 to-purple-50/30">
+                  <div className="text-gray-500">
+                    <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <h3 className="text-lg font-semibold mb-2">No Users Found</h3>
+                    <p className="text-sm">There are currently no users to manage.</p>
+                  </div>
+                </Card>
+              ) : (
+                users.map(user => (
+                  <UserCard
+                    key={user.id}
+                    user={user}
+                    onApprove={handleApproveUser}
+                    onSuspend={handleSuspendUser}
+                    onDelete={handleDeleteUser}
+                    onUnblock={handleUnblockUser}
                   />
                 ))
               )}
