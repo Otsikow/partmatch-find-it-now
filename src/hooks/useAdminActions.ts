@@ -212,6 +212,7 @@ export const useAdminActions = (refetchData: () => Promise<void>) => {
     try {
       console.log('Approving user:', userId);
       
+      // Update the user's profile to mark them as verified
       const { error } = await supabase
         .from('profiles')
         .update({ 
@@ -227,7 +228,8 @@ export const useAdminActions = (refetchData: () => Promise<void>) => {
 
       console.log('Successfully approved user');
 
-      // Refresh data
+      // Force refresh data to ensure UI updates
+      console.log('Refreshing data after user approval...');
       await refetchData();
       
       toast({

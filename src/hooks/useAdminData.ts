@@ -69,6 +69,8 @@ export const useAdminData = () => {
 
   const fetchData = async () => {
     try {
+      console.log('Fetching admin data...');
+      
       // Fetch real requests from database
       const { data: requestsData, error: requestsError } = await supabase
         .from('part_requests')
@@ -98,6 +100,7 @@ export const useAdminData = () => {
       if (verificationsError) throw verificationsError;
 
       // Fetch users from profiles table
+      console.log('Fetching users from profiles...');
       const { data: usersData, error: usersError } = await supabase
         .from('profiles')
         .select('*')
@@ -107,6 +110,8 @@ export const useAdminData = () => {
         console.error('Error fetching users:', usersError);
         setUsers([]);
       } else {
+        console.log('Successfully fetched users:', usersData?.length || 0);
+        
         // Try to fetch auth users to get emails, but handle the error gracefully
         let authUsers: any[] = [];
         try {
@@ -117,6 +122,7 @@ export const useAdminData = () => {
             // Continue without email data instead of failing
           } else {
             authUsers = authResponse?.users || [];
+            console.log('Successfully fetched auth users:', authUsers.length);
           }
         } catch (error) {
           console.error('Auth API error:', error);
@@ -127,12 +133,17 @@ export const useAdminData = () => {
           // Find matching auth user to get email (if available)
           const authUser = authUsers.find((au: any) => au.id === user.id);
           
-          return {
+          const transformedUser = {
             ...user,
             email: authUser?.email || `user-${user.id.slice(0, 8)}@unknown.com`, // Fallback email
             user_type: user.user_type as 'owner' | 'supplier' | 'admin'
           };
+          
+          console.log(`User ${user.id}: is_verified=${user.is_verified}, is_blocked=${user.is_blocked}`);
+          return transformedUser;
         });
+        
+        console.log('Transformed users:', transformedUsers.length);
         setUsers(transformedUsers);
       }
 
@@ -169,6 +180,8 @@ export const useAdminData = () => {
       setRequests(transformedRequests);
       setOffers(transformedOffers);
       setVerifications(transformedVerifications);
+      
+      console.log('Admin data fetch completed successfully');
     } catch (error) {
       console.error('Error fetching data:', error);
       toast({
