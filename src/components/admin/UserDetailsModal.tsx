@@ -29,7 +29,7 @@ interface UserProfile {
   location?: string;
   user_type: 'owner' | 'supplier' | 'admin';
   is_verified: boolean;
-  is_blocked: boolean;
+  is_blocked: boolean;  
   created_at: string;
   rating?: number;
   total_ratings?: number;
@@ -97,25 +97,34 @@ const UserDetailsModal = ({
       if (user.user_type === 'supplier') {
         const { data: reviewsData, error: reviewsError } = await supabase
           .from('reviews')
-          .select(`
-            *,
-            profiles!reviewer_id(first_name, last_name)
-          `)
+          .select('*')
           .eq('seller_id', user.id)
           .order('created_at', { ascending: false });
 
         if (reviewsError) {
           console.error('Error fetching reviews:', reviewsError);
         } else {
-          const transformedReviews = reviewsData?.map(review => ({
-            ...review,
-            reviewer: {
-              first_name: review.profiles?.first_name,
-              last_name: review.profiles?.last_name,
-              email: review.profiles?.email
-            }
-          })) || [];
-          setReviews(transformedReviews);
+          // Fetch reviewer profiles separately
+          const reviewsWithProfiles = await Promise.all(
+            (reviewsData || []).map(async (review) => {
+              const { data: profileData } = await supabase
+                .from('profiles')
+                .select('first_name, last_name')
+                .eq('id', review.reviewer_id)
+                .single();
+
+              return {
+                ...review,
+                reviewer: {
+                  first_name: profileData?.first_name,
+                  last_name: profileData?.last_name,
+                  email: undefined // We don't have easy access to email from profiles
+                }
+              };
+            })
+          );
+          
+          setReviews(reviewsWithProfiles);
         }
 
         // Fetch car parts listings
@@ -162,7 +171,7 @@ const UserDetailsModal = ({
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
-      month: 'long',
+      month: 'long', 
       day: 'numeric'
     });
   };
