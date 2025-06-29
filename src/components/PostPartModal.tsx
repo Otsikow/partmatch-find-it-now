@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -71,7 +70,14 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to post a part.",
+        variant: "destructive"
+      });
+      return;
+    }
 
     if (!location) {
       toast({
@@ -85,6 +91,10 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
     setIsSubmitting(true);
 
     try {
+      // Debug: Log user information
+      console.log('Current user:', user);
+      console.log('User ID:', user.id);
+
       // Upload images first
       const imageUrls = [];
       for (const photo of photos) {
@@ -92,28 +102,40 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
         imageUrls.push(url);
       }
 
-      // Insert part data with location
-      const { error } = await supabase
-        .from('car_parts')
-        .insert({
-          supplier_id: user.id,
-          title: formData.title,
-          description: formData.description || null,
-          make: formData.make,
-          model: formData.model,
-          year: formData.year,
-          part_type: formData.part_type,
-          condition: formData.condition,
-          price: parseFloat(formData.price),
-          currency: formData.currency,
-          images: imageUrls.length > 0 ? imageUrls : null,
-          latitude: location.lat,
-          longitude: location.lng,
-          address: location.address,
-          status: 'available'
-        });
+      // Prepare the data for insertion
+      const insertData = {
+        supplier_id: user.id, // Explicitly set the supplier_id to current user's ID
+        title: formData.title,
+        description: formData.description || null,
+        make: formData.make,
+        model: formData.model,
+        year: formData.year,
+        part_type: formData.part_type,
+        condition: formData.condition,
+        price: parseFloat(formData.price),
+        currency: formData.currency,
+        images: imageUrls.length > 0 ? imageUrls : null,
+        latitude: location.lat,
+        longitude: location.lng,
+        address: location.address,
+        status: 'available'
+      };
 
-      if (error) throw error;
+      // Debug: Log the data being inserted
+      console.log('Insert data:', insertData);
+
+      // Insert part data with location
+      const { data: insertedData, error } = await supabase
+        .from('car_parts')
+        .insert(insertData)
+        .select();
+
+      if (error) {
+        console.error('Supabase insert error:', error);
+        throw error;
+      }
+
+      console.log('Successfully inserted:', insertedData);
 
       toast({
         title: "Part Posted!",
