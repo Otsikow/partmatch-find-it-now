@@ -99,7 +99,7 @@ export const useAdminData = () => {
 
       if (verificationsError) throw verificationsError;
 
-      // Fetch users from profiles table
+      // Fetch users from profiles table - Force fresh data
       console.log('Fetching users from profiles...');
       const { data: usersData, error: usersError } = await supabase
         .from('profiles')
@@ -144,7 +144,9 @@ export const useAdminData = () => {
         });
         
         console.log('Transformed users:', transformedUsers.length);
-        setUsers(transformedUsers);
+        
+        // Force state update by creating a new array reference
+        setUsers([...transformedUsers]);
       }
 
       // Transform requests data

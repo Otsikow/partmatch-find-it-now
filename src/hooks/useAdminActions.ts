@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 
@@ -230,7 +229,7 @@ export const useAdminActions = (refetchData: () => Promise<void>) => {
 
       console.log('Current user status before approval:', currentUser);
 
-      // Update the user's profile to mark them as verified - Remove .single() to avoid the error
+      // Update the user's profile to mark them as verified
       const { error: updateError } = await supabase
         .from('profiles')
         .update({ 
@@ -246,6 +245,19 @@ export const useAdminActions = (refetchData: () => Promise<void>) => {
       }
 
       console.log('Successfully updated user profile for userId:', userId);
+
+      // Verify the update was successful by checking the database again
+      const { data: verifiedUser, error: verifyError } = await supabase
+        .from('profiles')
+        .select('is_verified, verified_at')
+        .eq('id', userId)
+        .maybeSingle();
+
+      if (verifyError) {
+        console.error('Error verifying update:', verifyError);
+      } else {
+        console.log('User verification status after update:', verifiedUser);
+      }
 
       // Log the approval action
       try {
@@ -268,23 +280,9 @@ export const useAdminActions = (refetchData: () => Promise<void>) => {
         // Don't throw here, approval was successful
       }
 
-      // Force multiple refreshes to ensure UI updates
+      // Force immediate refresh of data
       console.log('Refreshing data after user approval...');
       await refetchData();
-      
-      // Additional refresh with delay to ensure state propagation
-      setTimeout(async () => {
-        console.log('Performing second refresh...');
-        await refetchData();
-        console.log('Second refresh completed');
-      }, 500);
-      
-      // Third refresh for good measure
-      setTimeout(async () => {
-        console.log('Performing third refresh...');
-        await refetchData();
-        console.log('Third refresh completed');
-      }, 1500);
       
       toast({
         title: "User Approved!",
