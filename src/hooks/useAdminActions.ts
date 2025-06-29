@@ -230,21 +230,22 @@ export const useAdminActions = (refetchData: () => Promise<void>) => {
       console.log('Current user status before approval:', currentUser);
 
       // Update the user's profile to mark them as verified
-      const { error: updateError } = await supabase
+      const { data: updatedData, error: updateError } = await supabase
         .from('profiles')
         .update({ 
           is_verified: true,
           verified_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         })
-        .eq('id', userId);
+        .eq('id', userId)
+        .select();
 
       if (updateError) {
         console.error('Error approving user:', updateError);
         throw updateError;
       }
 
-      console.log('Successfully updated user profile for userId:', userId);
+      console.log('Successfully updated user profile:', updatedData);
 
       // Verify the update was successful by checking the database again
       const { data: verifiedUser, error: verifyError } = await supabase
@@ -257,27 +258,6 @@ export const useAdminActions = (refetchData: () => Promise<void>) => {
         console.error('Error verifying update:', verifyError);
       } else {
         console.log('User verification status after update:', verifiedUser);
-      }
-
-      // Log the approval action
-      try {
-        const { data: currentAuthUser } = await supabase.auth.getUser();
-        await supabase
-          .from('admin_audit_logs')
-          .insert({
-            action: 'USER_APPROVED',
-            user_id: userId,
-            details: { 
-              approved_by: currentAuthUser?.user?.id,
-              timestamp: new Date().toISOString(),
-              previous_status: currentUser.is_verified,
-              new_status: true
-            }
-          });
-        console.log('Audit log created for user approval');
-      } catch (auditError) {
-        console.error('Error creating audit log:', auditError);
-        // Don't throw here, approval was successful
       }
 
       // Force immediate refresh of data

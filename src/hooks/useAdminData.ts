@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
@@ -99,7 +98,7 @@ export const useAdminData = () => {
 
       if (verificationsError) throw verificationsError;
 
-      // Fetch users from profiles table - Force fresh data
+      // Fetch users from profiles table with fresh data
       console.log('Fetching users from profiles...');
       const { data: usersData, error: usersError } = await supabase
         .from('profiles')
@@ -143,10 +142,13 @@ export const useAdminData = () => {
           return transformedUser;
         });
         
-        console.log('Transformed users:', transformedUsers.length);
+        console.log('Setting users state with fresh data:', transformedUsers.length);
         
-        // Force state update by creating a new array reference
-        setUsers([...transformedUsers]);
+        // Clear existing state first, then set new data to force re-render
+        setUsers([]);
+        setTimeout(() => {
+          setUsers(transformedUsers);
+        }, 0);
       }
 
       // Transform requests data
