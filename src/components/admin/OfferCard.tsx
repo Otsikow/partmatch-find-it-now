@@ -1,4 +1,3 @@
-
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,7 +22,7 @@ interface Request {
 interface OfferCardProps {
   offer: Offer;
   relatedRequest?: Request;
-  onAcceptOffer: (requestId: string, offerId: string) => void;
+  onAcceptOffer: (requestId: string) => void;
 }
 
 const OfferCard = ({ offer, relatedRequest, onAcceptOffer }: OfferCardProps) => {
@@ -39,7 +38,7 @@ const OfferCard = ({ offer, relatedRequest, onAcceptOffer }: OfferCardProps) => 
 
   const handleAcceptOffer = () => {
     console.log('Accept offer clicked for:', offer.id, 'request:', offer.requestId);
-    onAcceptOffer(offer.requestId, offer.id);
+    onAcceptOffer(offer.requestId);
   };
 
   return (

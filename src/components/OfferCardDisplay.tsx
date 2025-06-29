@@ -84,7 +84,7 @@ const OfferCardDisplay = ({ offer, onWhatsAppContact }: OfferCardDisplayProps) =
             <Clock className="h-4 w-4 text-orange-500" />
             <span>Submitted: {formatDate(offer.created_at)}</span>
           </div>
-          {offer.contact_unlocked && (
+          {(offer.contact_unlocked || offer.status === 'accepted') && (
             <div className="flex items-center gap-2">
               <Eye className="h-4 w-4 text-green-500" />
               <span className="text-green-600 font-medium">Contact Unlocked</span>
@@ -92,7 +92,7 @@ const OfferCardDisplay = ({ offer, onWhatsAppContact }: OfferCardDisplayProps) =
           )}
         </div>
 
-        {offer.status === 'accepted' && offer.contact_unlocked && (
+        {offer.status === 'accepted' && (
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
             <p className="text-green-800 font-medium mb-2">🎉 Congratulations! Your offer was accepted.</p>
             <div className="flex items-center gap-2 text-sm text-green-700">

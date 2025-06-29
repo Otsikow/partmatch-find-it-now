@@ -152,10 +152,13 @@ const AdminDashboard = () => {
 
       console.log('Found related offer:', relatedOffer.id);
 
-      // Update offer status to accepted
+      // Update offer status to accepted and unlock contact
       const { error: offerError } = await supabase
         .from('offers')
-        .update({ status: 'accepted' })
+        .update({ 
+          status: 'accepted',
+          contact_unlocked: true
+        })
         .eq('id', relatedOffer.id);
 
       if (offerError) {

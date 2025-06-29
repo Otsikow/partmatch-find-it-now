@@ -41,7 +41,7 @@ export const useCarParts = () => {
             location
           )
         `)
-        .eq('status', 'available')
+        .in('status', ['available', 'accepted']) // Show both available and accepted parts
         .order('created_at', { ascending: false });
 
       if (error) {

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -106,6 +105,8 @@ const SupplierDashboard = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
+      
+      console.log('Fetched offers:', data);
       setMyOffers(data || []);
     } catch (error) {
       console.error('Error fetching offers:', error);
@@ -118,6 +119,32 @@ const SupplierDashboard = () => {
       setLoading(false);
     }
   };
+
+  // Set up real-time subscription for offer updates
+  useEffect(() => {
+    if (!user?.id) return;
+
+    const channel = supabase
+      .channel('offer-updates')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'offers',
+          filter: `supplier_id=eq.${user.id}`
+        },
+        (payload) => {
+          console.log('Offer updated:', payload);
+          fetchMyOffers(); // Refresh offers when status changes
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user?.id]);
 
   const handleMakeOffer = async (requestId: string, price: number, message: string, location: string) => {
     setSubmittingOffer(requestId);
