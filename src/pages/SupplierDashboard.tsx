@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -49,6 +50,7 @@ const SupplierDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [submittingOffer, setSubmittingOffer] = useState<string | null>(null);
   const [showMainDashboard, setShowMainDashboard] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Stats
   const [stats, setStats] = useState({
@@ -59,8 +61,11 @@ const SupplierDashboard = () => {
 
   useEffect(() => {
     if (user) {
-      fetchRequests();
-      fetchMyOffers();
+      console.log('SupplierDashboard: User found, fetching data for:', user.id);
+      fetchData();
+    } else {
+      console.log('SupplierDashboard: No user found');
+      setLoading(false);
     }
   }, [user]);
 
@@ -73,28 +78,71 @@ const SupplierDashboard = () => {
     setStats({ totalOffers, pendingOffers, acceptedOffers });
   }, [myOffers]);
 
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      console.log('SupplierDashboard: Starting data fetch');
+      
+      // Fetch both requests and offers in parallel
+      const [requestsResult, offersResult] = await Promise.allSettled([
+        fetchRequests(),
+        fetchMyOffers()
+      ]);
+
+      if (requestsResult.status === 'rejected') {
+        console.error('SupplierDashboard: Failed to fetch requests:', requestsResult.reason);
+      }
+
+      if (offersResult.status === 'rejected') {
+        console.error('SupplierDashboard: Failed to fetch offers:', offersResult.reason);
+      }
+
+      // If both failed, show error
+      if (requestsResult.status === 'rejected' && offersResult.status === 'rejected') {
+        setError('Failed to load dashboard data. Please try again.');
+      }
+
+    } catch (error) {
+      console.error('SupplierDashboard: Unexpected error in fetchData:', error);
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+      console.log('SupplierDashboard: Data fetch completed');
+    }
+  };
+
   const fetchRequests = async () => {
     try {
+      console.log('SupplierDashboard: Fetching requests');
       const { data, error } = await supabase
         .from('part_requests')
         .select('*')
         .eq('status', 'pending')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('SupplierDashboard: Error fetching requests:', error);
+        throw error;
+      }
+
+      console.log('SupplierDashboard: Fetched requests:', data?.length || 0);
       setRequests(data || []);
+      return data;
     } catch (error) {
-      console.error('Error fetching requests:', error);
+      console.error('SupplierDashboard: Request fetch failed:', error);
       toast({
         title: "Error",
         description: "Failed to load requests. Please try again.",
         variant: "destructive"
       });
+      throw error;
     }
   };
 
   const fetchMyOffers = async () => {
     try {
+      console.log('SupplierDashboard: Fetching offers for user:', user?.id);
       const { data, error } = await supabase
         .from('offers')
         .select(`
@@ -104,19 +152,22 @@ const SupplierDashboard = () => {
         .eq('supplier_id', user?.id)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('SupplierDashboard: Error fetching offers:', error);
+        throw error;
+      }
       
-      console.log('Fetched offers:', data);
+      console.log('SupplierDashboard: Fetched offers:', data?.length || 0);
       setMyOffers(data || []);
+      return data;
     } catch (error) {
-      console.error('Error fetching offers:', error);
+      console.error('SupplierDashboard: Offers fetch failed:', error);
       toast({
         title: "Error",
         description: "Failed to load your offers. Please try again.",
         variant: "destructive"
       });
-    } finally {
-      setLoading(false);
+      throw error;
     }
   };
 
@@ -124,6 +175,7 @@ const SupplierDashboard = () => {
   useEffect(() => {
     if (!user?.id) return;
 
+    console.log('SupplierDashboard: Setting up realtime subscription for user:', user.id);
     const channel = supabase
       .channel('offer-updates')
       .on(
@@ -135,13 +187,14 @@ const SupplierDashboard = () => {
           filter: `supplier_id=eq.${user.id}`
         },
         (payload) => {
-          console.log('Offer updated:', payload);
+          console.log('SupplierDashboard: Offer updated via realtime:', payload);
           fetchMyOffers(); // Refresh offers when status changes
         }
       )
       .subscribe();
 
     return () => {
+      console.log('SupplierDashboard: Cleaning up realtime subscription');
       supabase.removeChannel(channel);
     };
   }, [user?.id]);
@@ -150,6 +203,7 @@ const SupplierDashboard = () => {
     setSubmittingOffer(requestId);
 
     try {
+      console.log('SupplierDashboard: Submitting offer for request:', requestId);
       const { error } = await supabase
         .from('offers')
         .insert({
@@ -170,7 +224,7 @@ const SupplierDashboard = () => {
       // Refresh offers
       fetchMyOffers();
     } catch (error: any) {
-      console.error('Error making offer:', error);
+      console.error('SupplierDashboard: Error making offer:', error);
       toast({
         title: "Error",
         description: error.message || "Failed to submit offer. Please try again.",
@@ -188,12 +242,34 @@ const SupplierDashboard = () => {
     window.open(whatsappUrl, '_blank');
   };
 
+  const handleRetry = () => {
+    console.log('SupplierDashboard: Retrying data fetch');
+    fetchData();
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading your dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto p-6">
+          <div className="bg-red-100 rounded-full p-4 w-fit mx-auto mb-4">
+            <Package className="h-12 w-12 text-red-600" />
+          </div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Dashboard Error</h2>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <Button onClick={handleRetry} className="bg-orange-600 hover:bg-orange-700">
+            Try Again
+          </Button>
         </div>
       </div>
     );
