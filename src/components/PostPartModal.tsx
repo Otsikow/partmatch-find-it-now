@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -71,7 +70,11 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    console.log('=== PART POSTING DEBUG START ===');
+    
     if (!user) {
+      console.log('❌ No user found in context');
       toast({
         title: "Authentication Required",
         description: "Please sign in to post a part.",
@@ -80,7 +83,14 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
       return;
     }
 
+    console.log('✅ User found:', {
+      id: user.id,
+      email: user.email,
+      user_metadata: user.user_metadata
+    });
+
     if (!location) {
+      console.log('❌ No location selected');
       toast({
         title: "Location Required",
         description: "Please select a location on the map.",
@@ -89,26 +99,47 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
       return;
     }
 
+    console.log('✅ Location found:', location);
+
     setIsSubmitting(true);
 
     try {
-      // Debug: Log current session info
-      const { data: { session } } = await supabase.auth.getSession();
-      console.log('Current session:', session);
-      console.log('Current user from session:', session?.user);
-      console.log('Current user from context:', user);
-      console.log('User ID we will use:', user.id);
+      // Debug: Check current session and auth state
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      console.log('📋 Current session check:', {
+        session: session,
+        sessionError: sessionError,
+        userId: session?.user?.id,
+        userEmail: session?.user?.email
+      });
+
+      // Debug: Test RLS policies by checking if we can read from car_parts
+      console.log('🔍 Testing RLS policies...');
+      const { data: testRead, error: readError } = await supabase
+        .from('car_parts')
+        .select('id')
+        .limit(1);
+      
+      console.log('📖 RLS Read test:', { testRead, readError });
 
       // Upload images first
+      console.log('📸 Uploading images...');
       const imageUrls = [];
       for (const photo of photos) {
-        const url = await uploadImage(photo);
-        imageUrls.push(url);
+        try {
+          const url = await uploadImage(photo);
+          imageUrls.push(url);
+          console.log('✅ Image uploaded:', url);
+        } catch (imageError) {
+          console.error('❌ Image upload failed:', imageError);
+          throw imageError;
+        }
       }
+      console.log('📸 All images uploaded:', imageUrls);
 
-      // Prepare the data for insertion with explicit typing
+      // Prepare the data for insertion with explicit debugging
       const insertData = {
-        supplier_id: user.id, // This should match the RLS policy
+        supplier_id: user.id,
         title: formData.title,
         description: formData.description || null,
         make: formData.make,
@@ -125,33 +156,55 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
         status: 'available'
       };
 
-      // Debug: Log the exact data being inserted
-      console.log('Insert data structure:', insertData);
-      console.log('Insert data types:', {
-        supplier_id: typeof insertData.supplier_id,
-        supplier_id_value: insertData.supplier_id,
-        title: typeof insertData.title,
-        price: typeof insertData.price,
-        year: typeof insertData.year
+      console.log('📋 Final insert data:', {
+        ...insertData,
+        supplier_id_type: typeof insertData.supplier_id,
+        price_type: typeof insertData.price,
+        year_type: typeof insertData.year,
+        latitude_type: typeof insertData.latitude,
+        longitude_type: typeof insertData.longitude
       });
 
-      // Insert part data with location
-      const { data: insertedData, error } = await supabase
+      // Attempt to insert with detailed error logging
+      console.log('💾 Attempting to insert into car_parts table...');
+      const { data: insertedData, error: insertError } = await supabase
         .from('car_parts')
         .insert(insertData)
         .select();
 
-      if (error) {
-        console.error('Supabase insert error details:', {
-          message: error.message,
-          details: error.details,
-          hint: error.hint,
-          code: error.code
+      if (insertError) {
+        console.error('❌ INSERT ERROR DETAILS:', {
+          message: insertError.message,
+          details: insertError.details,
+          hint: insertError.hint,
+          code: insertError.code,
+          full_error: insertError
         });
-        throw error;
+
+        // Additional RLS debugging
+        if (insertError.message?.includes('row-level security policy')) {
+          console.log('🔒 RLS Policy violation detected. Checking policies...');
+          
+          // Test if we can query auth.uid() indirectly
+          const { data: profileTest, error: profileError } = await supabase
+            .from('profiles')
+            .select('id')
+            .eq('id', user.id)
+            .limit(1);
+          
+          console.log('👤 Profile lookup test:', { profileTest, profileError });
+          
+          // Check if user exists in profiles table (required for some RLS policies)
+          if (!profileTest || profileTest.length === 0) {
+            console.log('⚠️ User not found in profiles table - this might cause RLS issues');
+          }
+        }
+
+        throw insertError;
       }
 
-      console.log('Successfully inserted:', insertedData);
+      console.log('✅ Successfully inserted car part:', insertedData);
+      console.log('=== PART POSTING DEBUG END ===');
 
       toast({
         title: "Part Posted!",
@@ -176,7 +229,14 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
       onClose();
 
     } catch (error: any) {
-      console.error('Error posting part:', error);
+      console.error('❌ FINAL ERROR:', {
+        error: error,
+        message: error.message,
+        stack: error.stack,
+        name: error.name
+      });
+      console.log('=== PART POSTING DEBUG END (WITH ERROR) ===');
+      
       toast({
         title: "Error",
         description: error.message || "Failed to post part. Please try again.",
