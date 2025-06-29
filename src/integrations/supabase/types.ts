@@ -528,6 +528,36 @@ export type Database = {
           },
         ]
       }
+      reviews: {
+        Row: {
+          created_at: string
+          id: string
+          rating: number
+          review_text: string | null
+          reviewer_id: string
+          seller_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          rating: number
+          review_text?: string | null
+          reviewer_id: string
+          seller_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          rating?: number
+          review_text?: string | null
+          reviewer_id?: string
+          seller_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       seller_verifications: {
         Row: {
           admin_notes: string | null

@@ -7,9 +7,26 @@ import RequestCard from "@/components/admin/RequestCard";
 import OfferCard from "@/components/admin/OfferCard";
 import VerificationCard from "@/components/admin/VerificationCard";
 import UserCard from "@/components/admin/UserCard";
+import UserDetailsModal from "@/components/admin/UserDetailsModal";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { useAdminData } from "@/hooks/useAdminData";
 import { useAdminActions } from "@/hooks/useAdminActions";
+import { useState } from "react";
+
+interface UserProfile {
+  id: string;
+  first_name?: string;
+  last_name?: string;
+  phone?: string;
+  location?: string;
+  user_type: 'owner' | 'supplier' | 'admin';
+  is_verified: boolean;
+  is_blocked: boolean;
+  created_at: string;
+  rating?: number;
+  total_ratings?: number;
+  email?: string;
+}
 
 const AdminDashboard = () => {
   const { requests, offers, verifications, users, loading, refetchData } = useAdminData();
@@ -23,6 +40,14 @@ const AdminDashboard = () => {
     handleDeleteUser,
     handleUnblockUser
   } = useAdminActions(refetchData);
+
+  const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
+  const [showUserDetails, setShowUserDetails] = useState(false);
+
+  const handleViewUserDetails = (user: UserProfile) => {
+    setSelectedUser(user);
+    setShowUserDetails(true);
+  };
 
   if (loading) {
     return (
@@ -138,12 +163,24 @@ const AdminDashboard = () => {
                     onSuspend={handleSuspendUser}
                     onDelete={handleDeleteUser}
                     onUnblock={handleUnblockUser}
+                    onViewDetails={handleViewUserDetails}
                   />
                 ))
               )}
             </div>
           </TabsContent>
         </Tabs>
+
+        {/* User Details Modal */}
+        <UserDetailsModal
+          user={selectedUser}
+          open={showUserDetails}
+          onOpenChange={setShowUserDetails}
+          onApprove={handleApproveUser}
+          onSuspend={handleSuspendUser}
+          onDelete={handleDeleteUser}
+          onUnblock={handleUnblockUser}
+        />
       </main>
     </div>
   );

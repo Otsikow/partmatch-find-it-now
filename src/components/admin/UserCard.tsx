@@ -16,7 +16,9 @@ import {
   Ban,
   Trash2,
   CheckCircle,
-  AlertTriangle
+  AlertTriangle,
+  Eye,
+  Star
 } from "lucide-react";
 import { useState } from "react";
 
@@ -41,9 +43,10 @@ interface UserCardProps {
   onSuspend: (userId: string, reason: string) => void;
   onDelete: (userId: string, reason: string) => void;
   onUnblock: (userId: string) => void;
+  onViewDetails: (user: UserProfile) => void;
 }
 
-const UserCard = ({ user, onApprove, onSuspend, onDelete, onUnblock }: UserCardProps) => {
+const UserCard = ({ user, onApprove, onSuspend, onDelete, onUnblock, onViewDetails }: UserCardProps) => {
   const [suspendReason, setSuspendReason] = useState('');
   const [deleteReason, setDeleteReason] = useState('');
   const [showSuspendDialog, setShowSuspendDialog] = useState(false);
@@ -135,9 +138,9 @@ const UserCard = ({ user, onApprove, onSuspend, onDelete, onUnblock }: UserCardP
               <Calendar className="h-4 w-4" />
               <span>Joined: {formatDate(user.created_at)}</span>
             </div>
-            {user.rating !== undefined && user.total_ratings !== undefined && (
+            {user.user_type === 'supplier' && user.rating !== undefined && user.total_ratings !== undefined && (
               <div className="flex items-center gap-2">
-                <Shield className="h-4 w-4" />
+                <Star className="h-4 w-4 text-yellow-500" />
                 <span>Rating: {user.rating.toFixed(1)}/5 ({user.total_ratings} reviews)</span>
               </div>
             )}
@@ -148,6 +151,15 @@ const UserCard = ({ user, onApprove, onSuspend, onDelete, onUnblock }: UserCardP
       <Separator className="my-4" />
 
       <div className="flex flex-col sm:flex-row gap-3">
+        <Button 
+          onClick={() => onViewDetails(user)}
+          className="bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+          size="sm"
+        >
+          <Eye className="h-4 w-4 mr-2" />
+          View Details
+        </Button>
+
         {!user.is_verified && !user.is_blocked && (
           <Button 
             onClick={() => onApprove(user.id)}
@@ -155,7 +167,7 @@ const UserCard = ({ user, onApprove, onSuspend, onDelete, onUnblock }: UserCardP
             size="sm"
           >
             <CheckCircle className="h-4 w-4 mr-2" />
-            Approve User
+            Approve
           </Button>
         )}
 
@@ -166,7 +178,7 @@ const UserCard = ({ user, onApprove, onSuspend, onDelete, onUnblock }: UserCardP
             size="sm"
           >
             <CheckCircle className="h-4 w-4 mr-2" />
-            Unblock User
+            Unblock
           </Button>
         ) : (
           <Dialog open={showSuspendDialog} onOpenChange={setShowSuspendDialog}>
