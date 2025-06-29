@@ -8,7 +8,7 @@ import { toast } from '@/hooks/use-toast';
 import SellerVerificationForm from './SellerVerificationForm';
 import SellerVerificationStatus from './SellerVerificationStatus';
 import PostCarPartForm from './PostCarPartForm';
-import { Package, AlertCircle, CheckCircle } from 'lucide-react';
+import { Package, AlertCircle, CheckCircle, Shield } from 'lucide-react';
 
 interface VerificationStatus {
   id: string;
@@ -24,7 +24,7 @@ const SellCarPartsTab = () => {
   const { user } = useAuth();
   const [verification, setVerification] = useState<VerificationStatus | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeView, setActiveView] = useState<'verification' | 'post-part'>('verification');
+  const [activeView, setActiveView] = useState<'verification' | 'post-part'>('post-part');
 
   useEffect(() => {
     if (user) {
@@ -35,12 +35,10 @@ const SellCarPartsTab = () => {
 
   const ensureStorageBucket = async () => {
     try {
-      // Check if bucket exists
       const { data: buckets } = await supabase.storage.listBuckets();
       const bucketExists = buckets?.some(bucket => bucket.id === 'car-part-images');
       
       if (!bucketExists) {
-        // Create bucket if it doesn't exist
         const { error } = await supabase.storage.createBucket('car-part-images', { public: true });
         if (error && !error.message.includes('already exists')) {
           console.error('Error creating storage bucket:', error);
@@ -63,7 +61,6 @@ const SellCarPartsTab = () => {
         throw error;
       }
 
-      // Type cast the verification_status to ensure it matches our interface
       if (data) {
         const typedData: VerificationStatus = {
           ...data,
@@ -98,58 +95,73 @@ const SellCarPartsTab = () => {
     );
   }
 
-  // Show verification form if no verification exists
-  if (!verification) {
-    return (
-      <div className="space-y-6">
-        <div className="text-center">
-          <h3 className="text-xl font-semibold text-orange-700 mb-2">Seller Verification Required</h3>
-          <p className="text-gray-600 mb-6">
-            To start selling car parts on PartMatch Ghana, you need to complete the seller verification process.
-          </p>
-        </div>
-        <SellerVerificationForm onVerificationSubmitted={handleVerificationSubmitted} />
-      </div>
-    );
-  }
+  const isVerified = verification?.verification_status === 'approved';
 
-  // Show verification status if pending or rejected
-  if (verification.verification_status !== 'approved') {
-    return (
-      <div className="space-y-6">
-        <SellerVerificationStatus verification={verification} />
-        {verification.verification_status === 'rejected' && (
-          <div className="text-center">
-            <Button
-              onClick={() => {
-                setVerification(null);
-                fetchVerificationStatus();
-              }}
-              className="bg-orange-600 hover:bg-orange-700"
-            >
-              Resubmit Verification
-            </Button>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  // Show seller tools if approved
   return (
     <div className="space-y-6">
-      {/* Verification Success Banner */}
-      <Card className="border-green-200 bg-green-50">
-        <CardContent className="p-4">
-          <div className="flex items-center gap-3">
-            <CheckCircle className="h-6 w-6 text-green-600" />
-            <div>
-              <h3 className="font-semibold text-green-800">Verified Seller</h3>
-              <p className="text-green-700">Your account is verified. You can now sell car parts!</p>
+      {/* Verification Status Banner */}
+      {verification && (
+        <Card className={`border-2 ${
+          isVerified 
+            ? 'border-green-200 bg-green-50' 
+            : verification.verification_status === 'rejected'
+            ? 'border-red-200 bg-red-50'
+            : 'border-yellow-200 bg-yellow-50'
+        }`}>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              {isVerified ? (
+                <CheckCircle className="h-6 w-6 text-green-600" />
+              ) : verification.verification_status === 'rejected' ? (
+                <AlertCircle className="h-6 w-6 text-red-600" />
+              ) : (
+                <Shield className="h-6 w-6 text-yellow-600" />
+              )}
+              <div>
+                <h3 className={`font-semibold ${
+                  isVerified 
+                    ? 'text-green-800' 
+                    : verification.verification_status === 'rejected'
+                    ? 'text-red-800'
+                    : 'text-yellow-800'
+                }`}>
+                  {isVerified ? 'Verified Seller' : 
+                   verification.verification_status === 'rejected' ? 'Verification Rejected' :
+                   'Verification Pending'}
+                </h3>
+                <p className={`text-sm ${
+                  isVerified 
+                    ? 'text-green-700' 
+                    : verification.verification_status === 'rejected'
+                    ? 'text-red-700'
+                    : 'text-yellow-700'
+                }`}>
+                  {isVerified ? 'Your account is verified. You can sell with full features!' :
+                   verification.verification_status === 'rejected' ? 'Please review feedback and resubmit your verification.' :
+                   'Your verification is under review. You can still post parts while we review your application.'}
+                </p>
+              </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Unverified User Notice */}
+      {!verification && (
+        <Card className="border-blue-200 bg-blue-50">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <Shield className="h-6 w-6 text-blue-600" />
+              <div>
+                <h3 className="font-semibold text-blue-800">Get Verified for Better Sales</h3>
+                <p className="text-blue-700 text-sm">
+                  You can post parts now, but verified sellers get more visibility and trust from buyers.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Action Buttons */}
       <div className="flex gap-4 justify-center">
@@ -165,15 +177,40 @@ const SellCarPartsTab = () => {
           variant={activeView === 'verification' ? 'default' : 'outline'}
           onClick={() => setActiveView('verification')}
         >
-          View Verification
+          {verification ? 'View Verification' : 'Get Verified'}
         </Button>
       </div>
 
       {/* Content */}
       {activeView === 'post-part' ? (
         <PostCarPartForm onPartPosted={handlePartPosted} />
+      ) : verification ? (
+        <div className="space-y-6">
+          <SellerVerificationStatus verification={verification} />
+          {verification.verification_status === 'rejected' && (
+            <div className="text-center">
+              <Button
+                onClick={() => {
+                  setVerification(null);
+                  fetchVerificationStatus();
+                }}
+                className="bg-orange-600 hover:bg-orange-700"
+              >
+                Resubmit Verification
+              </Button>
+            </div>
+          )}
+        </div>
       ) : (
-        <SellerVerificationStatus verification={verification} />
+        <div className="space-y-6">
+          <div className="text-center">
+            <h3 className="text-xl font-semibold text-orange-700 mb-2">Seller Verification</h3>
+            <p className="text-gray-600 mb-6">
+              Get verified to increase trust with buyers and boost your sales.
+            </p>
+          </div>
+          <SellerVerificationForm onVerificationSubmitted={handleVerificationSubmitted} />
+        </div>
       )}
     </div>
   );

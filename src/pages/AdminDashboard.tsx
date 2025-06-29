@@ -3,10 +3,27 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Users, Package, CheckCircle, Clock, MapPin, Phone } from "lucide-react";
+import { ArrowLeft, Users, Package, CheckCircle, Clock, MapPin, Phone, Shield, Eye } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+
+interface SellerVerification {
+  id: string;
+  user_id: string;
+  full_name: string;
+  seller_type: string;
+  business_name?: string;
+  business_address: string;
+  phone: string;
+  email: string;
+  verification_status: 'pending' | 'approved' | 'rejected';
+  created_at: string;
+  admin_notes?: string;
+  government_id_url?: string;
+  business_registration_url?: string;
+  proof_of_address_url?: string;
+}
 
 interface Request {
   id: string;
@@ -33,6 +50,7 @@ interface Offer {
 const AdminDashboard = () => {
   const [requests, setRequests] = useState<Request[]>([]);
   const [offers, setOffers] = useState<Offer[]>([]);
+  const [verifications, setVerifications] = useState<SellerVerification[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -61,6 +79,14 @@ const AdminDashboard = () => {
 
       if (offersError) throw offersError;
 
+      // Fetch seller verifications
+      const { data: verificationsData, error: verificationsError } = await supabase
+        .from('seller_verifications')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (verificationsError) throw verificationsError;
+
       // Transform requests data
       const transformedRequests: Request[] = (requestsData || []).map(req => ({
         id: req.id,
@@ -87,6 +113,7 @@ const AdminDashboard = () => {
 
       setRequests(transformedRequests);
       setOffers(transformedOffers);
+      setVerifications(verificationsData || []);
     } catch (error) {
       console.error('Error fetching data:', error);
       toast({
@@ -160,6 +187,59 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleVerificationAction = async (verificationId: string, action: 'approve' | 'reject', notes?: string) => {
+    try {
+      const status = action === 'approve' ? 'approved' : 'rejected';
+      
+      const { error } = await supabase
+        .from('seller_verifications')
+        .update({ 
+          verification_status: status,
+          admin_notes: notes || null,
+          verified_at: action === 'approve' ? new Date().toISOString() : null
+        })
+        .eq('id', verificationId);
+
+      if (error) throw error;
+
+      // Refresh data
+      await fetchData();
+      
+      toast({
+        title: `Verification ${action === 'approve' ? 'Approved' : 'Rejected'}!`,
+        description: `The seller verification has been ${status}.`,
+      });
+    } catch (error: any) {
+      console.error('Error updating verification:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to update verification. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const viewDocument = async (documentUrl: string) => {
+    if (!documentUrl) return;
+    
+    try {
+      const { data } = await supabase.storage
+        .from('verification-documents')
+        .createSignedUrl(documentUrl, 3600); // 1 hour expiry
+        
+      if (data?.signedUrl) {
+        window.open(data.signedUrl, '_blank');
+      }
+    } catch (error) {
+      console.error('Error creating signed URL:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load document.",
+        variant: "destructive"
+      });
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'pending': return 'bg-yellow-100 text-yellow-800';
@@ -207,8 +287,8 @@ const AdminDashboard = () => {
       </header>
 
       <main className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-6xl">
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+        {/* Updated Stats to include verifications */}
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <Card className="p-4 sm:p-6 text-center bg-gradient-to-br from-white/90 to-yellow-50/50 backdrop-blur-sm shadow-lg border-0 hover:shadow-xl transition-all duration-300">
             <div className="bg-gradient-to-br from-yellow-500 to-amber-600 rounded-full p-3 w-fit mx-auto mb-3 shadow-lg">
               <Clock className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
@@ -237,12 +317,22 @@ const AdminDashboard = () => {
             <p className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-700 bg-clip-text text-transparent">{requests.length}</p>
             <p className="text-sm sm:text-base text-gray-600 font-crimson">Total Requests</p>
           </Card>
+          <Card className="p-4 sm:p-6 text-center bg-gradient-to-br from-white/90 to-indigo-50/50 backdrop-blur-sm shadow-lg border-0 hover:shadow-xl transition-all duration-300">
+            <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full p-3 w-fit mx-auto mb-3 shadow-lg">
+              <Shield className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
+            </div>
+            <p className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-700 bg-clip-text text-transparent">
+              {verifications.filter(v => v.verification_status === 'pending').length}
+            </p>
+            <p className="text-sm sm:text-base text-gray-600 font-crimson">Pending Verifications</p>
+          </Card>
         </div>
 
         <Tabs defaultValue="requests" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 bg-gradient-to-r from-white/90 to-purple-50/50 backdrop-blur-sm">
+          <TabsList className="grid w-full grid-cols-3 bg-gradient-to-r from-white/90 to-purple-50/50 backdrop-blur-sm">
             <TabsTrigger value="requests" className="text-base font-inter">All Requests</TabsTrigger>
             <TabsTrigger value="offers" className="text-base font-inter">Supplier Offers</TabsTrigger>
+            <TabsTrigger value="verifications" className="text-base font-inter">Seller Verifications</TabsTrigger>
           </TabsList>
 
           <TabsContent value="requests" className="mt-6">
@@ -367,6 +457,121 @@ const AdminDashboard = () => {
                   </Card>
                 );
               })}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="verifications" className="mt-6">
+            <div className="space-y-4 sm:space-y-6">
+              <h2 className="text-xl sm:text-2xl font-playfair font-semibold bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">
+                Seller Verifications
+              </h2>
+              
+              {verifications.map(verification => (
+                <Card key={verification.id} className="p-6 sm:p-8 bg-gradient-to-br from-white/90 to-purple-50/30 backdrop-blur-sm border-0 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                  <div className="flex justify-between items-start mb-4 sm:mb-6">
+                    <div>
+                      <h3 className="font-playfair font-semibold text-lg sm:text-xl">
+                        {verification.business_name || verification.full_name}
+                      </h3>
+                      <p className="text-gray-600 font-crimson text-base sm:text-lg">
+                        {verification.seller_type} - {verification.full_name}
+                      </p>
+                      <p className="text-sm sm:text-base text-gray-500 font-inter">
+                        Email: {verification.email} | Phone: {verification.phone}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <Badge className={`${getStatusColor(verification.verification_status)} flex items-center gap-1 text-sm sm:text-base`}>
+                        {getStatusIcon(verification.verification_status)}
+                        {verification.verification_status}
+                      </Badge>
+                      <p className="text-xs sm:text-sm text-gray-500 mt-1 font-inter">
+                        {new Date(verification.created_at).toLocaleString()}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mb-4 sm:mb-6">
+                    <p className="text-sm sm:text-base text-gray-600 font-crimson">
+                      <strong>Address:</strong> {verification.business_address}
+                    </p>
+                    {verification.admin_notes && (
+                      <p className="text-sm sm:text-base text-gray-600 font-crimson mt-2">
+                        <strong>Admin Notes:</strong> {verification.admin_notes}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex gap-2 flex-wrap mb-4">
+                    {verification.government_id_url && (
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => viewDocument(verification.government_id_url!)}
+                        className="text-base border-purple-200 hover:bg-purple-50"
+                      >
+                        <Eye className="h-4 w-4 mr-1" />
+                        View ID
+                      </Button>
+                    )}
+                    {verification.business_registration_url && (
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => viewDocument(verification.business_registration_url!)}
+                        className="text-base border-purple-200 hover:bg-purple-50"
+                      >
+                        <Eye className="h-4 w-4 mr-1" />
+                        View Registration
+                      </Button>
+                    )}
+                    {verification.proof_of_address_url && (
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => viewDocument(verification.proof_of_address_url!)}
+                        className="text-base border-purple-200 hover:bg-purple-50"
+                      >
+                        <Eye className="h-4 w-4 mr-1" />
+                        View Address Proof
+                      </Button>
+                    )}
+                  </div>
+
+                  {verification.verification_status === 'pending' && (
+                    <div className="flex gap-2 flex-wrap">
+                      <Button 
+                        size="sm"
+                        className="bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-base shadow-lg hover:shadow-xl transition-all duration-300"
+                        onClick={() => handleVerificationAction(verification.id, 'approve')}
+                      >
+                        Approve
+                      </Button>
+                      <Button 
+                        size="sm"
+                        variant="destructive"
+                        className="text-base shadow-lg hover:shadow-xl transition-all duration-300"
+                        onClick={() => {
+                          const notes = prompt('Enter rejection reason:');
+                          if (notes) {
+                            handleVerificationAction(verification.id, 'reject', notes);
+                          }
+                        }}
+                      >
+                        Reject
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => window.open(`tel:${verification.phone}`, '_self')}
+                        className="text-base border-purple-200 hover:bg-purple-50"
+                      >
+                        Call Seller
+                      </Button>
+                    </div>
+                  )}
+                </Card>
+              ))}
             </div>
           </TabsContent>
         </Tabs>
