@@ -97,26 +97,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const signUp = async (email: string, password: string, userData: any) => {
     console.log('AuthProvider: SignUp attempt:', { email, userData });
     
-    // Enforce admin email validation for admin accounts
+    // Prevent admin registration from public forms
     if (userData.user_type === 'admin') {
-      console.log('AuthProvider: Admin signup attempt for email:', email);
+      console.log('AuthProvider: Admin signup attempt blocked - not allowed from public form');
       
-      if (!isAuthorizedAdminEmail(email)) {
-        const error = new Error('Access denied. This email is not authorized for admin access.');
-        toast({
-          title: "Access Denied",
-          description: "This email is not authorized for admin access. Please contact the system administrator.",
-          variant: "destructive"
-        });
-        
-        logAdminSecurityEvent({
-          type: 'UNAUTHORIZED_ACCESS',
-          email: email,
-          details: 'Attempted admin signup with unauthorized email'
-        });
-        
-        return { error };
-      }
+      const error = new Error('Admin registration is not allowed from this form. Contact system administrator.');
+      toast({
+        title: "Access Denied",
+        description: "Admin registration is not allowed from this form. Contact system administrator.",
+        variant: "destructive"
+      });
+      
+      logAdminSecurityEvent({
+        type: 'UNAUTHORIZED_ACCESS',
+        email: email,
+        details: 'Attempted admin registration from public form'
+      });
+      
+      return { error };
     }
     
     const redirectUrl = `${window.location.origin}/`;
@@ -139,11 +137,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           description: error.message,
           variant: "destructive"
         });
-      } else if (userData.user_type === 'admin') {
-        toast({
-          title: "Admin Account Created!",
-          description: "Please check your email to verify your account, then sign in.",
-        });
       }
       
       return { error };
@@ -163,10 +156,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     
     // For admin login attempts, validate email authorization first
     const urlPath = window.location.pathname;
-    if (urlPath.includes('admin')) {
+    const isAdminLogin = urlPath.includes('admin');
+    
+    if (isAdminLogin) {
       console.log('AuthProvider: Admin signin attempt for email:', email);
       
-      // In development mode or for authorized emails, allow access
       if (!isAuthorizedAdminEmail(email)) {
         const error = new Error('Access denied. This email is not authorized for admin access.');
         toast({
@@ -214,26 +208,91 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         });
         
         // Log failed login attempts for admin routes
-        if (urlPath.includes('admin')) {
+        if (isAdminLogin) {
           logAdminSecurityEvent({
             type: 'LOGIN_FAILED',
             email: email,
             details: `Failed admin login attempt: ${error.message}`
           });
         }
-      } else {
-        console.log('AuthProvider: Sign in successful');
-        // Log successful admin logins
-        if (urlPath.includes('admin')) {
-          logAdminSecurityEvent({
-            type: 'LOGIN_SUCCESS',
-            email: email,
-            details: 'Successful admin login'
+        
+        return { error };
+      }
+      
+      // Additional admin verification after successful login
+      if (isAdminLogin && data?.user) {
+        console.log('AuthProvider: Verifying admin access after successful login');
+        
+        try {
+          // Check user profile for admin role
+          const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('user_type')
+            .eq('id', data.user.id)
+            .maybeSingle();
+          
+          console.log('AuthProvider: Profile check result:', { profile, profileError });
+          
+          // Check both profile and user metadata for admin role
+          const userMetadataType = data.user.user_metadata?.user_type;
+          const profileType = profile?.user_type;
+          
+          const isAdminUser = userMetadataType === 'admin' || profileType === 'admin';
+          
+          if (!isAdminUser) {
+            console.log('AuthProvider: User is not admin, signing out');
+            
+            // Sign out the user immediately
+            await supabase.auth.signOut();
+            
+            const accessError = new Error('Access denied. Your account does not have admin privileges.');
+            
+            toast({
+              title: "Access Denied",
+              description: "Your account does not have admin privileges.",
+              variant: "destructive"
+            });
+            
+            logAdminSecurityEvent({
+              type: 'UNAUTHORIZED_ACCESS',
+              email: email,
+              userId: data.user.id,
+              details: 'User logged in but does not have admin role'
+            });
+            
+            return { error: accessError };
+          }
+          
+          console.log('AuthProvider: Admin access verified');
+        } catch (verificationError) {
+          console.error('AuthProvider: Error verifying admin access:', verificationError);
+          
+          // Sign out on verification error
+          await supabase.auth.signOut();
+          
+          const error = new Error('Unable to verify admin access. Please try again.');
+          toast({
+            title: "Verification Error",
+            description: "Unable to verify admin access. Please try again.",
+            variant: "destructive"
           });
+          
+          return { error };
         }
       }
       
-      return { error };
+      console.log('AuthProvider: Sign in successful');
+      
+      // Log successful admin logins
+      if (isAdminLogin) {
+        logAdminSecurityEvent({
+          type: 'LOGIN_SUCCESS',
+          email: email,
+          details: 'Successful admin login'
+        });
+      }
+      
+      return { error: null };
     } catch (error: any) {
       console.error('AuthProvider: SignIn unexpected error:', error);
       
