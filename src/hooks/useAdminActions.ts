@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 
@@ -101,15 +102,19 @@ export const useAdminActions = (refetchData: () => Promise<void>) => {
     }
   };
 
-  const handleVerificationAction = async (verificationId: string, action: 'approve' | 'reject', notes?: string) => {
+  const handleVerificationAction = async (
+    verificationId: string,
+    action: 'approve' | 'reject',
+    notes?: string
+  ) => {
     try {
       console.log(`${action === 'approve' ? 'Approving' : 'Rejecting'} verification:`, verificationId);
-      
+
+      // 1. Update the verification status
       const status = action === 'approve' ? 'approved' : 'rejected';
-      
-      const { error } = await supabase
+      const { error: verificationError } = await supabase
         .from('seller_verifications')
-        .update({ 
+        .update({
           verification_status: status,
           admin_notes: notes || null,
           verified_at: action === 'approve' ? new Date().toISOString() : null,
@@ -117,44 +122,51 @@ export const useAdminActions = (refetchData: () => Promise<void>) => {
         })
         .eq('id', verificationId);
 
-      if (error) {
-        console.error('Error updating verification:', error);
-        throw error;
+      if (verificationError) {
+        console.error('Error updating verification:', verificationError);
+        throw verificationError;
       }
 
       console.log('Successfully updated verification status');
 
-      // If approving, also update the user's profile to mark them as verified
+      // 2. If approved, update the related profile as verified
       if (action === 'approve') {
-        const { data: verification } = await supabase
+        // Fetch the verification to get the user_id
+        const { data: verification, error: fetchVerificationError } = await supabase
           .from('seller_verifications')
           .select('user_id')
           .eq('id', verificationId)
-          .single();
+          .maybeSingle();
 
-        if (verification) {
-          console.log('Updating user profile to verified:', verification.user_id);
-          
-          const { error: profileError } = await supabase
-            .from('profiles')
-            .update({ 
-              is_verified: true,
-              verified_at: new Date().toISOString()
-            })
-            .eq('id', verification.user_id);
-
-          if (profileError) {
-            console.error('Error updating profile:', profileError);
-            throw profileError;
-          }
-          
-          console.log('Successfully updated user profile');
+        if (fetchVerificationError) {
+          console.error('Error fetching verification:', fetchVerificationError);
+          throw fetchVerificationError;
         }
+        if (!verification) {
+          throw new Error('Verification not found.');
+        }
+
+        console.log('Updating user profile to verified:', verification.user_id);
+
+        // Now update the user's profile as verified
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .update({
+            is_verified: true,
+            verified_at: new Date().toISOString()
+          })
+          .eq('id', verification.user_id);
+
+        if (profileError) {
+          console.error('Error updating profile:', profileError);
+          throw profileError;
+        }
+        console.log('Seller profile marked as verified:', verification.user_id);
       }
 
-      // Refresh data
+      // 3. Refresh data/UI
       await refetchData();
-      
+
       toast({
         title: `Verification ${action === 'approve' ? 'Approved' : 'Rejected'}!`,
         description: `The seller verification has been ${status}.`,
@@ -284,15 +296,6 @@ export const useAdminActions = (refetchData: () => Promise<void>) => {
 
       console.log('Successfully suspended user');
 
-      // Log the action
-      await supabase
-        .from('admin_audit_logs')
-        .insert({
-          action: 'USER_SUSPENDED',
-          user_id: userId,
-          details: { reason, suspended_by: (await supabase.auth.getUser()).data.user?.id }
-        });
-
       // Refresh data
       await refetchData();
       
@@ -314,15 +317,6 @@ export const useAdminActions = (refetchData: () => Promise<void>) => {
     try {
       console.log('Deleting user:', userId, 'Reason:', reason);
       
-      // Log the action before deletion
-      await supabase
-        .from('admin_audit_logs')
-        .insert({
-          action: 'USER_DELETED',
-          user_id: userId,
-          details: { reason, deleted_by: (await supabase.auth.getUser()).data.user?.id }
-        });
-
       // Call the delete user edge function
       const { data, error } = await supabase.functions.invoke('delete-user', {
         body: { userId }
@@ -370,15 +364,6 @@ export const useAdminActions = (refetchData: () => Promise<void>) => {
       }
 
       console.log('Successfully unblocked user');
-
-      // Log the action
-      await supabase
-        .from('admin_audit_logs')
-        .insert({
-          action: 'USER_UNBLOCKED',
-          user_id: userId,
-          details: { unblocked_by: (await supabase.auth.getUser()).data.user?.id }
-        });
 
       // Refresh data
       await refetchData();
