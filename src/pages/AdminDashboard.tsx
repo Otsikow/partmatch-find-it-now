@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -112,24 +111,29 @@ const AdminDashboard = () => {
 
       if (verificationsError) throw verificationsError;
 
-      // Fetch users with their auth emails
+      // Fetch users from profiles table
       const { data: usersData, error: usersError } = await supabase
         .from('profiles')
-        .select(`
-          *,
-          auth_users:id (email)
-        `)
+        .select('*')
         .order('created_at', { ascending: false });
 
       if (usersError) {
         console.error('Error fetching users:', usersError);
         setUsers([]);
       } else {
-        const transformedUsers: UserProfile[] = (usersData || []).map(user => ({
-          ...user,
-          email: user.auth_users?.email || undefined,
-          user_type: user.user_type as 'owner' | 'supplier' | 'admin'
-        }));
+        // Fetch auth users to get emails separately
+        const { data: authData } = await supabase.auth.admin.listUsers();
+        
+        const transformedUsers: UserProfile[] = (usersData || []).map(user => {
+          // Find matching auth user to get email
+          const authUser = authData?.users?.find(au => au.id === user.id);
+          
+          return {
+            ...user,
+            email: authUser?.email || undefined,
+            user_type: user.user_type as 'owner' | 'supplier' | 'admin'
+          };
+        });
         setUsers(transformedUsers);
       }
 
