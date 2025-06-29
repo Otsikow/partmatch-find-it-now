@@ -37,6 +37,11 @@ const OfferCard = ({ offer, relatedRequest, onAcceptOffer }: OfferCardProps) => 
     }
   };
 
+  const handleAcceptOffer = () => {
+    console.log('Accept offer clicked for:', offer.id, 'request:', offer.requestId);
+    onAcceptOffer(offer.requestId, offer.id);
+  };
+
   return (
     <Card className="p-6 sm:p-8 bg-gradient-to-br from-white/90 to-purple-50/30 backdrop-blur-sm border-0 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
       <div className="flex justify-between items-start mb-4 sm:mb-6">
@@ -66,7 +71,7 @@ const OfferCard = ({ offer, relatedRequest, onAcceptOffer }: OfferCardProps) => 
           <Button 
             size="sm"
             className="bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-base shadow-lg hover:shadow-xl transition-all duration-300"
-            onClick={() => onAcceptOffer(offer.requestId, offer.id)}
+            onClick={handleAcceptOffer}
           >
             Accept Offer
           </Button>

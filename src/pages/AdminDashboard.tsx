@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -136,9 +137,20 @@ const AdminDashboard = () => {
 
   const handleMatchSupplier = async (requestId: string) => {
     try {
+      console.log('Accepting offer for request:', requestId);
+      
       // Find the related offer
       const relatedOffer = offers.find(o => o.requestId === requestId);
-      if (!relatedOffer) return;
+      if (!relatedOffer) {
+        toast({
+          title: "Error",
+          description: "No offer found for this request.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      console.log('Found related offer:', relatedOffer.id);
 
       // Update offer status to accepted
       const { error: offerError } = await supabase
@@ -146,21 +158,29 @@ const AdminDashboard = () => {
         .update({ status: 'accepted' })
         .eq('id', relatedOffer.id);
 
-      if (offerError) throw offerError;
+      if (offerError) {
+        console.error('Error updating offer:', offerError);
+        throw offerError;
+      }
 
-      // Update request status
+      // Update request status to matched (offer_received in database)
       const { error: requestError } = await supabase
         .from('part_requests')
         .update({ status: 'offer_received' })
         .eq('id', requestId);
 
-      if (requestError) throw requestError;
+      if (requestError) {
+        console.error('Error updating request:', requestError);
+        throw requestError;
+      }
+
+      console.log('Successfully updated offer and request status');
 
       // Refresh data to show updated status
       await fetchData();
       
       toast({
-        title: "Match Created!",
+        title: "Offer Accepted!",
         description: "The offer has been accepted and both parties have been notified.",
       });
     } catch (error: any) {
@@ -175,12 +195,19 @@ const AdminDashboard = () => {
 
   const handleCompleteRequest = async (requestId: string) => {
     try {
+      console.log('Completing request:', requestId);
+      
       const { error } = await supabase
         .from('part_requests')
         .update({ status: 'completed' })
         .eq('id', requestId);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error completing request:', error);
+        throw error;
+      }
+
+      console.log('Successfully completed request');
 
       // Refresh data
       await fetchData();
@@ -201,6 +228,8 @@ const AdminDashboard = () => {
 
   const handleVerificationAction = async (verificationId: string, action: 'approve' | 'reject', notes?: string) => {
     try {
+      console.log(`${action === 'approve' ? 'Approving' : 'Rejecting'} verification:`, verificationId);
+      
       const status = action === 'approve' ? 'approved' : 'rejected';
       
       const { error } = await supabase
@@ -208,16 +237,24 @@ const AdminDashboard = () => {
         .update({ 
           verification_status: status,
           admin_notes: notes || null,
-          verified_at: action === 'approve' ? new Date().toISOString() : null
+          verified_at: action === 'approve' ? new Date().toISOString() : null,
+          verified_by: action === 'approve' ? (await supabase.auth.getUser()).data.user?.id : null
         })
         .eq('id', verificationId);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error updating verification:', error);
+        throw error;
+      }
+
+      console.log('Successfully updated verification status');
 
       // If approving, also update the user's profile to mark them as verified
       if (action === 'approve') {
         const verification = verifications.find(v => v.id === verificationId);
         if (verification) {
+          console.log('Updating user profile to verified:', verification.user_id);
+          
           const { error: profileError } = await supabase
             .from('profiles')
             .update({ 
@@ -226,7 +263,12 @@ const AdminDashboard = () => {
             })
             .eq('id', verification.user_id);
 
-          if (profileError) throw profileError;
+          if (profileError) {
+            console.error('Error updating profile:', profileError);
+            throw profileError;
+          }
+          
+          console.log('Successfully updated user profile');
         }
       }
 
@@ -248,17 +290,34 @@ const AdminDashboard = () => {
   };
 
   const viewDocument = async (documentUrl: string) => {
-    if (!documentUrl) return;
+    if (!documentUrl) {
+      toast({
+        title: "Error",
+        description: "Document URL not found.",
+        variant: "destructive"
+      });
+      return;
+    }
     
     try {
-      const { data } = await supabase.storage
+      console.log('Creating signed URL for document:', documentUrl);
+      
+      const { data, error } = await supabase.storage
         .from('verification-documents')
         .createSignedUrl(documentUrl, 3600); // 1 hour expiry
         
-      if (data?.signedUrl) {
-        window.open(data.signedUrl, '_blank');
+      if (error) {
+        console.error('Error creating signed URL:', error);
+        throw error;
       }
-    } catch (error) {
+        
+      if (data?.signedUrl) {
+        console.log('Opening document:', data.signedUrl);
+        window.open(data.signedUrl, '_blank');
+      } else {
+        throw new Error('Failed to generate signed URL');
+      }
+    } catch (error: any) {
       console.error('Error creating signed URL:', error);
       toast({
         title: "Error",

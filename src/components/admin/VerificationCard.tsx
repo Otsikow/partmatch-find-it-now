@@ -46,10 +46,16 @@ const VerificationCard = ({ verification, onApprove, onReject, onViewDocument }:
     }
   };
 
+  const handleApprove = () => {
+    console.log('Approve verification clicked for:', verification.id);
+    onApprove(verification.id);
+  };
+
   const handleReject = () => {
+    console.log('Reject verification clicked for:', verification.id);
     const notes = prompt('Enter rejection reason:');
-    if (notes) {
-      onReject(verification.id, notes);
+    if (notes && notes.trim()) {
+      onReject(verification.id, notes.trim());
     }
   };
 
@@ -130,7 +136,7 @@ const VerificationCard = ({ verification, onApprove, onReject, onViewDocument }:
           <Button 
             size="sm"
             className="bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-base shadow-lg hover:shadow-xl transition-all duration-300"
-            onClick={() => onApprove(verification.id)}
+            onClick={handleApprove}
           >
             Approve
           </Button>
