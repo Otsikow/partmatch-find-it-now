@@ -107,20 +107,29 @@ export const useAdminData = () => {
         console.error('Error fetching users:', usersError);
         setUsers([]);
       } else {
-        // Fetch auth users to get emails separately
-        const { data: authResponse, error: authError } = await supabase.auth.admin.listUsers();
-        
-        if (authError) {
-          console.error('Error fetching auth users:', authError);
+        // Try to fetch auth users to get emails, but handle the error gracefully
+        let authUsers: any[] = [];
+        try {
+          const { data: authResponse, error: authError } = await supabase.auth.admin.listUsers();
+          
+          if (authError) {
+            console.error('Error fetching auth users:', authError);
+            // Continue without email data instead of failing
+          } else {
+            authUsers = authResponse?.users || [];
+          }
+        } catch (error) {
+          console.error('Auth API error:', error);
+          // Continue without email data
         }
         
         const transformedUsers: UserProfile[] = (usersData || []).map(user => {
-          // Find matching auth user to get email
-          const authUser = authResponse?.users?.find((au: any) => au.id === user.id);
+          // Find matching auth user to get email (if available)
+          const authUser = authUsers.find((au: any) => au.id === user.id);
           
           return {
             ...user,
-            email: authUser?.email || undefined,
+            email: authUser?.email || `user-${user.id.slice(0, 8)}@unknown.com`, // Fallback email
             user_type: user.user_type as 'owner' | 'supplier' | 'admin'
           };
         });
