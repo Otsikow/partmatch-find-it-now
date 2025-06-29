@@ -24,7 +24,10 @@ export const useAdminNotifications = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
 
     fetchNotifications();
     setupRealtimeSubscriptions();
@@ -38,20 +41,76 @@ export const useAdminNotifications = () => {
     if (!user) return;
 
     try {
-      // For now, we'll create mock notifications based on real-time data
-      // Once the database types are updated, we can query the admin_notifications table directly
-      const mockNotifications: AdminNotification[] = [];
+      setLoading(true);
+      console.log('Fetching admin notifications for user:', user.id);
       
-      setNotifications(mockNotifications);
-      setUnreadCount(mockNotifications.filter(n => !n.read).length);
+      // Fetch admin-specific notifications from the database
+      const { data, error } = await supabase
+        .from('admin_notifications')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(50);
+
+      if (error) {
+        console.error('Error fetching admin notifications:', error);
+        // Still set up real-time notifications even if fetch fails
+        setNotifications([]);
+        setUnreadCount(0);
+      } else {
+        console.log('Fetched admin notifications:', data?.length || 0);
+        const transformedNotifications: AdminNotification[] = (data || []).map(notification => ({
+          id: notification.id,
+          type: notification.type as AdminNotification['type'],
+          title: notification.title,
+          message: notification.message,
+          read: notification.read || false,
+          created_at: notification.created_at,
+          metadata: notification.metadata as AdminNotification['metadata']
+        }));
+        
+        setNotifications(transformedNotifications);
+        setUnreadCount(transformedNotifications.filter(n => !n.read).length);
+      }
     } catch (error) {
       console.error('Error fetching admin notifications:', error);
+      setNotifications([]);
+      setUnreadCount(0);
     } finally {
       setLoading(false);
     }
   };
 
   const setupRealtimeSubscriptions = () => {
+    console.log('Setting up admin notification real-time subscriptions');
+
+    // Listen for new admin notifications
+    const adminNotificationsChannel = supabase
+      .channel('admin_notifications_realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'admin_notifications'
+        },
+        (payload) => {
+          console.log('New admin notification received:', payload);
+          const newNotification: AdminNotification = {
+            id: payload.new.id,
+            type: payload.new.type,
+            title: payload.new.title,
+            message: payload.new.message,
+            read: payload.new.read || false,
+            created_at: payload.new.created_at,
+            metadata: payload.new.metadata
+          };
+          
+          setNotifications(prev => [newNotification, ...prev]);
+          setUnreadCount(prev => prev + 1);
+        }
+      )
+      .subscribe();
+
     // Listen for new seller verifications
     const verificationsChannel = supabase
       .channel('seller_verifications_admin')
@@ -63,6 +122,7 @@ export const useAdminNotifications = () => {
           table: 'seller_verifications'
         },
         (payload) => {
+          console.log('New seller verification detected:', payload);
           const newNotification: AdminNotification = {
             id: `verification_${payload.new.id}`,
             type: 'new_verification',
@@ -75,6 +135,19 @@ export const useAdminNotifications = () => {
           
           setNotifications(prev => [newNotification, ...prev]);
           setUnreadCount(prev => prev + 1);
+
+          // Also create a persistent notification in the database
+          supabase
+            .from('admin_notifications')
+            .insert({
+              type: 'new_verification',
+              title: 'New Seller Verification',
+              message: `${payload.new.full_name} submitted a verification request`,
+              metadata: { verification_id: payload.new.id }
+            })
+            .then(({ error }) => {
+              if (error) console.error('Error creating admin notification:', error);
+            });
         }
       )
       .subscribe();
@@ -90,6 +163,7 @@ export const useAdminNotifications = () => {
           table: 'part_requests'
         },
         (payload) => {
+          console.log('New part request detected:', payload);
           const newNotification: AdminNotification = {
             id: `request_${payload.new.id}`,
             type: 'new_request',
@@ -102,6 +176,19 @@ export const useAdminNotifications = () => {
           
           setNotifications(prev => [newNotification, ...prev]);
           setUnreadCount(prev => prev + 1);
+
+          // Also create a persistent notification in the database
+          supabase
+            .from('admin_notifications')
+            .insert({
+              type: 'new_request',
+              title: 'New Part Request',
+              message: `New request for ${payload.new.part_needed} - ${payload.new.car_make} ${payload.new.car_model}`,
+              metadata: { request_id: payload.new.id }
+            })
+            .then(({ error }) => {
+              if (error) console.error('Error creating admin notification:', error);
+            });
         }
       )
       .subscribe();
@@ -117,6 +204,7 @@ export const useAdminNotifications = () => {
           table: 'offers'
         },
         (payload) => {
+          console.log('New offer detected:', payload);
           const newNotification: AdminNotification = {
             id: `offer_${payload.new.id}`,
             type: 'new_offer',
@@ -129,23 +217,76 @@ export const useAdminNotifications = () => {
           
           setNotifications(prev => [newNotification, ...prev]);
           setUnreadCount(prev => prev + 1);
+
+          // Also create a persistent notification in the database
+          supabase
+            .from('admin_notifications')
+            .insert({
+              type: 'new_offer',
+              title: 'New Supplier Offer',
+              message: `New offer of GHS ${payload.new.price} submitted`,
+              metadata: { offer_id: payload.new.id }
+            })
+            .then(({ error }) => {
+              if (error) console.error('Error creating admin notification:', error);
+            });
         }
       )
       .subscribe();
   };
 
-  const markAsRead = (notificationId: string) => {
-    setNotifications(prev => 
-      prev.map(n => 
-        n.id === notificationId ? { ...n, read: true } : n
-      )
-    );
-    setUnreadCount(prev => Math.max(0, prev - 1));
+  const markAsRead = async (notificationId: string) => {
+    try {
+      // Update in database if it's a persistent notification
+      const { error } = await supabase
+        .from('admin_notifications')
+        .update({ read: true })
+        .eq('id', notificationId);
+
+      if (error) {
+        console.error('Error marking notification as read:', error);
+      }
+
+      // Update local state
+      setNotifications(prev => 
+        prev.map(n => 
+          n.id === notificationId ? { ...n, read: true } : n
+        )
+      );
+      setUnreadCount(prev => Math.max(0, prev - 1));
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+      // Still update local state even if database update fails
+      setNotifications(prev => 
+        prev.map(n => 
+          n.id === notificationId ? { ...n, read: true } : n
+        )
+      );
+      setUnreadCount(prev => Math.max(0, prev - 1));
+    }
   };
 
-  const markAllAsRead = () => {
-    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
-    setUnreadCount(0);
+  const markAllAsRead = async () => {
+    try {
+      // Update all unread notifications in database
+      const { error } = await supabase
+        .from('admin_notifications')
+        .update({ read: true })
+        .eq('read', false);
+
+      if (error) {
+        console.error('Error marking all notifications as read:', error);
+      }
+
+      // Update local state
+      setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+      setUnreadCount(0);
+    } catch (error) {
+      console.error('Error marking all notifications as read:', error);
+      // Still update local state even if database update fails
+      setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+      setUnreadCount(0);
+    }
   };
 
   return {
