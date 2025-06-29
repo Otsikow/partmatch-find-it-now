@@ -210,60 +210,47 @@ export const useAdminActions = (refetchData: () => Promise<void>) => {
   const handleApproveUser = async (userId: string) => {
     try {
       console.log('Starting user approval process for:', userId);
-      
-      // First, let's check the current status of the user
+
+      // 1. Fetch the user by unique id
       const { data: currentUser, error: fetchError } = await supabase
         .from('profiles')
         .select('is_verified, user_type, first_name, last_name')
         .eq('id', userId)
-        .maybeSingle();
+        .maybeSingle(); // <- safer than .single()
 
       if (fetchError) {
-        console.error('Error fetching current user:', fetchError);
+        console.error('Error fetching user:', fetchError);
         throw fetchError;
       }
-
+      
       if (!currentUser) {
         throw new Error('User not found');
       }
 
       console.log('Current user status before approval:', currentUser);
 
-      // Update the user's profile to mark them as verified
-      const { data: updatedData, error: updateError } = await supabase
+      // 2. Update the user profile to mark as verified
+      const { error: updateError } = await supabase
         .from('profiles')
         .update({ 
           is_verified: true,
           verified_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         })
-        .eq('id', userId)
-        .select();
+        .eq('id', userId);
 
       if (updateError) {
         console.error('Error approving user:', updateError);
         throw updateError;
       }
 
-      console.log('Successfully updated user profile:', updatedData);
+      console.log('Successfully updated user profile for userId:', userId);
 
-      // Verify the update was successful by checking the database again
-      const { data: verifiedUser, error: verifyError } = await supabase
-        .from('profiles')
-        .select('is_verified, verified_at')
-        .eq('id', userId)
-        .maybeSingle();
-
-      if (verifyError) {
-        console.error('Error verifying update:', verifyError);
-      } else {
-        console.log('User verification status after update:', verifiedUser);
-      }
-
-      // Force immediate refresh of data
+      // 3. Force immediate refresh of data
       console.log('Refreshing data after user approval...');
       await refetchData();
       
+      // 4. Success feedback
       toast({
         title: "User Approved!",
         description: `${currentUser.first_name} ${currentUser.last_name} has been approved and verified.`,

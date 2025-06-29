@@ -98,8 +98,8 @@ export const useAdminData = () => {
 
       if (verificationsError) throw verificationsError;
 
-      // Fetch users from profiles table with fresh data
-      console.log('Fetching users from profiles...');
+      // Fetch users from profiles table with forced fresh data
+      console.log('Fetching users from profiles with fresh data...');
       const { data: usersData, error: usersError } = await supabase
         .from('profiles')
         .select('*')
@@ -142,13 +142,10 @@ export const useAdminData = () => {
           return transformedUser;
         });
         
-        console.log('Setting users state with fresh data:', transformedUsers.length);
+        console.log('Setting users state with transformed data:', transformedUsers.length);
         
-        // Clear existing state first, then set new data to force re-render
-        setUsers([]);
-        setTimeout(() => {
-          setUsers(transformedUsers);
-        }, 0);
+        // Force complete state refresh
+        setUsers(transformedUsers);
       }
 
       // Transform requests data
