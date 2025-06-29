@@ -32,15 +32,29 @@ const AdminAuth = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Prevent double submission
+    if (loading) return;
+    
     setLoading(true);
     
     try {
       if (isLogin) {
+        console.log('AdminAuth: Attempting sign in for:', formData.email);
         const { error } = await signIn(formData.email, formData.password);
-        if (!error) {
+        if (error) {
+          console.error('AdminAuth: Sign in error:', error);
+          toast({
+            title: "Sign In Failed",
+            description: error.message || "Failed to sign in. Please check your credentials.",
+            variant: "destructive"
+          });
+        } else {
+          console.log('AdminAuth: Sign in successful, navigating to admin dashboard');
           navigate('/admin');
         }
       } else {
+        console.log('AdminAuth: Attempting sign up for:', formData.email);
         const { error } = await signUp(formData.email, formData.password, {
           first_name: formData.firstName,
           last_name: formData.lastName,
@@ -48,7 +62,14 @@ const AdminAuth = () => {
           location: formData.location,
           user_type: 'admin'
         });
-        if (!error) {
+        if (error) {
+          console.error('AdminAuth: Sign up error:', error);
+          toast({
+            title: "Sign Up Failed",
+            description: error.message || "Failed to create admin account.",
+            variant: "destructive"
+          });
+        } else {
           toast({
             title: "Admin Account Created!",
             description: "Please check your email to verify your account, then sign in below.",
@@ -58,7 +79,7 @@ const AdminAuth = () => {
         }
       }
     } catch (error) {
-      console.error('Admin auth error:', error);
+      console.error('AdminAuth: Unexpected error:', error);
       toast({
         title: "Authentication Error",
         description: "An unexpected error occurred. Please try again.",
@@ -160,6 +181,7 @@ const AdminAuth = () => {
                           onChange={(e) => handleInputChange('firstName', e.target.value)}
                           required
                           className="mt-1 text-base border-purple-200 focus:border-purple-400"
+                          disabled={loading}
                         />
                       </div>
                       <div>
@@ -171,6 +193,7 @@ const AdminAuth = () => {
                           onChange={(e) => handleInputChange('lastName', e.target.value)}
                           required
                           className="mt-1 text-base border-purple-200 focus:border-purple-400"
+                          disabled={loading}
                         />
                       </div>
                     </div>
@@ -185,6 +208,7 @@ const AdminAuth = () => {
                         onChange={(e) => handleInputChange('phone', e.target.value)}
                         required
                         className="mt-1 text-base border-purple-200 focus:border-purple-400"
+                        disabled={loading}
                       />
                     </div>
 
@@ -197,6 +221,7 @@ const AdminAuth = () => {
                         onChange={(e) => handleInputChange('location', e.target.value)}
                         required
                         className="mt-1 text-base border-purple-200 focus:border-purple-400"
+                        disabled={loading}
                       />
                     </div>
                   </>
@@ -214,6 +239,7 @@ const AdminAuth = () => {
                       onChange={(e) => handleInputChange('email', e.target.value)}
                       required
                       className="mt-1 pl-10 text-base border-purple-200 focus:border-purple-400"
+                      disabled={loading}
                     />
                   </div>
                 </div>
@@ -230,6 +256,7 @@ const AdminAuth = () => {
                       onChange={(e) => handleInputChange('password', e.target.value)}
                       required
                       className="mt-1 pl-10 pr-10 text-base border-purple-200 focus:border-purple-400"
+                      disabled={loading}
                     />
                     <Button
                       type="button"
@@ -237,6 +264,7 @@ const AdminAuth = () => {
                       size="icon"
                       className="absolute right-1 top-1 h-8 w-8 text-gray-400 hover:text-gray-600"
                       onClick={() => setShowPassword(!showPassword)}
+                      disabled={loading}
                     >
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </Button>
@@ -263,6 +291,7 @@ const AdminAuth = () => {
                     type="button"
                     onClick={() => setShowPasswordReset(true)}
                     className="text-purple-600 hover:text-purple-800 hover:underline text-sm font-crimson transition-colors duration-300"
+                    disabled={loading}
                   >
                     Forgot your password?
                   </button>
@@ -278,6 +307,7 @@ const AdminAuth = () => {
                       setShowRegistration(true);
                     }}
                     className="text-purple-600 hover:text-purple-800 hover:underline text-sm sm:text-base font-crimson transition-colors duration-300"
+                    disabled={loading}
                   >
                     Need to create an admin account?
                   </button>
@@ -293,6 +323,7 @@ const AdminAuth = () => {
                       setShowRegistration(false);
                     }}
                     className="text-purple-600 hover:text-purple-800 hover:underline text-sm sm:text-base font-crimson transition-colors duration-300"
+                    disabled={loading}
                   >
                     Back to sign in
                   </button>
