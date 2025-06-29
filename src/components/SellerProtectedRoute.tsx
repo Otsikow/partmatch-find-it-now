@@ -28,9 +28,9 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
       const metadataUserType = user.user_metadata?.user_type;
       console.log('SellerProtectedRoute: Metadata user_type:', metadataUserType);
 
-      if (metadataUserType === 'supplier') {
-        console.log('SellerProtectedRoute: User is supplier based on metadata');
-        setUserType('supplier');
+      if (metadataUserType === 'supplier' || metadataUserType === 'admin') {
+        console.log('SellerProtectedRoute: User is supplier or admin based on metadata');
+        setUserType(metadataUserType);
         setProfileLoading(false);
         return;
       }
@@ -47,15 +47,15 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
 
         if (error) {
           console.error('SellerProtectedRoute: Error fetching profile:', error);
-          // No profile found and no supplier metadata - deny access
-          setUserType('not_supplier');
+          // No profile found and no supplier/admin metadata - deny access
+          setUserType('not_authorized');
         } else {
           console.log('SellerProtectedRoute: Profile user_type:', profile?.user_type);
-          setUserType(profile?.user_type || 'not_supplier');
+          setUserType(profile?.user_type || 'not_authorized');
         }
       } catch (error) {
         console.error('SellerProtectedRoute: Unexpected error:', error);
-        setUserType('not_supplier');
+        setUserType('not_authorized');
       } finally {
         setProfileLoading(false);
       }
@@ -88,17 +88,17 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
     return <Navigate to="/auth" replace />;
   }
 
-  if (userType !== 'supplier') {
+  if (userType !== 'supplier' && userType !== 'admin') {
     console.log('SellerProtectedRoute: Access denied, userType:', userType);
     toast({
       title: "Access Denied",
-      description: "Only sellers can access this dashboard. Please register as a seller to continue.",
+      description: "Only sellers and administrators can access this dashboard. Please register as a seller to continue.",
       variant: "destructive"
     });
     return <Navigate to="/buyer-dashboard" replace />;
   }
 
-  console.log('SellerProtectedRoute: Access granted for supplier');
+  console.log('SellerProtectedRoute: Access granted for supplier or admin');
   return <>{children}</>;
 };
 
