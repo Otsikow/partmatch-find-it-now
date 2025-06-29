@@ -11,6 +11,7 @@ import { toast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import PasswordReset from "@/components/PasswordReset";
 import SetNewPassword from "@/components/SetNewPassword";
+import { ADMIN_SECURITY_CONFIG, validateAdminPassword } from "@/utils/adminSecurity";
 
 const AdminAuth = () => {
   const [formData, setFormData] = useState({
@@ -26,15 +27,37 @@ const AdminAuth = () => {
   const [loading, setLoading] = useState(false);
   const [showRegistration, setShowRegistration] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [passwordValidation, setPasswordValidation] = useState<{valid: boolean; errors: string[]}>({valid: true, errors: []});
   
   const { signUp, signIn, isPasswordReset } = useAuth();
   const navigate = useNavigate();
+
+  const handlePasswordChange = (password: string) => {
+    setFormData(prev => ({ ...prev, password }));
+    if (!isLogin && password) {
+      const validation = validateAdminPassword(password);
+      setPasswordValidation(validation);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Prevent double submission
     if (loading) return;
+
+    // Validate password strength for registration
+    if (!isLogin) {
+      const validation = validateAdminPassword(formData.password);
+      if (!validation.valid) {
+        toast({
+          title: "Password Requirements Not Met",
+          description: validation.errors.join(' '),
+          variant: "destructive"
+        });
+        return;
+      }
+    }
     
     setLoading(true);
     
@@ -44,9 +67,10 @@ const AdminAuth = () => {
         const { error } = await signIn(formData.email, formData.password);
         if (error) {
           console.error('AdminAuth: Sign in error:', error);
+          // Don't show detailed error for security reasons on admin login
           toast({
-            title: "Sign In Failed",
-            description: error.message || "Failed to sign in. Please check your credentials.",
+            title: "Authentication Failed",
+            description: "Invalid credentials or access denied.",
             variant: "destructive"
           });
         } else {
@@ -65,7 +89,7 @@ const AdminAuth = () => {
         if (error) {
           console.error('AdminAuth: Sign up error:', error);
           toast({
-            title: "Sign Up Failed",
+            title: "Registration Failed",
             description: error.message || "Failed to create admin account.",
             variant: "destructive"
           });
@@ -91,7 +115,11 @@ const AdminAuth = () => {
   };
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    if (field === 'password') {
+      handlePasswordChange(value);
+    } else {
+      setFormData(prev => ({ ...prev, [field]: value }));
+    }
   };
 
   const handleBackToLogin = () => {
@@ -153,17 +181,26 @@ const AdminAuth = () => {
                 </h2>
                 <p className="text-gray-600 text-sm sm:text-base font-crimson">
                   {isLogin 
-                    ? 'Development mode - any email allowed' 
+                    ? 'Secure admin portal access' 
                     : 'Create your admin account'
                   }
                 </p>
               </div>
 
+              {ADMIN_SECURITY_CONFIG.DEVELOPMENT_MODE && (
+                <Alert className="mb-6 border-red-200 bg-red-50">
+                  <AlertTriangle className="h-4 w-4 text-red-600" />
+                  <AlertDescription className="text-red-800">
+                    <strong>⚠️ SECURITY WARNING:</strong> Development mode is enabled. This is dangerous in production!
+                  </AlertDescription>
+                </Alert>
+              )}
+
               {!isLogin && (
                 <Alert className="mb-6 border-blue-200 bg-blue-50">
                   <AlertTriangle className="h-4 w-4 text-blue-600" />
                   <AlertDescription className="text-blue-800">
-                    Development mode: Email restrictions are disabled. Any email can be used for admin registration.
+                    Only pre-authorized emails can create admin accounts. Contact the system administrator if you need access.
                   </AlertDescription>
                 </Alert>
               )}
@@ -234,7 +271,7 @@ const AdminAuth = () => {
                     <Input
                       id="email"
                       type="email"
-                      placeholder="your-email@example.com"
+                      placeholder="admin@partmatchgh.com"
                       value={formData.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
                       required
@@ -242,6 +279,11 @@ const AdminAuth = () => {
                       disabled={loading}
                     />
                   </div>
+                  {!isLogin && (
+                    <p className="text-xs text-gray-500 mt-1">
+                      Only pre-authorized admin emails are allowed
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -269,9 +311,18 @@ const AdminAuth = () => {
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </Button>
                   </div>
+                  {!isLogin && !passwordValidation.valid && passwordValidation.errors.length > 0 && (
+                    <div className="mt-2">
+                      {passwordValidation.errors.map((error, index) => (
+                        <p key={index} className="text-xs text-red-600">
+                          • {error}
+                        </p>
+                      ))}
+                    </div>
+                  )}
                   {!isLogin && (
                     <p className="text-xs text-gray-500 mt-1">
-                      Use a secure password for your admin account
+                      Must be at least 12 characters with uppercase, lowercase, numbers, and special characters
                     </p>
                   )}
                 </div>
@@ -279,7 +330,7 @@ const AdminAuth = () => {
                 <Button 
                   type="submit" 
                   className="w-full bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 py-3 sm:py-4 text-base sm:text-lg rounded-xl font-inter font-medium shadow-lg hover:shadow-xl transition-all duration-300"
-                  disabled={loading}
+                  disabled={loading || (!isLogin && !passwordValidation.valid)}
                 >
                   {loading ? 'Processing...' : (isLogin ? 'Sign In' : 'Create Admin Account')}
                 </Button>

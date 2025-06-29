@@ -5,11 +5,15 @@
 export const ADMIN_SECURITY_CONFIG = {
   // Authorized admin emails - only these emails can access admin functions
   AUTHORIZED_EMAILS: [
-    'admin@partmatch.com',
-    'administrator@partmatch.com'
+    'admin@partmatchgh.com',
+    'administrator@partmatchgh.com',
+    'eric.arthur@partmatchgh.com' // Add the actual admin email from the logs
     // Add your specific admin emails here
     // Never use common emails like admin@domain.com
   ],
+  
+  // Development mode flag - MUST be false in production
+  DEVELOPMENT_MODE: false, // Set to false for production
   
   // Minimum password requirements for admin accounts
   PASSWORD_REQUIREMENTS: {
@@ -29,7 +33,26 @@ export const ADMIN_SECURITY_CONFIG = {
 
 // Validate if an email is authorized for admin access
 export const isAuthorizedAdminEmail = (email: string): boolean => {
-  return ADMIN_SECURITY_CONFIG.AUTHORIZED_EMAILS.includes(email.toLowerCase());
+  // In development mode, allow any email (DANGEROUS - disable in production)
+  if (ADMIN_SECURITY_CONFIG.DEVELOPMENT_MODE) {
+    console.warn('⚠️ SECURITY WARNING: Development mode is enabled - any email can access admin functions');
+    return true;
+  }
+  
+  // In production, only allow pre-approved emails
+  const normalizedEmail = email.toLowerCase().trim();
+  const isAuthorized = ADMIN_SECURITY_CONFIG.AUTHORIZED_EMAILS.includes(normalizedEmail);
+  
+  if (!isAuthorized) {
+    console.error('🚫 SECURITY: Unauthorized admin access attempt for email:', email);
+    logAdminSecurityEvent({
+      type: 'UNAUTHORIZED_ACCESS',
+      email: email,
+      details: 'Attempted admin access with unauthorized email'
+    });
+  }
+  
+  return isAuthorized;
 };
 
 // Validate admin password strength
@@ -78,7 +101,7 @@ export const logAdminSecurityEvent = (event: {
     ip: 'Not available in client-side' // In production, capture this server-side
   };
   
-  console.warn('ADMIN SECURITY EVENT:', logEntry);
+  console.warn('🔒 ADMIN SECURITY EVENT:', logEntry);
   
   // In production, send this to your secure logging service
   // Example: await fetch('/api/admin-security-log', { method: 'POST', body: JSON.stringify(logEntry) });

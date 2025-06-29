@@ -3,6 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { isAuthorizedAdminEmail, logAdminSecurityEvent } from '@/utils/adminSecurity';
 
 interface AdminProtectedRouteProps {
   children: React.ReactNode;
@@ -22,6 +23,20 @@ const AdminProtectedRoute = ({ children }: AdminProtectedRouteProps) => {
 
       console.log('AdminProtectedRoute: Checking admin access for user:', user.id);
       console.log('AdminProtectedRoute: User email:', user.email);
+
+      // First check if email is authorized for admin access
+      if (user.email && !isAuthorizedAdminEmail(user.email)) {
+        console.error('AdminProtectedRoute: Unauthorized email for admin access:', user.email);
+        logAdminSecurityEvent({
+          type: 'UNAUTHORIZED_ACCESS',
+          email: user.email,
+          userId: user.id,
+          details: 'Attempted admin dashboard access with unauthorized email'
+        });
+        setUserType('unauthorized');
+        setProfileLoading(false);
+        return;
+      }
 
       try {
         // Check user metadata for admin role first

@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
+import { isAuthorizedAdminEmail, logAdminSecurityEvent } from '@/utils/adminSecurity';
 
 interface AuthContextType {
   user: User | null;
@@ -76,7 +77,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 event_details: {
                   email: session.user.email,
                   user_id: session.user.id,
-                  details: 'Admin user signed in successfully (dev mode)',
+                  details: 'Admin user signed in successfully',
                   timestamp: new Date().toISOString()
                 }
               });
@@ -114,9 +115,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const signUp = async (email: string, password: string, userData: any) => {
     console.log('AuthProvider: SignUp attempt:', { email, userData });
     
-    // Simplified admin signup for development - no strict email checking
+    // Enforce admin email validation for admin accounts
     if (userData.user_type === 'admin') {
-      console.log('AuthProvider: Admin signup in development mode');
+      console.log('AuthProvider: Admin signup attempt for email:', email);
+      
+      if (!isAuthorizedAdminEmail(email)) {
+        const error = new Error('Access denied. This email is not authorized for admin access.');
+        toast({
+          title: "Access Denied",
+          description: "This email is not authorized for admin access. Please contact the system administrator.",
+          variant: "destructive"
+        });
+        
+        logAdminSecurityEvent({
+          type: 'UNAUTHORIZED_ACCESS',
+          email: email,
+          details: 'Attempted admin signup with unauthorized email'
+        });
+        
+        return { error };
+      }
     }
     
     const redirectUrl = `${window.location.origin}/`;
@@ -151,6 +169,29 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const signIn = async (email: string, password: string) => {
     console.log('AuthProvider: SignIn attempt:', { email });
     
+    // For admin login attempts, validate email authorization first
+    const urlPath = window.location.pathname;
+    if (urlPath.includes('admin')) {
+      console.log('AuthProvider: Admin signin attempt for email:', email);
+      
+      if (!isAuthorizedAdminEmail(email)) {
+        const error = new Error('Access denied. This email is not authorized for admin access.');
+        toast({
+          title: "Access Denied",
+          description: "This email is not authorized for admin access.",
+          variant: "destructive"
+        });
+        
+        logAdminSecurityEvent({
+          type: 'UNAUTHORIZED_ACCESS',
+          email: email,
+          details: 'Attempted admin signin with unauthorized email'
+        });
+        
+        return { error };
+      }
+    }
+    
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password
@@ -164,6 +205,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         description: error.message,
         variant: "destructive"
       });
+      
+      // Log failed login attempts for admin routes
+      if (urlPath.includes('admin')) {
+        logAdminSecurityEvent({
+          type: 'LOGIN_FAILED',
+          email: email,
+          details: `Failed admin login attempt: ${error.message}`
+        });
+      }
+    } else {
+      // Log successful admin logins
+      if (urlPath.includes('admin')) {
+        logAdminSecurityEvent({
+          type: 'LOGIN_SUCCESS',
+          email: email,
+          details: 'Successful admin login'
+        });
+      }
     }
     
     return { error };
