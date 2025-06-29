@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -6,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, Users, Package, CheckCircle, Clock, MapPin, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Request {
   id: string;
@@ -30,72 +32,133 @@ interface Offer {
 }
 
 const AdminDashboard = () => {
-  const [requests, setRequests] = useState<Request[]>([
-    {
-      id: '1',
-      make: 'Toyota',
-      model: 'Corolla',
-      year: '2015',
-      part: 'Alternator',
-      customer: 'John Doe',
-      location: 'Accra',
-      phone: '+233 20 123 4567',
-      status: 'pending',
-      timestamp: '2024-01-15 10:30'
-    },
-    {
-      id: '2',
-      make: 'Honda',
-      model: 'Civic',
-      year: '2012',
-      part: 'Brake Pads',
-      customer: 'Jane Smith',
-      location: 'Kumasi',
-      phone: '+233 24 987 6543',
-      status: 'matched',
-      timestamp: '2024-01-15 09:15'
-    }
-  ]);
+  const [requests, setRequests] = useState<Request[]>([]);
+  const [offers, setOffers] = useState<Offer[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const [offers] = useState<Offer[]>([
-    {
-      id: '1',
-      requestId: '1',
-      supplier: 'AutoParts Ghana',
-      price: 'GHS 450',
-      phone: '+233 20 555 1234',
-      status: 'pending'
-    },
-    {
-      id: '2',
-      requestId: '2',
-      supplier: 'Parts Express',
-      price: 'GHS 180',
-      phone: '+233 24 777 8888',
-      status: 'accepted'
-    }
-  ]);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  const handleMatchSupplier = (requestId: string, offerId: string) => {
-    setRequests(prev => prev.map(req => 
-      req.id === requestId ? { ...req, status: 'matched' } : req
-    ));
-    
-    toast({
-      title: "Match Created!",
-      description: "Both customer and supplier have been notified via WhatsApp.",
-    });
+  const fetchData = async () => {
+    try {
+      // Fetch real requests from database
+      const { data: requestsData, error: requestsError } = await supabase
+        .from('part_requests')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (requestsError) throw requestsError;
+
+      // Fetch real offers from database
+      const { data: offersData, error: offersError } = await supabase
+        .from('offers')
+        .select(`
+          *,
+          part_requests!request_id(car_make, car_model, car_year, part_needed),
+          profiles!supplier_id(first_name, last_name, phone)
+        `)
+        .order('created_at', { ascending: false });
+
+      if (offersError) throw offersError;
+
+      // Transform requests data
+      const transformedRequests: Request[] = (requestsData || []).map(req => ({
+        id: req.id,
+        make: req.car_make,
+        model: req.car_model,
+        year: req.car_year.toString(),
+        part: req.part_needed,
+        customer: 'Customer', // You might want to join with profiles table for actual name
+        location: req.location,
+        phone: req.phone,
+        status: req.status === 'pending' ? 'pending' : req.status === 'offer_received' ? 'matched' : 'completed',
+        timestamp: new Date(req.created_at).toLocaleString()
+      }));
+
+      // Transform offers data
+      const transformedOffers: Offer[] = (offersData || []).map(offer => ({
+        id: offer.id,
+        requestId: offer.request_id,
+        supplier: offer.profiles ? `${offer.profiles.first_name || ''} ${offer.profiles.last_name || ''}`.trim() : 'Unknown Supplier',
+        price: `GHS ${offer.price}`,
+        phone: offer.profiles?.phone || '',
+        status: offer.status
+      }));
+
+      setRequests(transformedRequests);
+      setOffers(transformedOffers);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load dashboard data.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleCompleteRequest = (requestId: string) => {
-    setRequests(prev => prev.map(req => 
-      req.id === requestId ? { ...req, status: 'completed' } : req
-    ));
-    
-    toast({
-      title: "Request Completed!",
-      description: "The transaction has been marked as complete.",
-    });
+  const handleMatchSupplier = async (requestId: string, offerId: string) => {
+    try {
+      // Update offer status to accepted
+      const { error: offerError } = await supabase
+        .from('offers')
+        .update({ status: 'accepted' })
+        .eq('id', offerId);
+
+      if (offerError) throw offerError;
+
+      // Update request status
+      const { error: requestError } = await supabase
+        .from('part_requests')
+        .update({ status: 'offer_received' })
+        .eq('id', requestId);
+
+      if (requestError) throw requestError;
+
+      // Refresh data to show updated status
+      await fetchData();
+      
+      toast({
+        title: "Match Created!",
+        description: "The offer has been accepted and both parties have been notified.",
+      });
+    } catch (error: any) {
+      console.error('Error accepting offer:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to accept offer. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleCompleteRequest = async (requestId: string) => {
+    try {
+      const { error } = await supabase
+        .from('part_requests')
+        .update({ status: 'completed' })
+        .eq('id', requestId);
+
+      if (error) throw error;
+
+      // Refresh data
+      await fetchData();
+      
+      toast({
+        title: "Request Completed!",
+        description: "The transaction has been marked as complete.",
+      });
+    } catch (error: any) {
+      console.error('Error completing request:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to complete request. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -103,6 +166,7 @@ const AdminDashboard = () => {
       case 'pending': return 'bg-yellow-100 text-yellow-800';
       case 'matched': return 'bg-blue-100 text-blue-800';
       case 'completed': return 'bg-green-100 text-green-800';
+      case 'accepted': return 'bg-green-100 text-green-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
@@ -112,9 +176,21 @@ const AdminDashboard = () => {
       case 'pending': return <Clock className="h-4 w-4" />;
       case 'matched': return <Users className="h-4 w-4" />;
       case 'completed': return <CheckCircle className="h-4 w-4" />;
+      case 'accepted': return <CheckCircle className="h-4 w-4" />;
       default: return <Package className="h-4 w-4" />;
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-100 font-inter">
@@ -209,7 +285,12 @@ const AdminDashboard = () => {
                       <Button 
                         size="sm"
                         className="bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-base shadow-lg hover:shadow-xl transition-all duration-300"
-                        onClick={() => handleMatchSupplier(request.id, '1')}
+                        onClick={() => {
+                          const relatedOffer = offers.find(o => o.requestId === request.id);
+                          if (relatedOffer) {
+                            handleMatchSupplier(request.id, relatedOffer.id);
+                          }
+                        }}
                       >
                         Match with Supplier
                       </Button>
