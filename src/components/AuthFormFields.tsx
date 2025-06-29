@@ -1,3 +1,4 @@
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -73,12 +74,6 @@ const AuthFormFields = ({ isLogin, formData, onInputChange }: AuthFormFieldsProp
                   <div className="flex flex-col">
                     <span className="font-medium text-orange-700">🏪 Seller</span>
                     <span className="text-sm text-gray-600">Sell and supply car parts</span>
-                  </div>
-                </SelectItem>
-                <SelectItem value="admin" className="hover:bg-purple-50">
-                  <div className="flex flex-col">
-                    <span className="font-medium text-purple-700">⚙️ Administrator</span>
-                    <span className="text-sm text-gray-600">Manage platform and users</span>
                   </div>
                 </SelectItem>
               </SelectContent>
