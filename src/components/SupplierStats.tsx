@@ -2,13 +2,13 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Package, Clock, CheckCircle } from "lucide-react";
 
-interface SupplierStatsProps {
+interface SellerStatsProps {
   totalOffers: number;
   pendingOffers: number;
   acceptedOffers: number;
 }
 
-const SupplierStats = ({ totalOffers, pendingOffers, acceptedOffers }: SupplierStatsProps) => {
+const SellerStats = ({ totalOffers, pendingOffers, acceptedOffers }: SellerStatsProps) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8">
       <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 hover:shadow-lg transition-shadow duration-300">
@@ -50,4 +50,4 @@ const SupplierStats = ({ totalOffers, pendingOffers, acceptedOffers }: SupplierS
   );
 };
 
-export default SupplierStats;
+export default SellerStats;

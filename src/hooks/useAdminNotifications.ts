@@ -208,7 +208,7 @@ export const useAdminNotifications = () => {
           const newNotification: AdminNotification = {
             id: `offer_${payload.new.id}`,
             type: 'new_offer',
-            title: 'New Supplier Offer',
+            title: 'New Seller Offer',
             message: `New offer of GHS ${payload.new.price} submitted`,
             read: false,
             created_at: new Date().toISOString(),
@@ -223,7 +223,7 @@ export const useAdminNotifications = () => {
             .from('admin_notifications')
             .insert({
               type: 'new_offer',
-              title: 'New Supplier Offer',
+              title: 'New Seller Offer',
               message: `New offer of GHS ${payload.new.price} submitted`,
               metadata: { offer_id: payload.new.id }
             })

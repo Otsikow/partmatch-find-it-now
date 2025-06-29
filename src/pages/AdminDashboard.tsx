@@ -112,7 +112,7 @@ const AdminDashboard = () => {
       const transformedOffers: Offer[] = (offersData || []).map(offer => ({
         id: offer.id,
         requestId: offer.request_id,
-        supplier: offer.profiles ? `${offer.profiles.first_name || ''} ${offer.profiles.last_name || ''}`.trim() : 'Unknown Supplier',
+        supplier: offer.profiles ? `${offer.profiles.first_name || ''} ${offer.profiles.last_name || ''}`.trim() : 'Unknown Seller',
         price: `GHS ${offer.price}`,
         phone: offer.profiles?.phone || '',
         status: offer.status
@@ -379,7 +379,7 @@ const AdminDashboard = () => {
         <Tabs defaultValue="requests" className="w-full">
           <TabsList className="grid w-full grid-cols-3 bg-gradient-to-r from-white/90 to-purple-50/50 backdrop-blur-sm">
             <TabsTrigger value="requests" className="text-base font-inter">All Requests</TabsTrigger>
-            <TabsTrigger value="offers" className="text-base font-inter">Supplier Offers</TabsTrigger>
+            <TabsTrigger value="offers" className="text-base font-inter">Seller Offers</TabsTrigger>
             <TabsTrigger value="verifications" className="text-base font-inter">Seller Verifications</TabsTrigger>
           </TabsList>
 
@@ -401,7 +401,7 @@ const AdminDashboard = () => {
 
           <TabsContent value="offers" className="mt-6">
             <div className="space-y-4 sm:space-y-6">
-              <h2 className="text-xl sm:text-2xl font-playfair font-semibold bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">Supplier Offers</h2>
+              <h2 className="text-xl sm:text-2xl font-playfair font-semibold bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">Seller Offers</h2>
               
               {offers.map(offer => (
                 <OfferCard

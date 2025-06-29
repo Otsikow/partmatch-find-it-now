@@ -1,3 +1,4 @@
+
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -49,7 +50,7 @@ const OfferCard = ({ offer, relatedRequest, onAcceptOffer }: OfferCardProps) => 
             {relatedRequest?.make} {relatedRequest?.model} - {relatedRequest?.part}
           </h3>
           <p className="text-gray-600 font-crimson text-sm sm:text-base lg:text-lg truncate">
-            Supplier: {offer.supplier}
+            Seller: {offer.supplier}
           </p>
           <p className="text-base sm:text-lg lg:text-xl font-semibold bg-gradient-to-r from-green-600 to-emerald-700 bg-clip-text text-transparent">
             {offer.price}
@@ -82,7 +83,7 @@ const OfferCard = ({ offer, relatedRequest, onAcceptOffer }: OfferCardProps) => 
             onClick={() => window.open(`tel:${offer.phone}`, '_self')}
             className="text-sm sm:text-base border-purple-200 hover:bg-purple-50 flex-1 sm:flex-none"
           >
-            Call Supplier
+            Call Seller
           </Button>
         </div>
       )}
