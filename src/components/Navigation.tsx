@@ -1,8 +1,8 @@
-
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useNavigate } from "react-router-dom";
 import NavigationLogo from "./NavigationLogo";
 import NavigationAuth from "./NavigationAuth";
 import NavigationMobile from "./NavigationMobile";
@@ -13,6 +13,7 @@ const Navigation = () => {
   const [firstName, setFirstName] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -52,8 +53,15 @@ const Navigation = () => {
   }, [user]);
 
   const handleSignOut = async () => {
-    await signOut();
-    setIsMobileMenuOpen(false);
+    try {
+      console.log('Navigation: Attempting to sign out...');
+      await signOut();
+      console.log('Navigation: Sign out successful, redirecting to home');
+      setIsMobileMenuOpen(false);
+      navigate('/');
+    } catch (error) {
+      console.error('Navigation: Sign out error:', error);
+    }
   };
 
   const getDashboardLink = () => {
