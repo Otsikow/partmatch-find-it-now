@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -91,7 +90,7 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
     }
 
     setIsSubmitting(true);
-    console.log('PostPartModal: Starting part submission for user:', user.id);
+    console.log('Starting part submission for user:', user.id);
 
     try {
       // Upload images first
@@ -100,15 +99,16 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
         try {
           const url = await uploadImage(photo);
           imageUrls.push(url);
+          console.log('Image uploaded successfully:', url);
         } catch (imageError) {
-          console.error('PostPartModal: Image upload failed:', imageError);
-          throw imageError;
+          console.error('Image upload failed:', imageError);
+          // Continue without this image rather than failing completely
         }
       }
 
-      // Prepare the data for insertion - ensure all required fields are present
+      // Prepare the data for insertion
       const insertData = {
-        supplier_id: user.id, // This is the key field for RLS
+        supplier_id: user.id,
         title: formData.title.trim(),
         description: formData.description?.trim() || null,
         make: formData.make.trim(),
@@ -125,30 +125,24 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
         status: 'available'
       };
 
-      console.log('PostPartModal: Preparing to insert data:', {
+      console.log('Inserting part data:', {
         supplier_id: insertData.supplier_id,
         title: insertData.title,
-        user_id: user.id,
-        auth_uid: user.id
+        auth_user_id: user.id
       });
 
-      // Insert the car part with explicit RLS compliance
+      // Insert the car part
       const { data: insertedData, error: insertError } = await supabase
         .from('car_parts')
         .insert([insertData])
         .select();
 
       if (insertError) {
-        console.error('PostPartModal: Insert error details:', {
-          message: insertError.message,
-          details: insertError.details,
-          hint: insertError.hint,
-          code: insertError.code
-        });
+        console.error('Insert error:', insertError);
         throw insertError;
       }
 
-      console.log('PostPartModal: Part inserted successfully:', insertedData);
+      console.log('Part inserted successfully:', insertedData);
 
       toast({
         title: "Part Posted!",
@@ -173,13 +167,7 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
       onClose();
 
     } catch (error: any) {
-      console.error('PostPartModal: Error posting part:', {
-        error: error,
-        message: error?.message,
-        details: error?.details,
-        hint: error?.hint,
-        code: error?.code
-      });
+      console.error('Error posting part:', error);
       
       toast({
         title: "Error Posting Part",
