@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -409,15 +408,25 @@ const AdminDashboard = () => {
                 Seller Verifications
               </h2>
               
-              {verifications.map(verification => (
-                <VerificationCard
-                  key={verification.id}
-                  verification={verification}
-                  onApprove={(id) => handleVerificationAction(id, 'approve')}
-                  onReject={handleVerificationAction}
-                  onViewDocument={viewDocument}
-                />
-              ))}
+              {verifications.length === 0 ? (
+                <Card className="p-8 text-center bg-gradient-to-br from-white/90 to-purple-50/30">
+                  <div className="text-gray-500">
+                    <Building2 className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <h3 className="text-lg font-semibold mb-2">No Verification Requests</h3>
+                    <p className="text-sm">There are currently no seller verification requests to review.</p>
+                  </div>
+                </Card>
+              ) : (
+                verifications.map(verification => (
+                  <VerificationCard
+                    key={verification.id}
+                    verification={verification}
+                    onApprove={(id) => handleVerificationAction(id, 'approve')}
+                    onReject={handleVerificationAction}
+                    onViewDocument={viewDocument}
+                  />
+                ))
+              )}
             </div>
           </TabsContent>
         </Tabs>

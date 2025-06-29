@@ -1,8 +1,24 @@
-
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Eye, CheckCircle, Clock, XCircle } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { 
+  User, 
+  Phone, 
+  Mail, 
+  MapPin, 
+  Calendar, 
+  Building2, 
+  FileText, 
+  Eye,
+  Check,
+  X,
+  Download
+} from "lucide-react";
+import { useState } from "react";
 
 interface SellerVerification {
   id: string;
@@ -13,151 +29,197 @@ interface SellerVerification {
   business_address: string;
   phone: string;
   email: string;
+  date_of_birth: string;
   verification_status: 'pending' | 'approved' | 'rejected';
   created_at: string;
   admin_notes?: string;
   government_id_url?: string;
   business_registration_url?: string;
   proof_of_address_url?: string;
+  profile_photo_url?: string;
+  business_location_photo_url?: string;
 }
 
 interface VerificationCardProps {
   verification: SellerVerification;
-  onApprove: (verificationId: string) => void;
-  onReject: (verificationId: string, notes: string) => void;
-  onViewDocument: (documentUrl: string) => void;
+  onApprove: (id: string) => void;
+  onReject: (id: string, notes: string) => void;
+  onViewDocument: (url: string) => void;
 }
 
 const VerificationCard = ({ verification, onApprove, onReject, onViewDocument }: VerificationCardProps) => {
+  const [rejectNotes, setRejectNotes] = useState('');
+  const [showRejectDialog, setShowRejectDialog] = useState(false);
+
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      case 'approved': return 'bg-green-100 text-green-800';
-      case 'rejected': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'pending': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'approved': return 'bg-green-100 text-green-800 border-green-200';
+      case 'rejected': return 'bg-red-100 text-red-800 border-red-200';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'approved': return <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4" />;
-      case 'rejected': return <XCircle className="h-3 w-3 sm:h-4 sm:w-4" />;
-      default: return <Clock className="h-3 w-3 sm:h-4 sm:w-4" />;
-    }
-  };
-
-  const handleApprove = () => {
-    console.log('Approve verification clicked for:', verification.id);
-    onApprove(verification.id);
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   };
 
   const handleReject = () => {
-    console.log('Reject verification clicked for:', verification.id);
-    const notes = prompt('Enter rejection reason:');
-    if (notes && notes.trim()) {
-      onReject(verification.id, notes.trim());
+    if (rejectNotes.trim()) {
+      onReject(verification.id, rejectNotes);
+      setRejectNotes('');
+      setShowRejectDialog(false);
     }
   };
 
+  const documents = [
+    { label: 'Government ID', url: verification.government_id_url },
+    { label: 'Business Registration', url: verification.business_registration_url },
+    { label: 'Proof of Address', url: verification.proof_of_address_url },
+    { label: 'Profile Photo', url: verification.profile_photo_url },
+    { label: 'Business Location', url: verification.business_location_photo_url }
+  ].filter(doc => doc.url);
+
   return (
-    <Card className="p-3 sm:p-4 lg:p-6 xl:p-8 bg-gradient-to-br from-white/90 to-purple-50/30 backdrop-blur-sm border-0 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-3 lg:gap-4 mb-3 sm:mb-4 lg:mb-6">
-        <div className="flex-1 min-w-0">
-          <h3 className="font-playfair font-semibold text-base sm:text-lg lg:text-xl truncate">
-            {verification.business_name || verification.full_name}
-          </h3>
-          <p className="text-gray-600 font-crimson text-sm sm:text-base lg:text-lg truncate">
-            {verification.seller_type} - {verification.full_name}
-          </p>
-          <div className="text-xs sm:text-sm lg:text-base text-gray-500 font-inter space-y-1">
-            <p className="truncate">Email: {verification.email}</p>
-            <p className="truncate">Phone: {verification.phone}</p>
+    <Card className="p-6 bg-gradient-to-br from-white/90 to-purple-50/30 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4 mb-4">
+        <div className="flex-1">
+          <div className="flex items-center gap-3 mb-2">
+            <User className="h-5 w-5 text-purple-600" />
+            <h3 className="text-xl font-playfair font-semibold text-gray-900">
+              {verification.full_name}
+            </h3>
+            <Badge className={`${getStatusColor(verification.verification_status)} text-sm`}>
+              {verification.verification_status}
+            </Badge>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-3 text-sm text-gray-600 font-crimson">
+            <div className="flex items-center gap-2">
+              <Building2 className="h-4 w-4" />
+              <span>{verification.seller_type === 'individual' ? 'Individual Seller' : 'Business'}</span>
+            </div>
+            {verification.business_name && (
+              <div className="flex items-center gap-2">
+                <Building2 className="h-4 w-4" />
+                <span>{verification.business_name}</span>
+              </div>
+            )}
+            <div className="flex items-center gap-2">
+              <Phone className="h-4 w-4" />
+              <span>{verification.phone}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Mail className="h-4 w-4" />
+              <span>{verification.email}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Calendar className="h-4 w-4" />
+              <span>DOB: {formatDate(verification.date_of_birth)}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <MapPin className="h-4 w-4" />
+              <span>{verification.business_address}</span>
+            </div>
           </div>
         </div>
-        <div className="flex flex-row lg:flex-col lg:text-right gap-2 lg:gap-1 items-start">
-          <Badge className={`${getStatusColor(verification.verification_status)} flex items-center gap-1 text-xs sm:text-sm lg:text-base shrink-0`}>
-            {getStatusIcon(verification.verification_status)}
-            {verification.verification_status}
-          </Badge>
-          <p className="text-xs sm:text-sm text-gray-500 font-inter lg:mt-1 truncate max-w-[120px] lg:max-w-none">
-            {new Date(verification.created_at).toLocaleDateString()}
-          </p>
+
+        <div className="text-sm text-gray-500 font-crimson">
+          Applied: {formatDate(verification.created_at)}
         </div>
       </div>
 
-      <div className="mb-3 sm:mb-4 lg:mb-6 space-y-2">
-        <p className="text-xs sm:text-sm lg:text-base text-gray-600 font-crimson">
-          <strong>Address:</strong> <span className="break-words">{verification.business_address}</span>
-        </p>
-        {verification.admin_notes && (
-          <p className="text-xs sm:text-sm lg:text-base text-gray-600 font-crimson">
-            <strong>Admin Notes:</strong> <span className="break-words">{verification.admin_notes}</span>
-          </p>
-        )}
+      <Separator className="my-4" />
+
+      {/* Documents Section */}
+      <div className="mb-4">
+        <h4 className="text-lg font-playfair font-semibold mb-3 text-gray-900">
+          Submitted Documents
+        </h4>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
+          {documents.map((doc, index) => (
+            <Button
+              key={index}
+              variant="outline"
+              size="sm"
+              onClick={() => onViewDocument(doc.url!)}
+              className="flex items-center gap-2 text-xs h-auto p-2 hover:bg-purple-50"
+            >
+              <Eye className="h-3 w-3" />
+              <span className="truncate">{doc.label}</span>
+            </Button>
+          ))}
+        </div>
       </div>
 
-      <div className="flex flex-wrap gap-2 mb-3 sm:mb-4">
-        {verification.government_id_url && (
-          <Button 
-            size="sm" 
-            variant="outline"
-            onClick={() => onViewDocument(verification.government_id_url!)}
-            className="text-xs sm:text-sm lg:text-base border-purple-200 hover:bg-purple-50 flex-1 sm:flex-none min-w-0"
-          >
-            <Eye className="h-3 w-3 sm:h-4 sm:w-4 mr-1 shrink-0" />
-            <span className="truncate">View ID</span>
-          </Button>
-        )}
-        {verification.business_registration_url && (
-          <Button 
-            size="sm" 
-            variant="outline"
-            onClick={() => onViewDocument(verification.business_registration_url!)}
-            className="text-xs sm:text-sm lg:text-base border-purple-200 hover:bg-purple-50 flex-1 sm:flex-none min-w-0"
-          >
-            <Eye className="h-3 w-3 sm:h-4 sm:w-4 mr-1 shrink-0" />
-            <span className="truncate">View Registration</span>
-          </Button>
-        )}
-        {verification.proof_of_address_url && (
-          <Button 
-            size="sm" 
-            variant="outline"
-            onClick={() => onViewDocument(verification.proof_of_address_url!)}
-            className="text-xs sm:text-sm lg:text-base border-purple-200 hover:bg-purple-50 flex-1 sm:flex-none min-w-0"
-          >
-            <Eye className="h-3 w-3 sm:h-4 sm:w-4 mr-1 shrink-0" />
-            <span className="truncate">View Address Proof</span>
-          </Button>
-        )}
-      </div>
+      {verification.admin_notes && (
+        <>
+          <Separator className="my-4" />
+          <div className="bg-gray-50 p-3 rounded-lg">
+            <h4 className="text-sm font-semibold text-gray-700 mb-1">Admin Notes:</h4>
+            <p className="text-sm text-gray-600 font-crimson">{verification.admin_notes}</p>
+          </div>
+        </>
+      )}
 
       {verification.verification_status === 'pending' && (
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-          <Button 
-            size="sm"
-            className="bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-xs sm:text-sm lg:text-base shadow-lg hover:shadow-xl transition-all duration-300 flex-1 sm:flex-none"
-            onClick={handleApprove}
-          >
-            Approve
-          </Button>
-          <Button 
-            size="sm"
-            variant="destructive"
-            className="text-xs sm:text-sm lg:text-base shadow-lg hover:shadow-xl transition-all duration-300 flex-1 sm:flex-none"
-            onClick={handleReject}
-          >
-            Reject
-          </Button>
-          <Button 
-            size="sm" 
-            variant="outline"
-            onClick={() => window.open(`tel:${verification.phone}`, '_self')}
-            className="text-xs sm:text-sm lg:text-base border-purple-200 hover:bg-purple-50 flex-1 sm:flex-none"
-          >
-            Call Seller
-          </Button>
-        </div>
+        <>
+          <Separator className="my-4" />
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button 
+              onClick={() => onApprove(verification.id)}
+              className="bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex-1"
+            >
+              <Check className="h-4 w-4 mr-2" />
+              Approve Verification
+            </Button>
+            
+            <Dialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
+              <DialogTrigger asChild>
+                <Button 
+                  variant="outline"
+                  className="border-red-200 text-red-600 hover:bg-red-50 flex-1"
+                >
+                  <X className="h-4 w-4 mr-2" />
+                  Reject
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Reject Verification</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="reject-notes">Reason for rejection:</Label>
+                    <Textarea
+                      id="reject-notes"
+                      value={rejectNotes}
+                      onChange={(e) => setRejectNotes(e.target.value)}
+                      placeholder="Please provide a reason for rejecting this verification..."
+                      rows={4}
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <Button onClick={handleReject} variant="destructive" className="flex-1">
+                      Reject Verification
+                    </Button>
+                    <Button 
+                      onClick={() => setShowRejectDialog(false)} 
+                      variant="outline"
+                      className="flex-1"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </>
       )}
     </Card>
   );
