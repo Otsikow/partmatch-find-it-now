@@ -122,11 +122,15 @@ const AdminDashboard = () => {
         setUsers([]);
       } else {
         // Fetch auth users to get emails separately
-        const { data: authData } = await supabase.auth.admin.listUsers();
+        const { data: authResponse, error: authError } = await supabase.auth.admin.listUsers();
+        
+        if (authError) {
+          console.error('Error fetching auth users:', authError);
+        }
         
         const transformedUsers: UserProfile[] = (usersData || []).map(user => {
           // Find matching auth user to get email
-          const authUser = authData?.users?.find(au => au.id === user.id);
+          const authUser = authResponse?.users?.find((au: any) => au.id === user.id);
           
           return {
             ...user,
