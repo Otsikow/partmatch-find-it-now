@@ -91,9 +91,12 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
     setIsSubmitting(true);
 
     try {
-      // Debug: Log user information
-      console.log('Current user:', user);
-      console.log('User ID:', user.id);
+      // Debug: Log current session info
+      const { data: { session } } = await supabase.auth.getSession();
+      console.log('Current session:', session);
+      console.log('Current user from session:', session?.user);
+      console.log('Current user from context:', user);
+      console.log('User ID we will use:', user.id);
 
       // Upload images first
       const imageUrls = [];
@@ -102,9 +105,9 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
         imageUrls.push(url);
       }
 
-      // Prepare the data for insertion
+      // Prepare the data for insertion with explicit typing
       const insertData = {
-        supplier_id: user.id, // Explicitly set the supplier_id to current user's ID
+        supplier_id: user.id, // This should match the RLS policy
         title: formData.title,
         description: formData.description || null,
         make: formData.make,
@@ -121,8 +124,21 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
         status: 'available'
       };
 
-      // Debug: Log the data being inserted
-      console.log('Insert data:', insertData);
+      // Debug: Log the exact data being inserted
+      console.log('Insert data structure:', insertData);
+      console.log('Insert data types:', {
+        supplier_id: typeof insertData.supplier_id,
+        supplier_id_value: insertData.supplier_id,
+        title: typeof insertData.title,
+        price: typeof insertData.price,
+        year: typeof insertData.year
+      });
+
+      // First, let's verify we can check auth.uid()
+      const { data: authCheck, error: authError } = await supabase
+        .rpc('auth.uid');
+      
+      console.log('Auth UID check:', authCheck, authError);
 
       // Insert part data with location
       const { data: insertedData, error } = await supabase
@@ -131,7 +147,12 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
         .select();
 
       if (error) {
-        console.error('Supabase insert error:', error);
+        console.error('Supabase insert error details:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        });
         throw error;
       }
 
