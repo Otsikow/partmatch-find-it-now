@@ -210,37 +210,82 @@ export const useAdminActions = (refetchData: () => Promise<void>) => {
 
   const handleApproveUser = async (userId: string) => {
     try {
-      console.log('Approving user:', userId);
+      console.log('Starting user approval process for:', userId);
       
+      // First, let's check the current status of the user
+      const { data: currentUser, error: fetchError } = await supabase
+        .from('profiles')
+        .select('is_verified, user_type, first_name, last_name')
+        .eq('id', userId)
+        .single();
+
+      if (fetchError) {
+        console.error('Error fetching current user:', fetchError);
+        throw fetchError;
+      }
+
+      console.log('Current user status before approval:', currentUser);
+
       // Update the user's profile to mark them as verified
-      const { error } = await supabase
+      const { data: updatedData, error: updateError } = await supabase
         .from('profiles')
         .update({ 
           is_verified: true,
-          verified_at: new Date().toISOString()
+          verified_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
         })
-        .eq('id', userId);
+        .eq('id', userId)
+        .select('*')
+        .single();
 
-      if (error) {
-        console.error('Error approving user:', error);
-        throw error;
+      if (updateError) {
+        console.error('Error approving user:', updateError);
+        throw updateError;
       }
 
-      console.log('Successfully approved user');
+      console.log('Successfully updated user profile:', updatedData);
 
-      // Force refresh data to ensure UI updates
+      // Log the approval action
+      try {
+        await supabase
+          .from('admin_audit_logs')
+          .insert({
+            action: 'USER_APPROVED',
+            user_id: userId,
+            details: { 
+              approved_by: (await supabase.auth.getUser()).data.user?.id,
+              timestamp: new Date().toISOString(),
+              previous_status: currentUser.is_verified,
+              new_status: true
+            }
+          });
+        console.log('Audit log created for user approval');
+      } catch (auditError) {
+        console.error('Error creating audit log:', auditError);
+        // Don't throw here, approval was successful
+      }
+
+      // Force multiple refreshes to ensure UI updates
       console.log('Refreshing data after user approval...');
       await refetchData();
       
-      // Add a small delay to ensure state updates
+      // Additional refresh with delay to ensure state propagation
       setTimeout(async () => {
+        console.log('Performing second refresh...');
         await refetchData();
         console.log('Second refresh completed');
-      }, 1000);
+      }, 500);
+      
+      // Third refresh for good measure
+      setTimeout(async () => {
+        console.log('Performing third refresh...');
+        await refetchData();
+        console.log('Third refresh completed');
+      }, 1500);
       
       toast({
         title: "User Approved!",
-        description: "The user has been approved and verified.",
+        description: `${currentUser.first_name} ${currentUser.last_name} has been approved and verified.`,
       });
     } catch (error: any) {
       console.error('Error approving user:', error);
