@@ -73,6 +73,7 @@ const AdminAuth = () => {
     
     try {
       if (isLogin) {
+        console.log('AdminAuth: Attempting sign in...');
         const { error } = await signIn(formData.email, formData.password);
         if (error) {
           console.error('AdminAuth: Sign in error:', error);
@@ -89,6 +90,7 @@ const AdminAuth = () => {
           }, 100);
         }
       } else {
+        console.log('AdminAuth: Attempting sign up...');
         const { error } = await signUp(formData.email, formData.password, {
           first_name: formData.firstName,
           last_name: formData.lastName,
@@ -203,10 +205,10 @@ const AdminAuth = () => {
               </div>
 
               {ADMIN_SECURITY_CONFIG.DEVELOPMENT_MODE && (
-                <Alert className="mb-6 border-red-200 bg-red-50">
-                  <AlertTriangle className="h-4 w-4 text-red-600" />
-                  <AlertDescription className="text-red-800">
-                    <strong>⚠️ SECURITY WARNING:</strong> Development mode is enabled. This is dangerous in production!
+                <Alert className="mb-6 border-amber-200 bg-amber-50">
+                  <AlertTriangle className="h-4 w-4 text-amber-600" />
+                  <AlertDescription className="text-amber-800">
+                    <strong>⚠️ DEV MODE:</strong> Security checks are relaxed for testing. This will be disabled in production.
                   </AlertDescription>
                 </Alert>
               )}

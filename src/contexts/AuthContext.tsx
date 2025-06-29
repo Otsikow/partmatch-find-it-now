@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -187,18 +186,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
     
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      console.log('AuthProvider: Making Supabase auth request...');
+      const { error, data } = await supabase.auth.signInWithPassword({
         email,
         password
       });
       
-      console.log('AuthProvider: SignIn result:', { error });
+      console.log('AuthProvider: SignIn result:', { error, userData: data?.user?.id ? 'User found' : 'No user' });
       
       if (error) {
+        console.error('AuthProvider: Supabase auth error:', error);
+        
         // Provide more specific error messages
         let errorMessage = error.message;
         if (error.message.includes('Invalid login credentials')) {
           errorMessage = 'Invalid email or password. Please check your credentials and try again.';
+        } else if (error.message.includes('Email not confirmed')) {
+          errorMessage = 'Please check your email and click the confirmation link before signing in.';
+        } else if (error.message.includes('Too many requests')) {
+          errorMessage = 'Too many login attempts. Please wait a few minutes and try again.';
         }
         
         toast({
@@ -216,6 +222,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           });
         }
       } else {
+        console.log('AuthProvider: Sign in successful');
         // Log successful admin logins
         if (urlPath.includes('admin')) {
           logAdminSecurityEvent({
@@ -229,9 +236,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       return { error };
     } catch (error: any) {
       console.error('AuthProvider: SignIn unexpected error:', error);
+      
+      // More detailed error logging
+      console.error('Error details:', {
+        name: error.name,
+        message: error.message,
+        stack: error.stack
+      });
+      
       toast({
         title: "Sign In Error",
-        description: "An unexpected error occurred during sign in.",
+        description: `Connection error: ${error.message || 'Please check your internet connection and try again.'}`,
         variant: "destructive"
       });
       return { error };
