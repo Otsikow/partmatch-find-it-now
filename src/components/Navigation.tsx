@@ -78,12 +78,12 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 flex items-center justify-between bg-white shadow-sm border-b border-gray-100 relative">
+    <nav className="px-2 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4 flex items-center justify-between bg-white shadow-sm border-b border-gray-100 relative min-h-[56px] sm:min-h-[64px]">
       {/* Logo Section */}
       <NavigationLogo onLinkClick={closeMobileMenu} />
       
       {/* Desktop Navigation */}
-      <div className="hidden lg:flex items-center gap-4 xl:gap-6">
+      <div className="hidden md:flex items-center gap-3 lg:gap-4 xl:gap-6">
         <NavigationAuth
           user={user}
           userType={userType}

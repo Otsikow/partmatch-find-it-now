@@ -30,24 +30,24 @@ const NavigationAuth = ({
 }: NavigationAuthProps) => {
   if (user) {
     return (
-      <div className="flex items-center gap-4 xl:gap-6">
-        <span className="text-sm text-gray-600 font-medium hidden xl:block">
+      <div className="flex items-center gap-2 lg:gap-3 xl:gap-4">
+        <span className="text-xs lg:text-sm text-gray-600 font-medium hidden lg:block max-w-[120px] xl:max-w-none truncate">
           Welcome, {getDisplayName()}
         </span>
         <Link to={getDashboardLink()}>
           <Button 
             variant="outline" 
-            size="default" 
-            className="border-green-600 text-green-700 hover:bg-green-50 font-medium px-4 xl:px-6 py-2 h-9 xl:h-10 text-sm"
+            size="sm"
+            className="border-green-600 text-green-700 hover:bg-green-50 font-medium px-3 lg:px-4 xl:px-6 py-1.5 lg:py-2 h-8 lg:h-9 xl:h-10 text-xs lg:text-sm whitespace-nowrap"
           >
             {getDashboardLabel()}
           </Button>
         </Link>
         <Button 
           variant="ghost" 
-          size="default" 
+          size="sm"
           onClick={onSignOut}
-          className="text-gray-700 hover:text-red-700 hover:bg-red-50/50 font-medium px-3 xl:px-4 py-2 h-9 xl:h-10 text-sm"
+          className="text-gray-700 hover:text-red-700 hover:bg-red-50/50 font-medium px-2 lg:px-3 xl:px-4 py-1.5 lg:py-2 h-8 lg:h-9 xl:h-10 text-xs lg:text-sm"
         >
           Sign Out
         </Button>
@@ -56,31 +56,31 @@ const NavigationAuth = ({
   }
 
   return (
-    <div className="flex items-center gap-3 xl:gap-4">
+    <div className="flex items-center gap-2 lg:gap-3 xl:gap-4">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button 
             variant="ghost" 
-            size="default" 
-            className="text-gray-700 hover:text-green-700 hover:bg-green-50/50 font-medium px-3 xl:px-4 py-2 h-9 xl:h-10 text-sm"
+            size="sm"
+            className="text-gray-700 hover:text-green-700 hover:bg-green-50/50 font-medium px-2 lg:px-3 xl:px-4 py-1.5 lg:py-2 h-8 lg:h-9 xl:h-10 text-xs lg:text-sm"
           >
             Sign In
-            <ChevronDown className="h-4 w-4 ml-2" />
+            <ChevronDown className="h-3 w-3 lg:h-4 lg:w-4 ml-1 lg:ml-2" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56 mt-2">
+        <DropdownMenuContent align="end" className="w-48 lg:w-56 mt-2 bg-white z-50">
           <DropdownMenuItem asChild>
-            <Link to="/buyer-auth" className="w-full cursor-pointer py-3 px-4">
+            <Link to="/buyer-auth" className="w-full cursor-pointer py-2 lg:py-3 px-3 lg:px-4 text-sm">
               Sign In as Buyer
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link to="/seller-auth" className="w-full cursor-pointer py-3 px-4">
+            <Link to="/seller-auth" className="w-full cursor-pointer py-2 lg:py-3 px-3 lg:px-4 text-sm">
               Sign In as Seller
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link to="/admin-auth" className="w-full cursor-pointer py-3 px-4">
+            <Link to="/admin-auth" className="w-full cursor-pointer py-2 lg:py-3 px-3 lg:px-4 text-sm">
               Sign In as Administrator
             </Link>
           </DropdownMenuItem>
@@ -88,8 +88,8 @@ const NavigationAuth = ({
       </DropdownMenu>
       <Link to="/auth">
         <Button 
-          size="default" 
-          className="bg-gradient-to-r from-red-600 to-green-700 hover:from-red-700 hover:to-green-800 text-white shadow-md font-medium px-4 xl:px-6 py-2 h-9 xl:h-10 text-sm"
+          size="sm"
+          className="bg-gradient-to-r from-red-600 to-green-700 hover:from-red-700 hover:to-green-800 text-white shadow-md font-medium px-3 lg:px-4 xl:px-6 py-1.5 lg:py-2 h-8 lg:h-9 xl:h-10 text-xs lg:text-sm whitespace-nowrap"
         >
           Join Now
         </Button>
