@@ -217,43 +217,46 @@ export const useAdminActions = (refetchData: () => Promise<void>) => {
         .from('profiles')
         .select('is_verified, user_type, first_name, last_name')
         .eq('id', userId)
-        .single();
+        .maybeSingle();
 
       if (fetchError) {
         console.error('Error fetching current user:', fetchError);
         throw fetchError;
       }
 
+      if (!currentUser) {
+        throw new Error('User not found');
+      }
+
       console.log('Current user status before approval:', currentUser);
 
-      // Update the user's profile to mark them as verified
-      const { data: updatedData, error: updateError } = await supabase
+      // Update the user's profile to mark them as verified - Remove .single() to avoid the error
+      const { error: updateError } = await supabase
         .from('profiles')
         .update({ 
           is_verified: true,
           verified_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         })
-        .eq('id', userId)
-        .select('*')
-        .single();
+        .eq('id', userId);
 
       if (updateError) {
         console.error('Error approving user:', updateError);
         throw updateError;
       }
 
-      console.log('Successfully updated user profile:', updatedData);
+      console.log('Successfully updated user profile for userId:', userId);
 
       // Log the approval action
       try {
+        const { data: currentAuthUser } = await supabase.auth.getUser();
         await supabase
           .from('admin_audit_logs')
           .insert({
             action: 'USER_APPROVED',
             user_id: userId,
             details: { 
-              approved_by: (await supabase.auth.getUser()).data.user?.id,
+              approved_by: currentAuthUser?.user?.id,
               timestamp: new Date().toISOString(),
               previous_status: currentUser.is_verified,
               new_status: true
