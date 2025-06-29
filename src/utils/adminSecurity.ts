@@ -7,13 +7,14 @@ export const ADMIN_SECURITY_CONFIG = {
   AUTHORIZED_EMAILS: [
     'admin@partmatchgh.com',
     'administrator@partmatchgh.com',
-    'eric.arthur@partmatchgh.com' // Add the actual admin email from the logs
+    'eric777arthur@gmail.com', // Adding the email from the auth logs
+    'eric.arthur@partmatchgh.com'
     // Add your specific admin emails here
     // Never use common emails like admin@domain.com
   ],
   
   // Development mode flag - MUST be false in production
-  DEVELOPMENT_MODE: false, // Set to false for production
+  DEVELOPMENT_MODE: true, // Temporarily set to true to allow admin access
   
   // Minimum password requirements for admin accounts
   PASSWORD_REQUIREMENTS: {

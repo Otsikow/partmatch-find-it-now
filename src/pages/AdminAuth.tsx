@@ -76,11 +76,7 @@ const AdminAuth = () => {
         const { error } = await signIn(formData.email, formData.password);
         if (error) {
           console.error('AdminAuth: Sign in error:', error);
-          toast({
-            title: "Authentication Failed",
-            description: "Invalid credentials or access denied. Please check your email and password.",
-            variant: "destructive"
-          });
+          // The AuthContext already shows the toast, so we don't need to show another one here
         } else {
           console.log('AdminAuth: Sign in successful, navigating to admin dashboard');
           toast({
@@ -102,11 +98,7 @@ const AdminAuth = () => {
         });
         if (error) {
           console.error('AdminAuth: Sign up error:', error);
-          toast({
-            title: "Registration Failed",
-            description: error.message || "Failed to create admin account. Please check your information and try again.",
-            variant: "destructive"
-          });
+          // The AuthContext already shows the toast, so we don't need to show another one here
         } else {
           toast({
             title: "Admin Account Created!",

@@ -167,6 +167,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (urlPath.includes('admin')) {
       console.log('AuthProvider: Admin signin attempt for email:', email);
       
+      // In development mode or for authorized emails, allow access
       if (!isAuthorizedAdminEmail(email)) {
         const error = new Error('Access denied. This email is not authorized for admin access.');
         toast({
@@ -194,9 +195,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.log('AuthProvider: SignIn result:', { error });
       
       if (error) {
+        // Provide more specific error messages
+        let errorMessage = error.message;
+        if (error.message.includes('Invalid login credentials')) {
+          errorMessage = 'Invalid email or password. Please check your credentials and try again.';
+        }
+        
         toast({
           title: "Sign In Error",
-          description: error.message,
+          description: errorMessage,
           variant: "destructive"
         });
         
