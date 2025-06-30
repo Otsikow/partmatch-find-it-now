@@ -1,114 +1,136 @@
 
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import PhotoUpload from "@/components/PhotoUpload";
-import LocationSelector from "@/components/LocationSelector";
-import { RequestFormData } from "./RequestFormData";
 
 interface RequestFormFieldsProps {
-  formData: RequestFormData;
+  formData: {
+    make: string;
+    model: string;
+    year: string;
+    part: string;
+    description: string;
+    location: string;
+    phone: string;
+  };
   photo: File | null;
   onInputChange: (field: string, value: string) => void;
   onPhotoChange: (file: File | null) => void;
 }
 
-const RequestFormFields = ({ formData, photo, onInputChange, onPhotoChange }: RequestFormFieldsProps) => {
+const RequestFormFields = ({ 
+  formData, 
+  photo, 
+  onInputChange, 
+  onPhotoChange 
+}: RequestFormFieldsProps) => {
   return (
-    <div className="space-y-2 sm:space-y-3 md:space-y-4 lg:space-y-5">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 md:gap-4">
-        <div>
-          <Label htmlFor="make" className="text-xs sm:text-sm md:text-base font-inter">Car Make *</Label>
-          <Input
-            id="make"
-            placeholder="e.g. Toyota"
-            value={formData.make}
-            onChange={(e) => onInputChange('make', e.target.value)}
-            required
-            className="mt-1 text-sm sm:text-base border-blue-200 focus:border-blue-400"
-          />
-        </div>
-
-        <div>
-          <Label htmlFor="model" className="text-xs sm:text-sm md:text-base font-inter">Model *</Label>
-          <Input
-            id="model"
-            placeholder="e.g. Corolla"
-            value={formData.model}
-            onChange={(e) => onInputChange('model', e.target.value)}
-            required
-            className="mt-1 text-sm sm:text-base border-blue-200 focus:border-blue-400"
-          />
+    <div className="space-y-6">
+      <div className="bg-white rounded-xl shadow-lg p-6 space-y-4">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Vehicle Information</h3>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <Label htmlFor="make">Car Make *</Label>
+            <Input
+              id="make"
+              type="text"
+              placeholder="e.g., Toyota, Honda"
+              value={formData.make}
+              onChange={(e) => onInputChange('make', e.target.value)}
+              required
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="model">Car Model *</Label>
+            <Input
+              id="model"
+              type="text"
+              placeholder="e.g., Corolla, Civic"
+              value={formData.model}
+              onChange={(e) => onInputChange('model', e.target.value)}
+              required
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="year">Year *</Label>
+            <Input
+              id="year"
+              type="number"
+              placeholder="e.g., 2020"
+              value={formData.year}
+              onChange={(e) => onInputChange('year', e.target.value)}
+              min="1990"
+              max={new Date().getFullYear() + 1}
+              required
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="part">Part Needed *</Label>
+            <Input
+              id="part"
+              type="text"
+              placeholder="e.g., Front bumper, Headlight"
+              value={formData.part}
+              onChange={(e) => onInputChange('part', e.target.value)}
+              required
+            />
+          </div>
         </div>
       </div>
 
-      <div>
-        <Label htmlFor="year" className="text-xs sm:text-sm md:text-base font-inter">Year *</Label>
-        <Input
-          id="year"
-          type="number"
-          placeholder="e.g. 2015"
-          value={formData.year}
-          onChange={(e) => onInputChange('year', e.target.value)}
-          required
-          className="mt-1 text-sm sm:text-base border-blue-200 focus:border-blue-400"
+      <div className="bg-white rounded-xl shadow-lg p-6 space-y-4">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Additional Details</h3>
+        
+        <div>
+          <Label htmlFor="description">Description</Label>
+          <Textarea
+            id="description"
+            placeholder="Describe the part condition, specific requirements, etc."
+            value={formData.description}
+            onChange={(e) => onInputChange('description', e.target.value)}
+            rows={3}
+          />
+        </div>
+
+        <PhotoUpload
+          onPhotoChange={onPhotoChange}
+          currentPhoto={photo}
+          maxFreeImages={1}
         />
       </div>
 
-      <div>
-        <Label htmlFor="part" className="text-xs sm:text-sm md:text-base font-inter">Part Needed *</Label>
-        <Input
-          id="part"
-          placeholder="e.g. Alternator, Brake Pads"
-          value={formData.part}
-          onChange={(e) => onInputChange('part', e.target.value)}
-          required
-          className="mt-1 text-sm sm:text-base border-blue-200 focus:border-blue-400"
-        />
-      </div>
-
-      <div>
-        <Label htmlFor="description" className="text-xs sm:text-sm md:text-base font-inter">Additional Details</Label>
-        <Textarea
-          id="description"
-          placeholder="Any specific details about the part..."
-          value={formData.description}
-          onChange={(e) => onInputChange('description', e.target.value)}
-          rows={3}
-          className="mt-1 resize-none text-sm sm:text-base border-blue-200 focus:border-blue-400"
-        />
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 md:gap-4">
-        <div>
-          <LocationSelector
-            value={formData.location}
-            onChange={(value) => onInputChange('location', value)}
-            required
-          />
-        </div>
-
-        <div>
-          <Label htmlFor="phone" className="text-xs sm:text-sm md:text-base font-inter">Phone/WhatsApp *</Label>
-          <Input
-            id="phone"
-            type="tel"
-            placeholder="e.g. +233 20 123 4567"
-            value={formData.phone}
-            onChange={(e) => onInputChange('phone', e.target.value)}
-            required
-            className="mt-1 text-sm sm:text-base border-blue-200 focus:border-blue-400"
-          />
-        </div>
-      </div>
-
-      <div>
-        <Label className="text-xs sm:text-sm md:text-base font-inter">Upload Photo (Optional)</Label>
-        <div className="mt-1">
-          <PhotoUpload
-            currentPhoto={photo}
-            onPhotoChange={onPhotoChange}
-          />
+      <div className="bg-white rounded-xl shadow-lg p-6 space-y-4">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Contact Information</h3>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <Label htmlFor="location">Location *</Label>
+            <Input
+              id="location"
+              type="text"
+              placeholder="e.g., Accra, Kumasi"
+              value={formData.location}
+              onChange={(e) => onInputChange('location', e.target.value)}
+              required
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="phone">Phone Number *</Label>
+            <Input
+              id="phone"
+              type="tel"
+              placeholder="e.g., +233 XX XXX XXXX"
+              value={formData.phone}
+              onChange={(e) => onInputChange('phone', e.target.value)}
+              required
+            />
+          </div>
         </div>
       </div>
     </div>
