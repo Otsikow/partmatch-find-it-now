@@ -22,7 +22,7 @@ const SearchPartsWithMap = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100">
       <PageHeader 
         title="Browse Parts with Map"
-        subtitle="Find parts near you with our interactive map"
+        subtitle="Find parts near you with location directions"
         backTo="/"
       />
       
@@ -34,10 +34,7 @@ const SearchPartsWithMap = () => {
           onFiltersChange={setFilters}
         />
         
-        <div className="grid lg:grid-cols-2 gap-6 mt-6">
-          <div className="bg-gray-200 rounded-lg h-96 flex items-center justify-center">
-            <p className="text-gray-600">Map integration coming soon...</p>
-          </div>
+        <div className="mt-6">
           <CarPartsList 
             parts={parts} 
             loading={loading} 

@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, Phone, Calendar } from "lucide-react";
+import { MapPin, Phone, Calendar, Navigation } from "lucide-react";
 import ChatButton from "@/components/chat/ChatButton";
 import { format } from 'date-fns';
 
@@ -52,35 +52,52 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
     ? `${part.supplier.first_name || ''} ${part.supplier.last_name || ''}`.trim() || 'Seller'
     : 'Seller';
 
+  const openDirections = () => {
+    if (part.address) {
+      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(part.address)}`;
+      window.open(mapsUrl, '_blank');
+    }
+  };
+
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
-      {part.images && part.images.length > 0 && (
-        <div className="aspect-video w-full overflow-hidden">
+      {/* Image Section */}
+      <div className="aspect-video w-full overflow-hidden bg-gray-100">
+        {part.images && part.images.length > 0 ? (
           <img 
             src={part.images[0]} 
             alt={part.title}
             className="w-full h-full object-cover"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+              e.currentTarget.nextElementSibling?.classList.remove('hidden');
+            }}
           />
+        ) : null}
+        <div className={`${part.images && part.images.length > 0 ? 'hidden' : ''} w-full h-full flex items-center justify-center bg-gray-100 text-gray-500`}>
+          <div className="text-center p-4">
+            <div className="text-3xl mb-2">📦</div>
+            <p className="text-sm font-medium">Image not available yet</p>
+          </div>
         </div>
-      )}
+      </div>
       
       <CardContent className="p-4">
         <div className="space-y-3">
           <div className="flex justify-between items-start">
             <div className="flex-1">
-              <h3 className="font-semibold text-lg line-clamp-2">{part.title}</h3>
-              <p className="text-gray-600 text-sm">
-                {part.make} {part.model} ({part.year}) - {part.part_type}
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="font-bold text-lg text-green-600">
+              <h3 className="font-bold text-xl line-clamp-2 mb-1">{part.title}</h3>
+              <p className="text-green-600 font-bold text-xl mb-2">
                 {formatPrice(part.price, part.currency)}
               </p>
-              <Badge className={getConditionColor(part.condition)}>
-                {part.condition}
-              </Badge>
             </div>
+            <Badge className={getConditionColor(part.condition)}>
+              {part.condition}
+            </Badge>
+          </div>
+
+          <div className="text-gray-600 text-sm">
+            <p className="font-medium">{part.make} {part.model} ({part.year}) - {part.part_type}</p>
           </div>
 
           {part.description && (
@@ -115,10 +132,10 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
                 size="sm"
                 variant="outline"
               />
-              {part.supplier?.phone && (
-                <Button size="sm" variant="default">
-                  <Phone className="h-4 w-4 mr-1" />
-                  Call
+              {part.address && (
+                <Button size="sm" variant="default" onClick={openDirections}>
+                  <Navigation className="h-4 w-4 mr-1" />
+                  Get Directions
                 </Button>
               )}
             </div>
