@@ -34,16 +34,22 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
     blocked: u.is_blocked 
   })));
 
+  // Fix the calculation logic to properly count verified users
   const stats = {
     total: users.length,
     admins: users.filter(u => u.user_type === 'admin').length,
     sellers: users.filter(u => u.user_type === 'supplier').length,
     buyers: users.filter(u => u.user_type === 'owner').length,
-    verified: users.filter(u => u.is_verified && !u.is_blocked).length,
-    unverified: users.filter(u => !u.is_verified && !u.is_blocked).length,
+    // Count ALL verified users (not just non-blocked ones)
+    verified: users.filter(u => u.is_verified).length,
+    // Count ALL unverified users (not just non-blocked ones) 
+    unverified: users.filter(u => !u.is_verified).length,
     suspended: users.filter(u => u.is_blocked).length,
-    verifiedSellers: users.filter(u => u.user_type === 'supplier' && u.is_verified && !u.is_blocked).length,
-    unverifiedSellers: users.filter(u => u.user_type === 'supplier' && !u.is_verified && !u.is_blocked).length,
+    // For sellers specifically
+    verifiedSellers: users.filter(u => u.user_type === 'supplier' && u.is_verified).length,
+    unverifiedSellers: users.filter(u => u.user_type === 'supplier' && !u.is_verified).length,
+    // For buyers specifically (they auto-verify)
+    verifiedBuyers: users.filter(u => u.user_type === 'owner' && u.is_verified).length,
   };
 
   console.log('Calculated stats:', stats);

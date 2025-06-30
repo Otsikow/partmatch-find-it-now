@@ -1,7 +1,9 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
-import { Building2, Users } from "lucide-react";
+import { Building2, Users, ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 import AdminStats from "@/components/admin/AdminStats";
 import RequestCard from "@/components/admin/RequestCard";
 import OfferCard from "@/components/admin/OfferCard";
@@ -31,6 +33,7 @@ interface UserProfile {
 }
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
   const { requests, offers, verifications, users, loading, refetchData } = useAdminData();
   const {
     handleMatchSupplier,
@@ -65,6 +68,10 @@ const AdminDashboard = () => {
     setActiveTab("verifications");
   };
 
+  const handleGoBack = () => {
+    navigate('/');
+  };
+
   // Reduced auto-refresh frequency to prevent shaking - only refresh every 30 seconds
   useEffect(() => {
     if (refreshIntervalRef.current) {
@@ -96,7 +103,28 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-100 font-inter">
-      <AdminHeader onNavigateToVerifications={handleNavigateToVerifications} />
+      {/* Add back arrow to header */}
+      <div className="p-4 sm:p-6 flex items-center gap-3 bg-gradient-to-r from-white/90 via-purple-50/80 to-white/90 backdrop-blur-lg shadow-lg border-b">
+        <Button variant="ghost" size="icon" onClick={handleGoBack} className="h-8 w-8 sm:h-10 sm:w-10 hover:bg-white/50">
+          <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
+        </Button>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <img 
+            src="/lovable-uploads/23312658-5ff6-4d89-a7cb-c0fbf631cd1c.png" 
+            alt="PartMatch Logo" 
+            className="h-6 w-auto sm:h-8"
+          />
+          <div>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-purple-700 to-indigo-700 bg-clip-text text-transparent">
+              Admin Dashboard
+            </h1>
+            <p className="text-sm sm:text-base text-gray-600 font-crimson">
+              Manage your marketplace with ease
+            </p>
+          </div>
+        </div>
+        <AdminHeader onNavigateToVerifications={handleNavigateToVerifications} />
+      </div>
 
       <main className="container mx-auto px-2 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8 max-w-7xl">
         <div className="mb-4 sm:mb-6 lg:mb-8">

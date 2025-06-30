@@ -49,12 +49,12 @@ const UserCategoryTabs = ({
   const sellerUsers = users.filter(user => user.user_type === 'supplier');
   const buyerUsers = users.filter(user => user.user_type === 'owner');
 
-  // Further categorize sellers by verification status (buyers are always considered verified)
-  const verifiedSellers = sellerUsers.filter(user => user.is_verified && !user.is_blocked);
-  const unverifiedSellers = sellerUsers.filter(user => !user.is_verified && !user.is_blocked);
+  // Fixed categorization - don't exclude blocked users from verified count
+  const verifiedSellers = sellerUsers.filter(user => user.is_verified);
+  const unverifiedSellers = sellerUsers.filter(user => !user.is_verified);
   const suspendedSellers = sellerUsers.filter(user => user.is_blocked);
 
-  // For buyers, since they're auto-verified, we categorize differently
+  // For buyers - show all active (non-blocked) and suspended separately
   const activeBuyers = buyerUsers.filter(user => !user.is_blocked);
   const suspendedBuyers = buyerUsers.filter(user => user.is_blocked);
 
