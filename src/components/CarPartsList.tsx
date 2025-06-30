@@ -22,6 +22,8 @@ interface CarPart {
     last_name?: string;
     phone?: string;
     is_verified?: boolean;
+    rating?: number;
+    total_ratings?: number;
   };
 }
 
@@ -34,11 +36,11 @@ interface CarPartsListProps {
 const CarPartsList = ({ parts, loading, error }: CarPartsListProps) => {
   if (loading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
         {[...Array(8)].map((_, i) => (
           <div key={i} className="animate-pulse">
             <div className="bg-gray-200 aspect-video rounded-t-lg"></div>
-            <div className="bg-white p-4 rounded-b-lg border space-y-2">
+            <div className="bg-white p-3 sm:p-4 rounded-b-lg border space-y-2">
               <div className="h-4 bg-gray-200 rounded"></div>
               <div className="h-3 bg-gray-200 rounded w-3/4"></div>
               <div className="h-3 bg-gray-200 rounded w-1/2"></div>
@@ -52,7 +54,7 @@ const CarPartsList = ({ parts, loading, error }: CarPartsListProps) => {
 
   if (error) {
     return (
-      <div className="text-center py-8 sm:py-12">
+      <div className="text-center py-8 sm:py-12 px-4">
         <div className="text-red-500 text-base sm:text-lg mb-2">Error loading parts</div>
         <div className="text-red-400 text-sm">{error}</div>
       </div>
@@ -71,12 +73,12 @@ const CarPartsList = ({ parts, loading, error }: CarPartsListProps) => {
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between px-1">
-        <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
+        <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900">
           {parts.length} part{parts.length !== 1 ? 's' : ''} found
         </h2>
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
         {parts.map((part) => (
           <CarPartCardWithChat key={part.id} part={part} />
         ))}

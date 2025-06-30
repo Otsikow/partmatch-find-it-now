@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -66,10 +67,10 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
 
   return (
     <>
-      <Card className="w-full hover:shadow-lg transition-all duration-300 cursor-pointer group">
+      <Card className="w-full max-w-sm mx-auto hover:shadow-lg transition-all duration-300 cursor-pointer group bg-white">
         {/* Image Section */}
         <div 
-          className="relative aspect-video w-full overflow-hidden bg-gray-100"
+          className="relative aspect-video w-full overflow-hidden bg-gray-100 rounded-t-lg"
           onClick={() => setIsExpanded(true)}
         >
           {part.images && part.images.length > 0 ? (
@@ -84,22 +85,22 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
             />
           ) : null}
           <div className={`${part.images && part.images.length > 0 ? 'hidden' : ''} w-full h-full flex items-center justify-center bg-gray-100 text-gray-500`}>
-            <div className="text-center p-4">
-              <div className="text-2xl sm:text-3xl mb-2">📦</div>
-              <p className="text-xs sm:text-sm font-medium">Image not available yet</p>
+            <div className="text-center p-3 sm:p-4">
+              <div className="text-xl sm:text-2xl mb-1 sm:mb-2">📦</div>
+              <p className="text-xs font-medium">Image not available yet</p>
             </div>
           </div>
           
           {/* Condition Badge */}
           <div className="absolute top-2 left-2">
-            <Badge className={`${getConditionColor(part.condition)} text-xs sm:text-sm font-semibold`}>
+            <Badge className={`${getConditionColor(part.condition)} text-xs font-semibold px-2 py-1`}>
               {part.condition}
             </Badge>
           </div>
           
           {/* Expand Button */}
           <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            <Button size="sm" variant="secondary" className="bg-white/80 hover:bg-white h-8 w-8 p-0">
+            <Button size="sm" variant="secondary" className="bg-white/90 hover:bg-white h-7 w-7 p-0">
               <Expand className="h-3 w-3" />
             </Button>
           </div>
@@ -109,10 +110,10 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
           <div className="space-y-2 sm:space-y-3">
             {/* Title and Price */}
             <div className="space-y-1">
-              <h3 className="font-bold text-sm sm:text-lg lg:text-xl line-clamp-2 leading-tight">
+              <h3 className="font-bold text-sm sm:text-base lg:text-lg line-clamp-2 leading-tight">
                 {part.title}
               </h3>
-              <p className="text-green-600 font-bold text-lg sm:text-xl lg:text-2xl">
+              <p className="text-green-600 font-bold text-base sm:text-lg lg:text-xl">
                 {formatPrice(part.price, part.currency)}
               </p>
             </div>
@@ -142,7 +143,7 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
             )}
 
             {/* Location and Date */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 text-xs text-gray-500">
+            <div className="flex flex-col gap-1 text-xs text-gray-500">
               {part.address && (
                 <div className="flex items-center gap-1">
                   <MapPin className="h-3 w-3 flex-shrink-0" />
@@ -158,28 +159,35 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
         </CardContent>
 
         {/* Action Buttons */}
-        <div className="p-3 sm:p-4 pt-0 border-t" onClick={(e) => e.stopPropagation()}>
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
-            <div className="flex items-center gap-2">
-              <span className="text-xs sm:text-sm font-medium truncate">{supplierName}</span>
-              {part.supplier?.is_verified && (
-                <Badge variant="secondary" className="text-xs">Verified</Badge>
-              )}
+        <div className="p-3 sm:p-4 pt-0 border-t bg-gray-50 rounded-b-lg" onClick={(e) => e.stopPropagation()}>
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="text-xs sm:text-sm font-medium truncate">{supplierName}</span>
+                {part.supplier?.is_verified && (
+                  <Badge variant="secondary" className="text-xs flex-shrink-0">Verified</Badge>
+                )}
+              </div>
             </div>
             
-            <div className="flex gap-2 w-full sm:w-auto">
+            <div className="flex gap-2">
               <ChatButton
                 sellerId={part.supplier_id}
                 partId={part.id}
                 size="sm"
                 variant="outline"
-                className="flex-1 sm:flex-none text-xs sm:text-sm"
+                className="flex-1 text-xs sm:text-sm h-8 sm:h-9"
               />
               {part.address && (
-                <Button size="sm" variant="default" onClick={openDirections} className="flex-1 sm:flex-none text-xs sm:text-sm">
-                  <Navigation className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-                  <span className="hidden sm:inline">Get Directions</span>
-                  <span className="sm:hidden">Directions</span>
+                <Button 
+                  size="sm" 
+                  variant="default" 
+                  onClick={openDirections} 
+                  className="flex-1 text-xs sm:text-sm h-8 sm:h-9"
+                >
+                  <Navigation className="h-3 w-3 mr-1" />
+                  <span className="hidden xs:inline">Get Directions</span>
+                  <span className="xs:hidden">Directions</span>
                 </Button>
               )}
             </div>
@@ -191,7 +199,7 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
       <Dialog open={isExpanded} onOpenChange={setIsExpanded}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-xl sm:text-2xl font-bold pr-8">{part.title}</DialogTitle>
+            <DialogTitle className="text-lg sm:text-xl lg:text-2xl font-bold pr-8">{part.title}</DialogTitle>
           </DialogHeader>
           
           <div className="space-y-4 sm:space-y-6">
@@ -253,7 +261,7 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
               <div className="space-y-3">
                 <div>
                   <h4 className="font-semibold text-gray-900 mb-2">Price & Condition</h4>
-                  <p className="text-2xl sm:text-3xl font-bold text-green-600 mb-2">
+                  <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-green-600 mb-2">
                     {formatPrice(part.price, part.currency)}
                   </p>
                   <Badge className={`${getConditionColor(part.condition)} text-sm`}>
