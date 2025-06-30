@@ -41,6 +41,7 @@ export const useChatData = (chatId: string, userId: string | undefined) => {
 
   const fetchMessages = async () => {
     try {
+      console.log('📥 Fetching messages for chat:', chatId);
       const { data, error } = await supabase
         .from('messages')
         .select('*')
@@ -48,6 +49,7 @@ export const useChatData = (chatId: string, userId: string | undefined) => {
         .order('created_at', { ascending: true });
 
       if (error) throw error;
+      console.log('✅ Messages fetched:', data?.length || 0);
       setMessages(data || []);
     } catch (error) {
       console.error('Error fetching messages:', error);
@@ -61,6 +63,7 @@ export const useChatData = (chatId: string, userId: string | undefined) => {
 
   const fetchChatInfo = async () => {
     try {
+      console.log('📥 Fetching chat info for:', chatId);
       const { data: chatData, error: chatError } = await supabase
         .from('chats')
         .select('*')
@@ -68,10 +71,13 @@ export const useChatData = (chatId: string, userId: string | undefined) => {
         .single();
 
       if (chatError) throw chatError;
+      console.log('✅ Chat info fetched:', chatData);
       setChatInfo(chatData);
 
       // Fetch other user info
       const otherUserId = chatData.buyer_id === userId ? chatData.seller_id : chatData.buyer_id;
+      console.log('📥 Fetching other user info for:', otherUserId);
+      
       const { data: userData, error: userError } = await supabase
         .from('profiles')
         .select('*')
@@ -79,6 +85,7 @@ export const useChatData = (chatId: string, userId: string | undefined) => {
         .single();
 
       if (userError) throw userError;
+      console.log('✅ Other user info fetched:', userData);
       setOtherUser(userData);
     } catch (error) {
       console.error('Error fetching chat info:', error);
@@ -94,25 +101,33 @@ export const useChatData = (chatId: string, userId: string | undefined) => {
     if (!userId) return;
 
     try {
+      console.log('📖 Marking messages as read for chat:', chatId);
       await supabase.rpc('mark_messages_as_read', {
         chat_id_param: chatId,
         user_id_param: userId
       });
+      console.log('✅ Messages marked as read');
     } catch (error) {
       console.error('Error marking messages as read:', error);
     }
   };
 
   const addMessage = (newMessage: Message) => {
+    console.log('➕ Adding new message to local state:', newMessage);
     setMessages(prev => {
       const exists = prev.some(msg => msg.id === newMessage.id);
-      if (exists) return prev;
+      if (exists) {
+        console.log('⚠️ Message already exists, skipping');
+        return prev;
+      }
+      console.log('✅ Message added to local state');
       return [...prev, newMessage];
     });
   };
 
   useEffect(() => {
     if (chatId && userId) {
+      console.log('🚀 Initializing chat data for:', { chatId, userId });
       fetchMessages();
       fetchChatInfo();
       markMessagesAsRead();

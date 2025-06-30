@@ -29,11 +29,12 @@ export const useChatRealtime = ({ chatId, userId, onNewMessage, onMarkAsRead }: 
 
     // Clean up existing channel
     if (channelRef.current) {
+      console.log('Cleaning up existing channel');
       supabase.removeChannel(channelRef.current);
     }
 
     // Create new channel with unique name
-    const channelName = `chat-messages-${chatId}`;
+    const channelName = `messages-${chatId}-${Date.now()}`;
     const channel = supabase
       .channel(channelName)
       .on(
@@ -45,42 +46,33 @@ export const useChatRealtime = ({ chatId, userId, onNewMessage, onMarkAsRead }: 
           filter: `chat_id=eq.${chatId}`
         },
         (payload) => {
-          console.log('New message received:', payload);
+          console.log('🔥 New message received via real-time:', payload);
           const newMessage = payload.new as Message;
           
+          // Add the message to local state
           onNewMessage(newMessage);
           
           // Mark as read if not sent by current user
           if (newMessage.sender_id !== userId) {
-            setTimeout(() => onMarkAsRead(), 100);
+            setTimeout(() => onMarkAsRead(), 500);
           }
         }
       )
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'user_chat_status',
-          filter: `chat_id=eq.${chatId}`
-        },
-        (payload) => {
-          console.log('Typing status updated:', payload.new);
-        }
-      )
       .subscribe((status) => {
-        console.log('Channel subscription status:', status);
+        console.log('📡 Real-time subscription status:', status);
         if (status === 'SUBSCRIBED') {
-          console.log('Successfully subscribed to real-time updates');
+          console.log('✅ Successfully subscribed to real-time updates for chat:', chatId);
         } else if (status === 'CHANNEL_ERROR') {
-          console.error('Channel subscription error');
+          console.error('❌ Channel subscription error for chat:', chatId);
+        } else if (status === 'TIMED_OUT') {
+          console.error('⏰ Channel subscription timed out for chat:', chatId);
         }
       });
 
     channelRef.current = channel;
 
     return () => {
-      console.log('Cleaning up real-time subscription');
+      console.log('🧹 Cleaning up real-time subscription');
       if (channelRef.current) {
         supabase.removeChannel(channelRef.current);
         channelRef.current = null;
@@ -92,6 +84,7 @@ export const useChatRealtime = ({ chatId, userId, onNewMessage, onMarkAsRead }: 
   useEffect(() => {
     return () => {
       if (channelRef.current) {
+        console.log('🧹 Component unmounting, cleaning up channel');
         supabase.removeChannel(channelRef.current);
       }
     };
