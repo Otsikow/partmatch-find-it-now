@@ -20,6 +20,19 @@ const CarPartCard = ({ part, onContact }: CarPartCardProps) => {
     });
   };
 
+  const getConditionColor = (condition: string) => {
+    switch (condition.toLowerCase()) {
+      case 'new':
+        return 'bg-green-100 text-green-800 border-green-200';
+      case 'used':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'refurbished':
+        return 'bg-orange-100 text-orange-800 border-orange-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
+  };
+
   return (
     <Card className="w-full max-w-sm bg-white shadow-lg hover:shadow-xl transition-all duration-300 border-0 overflow-hidden">
       {/* Image Section */}
@@ -36,13 +49,7 @@ const CarPartCard = ({ part, onContact }: CarPartCardProps) => {
           <div className="absolute top-2 right-2">
             <Badge 
               variant="secondary" 
-              className={`${
-                part.condition === 'new' 
-                  ? 'bg-green-100 text-green-800 border-green-200' 
-                  : part.condition === 'used' 
-                  ? 'bg-yellow-100 text-yellow-800 border-yellow-200'
-                  : 'bg-orange-100 text-orange-800 border-orange-200'
-              } font-semibold`}
+              className={`${getConditionColor(part.condition)} font-semibold`}
             >
               {part.condition}
             </Badge>
@@ -79,7 +86,7 @@ const CarPartCard = ({ part, onContact }: CarPartCardProps) => {
           <div className="flex items-center gap-2 text-sm text-gray-500">
             <User className="h-4 w-4" />
             <span>Seller</span>
-            <VerifiedSellerBadge isVerified={part.supplier?.is_verified || false} size="sm" />
+            <VerifiedSellerBadge isVerified={false} size="sm" />
           </div>
 
           <div className="flex items-center gap-2 text-sm text-gray-500">
