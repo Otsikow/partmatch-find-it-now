@@ -36,7 +36,9 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
           </div>
           
           <div className="flex items-center gap-3">
-            <AdminNotificationBell onNavigateToVerifications={onNavigateToVerifications} />
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-1">
+              <AdminNotificationBell onNavigateToVerifications={onNavigateToVerifications} />
+            </div>
             <Button 
               onClick={handleSignOut}
               variant="ghost" 

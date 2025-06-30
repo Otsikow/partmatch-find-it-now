@@ -65,13 +65,13 @@ const AdminNotificationBell = ({ onNavigateToVerifications }: AdminNotificationB
         <Button 
           variant="ghost" 
           size="icon" 
-          className="relative hover:bg-purple-50 transition-colors"
+          className="relative hover:bg-white/20 transition-colors text-white border border-white/20"
         >
-          <Bell className="h-5 w-5 text-purple-600" />
+          <Bell className="h-5 w-5" />
           {unreadCount > 0 && (
             <Badge 
               variant="destructive" 
-              className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs animate-pulse"
+              className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs animate-pulse bg-red-500 border-red-500"
             >
               {unreadCount > 9 ? '9+' : unreadCount}
             </Badge>

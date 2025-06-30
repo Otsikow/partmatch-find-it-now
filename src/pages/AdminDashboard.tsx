@@ -1,3 +1,4 @@
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { Building2, Users } from "lucide-react";
@@ -11,7 +12,7 @@ import UserCategoryTabs from "@/components/admin/UserCategoryTabs";
 import UserManagementStats from "@/components/admin/UserManagementStats";
 import { useAdminData } from "@/hooks/useAdminData";
 import { useAdminActions } from "@/hooks/useAdminActions";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface UserProfile {
@@ -47,6 +48,7 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("requests");
   const [activeUserTab, setActiveUserTab] = useState("sellers");
   const isMobile = useIsMobile();
+  const refreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleViewUserDetails = (user: UserProfile) => {
     setSelectedUser(user);
@@ -63,14 +65,22 @@ const AdminDashboard = () => {
     setActiveTab("verifications");
   };
 
-  // Auto-refresh data every 10 seconds to ensure real-time updates
+  // Reduced auto-refresh frequency to prevent shaking - only refresh every 30 seconds
   useEffect(() => {
-    const interval = setInterval(() => {
+    if (refreshIntervalRef.current) {
+      clearInterval(refreshIntervalRef.current);
+    }
+
+    refreshIntervalRef.current = setInterval(() => {
       console.log('Auto-refreshing admin data...');
       refetchData();
-    }, 10000);
+    }, 30000); // Changed from 10 seconds to 30 seconds
 
-    return () => clearInterval(interval);
+    return () => {
+      if (refreshIntervalRef.current) {
+        clearInterval(refreshIntervalRef.current);
+      }
+    };
   }, [refetchData]);
 
   if (loading) {
