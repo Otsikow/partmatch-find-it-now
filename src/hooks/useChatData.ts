@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -39,7 +39,7 @@ export const useChatData = (chatId: string, userId: string | undefined) => {
   const [chatInfo, setChatInfo] = useState<Chat | null>(null);
   const [otherUser, setOtherUser] = useState<ChatUser | null>(null);
 
-  const fetchMessages = async () => {
+  const fetchMessages = useCallback(async () => {
     try {
       console.log('📥 Fetching messages for chat:', chatId);
       const { data, error } = await supabase
@@ -59,9 +59,9 @@ export const useChatData = (chatId: string, userId: string | undefined) => {
         variant: "destructive"
       });
     }
-  };
+  }, [chatId, toast]);
 
-  const fetchChatInfo = async () => {
+  const fetchChatInfo = useCallback(async () => {
     try {
       console.log('📥 Fetching chat info for:', chatId);
       const { data: chatData, error: chatError } = await supabase
@@ -95,9 +95,9 @@ export const useChatData = (chatId: string, userId: string | undefined) => {
         variant: "destructive"
       });
     }
-  };
+  }, [chatId, userId, toast]);
 
-  const markMessagesAsRead = async () => {
+  const markMessagesAsRead = useCallback(async () => {
     if (!userId) return;
 
     try {
@@ -110,9 +110,10 @@ export const useChatData = (chatId: string, userId: string | undefined) => {
     } catch (error) {
       console.error('Error marking messages as read:', error);
     }
-  };
+  }, [chatId, userId]);
 
-  const addMessage = (newMessage: Message) => {
+  // Stable callback for adding messages (won't cause re-subscriptions)
+  const addMessage = useCallback((newMessage: Message) => {
     console.log('➕ Adding new message to local state:', newMessage);
     setMessages(prev => {
       // Check if message already exists by ID
@@ -124,7 +125,7 @@ export const useChatData = (chatId: string, userId: string | undefined) => {
       console.log('✅ Message added to local state');
       return [...prev, newMessage];
     });
-  };
+  }, []);
 
   useEffect(() => {
     if (chatId && userId) {
@@ -133,7 +134,7 @@ export const useChatData = (chatId: string, userId: string | undefined) => {
       fetchChatInfo();
       markMessagesAsRead();
     }
-  }, [chatId, userId]);
+  }, [chatId, userId, fetchMessages, fetchChatInfo, markMessagesAsRead]);
 
   return {
     messages,

@@ -15,7 +15,6 @@ interface ChatInterfaceProps {
 
 const ChatInterface = ({ chatId, onBack }: ChatInterfaceProps) => {
   const { user } = useAuth();
-  const [isTyping] = useState(false);
   
   const {
     messages,
@@ -25,6 +24,7 @@ const ChatInterface = ({ chatId, onBack }: ChatInterfaceProps) => {
     markMessagesAsRead
   } = useChatData(chatId, user?.id);
 
+  // Set up real-time subscription with stable callbacks
   useChatRealtime({
     chatId,
     userId: user?.id,
