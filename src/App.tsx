@@ -47,6 +47,7 @@ const App = () => (
             <Route path="/request-part" element={<RequestPart />} />
             <Route path="/search-parts" element={<SearchParts />} />
             <Route path="/search-parts-with-map" element={<SearchPartsWithMap />} />
+            <Route path="/search-map" element={<SearchPartsWithMap />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/services" element={<Services />} />
