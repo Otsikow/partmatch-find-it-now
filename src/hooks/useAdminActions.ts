@@ -1,8 +1,7 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 
-export const useAdminActions = (refetchData: () => Promise<void>) => {
+export const useAdminActions = (refetchData: () => void) => {
   const handleMatchSupplier = async (requestId: string) => {
     try {
       console.log('Accepting offer for request:', requestId);
@@ -222,56 +221,56 @@ export const useAdminActions = (refetchData: () => Promise<void>) => {
   const handleApproveUser = async (userId: string) => {
     try {
       console.log('Starting user approval process for:', userId);
-
-      // 1. Fetch the user by unique id
+      
+      // First, get current user data to log the change
       const { data: currentUser, error: fetchError } = await supabase
         .from('profiles')
-        .select('is_verified, user_type, first_name, last_name')
+        .select('*')
         .eq('id', userId)
-        .maybeSingle(); // <- safer than .single()
-
+        .single();
+      
       if (fetchError) {
-        console.error('Error fetching user:', fetchError);
+        console.error('Error fetching current user:', fetchError);
         throw fetchError;
       }
       
-      if (!currentUser) {
-        throw new Error('User not found');
-      }
+      console.log('Current user status before approval:', {
+        is_verified: currentUser.is_verified,
+        user_type: currentUser.user_type,
+        first_name: currentUser.first_name,
+        last_name: currentUser.last_name
+      });
 
-      console.log('Current user status before approval:', currentUser);
-
-      // 2. Update the user profile to mark as verified
+      // Update the user profile to mark as verified
       const { error: updateError } = await supabase
         .from('profiles')
         .update({ 
           is_verified: true,
-          verified_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
+          verified_at: new Date().toISOString()
         })
         .eq('id', userId);
 
       if (updateError) {
-        console.error('Error approving user:', updateError);
+        console.error('Error updating user profile:', updateError);
         throw updateError;
       }
 
       console.log('Successfully updated user profile for userId:', userId);
 
-      // 3. Force immediate refresh of data
+      toast({
+        title: "Success",
+        description: "User has been approved successfully.",
+      });
+
+      // Force a complete data refresh
       console.log('Refreshing data after user approval...');
       await refetchData();
       
-      // 4. Success feedback
-      toast({
-        title: "User Approved!",
-        description: `${currentUser.first_name} ${currentUser.last_name} has been approved and verified.`,
-      });
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error approving user:', error);
       toast({
         title: "Error",
-        description: error.message || "Failed to approve user. Please try again.",
+        description: "Failed to approve user. Please try again.",
         variant: "destructive"
       });
     }

@@ -24,6 +24,9 @@ interface UserManagementStatsProps {
 }
 
 const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStatsProps) => {
+  console.log('UserManagementStats received users:', users.length);
+  console.log('Users breakdown:', users.map(u => ({ id: u.id, type: u.user_type, verified: u.is_verified, blocked: u.is_blocked })));
+
   const stats = {
     total: users.length,
     admins: users.filter(u => u.user_type === 'admin').length,
@@ -35,6 +38,8 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
     verifiedSellers: users.filter(u => u.user_type === 'supplier' && u.is_verified && !u.is_blocked).length,
     unverifiedSellers: users.filter(u => u.user_type === 'supplier' && !u.is_verified && !u.is_blocked).length,
   };
+
+  console.log('Calculated stats:', stats);
 
   const StatCard = ({ 
     title, 

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
@@ -138,11 +139,16 @@ export const useAdminData = () => {
             user_type: user.user_type as 'owner' | 'supplier' | 'admin'
           };
           
-          console.log(`User ${user.id}: is_verified=${user.is_verified}, is_blocked=${user.is_blocked}`);
+          console.log(`User ${user.id}: type=${user.user_type}, is_verified=${user.is_verified}, is_blocked=${user.is_blocked}`);
           return transformedUser;
         });
         
         console.log('Setting users state with transformed data:', transformedUsers.length);
+        console.log('Users by type:', {
+          suppliers: transformedUsers.filter(u => u.user_type === 'supplier').length,
+          owners: transformedUsers.filter(u => u.user_type === 'owner').length,
+          admins: transformedUsers.filter(u => u.user_type === 'admin').length
+        });
         
         // Force complete state refresh
         setUsers(transformedUsers);
