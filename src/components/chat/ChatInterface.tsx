@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -59,6 +60,7 @@ const ChatInterface = ({ chatId, onBack }: ChatInterfaceProps) => {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout>();
+  const channelRef = useRef<any>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -145,10 +147,6 @@ const ChatInterface = ({ chatId, onBack }: ChatInterfaceProps) => {
       if (error) throw error;
 
       setNewMessage('');
-      toast({
-        title: "Success",
-        description: "Message sent",
-      });
     } catch (error) {
       console.error('Error sending message:', error);
       toast({
@@ -215,10 +213,19 @@ const ChatInterface = ({ chatId, onBack }: ChatInterfaceProps) => {
 
   // Set up real-time subscriptions
   useEffect(() => {
-    if (!chatId) return;
+    if (!chatId || !user?.id) return;
 
-    const messagesChannel = supabase
-      .channel(`chat-${chatId}`)
+    console.log('Setting up real-time subscription for chat:', chatId);
+
+    // Clean up existing channel
+    if (channelRef.current) {
+      supabase.removeChannel(channelRef.current);
+    }
+
+    // Create new channel with unique name
+    const channelName = `chat-messages-${chatId}`;
+    const channel = supabase
+      .channel(channelName)
       .on(
         'postgres_changes',
         {
@@ -228,12 +235,20 @@ const ChatInterface = ({ chatId, onBack }: ChatInterfaceProps) => {
           filter: `chat_id=eq.${chatId}`
         },
         (payload) => {
+          console.log('New message received:', payload);
           const newMessage = payload.new as Message;
-          setMessages(prev => [...prev, newMessage]);
+          
+          setMessages(prev => {
+            // Check if message already exists to prevent duplicates
+            const exists = prev.some(msg => msg.id === newMessage.id);
+            if (exists) return prev;
+            
+            return [...prev, newMessage];
+          });
           
           // Mark as read if not sent by current user
-          if (newMessage.sender_id !== user?.id) {
-            markMessagesAsRead();
+          if (newMessage.sender_id !== user.id) {
+            setTimeout(() => markMessagesAsRead(), 100);
           }
         }
       )
@@ -246,16 +261,40 @@ const ChatInterface = ({ chatId, onBack }: ChatInterfaceProps) => {
           filter: `chat_id=eq.${chatId}`
         },
         (payload) => {
-          // Handle typing indicators
           console.log('Typing status updated:', payload.new);
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log('Channel subscription status:', status);
+        if (status === 'SUBSCRIBED') {
+          console.log('Successfully subscribed to real-time updates');
+        } else if (status === 'CHANNEL_ERROR') {
+          console.error('Channel subscription error');
+        }
+      });
+
+    channelRef.current = channel;
 
     return () => {
-      supabase.removeChannel(messagesChannel);
+      console.log('Cleaning up real-time subscription');
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current);
+        channelRef.current = null;
+      }
     };
   }, [chatId, user?.id]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current);
+      }
+    };
+  }, []);
 
   if (!chatInfo || !otherUser) {
     return (
