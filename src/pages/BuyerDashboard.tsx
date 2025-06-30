@@ -21,10 +21,13 @@ const BuyerDashboard = () => {
 
         if (profile) {
           const name = `${profile.first_name || ''} ${profile.last_name || ''}`.trim();
-          setDisplayName(name || 'Buyer');
+          setDisplayName(name || user.email?.split('@')[0] || 'Buyer');
+        } else {
+          setDisplayName(user.email?.split('@')[0] || 'Buyer');
         }
       } catch (error) {
         console.error('Error fetching user name:', error);
+        setDisplayName(user.email?.split('@')[0] || 'Buyer');
       }
     };
 
