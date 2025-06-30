@@ -13,7 +13,11 @@ import { Separator } from '@/components/ui/separator';
 import { useAdminNotifications } from '@/hooks/useAdminNotifications';
 import { formatDistanceToNow } from 'date-fns';
 
-const AdminNotificationBell = () => {
+interface AdminNotificationBellProps {
+  onNavigateToVerifications?: () => void;
+}
+
+const AdminNotificationBell = ({ onNavigateToVerifications }: AdminNotificationBellProps) => {
   const { notifications, loading, unreadCount, markAsRead, markAllAsRead } = useAdminNotifications();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -40,6 +44,18 @@ const AdminNotificationBell = () => {
         return 'border-l-green-500';
       default:
         return 'border-l-gray-500';
+    }
+  };
+
+  const handleNotificationClick = (notification: any) => {
+    if (!notification.read) {
+      markAsRead(notification.id);
+    }
+    
+    // Navigate to appropriate section based on notification type
+    if (notification.type === 'new_verification' && onNavigateToVerifications) {
+      onNavigateToVerifications();
+      setIsOpen(false);
     }
   };
 
@@ -105,7 +121,7 @@ const AdminNotificationBell = () => {
                   className={`p-4 hover:bg-gray-50 transition-colors cursor-pointer border-l-4 ${
                     getNotificationColor(notification.type)
                   } ${!notification.read ? 'bg-blue-50/30' : ''}`}
-                  onClick={() => !notification.read && markAsRead(notification.id)}
+                  onClick={() => handleNotificationClick(notification)}
                 >
                   <div className="flex items-start gap-3">
                     <div className="text-lg mt-0.5">

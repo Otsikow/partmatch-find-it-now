@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -53,7 +52,6 @@ export const useAdminNotifications = () => {
 
       if (error) {
         console.error('Error fetching admin notifications:', error);
-        // Still set up real-time notifications even if fetch fails
         setNotifications([]);
         setUnreadCount(0);
       } else {

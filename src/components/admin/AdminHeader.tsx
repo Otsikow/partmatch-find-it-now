@@ -1,27 +1,53 @@
 
-import { ArrowLeft, Users } from "lucide-react";
-import { Link } from "react-router-dom";
+import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import AdminNotificationBell from "@/components/admin/AdminNotificationBell";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+import AdminNotificationBell from "./AdminNotificationBell";
 
-const AdminHeader = () => {
+interface AdminHeaderProps {
+  onNavigateToVerifications?: () => void;
+}
+
+const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
+  const { signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      navigate('/admin-auth');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
   return (
-    <header className="p-4 sm:p-6 flex items-center justify-between bg-gradient-to-r from-white/90 via-purple-50/80 to-white/90 backdrop-blur-lg shadow-lg border-b">
-      <div className="flex items-center gap-3">
-        <Link to="/">
-          <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 hover:bg-white/50">
-            <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
-          </Button>
-        </Link>
-        <div className="flex items-center gap-2 sm:gap-3">
-          <Users className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600" />
-          <h1 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">Admin Dashboard</h1>
+    <header className="bg-gradient-to-r from-purple-700 via-pink-600 to-indigo-700 shadow-2xl border-b-4 border-white/20">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+        <div className="flex items-center justify-between">
+          <div className="text-left">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-playfair font-bold text-white mb-1 sm:mb-2">
+              Admin Dashboard
+            </h1>
+            <p className="text-sm sm:text-base text-purple-100 font-crimson">
+              Manage your marketplace with ease
+            </p>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <AdminNotificationBell onNavigateToVerifications={onNavigateToVerifications} />
+            <Button 
+              onClick={handleSignOut}
+              variant="ghost" 
+              size="sm"
+              className="text-white hover:bg-white/20 transition-all duration-300 font-inter"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">Sign Out</span>
+            </Button>
+          </div>
         </div>
-      </div>
-      
-      {/* Admin Notification Bell */}
-      <div className="flex items-center gap-2">
-        <AdminNotificationBell />
       </div>
     </header>
   );

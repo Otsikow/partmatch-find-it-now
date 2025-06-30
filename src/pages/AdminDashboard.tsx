@@ -59,6 +59,10 @@ const AdminDashboard = () => {
     setActiveUserTab(category);
   };
 
+  const handleNavigateToVerifications = () => {
+    setActiveTab("verifications");
+  };
+
   // Auto-refresh data every 10 seconds to ensure real-time updates
   useEffect(() => {
     const interval = setInterval(() => {
@@ -82,7 +86,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-100 font-inter">
-      <AdminHeader />
+      <AdminHeader onNavigateToVerifications={handleNavigateToVerifications} />
 
       <main className="container mx-auto px-2 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8 max-w-7xl">
         <div className="mb-4 sm:mb-6 lg:mb-8">
@@ -92,6 +96,7 @@ const AdminDashboard = () => {
             completedRequests={requests.filter(r => r.status === 'completed').length}
             totalRequests={requests.length}
             pendingVerifications={verifications.filter(v => v.verification_status === 'pending').length}
+            onNavigateToVerifications={handleNavigateToVerifications}
           />
         </div>
 

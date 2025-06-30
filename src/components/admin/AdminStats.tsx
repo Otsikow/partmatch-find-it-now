@@ -8,6 +8,7 @@ interface AdminStatsProps {
   completedRequests: number;
   totalRequests: number;
   pendingVerifications: number;
+  onNavigateToVerifications?: () => void;
 }
 
 const AdminStats = ({
@@ -15,7 +16,8 @@ const AdminStats = ({
   matchedRequests,
   completedRequests,
   totalRequests,
-  pendingVerifications
+  pendingVerifications,
+  onNavigateToVerifications
 }: AdminStatsProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-5 gap-4 sm:gap-6 mb-6 sm:mb-8">
@@ -59,7 +61,10 @@ const AdminStats = ({
         <p className="text-sm sm:text-base text-gray-600 font-crimson">Total Requests</p>
       </Card>
 
-      <Card className="p-4 sm:p-6 text-center bg-gradient-to-br from-white/90 to-indigo-50/50 backdrop-blur-sm shadow-lg border-0 hover:shadow-xl transition-all duration-300">
+      <Card 
+        className="p-4 sm:p-6 text-center bg-gradient-to-br from-white/90 to-indigo-50/50 backdrop-blur-sm shadow-lg border-0 hover:shadow-xl transition-all duration-300 cursor-pointer"
+        onClick={onNavigateToVerifications}
+      >
         <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full p-3 w-fit mx-auto mb-3 shadow-lg">
           <Shield className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
         </div>
