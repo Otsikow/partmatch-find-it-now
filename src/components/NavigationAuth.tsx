@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
@@ -11,11 +10,52 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useState, useEffect } from "react";
 
 const NavigationAuth = () => {
-  const { user, userType, firstName } = useAuth();
+  const { user, userType } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [displayName, setDisplayName] = useState<string>('User');
+
+  useEffect(() => {
+    const fetchUserName = async () => {
+      if (!user) return;
+
+      try {
+        // Try to get seller verification info first
+        const { data: verification } = await supabase
+          .from('seller_verifications')
+          .select('full_name, business_name')
+          .eq('user_id', user.id)
+          .single();
+
+        if (verification && (verification.business_name || verification.full_name)) {
+          setDisplayName(verification.business_name || verification.full_name);
+          return;
+        }
+
+        // Fallback to profile data
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('first_name, last_name')
+          .eq('id', user.id)
+          .single();
+
+        if (profile) {
+          const name = `${profile.first_name || ''} ${profile.last_name || ''}`.trim();
+          setDisplayName(name || user.email?.split('@')[0] || 'User');
+        } else {
+          setDisplayName(user.email?.split('@')[0] || 'User');
+        }
+      } catch (error) {
+        console.error('Error fetching user name:', error);
+        setDisplayName(user.email?.split('@')[0] || 'User');
+      }
+    };
+
+    fetchUserName();
+  }, [user]);
 
   const handleSignOut = async () => {
     try {
@@ -61,21 +101,11 @@ const NavigationAuth = () => {
     }
   };
 
-  const getDisplayName = () => {
-    if (firstName) {
-      return firstName;
-    }
-    if (user?.email) {
-      return user.email.split('@')[0];
-    }
-    return 'User';
-  };
-
   if (user) {
     return (
       <div className="flex items-center gap-2 lg:gap-3 xl:gap-4">
         <span className="text-xs lg:text-sm text-gray-600 font-medium hidden lg:block max-w-[120px] xl:max-w-none truncate">
-          Welcome, {getDisplayName()}
+          Welcome, {displayName}
         </span>
         <Link to={getDashboardLink()}>
           <Button 

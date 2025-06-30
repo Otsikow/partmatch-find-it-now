@@ -4,6 +4,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import ChatList from '@/components/chat/ChatList';
 import ChatInterface from '@/components/chat/ChatInterface';
 import { useIsMobile } from '@/hooks/use-mobile';
+import PageHeader from '@/components/PageHeader';
 
 const Chat = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -30,8 +31,14 @@ const Chat = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <PageHeader 
+        title="Messages"
+        subtitle="Chat with buyers and sellers"
+        backTo="/dashboard"
+      />
+      
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-8rem)]">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-12rem)]">
           {/* Chat List - Hidden on mobile when chat is selected */}
           <div className={`lg:col-span-1 ${selectedChatId && isMobile ? 'hidden' : 'block'}`}>
             <ChatList onChatSelect={handleChatSelect} />

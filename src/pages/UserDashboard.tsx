@@ -1,36 +1,40 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, Search, Package, Plus, User } from "lucide-react";
+import { Search, Package, Plus, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import PageHeader from "@/components/PageHeader";
 
 const UserDashboard = () => {
   const { user, signOut } = useAuth();
-  const [firstName, setFirstName] = useState<string | null>(null);
+  const [displayName, setDisplayName] = useState<string>('User');
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
+    const fetchUserName = async () => {
       if (!user) return;
 
       try {
         const { data: profile } = await supabase
           .from('profiles')
-          .select('first_name')
+          .select('first_name, last_name')
           .eq('id', user.id)
           .single();
 
         if (profile) {
-          setFirstName(profile.first_name);
+          const name = `${profile.first_name || ''} ${profile.last_name || ''}`.trim();
+          setDisplayName(name || user.email?.split('@')[0] || 'User');
+        } else {
+          setDisplayName(user.email?.split('@')[0] || 'User');
         }
       } catch (error) {
         console.error('Error fetching user profile:', error);
+        setDisplayName(user.email?.split('@')[0] || 'User');
       }
     };
 
-    fetchUserProfile();
+    fetchUserName();
   }, [user]);
 
   const handleSignOut = async () => {
@@ -41,47 +45,22 @@ const UserDashboard = () => {
     }
   };
 
-  const getDisplayName = () => {
-    if (firstName) return firstName;
-    return user?.email || 'User';
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 font-inter">
-      {/* Header */}
-      <header className="p-4 sm:p-6 flex items-center justify-between bg-gradient-to-r from-white/90 via-blue-50/80 to-white/90 backdrop-blur-lg shadow-lg border-b">
-        <div className="flex items-center gap-3">
-          <Link to="/">
-            <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 hover:bg-white/50">
-              <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
-            </Button>
-          </Link>
-          <div className="flex items-center gap-2 sm:gap-3">
-            <img 
-              src="/lovable-uploads/23312658-5ff6-4d89-a7cb-c0fbf631cd1c.png" 
-              alt="PartMatch Logo" 
-              className="h-6 w-auto sm:h-8"
-            />
-            <h1 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
-              Welcome to PartMatch
-            </h1>
-          </div>
-        </div>
-        
-        <div className="flex items-center gap-3">
-          <span className="text-sm text-gray-600 hidden sm:block">
-            {getDisplayName()}
-          </span>
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={handleSignOut}
-            className="text-gray-700 hover:text-red-700 hover:bg-red-50/50 font-medium"
-          >
-            Sign Out
-          </Button>
-        </div>
-      </header>
+      <PageHeader 
+        title={`Welcome to PartMatch`}
+        subtitle={`Hello, ${displayName}`}
+        backTo="/"
+      >
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={handleSignOut}
+          className="text-gray-700 hover:text-red-700 hover:bg-red-50/50 font-medium"
+        >
+          Sign Out
+        </Button>
+      </PageHeader>
 
       {/* Main Content */}
       <main className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-4xl">
