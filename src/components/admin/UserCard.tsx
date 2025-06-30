@@ -1,4 +1,3 @@
-
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -79,7 +78,7 @@ const UserCard = ({ user, onApprove, onSuspend, onDelete, onUnblock, onViewDetai
   const getUserTypeDisplayName = (userType: string) => {
     switch (userType) {
       case 'supplier': return 'Seller';
-      case 'owner': return 'Buyer';
+      case 'owner': return 'Buyer'; // Fixed: Changed from 'Owner' to 'Buyer'
       case 'admin': return 'Admin';
       default: return userType;
     }

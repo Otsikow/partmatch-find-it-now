@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -5,12 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import PhotoUpload from "@/components/PhotoUpload";
 import LocationPicker from "@/components/LocationPicker";
-import { X } from "lucide-react";
+import { X, Camera } from "lucide-react";
 
 interface PostPartModalProps {
   isOpen: boolean;
@@ -22,6 +24,7 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
   const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [photos, setPhotos] = useState<File[]>([]);
+  const [isPremium, setIsPremium] = useState(false);
   
   const [formData, setFormData] = useState({
     title: "",
@@ -41,14 +44,44 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
     address: string;
   } | null>(null);
 
+  const MAX_FREE_IMAGES = 3;
+  const MAX_PREMIUM_IMAGES = 10;
+
   const handlePhotoChange = (file: File | null) => {
     if (file) {
+      const maxImages = isPremium ? MAX_PREMIUM_IMAGES : MAX_FREE_IMAGES;
+      
+      if (photos.length >= maxImages) {
+        if (!isPremium) {
+          toast({
+            title: "Photo Limit Reached",
+            description: `You can upload up to ${MAX_FREE_IMAGES} photos for free. Upgrade to premium for more photos.`,
+            variant: "destructive"
+          });
+        } else {
+          toast({
+            title: "Maximum Photos Reached",
+            description: `You can upload up to ${MAX_PREMIUM_IMAGES} photos with premium.`,
+            variant: "destructive"
+          });
+        }
+        return;
+      }
+      
       setPhotos(prev => [...prev, file]);
     }
   };
 
   const removePhoto = (index: number) => {
     setPhotos(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleUpgradeRequest = () => {
+    // TODO: Implement premium upgrade payment flow
+    toast({
+      title: "Premium Photos",
+      description: "Premium photo upgrade feature coming soon!",
+    });
   };
 
   const uploadImage = async (file: File): Promise<string> => {
@@ -163,6 +196,7 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
       });
       setPhotos([]);
       setLocation(null);
+      setIsPremium(false);
       onPartPosted();
       onClose();
 
@@ -178,6 +212,8 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
       setIsSubmitting(false);
     }
   };
+
+  const maxImages = isPremium ? MAX_PREMIUM_IMAGES : MAX_FREE_IMAGES;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -309,10 +345,31 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
           </div>
 
           <div>
-            <Label>Photos</Label>
-            <PhotoUpload onPhotoChange={handlePhotoChange} />
+            <div className="flex items-center justify-between mb-2">
+              <Label className="flex items-center gap-2">
+                <Camera className="h-4 w-4" />
+                Photos ({photos.length}/{maxImages})
+              </Label>
+              {photos.length >= MAX_FREE_IMAGES && !isPremium && (
+                <Badge variant="secondary" className="text-xs">
+                  Free limit reached
+                </Badge>
+              )}
+              {isPremium && (
+                <Badge className="text-xs bg-emerald-100 text-emerald-800">
+                  Premium Active
+                </Badge>
+              )}
+            </div>
+            
+            <PhotoUpload 
+              onPhotoChange={handlePhotoChange} 
+              maxFreeImages={MAX_FREE_IMAGES}
+              onUpgradeRequest={handleUpgradeRequest}
+            />
+            
             {photos.length > 0 && (
-              <div className="grid grid-cols-3 gap-2 mt-2">
+              <div className="grid grid-cols-3 gap-2 mt-3">
                 {photos.map((photo, index) => (
                   <div key={index} className="relative">
                     <img

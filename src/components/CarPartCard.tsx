@@ -2,8 +2,9 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Phone, Calendar } from "lucide-react";
+import { MapPin, Phone, Calendar, Image as ImageIcon } from "lucide-react";
 import { CarPart } from "@/types/CarPart";
+import { useState } from "react";
 
 interface CarPartCardProps {
   part: CarPart & {
@@ -17,6 +18,8 @@ interface CarPartCardProps {
 }
 
 const CarPartCard = ({ part }: CarPartCardProps) => {
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
   const getConditionColor = (condition: string) => {
     switch (condition) {
       case 'New': return 'bg-green-100 text-green-800';
@@ -33,8 +36,59 @@ const CarPartCard = ({ part }: CarPartCardProps) => {
   const location = part.profiles?.location || part.address || 'Location not specified';
   const phone = part.profiles?.phone;
 
+  // Get images from the part
+  const images = part.images || [];
+  const hasImages = images.length > 0;
+
   return (
     <Card className="p-4 sm:p-6 bg-gradient-to-br from-white/90 to-emerald-50/30 backdrop-blur-sm border-0 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+      {/* Image Gallery Section */}
+      {hasImages && (
+        <div className="mb-4">
+          <div className="relative h-48 sm:h-64 rounded-lg overflow-hidden bg-gray-100">
+            <img
+              src={images[selectedImageIndex]}
+              alt={`${part.title} - Image ${selectedImageIndex + 1}`}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.style.display = 'none';
+              }}
+            />
+            {!images[selectedImageIndex] && (
+              <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
+                <ImageIcon className="h-12 w-12 text-gray-400" />
+              </div>
+            )}
+          </div>
+          
+          {/* Image thumbnails */}
+          {images.length > 1 && (
+            <div className="flex gap-2 mt-3 overflow-x-auto">
+              {images.map((image, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedImageIndex(index)}
+                  className={`flex-shrink-0 w-16 h-16 rounded border-2 overflow-hidden ${
+                    selectedImageIndex === index ? 'border-emerald-500' : 'border-gray-200'
+                  }`}
+                >
+                  <img
+                    src={image}
+                    alt={`Thumbnail ${index + 1}`}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                    }}
+                  />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="flex justify-between items-start mb-3 sm:mb-4">
         <div className="flex-1">
           <h3 className="font-playfair font-semibold text-lg sm:text-xl mb-1">{part.title}</h3>
