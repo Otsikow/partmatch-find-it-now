@@ -44,10 +44,17 @@ const AdminDashboard = () => {
 
   const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
   const [showUserDetails, setShowUserDetails] = useState(false);
+  const [activeTab, setActiveTab] = useState("requests");
+  const [activeUserTab, setActiveUserTab] = useState("sellers");
 
   const handleViewUserDetails = (user: UserProfile) => {
     setSelectedUser(user);
     setShowUserDetails(true);
+  };
+
+  const handleNavigateToCategory = (category: string) => {
+    setActiveTab("users");
+    setActiveUserTab(category);
   };
 
   if (loading) {
@@ -74,7 +81,7 @@ const AdminDashboard = () => {
           pendingVerifications={verifications.filter(v => v.verification_status === 'pending').length}
         />
 
-        <Tabs defaultValue="requests" className="w-full">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-4 bg-gradient-to-r from-white/90 to-purple-50/50 backdrop-blur-sm">
             <TabsTrigger value="requests" className="text-base font-inter">All Requests</TabsTrigger>
             <TabsTrigger value="offers" className="text-base font-inter">Seller Offers</TabsTrigger>
@@ -147,7 +154,10 @@ const AdminDashboard = () => {
                 User Management
               </h2>
               
-              <UserManagementStats users={users} />
+              <UserManagementStats 
+                users={users} 
+                onNavigateToCategory={handleNavigateToCategory}
+              />
               
               {users.length === 0 ? (
                 <Card className="p-8 text-center bg-gradient-to-br from-white/90 to-purple-50/30">
@@ -165,6 +175,8 @@ const AdminDashboard = () => {
                   onDelete={handleDeleteUser}
                   onUnblock={handleUnblockUser}
                   onViewDetails={handleViewUserDetails}
+                  activeTab={activeUserTab}
+                  onTabChange={setActiveUserTab}
                 />
               )}
             </div>

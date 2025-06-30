@@ -27,6 +27,8 @@ interface UserCategoryTabsProps {
   onDelete: (userId: string, reason: string) => void;
   onUnblock: (userId: string) => void;
   onViewDetails: (user: UserProfile) => void;
+  activeTab?: string;
+  onTabChange?: (tab: string) => void;
 }
 
 const UserCategoryTabs = ({
@@ -35,7 +37,9 @@ const UserCategoryTabs = ({
   onSuspend,
   onDelete,
   onUnblock,
-  onViewDetails
+  onViewDetails,
+  activeTab = "sellers",
+  onTabChange
 }: UserCategoryTabsProps) => {
   // Categorize users
   const adminUsers = users.filter(user => user.user_type === 'admin');
@@ -94,7 +98,7 @@ const UserCategoryTabs = ({
   );
 
   return (
-    <Tabs defaultValue="sellers" className="w-full">
+    <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
       <TabsList className="grid w-full grid-cols-3 bg-gradient-to-r from-white/90 to-purple-50/50 backdrop-blur-sm">
         <TabsTrigger value="sellers" className="text-base font-inter">
           <ShoppingCart className="h-4 w-4 mr-2" />

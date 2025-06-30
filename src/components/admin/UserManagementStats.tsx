@@ -20,9 +20,10 @@ interface UserProfile {
 
 interface UserManagementStatsProps {
   users: UserProfile[];
+  onNavigateToCategory: (category: string) => void;
 }
 
-const UserManagementStats = ({ users }: UserManagementStatsProps) => {
+const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStatsProps) => {
   const stats = {
     total: users.length,
     admins: users.filter(u => u.user_type === 'admin').length,
@@ -40,15 +41,20 @@ const UserManagementStats = ({ users }: UserManagementStatsProps) => {
     value, 
     icon: Icon, 
     color, 
-    bgColor 
+    bgColor,
+    onClick
   }: { 
     title: string; 
     value: number; 
     icon: any; 
     color: string; 
     bgColor: string;
+    onClick?: () => void;
   }) => (
-    <Card className={`${bgColor} border-0 shadow-lg hover:shadow-xl transition-all duration-300`}>
+    <Card 
+      className={`${bgColor} border-0 shadow-lg hover:shadow-xl transition-all duration-300 ${onClick ? 'cursor-pointer hover:scale-105' : ''}`}
+      onClick={onClick}
+    >
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium text-gray-600">{title}</CardTitle>
         <Icon className={`h-4 w-4 ${color}`} />
@@ -75,6 +81,7 @@ const UserManagementStats = ({ users }: UserManagementStatsProps) => {
         icon={ShoppingCart}
         color="text-purple-600"
         bgColor="bg-gradient-to-br from-purple-50 to-purple-100"
+        onClick={() => onNavigateToCategory('sellers')}
       />
       
       <StatCard
@@ -83,6 +90,7 @@ const UserManagementStats = ({ users }: UserManagementStatsProps) => {
         icon={User}
         color="text-green-600"
         bgColor="bg-gradient-to-br from-green-50 to-green-100"
+        onClick={() => onNavigateToCategory('buyers')}
       />
       
       <StatCard
@@ -91,6 +99,7 @@ const UserManagementStats = ({ users }: UserManagementStatsProps) => {
         icon={Shield}
         color="text-indigo-600"
         bgColor="bg-gradient-to-br from-indigo-50 to-indigo-100"
+        onClick={() => onNavigateToCategory('admins')}
       />
       
       <StatCard
