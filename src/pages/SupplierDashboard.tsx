@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -43,12 +44,12 @@ interface Offer {
 
 const SupplierDashboard = () => {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState('requests');
+  const [activeTab, setActiveTab] = useState('sell-parts');
   const [requests, setRequests] = useState<Request[]>([]);
   const [myOffers, setMyOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(true);
   const [submittingOffer, setSubmittingOffer] = useState<string | null>(null);
-  const [showMainDashboard, setShowMainDashboard] = useState(true);
+  const [showMainDashboard, setShowMainDashboard] = useState(false); // Changed to false by default
   const [error, setError] = useState<string | null>(null);
 
   // Stats
@@ -360,17 +361,6 @@ const SupplierDashboard = () => {
           </>
         ) : (
           <>
-            {/* Back Button */}
-            <div className="mb-6">
-              <Button 
-                variant="outline" 
-                onClick={() => setShowMainDashboard(true)}
-                className="flex items-center gap-2 hover:bg-orange-50"
-              >
-                ← Back to Dashboard
-              </Button>
-            </div>
-
             <SupplierStats
               totalOffers={stats.totalOffers}
               pendingOffers={stats.pendingOffers}
