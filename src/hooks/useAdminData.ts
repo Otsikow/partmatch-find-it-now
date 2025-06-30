@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
@@ -99,7 +98,7 @@ export const useAdminData = () => {
 
       if (verificationsError) throw verificationsError;
 
-      // Fetch users from profiles table with forced fresh data
+      // Fetch users from profiles table with forced fresh data and better error handling
       console.log('Fetching users from profiles with fresh data...');
       const { data: usersData, error: usersError } = await supabase
         .from('profiles')
@@ -111,6 +110,7 @@ export const useAdminData = () => {
         setUsers([]);
       } else {
         console.log('Successfully fetched users:', usersData?.length || 0);
+        console.log('Raw users data sample:', usersData?.slice(0, 2));
         
         // Try to fetch auth users to get emails, but handle the error gracefully
         let authUsers: any[] = [];
@@ -119,14 +119,12 @@ export const useAdminData = () => {
           
           if (authError) {
             console.error('Error fetching auth users:', authError);
-            // Continue without email data instead of failing
           } else {
             authUsers = authResponse?.users || [];
             console.log('Successfully fetched auth users:', authUsers.length);
           }
         } catch (error) {
           console.error('Auth API error:', error);
-          // Continue without email data
         }
         
         const transformedUsers: UserProfile[] = (usersData || []).map(user => {
@@ -135,19 +133,24 @@ export const useAdminData = () => {
           
           const transformedUser = {
             ...user,
-            email: authUser?.email || `user-${user.id.slice(0, 8)}@unknown.com`, // Fallback email
+            email: authUser?.email || `user-${user.id.slice(0, 8)}@unknown.com`,
             user_type: user.user_type as 'owner' | 'supplier' | 'admin'
           };
           
-          console.log(`User ${user.id}: type=${user.user_type}, is_verified=${user.is_verified}, is_blocked=${user.is_blocked}`);
+          console.log(`User ${user.id}: type=${user.user_type}, is_verified=${user.is_verified}, is_blocked=${user.is_blocked}, verified_at=${user.verified_at}`);
           return transformedUser;
         });
         
         console.log('Setting users state with transformed data:', transformedUsers.length);
-        console.log('Users by type:', {
+        console.log('Users by type and verification status:', {
           suppliers: transformedUsers.filter(u => u.user_type === 'supplier').length,
+          verified_suppliers: transformedUsers.filter(u => u.user_type === 'supplier' && u.is_verified).length,
           owners: transformedUsers.filter(u => u.user_type === 'owner').length,
-          admins: transformedUsers.filter(u => u.user_type === 'admin').length
+          verified_owners: transformedUsers.filter(u => u.user_type === 'owner' && u.is_verified).length,
+          admins: transformedUsers.filter(u => u.user_type === 'admin').length,
+          total_verified: transformedUsers.filter(u => u.is_verified && !u.is_blocked).length,
+          total_unverified: transformedUsers.filter(u => !u.is_verified && !u.is_blocked).length,
+          total_blocked: transformedUsers.filter(u => u.is_blocked).length
         });
         
         // Force complete state refresh

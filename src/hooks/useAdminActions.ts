@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 
@@ -222,7 +223,7 @@ export const useAdminActions = (refetchData: () => void) => {
     try {
       console.log('Starting user approval process for:', userId);
       
-      // First, get current user data to determine if this is a seller
+      // Get current user data to determine user type and status
       const { data: currentUser, error: fetchError } = await supabase
         .from('profiles')
         .select('*')
@@ -235,13 +236,14 @@ export const useAdminActions = (refetchData: () => void) => {
       }
       
       console.log('Current user status before approval:', {
+        id: currentUser.id,
         is_verified: currentUser.is_verified,
         user_type: currentUser.user_type,
         first_name: currentUser.first_name,
         last_name: currentUser.last_name
       });
 
-      // Check if this user has a seller verification request
+      // Check if this user has an approved seller verification request
       const { data: sellerVerification } = await supabase
         .from('seller_verifications')
         .select('*')
@@ -249,50 +251,67 @@ export const useAdminActions = (refetchData: () => void) => {
         .eq('verification_status', 'approved')
         .maybeSingle();
 
-      // Prepare update data
+      console.log('Seller verification found:', sellerVerification ? 'Yes' : 'No');
+
+      // Prepare update data - always mark as verified
       const updateData: any = {
         is_verified: true,
-        verified_at: new Date().toISOString()
+        verified_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
       };
 
-      // If there's an approved seller verification, set user_type to supplier
+      // If there's an approved seller verification, ensure user_type is supplier
       if (sellerVerification) {
         updateData.user_type = 'supplier';
-        console.log('User has approved seller verification, setting user_type to supplier');
+        console.log('Setting user_type to supplier due to approved seller verification');
       }
 
+      console.log('Update data:', updateData);
+
       // Update the user profile
-      const { error: updateError } = await supabase
+      const { data: updatedProfile, error: updateError } = await supabase
         .from('profiles')
         .update(updateData)
-        .eq('id', userId);
+        .eq('id', userId)
+        .select()
+        .single();
 
       if (updateError) {
         console.error('Error updating user profile:', updateError);
         throw updateError;
       }
 
-      console.log('Successfully updated user profile for userId:', userId);
+      console.log('Successfully updated user profile:', {
+        id: updatedProfile.id,
+        is_verified: updatedProfile.is_verified,
+        user_type: updatedProfile.user_type,
+        verified_at: updatedProfile.verified_at
+      });
 
       toast({
         title: "Success",
-        description: "User has been approved successfully.",
+        description: `User has been approved and verified successfully.`,
       });
 
-      // Force immediate data refresh multiple times to ensure UI updates
-      console.log('Immediately refreshing data after user approval...');
+      // Force immediate data refresh with multiple attempts to ensure UI updates
+      console.log('Triggering immediate data refresh...');
       await refetchData();
       
-      // Add multiple refresh attempts to ensure data consistency
+      // Additional refreshes to ensure data consistency
       setTimeout(async () => {
         console.log('Secondary refresh after approval...');
         await refetchData();
-      }, 500);
+      }, 100);
       
       setTimeout(async () => {
         console.log('Third refresh after approval...');
         await refetchData();
-      }, 1500);
+      }, 500);
+      
+      setTimeout(async () => {
+        console.log('Final refresh after approval...');
+        await refetchData();
+      }, 1000);
       
     } catch (error) {
       console.error('Error approving user:', error);
