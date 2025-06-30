@@ -24,23 +24,23 @@ const Navigation = () => {
           <NavigationLogo />
           
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
-            <Link to="/" className="flex items-center gap-2 text-gray-700 hover:text-purple-600 font-medium transition-colors px-3 py-2 rounded-lg hover:bg-purple-50">
-              <Home className="h-4 w-4" />
-              <span className="hidden lg:inline">Home</span>
+          <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
+            <Link to="/" className="flex flex-col items-center gap-1 text-gray-700 hover:text-purple-600 font-medium transition-colors px-3 py-2 rounded-lg hover:bg-purple-50 group">
+              <Home className="h-5 w-5" />
+              <span className="text-xs">Home</span>
             </Link>
-            <Link to="/search-parts" className="flex items-center gap-2 text-gray-700 hover:text-purple-600 font-medium transition-colors px-3 py-2 rounded-lg hover:bg-purple-50">
-              <Search className="h-4 w-4" />
-              <span className="hidden lg:inline">Browse Parts</span>
+            <Link to="/search-parts" className="flex flex-col items-center gap-1 text-gray-700 hover:text-purple-600 font-medium transition-colors px-3 py-2 rounded-lg hover:bg-purple-50 group">
+              <Search className="h-5 w-5" />
+              <span className="text-xs">Browse Parts</span>
             </Link>
-            <Link to="/request-part" className="flex items-center gap-2 text-gray-700 hover:text-purple-600 font-medium transition-colors px-3 py-2 rounded-lg hover:bg-purple-50">
-              <Plus className="h-4 w-4" />
-              <span className="hidden lg:inline">Request Part</span>
+            <Link to="/request-part" className="flex flex-col items-center gap-1 text-gray-700 hover:text-purple-600 font-medium transition-colors px-3 py-2 rounded-lg hover:bg-purple-50 group">
+              <Plus className="h-5 w-5" />
+              <span className="text-xs">Request Part</span>
             </Link>
             {user && (
-              <Link to="/chat" className="flex items-center gap-2 text-gray-700 hover:text-purple-600 font-medium transition-colors px-3 py-2 rounded-lg hover:bg-purple-50 relative">
-                <MessageCircle className="h-4 w-4" />
-                <span className="hidden lg:inline">Messages</span>
+              <Link to="/chat" className="flex flex-col items-center gap-1 text-gray-700 hover:text-purple-600 font-medium transition-colors px-3 py-2 rounded-lg hover:bg-purple-50 relative group">
+                <MessageCircle className="h-5 w-5" />
+                <span className="text-xs">Messages</span>
                 <ChatNotificationBadge />
               </Link>
             )}
