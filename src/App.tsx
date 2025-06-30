@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
-import Auth from "./pages/Auth";
+import AuthTypeSelector from "./components/AuthTypeSelector";
 import BuyerAuth from "./pages/BuyerAuth";
 import SellerAuth from "./pages/SellerAuth";
 import AdminAuth from "./pages/AdminAuth";
@@ -40,7 +40,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<Auth />} />
+            <Route path="/auth" element={<AuthTypeSelector />} />
             <Route path="/buyer-auth" element={<BuyerAuth />} />
             <Route path="/seller-auth" element={<SellerAuth />} />
             <Route path="/admin-auth" element={<AdminAuth />} />
