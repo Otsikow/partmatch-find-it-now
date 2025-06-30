@@ -47,7 +47,7 @@ const FeaturesSection = () => {
           </Card>
         </Link>
 
-        <Link to="/auth" className="block group sm:col-span-2 xl:col-span-1 max-w-md mx-auto xl:max-w-none">
+        <Link to="/seller-auth" className="block group sm:col-span-2 xl:col-span-1 max-w-md mx-auto xl:max-w-none">
           <Card className="text-center shadow-lg hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-green-50/50 group-hover:scale-105 cursor-pointer h-full">
             <CardContent className="p-6 lg:p-8 flex flex-col justify-center h-full">
               <div className="w-16 h-16 bg-gradient-to-r from-green-600 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">

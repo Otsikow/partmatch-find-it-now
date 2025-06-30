@@ -35,7 +35,7 @@ const CTASection = () => {
             </Button>
           </Link>
 
-          <Link to="/supplier-dashboard" className="w-full sm:w-auto">
+          <Link to="/seller-auth" className="w-full sm:w-auto">
             <Button size="lg" className="w-full bg-white text-gray-900 hover:bg-gray-50 shadow-lg font-semibold border-2 border-white">
               <Package className="mr-2 h-5 w-5" />
               Sell Car Parts
