@@ -6,9 +6,10 @@ import AdminStats from "@/components/admin/AdminStats";
 import RequestCard from "@/components/admin/RequestCard";
 import OfferCard from "@/components/admin/OfferCard";
 import VerificationCard from "@/components/admin/VerificationCard";
-import UserCard from "@/components/admin/UserCard";
 import UserDetailsModal from "@/components/admin/UserDetailsModal";
 import AdminHeader from "@/components/admin/AdminHeader";
+import UserCategoryTabs from "@/components/admin/UserCategoryTabs";
+import UserManagementStats from "@/components/admin/UserManagementStats";
 import { useAdminData } from "@/hooks/useAdminData";
 import { useAdminActions } from "@/hooks/useAdminActions";
 import { useState } from "react";
@@ -146,6 +147,8 @@ const AdminDashboard = () => {
                 User Management
               </h2>
               
+              <UserManagementStats users={users} />
+              
               {users.length === 0 ? (
                 <Card className="p-8 text-center bg-gradient-to-br from-white/90 to-purple-50/30">
                   <div className="text-gray-500">
@@ -155,17 +158,14 @@ const AdminDashboard = () => {
                   </div>
                 </Card>
               ) : (
-                users.map(user => (
-                  <UserCard
-                    key={user.id}
-                    user={user}
-                    onApprove={handleApproveUser}
-                    onSuspend={handleSuspendUser}
-                    onDelete={handleDeleteUser}
-                    onUnblock={handleUnblockUser}
-                    onViewDetails={handleViewUserDetails}
-                  />
-                ))
+                <UserCategoryTabs
+                  users={users}
+                  onApprove={handleApproveUser}
+                  onSuspend={handleSuspendUser}
+                  onDelete={handleDeleteUser}
+                  onUnblock={handleUnblockUser}
+                  onViewDetails={handleViewUserDetails}
+                />
               )}
             </div>
           </TabsContent>
