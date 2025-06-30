@@ -9,6 +9,8 @@ interface AuthContextType {
   session: Session | null;
   loading: boolean;
   isPasswordReset: boolean;
+  userType: string | null;
+  firstName: string | null;
   signUp: (email: string, password: string, userData: any) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
@@ -31,6 +33,30 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [isPasswordReset, setIsPasswordReset] = useState(false);
+  const [userType, setUserType] = useState<string | null>(null);
+  const [firstName, setFirstName] = useState<string | null>(null);
+
+  const fetchUserProfile = async (userId: string) => {
+    try {
+      const { data: profile, error } = await supabase
+        .from('profiles')
+        .select('user_type, first_name')
+        .eq('id', userId)
+        .maybeSingle();
+
+      if (error) {
+        console.error('Error fetching user profile:', error);
+        return;
+      }
+
+      if (profile) {
+        setUserType(profile.user_type);
+        setFirstName(profile.first_name);
+      }
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+    }
+  };
 
   useEffect(() => {
     console.log('AuthProvider: Setting up auth state listener');
@@ -66,11 +92,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setIsPasswordReset(true);
         } else if (event === 'SIGNED_OUT') {
           setIsPasswordReset(false);
+          setUserType(null);
+          setFirstName(null);
         }
         
         // Update session and user state
         setSession(session);
         setUser(session?.user ?? null);
+        
+        // Fetch user profile if user is logged in
+        if (session?.user) {
+          setTimeout(() => {
+            fetchUserProfile(session.user.id);
+          }, 0);
+        }
+        
         setLoading(false);
       }
     );
@@ -85,6 +121,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       
       setSession(session);
       setUser(session?.user ?? null);
+      
+      if (session?.user) {
+        fetchUserProfile(session.user.id);
+      }
+      
       setLoading(false);
     });
 
@@ -324,6 +365,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setSession(null);
       setUser(null);
       setIsPasswordReset(false);
+      setUserType(null);
+      setFirstName(null);
       
       if (error) {
         // Log the error but don't throw it - handle gracefully
@@ -349,6 +392,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setSession(null);
       setUser(null);
       setIsPasswordReset(false);
+      setUserType(null);
+      setFirstName(null);
       
       // Don't throw the error - handle gracefully
       toast({
@@ -434,6 +479,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     session,
     loading,
     isPasswordReset,
+    userType,
+    firstName,
     signUp,
     signIn,
     signOut,
@@ -446,7 +493,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     userEmail: user?.email,
     loading,
     hasSession: !!session,
-    isPasswordReset
+    isPasswordReset,
+    userType,
+    firstName
   });
 
   return (
