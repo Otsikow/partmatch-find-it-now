@@ -26,7 +26,7 @@ const HeroSection = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-lg mx-auto">
-          <Link to="/request" className="w-full sm:w-auto">
+          <Link to="/request-part" className="w-full sm:w-auto">
             <Button size="lg" className="w-full bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700 text-white shadow-lg font-semibold">
               <MessageSquare className="mr-2 h-5 w-5" />
               Request Car Parts

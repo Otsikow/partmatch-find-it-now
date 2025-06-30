@@ -19,7 +19,7 @@ const FeaturesSection = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
-        <Link to="/request" className="block group">
+        <Link to="/request-part" className="block group">
           <Card className="text-center shadow-lg hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-red-50/50 group-hover:scale-105 cursor-pointer h-full">
             <CardContent className="p-6 lg:p-8 flex flex-col justify-center h-full">
               <div className="w-16 h-16 bg-gradient-to-r from-red-600 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
@@ -33,7 +33,7 @@ const FeaturesSection = () => {
           </Card>
         </Link>
 
-        <Link to="/search" className="block group">
+        <Link to="/search-parts" className="block group">
           <Card className="text-center shadow-lg hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-yellow-50/50 group-hover:scale-105 cursor-pointer h-full">
             <CardContent className="p-6 lg:p-8 flex flex-col justify-center h-full">
               <div className="w-16 h-16 bg-gradient-to-r from-yellow-600 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
