@@ -6,7 +6,7 @@ import { useAdminNotificationsRealtime } from './useAdminNotificationsRealtime';
 import { useAdminNotificationsActions } from './useAdminNotificationsActions';
 
 export const useAdminNotifications = () => {
-  const { userId } = useAuth();
+  const { user } = useAuth();
   const {
     notifications,
     loading,
@@ -26,10 +26,10 @@ export const useAdminNotifications = () => {
   useAdminNotificationsRealtime({ addNotification });
 
   useEffect(() => {
-    if (userId) {
-      fetchNotifications(userId);
+    if (user?.id) {
+      fetchNotifications(user.id);
     }
-  }, [userId, fetchNotifications]);
+  }, [user?.id, fetchNotifications]);
 
   return {
     notifications,
