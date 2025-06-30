@@ -91,8 +91,25 @@ export const useCarParts = (params?: UseCarPartsParams) => {
         // Ensure images are properly formatted as URLs
         let processedImages: string[] = [];
         if (part.images && Array.isArray(part.images)) {
-          processedImages = part.images.filter(img => typeof img === 'string' && img.trim() !== '');
+          processedImages = part.images
+            .filter(img => typeof img === 'string' && img.trim() !== '')
+            .map(img => {
+              // If it's already a full URL, return as is
+              if (img.startsWith('http')) {
+                return img;
+              }
+              // If it's a storage path, convert to public URL
+              if (img.includes('/')) {
+                const { data: { publicUrl } } = supabase.storage
+                  .from('car-part-images')
+                  .getPublicUrl(img);
+                return publicUrl;
+              }
+              return img;
+            });
         }
+        
+        console.log('Processed images:', processedImages);
         
         return {
           ...part,
