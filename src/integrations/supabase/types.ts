@@ -181,6 +181,67 @@ export type Database = {
           },
         ]
       }
+      chats: {
+        Row: {
+          buyer_id: string
+          buyer_unread_count: number | null
+          created_at: string
+          id: string
+          last_message: string | null
+          last_message_at: string | null
+          part_id: string | null
+          seller_id: string
+          seller_unread_count: number | null
+          updated_at: string
+        }
+        Insert: {
+          buyer_id: string
+          buyer_unread_count?: number | null
+          created_at?: string
+          id?: string
+          last_message?: string | null
+          last_message_at?: string | null
+          part_id?: string | null
+          seller_id: string
+          seller_unread_count?: number | null
+          updated_at?: string
+        }
+        Update: {
+          buyer_id?: string
+          buyer_unread_count?: number | null
+          created_at?: string
+          id?: string
+          last_message?: string | null
+          last_message_at?: string | null
+          part_id?: string | null
+          seller_id?: string
+          seller_unread_count?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chats_buyer_id_fkey"
+            columns: ["buyer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chats_part_id_fkey"
+            columns: ["part_id"]
+            isOneToOne: false
+            referencedRelation: "car_parts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chats_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ghana_regions: {
         Row: {
           created_at: string | null
@@ -201,6 +262,57 @@ export type Database = {
           name?: string
         }
         Relationships: []
+      }
+      messages: {
+        Row: {
+          attachment_url: string | null
+          chat_id: string
+          content: string
+          created_at: string
+          id: string
+          is_read: boolean | null
+          message_type: string | null
+          sender_id: string
+          updated_at: string
+        }
+        Insert: {
+          attachment_url?: string | null
+          chat_id: string
+          content: string
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message_type?: string | null
+          sender_id: string
+          updated_at?: string
+        }
+        Update: {
+          attachment_url?: string | null
+          chat_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message_type?: string | null
+          sender_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_chat_id_fkey"
+            columns: ["chat_id"]
+            isOneToOne: false
+            referencedRelation: "chats"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       notifications: {
         Row: {
@@ -665,6 +777,51 @@ export type Database = {
         }
         Relationships: []
       }
+      user_chat_status: {
+        Row: {
+          chat_id: string
+          created_at: string
+          id: string
+          is_typing: boolean | null
+          last_seen: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          chat_id: string
+          created_at?: string
+          id?: string
+          is_typing?: boolean | null
+          last_seen?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          chat_id?: string
+          created_at?: string
+          id?: string
+          is_typing?: boolean | null
+          last_seen?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_chat_status_chat_id_fkey"
+            columns: ["chat_id"]
+            isOneToOne: false
+            referencedRelation: "chats"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_chat_status_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -680,6 +837,10 @@ export type Database = {
           event_details?: Json
           target_user_id?: string
         }
+        Returns: undefined
+      }
+      mark_messages_as_read: {
+        Args: { chat_id_param: string; user_id_param: string }
         Returns: undefined
       }
       process_contact_unlock_payment: {
