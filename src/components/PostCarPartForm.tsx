@@ -65,7 +65,10 @@ const PostCarPartForm = ({ onPartPosted }: { onPartPosted: () => void }) => {
         .from('car-part-images')
         .upload(fileName, image);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Image upload error:', error);
+        throw error;
+      }
       return data.path;
     });
 
@@ -74,9 +77,17 @@ const PostCarPartForm = ({ onPartPosted }: { onPartPosted: () => void }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to post car parts.",
+        variant: "destructive"
+      });
+      return;
+    }
 
     setLoading(true);
+    console.log('Starting car part submission for user:', user.id);
 
     try {
       // Validate required fields
@@ -100,31 +111,73 @@ const PostCarPartForm = ({ onPartPosted }: { onPartPosted: () => void }) => {
         return;
       }
 
+      const year = parseInt(formData.year);
+      if (isNaN(year) || year < 1990 || year > new Date().getFullYear()) {
+        toast({
+          title: "Invalid Year",
+          description: "Please enter a valid year.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      console.log('Form validation passed, proceeding with submission');
+
       // Upload images if any
       let imagePaths: string[] = [];
       if (formData.images.length > 0) {
-        imagePaths = await uploadImages(formData.images);
+        console.log('Uploading images:', formData.images.length);
+        try {
+          imagePaths = await uploadImages(formData.images);
+          console.log('Images uploaded successfully:', imagePaths);
+        } catch (uploadError) {
+          console.error('Image upload failed:', uploadError);
+          toast({
+            title: "Image Upload Failed",
+            description: "Failed to upload images. Posting without images.",
+            variant: "destructive"
+          });
+          // Continue without images
+        }
       }
 
-      // Save car part
-      const { error } = await supabase
-        .from('car_parts')
-        .insert({
-          supplier_id: user.id,
-          title: formData.title,
-          description: formData.description,
-          make: formData.make,
-          model: formData.model,
-          year: parseInt(formData.year),
-          part_type: formData.partType,
-          condition: formData.condition,
-          price: price,
-          address: formData.address,
-          images: imagePaths,
-          status: 'available'
-        });
+      // Prepare part data
+      const partData = {
+        supplier_id: user.id,
+        title: formData.title.trim(),
+        description: formData.description.trim() || null,
+        make: formData.make.trim(),
+        model: formData.model.trim(),
+        year: year,
+        part_type: formData.partType,
+        condition: formData.condition,
+        price: price,
+        currency: 'GHS',
+        address: formData.address.trim(),
+        images: imagePaths.length > 0 ? imagePaths : null,
+        status: 'available'
+      };
 
-      if (error) throw error;
+      console.log('Submitting part data:', partData);
+
+      // Save car part
+      const { data, error } = await supabase
+        .from('car_parts')
+        .insert([partData])
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Supabase insert error:', error);
+        toast({
+          title: "Posting Failed",
+          description: `Error: ${error.message}. Please try again.`,
+          variant: "destructive"
+        });
+        return;
+      }
+
+      console.log('Car part posted successfully:', data);
 
       toast({
         title: "Part Posted Successfully!",
@@ -147,10 +200,10 @@ const PostCarPartForm = ({ onPartPosted }: { onPartPosted: () => void }) => {
       setCurrentPhoto(null);
       onPartPosted();
     } catch (error: any) {
-      console.error('Part posting error:', error);
+      console.error('Unexpected error during part posting:', error);
       toast({
         title: "Posting Failed",
-        description: error.message || "Failed to post part. Please try again.",
+        description: error.message || "An unexpected error occurred. Please try again.",
         variant: "destructive"
       });
     } finally {
@@ -260,10 +313,8 @@ const PostCarPartForm = ({ onPartPosted }: { onPartPosted: () => void }) => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="New">New</SelectItem>
-                  <SelectItem value="Like New">Like New</SelectItem>
-                  <SelectItem value="Good">Good</SelectItem>
-                  <SelectItem value="Fair">Fair</SelectItem>
-                  <SelectItem value="For Parts">For Parts</SelectItem>
+                  <SelectItem value="Used">Used</SelectItem>
+                  <SelectItem value="Refurbished">Refurbished</SelectItem>
                 </SelectContent>
               </Select>
             </div>

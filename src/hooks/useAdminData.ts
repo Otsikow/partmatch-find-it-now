@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
@@ -68,7 +69,8 @@ export const useAdminData = () => {
 
   const fetchData = async () => {
     try {
-      console.log('Fetching admin data...');
+      console.log('Fetching admin data with fresh queries...');
+      setLoading(true);
       
       // Fetch real requests from database
       const { data: requestsData, error: requestsError } = await supabase
@@ -76,7 +78,10 @@ export const useAdminData = () => {
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (requestsError) throw requestsError;
+      if (requestsError) {
+        console.error('Error fetching requests:', requestsError);
+        throw requestsError;
+      }
 
       // Fetch real offers from database
       const { data: offersData, error: offersError } = await supabase
@@ -88,7 +93,10 @@ export const useAdminData = () => {
         `)
         .order('created_at', { ascending: false });
 
-      if (offersError) throw offersError;
+      if (offersError) {
+        console.error('Error fetching offers:', offersError);
+        throw offersError;
+      }
 
       // Fetch seller verifications
       const { data: verificationsData, error: verificationsError } = await supabase
@@ -96,10 +104,13 @@ export const useAdminData = () => {
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (verificationsError) throw verificationsError;
+      if (verificationsError) {
+        console.error('Error fetching verifications:', verificationsError);
+        throw verificationsError;
+      }
 
-      // Fetch users from profiles table with comprehensive logging
-      console.log('Fetching users from profiles with fresh data...');
+      // Fetch users from profiles table with fresh data
+      console.log('Fetching users from profiles...');
       const { data: usersData, error: usersError } = await supabase
         .from('profiles')
         .select('*')
@@ -107,45 +118,34 @@ export const useAdminData = () => {
 
       if (usersError) {
         console.error('Error fetching users:', usersError);
-        setUsers([]);
-      } else {
-        console.log('Successfully fetched users:', usersData?.length || 0);
-        console.log('Raw users data sample:', usersData?.slice(0, 3));
-        
-        // Enhanced user transformation with better email handling
-        const transformedUsers: UserProfile[] = (usersData || []).map(user => {
-          const transformedUser = {
-            ...user,
-            email: `user-${user.id.slice(0, 8)}@system.local`, // Simplified email for display
-            user_type: user.user_type as 'owner' | 'supplier' | 'admin'
-          };
-          
-          console.log(`User ${user.id.slice(0, 8)}: type=${user.user_type}, verified=${user.is_verified}, blocked=${user.is_blocked}, verified_at=${user.verified_at}`);
-          return transformedUser;
-        });
-        
-        console.log('Setting users state with transformed data:', transformedUsers.length);
-        
-        // Detailed logging of user statistics
-        const userStats = {
-          total: transformedUsers.length,
-          suppliers: transformedUsers.filter(u => u.user_type === 'supplier').length,
-          verified_suppliers: transformedUsers.filter(u => u.user_type === 'supplier' && u.is_verified).length,
-          unverified_suppliers: transformedUsers.filter(u => u.user_type === 'supplier' && !u.is_verified).length,
-          owners: transformedUsers.filter(u => u.user_type === 'owner').length,
-          verified_owners: transformedUsers.filter(u => u.user_type === 'owner' && u.is_verified).length,
-          unverified_owners: transformedUsers.filter(u => u.user_type === 'owner' && !u.is_verified).length,
-          admins: transformedUsers.filter(u => u.user_type === 'admin').length,
-          total_verified: transformedUsers.filter(u => u.is_verified && !u.is_blocked).length,
-          total_unverified: transformedUsers.filter(u => !u.is_verified && !u.is_blocked).length,
-          total_blocked: transformedUsers.filter(u => u.is_blocked).length
-        };
-        
-        console.log('Detailed user statistics:', userStats);
-        
-        // Force state update
-        setUsers([...transformedUsers]);
+        throw usersError;
       }
+
+      console.log('Raw users data:', usersData?.length || 0, 'users fetched');
+
+      // Transform users data
+      const transformedUsers: UserProfile[] = (usersData || []).map(user => ({
+        ...user,
+        email: `user-${user.id.slice(0, 8)}@system.local`,
+        user_type: user.user_type as 'owner' | 'supplier' | 'admin'
+      }));
+
+      // Log detailed statistics
+      const userStats = {
+        total: transformedUsers.length,
+        suppliers: transformedUsers.filter(u => u.user_type === 'supplier').length,
+        verified_suppliers: transformedUsers.filter(u => u.user_type === 'supplier' && u.is_verified).length,
+        unverified_suppliers: transformedUsers.filter(u => u.user_type === 'supplier' && !u.is_verified).length,
+        owners: transformedUsers.filter(u => u.user_type === 'owner').length,
+        verified_owners: transformedUsers.filter(u => u.user_type === 'owner' && u.is_verified).length,
+        unverified_owners: transformedUsers.filter(u => u.user_type === 'owner' && !u.is_verified).length,
+        admins: transformedUsers.filter(u => u.user_type === 'admin').length,
+        total_verified: transformedUsers.filter(u => u.is_verified && !u.is_blocked).length,
+        total_unverified: transformedUsers.filter(u => !u.is_verified && !u.is_blocked).length,
+        total_blocked: transformedUsers.filter(u => u.is_blocked).length
+      };
+      
+      console.log('Fresh user statistics:', userStats);
 
       // Transform requests data
       const transformedRequests: Request[] = (requestsData || []).map(req => ({
@@ -154,7 +154,7 @@ export const useAdminData = () => {
         model: req.car_model,
         year: req.car_year.toString(),
         part: req.part_needed,
-        customer: 'Customer', // You might want to join with profiles table for actual name
+        customer: 'Customer',
         location: req.location,
         phone: req.phone,
         status: req.status === 'pending' ? 'pending' : req.status === 'offer_received' ? 'matched' : 'completed',
@@ -171,19 +171,21 @@ export const useAdminData = () => {
         status: offer.status
       }));
 
-      // Transform verifications data with proper type casting
+      // Transform verifications data
       const transformedVerifications: SellerVerification[] = (verificationsData || []).map(verification => ({
         ...verification,
         verification_status: verification.verification_status as 'pending' | 'approved' | 'rejected'
       }));
 
+      // Update all state
       setRequests(transformedRequests);
       setOffers(transformedOffers);
       setVerifications(transformedVerifications);
-      
-      console.log('Admin data fetch completed successfully');
+      setUsers(transformedUsers);
+
+      console.log('Admin data updated successfully with fresh data');
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error('Error fetching admin data:', error);
       toast({
         title: "Error",
         description: "Failed to load dashboard data.",

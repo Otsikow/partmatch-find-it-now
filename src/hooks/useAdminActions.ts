@@ -155,7 +155,7 @@ export const useAdminActions = (refetchData: () => void) => {
           .from('profiles')
           .update({
             is_verified: true,
-            user_type: 'supplier', // Ensure they become a supplier
+            user_type: 'supplier',
             verified_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
           })
@@ -167,40 +167,15 @@ export const useAdminActions = (refetchData: () => void) => {
         }
 
         console.log('Successfully updated user profile to verified supplier');
-
-        // Verify the update was successful
-        const { data: updatedProfile, error: verifyError } = await supabase
-          .from('profiles')
-          .select('user_type, is_verified, verified_at')
-          .eq('id', verification.user_id)
-          .single();
-
-        if (verifyError) {
-          console.error('Error verifying profile update:', verifyError);
-        } else {
-          console.log('Profile verification check result:', updatedProfile);
-        }
       }
-
-      // 4. Comprehensive data refresh
-      console.log('Triggering comprehensive data refresh...');
-      await refetchData();
-      
-      // Multiple staggered refreshes to ensure UI consistency
-      setTimeout(async () => {
-        console.log('Secondary refresh after verification action...');
-        await refetchData();
-      }, 500);
-      
-      setTimeout(async () => {
-        console.log('Final refresh after verification action...');
-        await refetchData();
-      }, 1500);
 
       toast({
         title: `Verification ${action === 'approve' ? 'Approved' : 'Rejected'}!`,
         description: `The seller verification has been ${status}.`,
       });
+
+      // Comprehensive data refresh
+      await refetchData();
     } catch (error: any) {
       console.error('Error updating verification:', error);
       toast({
@@ -226,7 +201,7 @@ export const useAdminActions = (refetchData: () => void) => {
       
       const { data, error } = await supabase.storage
         .from('verification-documents')
-        .createSignedUrl(documentUrl, 3600); // 1 hour expiry
+        .createSignedUrl(documentUrl, 3600);
         
       if (error) {
         console.error('Error creating signed URL:', error);
@@ -253,7 +228,7 @@ export const useAdminActions = (refetchData: () => void) => {
     try {
       console.log('Starting user approval process for:', userId);
       
-      // Get current user data
+      // Get current user data first
       const { data: currentUser, error: fetchError } = await supabase
         .from('profiles')
         .select('*')
@@ -268,9 +243,7 @@ export const useAdminActions = (refetchData: () => void) => {
       console.log('Current user status before approval:', {
         id: currentUser.id,
         is_verified: currentUser.is_verified,
-        user_type: currentUser.user_type,
-        first_name: currentUser.first_name,
-        last_name: currentUser.last_name
+        user_type: currentUser.user_type
       });
 
       // Check if this user has an approved seller verification
@@ -298,25 +271,18 @@ export const useAdminActions = (refetchData: () => void) => {
 
       console.log('Update data:', updateData);
 
-      // Update the user profile
-      const { data: updatedProfile, error: updateError } = await supabase
+      // Update the user profile - DON'T use .single() after update
+      const { error: updateError } = await supabase
         .from('profiles')
         .update(updateData)
-        .eq('id', userId)
-        .select('*')
-        .single();
+        .eq('id', userId);
 
       if (updateError) {
         console.error('Error updating user profile:', updateError);
         throw updateError;
       }
 
-      console.log('Successfully updated user profile:', {
-        id: updatedProfile.id,
-        is_verified: updatedProfile.is_verified,
-        user_type: updatedProfile.user_type,
-        verified_at: updatedProfile.verified_at
-      });
+      console.log('Successfully updated user profile');
 
       toast({
         title: "Success",
@@ -324,24 +290,13 @@ export const useAdminActions = (refetchData: () => void) => {
       });
 
       // Comprehensive data refresh
-      console.log('Triggering comprehensive data refresh after user approval...');
       await refetchData();
       
-      setTimeout(async () => {
-        console.log('Secondary refresh after user approval...');
-        await refetchData();
-      }, 300);
-      
-      setTimeout(async () => {
-        console.log('Final refresh after user approval...');
-        await refetchData();
-      }, 1000);
-      
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error approving user:', error);
       toast({
         title: "Error",
-        description: "Failed to approve user. Please try again.",
+        description: error.message || "Failed to approve user. Please try again.",
         variant: "destructive"
       });
     }
@@ -371,11 +326,7 @@ export const useAdminActions = (refetchData: () => void) => {
         description: "The user has been suspended.",
       });
 
-      // Immediate refresh
       await refetchData();
-      setTimeout(async () => {
-        await refetchData();
-      }, 1000);
       
     } catch (error: any) {
       console.error('Error suspending user:', error);
@@ -408,11 +359,7 @@ export const useAdminActions = (refetchData: () => void) => {
         description: "The user account has been permanently deleted.",
       });
 
-      // Immediate refresh
       await refetchData();
-      setTimeout(async () => {
-        await refetchData();
-      }, 1000);
       
     } catch (error: any) {
       console.error('Error deleting user:', error);
@@ -448,11 +395,7 @@ export const useAdminActions = (refetchData: () => void) => {
         description: "The user has been unblocked.",
       });
 
-      // Immediate refresh
       await refetchData();
-      setTimeout(async () => {
-        await refetchData();
-      }, 1000);
       
     } catch (error: any) {
       console.error('Error unblocking user:', error);
