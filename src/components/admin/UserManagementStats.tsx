@@ -78,6 +78,10 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         icon={Users}
         color="text-blue-600"
         bgColor="bg-gradient-to-br from-blue-50 to-blue-100"
+        onClick={() => {
+          // Navigate to sellers tab by default when clicking total users
+          onNavigateToCategory('sellers');
+        }}
       />
       
       <StatCard
@@ -113,6 +117,10 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         icon={UserCheck}
         color="text-emerald-600"
         bgColor="bg-gradient-to-br from-emerald-50 to-emerald-100"
+        onClick={() => {
+          // Navigate to sellers tab to show verified users
+          onNavigateToCategory('sellers');
+        }}
       />
       
       <StatCard
@@ -121,6 +129,10 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         icon={UserX}
         color="text-yellow-600"
         bgColor="bg-gradient-to-br from-yellow-50 to-yellow-100"
+        onClick={() => {
+          // Navigate to sellers tab to show unverified users
+          onNavigateToCategory('sellers');
+        }}
       />
       
       <StatCard
@@ -129,19 +141,30 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         icon={AlertTriangle}
         color="text-red-600"
         bgColor="bg-gradient-to-br from-red-50 to-red-100"
+        onClick={() => {
+          // Navigate to sellers tab to show suspended users
+          onNavigateToCategory('sellers');
+        }}
       />
       
-      <div className="flex flex-col gap-2">
-        <div className="text-xs text-gray-500 font-medium">Seller Breakdown</div>
-        <div className="flex items-center gap-2">
-          <Badge className="bg-green-100 text-green-800 text-xs">
-            Verified: {stats.verifiedSellers}
-          </Badge>
-          <Badge className="bg-yellow-100 text-yellow-800 text-xs">
-            Pending: {stats.unverifiedSellers}
-          </Badge>
-        </div>
-      </div>
+      <Card className="bg-gradient-to-br from-gray-50 to-gray-100 border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-105"
+            onClick={() => onNavigateToCategory('sellers')}>
+        <CardHeader className="flex flex-col space-y-1.5 pb-2">
+          <CardTitle className="text-xs text-gray-500 font-medium">Seller Breakdown</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          <div className="flex items-center gap-2">
+            <Badge className="bg-green-100 text-green-800 text-xs">
+              Verified: {stats.verifiedSellers}
+            </Badge>
+          </div>
+          <div className="flex items-center gap-2">
+            <Badge className="bg-yellow-100 text-yellow-800 text-xs">
+              Pending: {stats.unverifiedSellers}
+            </Badge>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

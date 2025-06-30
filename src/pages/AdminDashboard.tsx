@@ -12,7 +12,7 @@ import UserCategoryTabs from "@/components/admin/UserCategoryTabs";
 import UserManagementStats from "@/components/admin/UserManagementStats";
 import { useAdminData } from "@/hooks/useAdminData";
 import { useAdminActions } from "@/hooks/useAdminActions";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface UserProfile {
   id: string;
@@ -53,9 +53,20 @@ const AdminDashboard = () => {
   };
 
   const handleNavigateToCategory = (category: string) => {
+    console.log('Navigating to category:', category);
     setActiveTab("users");
     setActiveUserTab(category);
   };
+
+  // Auto-refresh data every 10 seconds to ensure real-time updates
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log('Auto-refreshing admin data...');
+      refetchData();
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [refetchData]);
 
   if (loading) {
     return (

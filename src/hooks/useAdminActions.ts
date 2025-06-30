@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 
@@ -262,9 +263,15 @@ export const useAdminActions = (refetchData: () => void) => {
         description: "User has been approved successfully.",
       });
 
-      // Force a complete data refresh
-      console.log('Refreshing data after user approval...');
+      // Force immediate data refresh
+      console.log('Immediately refreshing data after user approval...');
       await refetchData();
+      
+      // Add a small delay and refresh again to ensure UI updates
+      setTimeout(async () => {
+        console.log('Secondary refresh after approval...');
+        await refetchData();
+      }, 1000);
       
     } catch (error) {
       console.error('Error approving user:', error);
@@ -295,13 +302,17 @@ export const useAdminActions = (refetchData: () => void) => {
 
       console.log('Successfully suspended user');
 
-      // Refresh data
-      await refetchData();
-      
       toast({
         title: "User Suspended!",
         description: "The user has been suspended.",
       });
+
+      // Immediate refresh
+      await refetchData();
+      setTimeout(async () => {
+        await refetchData();
+      }, 1000);
+      
     } catch (error: any) {
       console.error('Error suspending user:', error);
       toast({
@@ -328,13 +339,17 @@ export const useAdminActions = (refetchData: () => void) => {
 
       console.log('Successfully deleted user');
 
-      // Refresh data
-      await refetchData();
-      
       toast({
         title: "User Deleted!",
         description: "The user account has been permanently deleted.",
       });
+
+      // Immediate refresh
+      await refetchData();
+      setTimeout(async () => {
+        await refetchData();
+      }, 1000);
+      
     } catch (error: any) {
       console.error('Error deleting user:', error);
       toast({
@@ -364,13 +379,17 @@ export const useAdminActions = (refetchData: () => void) => {
 
       console.log('Successfully unblocked user');
 
-      // Refresh data
-      await refetchData();
-      
       toast({
         title: "User Unblocked!",
         description: "The user has been unblocked.",
       });
+
+      // Immediate refresh
+      await refetchData();
+      setTimeout(async () => {
+        await refetchData();
+      }, 1000);
+      
     } catch (error: any) {
       console.error('Error unblocking user:', error);
       toast({
