@@ -21,21 +21,21 @@ const CTASection = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-2xl mx-auto">
-          <Link to="/search" className="w-full sm:w-auto">
+          <Link to="/search-parts" className="w-full sm:w-auto">
             <Button size="lg" variant="secondary" className="w-full bg-white text-red-700 hover:bg-yellow-50 shadow-lg font-semibold">
               <Search className="mr-2 h-5 w-5" />
               Find Car Parts
             </Button>
           </Link>
           
-          <Link to="/request" className="w-full sm:w-auto">
+          <Link to="/request-part" className="w-full sm:w-auto">
             <Button size="lg" className="w-full bg-white text-gray-900 hover:bg-gray-50 shadow-lg font-semibold border-2 border-white">
               <Search className="mr-2 h-5 w-5" />
               Request Parts Now
             </Button>
           </Link>
 
-          <Link to="/supplier" className="w-full sm:w-auto">
+          <Link to="/supplier-dashboard" className="w-full sm:w-auto">
             <Button size="lg" className="w-full bg-white text-gray-900 hover:bg-gray-50 shadow-lg font-semibold border-2 border-white">
               <Package className="mr-2 h-5 w-5" />
               Sell Car Parts
