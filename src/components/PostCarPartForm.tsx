@@ -59,7 +59,9 @@ const PostCarPartForm = ({ onPartPosted }: { onPartPosted: () => void }) => {
   const uploadImages = async (images: File[]): Promise<string[]> => {
     const uploadPromises = images.map(async (image, index) => {
       const timestamp = Date.now();
-      const fileName = `car-parts/${user?.id}/${timestamp}-${index}.${image.name.split('.').pop()}`;
+      const fileName = `${user?.id}/${timestamp}-${index}.${image.name.split('.').pop()}`;
+      
+      console.log('Uploading image:', fileName);
       
       const { data, error } = await supabase.storage
         .from('car-part-images')
@@ -69,7 +71,14 @@ const PostCarPartForm = ({ onPartPosted }: { onPartPosted: () => void }) => {
         console.error('Image upload error:', error);
         throw error;
       }
-      return data.path;
+      
+      // Get the public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('car-part-images')
+        .getPublicUrl(fileName);
+      
+      console.log('Image uploaded successfully, public URL:', publicUrl);
+      return publicUrl;
     });
 
     return Promise.all(uploadPromises);
@@ -124,12 +133,12 @@ const PostCarPartForm = ({ onPartPosted }: { onPartPosted: () => void }) => {
       console.log('Form validation passed, proceeding with submission');
 
       // Upload images if any
-      let imagePaths: string[] = [];
+      let imageUrls: string[] = [];
       if (formData.images.length > 0) {
         console.log('Uploading images:', formData.images.length);
         try {
-          imagePaths = await uploadImages(formData.images);
-          console.log('Images uploaded successfully:', imagePaths);
+          imageUrls = await uploadImages(formData.images);
+          console.log('Images uploaded successfully:', imageUrls);
         } catch (uploadError) {
           console.error('Image upload failed:', uploadError);
           toast({
@@ -154,7 +163,7 @@ const PostCarPartForm = ({ onPartPosted }: { onPartPosted: () => void }) => {
         price: price,
         currency: 'GHS',
         address: formData.address.trim(),
-        images: imagePaths.length > 0 ? imagePaths : null,
+        images: imageUrls.length > 0 ? imageUrls : null,
         status: 'available'
       };
 

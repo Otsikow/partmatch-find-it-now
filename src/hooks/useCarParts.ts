@@ -84,14 +84,26 @@ export const useCarParts = (params?: UseCarPartsParams) => {
         return;
       }
 
-      // Transform the data to match our CarPart interface
-      const transformedParts: CarPart[] = (data || []).map(part => ({
-        ...part,
-        condition: part.condition as 'New' | 'Used' | 'Refurbished',
-        status: part.status as 'available' | 'sold' | 'hidden' | 'pending',
-        profiles: part.profiles
-      }));
+      // Transform the data to match our CarPart interface and ensure images are properly formatted
+      const transformedParts: CarPart[] = (data || []).map(part => {
+        console.log('Processing part images:', part.images);
+        
+        // Ensure images are properly formatted as URLs
+        let processedImages: string[] = [];
+        if (part.images && Array.isArray(part.images)) {
+          processedImages = part.images.filter(img => typeof img === 'string' && img.trim() !== '');
+        }
+        
+        return {
+          ...part,
+          condition: part.condition as 'New' | 'Used' | 'Refurbished',
+          status: part.status as 'available' | 'sold' | 'hidden' | 'pending',
+          profiles: part.profiles,
+          images: processedImages.length > 0 ? processedImages : undefined
+        };
+      });
 
+      console.log('Transformed parts with images:', transformedParts);
       setParts(transformedParts);
     } catch (err) {
       console.error('Unexpected error:', err);

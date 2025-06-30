@@ -33,19 +33,51 @@ const CarPartCard = ({ part, onContact }: CarPartCardProps) => {
     }
   };
 
+  // Get the first valid image URL
+  const getImageUrl = () => {
+    if (part.images && part.images.length > 0) {
+      const firstImage = part.images[0];
+      console.log('Displaying image URL:', firstImage);
+      return firstImage;
+    }
+    return null;
+  };
+
+  const imageUrl = getImageUrl();
+
   return (
     <Card className="w-full max-w-sm bg-white shadow-lg hover:shadow-xl transition-all duration-300 border-0 overflow-hidden">
       {/* Image Section */}
-      {part.images && part.images.length > 0 && (
+      {imageUrl ? (
         <div className="relative h-48 bg-gray-100">
           <img
-            src={part.images[0]}
+            src={imageUrl}
             alt={part.title}
             className="w-full h-full object-cover"
             onError={(e) => {
+              console.error('Image failed to load:', imageUrl);
               e.currentTarget.style.display = 'none';
+              e.currentTarget.parentElement?.classList.add('hidden');
+            }}
+            onLoad={() => {
+              console.log('Image loaded successfully:', imageUrl);
             }}
           />
+          <div className="absolute top-2 right-2">
+            <Badge 
+              variant="secondary" 
+              className={`${getConditionColor(part.condition)} font-semibold`}
+            >
+              {part.condition}
+            </Badge>
+          </div>
+        </div>
+      ) : (
+        <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+          <div className="text-gray-400 text-center">
+            <div className="text-2xl mb-2">📦</div>
+            <p className="text-sm">No Image Available</p>
+          </div>
           <div className="absolute top-2 right-2">
             <Badge 
               variant="secondary" 
