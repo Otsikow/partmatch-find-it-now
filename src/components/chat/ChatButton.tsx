@@ -51,14 +51,20 @@ const ChatButton = ({
     try {
       console.log('Starting chat with seller:', sellerId, 'for part:', partId);
       
-      // Check if chat already exists
-      const { data: existingChat, error: searchError } = await supabase
+      // Search for existing chat (properly handle null part_id)
+      let chatQuery = supabase
         .from('chats')
         .select('id')
         .eq('buyer_id', user.id)
-        .eq('seller_id', sellerId)
-        .eq('part_id', partId || null)
-        .maybeSingle();
+        .eq('seller_id', sellerId);
+
+      if (partId) {
+        chatQuery = chatQuery.eq('part_id', partId);
+      } else {
+        chatQuery = chatQuery.is('part_id', null);
+      }
+
+      const { data: existingChat, error: searchError } = await chatQuery.maybeSingle();
 
       if (searchError) {
         console.error('Error searching for existing chat:', searchError);
