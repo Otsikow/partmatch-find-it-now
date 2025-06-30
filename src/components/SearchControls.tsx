@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -6,24 +7,30 @@ import { getUniqueMakes, getUniqueModels, getUniqueYears } from "@/utils/partFil
 
 interface SearchControlsProps {
   searchTerm: string;
-  setSearchTerm: (term: string) => void;
-  selectedMake: string;
-  setSelectedMake: (make: string) => void;
-  selectedModel: string;
-  setSelectedModel: (model: string) => void;
-  selectedYear: string;
-  setSelectedYear: (year: string) => void;
+  onSearchChange: (term: string) => void;
+  filters: {
+    make: string;
+    model: string;
+    year: string;
+    category: string;
+    location: string;
+    priceRange: [number, number];
+  };
+  onFiltersChange: (filters: {
+    make: string;
+    model: string;
+    year: string;
+    category: string;
+    location: string;
+    priceRange: [number, number];
+  }) => void;
 }
 
 const SearchControls = ({ 
   searchTerm, 
-  setSearchTerm, 
-  selectedMake, 
-  setSelectedMake, 
-  selectedModel,
-  setSelectedModel,
-  selectedYear,
-  setSelectedYear
+  onSearchChange, 
+  filters,
+  onFiltersChange
 }: SearchControlsProps) => {
   // Popular car brands in Ghana
   const popularMakesInGhana = [
@@ -40,21 +47,34 @@ const SearchControls = ({
   ];
 
   const uniqueMakes = getUniqueMakes(mockParts);
-  const uniqueModels = getUniqueModels(mockParts, selectedMake);
-  const uniqueYears = getUniqueYears(mockParts, selectedMake, selectedModel);
+  const uniqueModels = getUniqueModels(mockParts, filters.make);
+  const uniqueYears = getUniqueYears(mockParts, filters.make, filters.model);
 
   // Combine database makes with popular makes, removing duplicates and sorting alphabetically
   const allMakes = Array.from(new Set([...uniqueMakes, ...popularMakesInGhana])).sort();
 
   const handleMakeChange = (make: string) => {
-    setSelectedMake(make);
-    setSelectedModel(''); // Reset model when make changes
-    setSelectedYear(''); // Reset year when make changes
+    onFiltersChange({
+      ...filters,
+      make,
+      model: '', // Reset model when make changes
+      year: '' // Reset year when make changes
+    });
   };
 
   const handleModelChange = (model: string) => {
-    setSelectedModel(model);
-    setSelectedYear(''); // Reset year when model changes
+    onFiltersChange({
+      ...filters,
+      model,
+      year: '' // Reset year when model changes
+    });
+  };
+
+  const handleYearChange = (year: string) => {
+    onFiltersChange({
+      ...filters,
+      year
+    });
   };
 
   return (
@@ -64,7 +84,7 @@ const SearchControls = ({
           <Input
             placeholder="Search parts (e.g. alternator, brake pads)"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => onSearchChange(e.target.value)}
             className="w-full text-sm sm:text-base md:text-lg border-emerald-200 focus:border-emerald-400"
           />
         </div>
@@ -74,20 +94,20 @@ const SearchControls = ({
           <p className="text-sm font-medium text-gray-700 mb-2">Make</p>
           <div className="flex gap-1 sm:gap-2 flex-wrap max-h-32 overflow-y-auto">
             <Button
-              variant={selectedMake === '' ? 'default' : 'outline'}
+              variant={filters.make === '' ? 'default' : 'outline'}
               size="sm"
               onClick={() => handleMakeChange('')}
-              className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 flex-shrink-0 ${selectedMake === '' ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
+              className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 flex-shrink-0 ${filters.make === '' ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
             >
               All Makes
             </Button>
             {allMakes.map(make => (
               <Button
                 key={make}
-                variant={selectedMake === make ? 'default' : 'outline'}
+                variant={filters.make === make ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => handleMakeChange(make)}
-                className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 flex-shrink-0 ${selectedMake === make ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
+                className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 flex-shrink-0 ${filters.make === make ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
               >
                 {make}
               </Button>
@@ -96,25 +116,25 @@ const SearchControls = ({
         </div>
 
         {/* Model Filter */}
-        {selectedMake && (
+        {filters.make && (
           <div>
             <p className="text-sm font-medium text-gray-700 mb-2">Model</p>
             <div className="flex gap-1 sm:gap-2 flex-wrap">
               <Button
-                variant={selectedModel === '' ? 'default' : 'outline'}
+                variant={filters.model === '' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => handleModelChange('')}
-                className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 ${selectedModel === '' ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
+                className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 ${filters.model === '' ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
               >
                 All Models
               </Button>
               {uniqueModels.map(model => (
                 <Button
                   key={model}
-                  variant={selectedModel === model ? 'default' : 'outline'}
+                  variant={filters.model === model ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => handleModelChange(model)}
-                  className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 ${selectedModel === model ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
+                  className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 ${filters.model === model ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
                 >
                   {model}
                 </Button>
@@ -124,25 +144,25 @@ const SearchControls = ({
         )}
 
         {/* Year Filter */}
-        {selectedMake && selectedModel && (
+        {filters.make && filters.model && (
           <div>
             <p className="text-sm font-medium text-gray-700 mb-2">Year</p>
             <div className="flex gap-1 sm:gap-2 flex-wrap">
               <Button
-                variant={selectedYear === '' ? 'default' : 'outline'}
+                variant={filters.year === '' ? 'default' : 'outline'}
                 size="sm"
-                onClick={() => setSelectedYear('')}
-                className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 ${selectedYear === '' ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
+                onClick={() => handleYearChange('')}
+                className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 ${filters.year === '' ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
               >
                 All Years
               </Button>
               {uniqueYears.map(year => (
                 <Button
                   key={year}
-                  variant={selectedYear === year ? 'default' : 'outline'}
+                  variant={filters.year === year ? 'default' : 'outline'}
                   size="sm"
-                  onClick={() => setSelectedYear(year)}
-                  className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 ${selectedYear === year ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
+                  onClick={() => handleYearChange(year)}
+                  className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 ${filters.year === year ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
                 >
                   {year}
                 </Button>
