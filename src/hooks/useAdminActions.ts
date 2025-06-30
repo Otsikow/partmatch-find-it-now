@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 
@@ -73,24 +72,40 @@ export const useAdminActions = (refetchData: () => void) => {
     try {
       console.log('Completing request:', requestId);
       
-      const { error } = await supabase
+      // Update request status
+      const { error: requestError } = await supabase
         .from('part_requests')
         .update({ status: 'completed' })
         .eq('id', requestId);
 
-      if (error) {
-        console.error('Error completing request:', error);
-        throw error;
+      if (requestError) {
+        console.error('Error completing request:', requestError);
+        throw requestError;
       }
 
-      console.log('Successfully completed request');
+      // Mark related offers as transaction completed for rating eligibility
+      const { error: offerError } = await supabase
+        .from('offers')
+        .update({ 
+          transaction_completed: true,
+          completed_at: new Date().toISOString()
+        })
+        .eq('request_id', requestId)
+        .eq('status', 'accepted');
+
+      if (offerError) {
+        console.error('Error updating offer completion status:', offerError);
+        throw offerError;
+      }
+
+      console.log('Successfully completed request and marked offers for rating');
 
       // Refresh data
       await refetchData();
       
       toast({
-        title: "Request Completed!",
-        description: "The transaction has been marked as complete.",
+        title: "Transaction Completed!",
+        description: "The transaction has been marked as complete. Buyers can now rate the seller.",
       });
     } catch (error: any) {
       console.error('Error completing request:', error);
@@ -147,7 +162,7 @@ export const useAdminActions = (refetchData: () => void) => {
 
       console.log('Successfully updated verification status to:', status);
 
-      // 3. If approved, update the user's profile
+      // 3. If approved, update the user's profile (only suppliers need manual verification now)
       if (action === 'approve') {
         console.log('Updating user profile to verified supplier for user:', verification.user_id);
 
@@ -224,6 +239,7 @@ export const useAdminActions = (refetchData: () => void) => {
     }
   };
 
+  // Buyers are auto-approved now, so this function is simplified for suppliers only
   const handleApproveUser = async (userId: string) => {
     try {
       console.log('Starting user approval process for:', userId);
@@ -245,6 +261,15 @@ export const useAdminActions = (refetchData: () => void) => {
         is_verified: currentUser.is_verified,
         user_type: currentUser.user_type
       });
+
+      // Only allow manual approval for suppliers (buyers are auto-verified)
+      if (currentUser.user_type === 'owner') {
+        toast({
+          title: "Info",
+          description: "Buyers are automatically verified upon registration.",
+        });
+        return;
+      }
 
       // Check if this user has an approved seller verification
       const { data: sellerVerification } = await supabase
@@ -271,7 +296,7 @@ export const useAdminActions = (refetchData: () => void) => {
 
       console.log('Update data:', updateData);
 
-      // Update the user profile - DON'T use .single() after update
+      // Update the user profile
       const { error: updateError } = await supabase
         .from('profiles')
         .update(updateData)
@@ -286,7 +311,7 @@ export const useAdminActions = (refetchData: () => void) => {
 
       toast({
         title: "Success",
-        description: `User has been approved and verified successfully.`,
+        description: `Supplier has been approved and verified successfully.`,
       });
 
       // Comprehensive data refresh

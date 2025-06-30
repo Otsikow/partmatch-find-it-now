@@ -43,6 +43,8 @@ interface Offer {
   price: string;
   phone: string;
   status: 'pending' | 'accepted' | 'rejected' | 'expired';
+  transaction_completed?: boolean;
+  buyer_id?: string;
 }
 
 interface UserProfile {
@@ -83,7 +85,7 @@ export const useAdminData = () => {
         throw requestsError;
       }
 
-      // Fetch real offers from database
+      // Fetch real offers from database with new transaction fields
       const { data: offersData, error: offersError } = await supabase
         .from('offers')
         .select(`
@@ -98,7 +100,7 @@ export const useAdminData = () => {
         throw offersError;
       }
 
-      // Fetch seller verifications
+      // Fetch seller verifications (only for suppliers)
       const { data: verificationsData, error: verificationsError } = await supabase
         .from('seller_verifications')
         .select('*')
@@ -109,7 +111,7 @@ export const useAdminData = () => {
         throw verificationsError;
       }
 
-      // Fetch users from profiles table with fresh data
+      // Fetch users from profiles table - buyers are now auto-verified
       console.log('Fetching users from profiles...');
       const { data: usersData, error: usersError } = await supabase
         .from('profiles')
@@ -123,29 +125,29 @@ export const useAdminData = () => {
 
       console.log('Raw users data:', usersData?.length || 0, 'users fetched');
 
-      // Transform users data
+      // Transform users data - buyers are auto-verified, only suppliers need manual verification
       const transformedUsers: UserProfile[] = (usersData || []).map(user => ({
         ...user,
         email: `user-${user.id.slice(0, 8)}@system.local`,
         user_type: user.user_type as 'owner' | 'supplier' | 'admin'
       }));
 
-      // Log detailed statistics
+      // Log detailed statistics - note buyers are now auto-verified
       const userStats = {
         total: transformedUsers.length,
-        suppliers: transformedUsers.filter(u => u.user_type === 'supplier').length,
-        verified_suppliers: transformedUsers.filter(u => u.user_type === 'supplier' && u.is_verified).length,
-        unverified_suppliers: transformedUsers.filter(u => u.user_type === 'supplier' && !u.is_verified).length,
-        owners: transformedUsers.filter(u => u.user_type === 'owner').length,
-        verified_owners: transformedUsers.filter(u => u.user_type === 'owner' && u.is_verified).length,
-        unverified_owners: transformedUsers.filter(u => u.user_type === 'owner' && !u.is_verified).length,
         admins: transformedUsers.filter(u => u.user_type === 'admin').length,
-        total_verified: transformedUsers.filter(u => u.is_verified && !u.is_blocked).length,
-        total_unverified: transformedUsers.filter(u => !u.is_verified && !u.is_blocked).length,
-        total_blocked: transformedUsers.filter(u => u.is_blocked).length
+        sellers: transformedUsers.filter(u => u.user_type === 'supplier').length,
+        buyers: transformedUsers.filter(u => u.user_type === 'owner').length,
+        verified: transformedUsers.filter(u => u.is_verified && !u.is_blocked).length,
+        unverified: transformedUsers.filter(u => !u.is_verified && !u.is_blocked).length,
+        suspended: transformedUsers.filter(u => u.is_blocked).length,
+        verifiedSellers: transformedUsers.filter(u => u.user_type === 'supplier' && u.is_verified && !u.is_blocked).length,
+        unverifiedSellers: transformedUsers.filter(u => u.user_type === 'supplier' && !u.is_verified && !u.is_blocked).length,
+        // Buyers are auto-verified, so we track them separately
+        autoVerifiedBuyers: transformedUsers.filter(u => u.user_type === 'owner' && u.is_verified && !u.is_blocked).length,
       };
       
-      console.log('Fresh user statistics:', userStats);
+      console.log('Fresh user statistics (buyers auto-verified):', userStats);
 
       // Transform requests data
       const transformedRequests: Request[] = (requestsData || []).map(req => ({
@@ -161,14 +163,16 @@ export const useAdminData = () => {
         timestamp: new Date(req.created_at).toLocaleString()
       }));
 
-      // Transform offers data
+      // Transform offers data with new transaction completion fields
       const transformedOffers: Offer[] = (offersData || []).map(offer => ({
         id: offer.id,
         requestId: offer.request_id,
         supplier: offer.profiles ? `${offer.profiles.first_name || ''} ${offer.profiles.last_name || ''}`.trim() : 'Unknown Seller',
         price: `GHS ${offer.price}`,
         phone: offer.profiles?.phone || '',
-        status: offer.status
+        status: offer.status,
+        transaction_completed: offer.transaction_completed || false,
+        buyer_id: offer.buyer_id
       }));
 
       // Transform verifications data
@@ -183,7 +187,7 @@ export const useAdminData = () => {
       setVerifications(transformedVerifications);
       setUsers(transformedUsers);
 
-      console.log('Admin data updated successfully with fresh data');
+      console.log('Admin data updated successfully with fresh data (buyers auto-verified)');
     } catch (error) {
       console.error('Error fetching admin data:', error);
       toast({

@@ -245,6 +245,8 @@ export type Database = {
       }
       offers: {
         Row: {
+          buyer_id: string | null
+          completed_at: string | null
           contact_unlock_fee: number | null
           contact_unlocked: boolean | null
           created_at: string | null
@@ -255,9 +257,12 @@ export type Database = {
           request_id: string
           status: Database["public"]["Enums"]["offer_status"] | null
           supplier_id: string
+          transaction_completed: boolean | null
           updated_at: string | null
         }
         Insert: {
+          buyer_id?: string | null
+          completed_at?: string | null
           contact_unlock_fee?: number | null
           contact_unlocked?: boolean | null
           created_at?: string | null
@@ -268,9 +273,12 @@ export type Database = {
           request_id: string
           status?: Database["public"]["Enums"]["offer_status"] | null
           supplier_id: string
+          transaction_completed?: boolean | null
           updated_at?: string | null
         }
         Update: {
+          buyer_id?: string | null
+          completed_at?: string | null
           contact_unlock_fee?: number | null
           contact_unlocked?: boolean | null
           created_at?: string | null
@@ -281,6 +289,7 @@ export type Database = {
           request_id?: string
           status?: Database["public"]["Enums"]["offer_status"] | null
           supplier_id?: string
+          transaction_completed?: boolean | null
           updated_at?: string | null
         }
         Relationships: [
@@ -532,31 +541,45 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          offer_id: string | null
           rating: number
           review_text: string | null
           reviewer_id: string
           seller_id: string
+          transaction_verified: boolean | null
           updated_at: string
         }
         Insert: {
           created_at?: string
           id?: string
+          offer_id?: string | null
           rating: number
           review_text?: string | null
           reviewer_id: string
           seller_id: string
+          transaction_verified?: boolean | null
           updated_at?: string
         }
         Update: {
           created_at?: string
           id?: string
+          offer_id?: string | null
           rating?: number
           review_text?: string | null
           reviewer_id?: string
           seller_id?: string
+          transaction_verified?: boolean | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "reviews_offer_id_fkey"
+            columns: ["offer_id"]
+            isOneToOne: false
+            referencedRelation: "offers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       seller_verifications: {
         Row: {
