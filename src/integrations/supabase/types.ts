@@ -550,6 +550,7 @@ export type Database = {
           location: string | null
           longitude: number | null
           phone: string | null
+          profile_photo_url: string | null
           rating: number | null
           total_ratings: number | null
           updated_at: string | null
@@ -569,6 +570,7 @@ export type Database = {
           location?: string | null
           longitude?: number | null
           phone?: string | null
+          profile_photo_url?: string | null
           rating?: number | null
           total_ratings?: number | null
           updated_at?: string | null
@@ -588,6 +590,7 @@ export type Database = {
           location?: string | null
           longitude?: number | null
           phone?: string | null
+          profile_photo_url?: string | null
           rating?: number | null
           total_ratings?: number | null
           updated_at?: string | null

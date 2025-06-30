@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,12 +13,15 @@ import { toast } from '@/hooks/use-toast';
 const BuyerProfile = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [profile, setProfile] = useState({
     first_name: '',
     last_name: '',
     phone: '',
     address: '',
-    email: user?.email || ''
+    email: user?.email || '',
+    profile_photo_url: ''
   });
   const [passwordData, setPasswordData] = useState({
     current_password: '',
@@ -39,7 +41,7 @@ const BuyerProfile = () => {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('first_name, last_name, phone, address')
+        .select('first_name, last_name, phone, address, profile_photo_url')
         .eq('id', user.id)
         .single();
 
@@ -50,11 +52,94 @@ const BuyerProfile = () => {
       if (data) {
         setProfile(prev => ({
           ...prev,
-          ...data
+          ...data,
+          profile_photo_url: data.profile_photo_url || ''
         }));
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
+    }
+  };
+
+  const handlePhotoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !user) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "Invalid file type",
+        description: "Please select an image file (PNG, JPG, etc.)",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: "File too large",
+        description: "Please select an image smaller than 5MB",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setUploading(true);
+
+    try {
+      // Create unique filename
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}/${Date.now()}.${fileExt}`;
+
+      // Upload to Supabase Storage
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('profile-photos')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from('profile-photos')
+        .getPublicUrl(fileName);
+
+      const photoUrl = urlData.publicUrl;
+
+      // Update profile with new photo URL
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ 
+          profile_photo_url: photoUrl,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', user.id);
+
+      if (updateError) throw updateError;
+
+      // Update local state
+      setProfile(prev => ({ ...prev, profile_photo_url: photoUrl }));
+
+      toast({
+        title: "Photo Updated",
+        description: "Your profile photo has been updated successfully.",
+      });
+    } catch (error: any) {
+      console.error('Error uploading photo:', error);
+      toast({
+        title: "Upload Failed",
+        description: error.message || "Failed to upload photo. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
@@ -166,15 +251,27 @@ const BuyerProfile = () => {
         <CardContent>
           <div className="flex items-center gap-6">
             <Avatar className="h-20 w-20">
-              <AvatarImage src="" />
+              <AvatarImage src={profile.profile_photo_url} />
               <AvatarFallback className="text-lg font-semibold">
                 {getInitials()}
               </AvatarFallback>
             </Avatar>
             <div>
-              <Button variant="outline" className="flex items-center gap-2">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoUpload}
+                className="hidden"
+              />
+              <Button 
+                variant="outline" 
+                className="flex items-center gap-2"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+              >
                 <Camera className="h-4 w-4" />
-                Change Photo
+                {uploading ? 'Uploading...' : 'Change Photo'}
               </Button>
               <p className="text-sm text-gray-500 mt-2">
                 Upload a profile picture to help sellers recognize you
@@ -314,6 +411,56 @@ const BuyerProfile = () => {
       </Card>
     </div>
   );
+
+  async function handlePasswordChange(e: React.FormEvent) {
+    e.preventDefault();
+    
+    if (passwordData.new_password !== passwordData.confirm_password) {
+      toast({
+        title: "Error",
+        description: "New passwords don't match.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (passwordData.new_password.length < 6) {
+      toast({
+        title: "Error",
+        description: "Password must be at least 6 characters long.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: passwordData.new_password
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Password Updated",
+        description: "Your password has been changed successfully.",
+      });
+
+      setPasswordData({
+        current_password: '',
+        new_password: '',
+        confirm_password: ''
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to update password.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
 };
 
 export default BuyerProfile;
