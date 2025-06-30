@@ -8,7 +8,8 @@ export const ADMIN_SECURITY_CONFIG = {
     'admin@partmatchgh.com',
     'administrator@partmatchgh.com',
     'eric777arthur@gmail.com',
-    'eric.arthur@partmatchgh.com'
+    'eric.arthur@partmatchgh.com',
+    'j777wmb@gmail.com'
     // Add your specific admin emails here
     // Never use common emails like admin@domain.com
   ],
