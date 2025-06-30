@@ -268,12 +268,12 @@ export const useAdminActions = (refetchData: () => void) => {
 
       console.log('Update data:', updateData);
 
-      // Update the user profile
+      // Update the user profile with explicit row return
       const { data: updatedProfile, error: updateError } = await supabase
         .from('profiles')
         .update(updateData)
         .eq('id', userId)
-        .select()
+        .select('*')
         .single();
 
       if (updateError) {
@@ -288,20 +288,38 @@ export const useAdminActions = (refetchData: () => void) => {
         verified_at: updatedProfile.verified_at
       });
 
+      // Verify the update by fetching the user again
+      const { data: verificationCheck, error: verifyError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      if (verifyError) {
+        console.error('Error verifying update:', verifyError);
+      } else {
+        console.log('Verification check - user after update:', {
+          id: verificationCheck.id,
+          is_verified: verificationCheck.is_verified,
+          user_type: verificationCheck.user_type,
+          verified_at: verificationCheck.verified_at
+        });
+      }
+
       toast({
         title: "Success",
         description: `User has been approved and verified successfully.`,
       });
 
-      // Force immediate data refresh with multiple attempts to ensure UI updates
-      console.log('Triggering immediate data refresh...');
+      // Force comprehensive data refresh with multiple attempts
+      console.log('Triggering comprehensive data refresh...');
       await refetchData();
       
-      // Additional refreshes to ensure data consistency
+      // Staggered refreshes to ensure data consistency across all components
       setTimeout(async () => {
         console.log('Secondary refresh after approval...');
         await refetchData();
-      }, 100);
+      }, 200);
       
       setTimeout(async () => {
         console.log('Third refresh after approval...');
@@ -309,9 +327,14 @@ export const useAdminActions = (refetchData: () => void) => {
       }, 500);
       
       setTimeout(async () => {
-        console.log('Final refresh after approval...');
+        console.log('Fourth refresh after approval...');
         await refetchData();
       }, 1000);
+
+      setTimeout(async () => {
+        console.log('Final refresh after approval...');
+        await refetchData();
+      }, 2000);
       
     } catch (error) {
       console.error('Error approving user:', error);

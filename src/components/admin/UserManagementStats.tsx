@@ -10,6 +10,7 @@ import {
   User,
   AlertTriangle
 } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface UserProfile {
   id: string;
@@ -24,6 +25,7 @@ interface UserManagementStatsProps {
 }
 
 const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStatsProps) => {
+  const isMobile = useIsMobile();
   console.log('UserManagementStats received users:', users.length);
   console.log('Users breakdown:', users.map(u => ({ id: u.id, type: u.user_type, verified: u.is_verified, blocked: u.is_blocked })));
 
@@ -57,21 +59,23 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
     onClick?: () => void;
   }) => (
     <Card 
-      className={`${bgColor} border-0 shadow-lg hover:shadow-xl transition-all duration-300 ${onClick ? 'cursor-pointer hover:scale-105' : ''}`}
+      className={`${bgColor} border-0 shadow-lg hover:shadow-xl transition-all duration-300 ${onClick ? 'cursor-pointer hover:scale-105' : ''} ${isMobile ? 'h-24' : 'h-auto'}`}
       onClick={onClick}
     >
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium text-gray-600">{title}</CardTitle>
-        <Icon className={`h-4 w-4 ${color}`} />
+      <CardHeader className={`flex flex-row items-center justify-between space-y-0 ${isMobile ? 'pb-1 pt-3 px-3' : 'pb-2'}`}>
+        <CardTitle className={`${isMobile ? 'text-xs' : 'text-sm'} font-medium text-gray-600 leading-tight`}>
+          {title}
+        </CardTitle>
+        <Icon className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} ${color} flex-shrink-0`} />
       </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
+      <CardContent className={isMobile ? 'px-3 pb-3' : ''}>
+        <div className={`${isMobile ? 'text-lg' : 'text-2xl'} font-bold`}>{value}</div>
       </CardContent>
     </Card>
   );
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+    <div className={`grid ${isMobile ? 'grid-cols-2 gap-2' : 'grid-cols-2 md:grid-cols-4 gap-4'} mb-4 sm:mb-6`}>
       <StatCard
         title="Total Users"
         value={stats.total}
@@ -164,19 +168,21 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         }}
       />
       
-      <Card className="bg-gradient-to-br from-gray-50 to-gray-100 border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-105"
+      <Card className={`bg-gradient-to-br from-gray-50 to-gray-100 border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-105 ${isMobile ? 'h-24' : 'h-auto'}`}
             onClick={() => onNavigateToCategory('sellers')}>
-        <CardHeader className="flex flex-col space-y-1.5 pb-2">
-          <CardTitle className="text-xs text-gray-500 font-medium">Seller Breakdown</CardTitle>
+        <CardHeader className={`flex flex-col space-y-1.5 ${isMobile ? 'pb-1 pt-2 px-3' : 'pb-2'}`}>
+          <CardTitle className={`${isMobile ? 'text-xs' : 'text-xs'} text-gray-500 font-medium`}>
+            Seller Breakdown
+          </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-2">
+        <CardContent className={`space-y-1 ${isMobile ? 'px-3 pb-2' : 'space-y-2'}`}>
           <div className="flex items-center gap-2">
-            <Badge className="bg-green-100 text-green-800 text-xs">
+            <Badge className={`bg-green-100 text-green-800 ${isMobile ? 'text-xs px-1 py-0' : 'text-xs'}`}>
               Verified: {stats.verifiedSellers}
             </Badge>
           </div>
           <div className="flex items-center gap-2">
-            <Badge className="bg-yellow-100 text-yellow-800 text-xs">
+            <Badge className={`bg-yellow-100 text-yellow-800 ${isMobile ? 'text-xs px-1 py-0' : 'text-xs'}`}>
               Pending: {stats.unverifiedSellers}
             </Badge>
           </div>

@@ -1,9 +1,9 @@
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Users, UserCheck, UserX, Shield, ShoppingCart, User } from "lucide-react";
 import UserCard from "./UserCard";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface UserProfile {
   id: string;
@@ -41,6 +41,8 @@ const UserCategoryTabs = ({
   activeTab = "sellers",
   onTabChange
 }: UserCategoryTabsProps) => {
+  const isMobile = useIsMobile();
+  
   // Categorize users
   const adminUsers = users.filter(user => user.user_type === 'admin');
   const sellerUsers = users.filter(user => user.user_type === 'supplier');
@@ -68,29 +70,30 @@ const UserCategoryTabs = ({
     icon: any; 
     color: string;
   }) => (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2 mb-4">
-        <Icon className={`h-5 w-5 ${color}`} />
-        <h3 className="text-lg font-semibold">{title}</h3>
-        <Badge variant="secondary">{count}</Badge>
+    <div className="space-y-3 sm:space-y-4">
+      <div className="flex items-center gap-2 mb-3 sm:mb-4 px-2 sm:px-0">
+        <Icon className={`${isMobile ? 'h-4 w-4' : 'h-5 w-5'} ${color}`} />
+        <h3 className={`${isMobile ? 'text-base' : 'text-lg'} font-semibold`}>{title}</h3>
+        <Badge variant="secondary" className={isMobile ? 'text-xs' : ''}>{count}</Badge>
       </div>
       
       {users.length === 0 ? (
-        <Card className="p-6 text-center bg-gray-50">
-          <p className="text-gray-500">No users in this category</p>
+        <Card className="p-4 sm:p-6 text-center bg-gray-50 mx-2 sm:mx-0">
+          <p className={`text-gray-500 ${isMobile ? 'text-sm' : ''}`}>No users in this category</p>
         </Card>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {users.map(user => (
-            <UserCard
-              key={user.id}
-              user={user}
-              onApprove={onApprove}
-              onSuspend={onSuspend}
-              onDelete={onDelete}
-              onUnblock={onUnblock}
-              onViewDetails={onViewDetails}
-            />
+            <div key={user.id} className="mx-2 sm:mx-0">
+              <UserCard
+                user={user}
+                onApprove={onApprove}
+                onSuspend={onSuspend}
+                onDelete={onDelete}
+                onUnblock={onUnblock}
+                onViewDetails={onViewDetails}
+              />
+            </div>
           ))}
         </div>
       )}
@@ -99,23 +102,23 @@ const UserCategoryTabs = ({
 
   return (
     <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
-      <TabsList className="grid w-full grid-cols-3 bg-gradient-to-r from-white/90 to-purple-50/50 backdrop-blur-sm">
-        <TabsTrigger value="sellers" className="text-base font-inter">
-          <ShoppingCart className="h-4 w-4 mr-2" />
-          Sellers ({sellerUsers.length})
+      <TabsList className={`grid w-full grid-cols-3 bg-gradient-to-r from-white/90 to-purple-50/50 backdrop-blur-sm ${isMobile ? 'mb-3' : 'mb-4'}`}>
+        <TabsTrigger value="sellers" className={`${isMobile ? 'text-xs px-1' : 'text-base'} font-inter`}>
+          <ShoppingCart className={`${isMobile ? 'h-3 w-3 mr-1' : 'h-4 w-4 mr-2'}`} />
+          {isMobile ? `Sellers (${sellerUsers.length})` : `Sellers (${sellerUsers.length})`}
         </TabsTrigger>
-        <TabsTrigger value="buyers" className="text-base font-inter">
-          <User className="h-4 w-4 mr-2" />
-          Buyers ({buyerUsers.length})
+        <TabsTrigger value="buyers" className={`${isMobile ? 'text-xs px-1' : 'text-base'} font-inter`}>
+          <User className={`${isMobile ? 'h-3 w-3 mr-1' : 'h-4 w-4 mr-2'}`} />
+          {isMobile ? `Buyers (${buyerUsers.length})` : `Buyers (${buyerUsers.length})`}
         </TabsTrigger>
-        <TabsTrigger value="admins" className="text-base font-inter">
-          <Shield className="h-4 w-4 mr-2" />
-          Admins ({adminUsers.length})
+        <TabsTrigger value="admins" className={`${isMobile ? 'text-xs px-1' : 'text-base'} font-inter`}>
+          <Shield className={`${isMobile ? 'h-3 w-3 mr-1' : 'h-4 w-4 mr-2'}`} />
+          {isMobile ? `Admins (${adminUsers.length})` : `Admins (${adminUsers.length})`}
         </TabsTrigger>
       </TabsList>
 
-      <TabsContent value="sellers" className="mt-6">
-        <div className="space-y-8">
+      <TabsContent value="sellers" className="mt-4 sm:mt-6">
+        <div className="space-y-6 sm:space-y-8">
           <CategoryCard
             title="Verified Sellers"
             count={verifiedSellers.length}
@@ -144,8 +147,8 @@ const UserCategoryTabs = ({
         </div>
       </TabsContent>
 
-      <TabsContent value="buyers" className="mt-6">
-        <div className="space-y-8">
+      <TabsContent value="buyers" className="mt-4 sm:mt-6">
+        <div className="space-y-6 sm:space-y-8">
           <CategoryCard
             title="Verified Buyers"
             count={verifiedBuyers.length}
@@ -174,7 +177,7 @@ const UserCategoryTabs = ({
         </div>
       </TabsContent>
 
-      <TabsContent value="admins" className="mt-6">
+      <TabsContent value="admins" className="mt-4 sm:mt-6">
         <CategoryCard
           title="System Administrators"
           count={adminUsers.length}
