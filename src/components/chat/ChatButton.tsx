@@ -49,6 +49,8 @@ const ChatButton = ({
     }
 
     try {
+      console.log('Starting chat with seller:', sellerId, 'for part:', partId);
+      
       // Check if chat already exists
       const { data: existingChat, error: searchError } = await supabase
         .from('chats')
@@ -58,12 +60,17 @@ const ChatButton = ({
         .eq('part_id', partId || null)
         .maybeSingle();
 
-      if (searchError) throw searchError;
+      if (searchError) {
+        console.error('Error searching for existing chat:', searchError);
+        throw searchError;
+      }
 
       let chatId = existingChat?.id;
+      console.log('Existing chat found:', existingChat);
 
       // Create new chat if it doesn't exist
       if (!chatId) {
+        console.log('Creating new chat...');
         const { data: newChat, error: createError } = await supabase
           .from('chats')
           .insert({
@@ -74,17 +81,33 @@ const ChatButton = ({
           .select('id')
           .single();
 
-        if (createError) throw createError;
+        if (createError) {
+          console.error('Error creating chat:', createError);
+          throw createError;
+        }
+        
+        console.log('New chat created:', newChat);
         chatId = newChat.id;
+        
+        toast({
+          title: "Chat Started",
+          description: "New conversation created successfully",
+        });
+      } else {
+        toast({
+          title: "Chat Opened",
+          description: "Opening existing conversation",
+        });
       }
 
       // Navigate to chat
+      console.log('Navigating to chat:', chatId);
       navigate(`/chat?id=${chatId}`);
     } catch (error) {
       console.error('Error starting chat:', error);
       toast({
         title: "Error",
-        description: "Failed to start conversation",
+        description: "Failed to start conversation. Please try again.",
         variant: "destructive"
       });
     }

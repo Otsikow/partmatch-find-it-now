@@ -49,6 +49,8 @@ const ChatList = ({ onChatSelect }: ChatListProps) => {
 
     try {
       setLoading(true);
+      console.log('Fetching chats for user:', user.id);
+      
       const { data, error } = await supabase
         .from('chats')
         .select(`
@@ -60,7 +62,12 @@ const ChatList = ({ onChatSelect }: ChatListProps) => {
         .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`)
         .order('last_message_at', { ascending: false, nullsFirst: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching chats:', error);
+        throw error;
+      }
+
+      console.log('Raw chat data:', data);
 
       const formattedChats = data?.map(chat => ({
         ...chat,
@@ -68,6 +75,7 @@ const ChatList = ({ onChatSelect }: ChatListProps) => {
         part_info: chat.part
       })) || [];
 
+      console.log('Formatted chats:', formattedChats);
       setChats(formattedChats);
     } catch (error) {
       console.error('Error fetching chats:', error);
@@ -100,6 +108,7 @@ const ChatList = ({ onChatSelect }: ChatListProps) => {
           filter: `or(buyer_id.eq.${user.id},seller_id.eq.${user.id})`
         },
         () => {
+          console.log('Chat updated, refetching...');
           fetchChats();
         }
       )
@@ -114,7 +123,7 @@ const ChatList = ({ onChatSelect }: ChatListProps) => {
     if (!searchTerm) return true;
     
     const searchLower = searchTerm.toLowerCase();
-    const otherUserName = `${chat.other_user.first_name || ''} ${chat.other_user.last_name || ''}`.toLowerCase();
+    const otherUserName = `${chat.other_user?.first_name || ''} ${chat.other_user?.last_name || ''}`.toLowerCase();
     const partTitle = chat.part_info?.title?.toLowerCase() || '';
     
     return otherUserName.includes(searchLower) || partTitle.includes(searchLower);
@@ -179,7 +188,7 @@ const ChatList = ({ onChatSelect }: ChatListProps) => {
                   <div className="flex items-start gap-3">
                     <Avatar className="h-10 w-10 flex-shrink-0">
                       <AvatarFallback>
-                        {getInitials(chat.other_user.first_name, chat.other_user.last_name)}
+                        {getInitials(chat.other_user?.first_name, chat.other_user?.last_name)}
                       </AvatarFallback>
                     </Avatar>
                     
@@ -187,9 +196,9 @@ const ChatList = ({ onChatSelect }: ChatListProps) => {
                       <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-2">
                           <h4 className="font-medium text-sm truncate">
-                            {chat.other_user.first_name} {chat.other_user.last_name}
+                            {chat.other_user?.first_name} {chat.other_user?.last_name}
                           </h4>
-                          {chat.other_user.is_verified && (
+                          {chat.other_user?.is_verified && (
                             <Badge variant="secondary" className="text-xs">
                               Verified
                             </Badge>
