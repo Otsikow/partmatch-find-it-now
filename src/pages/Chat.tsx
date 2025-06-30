@@ -24,7 +24,7 @@ const Chat = () => {
       setSearchParams({});
     } else {
       // On desktop, navigate back to dashboard or previous page
-      navigate(-1);
+      navigate('/dashboard');
     }
   };
 

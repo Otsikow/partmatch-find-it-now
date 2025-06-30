@@ -285,29 +285,29 @@ const ChatInterface = ({ chatId, onBack }: ChatInterfaceProps) => {
             
             <Avatar className="h-10 w-10">
               <AvatarFallback className="text-sm bg-purple-100 text-purple-700">
-                {getInitials(otherUser.first_name, otherUser.last_name)}
+                {getInitials(otherUser?.first_name, otherUser?.last_name)}
               </AvatarFallback>
             </Avatar>
             
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
                 <CardTitle className="text-lg font-medium truncate">
-                  {otherUser.first_name} {otherUser.last_name}
+                  {otherUser?.first_name} {otherUser?.last_name}
                 </CardTitle>
-                {otherUser.is_verified && (
+                {otherUser?.is_verified && (
                   <Badge variant="secondary" className="text-xs bg-green-100 text-green-700">
                     Verified {otherUser.user_type}
                   </Badge>
                 )}
               </div>
               <p className="text-sm text-gray-500 capitalize">
-                {otherUser.user_type}
+                {otherUser?.user_type}
               </p>
             </div>
           </div>
           
           <div className="flex items-center gap-2">
-            {otherUser.phone && (
+            {otherUser?.phone && (
               <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-purple-100">
                 <Phone className="h-4 w-4 text-purple-600" />
               </Button>
