@@ -33,7 +33,11 @@ const UserDashboard = () => {
   }, [user]);
 
   const handleSignOut = async () => {
-    await signOut();
+    try {
+      await signOut();
+    } catch (error) {
+      console.log('Sign out completed with graceful error handling');
+    }
   };
 
   const getDisplayName = () => {

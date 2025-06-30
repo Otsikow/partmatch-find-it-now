@@ -1,8 +1,10 @@
+
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useNavigate } from "react-router-dom";
+import { toast } from "@/hooks/use-toast";
 import NavigationLogo from "./NavigationLogo";
 import NavigationAuth from "./NavigationAuth";
 import NavigationMobile from "./NavigationMobile";
@@ -55,12 +57,29 @@ const Navigation = () => {
   const handleSignOut = async () => {
     try {
       console.log('Navigation: Attempting to sign out...');
+      setIsMobileMenuOpen(false);
+      
+      // Always attempt to sign out, but handle missing session gracefully
       await signOut();
       console.log('Navigation: Sign out successful, redirecting to home');
-      setIsMobileMenuOpen(false);
       navigate('/');
+      
+      // Show success message instead of error
+      toast({
+        title: "Signed Out Successfully",
+        description: "You have been signed out.",
+      });
     } catch (error) {
       console.error('Navigation: Sign out error:', error);
+      
+      // Even if there's an error, clear the UI state and redirect
+      navigate('/');
+      
+      // Show friendly message instead of scary error
+      toast({
+        title: "Signed Out",
+        description: "You have been signed out.",
+      });
     }
   };
 

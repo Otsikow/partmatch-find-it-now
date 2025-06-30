@@ -320,24 +320,41 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       
       console.log('AuthProvider: SignOut result:', { error });
       
+      // Clear local state immediately regardless of error
+      setSession(null);
+      setUser(null);
+      setIsPasswordReset(false);
+      
       if (error) {
-        console.error('AuthProvider: Sign out error:', error);
-        toast({
-          title: "Sign Out Error",
-          description: error.message,
-          variant: "destructive"
-        });
-        throw error;
+        // Log the error but don't throw it - handle gracefully
+        console.error('AuthProvider: Sign out error (handled gracefully):', error);
+        
+        // For session missing errors, don't show error toast
+        if (error.message && error.message.includes('session')) {
+          console.log('AuthProvider: Session already cleared, sign out completed');
+        } else {
+          // Only show toast for unexpected errors
+          toast({
+            title: "Sign Out Notice",
+            description: "You have been signed out.",
+          });
+        }
       } else {
         console.log('AuthProvider: Sign out successful');
-        // Clear local state immediately
-        setSession(null);
-        setUser(null);
-        setIsPasswordReset(false);
       }
     } catch (error) {
-      console.error('AuthProvider: Sign out error:', error);
-      throw error;
+      console.error('AuthProvider: Sign out unexpected error:', error);
+      
+      // Always clear local state even on unexpected errors
+      setSession(null);
+      setUser(null);
+      setIsPasswordReset(false);
+      
+      // Don't throw the error - handle gracefully
+      toast({
+        title: "Signed Out",
+        description: "You have been signed out.",
+      });
     }
   };
 
