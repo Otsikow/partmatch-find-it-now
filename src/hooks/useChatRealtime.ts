@@ -33,10 +33,9 @@ export const useChatRealtime = ({ chatId, userId, onNewMessage, onMarkAsRead }: 
       supabase.removeChannel(channelRef.current);
     }
 
-    // Create new channel with unique name
-    const channelName = `messages-${chatId}-${Date.now()}`;
+    // Create new channel with simpler configuration
     const channel = supabase
-      .channel(channelName)
+      .channel(`chat-${chatId}`)
       .on(
         'postgres_changes',
         {
@@ -54,7 +53,7 @@ export const useChatRealtime = ({ chatId, userId, onNewMessage, onMarkAsRead }: 
           
           // Mark as read if not sent by current user
           if (newMessage.sender_id !== userId) {
-            setTimeout(() => onMarkAsRead(), 500);
+            setTimeout(() => onMarkAsRead(), 100);
           }
         }
       )
@@ -66,6 +65,13 @@ export const useChatRealtime = ({ chatId, userId, onNewMessage, onMarkAsRead }: 
           console.error('❌ Channel subscription error for chat:', chatId);
         } else if (status === 'TIMED_OUT') {
           console.error('⏰ Channel subscription timed out for chat:', chatId);
+          // Try to resubscribe after timeout
+          setTimeout(() => {
+            if (channelRef.current) {
+              console.log('🔄 Attempting to resubscribe after timeout');
+              channelRef.current.subscribe();
+            }
+          }, 1000);
         }
       });
 

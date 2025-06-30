@@ -115,6 +115,7 @@ export const useChatData = (chatId: string, userId: string | undefined) => {
   const addMessage = (newMessage: Message) => {
     console.log('➕ Adding new message to local state:', newMessage);
     setMessages(prev => {
+      // Check if message already exists by ID
       const exists = prev.some(msg => msg.id === newMessage.id);
       if (exists) {
         console.log('⚠️ Message already exists, skipping');
