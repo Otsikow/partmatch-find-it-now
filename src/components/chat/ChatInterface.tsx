@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -6,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Send, Phone, MoreVertical, ArrowLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
 import { formatDistanceToNow } from 'date-fns';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -270,37 +270,39 @@ const ChatInterface = ({ chatId, onBack }: ChatInterfaceProps) => {
   };
 
   return (
-    <Card className="h-full flex flex-col">
-      <CardHeader className="pb-3 border-b">
+    <Card className="h-full flex flex-col bg-white shadow-lg">
+      <CardHeader className="pb-3 border-b bg-gradient-to-r from-purple-50 to-indigo-50">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onBack}
-              className="p-1 h-8 w-8"
-            >
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
+            {isMobile && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onBack}
+                className="p-1 h-8 w-8"
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
+            )}
             
-            <Avatar className="h-8 w-8">
-              <AvatarFallback className="text-xs">
+            <Avatar className="h-10 w-10">
+              <AvatarFallback className="text-sm bg-purple-100 text-purple-700">
                 {getInitials(otherUser.first_name, otherUser.last_name)}
               </AvatarFallback>
             </Avatar>
             
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <CardTitle className="text-sm font-medium truncate">
+                <CardTitle className="text-lg font-medium truncate">
                   {otherUser.first_name} {otherUser.last_name}
                 </CardTitle>
                 {otherUser.is_verified && (
-                  <Badge variant="secondary" className="text-xs">
+                  <Badge variant="secondary" className="text-xs bg-green-100 text-green-700">
                     Verified {otherUser.user_type}
                   </Badge>
                 )}
               </div>
-              <p className="text-xs text-gray-500 capitalize">
+              <p className="text-sm text-gray-500 capitalize">
                 {otherUser.user_type}
               </p>
             </div>
@@ -308,64 +310,82 @@ const ChatInterface = ({ chatId, onBack }: ChatInterfaceProps) => {
           
           <div className="flex items-center gap-2">
             {otherUser.phone && (
-              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                <Phone className="h-4 w-4" />
+              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-purple-100">
+                <Phone className="h-4 w-4 text-purple-600" />
               </Button>
             )}
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-              <MoreVertical className="h-4 w-4" />
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-purple-100">
+              <MoreVertical className="h-4 w-4 text-purple-600" />
             </Button>
           </div>
         </div>
       </CardHeader>
 
-      <CardContent className="flex-1 flex flex-col p-0">
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 max-h-96">
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={`flex ${message.sender_id === user?.id ? 'justify-end' : 'justify-start'}`}
-            >
-              <div
-                className={`max-w-xs lg:max-w-md px-3 py-2 rounded-lg ${
-                  message.sender_id === user?.id
-                    ? 'bg-purple-600 text-white'
-                    : 'bg-gray-100 text-gray-900'
-                }`}
-              >
-                <p className="text-sm">{message.content}</p>
-                <p className={`text-xs mt-1 ${
-                  message.sender_id === user?.id ? 'text-purple-200' : 'text-gray-500'
-                }`}>
-                  {formatDistanceToNow(new Date(message.created_at), { addSuffix: true })}
-                </p>
-              </div>
+      <CardContent className="flex-1 flex flex-col p-0 min-h-0">
+        {/* Messages Area */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+          {messages.length === 0 ? (
+            <div className="flex items-center justify-center h-32 text-gray-500">
+              <p>No messages yet. Start the conversation!</p>
             </div>
-          ))}
+          ) : (
+            messages.map((message) => (
+              <div
+                key={message.id}
+                className={`flex ${message.sender_id === user?.id ? 'justify-end' : 'justify-start'}`}
+              >
+                <div
+                  className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl shadow-sm ${
+                    message.sender_id === user?.id
+                      ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white ml-4'
+                      : 'bg-white text-gray-900 mr-4 border'
+                  }`}
+                >
+                  <p className="text-sm leading-relaxed">{message.content}</p>
+                  <p className={`text-xs mt-2 ${
+                    message.sender_id === user?.id ? 'text-purple-200' : 'text-gray-500'
+                  }`}>
+                    {formatDistanceToNow(new Date(message.created_at), { addSuffix: true })}
+                  </p>
+                </div>
+              </div>
+            ))
+          )}
           <div ref={messagesEndRef} />
         </div>
 
-        <div className="border-t p-4">
-          <div className="flex gap-2">
-            <Input
-              value={newMessage}
-              onChange={(e) => {
-                setNewMessage(e.target.value);
-                handleTyping();
-              }}
-              onKeyPress={handleKeyPress}
-              placeholder="Type a message..."
-              className="flex-1"
-              disabled={loading}
-            />
+        {/* Message Input Area */}
+        <div className="border-t bg-white p-4">
+          <div className="flex items-end gap-3">
+            <div className="flex-1">
+              <Textarea
+                value={newMessage}
+                onChange={(e) => {
+                  setNewMessage(e.target.value);
+                  handleTyping();
+                }}
+                onKeyPress={handleKeyPress}
+                placeholder="Type your message here..."
+                className="min-h-[44px] max-h-32 resize-none border-gray-200 focus:border-purple-400 focus:ring-purple-400"
+                disabled={loading}
+                rows={1}
+              />
+            </div>
             <Button
               onClick={sendMessage}
               disabled={!newMessage.trim() || loading}
-              size="sm"
+              className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-6 py-3 h-11"
             >
-              <Send className="h-4 w-4" />
+              {loading ? (
+                <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
+              ) : (
+                <Send className="h-4 w-4" />
+              )}
             </Button>
           </div>
+          {isTyping && (
+            <p className="text-xs text-gray-500 mt-2">You are typing...</p>
+          )}
         </div>
       </CardContent>
     </Card>
