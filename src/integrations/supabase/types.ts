@@ -597,6 +597,44 @@ export type Database = {
         }
         Relationships: []
       }
+      rating_reminders: {
+        Row: {
+          buyer_id: string
+          created_at: string | null
+          id: string
+          offer_id: string
+          reminder_count: number | null
+          seller_id: string
+          sent_at: string | null
+        }
+        Insert: {
+          buyer_id: string
+          created_at?: string | null
+          id?: string
+          offer_id: string
+          reminder_count?: number | null
+          seller_id: string
+          sent_at?: string | null
+        }
+        Update: {
+          buyer_id?: string
+          created_at?: string | null
+          id?: string
+          offer_id?: string
+          reminder_count?: number | null
+          seller_id?: string
+          sent_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rating_reminders_offer_id_fkey"
+            columns: ["offer_id"]
+            isOneToOne: false
+            referencedRelation: "offers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ratings: {
         Row: {
           comment: string | null

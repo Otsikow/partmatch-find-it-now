@@ -1,10 +1,10 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MapPin, Phone, Calendar, Navigation, Expand, X } from "lucide-react";
 import ChatButton from "@/components/chat/ChatButton";
+import SellerRatingDisplay from "@/components/SellerRatingDisplay";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { format } from 'date-fns';
 
@@ -28,6 +28,8 @@ interface CarPart {
     last_name?: string;
     phone?: string;
     is_verified?: boolean;
+    rating?: number;
+    total_ratings?: number;
   };
 }
 
@@ -125,6 +127,18 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
               <p className="text-gray-600 text-xs sm:text-sm line-clamp-2 leading-relaxed">
                 {part.description}
               </p>
+            )}
+
+            {/* Seller Rating Display */}
+            {part.supplier && (
+              <div className="border-t pt-2">
+                <SellerRatingDisplay
+                  rating={part.supplier.rating || 0}
+                  totalRatings={part.supplier.total_ratings || 0}
+                  size="sm"
+                  showBadge={true}
+                />
+              </div>
             )}
 
             {/* Location and Date */}
@@ -249,11 +263,20 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
                 
                 <div>
                   <h4 className="font-semibold text-gray-900 mb-2">Seller</h4>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm sm:text-base">{supplierName}</span>
-                    {part.supplier?.is_verified && (
-                      <Badge variant="secondary" className="text-xs">Verified</Badge>
-                    )}
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm sm:text-base">{supplierName}</span>
+                      {part.supplier?.is_verified && (
+                        <Badge variant="secondary" className="text-xs">Verified</Badge>
+                      )}
+                    </div>
+                    {/* Seller Rating in Expanded View */}
+                    <SellerRatingDisplay
+                      rating={part.supplier?.rating || 0}
+                      totalRatings={part.supplier?.total_ratings || 0}
+                      size="md"
+                      showBadge={true}
+                    />
                   </div>
                 </div>
               </div>

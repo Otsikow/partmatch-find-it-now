@@ -4,6 +4,7 @@ import { useCarParts } from "@/hooks/useCarParts";
 import SearchControls from "@/components/SearchControls";
 import CarPartsList from "@/components/CarPartsList";
 import PageHeader from "@/components/PageHeader";
+import PendingRatingNotification from "@/components/PendingRatingNotification";
 
 const SearchParts = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -27,6 +28,8 @@ const SearchParts = () => {
       />
       
       <main className="container mx-auto px-4 py-8">
+        <PendingRatingNotification />
+        
         <SearchControls
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
