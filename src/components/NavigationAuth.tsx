@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
@@ -8,26 +8,69 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
-interface NavigationAuthProps {
-  user: any;
-  userType: string | null;
-  firstName: string | null;
-  onSignOut: () => void;
-  getDashboardLink: () => string;
-  getDashboardLabel: () => string;
-  getDisplayName: () => string;
-}
+const NavigationAuth = () => {
+  const { user, userType, firstName } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
-const NavigationAuth = ({
-  user,
-  userType,
-  firstName,
-  onSignOut,
-  getDashboardLink,
-  getDashboardLabel,
-  getDisplayName
-}: NavigationAuthProps) => {
+  const handleSignOut = async () => {
+    try {
+      await supabase.auth.signOut();
+      navigate('/');
+      toast({
+        title: "Signed out successfully",
+        description: "You have been logged out of your account.",
+      });
+    } catch (error) {
+      console.error('Error signing out:', error);
+      toast({
+        title: "Error",
+        description: "Failed to sign out. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const getDashboardLink = () => {
+    switch (userType) {
+      case 'admin':
+        return '/admin';
+      case 'seller':
+        return '/supplier-dashboard';
+      case 'buyer':
+        return '/buyer-dashboard';
+      default:
+        return '/dashboard';
+    }
+  };
+
+  const getDashboardLabel = () => {
+    switch (userType) {
+      case 'admin':
+        return 'Admin Panel';
+      case 'seller':
+        return 'Seller Dashboard';
+      case 'buyer':
+        return 'Buyer Dashboard';
+      default:
+        return 'Dashboard';
+    }
+  };
+
+  const getDisplayName = () => {
+    if (firstName) {
+      return firstName;
+    }
+    if (user?.email) {
+      return user.email.split('@')[0];
+    }
+    return 'User';
+  };
+
   if (user) {
     return (
       <div className="flex items-center gap-2 lg:gap-3 xl:gap-4">
@@ -46,7 +89,7 @@ const NavigationAuth = ({
         <Button 
           variant="ghost" 
           size="sm"
-          onClick={onSignOut}
+          onClick={handleSignOut}
           className="text-gray-700 hover:text-red-700 hover:bg-red-50/50 font-medium px-2 lg:px-3 xl:px-4 py-1.5 lg:py-2 h-8 lg:h-9 xl:h-10 text-xs lg:text-sm"
         >
           Sign Out
