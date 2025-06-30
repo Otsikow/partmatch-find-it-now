@@ -87,6 +87,14 @@ const App = () => (
               } 
             />
             <Route 
+              path="/supplier" 
+              element={
+                <SellerProtectedRoute>
+                  <SupplierDashboard />
+                </SellerProtectedRoute>
+              } 
+            />
+            <Route 
               path="/admin" 
               element={
                 <AdminProtectedRoute>
