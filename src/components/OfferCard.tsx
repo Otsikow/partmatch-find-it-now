@@ -1,129 +1,181 @@
 
-import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Phone, MessageCircle, Eye, EyeOff } from "lucide-react";
-import PaymentModal from "./PaymentModal";
-import VerifiedBadge from "./VerifiedBadge";
+import { Button } from "@/components/ui/button";
+import { Calendar, DollarSign, Package, MapPin } from "lucide-react";
+import ChatButton from "@/components/chat/ChatButton";
+import { format, formatDistanceToNow } from 'date-fns';
 
-interface OfferCardProps {
-  offer: {
-    id: string;
-    price: number;
-    message?: string;
-    photo_url?: string;
-    contact_unlocked: boolean;
-    contact_unlock_fee: number;
-    supplier: {
-      first_name?: string;
-      last_name?: string;
-      phone?: string;
-      is_verified: boolean;
-      rating?: number;
-      location?: string;
-    };
+interface Offer {
+  id: string;
+  price: number;
+  message?: string;
+  status: string;
+  created_at: string;
+  supplier?: {
+    id?: string;
+    first_name?: string;
+    last_name?: string;
+    phone?: string;
+    location?: string;
+    is_verified?: boolean;
   };
-  requestPhone?: string;
-  onContactUnlocked?: () => void;
+  request?: {
+    part_needed: string;
+    car_make: string;
+    car_model: string;
+    car_year: number;
+    description?: string;
+  };
 }
 
-const OfferCard = ({ offer, requestPhone, onContactUnlocked }: OfferCardProps) => {
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
+interface OfferCardProps {
+  offer: Offer;
+  onContactUnlock?: (offerId: string) => void;
+  showActions?: boolean;
+  currentUserId?: string;
+}
 
-  const handleWhatsAppContact = (phone: string) => {
-    const message = `Hi! I'm interested in your car part offer for GHS ${offer.price}. Can we discuss?`;
-    const whatsappUrl = `https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+const OfferCard = ({ offer, onContactUnlock, showActions = true, currentUserId }: OfferCardProps) => {
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'accepted': 
+      case 'confirmed':
+        return 'bg-green-100 text-green-800 border-green-200';
+      case 'pending': 
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'rejected':
+      case 'cancelled':
+        return 'bg-red-100 text-red-800 border-red-200';
+      default: 
+        return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
   };
 
-  const supplierName = offer.supplier.first_name || offer.supplier.last_name 
-    ? `${offer.supplier.first_name || ''} ${offer.supplier.last_name || ''}`.trim()
+  const supplierName = offer.supplier 
+    ? `${offer.supplier.first_name || ''} ${offer.supplier.last_name || ''}`.trim() || 'Supplier'
     : 'Supplier';
 
+  const canShowChat = offer.supplier?.id && currentUserId && offer.supplier.id !== currentUserId;
+
   return (
-    <Card className="p-4">
-      <div className="flex justify-between items-start mb-3">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <h3 className="font-semibold">{supplierName}</h3>
-            <VerifiedBadge isVerified={offer.supplier.is_verified} />
-          </div>
-          {offer.supplier.location && (
-            <p className="text-sm text-gray-600">{offer.supplier.location}</p>
-          )}
-          {offer.supplier.rating && offer.supplier.rating > 0 && (
-            <div className="flex items-center gap-1">
-              <span className="text-sm">⭐ {offer.supplier.rating.toFixed(1)}</span>
-            </div>
-          )}
+    <Card className="hover:shadow-md transition-shadow duration-200">
+      <CardHeader className="pb-3">
+        <div className="flex justify-between items-start">
+          <CardTitle className="text-lg font-semibold">
+            Offer from {supplierName}
+          </CardTitle>
+          <Badge className={`${getStatusColor(offer.status)} border`}>
+            {offer.status.charAt(0).toUpperCase() + offer.status.slice(1)}
+          </Badge>
         </div>
-        <div className="text-right">
-          <p className="text-2xl font-bold text-green-600">GHS {offer.price}</p>
-        </div>
-      </div>
+      </CardHeader>
 
-      {offer.message && (
-        <div className="mb-3">
-          <p className="text-sm text-gray-700">{offer.message}</p>
-        </div>
-      )}
-
-      {offer.photo_url && (
-        <div className="mb-3">
-          <img 
-            src={offer.photo_url} 
-            alt="Part photo" 
-            className="w-full h-32 object-cover rounded-lg"
-          />
-        </div>
-      )}
-
-      <div className="space-y-2">
-        {offer.contact_unlocked ? (
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 p-2 bg-green-50 rounded-lg">
-              <Phone className="h-4 w-4 text-green-600" />
-              <span className="font-medium">{offer.supplier.phone}</span>
+      <CardContent className="space-y-4">
+        {/* Request Details */}
+        {offer.request && (
+          <div className="p-3 bg-gray-50 rounded-lg">
+            <div className="flex items-start gap-2 mb-2">
+              <Package className="h-4 w-4 mt-0.5 text-gray-500" />
+              <div>
+                <p className="font-medium text-sm">
+                  {offer.request.part_needed}
+                </p>
+                <p className="text-xs text-gray-600">
+                  {offer.request.car_make} {offer.request.car_model} ({offer.request.car_year})
+                </p>
+              </div>
             </div>
-            <Button
-              onClick={() => handleWhatsAppContact(offer.supplier.phone || '')}
-              className="w-full bg-green-600 hover:bg-green-700"
-            >
-              <MessageCircle className="h-4 w-4 mr-2" />
-              Message on WhatsApp
-            </Button>
-          </div>
-        ) : (
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
-              <EyeOff className="h-4 w-4 text-gray-500" />
-              <span className="text-gray-600">Contact hidden</span>
-              <Badge variant="outline" className="ml-auto">
-                GHS {offer.contact_unlock_fee} to unlock
-              </Badge>
-            </div>
-            <Button
-              onClick={() => setShowPaymentModal(true)}
-              variant="outline"
-              className="w-full"
-            >
-              <Eye className="h-4 w-4 mr-2" />
-              Unlock Contact (GHS {offer.contact_unlock_fee})
-            </Button>
+            {offer.request.description && (
+              <p className="text-xs text-gray-600 mt-2">
+                {offer.request.description}
+              </p>
+            )}
           </div>
         )}
-      </div>
 
-      <PaymentModal
-        isOpen={showPaymentModal}
-        onClose={() => setShowPaymentModal(false)}
-        offerId={offer.id}
-        amount={offer.contact_unlock_fee}
-        onPaymentSuccess={() => {
-          onContactUnlocked?.();
-        }}
-      />
+        {/* Price */}
+        <div className="flex items-center gap-2">
+          <DollarSign className="h-5 w-5 text-green-600" />
+          <span className="font-bold text-xl text-green-600">
+            GHS {offer.price.toLocaleString()}
+          </span>
+        </div>
+
+        {/* Offer Message */}
+        {offer.message && (
+          <div className="p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+            <p className="text-sm text-gray-700">{offer.message}</p>
+          </div>
+        )}
+
+        {/* Supplier Info */}
+        {offer.supplier && (
+          <div className="flex items-center justify-between pt-2 border-t">
+            <div className="flex items-center gap-2">
+              <div>
+                <p className="font-medium text-sm">{supplierName}</p>
+                <div className="flex items-center gap-1 text-xs text-gray-500">
+                  {offer.supplier.location && (
+                    <>
+                      <MapPin className="h-3 w-3" />
+                      <span>{offer.supplier.location}</span>
+                    </>
+                  )}
+                  {offer.supplier.is_verified && (
+                    <Badge variant="secondary" className="text-xs ml-2">
+                      Verified
+                    </Badge>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Timestamp */}
+        <div className="flex items-center gap-2 text-xs text-gray-500">
+          <Calendar className="h-3 w-3" />
+          <span>
+            {formatDistanceToNow(new Date(offer.created_at), { addSuffix: true })}
+          </span>
+        </div>
+
+        {/* Actions */}
+        {showActions && (
+          <div className="flex gap-2 pt-3 border-t">
+            {canShowChat && (
+              <ChatButton
+                sellerId={offer.supplier!.id!}
+                size="sm"
+                variant="outline"
+                className="flex-1 border-purple-600 text-purple-700 hover:bg-purple-50"
+              />
+            )}
+            
+            {onContactUnlock && offer.supplier?.phone && (
+              <Button
+                size="sm"
+                onClick={() => onContactUnlock(offer.id)}
+                className="flex-1"
+              >
+                Unlock Contact
+              </Button>
+            )}
+            
+            {offer.supplier?.phone && !onContactUnlock && (
+              <Button
+                size="sm"
+                onClick={() => window.open(`tel:${offer.supplier!.phone}`, '_self')}
+                className="flex-1"
+              >
+                Call Now
+              </Button>
+            )}
+          </div>
+        )}
+      </CardContent>
     </Card>
   );
 };

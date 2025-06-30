@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Phone } from "lucide-react";
 import { Part } from "@/types/Part";
+import ChatButton from "@/components/chat/ChatButton";
 
 interface PartCardProps {
   part: Part;
@@ -46,13 +47,23 @@ const PartCard = ({ part }: PartCardProps) => {
             </div>
           </div>
           
-          <Button 
-            className="bg-gradient-to-r from-emerald-600 to-green-700 hover:from-emerald-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-base sm:text-lg"
-            onClick={() => window.open(`tel:${part.phone}`, '_self')}
-          >
-            <Phone className="h-4 w-4 mr-2" />
-            Call
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <ChatButton
+              sellerId={part.supplierId || 'mock-seller-id'}
+              partId={part.id}
+              size="sm"
+              variant="outline"
+              className="border-purple-600 text-purple-700 hover:bg-purple-50"
+            />
+            <Button 
+              className="bg-gradient-to-r from-emerald-600 to-green-700 hover:from-emerald-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 text-sm sm:text-base"
+              size="sm"
+              onClick={() => window.open(`tel:${part.phone}`, '_self')}
+            >
+              <Phone className="h-4 w-4 mr-2" />
+              Call
+            </Button>
+          </div>
         </div>
       </div>
     </Card>

@@ -13,6 +13,7 @@ interface ChatButtonProps {
   className?: string;
   size?: "sm" | "default" | "lg";
   variant?: "default" | "outline" | "ghost";
+  children?: React.ReactNode;
 }
 
 const ChatButton = ({ 
@@ -20,7 +21,8 @@ const ChatButton = ({
   partId, 
   className = "", 
   size = "default",
-  variant = "default"
+  variant = "default",
+  children
 }: ChatButtonProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -96,7 +98,7 @@ const ChatButton = ({
       className={`flex items-center gap-2 ${className}`}
     >
       <MessageCircle className="h-4 w-4" />
-      Chat with Seller
+      {children || "Chat with Seller"}
     </Button>
   );
 };
