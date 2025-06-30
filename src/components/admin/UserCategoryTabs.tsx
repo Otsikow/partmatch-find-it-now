@@ -1,3 +1,4 @@
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -48,13 +49,13 @@ const UserCategoryTabs = ({
   const sellerUsers = users.filter(user => user.user_type === 'supplier');
   const buyerUsers = users.filter(user => user.user_type === 'owner');
 
-  // Further categorize by verification status
+  // Further categorize sellers by verification status (buyers are always considered verified)
   const verifiedSellers = sellerUsers.filter(user => user.is_verified && !user.is_blocked);
   const unverifiedSellers = sellerUsers.filter(user => !user.is_verified && !user.is_blocked);
   const suspendedSellers = sellerUsers.filter(user => user.is_blocked);
 
-  const verifiedBuyers = buyerUsers.filter(user => user.is_verified && !user.is_blocked);
-  const unverifiedBuyers = buyerUsers.filter(user => !user.is_verified && !user.is_blocked);
+  // For buyers, since they're auto-verified, we categorize differently
+  const activeBuyers = buyerUsers.filter(user => !user.is_blocked);
   const suspendedBuyers = buyerUsers.filter(user => user.is_blocked);
 
   const CategoryCard = ({ 
@@ -150,19 +151,11 @@ const UserCategoryTabs = ({
       <TabsContent value="buyers" className="mt-4 sm:mt-6">
         <div className="space-y-6 sm:space-y-8">
           <CategoryCard
-            title="Verified Buyers"
-            count={verifiedBuyers.length}
-            users={verifiedBuyers}
+            title="Active Buyers"
+            count={activeBuyers.length}
+            users={activeBuyers}
             icon={UserCheck}
             color="text-green-600"
-          />
-          
-          <CategoryCard
-            title="Unverified Buyers"
-            count={unverifiedBuyers.length}
-            users={unverifiedBuyers}
-            icon={UserX}
-            color="text-yellow-600"
           />
           
           {suspendedBuyers.length > 0 && (

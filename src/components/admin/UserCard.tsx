@@ -52,14 +52,17 @@ const UserCard = ({ user, onApprove, onSuspend, onDelete, onUnblock, onViewDetai
   const [showSuspendDialog, setShowSuspendDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
-  const getStatusColor = (isBlocked: boolean, isVerified: boolean) => {
+  const getStatusColor = (isBlocked: boolean, isVerified: boolean, userType: string) => {
     if (isBlocked) return 'bg-red-100 text-red-800 border-red-200';
-    if (isVerified) return 'bg-green-100 text-green-800 border-green-200';
+    // Buyers are auto-verified, so always show as verified
+    if (userType === 'owner' || isVerified) return 'bg-green-100 text-green-800 border-green-200';
     return 'bg-yellow-100 text-yellow-800 border-yellow-200';
   };
 
-  const getStatusText = (isBlocked: boolean, isVerified: boolean) => {
+  const getStatusText = (isBlocked: boolean, isVerified: boolean, userType: string) => {
     if (isBlocked) return 'Suspended';
+    // Buyers are auto-verified
+    if (userType === 'owner') return 'Auto-Verified';
     if (isVerified) return 'Verified';
     return 'Unverified';
   };
@@ -107,6 +110,8 @@ const UserCard = ({ user, onApprove, onSuspend, onDelete, onUnblock, onViewDetai
   };
 
   const fullName = `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Unknown User';
+  const isBuyer = user.user_type === 'owner';
+  const needsApproval = !isBuyer && !user.is_verified && !user.is_blocked;
 
   return (
     <Card className="p-6 bg-gradient-to-br from-white/90 to-purple-50/30 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300">
@@ -117,8 +122,8 @@ const UserCard = ({ user, onApprove, onSuspend, onDelete, onUnblock, onViewDetai
             <h3 className="text-xl font-playfair font-semibold text-gray-900">
               {fullName}
             </h3>
-            <Badge className={`${getStatusColor(user.is_blocked, user.is_verified)} text-sm`}>
-              {getStatusText(user.is_blocked, user.is_verified)}
+            <Badge className={`${getStatusColor(user.is_blocked, user.is_verified, user.user_type)} text-sm`}>
+              {getStatusText(user.is_blocked, user.is_verified, user.user_type)}
             </Badge>
             <Badge className={`${getUserTypeColor(user.user_type)} text-sm`}>
               {getUserTypeDisplayName(user.user_type)}
@@ -170,7 +175,8 @@ const UserCard = ({ user, onApprove, onSuspend, onDelete, onUnblock, onViewDetai
           View Details
         </Button>
 
-        {!user.is_verified && !user.is_blocked && (
+        {/* Only show approve button for unverified suppliers */}
+        {needsApproval && (
           <Button 
             onClick={() => onApprove(user.id)}
             className="bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white shadow-lg hover:shadow-xl transition-all duration-300"
