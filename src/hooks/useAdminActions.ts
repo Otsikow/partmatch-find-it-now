@@ -110,7 +110,25 @@ export const useAdminActions = (refetchData: () => void) => {
     try {
       console.log(`${action === 'approve' ? 'Approving' : 'Rejecting'} verification:`, verificationId);
 
-      // 1. Update the verification status
+      // 1. First, get the verification details to get the user_id
+      const { data: verification, error: fetchVerificationError } = await supabase
+        .from('seller_verifications')
+        .select('user_id, full_name')
+        .eq('id', verificationId)
+        .single();
+
+      if (fetchVerificationError) {
+        console.error('Error fetching verification:', fetchVerificationError);
+        throw fetchVerificationError;
+      }
+
+      if (!verification) {
+        throw new Error('Verification not found.');
+      }
+
+      console.log('Processing verification for user:', verification.user_id);
+
+      // 2. Update the verification status
       const status = action === 'approve' ? 'approved' : 'rejected';
       const { error: verificationError } = await supabase
         .from('seller_verifications')
@@ -127,33 +145,19 @@ export const useAdminActions = (refetchData: () => void) => {
         throw verificationError;
       }
 
-      console.log('Successfully updated verification status');
+      console.log('Successfully updated verification status to:', status);
 
-      // 2. If approved, update the related profile as verified
+      // 3. If approved, update the user's profile
       if (action === 'approve') {
-        // Fetch the verification to get the user_id
-        const { data: verification, error: fetchVerificationError } = await supabase
-          .from('seller_verifications')
-          .select('user_id')
-          .eq('id', verificationId)
-          .maybeSingle();
+        console.log('Updating user profile to verified supplier for user:', verification.user_id);
 
-        if (fetchVerificationError) {
-          console.error('Error fetching verification:', fetchVerificationError);
-          throw fetchVerificationError;
-        }
-        if (!verification) {
-          throw new Error('Verification not found.');
-        }
-
-        console.log('Updating user profile to verified:', verification.user_id);
-
-        // Now update the user's profile as verified
         const { error: profileError } = await supabase
           .from('profiles')
           .update({
             is_verified: true,
-            verified_at: new Date().toISOString()
+            user_type: 'supplier', // Ensure they become a supplier
+            verified_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
           })
           .eq('id', verification.user_id);
 
@@ -161,11 +165,37 @@ export const useAdminActions = (refetchData: () => void) => {
           console.error('Error updating profile:', profileError);
           throw profileError;
         }
-        console.log('Seller profile marked as verified:', verification.user_id);
+
+        console.log('Successfully updated user profile to verified supplier');
+
+        // Verify the update was successful
+        const { data: updatedProfile, error: verifyError } = await supabase
+          .from('profiles')
+          .select('user_type, is_verified, verified_at')
+          .eq('id', verification.user_id)
+          .single();
+
+        if (verifyError) {
+          console.error('Error verifying profile update:', verifyError);
+        } else {
+          console.log('Profile verification check result:', updatedProfile);
+        }
       }
 
-      // 3. Refresh data/UI
+      // 4. Comprehensive data refresh
+      console.log('Triggering comprehensive data refresh...');
       await refetchData();
+      
+      // Multiple staggered refreshes to ensure UI consistency
+      setTimeout(async () => {
+        console.log('Secondary refresh after verification action...');
+        await refetchData();
+      }, 500);
+      
+      setTimeout(async () => {
+        console.log('Final refresh after verification action...');
+        await refetchData();
+      }, 1500);
 
       toast({
         title: `Verification ${action === 'approve' ? 'Approved' : 'Rejected'}!`,
@@ -223,7 +253,7 @@ export const useAdminActions = (refetchData: () => void) => {
     try {
       console.log('Starting user approval process for:', userId);
       
-      // Get current user data to determine user type and status
+      // Get current user data
       const { data: currentUser, error: fetchError } = await supabase
         .from('profiles')
         .select('*')
@@ -243,7 +273,7 @@ export const useAdminActions = (refetchData: () => void) => {
         last_name: currentUser.last_name
       });
 
-      // Check if this user has an approved seller verification request
+      // Check if this user has an approved seller verification
       const { data: sellerVerification } = await supabase
         .from('seller_verifications')
         .select('*')
@@ -253,7 +283,7 @@ export const useAdminActions = (refetchData: () => void) => {
 
       console.log('Seller verification found:', sellerVerification ? 'Yes' : 'No');
 
-      // Prepare update data - always mark as verified
+      // Prepare update data
       const updateData: any = {
         is_verified: true,
         verified_at: new Date().toISOString(),
@@ -268,7 +298,7 @@ export const useAdminActions = (refetchData: () => void) => {
 
       console.log('Update data:', updateData);
 
-      // Update the user profile with explicit row return
+      // Update the user profile
       const { data: updatedProfile, error: updateError } = await supabase
         .from('profiles')
         .update(updateData)
@@ -288,53 +318,24 @@ export const useAdminActions = (refetchData: () => void) => {
         verified_at: updatedProfile.verified_at
       });
 
-      // Verify the update by fetching the user again
-      const { data: verificationCheck, error: verifyError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
-
-      if (verifyError) {
-        console.error('Error verifying update:', verifyError);
-      } else {
-        console.log('Verification check - user after update:', {
-          id: verificationCheck.id,
-          is_verified: verificationCheck.is_verified,
-          user_type: verificationCheck.user_type,
-          verified_at: verificationCheck.verified_at
-        });
-      }
-
       toast({
         title: "Success",
         description: `User has been approved and verified successfully.`,
       });
 
-      // Force comprehensive data refresh with multiple attempts
-      console.log('Triggering comprehensive data refresh...');
+      // Comprehensive data refresh
+      console.log('Triggering comprehensive data refresh after user approval...');
       await refetchData();
       
-      // Staggered refreshes to ensure data consistency across all components
       setTimeout(async () => {
-        console.log('Secondary refresh after approval...');
+        console.log('Secondary refresh after user approval...');
         await refetchData();
-      }, 200);
+      }, 300);
       
       setTimeout(async () => {
-        console.log('Third refresh after approval...');
-        await refetchData();
-      }, 500);
-      
-      setTimeout(async () => {
-        console.log('Fourth refresh after approval...');
+        console.log('Final refresh after user approval...');
         await refetchData();
       }, 1000);
-
-      setTimeout(async () => {
-        console.log('Final refresh after approval...');
-        await refetchData();
-      }, 2000);
       
     } catch (error) {
       console.error('Error approving user:', error);

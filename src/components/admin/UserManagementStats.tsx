@@ -27,7 +27,12 @@ interface UserManagementStatsProps {
 const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStatsProps) => {
   const isMobile = useIsMobile();
   console.log('UserManagementStats received users:', users.length);
-  console.log('Users breakdown:', users.map(u => ({ id: u.id, type: u.user_type, verified: u.is_verified, blocked: u.is_blocked })));
+  console.log('Users breakdown:', users.map(u => ({ 
+    id: u.id.slice(0, 8), 
+    type: u.user_type, 
+    verified: u.is_verified, 
+    blocked: u.is_blocked 
+  })));
 
   const stats = {
     total: users.length,
@@ -83,8 +88,15 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         color="text-blue-600"
         bgColor="bg-gradient-to-br from-blue-50 to-blue-100"
         onClick={() => {
-          // Show all users - default to sellers tab
-          onNavigateToCategory('sellers');
+          console.log('Total Users clicked - navigating to show all users');
+          // Navigate to the tab with the most users to show all
+          if (stats.buyers >= stats.sellers && stats.buyers >= stats.admins) {
+            onNavigateToCategory('buyers');
+          } else if (stats.sellers >= stats.admins) {
+            onNavigateToCategory('sellers');
+          } else {
+            onNavigateToCategory('admins');
+          }
         }}
       />
       
@@ -94,7 +106,10 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         icon={ShoppingCart}
         color="text-purple-600"
         bgColor="bg-gradient-to-br from-purple-50 to-purple-100"
-        onClick={() => onNavigateToCategory('sellers')}
+        onClick={() => {
+          console.log('Sellers clicked - navigating to sellers tab');
+          onNavigateToCategory('sellers');
+        }}
       />
       
       <StatCard
@@ -103,7 +118,10 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         icon={User}
         color="text-green-600"
         bgColor="bg-gradient-to-br from-green-50 to-green-100"
-        onClick={() => onNavigateToCategory('buyers')}
+        onClick={() => {
+          console.log('Buyers clicked - navigating to buyers tab');
+          onNavigateToCategory('buyers');
+        }}
       />
       
       <StatCard
@@ -112,7 +130,10 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         icon={Shield}
         color="text-indigo-600"
         bgColor="bg-gradient-to-br from-indigo-50 to-indigo-100"
-        onClick={() => onNavigateToCategory('admins')}
+        onClick={() => {
+          console.log('Admins clicked - navigating to admins tab');
+          onNavigateToCategory('admins');
+        }}
       />
       
       <StatCard
@@ -122,10 +143,18 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         color="text-emerald-600"
         bgColor="bg-gradient-to-br from-emerald-50 to-emerald-100"
         onClick={() => {
-          // Navigate to sellers tab and show verified users across all categories
-          if (stats.sellers > 0) {
+          console.log('Verified clicked - showing verified users. Stats:', {
+            verified: stats.verified,
+            verifiedSellers: stats.verifiedSellers,
+            verifiedBuyers: users.filter(u => u.user_type === 'owner' && u.is_verified && !u.is_blocked).length
+          });
+          // Navigate to the category with most verified users
+          const verifiedBuyers = users.filter(u => u.user_type === 'owner' && u.is_verified && !u.is_blocked).length;
+          const verifiedAdmins = users.filter(u => u.user_type === 'admin' && u.is_verified && !u.is_blocked).length;
+          
+          if (stats.verifiedSellers >= verifiedBuyers && stats.verifiedSellers >= verifiedAdmins) {
             onNavigateToCategory('sellers');
-          } else if (stats.buyers > 0) {
+          } else if (verifiedBuyers >= verifiedAdmins) {
             onNavigateToCategory('buyers');
           } else {
             onNavigateToCategory('admins');
@@ -140,8 +169,11 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         color="text-yellow-600"
         bgColor="bg-gradient-to-br from-yellow-50 to-yellow-100"
         onClick={() => {
-          // Navigate to sellers tab and show unverified users
-          if (stats.sellers > 0 || stats.unverifiedSellers > 0) {
+          console.log('Unverified clicked - showing unverified users');
+          // Navigate to the category with most unverified users
+          const unverifiedBuyers = users.filter(u => u.user_type === 'owner' && !u.is_verified && !u.is_blocked).length;
+          
+          if (stats.unverifiedSellers >= unverifiedBuyers) {
             onNavigateToCategory('sellers');
           } else {
             onNavigateToCategory('buyers');
@@ -156,6 +188,7 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         color="text-red-600"
         bgColor="bg-gradient-to-br from-red-50 to-red-100"
         onClick={() => {
+          console.log('Suspended clicked - showing suspended users');
           // Navigate to the category with most suspended users
           const suspendedSellers = users.filter(u => u.user_type === 'supplier' && u.is_blocked).length;
           const suspendedBuyers = users.filter(u => u.user_type === 'owner' && u.is_blocked).length;
@@ -169,7 +202,10 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
       />
       
       <Card className={`bg-gradient-to-br from-gray-50 to-gray-100 border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-105 ${isMobile ? 'h-24' : 'h-auto'}`}
-            onClick={() => onNavigateToCategory('sellers')}>
+            onClick={() => {
+              console.log('Seller breakdown card clicked');
+              onNavigateToCategory('sellers');
+            }}>
         <CardHeader className={`flex flex-col space-y-1.5 ${isMobile ? 'pb-1 pt-2 px-3' : 'pb-2'}`}>
           <CardTitle className={`${isMobile ? 'text-xs' : 'text-xs'} text-gray-500 font-medium`}>
             Seller Breakdown
