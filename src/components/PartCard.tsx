@@ -49,7 +49,7 @@ const PartCard = ({ part }: PartCardProps) => {
           
           <div className="flex flex-col sm:flex-row gap-2">
             <ChatButton
-              sellerId={part.supplierId || 'mock-seller-id'}
+              sellerId={part.id || 'mock-seller-id'}
               partId={part.id}
               size="sm"
               variant="outline"

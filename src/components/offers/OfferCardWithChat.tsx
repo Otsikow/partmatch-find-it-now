@@ -27,6 +27,7 @@ interface Offer {
     first_name?: string;
     last_name?: string;
     phone?: string;
+    is_verified?: boolean;
   };
   request?: {
     part_needed: string;

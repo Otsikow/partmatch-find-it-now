@@ -8,6 +8,7 @@ export interface Part {
   price: string;
   condition: 'New' | 'Used' | 'Refurbished';
   supplier: string;
+  supplierId?: string;
   location: string;
   phone: string;
   image?: string;
