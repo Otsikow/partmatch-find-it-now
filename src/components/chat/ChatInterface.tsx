@@ -274,16 +274,14 @@ const ChatInterface = ({ chatId, onBack }: ChatInterfaceProps) => {
       <CardHeader className="pb-3 border-b bg-gradient-to-r from-purple-50 to-indigo-50">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            {isMobile && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={onBack}
-                className="p-1 h-8 w-8"
-              >
-                <ArrowLeft className="h-4 w-4" />
-              </Button>
-            )}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onBack}
+              className="p-1 h-8 w-8 hover:bg-purple-100"
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
             
             <Avatar className="h-10 w-10">
               <AvatarFallback className="text-sm bg-purple-100 text-purple-700">
