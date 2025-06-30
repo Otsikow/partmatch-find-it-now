@@ -56,12 +56,12 @@ export const useAdminNotificationsActions = ({
 
       // Update local state
       updateNotifications(prev => prev.map(n => ({ ...n, read: true })));
-      updateUnreadCount(0);
+      updateUnreadCount(() => 0);
     } catch (error) {
       console.error('Error marking all notifications as read:', error);
       // Still update local state even if database update fails
       updateNotifications(prev => prev.map(n => ({ ...n, read: true })));
-      updateUnreadCount(0);
+      updateUnreadCount(() => 0);
     }
   };
 
