@@ -20,7 +20,7 @@ interface UserProfile {
 
 interface UserManagementStatsProps {
   users: UserProfile[];
-  onNavigateToCategory: (category: string) => void;
+  onNavigateToCategory: (category: string, filter?: string) => void;
 }
 
 const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStatsProps) => {
@@ -79,7 +79,7 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         color="text-blue-600"
         bgColor="bg-gradient-to-br from-blue-50 to-blue-100"
         onClick={() => {
-          // Navigate to sellers tab by default when clicking total users
+          // Show all users - default to sellers tab
           onNavigateToCategory('sellers');
         }}
       />
@@ -118,8 +118,14 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         color="text-emerald-600"
         bgColor="bg-gradient-to-br from-emerald-50 to-emerald-100"
         onClick={() => {
-          // Navigate to sellers tab to show verified users
-          onNavigateToCategory('sellers');
+          // Navigate to sellers tab and show verified users across all categories
+          if (stats.sellers > 0) {
+            onNavigateToCategory('sellers');
+          } else if (stats.buyers > 0) {
+            onNavigateToCategory('buyers');
+          } else {
+            onNavigateToCategory('admins');
+          }
         }}
       />
       
@@ -130,8 +136,12 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         color="text-yellow-600"
         bgColor="bg-gradient-to-br from-yellow-50 to-yellow-100"
         onClick={() => {
-          // Navigate to sellers tab to show unverified users
-          onNavigateToCategory('sellers');
+          // Navigate to sellers tab and show unverified users
+          if (stats.sellers > 0 || stats.unverifiedSellers > 0) {
+            onNavigateToCategory('sellers');
+          } else {
+            onNavigateToCategory('buyers');
+          }
         }}
       />
       
@@ -142,8 +152,15 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         color="text-red-600"
         bgColor="bg-gradient-to-br from-red-50 to-red-100"
         onClick={() => {
-          // Navigate to sellers tab to show suspended users
-          onNavigateToCategory('sellers');
+          // Navigate to the category with most suspended users
+          const suspendedSellers = users.filter(u => u.user_type === 'supplier' && u.is_blocked).length;
+          const suspendedBuyers = users.filter(u => u.user_type === 'owner' && u.is_blocked).length;
+          
+          if (suspendedSellers >= suspendedBuyers) {
+            onNavigateToCategory('sellers');
+          } else {
+            onNavigateToCategory('buyers');
+          }
         }}
       />
       

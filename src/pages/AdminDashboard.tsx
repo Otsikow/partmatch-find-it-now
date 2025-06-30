@@ -1,4 +1,3 @@
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { Building2, Users } from "lucide-react";
@@ -52,8 +51,8 @@ const AdminDashboard = () => {
     setShowUserDetails(true);
   };
 
-  const handleNavigateToCategory = (category: string) => {
-    console.log('Navigating to category:', category);
+  const handleNavigateToCategory = (category: string, filter?: string) => {
+    console.log('Navigating to category:', category, 'with filter:', filter);
     setActiveTab("users");
     setActiveUserTab(category);
   };

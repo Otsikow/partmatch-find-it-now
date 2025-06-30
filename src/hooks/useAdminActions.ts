@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 
@@ -223,7 +222,7 @@ export const useAdminActions = (refetchData: () => void) => {
     try {
       console.log('Starting user approval process for:', userId);
       
-      // First, get current user data to log the change
+      // First, get current user data to determine if this is a seller
       const { data: currentUser, error: fetchError } = await supabase
         .from('profiles')
         .select('*')
@@ -242,13 +241,30 @@ export const useAdminActions = (refetchData: () => void) => {
         last_name: currentUser.last_name
       });
 
-      // Update the user profile to mark as verified
+      // Check if this user has a seller verification request
+      const { data: sellerVerification } = await supabase
+        .from('seller_verifications')
+        .select('*')
+        .eq('user_id', userId)
+        .eq('verification_status', 'approved')
+        .maybeSingle();
+
+      // Prepare update data
+      const updateData: any = {
+        is_verified: true,
+        verified_at: new Date().toISOString()
+      };
+
+      // If there's an approved seller verification, set user_type to supplier
+      if (sellerVerification) {
+        updateData.user_type = 'supplier';
+        console.log('User has approved seller verification, setting user_type to supplier');
+      }
+
+      // Update the user profile
       const { error: updateError } = await supabase
         .from('profiles')
-        .update({ 
-          is_verified: true,
-          verified_at: new Date().toISOString()
-        })
+        .update(updateData)
         .eq('id', userId);
 
       if (updateError) {
@@ -263,15 +279,20 @@ export const useAdminActions = (refetchData: () => void) => {
         description: "User has been approved successfully.",
       });
 
-      // Force immediate data refresh
+      // Force immediate data refresh multiple times to ensure UI updates
       console.log('Immediately refreshing data after user approval...');
       await refetchData();
       
-      // Add a small delay and refresh again to ensure UI updates
+      // Add multiple refresh attempts to ensure data consistency
       setTimeout(async () => {
         console.log('Secondary refresh after approval...');
         await refetchData();
-      }, 1000);
+      }, 500);
+      
+      setTimeout(async () => {
+        console.log('Third refresh after approval...');
+        await refetchData();
+      }, 1500);
       
     } catch (error) {
       console.error('Error approving user:', error);
