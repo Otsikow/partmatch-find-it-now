@@ -2,8 +2,8 @@
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Upload, X, Image as ImageIcon, CreditCard } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Upload, X, Image as ImageIcon, CreditCard, Camera } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface PhotoUploadProps {
   onPhotoChange: (file: File | null) => void;
@@ -21,6 +21,7 @@ const PhotoUpload = ({
   const [dragActive, setDragActive] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -52,7 +53,7 @@ const PhotoUpload = ({
   const handleFile = (file: File) => {
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      alert('Please select an image file');
+      alert('Please select an image file (PNG, JPG)');
       return;
     }
 
@@ -65,14 +66,21 @@ const PhotoUpload = ({
     onPhotoChange(file);
   };
 
-  const onButtonClick = () => {
+  const onFileUploadClick = () => {
     inputRef.current?.click();
+  };
+
+  const onCameraClick = () => {
+    cameraInputRef.current?.click();
   };
 
   const removePhoto = () => {
     onPhotoChange(null);
     if (inputRef.current) {
       inputRef.current.value = '';
+    }
+    if (cameraInputRef.current) {
+      cameraInputRef.current.value = '';
     }
   };
 
@@ -103,10 +111,20 @@ const PhotoUpload = ({
         </Button>
       </div>
 
+      {/* Hidden file inputs */}
       <input
         ref={inputRef}
         type="file"
         accept="image/*"
+        onChange={handleChange}
+        className="hidden"
+      />
+      
+      <input
+        ref={cameraInputRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
         onChange={handleChange}
         className="hidden"
       />
@@ -142,7 +160,7 @@ const PhotoUpload = ({
           onDragLeave={handleDrag}
           onDragOver={handleDrag}
           onDrop={handleDrop}
-          onClick={onButtonClick}
+          onClick={onFileUploadClick}
         >
           <ImageIcon className="mx-auto h-12 w-12 text-gray-400 mb-4" />
           <div className="space-y-2">
@@ -150,25 +168,35 @@ const PhotoUpload = ({
               Upload a photo of your part
             </p>
             <p className="text-xs text-gray-500">
-              Drag and drop or click to browse
+              Drag and drop, take a photo, or click to browse
             </p>
             <p className="text-xs text-gray-400">
               PNG, JPG up to 5MB
             </p>
           </div>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="mt-4"
-            onClick={(e) => {
-              e.stopPropagation();
-              onButtonClick();
-            }}
-          >
-            <Upload className="h-4 w-4 mr-2" />
-            Choose File
-          </Button>
+          
+          <div className="flex gap-2 mt-4" onClick={(e) => e.stopPropagation()}>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="flex-1"
+              onClick={onFileUploadClick}
+            >
+              <Upload className="h-4 w-4 mr-2" />
+              Choose File
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="flex-1"
+              onClick={onCameraClick}
+            >
+              <Camera className="h-4 w-4 mr-2" />
+              Take Photo
+            </Button>
+          </div>
         </div>
       )}
 

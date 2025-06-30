@@ -10,9 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import PhotoUpload from "@/components/PhotoUpload";
 import LocationPicker from "@/components/LocationPicker";
-import { X, Camera } from "lucide-react";
+import { X, Camera, Upload } from "lucide-react";
 
 interface PostPartModalProps {
   isOpen: boolean;
@@ -47,29 +46,58 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
   const MAX_FREE_IMAGES = 3;
   const MAX_PREMIUM_IMAGES = 10;
 
-  const handlePhotoChange = (file: File | null) => {
-    if (file) {
-      const maxImages = isPremium ? MAX_PREMIUM_IMAGES : MAX_FREE_IMAGES;
-      
-      if (photos.length >= maxImages) {
-        if (!isPremium) {
-          toast({
-            title: "Photo Limit Reached",
-            description: `You can upload up to ${MAX_FREE_IMAGES} photos for free. Upgrade to premium for more photos.`,
-            variant: "destructive"
-          });
-        } else {
-          toast({
-            title: "Maximum Photos Reached",
-            description: `You can upload up to ${MAX_PREMIUM_IMAGES} photos with premium.`,
-            variant: "destructive"
-          });
-        }
-        return;
+  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || []);
+    if (files.length === 0) return;
+
+    const maxImages = isPremium ? MAX_PREMIUM_IMAGES : MAX_FREE_IMAGES;
+    const availableSlots = maxImages - photos.length;
+
+    if (availableSlots <= 0) {
+      if (!isPremium) {
+        toast({
+          title: "Photo Limit Reached",
+          description: `You can upload up to ${MAX_FREE_IMAGES} photos for free. Upgrade to premium for more photos.`,
+          variant: "destructive"
+        });
+        handleUpgradeRequest();
+      } else {
+        toast({
+          title: "Maximum Photos Reached",
+          description: `You can upload up to ${MAX_PREMIUM_IMAGES} photos with premium.`,
+          variant: "destructive"
+        });
       }
-      
-      setPhotos(prev => [...prev, file]);
+      return;
     }
+
+    // Validate each file
+    const validFiles = files.filter(file => {
+      if (!file.type.startsWith('image/')) {
+        toast({
+          title: "Invalid File Type",
+          description: `${file.name} is not an image file. Please select PNG or JPG files.`,
+          variant: "destructive"
+        });
+        return false;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          title: "File Too Large",
+          description: `${file.name} is larger than 5MB. Please choose a smaller file.`,
+          variant: "destructive"
+        });
+        return false;
+      }
+      return true;
+    });
+
+    // Take only as many files as we have slots available
+    const filesToAdd = validFiles.slice(0, availableSlots);
+    setPhotos(prev => [...prev, ...filesToAdd]);
+
+    // Clear the input
+    event.target.value = '';
   };
 
   const removePhoto = (index: number) => {
@@ -77,11 +105,13 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
   };
 
   const handleUpgradeRequest = () => {
-    // TODO: Implement premium upgrade payment flow
     toast({
-      title: "Premium Photos",
-      description: "Premium photo upgrade feature coming soon!",
+      title: "Premium Photos Available",
+      description: "Pay GHS 10 to upload up to 10 photos for this listing!",
     });
+    // TODO: Implement payment flow
+    // For now, we'll simulate the upgrade
+    // setIsPremium(true);
   };
 
   const uploadImage = async (file: File): Promise<string> => {
@@ -223,6 +253,7 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Form fields */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="title">Title *</Label>
@@ -344,38 +375,101 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
             )}
           </div>
 
+          {/* Enhanced Photo Upload Section */}
           <div>
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-3">
               <Label className="flex items-center gap-2">
                 <Camera className="h-4 w-4" />
                 Photos ({photos.length}/{maxImages})
               </Label>
-              {photos.length >= MAX_FREE_IMAGES && !isPremium && (
+              <div className="flex items-center gap-2">
                 <Badge variant="secondary" className="text-xs">
-                  Free limit reached
+                  Up to {MAX_FREE_IMAGES} free
                 </Badge>
-              )}
-              {isPremium && (
-                <Badge className="text-xs bg-emerald-100 text-emerald-800">
-                  Premium Active
-                </Badge>
-              )}
+                {isPremium && (
+                  <Badge className="text-xs bg-emerald-100 text-emerald-800">
+                    Premium Active
+                  </Badge>
+                )}
+                {!isPremium && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleUpgradeRequest}
+                    className="text-xs"
+                  >
+                    Upgrade for GHS 10
+                  </Button>
+                )}
+              </div>
             </div>
             
-            <PhotoUpload 
-              onPhotoChange={handlePhotoChange} 
-              maxFreeImages={MAX_FREE_IMAGES}
-              onUpgradeRequest={handleUpgradeRequest}
-            />
+            {/* Photo Upload Area */}
+            {photos.length < maxImages && (
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
+                <Camera className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-gray-900">
+                    Add photos of your part
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    Take a photo or upload from gallery
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    PNG, JPG up to 5MB each
+                  </p>
+                </div>
+                
+                <div className="flex gap-2 mt-4 justify-center">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    onChange={handlePhotoUpload}
+                    className="hidden"
+                    id="camera-input"
+                  />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handlePhotoUpload}
+                    className="hidden"
+                    id="file-input"
+                  />
+                  
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => document.getElementById('camera-input')?.click()}
+                  >
+                    <Camera className="h-4 w-4 mr-2" />
+                    Take Photo
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => document.getElementById('file-input')?.click()}
+                  >
+                    <Upload className="h-4 w-4 mr-2" />
+                    Choose Files
+                  </Button>
+                </div>
+              </div>
+            )}
             
+            {/* Photo Preview Grid */}
             {photos.length > 0 && (
-              <div className="grid grid-cols-3 gap-2 mt-3">
+              <div className="grid grid-cols-3 gap-3 mt-4">
                 {photos.map((photo, index) => (
                   <div key={index} className="relative">
                     <img
                       src={URL.createObjectURL(photo)}
                       alt={`Photo ${index + 1}`}
-                      className="w-full h-20 object-cover rounded border"
+                      className="w-full h-24 object-cover rounded border"
                     />
                     <Button
                       type="button"
@@ -390,6 +484,18 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
                 ))}
               </div>
             )}
+            
+            {/* Photo limits info */}
+            <div className="mt-2 text-xs text-gray-500">
+              {photos.length >= MAX_FREE_IMAGES && !isPremium && (
+                <p className="text-amber-600">
+                  Free limit reached. Upgrade to add {MAX_PREMIUM_IMAGES - MAX_FREE_IMAGES} more photos.
+                </p>
+              )}
+              {isPremium && photos.length >= MAX_PREMIUM_IMAGES && (
+                <p className="text-gray-600">Maximum photos reached.</p>
+              )}
+            </div>
           </div>
 
           <div className="flex gap-2 pt-4">
