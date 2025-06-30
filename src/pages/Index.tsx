@@ -1,22 +1,28 @@
 
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
-import HeroSection from "@/components/HeroSection";
-import FeaturesSection from "@/components/FeaturesSection";
-import CTASection from "@/components/CTASection";
-import StatsSection from "@/components/StatsSection";
+import WelcomeSection from "@/components/WelcomeSection";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-red-50 to-green-50 font-inter">
-      <Navigation />
-      <div className="px-2 sm:px-4 lg:px-6">
-        <HeroSection />
-        <FeaturesSection />
-        <CTASection />
-        <StatsSection />
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
       </div>
-      <Footer />
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 font-inter">
+      <Navigation />
+      <WelcomeSection />
+      {!user && <Footer />}
     </div>
   );
 };
