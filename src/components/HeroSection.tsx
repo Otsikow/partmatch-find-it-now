@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { MessageSquare, MapPin, Package, Zap } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -29,11 +28,8 @@ const HeroSection = () => {
             <img 
               src="/lovable-uploads/23312658-5ff6-4d89-a7cb-c0fbf631cd1c.png" 
               alt="PartMatch Logo" 
-              className="h-16 w-auto mr-4"
+              className="h-32 w-auto"
             />
-            <h1 className="text-5xl font-playfair font-bold text-gray-900">
-              PartMatch
-            </h1>
           </div>
         </div>
         
