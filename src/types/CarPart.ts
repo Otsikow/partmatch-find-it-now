@@ -23,7 +23,6 @@ export interface CarPart {
     last_name?: string;
     phone?: string;
     location?: string;
-    business_name?: string;
     is_verified?: boolean;
     rating?: number;
     total_ratings?: number;

@@ -18,10 +18,9 @@ interface CarPartExpandedDialogProps {
 }
 
 const CarPartExpandedDialog = ({ part, isOpen, onOpenChange, onContact }: CarPartExpandedDialogProps) => {
-  // Get seller name from profiles data
-  const sellerName = part.profiles?.business_name || 
-    `${part.profiles?.first_name || ''} ${part.profiles?.last_name || ''}`.trim() || 
-    'Seller';
+  // Get seller name from profiles data - since business_name doesn't exist in profiles table, 
+  // we'll use first_name and last_name, or fallback to 'Seller'
+  const sellerName = `${part.profiles?.first_name || ''} ${part.profiles?.last_name || ''}`.trim() || 'Seller';
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>

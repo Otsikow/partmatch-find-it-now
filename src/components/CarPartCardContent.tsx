@@ -12,10 +12,9 @@ interface CarPartCardContentProps {
 }
 
 const CarPartCardContent = ({ part, onExpand }: CarPartCardContentProps) => {
-  // Get seller name from profiles data
-  const sellerName = part.profiles?.business_name || 
-    `${part.profiles?.first_name || ''} ${part.profiles?.last_name || ''}`.trim() || 
-    'Seller';
+  // Get seller name from profiles data - since business_name doesn't exist in profiles table, 
+  // we'll use first_name and last_name, or fallback to 'Seller'
+  const sellerName = `${part.profiles?.first_name || ''} ${part.profiles?.last_name || ''}`.trim() || 'Seller';
 
   return (
     <div onClick={onExpand}>

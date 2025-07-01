@@ -51,7 +51,6 @@ export const useCarParts = (params?: UseCarPartsParams) => {
             last_name,
             phone,
             location,
-            business_name,
             is_verified,
             rating,
             total_ratings
