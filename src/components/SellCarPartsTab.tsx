@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,6 +7,7 @@ import { toast } from '@/hooks/use-toast';
 import SellerVerificationForm from './SellerVerificationForm';
 import SellerVerificationStatus from './SellerVerificationStatus';
 import PostCarPartForm from './PostCarPartForm';
+import AdminPartSeeder from './AdminPartSeeder';
 import { Package, AlertCircle, CheckCircle, Shield } from 'lucide-react';
 
 interface VerificationStatus {
@@ -21,10 +21,10 @@ interface VerificationStatus {
 }
 
 const SellCarPartsTab = () => {
-  const { user } = useAuth();
+  const { user, userType } = useAuth();
   const [verification, setVerification] = useState<VerificationStatus | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeView, setActiveView] = useState<'verification' | 'post-part'>('post-part');
+  const [activeView, setActiveView] = useState<'verification' | 'post-part' | 'admin-seeder'>('post-part');
 
   useEffect(() => {
     if (user) {
@@ -164,7 +164,7 @@ const SellCarPartsTab = () => {
       )}
 
       {/* Action Buttons */}
-      <div className="flex gap-4 justify-center">
+      <div className="flex gap-4 justify-center flex-wrap">
         <Button
           variant={activeView === 'post-part' ? 'default' : 'outline'}
           onClick={() => setActiveView('post-part')}
@@ -179,11 +179,22 @@ const SellCarPartsTab = () => {
         >
           {verification ? 'View Verification' : 'Get Verified'}
         </Button>
+        {userType === 'admin' && (
+          <Button
+            variant={activeView === 'admin-seeder' ? 'default' : 'outline'}
+            onClick={() => setActiveView('admin-seeder')}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Admin: Seed Parts
+          </Button>
+        )}
       </div>
 
       {/* Content */}
       {activeView === 'post-part' ? (
         <PostCarPartForm onPartPosted={handlePartPosted} />
+      ) : activeView === 'admin-seeder' && userType === 'admin' ? (
+        <AdminPartSeeder />
       ) : verification ? (
         <div className="space-y-6">
           <SellerVerificationStatus verification={verification} />
