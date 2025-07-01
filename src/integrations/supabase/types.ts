@@ -552,6 +552,8 @@ export type Database = {
           phone: string | null
           profile_photo_url: string | null
           rating: number | null
+          subscription_expiry: string | null
+          subscription_type: string | null
           total_ratings: number | null
           updated_at: string | null
           user_type: Database["public"]["Enums"]["user_type"]
@@ -572,6 +574,8 @@ export type Database = {
           phone?: string | null
           profile_photo_url?: string | null
           rating?: number | null
+          subscription_expiry?: string | null
+          subscription_type?: string | null
           total_ratings?: number | null
           updated_at?: string | null
           user_type?: Database["public"]["Enums"]["user_type"]
@@ -592,6 +596,8 @@ export type Database = {
           phone?: string | null
           profile_photo_url?: string | null
           rating?: number | null
+          subscription_expiry?: string | null
+          subscription_type?: string | null
           total_ratings?: number | null
           updated_at?: string | null
           user_type?: Database["public"]["Enums"]["user_type"]

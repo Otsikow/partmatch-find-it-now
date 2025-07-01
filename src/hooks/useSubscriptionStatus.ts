@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -32,7 +33,7 @@ export const useSubscriptionStatus = (): SubscriptionStatus => {
 
       try {
         const { data, error } = await supabase
-          .from('user_profiles')
+          .from('profiles')
           .select('subscription_type, subscription_expiry')
           .eq('id', user.id)
           .single();
