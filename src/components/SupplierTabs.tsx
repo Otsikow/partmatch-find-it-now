@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,7 +19,7 @@ interface SupplierTabsProps {
 const SupplierTabs = ({ onRefresh }: SupplierTabsProps) => {
   const [activeTab, setActiveTab] = useState("my-parts");
   const [showPostForm, setShowPostForm] = useState(false);
-  const [hasBusinessSubscription, setHasBusinessSubscription] = useState(false); // This would come from user's subscription status
+  const [hasBusinessSubscription, setHasBusinessSubscription] = useState(false);
 
   const handlePartPosted = () => {
     setShowPostForm(false);
@@ -59,7 +60,7 @@ const SupplierTabs = ({ onRefresh }: SupplierTabsProps) => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="my-parts" className="flex items-center gap-2">
             <Package className="h-4 w-4" />
             My Parts
@@ -87,11 +88,17 @@ const SupplierTabs = ({ onRefresh }: SupplierTabsProps) => {
         </TabsContent>
 
         <TabsContent value="offers" className="space-y-4">
-          <OffersTab />
+          <Card className="p-6">
+            <h3 className="text-lg font-semibold mb-4">Your Offers</h3>
+            <p className="text-gray-600">View and manage offers you've made on part requests.</p>
+          </Card>
         </TabsContent>
 
         <TabsContent value="requests" className="space-y-4">
-          <RequestsTab />
+          <Card className="p-6">
+            <h3 className="text-lg font-semibold mb-4">Part Requests</h3>
+            <p className="text-gray-600">Browse part requests from buyers and make offers.</p>
+          </Card>
         </TabsContent>
 
         <TabsContent value="subscription" className="space-y-4">

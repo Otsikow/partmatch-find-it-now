@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Star, TrendingUp, Camera, Crown, Megaphone, Receipt } from "lucide-react";
+import { Star, TrendingUp, Camera, Crown, Megaphone } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import PaymentModal from "./PaymentModal";
 
@@ -47,8 +47,6 @@ const MonetizationFeatures = ({
   };
 
   const canAddMorePhotos = currentPhotoCount < 10;
-  const extraPhotosNeeded = Math.max(0, currentPhotoCount - 3);
-  const extraPhotosCost = extraPhotosNeeded * 10;
 
   return (
     <div className="space-y-4">

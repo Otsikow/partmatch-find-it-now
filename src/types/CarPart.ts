@@ -20,4 +20,12 @@ export interface CarPart {
   is_featured?: boolean;
   featured_until?: string;
   boosted_until?: string;
+  // Seller profile information (joined from profiles table)
+  profiles?: {
+    first_name?: string;
+    last_name?: string;
+    is_verified?: boolean;
+    rating?: number;
+    total_ratings?: number;
+  };
 }
