@@ -2,6 +2,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MapPin, Phone, User } from "lucide-react";
 import { CarPart } from "@/types/CarPart";
 import SaveButton from "./SaveButton";
@@ -21,6 +22,7 @@ const CarPartExpandedDialog = ({ part, isOpen, onOpenChange, onContact }: CarPar
   // Get seller name from profiles data - since business_name doesn't exist in profiles table, 
   // we'll use first_name and last_name, or fallback to 'Seller'
   const sellerName = `${part.profiles?.first_name || ''} ${part.profiles?.last_name || ''}`.trim() || 'Seller';
+  const initials = sellerName.split(' ').map(n => n.charAt(0)).join('').slice(0, 2).toUpperCase();
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -91,10 +93,17 @@ const CarPartExpandedDialog = ({ part, isOpen, onOpenChange, onContact }: CarPar
           <div className="border-t pt-4">
             <h4 className="font-semibold text-gray-900 mb-3">Seller Information</h4>
             <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <User className="h-4 w-4 text-gray-500" />
-                <span className="font-medium text-gray-700">{sellerName}</span>
-                <VerifiedSellerBadge isVerified={part.profiles?.is_verified || false} size="sm" />
+              <div className="flex items-center gap-3">
+                <Avatar className="h-10 w-10">
+                  <AvatarImage src={part.profiles?.profile_photo_url} alt={sellerName} />
+                  <AvatarFallback className="text-sm font-medium">
+                    {initials}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex items-center gap-2">
+                  <span className="font-medium text-gray-700">{sellerName}</span>
+                  <VerifiedSellerBadge isVerified={part.profiles?.is_verified || false} size="sm" />
+                </div>
               </div>
               
               <SellerRatingDisplay

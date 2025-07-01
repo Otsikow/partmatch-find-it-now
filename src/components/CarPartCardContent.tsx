@@ -1,5 +1,6 @@
 
 import { CardHeader, CardContent } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MapPin, Calendar, User } from "lucide-react";
 import { CarPart } from "@/types/CarPart";
 import VerifiedSellerBadge from "./VerifiedSellerBadge";
@@ -15,6 +16,7 @@ const CarPartCardContent = ({ part, onExpand }: CarPartCardContentProps) => {
   // Get seller name from profiles data - since business_name doesn't exist in profiles table, 
   // we'll use first_name and last_name, or fallback to 'Seller'
   const sellerName = `${part.profiles?.first_name || ''} ${part.profiles?.last_name || ''}`.trim() || 'Seller';
+  const initials = sellerName.split(' ').map(n => n.charAt(0)).join('').slice(0, 2).toUpperCase();
 
   return (
     <div onClick={onExpand}>
@@ -46,7 +48,12 @@ const CarPartCardContent = ({ part, onExpand }: CarPartCardContentProps) => {
           
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-sm text-gray-700">
-              <User className="h-4 w-4" />
+              <Avatar className="h-6 w-6">
+                <AvatarImage src={part.profiles?.profile_photo_url} alt={sellerName} />
+                <AvatarFallback className="text-xs font-medium">
+                  {initials}
+                </AvatarFallback>
+              </Avatar>
               <span className="font-medium">{sellerName}</span>
               <VerifiedSellerBadge isVerified={part.profiles?.is_verified || false} size="sm" />
             </div>
