@@ -734,6 +734,41 @@ export type Database = {
           },
         ]
       }
+      saved_parts: {
+        Row: {
+          created_at: string
+          id: string
+          list_name: string | null
+          notes: string | null
+          part_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          list_name?: string | null
+          notes?: string | null
+          part_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          list_name?: string | null
+          notes?: string | null
+          part_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_parts_part_id_fkey"
+            columns: ["part_id"]
+            isOneToOne: false
+            referencedRelation: "car_parts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       seller_verifications: {
         Row: {
           admin_notes: string | null

@@ -6,6 +6,7 @@ import { MapPin, Calendar, Phone, User, Expand } from "lucide-react";
 import { CarPart } from "@/types/CarPart";
 import VerifiedSellerBadge from "./VerifiedSellerBadge";
 import ChatButton from "./chat/ChatButton";
+import SaveButton from "./SaveButton";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
@@ -75,7 +76,13 @@ const CarPartCard = ({ part, onContact }: CarPartCardProps) => {
                   console.log('Image loaded successfully:', imageUrl);
                 }}
               />
-              <div className="absolute top-2 right-2">
+              <div className="absolute top-2 right-2 flex gap-2">
+                <SaveButton 
+                  partId={part.id} 
+                  size="sm" 
+                  variant="ghost"
+                  className="bg-white/90 hover:bg-white shadow-sm"
+                />
                 <Badge 
                   variant="secondary" 
                   className={`${getConditionColor(part.condition)} font-semibold`}
@@ -95,7 +102,13 @@ const CarPartCard = ({ part, onContact }: CarPartCardProps) => {
                 <div className="text-2xl mb-2">📦</div>
                 <p className="text-sm">No Image Available</p>
               </div>
-              <div className="absolute top-2 right-2">
+              <div className="absolute top-2 right-2 flex gap-2">
+                <SaveButton 
+                  partId={part.id} 
+                  size="sm" 
+                  variant="ghost"
+                  className="bg-white/90 hover:bg-white shadow-sm"
+                />
                 <Badge 
                   variant="secondary" 
                   className={`${getConditionColor(part.condition)} font-semibold`}
@@ -159,11 +172,19 @@ const CarPartCard = ({ part, onContact }: CarPartCardProps) => {
         </div>
 
         <CardFooter className="pt-3 space-y-2">
-          <ChatButton
-            sellerId={part.supplier_id}
-            partId={part.id}
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-700 hover:from-blue-700 hover:to-purple-800 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
-          />
+          <div className="flex gap-2 w-full">
+            <ChatButton
+              sellerId={part.supplier_id}
+              partId={part.id}
+              className="flex-1 bg-gradient-to-r from-blue-600 to-purple-700 hover:from-blue-700 hover:to-purple-800 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+            />
+            <SaveButton 
+              partId={part.id} 
+              size="default"
+              variant="outline"
+              className="border-red-200 hover:bg-red-50"
+            />
+          </div>
           
           <Button 
             onClick={onContact}
@@ -180,7 +201,14 @@ const CarPartCard = ({ part, onContact }: CarPartCardProps) => {
       <Dialog open={isExpanded} onOpenChange={setIsExpanded}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold">{part.title}</DialogTitle>
+            <DialogTitle className="text-xl font-bold flex items-center gap-2">
+              {part.title}
+              <SaveButton 
+                partId={part.id} 
+                size="sm"
+                showText={true}
+              />
+            </DialogTitle>
           </DialogHeader>
           
           <div className="space-y-4">

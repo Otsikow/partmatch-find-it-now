@@ -11,6 +11,7 @@ import ChatButton from '@/components/chat/ChatButton';
 import RatingModal from '@/components/RatingModal';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 interface Order {
   id: string;
@@ -36,6 +37,7 @@ interface Order {
 
 const MyOrders = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -159,6 +161,10 @@ const MyOrders = () => {
     fetchOrders(); // Refresh to update rating status
   };
 
+  const handleStartShopping = () => {
+    navigate('/search-parts');
+  };
+
   if (loading) {
     return (
       <div className="space-y-6">
@@ -234,7 +240,10 @@ const MyOrders = () => {
               }
             </p>
             {!searchTerm && statusFilter === 'all' && (
-              <Button className="bg-blue-600 hover:bg-blue-700">
+              <Button 
+                onClick={handleStartShopping}
+                className="bg-blue-600 hover:bg-blue-700"
+              >
                 Start Shopping
               </Button>
             )}

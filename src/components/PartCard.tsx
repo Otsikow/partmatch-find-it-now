@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { MapPin, Phone } from "lucide-react";
 import { Part } from "@/types/Part";
 import ChatButton from "@/components/chat/ChatButton";
+import SaveButton from "@/components/SaveButton";
 
 interface PartCardProps {
   part: Part;
@@ -23,17 +24,25 @@ const PartCard = ({ part }: PartCardProps) => {
   return (
     <Card className="p-4 sm:p-6 bg-gradient-to-br from-white/90 to-emerald-50/30 backdrop-blur-sm border-0 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
       <div className="flex justify-between items-start mb-3 sm:mb-4">
-        <div>
+        <div className="flex-1">
           <h3 className="font-playfair font-semibold text-lg sm:text-xl">{part.name}</h3>
           <p className="text-gray-600 font-crimson text-base sm:text-lg">
             {part.make} {part.model} ({part.year})
           </p>
         </div>
-        <div className="text-right">
+        <div className="text-right flex flex-col items-end gap-2">
           <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-emerald-600 to-green-700 bg-clip-text text-transparent">{part.price}</p>
-          <Badge className={`${getConditionColor(part.condition)} text-sm sm:text-base`}>
-            {part.condition}
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Badge className={`${getConditionColor(part.condition)} text-sm sm:text-base`}>
+              {part.condition}
+            </Badge>
+            <SaveButton 
+              partId={part.id || 'mock-part-id'} 
+              size="sm" 
+              variant="outline"
+              className="border-red-200 hover:bg-red-50"
+            />
+          </div>
         </div>
       </div>
 
