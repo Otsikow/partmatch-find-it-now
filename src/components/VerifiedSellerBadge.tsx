@@ -1,6 +1,6 @@
 
 import { Badge } from "@/components/ui/badge";
-import { Shield, CheckCircle } from "lucide-react";
+import { Shield } from "lucide-react";
 
 interface VerifiedSellerBadgeProps {
   isVerified: boolean;

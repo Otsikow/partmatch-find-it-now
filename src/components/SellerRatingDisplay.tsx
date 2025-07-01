@@ -1,66 +1,90 @@
 
-import { Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Star } from "lucide-react";
 
 interface SellerRatingDisplayProps {
-  rating?: number;
-  totalRatings?: number;
-  showBadge?: boolean;
+  rating: number;
+  totalRatings: number;
   size?: 'sm' | 'md' | 'lg';
+  showBadge?: boolean;
+  className?: string;
 }
 
 const SellerRatingDisplay = ({ 
-  rating = 0, 
-  totalRatings = 0, 
+  rating, 
+  totalRatings, 
+  size = 'md', 
   showBadge = false,
-  size = 'md'
+  className = "" 
 }: SellerRatingDisplayProps) => {
-  const starSize = size === 'sm' ? 'w-3 h-3' : size === 'lg' ? 'w-5 h-5' : 'w-4 h-4';
-  const textSize = size === 'sm' ? 'text-xs' : size === 'lg' ? 'text-base' : 'text-sm';
+  const sizeClasses = {
+    sm: "text-xs",
+    md: "text-sm",
+    lg: "text-base"
+  };
+
+  const iconSizes = {
+    sm: "h-3 w-3",
+    md: "h-4 w-4",
+    lg: "h-5 w-5"
+  };
+
+  const renderStars = () => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+
+    for (let i = 0; i < 5; i++) {
+      if (i < fullStars) {
+        stars.push(
+          <Star 
+            key={i} 
+            className={`${iconSizes[size]} fill-yellow-400 text-yellow-400`} 
+          />
+        );
+      } else if (i === fullStars && hasHalfStar) {
+        stars.push(
+          <Star 
+            key={i} 
+            className={`${iconSizes[size]} fill-yellow-400/50 text-yellow-400`} 
+          />
+        );
+      } else {
+        stars.push(
+          <Star 
+            key={i} 
+            className={`${iconSizes[size]} text-gray-300`} 
+          />
+        );
+      }
+    }
+    return stars;
+  };
+
+  const isTopRated = rating >= 4.5 && totalRatings >= 10;
 
   if (totalRatings === 0) {
     return (
-      <div className="flex items-center gap-1">
-        <div className="flex">
-          {[1, 2, 3, 4, 5].map((star) => (
-            <Star key={star} className={`${starSize} text-gray-300`} />
-          ))}
-        </div>
-        <span className={`${textSize} text-gray-500`}>No ratings</span>
+      <div className={`flex items-center gap-1 ${sizeClasses[size]} text-gray-500 ${className}`}>
+        <span>No ratings yet</span>
       </div>
     );
   }
 
-  const fullStars = Math.floor(rating);
-  const hasHalfStar = rating % 1 >= 0.5;
-
   return (
-    <div className="flex items-center gap-2">
+    <div className={`flex items-center gap-2 ${className}`}>
       <div className="flex items-center gap-1">
-        <div className="flex">
-          {[1, 2, 3, 4, 5].map((star) => (
-            <Star
-              key={star}
-              className={`${starSize} ${
-                star <= fullStars
-                  ? 'text-yellow-400 fill-yellow-400'
-                  : star === fullStars + 1 && hasHalfStar
-                  ? 'text-yellow-400 fill-yellow-400 opacity-50'
-                  : 'text-gray-300'
-              }`}
-            />
-          ))}
-        </div>
-        <span className={`${textSize} font-medium`}>
+        <div className="flex">{renderStars()}</div>
+        <span className={`${sizeClasses[size]} text-gray-600 font-medium`}>
           {rating.toFixed(1)}
         </span>
-        <span className={`${textSize} text-gray-500`}>
-          ({totalRatings} {totalRatings === 1 ? 'review' : 'reviews'})
+        <span className={`${sizeClasses[size]} text-gray-500`}>
+          ({totalRatings} review{totalRatings !== 1 ? 's' : ''})
         </span>
       </div>
       
-      {showBadge && rating >= 4.5 && totalRatings >= 5 && (
-        <Badge variant="secondary" className="text-xs">
+      {showBadge && isTopRated && (
+        <Badge className="bg-gradient-to-r from-yellow-100 to-orange-100 text-yellow-800 border-yellow-200 text-xs px-2 py-1">
           Top Rated
         </Badge>
       )}
