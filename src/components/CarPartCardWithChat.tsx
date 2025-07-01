@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MapPin, Phone, Calendar, Navigation, Expand, X } from "lucide-react";
 import ChatButton from "@/components/chat/ChatButton";
 import SellerRatingDisplay from "@/components/SellerRatingDisplay";
@@ -24,13 +25,14 @@ interface CarPart {
   address?: string;
   created_at: string;
   supplier_id: string;
-  supplier?: {
+  profiles?: {
     first_name?: string;
     last_name?: string;
     phone?: string;
     is_verified?: boolean;
     rating?: number;
     total_ratings?: number;
+    profile_photo_url?: string;
   };
 }
 
@@ -54,9 +56,13 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
     return `${currency} ${price.toLocaleString()}`;
   };
 
-  const supplierName = part.supplier 
-    ? `${part.supplier.first_name || ''} ${part.supplier.last_name || ''}`.trim() || 'Seller'
+  const supplierName = part.profiles 
+    ? `${part.profiles.first_name || ''} ${part.profiles.last_name || ''}`.trim() || 'Seller'
     : 'Seller';
+
+  const initials = supplierName === 'Seller' 
+    ? 'S' 
+    : supplierName.split(' ').map(n => n.charAt(0)).join('').slice(0, 2).toUpperCase();
 
   const openDirections = () => {
     if (part.address) {
@@ -130,12 +136,25 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
               </p>
             )}
 
-            {/* Seller Rating Display */}
-            {part.supplier && (
-              <div className="border-t pt-2">
+            {/* Seller Info with Avatar */}
+            {part.profiles && (
+              <div className="border-t pt-2 space-y-2">
+                <div className="flex items-center gap-2">
+                  <Avatar className="h-6 w-6">
+                    <AvatarImage src={part.profiles.profile_photo_url} alt={supplierName} />
+                    <AvatarFallback className="text-xs font-medium">
+                      {initials}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="text-xs sm:text-sm font-medium">{supplierName}</span>
+                  {part.profiles.is_verified && (
+                    <Badge variant="secondary" className="text-xs">Verified</Badge>
+                  )}
+                </div>
+                
                 <SellerRatingDisplay
-                  rating={part.supplier.rating || 0}
-                  totalRatings={part.supplier.total_ratings || 0}
+                  rating={part.profiles.rating || 0}
+                  totalRatings={part.profiles.total_ratings || 0}
                   size="sm"
                   showBadge={true}
                 />
@@ -160,37 +179,26 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
 
         {/* Action Buttons */}
         <div className="p-3 sm:p-4 pt-0 border-t bg-gray-50 rounded-b-lg" onClick={(e) => e.stopPropagation()}>
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2 min-w-0">
-                <span className="text-xs sm:text-sm font-medium truncate">{supplierName}</span>
-                {part.supplier?.is_verified && (
-                  <Badge variant="secondary" className="text-xs flex-shrink-0">Verified</Badge>
-                )}
-              </div>
-            </div>
-            
-            <div className="flex gap-2">
-              <ChatButton
-                sellerId={part.supplier_id}
-                partId={part.id}
-                size="sm"
-                variant="outline"
+          <div className="flex gap-2">
+            <ChatButton
+              sellerId={part.supplier_id}
+              partId={part.id}
+              size="sm"
+              variant="outline"
+              className="flex-1 text-xs sm:text-sm h-8 sm:h-9"
+            />
+            {part.address && (
+              <Button 
+                size="sm" 
+                variant="default" 
+                onClick={openDirections} 
                 className="flex-1 text-xs sm:text-sm h-8 sm:h-9"
-              />
-              {part.address && (
-                <Button 
-                  size="sm" 
-                  variant="default" 
-                  onClick={openDirections} 
-                  className="flex-1 text-xs sm:text-sm h-8 sm:h-9"
-                >
-                  <Navigation className="h-3 w-3 mr-1" />
-                  <span className="hidden xs:inline">Get Directions</span>
-                  <span className="xs:hidden">Directions</span>
-                </Button>
-              )}
-            </div>
+              >
+                <Navigation className="h-3 w-3 mr-1" />
+                <span className="hidden xs:inline">Get Directions</span>
+                <span className="xs:hidden">Directions</span>
+              </Button>
+            )}
           </div>
         </div>
       </Card>
@@ -273,15 +281,21 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
                   <h4 className="font-semibold text-gray-900 mb-2">Seller</h4>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm sm:text-base">{supplierName}</span>
-                      {part.supplier?.is_verified && (
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={part.profiles?.profile_photo_url} alt={supplierName} />
+                        <AvatarFallback className="text-sm font-medium">
+                          {initials}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="text-sm sm:text-base font-medium">{supplierName}</span>
+                      {part.profiles?.is_verified && (
                         <Badge variant="secondary" className="text-xs">Verified</Badge>
                       )}
                     </div>
                     {/* Seller Rating in Expanded View */}
                     <SellerRatingDisplay
-                      rating={part.supplier?.rating || 0}
-                      totalRatings={part.supplier?.total_ratings || 0}
+                      rating={part.profiles?.rating || 0}
+                      totalRatings={part.profiles?.total_ratings || 0}
                       size="md"
                       showBadge={true}
                     />

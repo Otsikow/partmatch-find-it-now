@@ -17,13 +17,14 @@ interface CarPart {
   address?: string;
   created_at: string;
   supplier_id: string;
-  supplier?: {
+  profiles?: {
     first_name?: string;
     last_name?: string;
     phone?: string;
     is_verified?: boolean;
     rating?: number;
     total_ratings?: number;
+    profile_photo_url?: string;
   };
 }
 
