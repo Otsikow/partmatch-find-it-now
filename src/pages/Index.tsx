@@ -2,6 +2,9 @@
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
+import StatsSection from "@/components/StatsSection";
+import CTASection from "@/components/CTASection";
+import FeaturesSection from "@/components/FeaturesSection";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
@@ -22,6 +25,9 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 font-inter">
       <Navigation />
       <HeroSection />
+      <FeaturesSection />
+      <CTASection />
+      <StatsSection />
       {!user && <Footer />}
     </div>
   );
