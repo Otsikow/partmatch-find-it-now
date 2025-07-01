@@ -1,13 +1,18 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import RequestFormFields from "@/components/RequestForm/RequestFormFields";
 import { useRequestSubmission } from "@/hooks/useRequestSubmission";
 import PageHeader from "@/components/PageHeader";
 import { RequestFormData } from "@/components/RequestForm/RequestFormData";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "@/hooks/use-toast";
 
 const RequestPart = () => {
-  const { loading, aiReviewing, submitRequest } = useRequestSubmission();
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
+  const { loading: submissionLoading, aiReviewing, submitRequest } = useRequestSubmission();
   const [formData, setFormData] = useState<RequestFormData>({
     make: "",
     model: "",
@@ -19,6 +24,17 @@ const RequestPart = () => {
   });
   const [photo, setPhoto] = useState<File | null>(null);
 
+  useEffect(() => {
+    if (!loading && !user) {
+      toast({
+        title: "Sign In Required",
+        description: "Please sign in to request car parts.",
+        variant: "destructive"
+      });
+      navigate('/auth');
+    }
+  }, [user, loading, navigate]);
+
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
@@ -29,8 +45,36 @@ const RequestPart = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to request car parts.",
+        variant: "destructive"
+      });
+      navigate('/auth');
+      return;
+    }
+
     await submitRequest(formData, photo);
   };
+
+  // Show loading while checking authentication
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render the form if user is not authenticated
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100">
@@ -51,10 +95,10 @@ const RequestPart = () => {
           
           <Button
             type="submit"
-            disabled={loading || aiReviewing}
+            disabled={submissionLoading || aiReviewing}
             className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
           >
-            {loading || aiReviewing ? "Submitting..." : "Submit Request"}
+            {submissionLoading || aiReviewing ? "Submitting..." : "Submit Request"}
           </Button>
         </form>
       </main>

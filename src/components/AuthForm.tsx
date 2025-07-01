@@ -54,8 +54,8 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
         
         if (!error) {
           toast({
-            title: "Account Created!",
-            description: "Please check your email to verify your account, then sign in below.",
+            title: "Registration Successful!",
+            description: "Please check your email and click the verification link before signing in.",
           });
           setIsLogin(true);
         }
@@ -111,9 +111,16 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
                 }
               </p>
               {!isLogin && (
-                <div className="mt-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium inline-block">
-                  Registering as: {getRoleDisplayName(formData.userType)}
-                </div>
+                <>
+                  <div className="mt-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium inline-block">
+                    Registering as: {getRoleDisplayName(formData.userType)}
+                  </div>
+                  <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <p className="text-xs text-yellow-800">
+                      📧 You'll need to verify your email before you can sign in
+                    </p>
+                  </div>
+                </>
               )}
             </div>
 
@@ -134,15 +141,22 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
             </form>
 
             {isLogin && (
-              <div className="text-center mt-4">
-                <button
-                  type="button"
-                  onClick={() => setShowPasswordReset(true)}
-                  className="text-blue-600 hover:text-blue-800 hover:underline text-sm font-crimson transition-colors duration-300"
-                >
-                  Forgot your password?
-                </button>
-              </div>
+              <>
+                <div className="text-center mt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowPasswordReset(true)}
+                    className="text-blue-600 hover:text-blue-800 hover:underline text-sm font-crimson transition-colors duration-300"
+                  >
+                    Forgot your password?
+                  </button>
+                </div>
+                <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-xs text-blue-800 text-center">
+                    💡 If you just registered, check your email for a verification link before signing in
+                  </p>
+                </div>
+              </>
             )}
 
             <div className="text-center mt-2">

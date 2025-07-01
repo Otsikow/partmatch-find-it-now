@@ -1,9 +1,26 @@
 
 import { Button } from "@/components/ui/button";
 import { MessageSquare, MapPin, Package, Zap } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "@/hooks/use-toast";
 
 const HeroSection = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleRequestPartClick = (e: React.MouseEvent) => {
+    if (!user) {
+      e.preventDefault();
+      toast({
+        title: "Sign In Required",
+        description: "Please sign in to request car parts.",
+        variant: "destructive"
+      });
+      navigate('/auth');
+    }
+  };
+
   return (
     <div className="relative min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100">
       <div className="container mx-auto px-4 text-center">
@@ -31,12 +48,23 @@ const HeroSection = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-lg mx-auto">
-          <Link to="/request-part" className="w-full sm:w-auto">
-            <Button size="lg" className="w-full bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700 text-white shadow-lg font-semibold">
+          {user ? (
+            <Link to="/request-part" className="w-full sm:w-auto">
+              <Button size="lg" className="w-full bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700 text-white shadow-lg font-semibold">
+                <MessageSquare className="mr-2 h-5 w-5" />
+                Request Car Parts
+              </Button>
+            </Link>
+          ) : (
+            <Button 
+              size="lg" 
+              className="w-full sm:w-auto bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700 text-white shadow-lg font-semibold"
+              onClick={handleRequestPartClick}
+            >
               <MessageSquare className="mr-2 h-5 w-5" />
               Request Car Parts
             </Button>
-          </Link>
+          )}
           
           <Link to="/search-parts" className="w-full sm:w-auto">
             <Button size="lg" variant="outline" className="w-full border-2 border-green-600 text-green-700 hover:bg-green-50 shadow-lg font-semibold">

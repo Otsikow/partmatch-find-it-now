@@ -81,7 +81,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         console.log('AuthProvider: Auth state changed:', event, {
           userId: session?.user?.id,
           userEmail: session?.user?.email,
-          userMetadata: session?.user?.user_metadata
+          userMetadata: session?.user?.user_metadata,
+          emailConfirmed: session?.user?.email_confirmed_at
         });
         
         // Check if this is a password recovery session
@@ -116,7 +117,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.log('AuthProvider: Initial session check:', {
         userId: session?.user?.id,
         userEmail: session?.user?.email,
-        userMetadata: session?.user?.user_metadata
+        userMetadata: session?.user?.user_metadata,
+        emailConfirmed: session?.user?.email_confirmed_at
       });
       
       setSession(session);
@@ -178,6 +180,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           description: error.message,
           variant: "destructive"
         });
+      } else {
+        toast({
+          title: "Registration Successful!",
+          description: "Please check your email and click the verification link before signing in.",
+        });
       }
       
       return { error };
@@ -227,7 +234,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         password
       });
       
-      console.log('AuthProvider: SignIn result:', { error, userData: data?.user?.id ? 'User found' : 'No user' });
+      console.log('AuthProvider: SignIn result:', { 
+        error, 
+        userData: data?.user?.id ? 'User found' : 'No user',
+        emailConfirmed: data?.user?.email_confirmed_at
+      });
       
       if (error) {
         console.error('AuthProvider: Supabase auth error:', error);
@@ -237,7 +248,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (error.message.includes('Invalid login credentials')) {
           errorMessage = 'Invalid email or password. Please check your credentials and try again.';
         } else if (error.message.includes('Email not confirmed')) {
-          errorMessage = 'Please check your email and click the confirmation link before signing in.';
+          errorMessage = 'Please verify your email address before signing in. Check your inbox for a confirmation email.';
         } else if (error.message.includes('Too many requests')) {
           errorMessage = 'Too many login attempts. Please wait a few minutes and try again.';
         }
@@ -258,6 +269,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
         
         return { error };
+      }
+
+      // Check if email is confirmed
+      if (data?.user && !data.user.email_confirmed_at) {
+        console.log('AuthProvider: Email not confirmed, signing out user');
+        
+        // Sign out the user immediately
+        await supabase.auth.signOut();
+        
+        const emailError = new Error('Please verify your email address before signing in. Check your inbox for a confirmation email.');
+        
+        toast({
+          title: "Email Verification Required",
+          description: "Please verify your email address before signing in. Check your inbox for a confirmation email.",
+          variant: "destructive"
+        });
+        
+        return { error: emailError };
       }
       
       // Additional admin verification after successful login
@@ -495,7 +524,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     hasSession: !!session,
     isPasswordReset,
     userType,
-    firstName
+    firstName,
+    emailConfirmed: user?.email_confirmed_at
   });
 
   return (
