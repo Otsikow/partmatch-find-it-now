@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { CarPart } from "@/types/CarPart";
 import MonetizationFeatures from "./MonetizationFeatures";
+import { useSubscriptionStatus } from "@/hooks/useSubscriptionStatus";
 
 interface MyPartsTabProps {
   onRefresh: () => void;
@@ -15,6 +16,7 @@ interface MyPartsTabProps {
 
 const MyPartsTab = ({ onRefresh }: MyPartsTabProps) => {
   const { user } = useAuth();
+  const { hasBusinessSubscription } = useSubscriptionStatus();
   const [parts, setParts] = useState<CarPart[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedPartForBoost, setSelectedPartForBoost] = useState<string | null>(null);
@@ -163,13 +165,13 @@ const MyPartsTab = ({ onRefresh }: MyPartsTabProps) => {
               <div className="flex items-center gap-2 mb-2">
                 <h3 className="font-semibold text-lg">{part.title}</h3>
                 {isPartFeatured(part) && (
-                  <Badge className="bg-yellow-100 text-yellow-800">
+                  <Badge>
                     <Star className="h-3 w-3 mr-1" />
                     Featured
                   </Badge>
                 )}
                 {isPartBoosted(part) && (
-                  <Badge className="bg-blue-100 text-blue-800">
+                  <Badge>
                     <TrendingUp className="h-3 w-3 mr-1" />
                     Boosted
                   </Badge>
@@ -182,10 +184,10 @@ const MyPartsTab = ({ onRefresh }: MyPartsTabProps) => {
                 <p className="text-sm text-gray-600 mb-3">{part.description}</p>
               )}
               <div className="flex flex-wrap gap-2 mb-3">
-                <Badge className={getConditionColor(part.condition)}>
+                <Badge>
                   {part.condition}
                 </Badge>
-                <Badge className={getStatusColor(part.status)}>
+                <Badge>
                   {part.status}
                 </Badge>
               </div>
@@ -231,7 +233,7 @@ const MyPartsTab = ({ onRefresh }: MyPartsTabProps) => {
                 currentPhotoCount={part.images?.length || 0}
                 isFeatured={isPartFeatured(part)}
                 isBoosted={isPartBoosted(part)}
-                hasBusinessSubscription={false} // This would come from user's subscription status
+                hasBusinessSubscription={hasBusinessSubscription}
                 onFeatureUpdate={fetchMyParts}
               />
             </div>
