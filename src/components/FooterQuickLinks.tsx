@@ -1,5 +1,5 @@
 
-import { Home, Users, Wrench, Mail } from "lucide-react";
+import { Home, Users, Wrench, Mail, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const FooterQuickLinks = () => {
@@ -32,6 +32,15 @@ const FooterQuickLinks = () => {
           >
             <Wrench className="h-3 w-3" />
             <span>Our Services</span>
+          </Link>
+        </li>
+        <li>
+          <Link 
+            to="/request-part" 
+            className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
+          >
+            <MessageSquare className="h-3 w-3" />
+            <span>Request Car Parts</span>
           </Link>
         </li>
         <li>
