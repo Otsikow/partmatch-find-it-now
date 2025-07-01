@@ -105,7 +105,7 @@ const SupplierTabs = ({
 
   return (
     <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
-      <TabsList className="grid w-full grid-cols-4 mb-8">
+      <TabsList className="grid w-full grid-cols-5 mb-8">
         <TabsTrigger value="sell-parts" className="flex items-center gap-2">
           <Plus className="h-4 w-4" />
           Sell Parts
@@ -117,6 +117,10 @@ const SupplierTabs = ({
         <TabsTrigger value="offers" className="flex items-center gap-2">
           <TrendingUp className="h-4 w-4" />
           My Offers ({offers.length})
+        </TabsTrigger>
+        <TabsTrigger value="subscription" className="flex items-center gap-2">
+          <User className="h-4 w-4" />
+          Business
         </TabsTrigger>
         <TabsTrigger value="profile" className="flex items-center gap-2">
           <User className="h-4 w-4" />
@@ -303,6 +307,15 @@ const SupplierTabs = ({
             ))}
           </div>
         )}
+      </TabsContent>
+
+      <TabsContent value="subscription" className="space-y-6">
+        <div className="text-center mb-6">
+          <h3 className="text-xl font-semibold text-orange-700 mb-2">Business Subscription</h3>
+          <p className="text-gray-600">Upgrade your account for premium features</p>
+        </div>
+        
+        <SubscriptionManager sellerId="current-user-id" />
       </TabsContent>
 
       <TabsContent value="profile" className="space-y-6">
