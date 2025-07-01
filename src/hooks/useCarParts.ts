@@ -25,6 +25,8 @@ export const useCarParts = (params?: UseCarPartsParams) => {
       setLoading(true);
       setError(null);
       
+      console.log('Fetching car parts...');
+      
       let query = supabase
         .from('car_parts')
         .select(`
@@ -57,8 +59,10 @@ export const useCarParts = (params?: UseCarPartsParams) => {
             total_ratings
           )
         `)
-        .in('status', ['available', 'accepted'])
+        .eq('status', 'available')
         .order('created_at', { ascending: false });
+
+      console.log('Query built, executing...');
 
       // Apply filters if provided
       if (params?.filters) {
@@ -82,6 +86,9 @@ export const useCarParts = (params?: UseCarPartsParams) => {
 
       const { data, error } = await query;
 
+      console.log('Query executed. Data:', data);
+      console.log('Query error:', error);
+
       if (error) {
         console.error('Error fetching parts:', error);
         setError(error.message);
@@ -90,6 +97,7 @@ export const useCarParts = (params?: UseCarPartsParams) => {
 
       // Transform the data to match our CarPart interface and ensure images are properly formatted
       const transformedParts: CarPart[] = (data || []).map(part => {
+        console.log('Processing part:', part.title, 'Status:', part.status);
         console.log('Processing part images:', part.images);
         
         // Ensure images are properly formatted as URLs
@@ -124,7 +132,8 @@ export const useCarParts = (params?: UseCarPartsParams) => {
         };
       });
 
-      console.log('Transformed parts with images:', transformedParts);
+      console.log('Final transformed parts count:', transformedParts.length);
+      console.log('Transformed parts:', transformedParts);
       setParts(transformedParts);
     } catch (err) {
       console.error('Unexpected error:', err);

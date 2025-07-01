@@ -27,6 +27,18 @@ const AdminPartSeeder = () => {
     console.log('Starting to seed sample parts for admin user:', user.id);
 
     try {
+      // First, let's check if the user exists in profiles
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      console.log('Admin profile:', profile);
+      if (profileError) {
+        console.error('Profile error:', profileError);
+      }
+
       const insertPromises = sampleParts.map(async (part) => {
         const partData = {
           supplier_id: user.id,
@@ -44,7 +56,7 @@ const AdminPartSeeder = () => {
           status: 'available'
         };
 
-        console.log('Inserting part:', partData.title);
+        console.log('Inserting part:', partData.title, 'with data:', partData);
 
         const { data, error } = await supabase
           .from('car_parts')
@@ -57,12 +69,23 @@ const AdminPartSeeder = () => {
           throw error;
         }
 
-        console.log('Successfully inserted part:', data.title);
+        console.log('Successfully inserted part:', data);
         return data.title;
       });
 
       const results = await Promise.all(insertPromises);
       setSeededParts(results);
+
+      // Let's also verify the parts were actually inserted
+      const { data: allParts, error: fetchError } = await supabase
+        .from('car_parts')
+        .select('*')
+        .eq('supplier_id', user.id);
+
+      console.log('All parts for this supplier after seeding:', allParts);
+      if (fetchError) {
+        console.error('Error fetching parts after seeding:', fetchError);
+      }
 
       toast({
         title: "Parts Seeded Successfully!",
