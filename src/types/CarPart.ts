@@ -11,21 +11,13 @@ export interface CarPart {
   condition: 'New' | 'Used' | 'Refurbished';
   price: number;
   currency: string;
+  address: string;
   images?: string[];
-  latitude?: number;
-  longitude?: number;
-  address?: string;
-  created_at: string;
-  updated_at: string;
   status: 'available' | 'sold' | 'hidden' | 'pending';
-  profiles?: {
-    first_name?: string;
-    last_name?: string;
-    phone?: string;
-    location?: string;
-    profile_photo_url?: string;
-    is_verified?: boolean;
-    rating?: number;
-    total_ratings?: number;
-  };
+  created_at: string;
+  updated_at?: string;
+  // Monetization fields
+  is_featured?: boolean;
+  featured_until?: string;
+  boosted_until?: string;
 }

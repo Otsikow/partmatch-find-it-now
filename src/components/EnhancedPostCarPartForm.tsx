@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,7 +11,6 @@ import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Package, Upload, Star, Camera, AlertCircle } from 'lucide-react';
-import PhotoUpload from './PhotoUpload';
 import PaymentModal from './PaymentModal';
 
 interface EnhancedPostCarPartFormProps {
@@ -23,7 +23,7 @@ const EnhancedPostCarPartForm = ({ onPartPosted, hasBusinessSubscription = false
   const [loading, setLoading] = useState(false);
   const [currentPhotos, setCurrentPhotos] = useState<File[]>([]);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [extraPhotosNeeded, setExtraPhotosNeeded] = useState(0);
+  const [pendingPhoto, setPendingPhoto] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -40,7 +40,11 @@ const EnhancedPostCarPartForm = ({ onPartPosted, hasBusinessSubscription = false
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handlePhotoAdd = (file: File) => {
+  const handlePhotoAdd = (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    
+    const file = files[0];
+    
     if (currentPhotos.length >= 10) {
       toast({
         title: "Photo Limit Reached",
@@ -51,8 +55,7 @@ const EnhancedPostCarPartForm = ({ onPartPosted, hasBusinessSubscription = false
     }
 
     if (currentPhotos.length >= 3 && !hasBusinessSubscription) {
-      // Need to pay for extra photos
-      setExtraPhotosNeeded(1);
+      setPendingPhoto(file);
       setShowPaymentModal(true);
       return;
     }
@@ -66,8 +69,14 @@ const EnhancedPostCarPartForm = ({ onPartPosted, hasBusinessSubscription = false
       description: "You can now add more photos to your listing.",
     });
     setShowPaymentModal(false);
-    // Add the pending photo
-    // This would be handled by the actual photo upload logic
+    if (pendingPhoto) {
+      setCurrentPhotos(prev => [...prev, pendingPhoto]);
+      setPendingPhoto(null);
+    }
+  };
+
+  const removePhoto = (index: number) => {
+    setCurrentPhotos(prev => prev.filter((_, i) => i !== index));
   };
 
   const freePhotosRemaining = Math.max(0, 3 - currentPhotos.length);
@@ -376,9 +385,11 @@ const EnhancedPostCarPartForm = ({ onPartPosted, hasBusinessSubscription = false
             </Label>
             
             <div className="mt-2">
-              <PhotoUpload 
-                onPhotoChange={handlePhotoAdd} 
-                currentPhoto={null}
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handlePhotoAdd(e.target.files)}
+                className="mb-3"
               />
               
               <div className="mt-3 space-y-2">
@@ -414,6 +425,15 @@ const EnhancedPostCarPartForm = ({ onPartPosted, hasBusinessSubscription = false
                             Paid
                           </Badge>
                         )}
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="sm"
+                          className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0"
+                          onClick={() => removePhoto(index)}
+                        >
+                          ×
+                        </Button>
                       </div>
                     ))}
                   </div>
@@ -451,7 +471,7 @@ const EnhancedPostCarPartForm = ({ onPartPosted, hasBusinessSubscription = false
           isOpen={showPaymentModal}
           onClose={() => setShowPaymentModal(false)}
           offerId="extra-photos"
-          amount={extraPhotosNeeded * 10}
+          amount={10}
           onPaymentSuccess={handleExtraPhotoPayment}
         />
       )}
