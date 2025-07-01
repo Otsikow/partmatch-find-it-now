@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
 import { 
   Package, 
   MessageCircle, 
@@ -68,30 +67,41 @@ const BuyerSidebar = ({
   ];
 
   return (
-    <div className="w-64 bg-white border-r shadow-sm h-full">
-      <div className="p-6 border-b">
-        <div className="flex items-center gap-2">
-          <ShoppingCart className="h-6 w-6 text-blue-600" />
-          <h2 className="text-lg font-semibold text-gray-900">Buyer Dashboard</h2>
+    <div className="h-full flex flex-col">
+      {/* Header */}
+      <div className="p-6 border-b border-gray-200">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-blue-100 rounded-lg">
+            <ShoppingCart className="h-6 w-6 text-blue-600" />
+          </div>
+          <div>
+            <h2 className="text-lg font-bold text-gray-900">Dashboard</h2>
+            <p className="text-sm text-gray-500">Buyer Portal</p>
+          </div>
         </div>
       </div>
       
-      <nav className="p-4 space-y-2">
+      {/* Navigation */}
+      <nav className="flex-1 p-4 space-y-2">
         {navigationItems.map((item) => (
           <button
             key={item.id}
             onClick={() => onSectionChange(item.id)}
             className={cn(
-              "w-full flex items-center gap-3 px-3 py-3 rounded-lg text-left transition-colors group",
+              "w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-200 group relative",
               activeSection === item.id
-                ? "bg-blue-50 text-blue-700 border border-blue-200"
-                : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                ? "bg-blue-50 text-blue-700 border border-blue-200 shadow-sm"
+                : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
             )}
           >
-            <item.icon className={cn(
-              "h-5 w-5 flex-shrink-0",
-              activeSection === item.id ? "text-blue-600" : "text-gray-400 group-hover:text-gray-600"
-            )} />
+            <div className={cn(
+              "p-2 rounded-lg",
+              activeSection === item.id
+                ? "bg-blue-100 text-blue-600"
+                : "bg-gray-100 text-gray-500 group-hover:bg-gray-200"
+            )}>
+              <item.icon className="h-4 w-4" />
+            </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between">
                 <span className="font-medium truncate">{item.label}</span>
@@ -106,6 +116,13 @@ const BuyerSidebar = ({
           </button>
         ))}
       </nav>
+
+      {/* Footer */}
+      <div className="p-4 border-t border-gray-200">
+        <div className="text-xs text-gray-500 text-center">
+          © 2024 Auto Parts Platform
+        </div>
+      </div>
     </div>
   );
 };

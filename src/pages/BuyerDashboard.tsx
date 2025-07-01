@@ -17,7 +17,7 @@ const BuyerDashboard = () => {
   const [displayName, setDisplayName] = useState<string>('Buyer');
   const [activeSection, setActiveSection] = useState('orders');
   const [unreadMessages, setUnreadMessages] = useState(0);
-  const [unreadNotifications, setUnreadNotifications] = useState(3); // Sample count
+  const [unreadNotifications, setUnreadNotifications] = useState(3);
   const { pendingRatings } = useTransactionRating();
 
   useEffect(() => {
@@ -78,7 +78,7 @@ const BuyerDashboard = () => {
       case 'saved-parts':
         return <SavedParts />;
       case 'rate-sellers':
-        return <MyOrders />; // Same as orders but could be filtered for completed orders
+        return <MyOrders />;
       case 'notifications':
         return <BuyerNotifications />;
       case 'profile':
@@ -101,20 +101,29 @@ const BuyerDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
-      <PageHeader 
-        title={`Welcome ${displayName}`}
-        subtitle={getSectionTitle()}
-        backTo="/"
-      />
+    <div className="min-h-screen bg-gray-50">
+      {/* Modern Header */}
+      <div className="bg-white border-b border-gray-200 shadow-sm">
+        <div className="px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <h1 className="text-2xl font-bold text-gray-900">
+                Welcome, <span className="text-blue-600">{displayName}</span>
+              </h1>
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="hidden sm:block text-sm text-gray-500">
+                {getSectionTitle()}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       
-      <main className="container mx-auto px-4 py-8">
-        {/* Show pending rating notifications */}
-        {pendingRatings.length > 0 && <PendingRatingNotification />}
-        
-        <div className="flex gap-6 min-h-[600px]">
-          {/* Sidebar */}
-          <div className="hidden lg:block">
+      <div className="flex h-[calc(100vh-4rem)]">
+        {/* Sidebar - Hidden on mobile, visible on desktop */}
+        <div className="hidden lg:block lg:w-64 lg:flex-shrink-0">
+          <div className="h-full bg-white border-r border-gray-200 shadow-sm">
             <BuyerSidebar
               activeSection={activeSection}
               onSectionChange={setActiveSection}
@@ -122,43 +131,64 @@ const BuyerDashboard = () => {
               unreadNotifications={unreadNotifications}
             />
           </div>
+        </div>
 
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col overflow-hidden">
           {/* Mobile Navigation */}
-          <div className="lg:hidden w-full mb-6">
-            <div className="bg-white rounded-lg border shadow-sm p-4">
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {[
-                  { id: 'orders', label: 'Orders' },
-                  { id: 'messages', label: 'Messages' },
-                  { id: 'saved-parts', label: 'Saved' },
-                  { id: 'notifications', label: 'Alerts' },
-                  { id: 'profile', label: 'Profile' },
-                  { id: 'rate-sellers', label: 'Rate' }
-                ].map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => setActiveSection(item.id)}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                      activeSection === item.id
-                        ? 'bg-blue-100 text-blue-700'
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                    }`}
-                  >
+          <div className="lg:hidden bg-white border-b border-gray-200 p-4">
+            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+              {[
+                { id: 'orders', label: 'Orders', icon: '📦' },
+                { id: 'messages', label: 'Messages', icon: '💬', badge: unreadMessages },
+                { id: 'saved-parts', label: 'Saved', icon: '❤️' },
+                { id: 'notifications', label: 'Alerts', icon: '🔔', badge: unreadNotifications },
+                { id: 'profile', label: 'Profile', icon: '👤' },
+                { id: 'rate-sellers', label: 'Rate', icon: '⭐' }
+              ].map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveSection(item.id)}
+                  className={`relative flex flex-col items-center justify-center p-3 rounded-lg transition-all duration-200 ${
+                    activeSection === item.id
+                      ? 'bg-blue-50 text-blue-700 border-2 border-blue-200'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 border-2 border-transparent'
+                  }`}
+                >
+                  <span className="text-lg mb-1">{item.icon}</span>
+                  <span className="text-xs font-medium truncate w-full text-center">
                     {item.label}
-                  </button>
-                ))}
+                  </span>
+                  {item.badge && item.badge > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                      {item.badge > 99 ? '99+' : item.badge}
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Page Content */}
+          <div className="flex-1 overflow-y-auto bg-gray-50">
+            <div className="p-4 sm:p-6 lg:p-8">
+              {/* Show pending rating notifications */}
+              {pendingRatings.length > 0 && (
+                <div className="mb-6">
+                  <PendingRatingNotification />
+                </div>
+              )}
+              
+              {/* Content Card */}
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 min-h-[600px]">
+                <div className="p-6">
+                  {renderContent()}
+                </div>
               </div>
             </div>
           </div>
-
-          {/* Main Content */}
-          <div className="flex-1">
-            <div className="bg-white rounded-lg border shadow-sm p-6">
-              {renderContent()}
-            </div>
-          </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 };

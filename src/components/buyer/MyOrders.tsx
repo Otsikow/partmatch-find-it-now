@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Package, Search, MessageCircle, Star, Eye, Calendar } from 'lucide-react';
+import { Package, Search, MessageCircle, Star, Eye, Calendar, Filter } from 'lucide-react';
 import { format } from 'date-fns';
 import ChatButton from '@/components/chat/ChatButton';
 import RatingModal from '@/components/RatingModal';
@@ -161,39 +161,51 @@ const MyOrders = () => {
 
   if (loading) {
     return (
-      <div className="space-y-4">
-        {[...Array(3)].map((_, i) => (
-          <Card key={i} className="animate-pulse">
-            <CardContent className="p-6">
-              <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
-              <div className="h-3 bg-gray-200 rounded w-1/2 mb-2"></div>
-              <div className="h-3 bg-gray-200 rounded w-1/4"></div>
-            </CardContent>
-          </Card>
-        ))}
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">My Orders</h2>
+            <p className="text-gray-600 mt-1">Track and manage your purchases</p>
+          </div>
+        </div>
+        <div className="space-y-4">
+          {[...Array(3)].map((_, i) => (
+            <Card key={i} className="animate-pulse border-gray-200">
+              <CardContent className="p-6">
+                <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+                <div className="h-3 bg-gray-200 rounded w-1/2 mb-2"></div>
+                <div className="h-3 bg-gray-200 rounded w-1/4"></div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+      {/* Header Section */}
+      <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">My Orders</h2>
           <p className="text-gray-600 mt-1">Track and manage your purchases</p>
         </div>
-        <div className="flex gap-3 w-full sm:w-auto">
+        
+        {/* Search and Filter Controls */}
+        <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
           <div className="relative flex-1 sm:flex-initial">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
               placeholder="Search orders..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 w-full sm:w-64"
+              className="pl-10 w-full sm:w-64 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
             />
           </div>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-full sm:w-40">
+            <SelectTrigger className="w-full sm:w-40 border-gray-300">
+              <Filter className="h-4 w-4 mr-2" />
               <SelectValue placeholder="Filter by status" />
             </SelectTrigger>
             <SelectContent>
@@ -207,59 +219,69 @@ const MyOrders = () => {
         </div>
       </div>
 
+      {/* Orders List */}
       {filteredOrders.length === 0 ? (
-        <Card>
-          <CardContent className="text-center py-12">
-            <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No orders found</h3>
-            <p className="text-gray-500">
+        <Card className="border-gray-200">
+          <CardContent className="text-center py-16">
+            <div className="bg-gray-100 rounded-full p-6 w-24 h-24 mx-auto mb-6 flex items-center justify-center">
+              <Package className="h-12 w-12 text-gray-400" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">No orders found</h3>
+            <p className="text-gray-500 mb-6 max-w-md mx-auto">
               {searchTerm || statusFilter !== 'all' 
-                ? 'Try adjusting your search or filter criteria.'
-                : 'Start shopping to see your orders here.'
+                ? 'Try adjusting your search or filter criteria to find what you\'re looking for.'
+                : 'Start shopping to see your orders here. Browse our marketplace to find the car parts you need.'
               }
             </p>
+            {!searchTerm && statusFilter === 'all' && (
+              <Button className="bg-blue-600 hover:bg-blue-700">
+                Start Shopping
+              </Button>
+            )}
           </CardContent>
         </Card>
       ) : (
         <div className="space-y-4">
           {filteredOrders.map((order) => (
-            <Card key={order.id} className="hover:shadow-md transition-shadow">
+            <Card key={order.id} className="hover:shadow-lg transition-all duration-200 border-gray-200">
               <CardContent className="p-6">
-                <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-                  <div className="flex-1 space-y-3">
+                <div className="flex flex-col xl:flex-row xl:items-center gap-6">
+                  {/* Order Info */}
+                  <div className="flex-1 space-y-4">
                     <div className="flex items-start justify-between">
-                      <div>
+                      <div className="space-y-2">
                         <h3 className="font-semibold text-lg text-gray-900">
                           {order.part?.title}
                         </h3>
-                        <p className="text-gray-600 text-sm">
+                        <p className="text-gray-600">
                           {order.part?.make} {order.part?.model} ({order.part?.year})
                         </p>
-                        <p className="text-gray-500 text-sm">
+                        <p className="text-sm text-gray-500">
                           Seller: {order.seller 
                             ? `${order.seller.first_name || ''} ${order.seller.last_name || ''}`.trim() || 'Unknown'
                             : 'Unknown'
                           }
                         </p>
                       </div>
-                      <Badge className={getStatusColor(order.status)}>
+                      <Badge className={`${getStatusColor(order.status)} px-3 py-1`}>
                         {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                       </Badge>
                     </div>
                     
-                    <div className="flex items-center gap-4 text-sm text-gray-500">
-                      <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-6 text-sm">
+                      <div className="flex items-center gap-2 text-gray-500">
                         <Calendar className="h-4 w-4" />
                         <span>{format(new Date(order.created_at), 'MMM dd, yyyy')}</span>
                       </div>
-                      <div className="font-medium text-green-600">
+                      <div className="font-semibold text-green-600 text-lg">
                         {order.currency} {order.total_amount.toLocaleString()}
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex flex-col sm:flex-row gap-2 lg:flex-col xl:flex-row">
-                    <Button variant="outline" size="sm" className="flex items-center gap-2">
+                  {/* Action Buttons */}
+                  <div className="flex flex-row xl:flex-col gap-3">
+                    <Button variant="outline" size="sm" className="flex items-center gap-2 hover:bg-gray-50">
                       <Eye className="h-4 w-4" />
                       View Details
                     </Button>
@@ -269,14 +291,14 @@ const MyOrders = () => {
                       partId={undefined}
                       size="sm"
                       variant="outline"
-                      className="flex items-center gap-2"
+                      className="flex items-center gap-2 hover:bg-blue-50"
                     />
                     
                     {order.status === 'completed' && !order.has_rated && (
                       <Button 
                         onClick={() => handleRateClick(order)}
                         size="sm" 
-                        className="bg-yellow-600 hover:bg-yellow-700 flex items-center gap-2"
+                        className="bg-yellow-500 hover:bg-yellow-600 text-white flex items-center gap-2"
                       >
                         <Star className="h-4 w-4" />
                         Rate Seller
