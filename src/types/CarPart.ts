@@ -27,5 +27,6 @@ export interface CarPart {
     is_verified?: boolean;
     rating?: number;
     total_ratings?: number;
+    profile_photo_url?: string;
   };
 }

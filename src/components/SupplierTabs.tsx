@@ -88,17 +88,11 @@ const SupplierTabs = ({ onRefresh }: SupplierTabsProps) => {
         </TabsContent>
 
         <TabsContent value="offers" className="space-y-4">
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4">Your Offers</h3>
-            <p className="text-gray-600">View and manage offers you've made on part requests.</p>
-          </Card>
+          <OffersTab />
         </TabsContent>
 
         <TabsContent value="requests" className="space-y-4">
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold mb-4">Part Requests</h3>
-            <p className="text-gray-600">Browse part requests from buyers and make offers.</p>
-          </Card>
+          <RequestsTab />
         </TabsContent>
 
         <TabsContent value="subscription" className="space-y-4">
