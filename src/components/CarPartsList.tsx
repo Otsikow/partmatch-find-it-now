@@ -1,4 +1,3 @@
-
 import React from 'react';
 import CarPartCardWithChat from './CarPartCardWithChat';
 
@@ -52,7 +51,7 @@ const CarPartsList = ({ parts, loading, error }: CarPartsListProps) => {
       </div>
     );
   }
-
+  
   if (error) {
     return (
       <div className="text-center py-8 sm:py-12 px-4">
