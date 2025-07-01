@@ -12,18 +12,66 @@ import RequestsTab from "./RequestsTab";
 import SellerProfileManagement from "./SellerProfileManagement";
 import SubscriptionManager from "./SubscriptionManager";
 
-interface SupplierTabsProps {
-  onRefresh: () => void;
+interface Request {
+  id: string;
+  car_make: string;
+  car_model: string;
+  car_year: number;
+  part_needed: string;
+  location: string;
+  phone: string;
+  description?: string;
+  status: string;
+  created_at: string;
 }
 
-const SupplierTabs = ({ onRefresh }: SupplierTabsProps) => {
-  const [activeTab, setActiveTab] = useState("my-parts");
+interface Offer {
+  id: string;
+  price: number;
+  message?: string;
+  status: string;
+  created_at: string;
+  contact_unlocked: boolean;
+  request: {
+    id: string;
+    car_make: string;
+    car_model: string;
+    car_year: number;
+    part_needed: string;
+    phone: string;
+    location: string;
+  };
+}
+
+interface SupplierTabsProps {
+  activeTab: string;
+  onTabChange: (tab: string) => void;
+  requests: Request[];
+  offers: Offer[];
+  onOfferSubmit: (requestId: string, price: number, message: string, location: string) => Promise<void>;
+  onWhatsAppContact: (phone: string, request: Request | Offer['request']) => void;
+  isSubmittingOffer: boolean;
+}
+
+const SupplierTabs = ({ 
+  activeTab, 
+  onTabChange, 
+  requests, 
+  offers, 
+  onOfferSubmit, 
+  onWhatsAppContact, 
+  isSubmittingOffer 
+}: SupplierTabsProps) => {
   const [showPostForm, setShowPostForm] = useState(false);
   const [hasBusinessSubscription, setHasBusinessSubscription] = useState(false);
 
   const handlePartPosted = () => {
     setShowPostForm(false);
-    onRefresh();
+    // You might want to call a refresh function here if available
+  };
+
+  const handleViewRequests = () => {
+    onTabChange('requests');
   };
 
   if (showPostForm) {
@@ -59,7 +107,7 @@ const SupplierTabs = ({ onRefresh }: SupplierTabsProps) => {
         </Button>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+      <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="my-parts" className="flex items-center gap-2">
             <Package className="h-4 w-4" />
@@ -84,15 +132,24 @@ const SupplierTabs = ({ onRefresh }: SupplierTabsProps) => {
         </TabsList>
 
         <TabsContent value="my-parts" className="space-y-4">
-          <MyPartsTab onRefresh={onRefresh} />
+          <MyPartsTab onRefresh={() => {}} />
         </TabsContent>
 
         <TabsContent value="offers" className="space-y-4">
-          <OffersTab />
+          <OffersTab 
+            offers={offers}
+            onWhatsAppContact={onWhatsAppContact}
+            onViewRequests={handleViewRequests}
+          />
         </TabsContent>
 
         <TabsContent value="requests" className="space-y-4">
-          <RequestsTab />
+          <RequestsTab 
+            requests={requests}
+            onOfferSubmit={onOfferSubmit}
+            onWhatsAppContact={onWhatsAppContact}
+            isSubmittingOffer={isSubmittingOffer}
+          />
         </TabsContent>
 
         <TabsContent value="subscription" className="space-y-4">

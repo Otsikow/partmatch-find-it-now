@@ -12,7 +12,7 @@ import { useOfferHandling } from "@/hooks/useOfferHandling";
 
 const SupplierDashboard = () => {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState('sell-parts');
+  const [activeTab, setActiveTab] = useState('my-parts');
   const [showMainDashboard, setShowMainDashboard] = useState(false);
 
   const { requests, myOffers, loading, error, refetch } = useSupplierData();
