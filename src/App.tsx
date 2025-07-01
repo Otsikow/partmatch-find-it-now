@@ -45,6 +45,7 @@ const App = () => (
             <Route path="/seller-auth" element={<SellerAuth />} />
             <Route path="/admin-auth" element={<AdminAuth />} />
             <Route path="/request-part" element={<RequestPart />} />
+            <Route path="/request" element={<RequestPart />} />
             <Route path="/search-parts" element={<SearchParts />} />
             <Route path="/search-parts-with-map" element={<SearchPartsWithMap />} />
             <Route path="/search-map" element={<SearchPartsWithMap />} />
