@@ -27,16 +27,46 @@ const AdminPartSeeder = () => {
     console.log('Starting to seed sample parts for admin user:', user.id);
 
     try {
-      // First, let's check if the user exists in profiles
-      const { data: profile, error: profileError } = await supabase
+      // First, ensure the admin user has a profile
+      console.log('Checking/creating admin profile...');
+      const { data: existingProfile } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', user.id)
         .single();
 
-      console.log('Admin profile:', profile);
-      if (profileError) {
-        console.error('Profile error:', profileError);
+      if (!existingProfile) {
+        console.log('Creating admin profile...');
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert({
+            id: user.id,
+            first_name: 'Admin',
+            last_name: 'User',
+            user_type: 'admin',
+            is_verified: true,
+            phone: '+233200000000',
+            location: 'Accra, Ghana'
+          });
+
+        if (profileError) {
+          console.error('Error creating admin profile:', profileError);
+          throw profileError;
+        }
+        console.log('Admin profile created successfully');
+      } else {
+        console.log('Admin profile exists:', existingProfile);
+      }
+
+      // Clear existing seeded parts first
+      console.log('Clearing existing parts for admin...');
+      const { error: deleteError } = await supabase
+        .from('car_parts')
+        .delete()
+        .eq('supplier_id', user.id);
+
+      if (deleteError) {
+        console.error('Error clearing existing parts:', deleteError);
       }
 
       const insertPromises = sampleParts.map(async (part) => {
@@ -65,7 +95,7 @@ const AdminPartSeeder = () => {
           .single();
 
         if (error) {
-          console.error('Error inserting part:', error);
+          console.error('Error inserting part:', partData.title, error);
           throw error;
         }
 
@@ -76,15 +106,60 @@ const AdminPartSeeder = () => {
       const results = await Promise.all(insertPromises);
       setSeededParts(results);
 
-      // Let's also verify the parts were actually inserted
+      // Verify the parts were actually inserted and are retrievable
+      console.log('Verifying inserted parts...');
       const { data: allParts, error: fetchError } = await supabase
         .from('car_parts')
-        .select('*')
+        .select(`
+          *,
+          profiles!inner(first_name, last_name, is_verified)
+        `)
         .eq('supplier_id', user.id);
 
-      console.log('All parts for this supplier after seeding:', allParts);
+      console.log('Verification query result:', allParts);
       if (fetchError) {
-        console.error('Error fetching parts after seeding:', fetchError);
+        console.error('Error in verification query:', fetchError);
+      }
+
+      // Also test the main fetch query
+      console.log('Testing main fetch query...');
+      const { data: testFetch, error: testError } = await supabase
+        .from('car_parts')
+        .select(`
+          id,
+          supplier_id,
+          title,
+          description,
+          make,
+          model,
+          year,
+          part_type,
+          condition,
+          price,
+          currency,
+          images,
+          latitude,
+          longitude,
+          address,
+          created_at,
+          updated_at,
+          status,
+          profiles!inner(
+            first_name,
+            last_name,
+            phone,
+            location,
+            profile_photo_url,
+            is_verified,
+            rating,
+            total_ratings
+          )
+        `)
+        .eq('status', 'available');
+
+      console.log('Main fetch test result:', testFetch);
+      if (testError) {
+        console.error('Error in main fetch test:', testError);
       }
 
       toast({
@@ -156,7 +231,7 @@ const AdminPartSeeder = () => {
             ) : (
               <>
                 <Package className="h-4 w-4 mr-2" />
-                Seed 5 Sample Parts
+                Seed 5 Sample Parts (Clear & Recreate)
               </>
             )}
           </Button>
