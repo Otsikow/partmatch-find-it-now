@@ -1,7 +1,7 @@
 
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
-import WelcomeSection from "@/components/WelcomeSection";
+import HeroSection from "@/components/HeroSection";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
@@ -21,7 +21,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 font-inter">
       <Navigation />
-      <WelcomeSection />
+      <HeroSection />
       {!user && <Footer />}
     </div>
   );
