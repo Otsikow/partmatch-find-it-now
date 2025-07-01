@@ -19,10 +19,17 @@ interface CarPartExpandedDialogProps {
 }
 
 const CarPartExpandedDialog = ({ part, isOpen, onOpenChange, onContact }: CarPartExpandedDialogProps) => {
-  // Get seller name from profiles data - since business_name doesn't exist in profiles table, 
-  // we'll use first_name and last_name, or fallback to 'Seller'
-  const sellerName = `${part.profiles?.first_name || ''} ${part.profiles?.last_name || ''}`.trim() || 'Seller';
-  const initials = sellerName.split(' ').map(n => n.charAt(0)).join('').slice(0, 2).toUpperCase();
+  // Fix the seller name construction to handle the profiles structure properly
+  const sellerName = part.profiles?.first_name && part.profiles?.last_name 
+    ? `${part.profiles.first_name} ${part.profiles.last_name}`.trim()
+    : part.profiles?.first_name || part.profiles?.last_name || 'Seller';
+  
+  const initials = sellerName === 'Seller' 
+    ? 'S' 
+    : sellerName.split(' ').map(n => n.charAt(0)).join('').slice(0, 2).toUpperCase();
+
+  console.log('CarPartExpandedDialog - sellerName:', sellerName, 'for part:', part.title);
+  console.log('CarPartExpandedDialog - profiles data:', part.profiles);
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -84,10 +91,12 @@ const CarPartExpandedDialog = ({ part, isOpen, onOpenChange, onContact }: CarPar
             </div>
           )}
 
-          <div className="flex items-center gap-2 text-sm text-gray-500">
-            <MapPin className="h-4 w-4" />
-            <span>{part.address}</span>
-          </div>
+          {part.address && (
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+              <MapPin className="h-4 w-4" />
+              <span>{part.address}</span>
+            </div>
+          )}
 
           {/* Seller Information Section */}
           <div className="border-t pt-4">

@@ -13,10 +13,17 @@ interface CarPartCardContentProps {
 }
 
 const CarPartCardContent = ({ part, onExpand }: CarPartCardContentProps) => {
-  // Get seller name from profiles data - since business_name doesn't exist in profiles table, 
-  // we'll use first_name and last_name, or fallback to 'Seller'
-  const sellerName = `${part.profiles?.first_name || ''} ${part.profiles?.last_name || ''}`.trim() || 'Seller';
-  const initials = sellerName.split(' ').map(n => n.charAt(0)).join('').slice(0, 2).toUpperCase();
+  // Fix the seller name construction to handle the profiles structure properly
+  const sellerName = part.profiles?.first_name && part.profiles?.last_name 
+    ? `${part.profiles.first_name} ${part.profiles.last_name}`.trim()
+    : part.profiles?.first_name || part.profiles?.last_name || 'Seller';
+  
+  const initials = sellerName === 'Seller' 
+    ? 'S' 
+    : sellerName.split(' ').map(n => n.charAt(0)).join('').slice(0, 2).toUpperCase();
+
+  console.log('CarPartCardContent - sellerName:', sellerName, 'for part:', part.title);
+  console.log('CarPartCardContent - profiles data:', part.profiles);
 
   return (
     <div onClick={onExpand}>
@@ -66,10 +73,12 @@ const CarPartCardContent = ({ part, onExpand }: CarPartCardContentProps) => {
             />
           </div>
 
-          <div className="flex items-center gap-2 text-sm text-gray-500">
-            <MapPin className="h-4 w-4" />
-            <span className="truncate">{part.address}</span>
-          </div>
+          {part.address && (
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+              <MapPin className="h-4 w-4" />
+              <span className="truncate">{part.address}</span>
+            </div>
+          )}
           
           <div className="flex items-center gap-2 text-sm text-gray-500">
             <Calendar className="h-4 w-4" />
