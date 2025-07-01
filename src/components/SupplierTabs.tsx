@@ -4,13 +4,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Package, Plus, Star, Settings, CreditCard } from "lucide-react";
-import PostCarPartForm from "./PostCarPartForm";
 import EnhancedPostCarPartForm from "./EnhancedPostCarPartForm";
 import MyPartsTab from "./MyPartsTab";
 import OffersTab from "./OffersTab";
 import RequestsTab from "./RequestsTab";
 import SellerProfileManagement from "./SellerProfileManagement";
 import SubscriptionManager from "./SubscriptionManager";
+import { useSubscriptionStatus } from "@/hooks/useSubscriptionStatus";
 
 interface Request {
   id: string;
@@ -63,7 +63,7 @@ const SupplierTabs = ({
   isSubmittingOffer 
 }: SupplierTabsProps) => {
   const [showPostForm, setShowPostForm] = useState(false);
-  const [hasBusinessSubscription, setHasBusinessSubscription] = useState(false);
+  const { hasBusinessSubscription } = useSubscriptionStatus();
 
   const handlePartPosted = () => {
     setShowPostForm(false);

@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Star, TrendingUp, Camera, Crown, Megaphone } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
-import PaymentModal from "./PaymentModal";
+import MonetizationPaymentModal from "./MonetizationPaymentModal";
 
 interface MonetizationFeaturesProps {
   partId: string;
@@ -37,10 +37,6 @@ const MonetizationFeatures = ({
   };
 
   const handlePaymentSuccess = () => {
-    toast({
-      title: "Payment Successful!",
-      description: `Your listing has been upgraded with ${selectedFeature?.description}.`,
-    });
     onFeatureUpdate();
     setShowPaymentModal(false);
     setSelectedFeature(null);
@@ -70,7 +66,7 @@ const MonetizationFeatures = ({
             <div className="text-right">
               <p className="font-bold text-green-600">GHS 20</p>
               {isFeatured ? (
-                <Badge variant="secondary">Active</Badge>
+                <Badge>Active</Badge>
               ) : (
                 <Button
                   size="sm"
@@ -95,7 +91,7 @@ const MonetizationFeatures = ({
             <div className="text-right">
               <p className="font-bold text-green-600">GHS 8</p>
               {isBoosted ? (
-                <Badge variant="secondary">Active</Badge>
+                <Badge>Active</Badge>
               ) : (
                 <Button
                   size="sm"
@@ -201,11 +197,13 @@ const MonetizationFeatures = ({
 
       {/* Payment Modal */}
       {showPaymentModal && selectedFeature && (
-        <PaymentModal
+        <MonetizationPaymentModal
           isOpen={showPaymentModal}
           onClose={() => setShowPaymentModal(false)}
-          offerId={partId}
+          partId={partId}
+          featureType={selectedFeature.type}
           amount={selectedFeature.amount}
+          description={selectedFeature.description}
           onPaymentSuccess={handlePaymentSuccess}
         />
       )}
