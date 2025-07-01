@@ -2,10 +2,12 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Phone } from "lucide-react";
+import { MapPin, Phone, User } from "lucide-react";
 import { CarPart } from "@/types/CarPart";
 import SaveButton from "./SaveButton";
 import ChatButton from "./chat/ChatButton";
+import VerifiedSellerBadge from "./VerifiedSellerBadge";
+import SellerRatingDisplay from "./SellerRatingDisplay";
 import { getConditionColor } from "@/utils/carPartUtils";
 
 interface CarPartExpandedDialogProps {
@@ -16,6 +18,11 @@ interface CarPartExpandedDialogProps {
 }
 
 const CarPartExpandedDialog = ({ part, isOpen, onOpenChange, onContact }: CarPartExpandedDialogProps) => {
+  // Get seller name from profiles data
+  const sellerName = part.profiles?.business_name || 
+    `${part.profiles?.first_name || ''} ${part.profiles?.last_name || ''}`.trim() || 
+    'Seller';
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -79,6 +86,25 @@ const CarPartExpandedDialog = ({ part, isOpen, onOpenChange, onContact }: CarPar
           <div className="flex items-center gap-2 text-sm text-gray-500">
             <MapPin className="h-4 w-4" />
             <span>{part.address}</span>
+          </div>
+
+          {/* Seller Information Section */}
+          <div className="border-t pt-4">
+            <h4 className="font-semibold text-gray-900 mb-3">Seller Information</h4>
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <User className="h-4 w-4 text-gray-500" />
+                <span className="font-medium text-gray-700">{sellerName}</span>
+                <VerifiedSellerBadge isVerified={part.profiles?.is_verified || false} size="sm" />
+              </div>
+              
+              <SellerRatingDisplay
+                rating={part.profiles?.rating || 0}
+                totalRatings={part.profiles?.total_ratings || 0}
+                size="md"
+                showBadge={true}
+              />
+            </div>
           </div>
 
           <div className="flex gap-2 pt-4">

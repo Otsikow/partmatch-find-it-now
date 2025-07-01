@@ -18,4 +18,14 @@ export interface CarPart {
   created_at: string;
   updated_at: string;
   status: 'available' | 'sold' | 'hidden' | 'pending';
+  profiles?: {
+    first_name?: string;
+    last_name?: string;
+    phone?: string;
+    location?: string;
+    business_name?: string;
+    is_verified?: boolean;
+    rating?: number;
+    total_ratings?: number;
+  };
 }

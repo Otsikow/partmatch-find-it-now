@@ -50,7 +50,11 @@ export const useCarParts = (params?: UseCarPartsParams) => {
             first_name,
             last_name,
             phone,
-            location
+            location,
+            business_name,
+            is_verified,
+            rating,
+            total_ratings
           )
         `)
         .in('status', ['available', 'accepted'])

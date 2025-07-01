@@ -3,6 +3,7 @@ import { CardHeader, CardContent } from "@/components/ui/card";
 import { MapPin, Calendar, User } from "lucide-react";
 import { CarPart } from "@/types/CarPart";
 import VerifiedSellerBadge from "./VerifiedSellerBadge";
+import SellerRatingDisplay from "./SellerRatingDisplay";
 import { formatDate } from "@/utils/carPartUtils";
 
 interface CarPartCardContentProps {
@@ -11,6 +12,11 @@ interface CarPartCardContentProps {
 }
 
 const CarPartCardContent = ({ part, onExpand }: CarPartCardContentProps) => {
+  // Get seller name from profiles data
+  const sellerName = part.profiles?.business_name || 
+    `${part.profiles?.first_name || ''} ${part.profiles?.last_name || ''}`.trim() || 
+    'Seller';
+
   return (
     <div onClick={onExpand}>
       <CardHeader className="pb-3">
@@ -39,10 +45,19 @@ const CarPartCardContent = ({ part, onExpand }: CarPartCardContentProps) => {
             </p>
           )}
           
-          <div className="flex items-center gap-2 text-sm text-gray-500">
-            <User className="h-4 w-4" />
-            <span>Seller</span>
-            <VerifiedSellerBadge isVerified={false} size="sm" />
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-sm text-gray-700">
+              <User className="h-4 w-4" />
+              <span className="font-medium">{sellerName}</span>
+              <VerifiedSellerBadge isVerified={part.profiles?.is_verified || false} size="sm" />
+            </div>
+            
+            <SellerRatingDisplay
+              rating={part.profiles?.rating || 0}
+              totalRatings={part.profiles?.total_ratings || 0}
+              size="sm"
+              showBadge={true}
+            />
           </div>
 
           <div className="flex items-center gap-2 text-sm text-gray-500">
