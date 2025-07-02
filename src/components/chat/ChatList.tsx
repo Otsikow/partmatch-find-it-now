@@ -107,9 +107,23 @@ const ChatList = ({ onChatSelect }: ChatListProps) => {
           table: 'chats',
           filter: `or(buyer_id.eq.${user.id},seller_id.eq.${user.id})`
         },
-        () => {
-          console.log('Chat updated, refetching...');
-          fetchChats();
+        (payload) => {
+          console.log('Chat updated:', payload);
+          
+          if (payload.eventType === 'UPDATE' && payload.new) {
+            setChats(prev => prev.map(chat => 
+              chat.id === payload.new.id 
+                ? { 
+                    ...chat, 
+                    ...payload.new,
+                    other_user: chat.other_user, // Preserve other_user data
+                    part_info: chat.part_info // Preserve part_info data
+                  }
+                : chat
+            ));
+          } else {
+            fetchChats();
+          }
         }
       )
       .subscribe();
@@ -117,7 +131,7 @@ const ChatList = ({ onChatSelect }: ChatListProps) => {
     return () => {
       supabase.removeChannel(chatsChannel);
     };
-  }, [user?.id]);
+  }, [user?.id, fetchChats]);
 
   const filteredChats = chats.filter(chat => {
     if (!searchTerm) return true;

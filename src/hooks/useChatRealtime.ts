@@ -26,12 +26,6 @@ export const useChatRealtime = ({ chatId, userId, onNewMessage, onMarkAsRead }: 
   useEffect(() => {
     if (!chatId || !userId) return;
 
-    // Prevent duplicate subscriptions
-    if (isSubscribedRef.current) {
-      console.log('⚠️ Subscription already active, skipping');
-      return;
-    }
-
     console.log('🚀 Setting up real-time subscription for chat:', chatId);
 
     // Clean up any existing channel first
@@ -43,7 +37,7 @@ export const useChatRealtime = ({ chatId, userId, onNewMessage, onMarkAsRead }: 
     }
 
     // Create a unique channel name to avoid conflicts
-    const channelName = `chat_messages_${chatId}_${userId}`;
+    const channelName = `chat_messages_${chatId}_${Date.now()}`;
     
     const channel = supabase
       .channel(channelName)
@@ -64,7 +58,7 @@ export const useChatRealtime = ({ chatId, userId, onNewMessage, onMarkAsRead }: 
           
           // Mark as read if not sent by current user (with minimal delay)
           if (newMessage.sender_id !== userId) {
-            setTimeout(() => onMarkAsRead(), 50);
+            setTimeout(() => onMarkAsRead(), 100);
           }
         }
       )
@@ -74,15 +68,16 @@ export const useChatRealtime = ({ chatId, userId, onNewMessage, onMarkAsRead }: 
         if (status === 'SUBSCRIBED') {
           console.log('✅ Successfully subscribed to real-time updates for chat:', chatId);
           isSubscribedRef.current = true;
-        } else if (status === 'CHANNEL_ERROR') {
-          console.error('❌ Channel subscription error for chat:', chatId);
-          isSubscribedRef.current = false;
-        } else if (status === 'TIMED_OUT') {
-          console.error('⏰ Channel subscription timed out for chat:', chatId);
+        } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+          console.error('❌ Channel subscription error/timeout for chat:', chatId);
           isSubscribedRef.current = false;
           
-          // Don't attempt immediate resubscription to avoid loops
-          // Let the effect cleanup and restart naturally
+          setTimeout(() => {
+            if (!isSubscribedRef.current && channelRef.current) {
+              console.log('🔄 Retrying subscription...');
+              channelRef.current.subscribe();
+            }
+          }, 2000);
         } else if (status === 'CLOSED') {
           console.log('📪 Channel subscription closed for chat:', chatId);
           isSubscribedRef.current = false;

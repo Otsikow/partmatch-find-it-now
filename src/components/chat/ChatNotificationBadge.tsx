@@ -47,8 +47,21 @@ const ChatNotificationBadge = () => {
           table: 'chats',
           filter: `or(buyer_id.eq.${user.id},seller_id.eq.${user.id})`
         },
-        () => {
-          fetchUnreadCount();
+        (payload) => {
+          console.log('Chat updated, recalculating unread count:', payload);
+          if (payload.new) {
+            const chat = payload.new as any;
+            const newUnreadCount = user.id === chat.buyer_id ? chat.buyer_unread_count : chat.seller_unread_count;
+            setUnreadCount(prev => {
+              if (payload.eventType === 'UPDATE') {
+                return Math.max(0, newUnreadCount);
+              }
+              fetchUnreadCount();
+              return prev;
+            });
+          } else {
+            fetchUnreadCount();
+          }
         }
       )
       .subscribe();
@@ -56,7 +69,7 @@ const ChatNotificationBadge = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user?.id]);
+  }, [user?.id, fetchUnreadCount]);
 
   if (unreadCount === 0) return null;
 

@@ -27,6 +27,37 @@ const BuyerNotifications = () => {
   useEffect(() => {
     if (user) {
       fetchNotifications();
+      
+      // Set up real-time subscription for new notifications
+      const channel = supabase
+        .channel('buyer-notifications')
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'notifications',
+            filter: `user_id=eq.${user.id}`
+          },
+          (payload) => {
+            const newNotif = payload.new as any;
+            const mappedNotif = {
+              id: newNotif.id,
+              title: newNotif.type.charAt(0).toUpperCase() + newNotif.type.slice(1),
+              message: newNotif.message,
+              type: newNotif.type,
+              read: newNotif.sent,
+              created_at: newNotif.created_at,
+              metadata: {}
+            };
+            setNotifications(prev => [mappedNotif, ...prev]);
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
     }
   }, [user]);
 
@@ -34,48 +65,65 @@ const BuyerNotifications = () => {
     if (!user) return;
 
     try {
-      // Since we don't have a buyer-specific notifications table, 
-      // we'll create sample notifications for demonstration
-      const sampleNotifications: Notification[] = [
-        {
-          id: '1',
-          title: 'Order Confirmed',
-          message: 'Your order for Brake Pads has been confirmed by the seller.',
-          type: 'order',
-          read: false,
-          created_at: new Date().toISOString(),
-          metadata: { orderId: 'ord_123' }
-        },
-        {
-          id: '2',
-          title: 'New Message',
-          message: 'You have a new message from John\'s Auto Parts.',
-          type: 'message',
-          read: false,
-          created_at: new Date(Date.now() - 3600000).toISOString(),
-          metadata: { chatId: 'chat_456' }
-        },
-        {
-          id: '3',
-          title: 'Rate Your Recent Purchase',
-          message: 'Please rate your experience with your recent order.',
-          type: 'rating',
-          read: true,
-          created_at: new Date(Date.now() - 86400000).toISOString(),
-          metadata: { orderId: 'ord_789' }
-        },
-        {
-          id: '4',
-          title: 'Special Offer',
-          message: 'Get 20% off on all brake components this week!',
-          type: 'promo',
-          read: true,
-          created_at: new Date(Date.now() - 172800000).toISOString(),
-          metadata: { promoCode: 'BRAKE20' }
-        }
-      ];
+      const { data, error } = await supabase
+        .from('notifications')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
 
-      setNotifications(sampleNotifications);
+      if (error) {
+        console.error('Error fetching notifications:', error);
+        const sampleNotifications: Notification[] = [
+          {
+            id: '1',
+            title: 'Order Confirmed',
+            message: 'Your order for Brake Pads has been confirmed by the seller.',
+            type: 'order',
+            read: false,
+            created_at: new Date().toISOString(),
+            metadata: { orderId: 'ord_123' }
+          },
+          {
+            id: '2',
+            title: 'New Message',
+            message: 'You have a new message from John\'s Auto Parts.',
+            type: 'message',
+            read: false,
+            created_at: new Date(Date.now() - 3600000).toISOString(),
+            metadata: { chatId: 'chat_456' }
+          },
+          {
+            id: '3',
+            title: 'Rate Your Recent Purchase',
+            message: 'Please rate your experience with your recent order.',
+            type: 'rating',
+            read: true,
+            created_at: new Date(Date.now() - 86400000).toISOString(),
+            metadata: { orderId: 'ord_789' }
+          },
+          {
+            id: '4',
+            title: 'Special Offer',
+            message: 'Get 20% off on all brake components this week!',
+            type: 'promo',
+            read: true,
+            created_at: new Date(Date.now() - 172800000).toISOString(),
+            metadata: { promoCode: 'BRAKE20' }
+          }
+        ];
+        setNotifications(sampleNotifications);
+      } else {
+        const mappedNotifications = data?.map(notif => ({
+          id: notif.id,
+          title: notif.type.charAt(0).toUpperCase() + notif.type.slice(1),
+          message: notif.message,
+          type: notif.type,
+          read: notif.sent, // Use 'sent' field as 'read' status
+          created_at: notif.created_at,
+          metadata: {}
+        })) || [];
+        setNotifications(mappedNotifications);
+      }
     } catch (error) {
       console.error('Error fetching notifications:', error);
     } finally {
