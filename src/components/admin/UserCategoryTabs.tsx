@@ -1,4 +1,5 @@
 
+import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -44,19 +45,23 @@ const UserCategoryTabs = ({
 }: UserCategoryTabsProps) => {
   const isMobile = useIsMobile();
   
-  // Categorize users
-  const adminUsers = users.filter(user => user.user_type === 'admin');
-  const sellerUsers = users.filter(user => user.user_type === 'supplier');
-  const buyerUsers = users.filter(user => user.user_type === 'owner');
+  // Categorize users with memoization
+  const { adminUsers, sellerUsers, buyerUsers, verifiedSellers, unverifiedSellers, suspendedSellers, activeBuyers, suspendedBuyers } = React.useMemo(() => {
+    const adminUsers = users.filter(user => user.user_type === 'admin');
+    const sellerUsers = users.filter(user => user.user_type === 'supplier');
+    const buyerUsers = users.filter(user => user.user_type === 'owner');
 
-  // Fixed categorization - don't exclude blocked users from verified count
-  const verifiedSellers = sellerUsers.filter(user => user.is_verified);
-  const unverifiedSellers = sellerUsers.filter(user => !user.is_verified);
-  const suspendedSellers = sellerUsers.filter(user => user.is_blocked);
+    // Fixed categorization - don't exclude blocked users from verified count
+    const verifiedSellers = sellerUsers.filter(user => user.is_verified);
+    const unverifiedSellers = sellerUsers.filter(user => !user.is_verified);
+    const suspendedSellers = sellerUsers.filter(user => user.is_blocked);
 
-  // For buyers - show all active (non-blocked) and suspended separately
-  const activeBuyers = buyerUsers.filter(user => !user.is_blocked);
-  const suspendedBuyers = buyerUsers.filter(user => user.is_blocked);
+    // For buyers - show all active (non-blocked) and suspended separately
+    const activeBuyers = buyerUsers.filter(user => !user.is_blocked);
+    const suspendedBuyers = buyerUsers.filter(user => user.is_blocked);
+
+    return { adminUsers, sellerUsers, buyerUsers, verifiedSellers, unverifiedSellers, suspendedSellers, activeBuyers, suspendedBuyers };
+  }, [users]);
 
   const CategoryCard = ({ 
     title, 

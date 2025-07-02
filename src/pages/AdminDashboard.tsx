@@ -13,7 +13,7 @@ import UserCategoryTabs from "@/components/admin/UserCategoryTabs";
 import UserManagementStats from "@/components/admin/UserManagementStats";
 import { useAdminData } from "@/hooks/useAdminData";
 import { useAdminActions } from "@/hooks/useAdminActions";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface UserProfile {
@@ -108,11 +108,11 @@ const AdminDashboard = () => {
       <main className="container mx-auto px-2 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8 max-w-7xl">
         <div className="mb-4 sm:mb-6 lg:mb-8">
           <AdminStats
-            pendingRequests={requests.filter(r => r.status === 'pending').length}
-            matchedRequests={requests.filter(r => r.status === 'matched').length}
-            completedRequests={requests.filter(r => r.status === 'completed').length}
+            pendingRequests={useMemo(() => requests.filter(r => r.status === 'pending').length, [requests])}
+            matchedRequests={useMemo(() => requests.filter(r => r.status === 'matched').length, [requests])}
+            completedRequests={useMemo(() => requests.filter(r => r.status === 'completed').length, [requests])}
             totalRequests={requests.length}
-            pendingVerifications={verifications.filter(v => v.verification_status === 'pending').length}
+            pendingVerifications={useMemo(() => verifications.filter(v => v.verification_status === 'pending').length, [verifications])}
             onNavigateToVerifications={handleNavigateToVerifications}
           />
         </div>

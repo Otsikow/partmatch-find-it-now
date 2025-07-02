@@ -1,4 +1,5 @@
 
+import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { 
@@ -35,7 +36,7 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
   })));
 
   // Fix the calculation logic to properly count verified users
-  const stats = {
+  const stats = React.useMemo(() => ({
     total: users.length,
     admins: users.filter(u => u.user_type === 'admin').length,
     sellers: users.filter(u => u.user_type === 'supplier').length,
@@ -50,7 +51,7 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
     unverifiedSellers: users.filter(u => u.user_type === 'supplier' && !u.is_verified).length,
     // For buyers specifically (they auto-verify)
     verifiedBuyers: users.filter(u => u.user_type === 'owner' && u.is_verified).length,
-  };
+  }), [users]);
 
   console.log('Calculated stats:', stats);
 
