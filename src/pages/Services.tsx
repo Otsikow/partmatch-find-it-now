@@ -45,7 +45,7 @@ const Services = () => {
               <p className="text-gray-600 font-crimson leading-relaxed mb-6">
                 Advanced search and matching system to help you find the exact parts you need for your vehicle. Our intelligent algorithms match parts based on make, model, year, and specifications.
               </p>
-              <Link to="/search">
+              <Link to="/search-parts">
                 <Button className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700">
                   Search Parts
                 </Button>
@@ -170,12 +170,12 @@ const Services = () => {
               Join thousands of satisfied customers who trust PartMatch for their automotive parts needs. Start searching for parts or become a verified seller today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/search">
+              <Link to="/search-parts">
                 <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium px-8">
                   Find Parts Now
                 </Button>
               </Link>
-              <Link to="/request">
+              <Link to="/request-part">
                 <Button size="lg" variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-50 font-medium px-8">
                   Request a Quote
                 </Button>
