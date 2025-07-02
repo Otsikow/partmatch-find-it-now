@@ -36,15 +36,15 @@ interface CarPartsListProps {
 const CarPartsList = ({ parts, loading, error }: CarPartsListProps) => {
   if (loading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-5 lg:gap-6">
         {[...Array(8)].map((_, i) => (
           <div key={i} className="animate-pulse">
             <div className="bg-gray-200 aspect-video rounded-t-lg"></div>
-            <div className="bg-white p-3 sm:p-4 rounded-b-lg border space-y-2">
-              <div className="h-4 bg-gray-200 rounded"></div>
-              <div className="h-3 bg-gray-200 rounded w-3/4"></div>
-              <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-              <div className="h-8 bg-gray-200 rounded mt-4"></div>
+            <div className="bg-white p-4 sm:p-5 lg:p-6 rounded-b-lg border space-y-3">
+              <div className="h-5 bg-gray-200 rounded"></div>
+              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+              <div className="h-10 bg-gray-200 rounded mt-4"></div>
             </div>
           </div>
         ))}
@@ -78,7 +78,7 @@ const CarPartsList = ({ parts, loading, error }: CarPartsListProps) => {
         </h2>
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-5 lg:gap-6">
         {parts.map((part) => (
           <CarPartCardWithChat key={part.id} part={part} />
         ))}
