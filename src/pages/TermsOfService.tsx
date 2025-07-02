@@ -199,7 +199,7 @@ const TermsOfService = () => {
               <div className="space-y-4 text-gray-600 font-crimson">
                 <p>If you have questions about these Terms of Service, please contact us:</p>
                 <ul className="space-y-2">
-                  <li><strong>Email:</strong> legal@partmatch.com</li>
+                  <li><strong>Email:</strong> legal@partmatchgh.com</li>
                   <li><strong>Phone:</strong> +233 55 123-PART</li>
                   <li><strong>Address:</strong> 123 Auto Parts Street, Motor City, MC 12345, Ghana</li>
                 </ul>
