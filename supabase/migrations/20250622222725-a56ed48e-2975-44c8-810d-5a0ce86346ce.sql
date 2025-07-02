@@ -140,7 +140,7 @@ BEGIN
   );
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = '';
 
 -- Create trigger for new user registration
 CREATE TRIGGER on_auth_user_created
@@ -167,7 +167,7 @@ BEGIN
   WHERE id = NEW.rated_id;
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = '';
 
 -- Create trigger for rating updates
 CREATE TRIGGER on_rating_created
