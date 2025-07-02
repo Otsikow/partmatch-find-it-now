@@ -32,7 +32,7 @@ const About = () => {
                 <h2 className="text-2xl font-playfair font-bold text-gray-800">Our Mission</h2>
               </div>
               <p className="text-gray-600 font-crimson leading-relaxed">
-                To revolutionize the automotive parts market in Ghana by creating a trusted platform that connects car owners with verified sellers, ensuring quality parts and transparent transactions.
+                To revolutionize the automotive parts market in Ghana by creating a trusted platform that connects car buyers with verified sellers, ensuring quality parts and transparent transactions.
               </p>
             </CardContent>
           </Card>
@@ -59,7 +59,7 @@ const About = () => {
             </div>
             <div className="max-w-4xl mx-auto space-y-6 text-gray-600 font-crimson leading-relaxed">
               <p>
-                PartMatch was born from a simple observation: finding quality automotive parts in Ghana was unnecessarily complicated and time-consuming. Car owners often struggled to locate the right parts, while parts sellers had difficulty reaching potential customers.
+                PartMatch was born from a simple observation: finding quality automotive parts in Ghana was unnecessarily complicated and time-consuming. Car buyers often struggled to locate the right parts, while parts sellers had difficulty reaching potential customers.
               </p>
               <p>
                 Founded in 2024, PartMatch bridges this gap by creating a comprehensive platform where verified sellers can showcase their inventory and customers can easily find exactly what they need. Our team combines deep understanding of the local automotive market with modern technology to deliver a seamless experience.
