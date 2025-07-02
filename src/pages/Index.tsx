@@ -6,9 +6,12 @@ import StatsSection from "@/components/StatsSection";
 import CTASection from "@/components/CTASection";
 import FeaturesSection from "@/components/FeaturesSection";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUserRedirect } from "@/hooks/useUserRedirect";
 
 const Index = () => {
   const { user, loading } = useAuth();
+  
+  useUserRedirect();
 
   if (loading) {
     return (
