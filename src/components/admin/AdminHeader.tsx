@@ -24,12 +24,7 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
 
   const handleGoBack = () => {
     console.log('AdminHeader: Back button clicked, navigating to home page');
-    try {
-      navigate('/');
-    } catch (error) {
-      console.error('Navigation error:', error);
-      window.location.href = '/';
-    }
+    window.location.href = '/';
   };
 
   return (
