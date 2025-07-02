@@ -3,11 +3,11 @@ import { MessageSquare, MapPin, Package, Zap } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
-
 const HeroSection = () => {
-  const { user } = useAuth();
+  const {
+    user
+  } = useAuth();
   const navigate = useNavigate();
-
   const handleRequestPartClick = (e: React.MouseEvent) => {
     if (!user) {
       e.preventDefault();
@@ -19,17 +19,11 @@ const HeroSection = () => {
       navigate('/auth');
     }
   };
-
-  return (
-    <div className="relative min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100">
+  return <div className="relative min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100">
       <div className="container mx-auto px-4 text-center">
         <div className="mb-8">
           <div className="flex items-center justify-center mb-6">
-            <img 
-              src="/lovable-uploads/1ff049b2-7c70-416c-9a87-0b8e66907a58.png" 
-              alt="PartMatch Logo" 
-              className="h-32 w-auto"
-            />
+            <img src="/lovable-uploads/23312658-5ff6-4d89-a7cb-c0fbf631cd1c.png" alt="PartMatch Logo" className="h-32 w-auto object-cover" />
           </div>
         </div>
         
@@ -44,23 +38,15 @@ const HeroSection = () => {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-lg mx-auto">
-          {user ? (
-            <Link to="/request-part" className="w-full sm:w-auto">
+          {user ? <Link to="/request-part" className="w-full sm:w-auto">
               <Button size="lg" className="w-full bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700 text-white shadow-lg font-semibold">
                 <MessageSquare className="mr-2 h-5 w-5" />
                 Request Car Parts
               </Button>
-            </Link>
-          ) : (
-            <Button 
-              size="lg" 
-              className="w-full sm:w-auto bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700 text-white shadow-lg font-semibold"
-              onClick={handleRequestPartClick}
-            >
+            </Link> : <Button size="lg" className="w-full sm:w-auto bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700 text-white shadow-lg font-semibold" onClick={handleRequestPartClick}>
               <MessageSquare className="mr-2 h-5 w-5" />
               Request Car Parts
-            </Button>
-          )}
+            </Button>}
           
           <Link to="/search-parts" className="w-full sm:w-auto">
             <Button size="lg" variant="outline" className="w-full border-2 border-green-600 text-green-700 hover:bg-green-50 shadow-lg font-semibold">
@@ -77,8 +63,6 @@ const HeroSection = () => {
           </Link>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default HeroSection;
