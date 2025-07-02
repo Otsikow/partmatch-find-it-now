@@ -273,7 +273,7 @@ const CookiePolicy = () => {
               <div className="space-y-4 text-gray-600 font-crimson">
                 <p>If you have questions about our use of cookies, please contact us:</p>
                 <ul className="space-y-2">
-                  <li><strong>Email:</strong> privacy@partmatch.com</li>
+                  <li><strong>Email:</strong> privacy@partmatchgh.com</li>
                   <li><strong>Phone:</strong> +233 55 123-PART</li>
                   <li><strong>Address:</strong> 123 Auto Parts Street, Motor City, MC 12345, Ghana</li>
                 </ul>

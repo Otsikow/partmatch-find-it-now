@@ -127,7 +127,7 @@ const About = () => {
               <div className="space-y-3">
                 <Mail className="h-8 w-8 text-blue-500 mx-auto" />
                 <h3 className="text-lg font-playfair font-bold text-gray-800">Email Us</h3>
-                <p className="text-gray-600 font-crimson">support@partmatch.com<br/>info@partmatch.com<br/>We reply within 24 hours</p>
+                <p className="text-gray-600 font-crimson">support@partmatchgh.com<br/>info@partmatchgh.com<br/>We reply within 24 hours</p>
               </div>
             </div>
           </CardContent>
