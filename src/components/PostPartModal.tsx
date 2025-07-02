@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +24,11 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [photos, setPhotos] = useState<File[]>([]);
   const [isPremium, setIsPremium] = useState(false);
+  const [showCameraModal, setShowCameraModal] = useState(false);
+  const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
+  const [isCapturing, setIsCapturing] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   
   const [formData, setFormData] = useState({
     title: "",
@@ -102,6 +107,94 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
 
   const removePhoto = (index: number) => {
     setPhotos(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleCameraClick = async () => {
+    const maxImages = isPremium ? MAX_PREMIUM_IMAGES : MAX_FREE_IMAGES;
+    
+    if (photos.length >= maxImages) {
+      toast({
+        title: "Photo limit reached",
+        description: `You can upload up to ${maxImages} photos. ${isPremium ? '' : 'Upgrade to premium for more photos.'}`,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      setIsCapturing(true);
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: 'environment' } 
+      });
+      setCameraStream(stream);
+      setShowCameraModal(true);
+      
+      setTimeout(() => {
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+      }, 100);
+    } catch (error: any) {
+      console.error('Camera access error:', error);
+      let errorMessage = 'Camera access failed. ';
+      
+      if (error.name === 'NotAllowedError') {
+        errorMessage += 'Please allow camera permissions and try again.';
+      } else if (error.name === 'NotFoundError') {
+        errorMessage += 'No camera found on this device.';
+      } else if (error.name === 'NotSupportedError') {
+        errorMessage += 'Camera not supported on this browser.';
+      } else {
+        errorMessage += 'Please try using the file upload instead.';
+      }
+      
+      toast({
+        title: "Camera Error",
+        description: errorMessage,
+        variant: "destructive",
+      });
+      
+      document.getElementById('file-input')?.click();
+    } finally {
+      setIsCapturing(false);
+    }
+  };
+
+  const capturePhoto = () => {
+    if (!videoRef.current || !canvasRef.current) return;
+    
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
+    
+    if (!context) return;
+    
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    context.drawImage(video, 0, 0);
+    
+    canvas.toBlob((blob) => {
+      if (blob) {
+        const file = new File([blob], `camera-photo-${Date.now()}.jpg`, { 
+          type: 'image/jpeg' 
+        });
+        setPhotos(prev => [...prev, file]);
+        closeCameraModal();
+        
+        toast({
+          title: "Photo captured",
+          description: "Photo has been added to your listing.",
+        });
+      }
+    }, 'image/jpeg', 0.8);
+  };
+
+  const closeCameraModal = () => {
+    if (cameraStream) {
+      cameraStream.getTracks().forEach(track => track.stop());
+      setCameraStream(null);
+    }
+    setShowCameraModal(false);
   };
 
   const handleUpgradeRequest = () => {
@@ -425,14 +518,6 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
                   <input
                     type="file"
                     accept="image/*"
-                    capture="environment"
-                    onChange={handlePhotoUpload}
-                    className="hidden"
-                    id="camera-input"
-                  />
-                  <input
-                    type="file"
-                    accept="image/*"
                     multiple
                     onChange={handlePhotoUpload}
                     className="hidden"
@@ -443,10 +528,11 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
                     type="button"
                     variant="outline"
                     size="sm"
-                    onClick={() => document.getElementById('camera-input')?.click()}
+                    onClick={handleCameraClick}
+                    disabled={isCapturing}
                   >
                     <Camera className="h-4 w-4 mr-2" />
-                    Take Photo
+                    {isCapturing ? 'Opening Camera...' : 'Take Photo'}
                   </Button>
                   <Button
                     type="button"
@@ -508,6 +594,49 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
           </div>
         </form>
       </DialogContent>
+
+      {/* Camera Modal */}
+      <Dialog open={showCameraModal} onOpenChange={closeCameraModal}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Camera className="h-5 w-5" />
+              Take Photo
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="relative bg-black rounded-lg overflow-hidden">
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                className="w-full h-64 object-cover"
+              />
+              <canvas
+                ref={canvasRef}
+                className="hidden"
+              />
+            </div>
+            
+            <div className="flex gap-2">
+              <Button 
+                onClick={closeCameraModal}
+                variant="outline" 
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+              <Button 
+                onClick={capturePhoto}
+                className="flex-1 bg-emerald-600 hover:bg-emerald-700"
+              >
+                <Camera className="h-4 w-4 mr-2" />
+                Capture
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </Dialog>
   );
 };
