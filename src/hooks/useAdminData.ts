@@ -124,6 +124,12 @@ export const useAdminData = () => {
       }
 
       console.log('Raw users data:', usersData?.length || 0, 'users fetched');
+      console.log('Sample user data:', usersData?.slice(0, 3).map(u => ({ 
+        id: u.id.slice(0, 8), 
+        user_type: u.user_type, 
+        is_verified: u.is_verified, 
+        is_blocked: u.is_blocked 
+      })));
 
       // Transform users data - buyers are auto-verified, only suppliers need manual verification
       const transformedUsers: UserProfile[] = (usersData || []).map(user => ({
@@ -131,6 +137,13 @@ export const useAdminData = () => {
         email: `user-${user.id.slice(0, 8)}@system.local`,
         user_type: user.user_type as 'owner' | 'supplier' | 'admin'
       }));
+
+      console.log('Transformed users:', transformedUsers.length);
+      console.log('User types breakdown:', {
+        suppliers: transformedUsers.filter(u => u.user_type === 'supplier').length,
+        owners: transformedUsers.filter(u => u.user_type === 'owner').length,
+        admins: transformedUsers.filter(u => u.user_type === 'admin').length
+      });
 
       // Log detailed statistics - note buyers are now auto-verified
       const userStats = {
