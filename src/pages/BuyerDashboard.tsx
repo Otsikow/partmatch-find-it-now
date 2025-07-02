@@ -11,14 +11,17 @@ import BuyerProfile from "@/components/buyer/BuyerProfile";
 import Chat from "@/pages/Chat";
 import PendingRatingNotification from "@/components/PendingRatingNotification";
 import { useTransactionRating } from "@/hooks/useTransactionRating";
+import { useNotifications } from "@/hooks/useNotifications";
 
 const BuyerDashboard = () => {
   const { user } = useAuth();
   const [displayName, setDisplayName] = useState<string>('Buyer');
   const [activeSection, setActiveSection] = useState('orders');
   const [unreadMessages, setUnreadMessages] = useState(0);
-  const [unreadNotifications, setUnreadNotifications] = useState(3);
+  const { notifications } = useNotifications();
   const { pendingRatings } = useTransactionRating();
+
+  const unreadNotifications = notifications.filter(n => !n.sent).length;
 
   useEffect(() => {
     const fetchUserName = async () => {
