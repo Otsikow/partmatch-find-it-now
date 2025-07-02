@@ -127,14 +127,14 @@ const AdminDashboard = () => {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className={`grid w-full ${isMobile ? 'grid-cols-2' : 'grid-cols-4'} bg-gradient-to-r from-white/90 to-purple-50/50 backdrop-blur-sm ${isMobile ? 'mb-2' : 'mb-4'}`}>
             <TabsTrigger value="requests" className={`${isMobile ? 'text-xs px-2' : 'text-base'} font-inter`}>
-              {isMobile ? 'Requests' : 'All Requests'}
+              {isMobile ? `Requests (${requests.length})` : `All Requests (${requests.length})`}
             </TabsTrigger>
             <TabsTrigger value="offers" className={`${isMobile ? 'text-xs px-2' : 'text-base'} font-inter`}>
-              {isMobile ? 'Offers' : 'Seller Offers'}
+              {isMobile ? `Offers (${offers.length})` : `Seller Offers (${offers.length})`}
             </TabsTrigger>
             {!isMobile && (
               <>
-                <TabsTrigger value="verifications" className="text-base font-inter">Seller Verifications</TabsTrigger>
+                <TabsTrigger value="verifications" className="text-base font-inter">Seller Verifications ({verifications.length})</TabsTrigger>
                 <TabsTrigger value="users" className="text-base font-inter">User Management</TabsTrigger>
               </>
             )}
@@ -142,7 +142,7 @@ const AdminDashboard = () => {
 
           {isMobile && (
             <TabsList className="grid w-full grid-cols-2 bg-gradient-to-r from-white/90 to-purple-50/50 backdrop-blur-sm mb-4">
-              <TabsTrigger value="verifications" className="text-xs px-2 font-inter">Verifications</TabsTrigger>
+              <TabsTrigger value="verifications" className="text-xs px-2 font-inter">Verifications ({verifications.length})</TabsTrigger>
               <TabsTrigger value="users" className="text-xs px-2 font-inter">Users</TabsTrigger>
             </TabsList>
           )}
