@@ -29,7 +29,7 @@ export const useAdminNotifications = () => {
     if (user?.id) {
       fetchNotifications(user.id);
     }
-  }, [user?.id, fetchNotifications]);
+  }, [user?.id]); // Remove fetchNotifications from dependencies to prevent infinite loop
 
   return {
     notifications,

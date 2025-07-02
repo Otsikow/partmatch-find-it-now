@@ -159,7 +159,11 @@ export const useAdminNotificationsRealtime = ({ addNotification }: UseAdminNotif
       .subscribe();
 
     return () => {
-      supabase.removeAllChannels();
+      console.log('Cleaning up admin notification channels');
+      adminNotificationsChannel.unsubscribe();
+      verificationsChannel.unsubscribe();
+      requestsChannel.unsubscribe();
+      offersChannel.unsubscribe();
     };
   }, [addNotification]);
 };

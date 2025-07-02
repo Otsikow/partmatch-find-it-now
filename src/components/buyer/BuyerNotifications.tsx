@@ -117,7 +117,7 @@ const BuyerNotifications = () => {
           id: notif.id,
           title: notif.type.charAt(0).toUpperCase() + notif.type.slice(1),
           message: notif.message,
-          type: notif.type,
+          type: 'system' as const, // Map to valid notification type
           read: notif.sent, // Use 'sent' field as 'read' status
           created_at: notif.created_at,
           metadata: {}
