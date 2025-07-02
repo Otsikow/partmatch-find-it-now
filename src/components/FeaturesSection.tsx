@@ -1,5 +1,6 @@
 
 import { MapPin, Search, Package } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const FeaturesSection = () => {
   return (
@@ -21,7 +22,7 @@ const FeaturesSection = () => {
 
         <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {/* Request Car Parts */}
-          <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
+          <Link to="/request-part" className="block bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
             <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6">
               <MapPin className="h-8 w-8 text-white" />
             </div>
@@ -29,10 +30,10 @@ const FeaturesSection = () => {
             <p className="text-gray-600 text-center leading-relaxed">
               Tell us what you need and get multiple competitive offers from verified suppliers near you.
             </p>
-          </div>
+          </Link>
 
           {/* Browse Car Parts */}
-          <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
+          <Link to="/search-parts" className="block bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
             <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-6">
               <Search className="h-8 w-8 text-white" />
             </div>
@@ -40,10 +41,10 @@ const FeaturesSection = () => {
             <p className="text-gray-600 text-center leading-relaxed">
               Search through available car parts from verified suppliers across Ghana.
             </p>
-          </div>
+          </Link>
 
           {/* Sell Car Parts */}
-          <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
+          <Link to="/seller-auth" className="block bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
             <div className="w-16 h-16 bg-gradient-to-r from-green-600 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
               <Package className="h-8 w-8 text-white" />
             </div>
@@ -51,7 +52,7 @@ const FeaturesSection = () => {
             <p className="text-gray-600 text-center leading-relaxed">
               List your inventory and reach customers across Ghana. Simple, secure, and profitable.
             </p>
-          </div>
+          </Link>
         </div>
       </div>
     </div>
