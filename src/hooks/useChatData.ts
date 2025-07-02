@@ -122,8 +122,13 @@ export const useChatData = (chatId: string, userId: string | undefined) => {
         console.log('⚠️ Message already exists, skipping');
         return prev;
       }
+      
+      const newMessages = [...prev, newMessage].sort((a, b) => 
+        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+      );
+      
       console.log('✅ Message added to local state');
-      return [...prev, newMessage];
+      return newMessages;
     });
   }, []);
 
