@@ -1,6 +1,6 @@
 
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -8,11 +8,24 @@ import { supabase } from '@/integrations/supabase/client';
 export const useUserRedirect = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const hasRedirectedRef = useRef(false);
 
   useEffect(() => {
     const handleUserRedirect = async () => {
       if (!user) {
         console.log('useUserRedirect: No user found, skipping redirect');
+        hasRedirectedRef.current = false;
+        return;
+      }
+
+      const isFromDashboard = document.referrer.includes('/buyer-dashboard') || 
+                             document.referrer.includes('/supplier-dashboard') || 
+                             document.referrer.includes('/admin') ||
+                             document.referrer.includes('/supplier');
+      
+      if (hasRedirectedRef.current || isFromDashboard) {
+        console.log('useUserRedirect: Skipping redirect - user intentionally navigating to home or already redirected');
         return;
       }
 
@@ -61,6 +74,7 @@ export const useUserRedirect = () => {
             // Redirect based on the metadata user_type
             if (userTypeFromMetadata === 'supplier') {
               console.log('useUserRedirect: Redirecting supplier to supplier dashboard');
+              hasRedirectedRef.current = true;
               navigate('/supplier');
               toast({
                 title: "Welcome back, Seller!",
@@ -69,6 +83,7 @@ export const useUserRedirect = () => {
               return;
             } else if (userTypeFromMetadata === 'admin') {
               console.log('useUserRedirect: Redirecting admin to admin dashboard');
+              hasRedirectedRef.current = true;
               navigate('/admin');
               toast({
                 title: "Welcome back, Administrator!",
@@ -80,6 +95,7 @@ export const useUserRedirect = () => {
           
           // Default to buyer dashboard on error
           console.log('useUserRedirect: Defaulting to buyer dashboard due to error');
+          hasRedirectedRef.current = true;
           navigate('/buyer-dashboard');
           return;
         }
@@ -90,6 +106,7 @@ export const useUserRedirect = () => {
         // Redirect based on user type with role-specific messaging
         if (profile?.user_type === 'supplier') {
           console.log('useUserRedirect: Redirecting supplier to supplier dashboard');
+          hasRedirectedRef.current = true;
           navigate('/supplier');
           toast({
             title: "Welcome back, Seller!",
@@ -97,6 +114,7 @@ export const useUserRedirect = () => {
           });
         } else if (profile?.user_type === 'admin') {
           console.log('useUserRedirect: Redirecting admin to admin dashboard');
+          hasRedirectedRef.current = true;
           navigate('/admin');
           toast({
             title: "Welcome back, Administrator!",
@@ -105,6 +123,7 @@ export const useUserRedirect = () => {
         } else {
           // For 'owner' and any other user types, go to buyer dashboard
           console.log('useUserRedirect: Redirecting to buyer dashboard, user_type:', profile?.user_type);
+          hasRedirectedRef.current = true;
           navigate('/buyer-dashboard');
           toast({
             title: "Welcome back, Buyer!",
@@ -115,12 +134,13 @@ export const useUserRedirect = () => {
         console.error('useUserRedirect: Error handling user redirect:', error);
         // Default to buyer dashboard on error
         console.log('useUserRedirect: Defaulting to buyer dashboard due to catch error');
+        hasRedirectedRef.current = true;
         navigate('/buyer-dashboard');
       }
     };
 
     handleUserRedirect();
-  }, [user, navigate]);
+  }, [user, navigate, location]);
 
   return { user };
 };
