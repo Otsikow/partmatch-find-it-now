@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import AdminNotificationBell from "./AdminNotificationBell";
+import { useUserDisplayName } from "@/hooks/useUserDisplayName";
 
 interface AdminHeaderProps {
   onNavigateToVerifications?: () => void;
@@ -12,6 +13,7 @@ interface AdminHeaderProps {
 const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
   const { signOut } = useAuth();
   const navigate = useNavigate();
+  const adminName = useUserDisplayName("Admin");
 
   const handleSignOut = async () => {
     try {
@@ -23,7 +25,7 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
   };
 
   const handleGoBack = () => {
-    navigate('/');
+    navigate('/admin');
   };
 
   return (
@@ -48,7 +50,7 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
               />
               <div className="text-left">
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-playfair font-bold text-white mb-1 sm:mb-2">
-                  Admin Dashboard
+                  Welcome, {adminName}
                 </h1>
                 <p className="text-sm sm:text-base text-purple-100 font-crimson">
                   Manage your marketplace with ease
