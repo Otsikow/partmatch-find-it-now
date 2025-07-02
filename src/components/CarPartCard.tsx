@@ -17,7 +17,7 @@ const CarPartCard = ({ part, onContact }: CarPartCardProps) => {
 
   return (
     <>
-      <Card className="w-full max-w-sm bg-white shadow-lg hover:shadow-xl transition-all duration-300 border-0 overflow-hidden cursor-pointer">
+      <Card className="w-full bg-white shadow-md hover:shadow-xl transition-all duration-300 border-0 overflow-hidden cursor-pointer">
         <CarPartCardImage
           partId={part.id}
           title={part.title}

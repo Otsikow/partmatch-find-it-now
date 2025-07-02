@@ -27,17 +27,17 @@ const CarPartCardContent = ({ part, onExpand }: CarPartCardContentProps) => {
 
   return (
     <div onClick={onExpand}>
-      <CardHeader className="pb-3">
-        <div className="space-y-2">
-          <h3 className="text-lg font-bold text-gray-900 line-clamp-2 leading-tight">
+      <CardHeader className="pb-3 sm:pb-4">
+        <div className="space-y-2 sm:space-y-3">
+          <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 line-clamp-2 leading-tight">
             {part.title}
           </h3>
           <div className="flex items-center justify-between">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm sm:text-base text-gray-600">
               {part.make} {part.model} ({part.year})
             </p>
             <div className="text-right">
-              <p className="text-xl font-bold text-green-600">
+              <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-green-600">
                 {part.currency} {part.price}
               </p>
             </div>
@@ -45,19 +45,19 @@ const CarPartCardContent = ({ part, onExpand }: CarPartCardContentProps) => {
         </div>
       </CardHeader>
 
-      <CardContent className="py-3">
-        <div className="space-y-3">
+      <CardContent className="py-3 sm:py-4">
+        <div className="space-y-3 sm:space-y-4">
           {part.description && (
-            <p className="text-sm text-gray-600 line-clamp-2">
+            <p className="text-sm sm:text-base text-gray-600 line-clamp-2">
               {part.description}
             </p>
           )}
           
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm text-gray-700">
-              <Avatar className="h-6 w-6">
+          <div className="space-y-2 sm:space-y-3">
+            <div className="flex items-center gap-2 text-sm sm:text-base text-gray-700">
+              <Avatar className="h-7 w-7 sm:h-8 sm:w-8">
                 <AvatarImage src={part.profiles?.profile_photo_url} alt={sellerName} />
-                <AvatarFallback className="text-xs font-medium">
+                <AvatarFallback className="text-xs sm:text-sm font-medium">
                   {initials}
                 </AvatarFallback>
               </Avatar>
@@ -74,13 +74,13 @@ const CarPartCardContent = ({ part, onExpand }: CarPartCardContentProps) => {
           </div>
 
           {part.address && (
-            <div className="flex items-center gap-2 text-sm text-gray-500">
+            <div className="flex items-center gap-2 text-sm sm:text-base text-gray-500">
               <MapPin className="h-4 w-4" />
               <span className="truncate">{part.address}</span>
             </div>
           )}
           
-          <div className="flex items-center gap-2 text-sm text-gray-500">
+          <div className="flex items-center gap-2 text-sm sm:text-base text-gray-500">
             <Calendar className="h-4 w-4" />
             <span>Listed {formatDate(part.created_at)}</span>
           </div>

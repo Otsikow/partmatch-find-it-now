@@ -73,7 +73,7 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
 
   return (
     <>
-      <Card className="w-full max-w-sm mx-auto hover:shadow-lg transition-all duration-300 cursor-pointer group bg-white">
+      <Card className="w-full hover:shadow-xl transition-all duration-300 cursor-pointer group bg-white border-0 shadow-md">
         {/* Image Section */}
         <div 
           className="relative aspect-video w-full overflow-hidden bg-gray-100 rounded-t-lg"
@@ -112,41 +112,41 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
           </div>
         </div>
         
-        <CardContent className="p-3 sm:p-4" onClick={() => setIsExpanded(true)}>
-          <div className="space-y-2 sm:space-y-3">
+        <CardContent className="p-4 sm:p-5 lg:p-6" onClick={() => setIsExpanded(true)}>
+          <div className="space-y-3 sm:space-y-4">
             {/* Title and Price */}
-            <div className="space-y-1">
-              <h3 className="font-bold text-sm sm:text-base lg:text-lg line-clamp-2 leading-tight">
+            <div className="space-y-2">
+              <h3 className="font-bold text-base sm:text-lg lg:text-xl line-clamp-2 leading-tight text-gray-900">
                 {part.title}
               </h3>
-              <p className="text-green-600 font-bold text-base sm:text-lg lg:text-xl">
+              <p className="text-green-600 font-bold text-lg sm:text-xl lg:text-2xl">
                 {formatPrice(part.price, part.currency)}
               </p>
             </div>
 
             {/* Vehicle Info */}
-            <div className="text-gray-600 text-xs sm:text-sm">
+            <div className="text-gray-600 text-sm sm:text-base">
               <p className="font-medium">{part.make} {part.model} ({part.year}) - {part.part_type}</p>
             </div>
 
             {/* Description Preview */}
             {part.description && (
-              <p className="text-gray-600 text-xs sm:text-sm line-clamp-2 leading-relaxed">
+              <p className="text-gray-600 text-sm sm:text-base line-clamp-2 leading-relaxed">
                 {part.description}
               </p>
             )}
 
             {/* Seller Info with Avatar */}
             {part.profiles && (
-              <div className="border-t pt-2 space-y-2">
+              <div className="border-t pt-3 space-y-2">
                 <div className="flex items-center gap-2">
-                  <Avatar className="h-6 w-6">
+                  <Avatar className="h-7 w-7 sm:h-8 sm:w-8">
                     <AvatarImage src={part.profiles.profile_photo_url} alt={supplierName} />
-                    <AvatarFallback className="text-xs font-medium">
+                    <AvatarFallback className="text-xs sm:text-sm font-medium">
                       {initials}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="text-xs sm:text-sm font-medium">{supplierName}</span>
+                  <span className="text-sm sm:text-base font-medium">{supplierName}</span>
                   {part.profiles.is_verified && (
                     <Badge variant="secondary" className="text-xs">Verified</Badge>
                   )}
@@ -162,15 +162,15 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
             )}
 
             {/* Location and Date */}
-            <div className="flex flex-col gap-1 text-xs text-gray-500">
+            <div className="flex flex-col gap-1 text-sm text-gray-500">
               {part.address && (
-                <div className="flex items-center gap-1">
-                  <MapPin className="h-3 w-3 flex-shrink-0" />
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4 flex-shrink-0" />
                   <span className="truncate">{part.address}</span>
                 </div>
               )}
-              <div className="flex items-center gap-1">
-                <Calendar className="h-3 w-3 flex-shrink-0" />
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4 flex-shrink-0" />
                 <span>{format(new Date(part.created_at), 'MMM dd')}</span>
               </div>
             </div>
@@ -178,25 +178,25 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
         </CardContent>
 
         {/* Action Buttons */}
-        <div className="p-3 sm:p-4 pt-0 border-t bg-gray-50 rounded-b-lg" onClick={(e) => e.stopPropagation()}>
-          <div className="flex gap-2">
+        <div className="p-4 sm:p-5 lg:p-6 pt-0 border-t bg-gray-50/50 rounded-b-lg" onClick={(e) => e.stopPropagation()}>
+          <div className="flex gap-2 sm:gap-3">
             <ChatButton
               sellerId={part.supplier_id}
               partId={part.id}
               size="sm"
               variant="outline"
-              className="flex-1 text-xs sm:text-sm h-8 sm:h-9"
+              className="flex-1 text-sm h-9 sm:h-10 font-medium"
             />
             {part.address && (
               <Button 
                 size="sm" 
                 variant="default" 
                 onClick={openDirections} 
-                className="flex-1 text-xs sm:text-sm h-8 sm:h-9"
+                className="flex-1 text-sm h-9 sm:h-10 font-medium"
               >
-                <Navigation className="h-3 w-3 mr-1" />
-                <span className="hidden xs:inline">Get Directions</span>
-                <span className="xs:hidden">Directions</span>
+                <Navigation className="h-4 w-4 mr-1" />
+                <span className="hidden sm:inline">Get Directions</span>
+                <span className="sm:hidden">Directions</span>
               </Button>
             )}
           </div>
