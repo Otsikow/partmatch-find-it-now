@@ -2,6 +2,7 @@
 import { useState } from "react";
 import BuyerAuthHeader from "@/components/BuyerAuthHeader";
 import BuyerAuthForm from "@/components/BuyerAuthForm";
+import Footer from "@/components/Footer";
 
 const BuyerAuth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -16,6 +17,7 @@ const BuyerAuth = () => {
         showPasswordReset={showPasswordReset}
         setShowPasswordReset={setShowPasswordReset}
       />
+      <Footer />
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import { useAuth } from "@/contexts/AuthContext";
+import Footer from "@/components/Footer";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import PageHeader from "@/components/PageHeader";
@@ -178,6 +179,7 @@ const BuyerDashboard = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

@@ -28,7 +28,7 @@ const Index = () => {
       <FeaturesSection />
       <CTASection />
       <StatsSection />
-      {!user && <Footer />}
+      <Footer />
     </div>
   );
 };
