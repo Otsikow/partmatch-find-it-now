@@ -3,6 +3,7 @@ import { LogOut, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useUserDisplayName } from "@/hooks/useUserDisplayName";
 import AdminNotificationBell from "./AdminNotificationBell";
 
 interface AdminHeaderProps {
@@ -12,6 +13,7 @@ interface AdminHeaderProps {
 const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
   const { signOut } = useAuth();
   const navigate = useNavigate();
+  const displayName = useUserDisplayName('Admin');
 
   const handleSignOut = async () => {
     try {
@@ -24,7 +26,7 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
 
   const handleGoBack = () => {
     console.log('AdminHeader: Back button clicked, navigating to home page');
-    window.location.href = '/';
+    navigate('/');
   };
 
   return (
@@ -52,7 +54,7 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
                   Admin Dashboard
                 </h1>
                 <p className="text-sm sm:text-base text-purple-100 font-crimson">
-                  Manage your marketplace with ease
+                  Welcome back, {displayName}
                 </p>
               </div>
             </div>
