@@ -13,7 +13,7 @@ const RequestHeader = () => {
       </Link>
       <div className="flex items-center gap-1 sm:gap-2 md:gap-3 min-w-0 flex-1">
         <img 
-          src="/lovable-uploads/846aa041-c3b2-42f1-8842-2348e4ced1a4.png" 
+          src="/lovable-uploads/partmatch-hero-logo.png" 
           alt="PartMatch Logo" 
           className="h-5 w-auto sm:h-6 md:h-8 flex-shrink-0"
         />

@@ -27,7 +27,7 @@ const HeroSection = () => {
         <div className="mb-8">
           <div className="flex items-center justify-center mb-6">
             <img 
-              src="/lovable-uploads/0d88b578-80eb-4349-81ca-283275f3b6ad.png" 
+              src="/lovable-uploads/partmatch-hero-logo.png" 
               alt="PartMatch Logo" 
               className="h-48 w-auto object-cover"
             />
