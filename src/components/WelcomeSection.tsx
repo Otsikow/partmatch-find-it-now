@@ -3,9 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Search, Package, Plus, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useUserDisplayName } from "@/hooks/useUserDisplayName";
 
 const WelcomeSection = () => {
   const { user } = useAuth();
+  const displayName = useUserDisplayName('User');
 
   if (!user) {
     return (
@@ -95,7 +97,7 @@ const WelcomeSection = () => {
             <User className="h-12 w-12 text-white" />
           </div>
           <h1 className="text-4xl font-bold text-blue-600 mb-2">Welcome to PartMatch</h1>
-          <p className="text-xl text-gray-600">Hello, {user.email?.split('@')[0] || 'User'}</p>
+          <p className="text-xl text-gray-600">Hello, {displayName}</p>
         </div>
 
         <div className="mb-8">

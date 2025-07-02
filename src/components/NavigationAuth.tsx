@@ -16,11 +16,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import { useUserDisplayName } from "@/hooks/useUserDisplayName";
 
 const NavigationAuth = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [isSigningOut, setIsSigningOut] = useState(false);
+  const displayName = useUserDisplayName('User');
 
   const handleSignOut = async () => {
     setIsSigningOut(true);
@@ -75,7 +77,7 @@ const NavigationAuth = () => {
   return (
     <div className="flex items-center gap-3">
       <span className="text-sm text-gray-600 hidden sm:block">
-        Welcome, {user.email?.split('@')[0] || 'User'}
+        Welcome, {displayName}
       </span>
       
       <Link to={getDashboardLink()}>
