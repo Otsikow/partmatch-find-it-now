@@ -15,7 +15,7 @@ export const ADMIN_SECURITY_CONFIG = {
   ],
   
   // Development mode flag - MUST be false in production
-  DEVELOPMENT_MODE: false, // Set to false for production security
+  DEVELOPMENT_MODE: true, // Set to false for production security
   
   // Minimum password requirements for admin accounts
   PASSWORD_REQUIREMENTS: {

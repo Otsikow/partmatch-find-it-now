@@ -25,6 +25,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import CookiePolicy from "./pages/CookiePolicy";
 import NotFound from "./pages/NotFound";
+import ButtonTestPage from "./pages/ButtonTestPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SellerProtectedRoute from "./components/SellerProtectedRoute";
 import AdminProtectedRoute from "./components/AdminProtectedRoute";
@@ -103,6 +104,7 @@ const App = () => (
                 </AdminProtectedRoute>
               } 
             />
+            <Route path="/button-test" element={<ButtonTestPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
