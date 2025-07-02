@@ -9,7 +9,7 @@ const FooterBrowseShop = () => {
       <ul className="space-y-3">
         <li>
           <Link 
-            to="/search" 
+            to="/search-parts" 
             className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
           >
             <Search className="h-3 w-3" />
@@ -27,7 +27,7 @@ const FooterBrowseShop = () => {
         </li>
         <li>
           <Link 
-            to="/request" 
+            to="/request-part" 
             className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
           >
             <Package className="h-3 w-3" />

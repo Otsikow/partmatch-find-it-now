@@ -28,7 +28,7 @@ const PartsList = ({ parts }: PartsListProps) => {
           <h3 className="text-lg sm:text-xl font-playfair font-semibold mb-2 sm:mb-3">No parts found</h3>
           <p className="text-gray-600 mb-4 sm:mb-6 font-crimson text-base sm:text-lg">
             Try searching with different keywords or{' '}
-            <Link to="/request" className="text-emerald-600 hover:underline font-medium">
+            <Link to="/request-part" className="text-emerald-600 hover:underline font-medium">
               request the part you need
             </Link>
           </p>
