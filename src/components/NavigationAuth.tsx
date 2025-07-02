@@ -80,12 +80,6 @@ const NavigationAuth = () => {
         Welcome, {displayName}
       </span>
       
-      <Link to={getDashboardLink()}>
-        <Button variant="outline" size="sm">
-          Dashboard
-        </Button>
-      </Link>
-
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
@@ -106,21 +100,6 @@ const NavigationAuth = () => {
               </p>
             </div>
           </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            <DropdownMenuItem asChild>
-              <Link to={getDashboardLink()} className="flex items-center">
-                <User className="mr-2 h-4 w-4" />
-                <span>Dashboard</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link to="/chat" className="flex items-center">
-                <MessageCircle className="mr-2 h-4 w-4" />
-                <span>Messages</span>
-              </Link>
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem 
             onClick={handleSignOut} 
