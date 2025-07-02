@@ -111,6 +111,8 @@ const BuyerDashboard = () => {
         subtitle={`Welcome back, ${displayName}`}
         showBackButton={true}
         backTo="/"
+        showSignOut={true}
+        showHomeButton={true}
       />
       
       <div className="flex h-[calc(100vh-4rem)]">
