@@ -11,6 +11,7 @@ import UserDetailsModal from "@/components/admin/UserDetailsModal";
 import AdminHeader from "@/components/admin/AdminHeader";
 import UserCategoryTabs from "@/components/admin/UserCategoryTabs";
 import UserManagementStats from "@/components/admin/UserManagementStats";
+import AnalyticsDashboard from "@/components/admin/AnalyticsDashboard";
 import { useAdminData } from "@/hooks/useAdminData";
 import { useAdminActions } from "@/hooks/useAdminActions";
 import { useState, useEffect, useRef, useMemo } from "react";
@@ -47,7 +48,7 @@ const AdminDashboard = () => {
 
   const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
   const [showUserDetails, setShowUserDetails] = useState(false);
-  const [activeTab, setActiveTab] = useState("requests");
+  const [activeTab, setActiveTab] = useState("analytics");
   const [activeUserTab, setActiveUserTab] = useState("sellers");
   const isMobile = useIsMobile();
   const refreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -125,11 +126,14 @@ const AdminDashboard = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className={`grid w-full ${isMobile ? 'grid-cols-2' : 'grid-cols-4'} bg-gradient-to-r from-white/90 to-purple-50/50 backdrop-blur-sm ${isMobile ? 'mb-2' : 'mb-4'}`}>
-            <TabsTrigger value="requests" className={`${isMobile ? 'text-xs px-2' : 'text-base'} font-inter`}>
+          <TabsList className={`grid w-full ${isMobile ? 'grid-cols-3' : 'grid-cols-5'} bg-gradient-to-r from-white/90 to-purple-50/50 backdrop-blur-sm ${isMobile ? 'mb-2' : 'mb-4'}`}>
+            <TabsTrigger value="analytics" className={`${isMobile ? 'text-xs px-1' : 'text-base'} font-inter`}>
+              {isMobile ? 'Analytics' : 'Analytics Dashboard'}
+            </TabsTrigger>
+            <TabsTrigger value="requests" className={`${isMobile ? 'text-xs px-1' : 'text-base'} font-inter`}>
               {isMobile ? `Requests (${requests.length})` : `All Requests (${requests.length})`}
             </TabsTrigger>
-            <TabsTrigger value="offers" className={`${isMobile ? 'text-xs px-2' : 'text-base'} font-inter`}>
+            <TabsTrigger value="offers" className={`${isMobile ? 'text-xs px-1' : 'text-base'} font-inter`}>
               {isMobile ? `Offers (${offers.length})` : `Seller Offers (${offers.length})`}
             </TabsTrigger>
             {!isMobile && (
@@ -146,6 +150,18 @@ const AdminDashboard = () => {
               <TabsTrigger value="users" className="text-xs px-2 font-inter">Users</TabsTrigger>
             </TabsList>
           )}
+
+          <TabsContent value="analytics" className="mt-4 sm:mt-6">
+            <div className="space-y-3 sm:space-y-4 lg:space-y-6">
+              <h2 className="text-lg sm:text-xl lg:text-2xl font-playfair font-semibold bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent px-2 sm:px-0">
+                Analytics Dashboard
+              </h2>
+              
+              <div className="mx-2 sm:mx-0">
+                <AnalyticsDashboard />
+              </div>
+            </div>
+          </TabsContent>
 
           <TabsContent value="requests" className="mt-4 sm:mt-6">
             <div className="space-y-3 sm:space-y-4 lg:space-y-6">
