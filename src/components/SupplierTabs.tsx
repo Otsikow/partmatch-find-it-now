@@ -11,6 +11,8 @@ import RequestsTab from "./RequestsTab";
 import SellerProfileManagement from "./SellerProfileManagement";
 import SubscriptionManager from "./SubscriptionManager";
 import { useSubscriptionStatus } from "@/hooks/useSubscriptionStatus";
+import { useMyPartsCount } from "@/hooks/useMyPartsCount";
+import TabCountBadge from "./TabCountBadge";
 
 interface Request {
   id: string;
@@ -64,6 +66,7 @@ const SupplierTabs = ({
 }: SupplierTabsProps) => {
   const [showPostForm, setShowPostForm] = useState(false);
   const { hasBusinessSubscription } = useSubscriptionStatus();
+  const partsCount = useMyPartsCount();
 
   const handlePartPosted = () => {
     setShowPostForm(false);
@@ -112,14 +115,17 @@ const SupplierTabs = ({
           <TabsTrigger value="my-parts" className="flex items-center gap-2">
             <Package className="h-4 w-4" />
             My Parts
+            <TabCountBadge count={partsCount} />
           </TabsTrigger>
           <TabsTrigger value="offers" className="flex items-center gap-2">
             <Star className="h-4 w-4" />
             Offers
+            <TabCountBadge count={offers.length} />
           </TabsTrigger>
           <TabsTrigger value="requests" className="flex items-center gap-2">
             <Settings className="h-4 w-4" />
             Requests
+            <TabCountBadge count={requests.length} />
           </TabsTrigger>
           <TabsTrigger value="subscription" className="flex items-center gap-2">
             <CreditCard className="h-4 w-4" />
