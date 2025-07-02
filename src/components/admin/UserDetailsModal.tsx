@@ -194,7 +194,7 @@ const UserDetailsModal = ({
                   {getStatusText(user.is_blocked, user.is_verified)}
                 </Badge>
                 <Badge variant="outline">
-                  {user.user_type === 'supplier' ? 'Seller' : user.user_type}
+                  {user.user_type === 'supplier' ? 'Seller' : user.user_type === 'owner' ? 'Buyer' : user.user_type}
                 </Badge>
               </div>
             </div>
