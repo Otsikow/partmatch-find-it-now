@@ -129,7 +129,7 @@ BEGIN
   
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = '';
 
 -- Trigger to update chat when message is inserted
 CREATE TRIGGER update_chat_on_message_trigger
@@ -167,7 +167,7 @@ BEGIN
     updated_at = now()
   WHERE id = chat_id_param;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = '';
 
 -- Enable realtime for the tables
 ALTER TABLE public.chats REPLICA IDENTITY FULL;

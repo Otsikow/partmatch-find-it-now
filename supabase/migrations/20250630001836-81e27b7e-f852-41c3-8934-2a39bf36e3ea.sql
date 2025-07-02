@@ -4,6 +4,7 @@ CREATE OR REPLACE FUNCTION public.is_authorized_admin_email(email_to_check text)
  RETURNS boolean
  LANGUAGE plpgsql
  SECURITY DEFINER
+ SET search_path = ''
 AS $$
 DECLARE
     authorized_emails TEXT[] := ARRAY[

@@ -6,6 +6,7 @@ CREATE OR REPLACE FUNCTION public.is_authorized_admin_email(email_to_check TEXT)
 RETURNS BOOLEAN
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = ''
 AS $$
 BEGIN
     -- During development, allow any email to be admin
@@ -19,6 +20,7 @@ CREATE OR REPLACE FUNCTION public.prevent_unauthorized_admin_assignment()
 RETURNS TRIGGER
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = ''
 AS $$
 DECLARE
     user_email TEXT;

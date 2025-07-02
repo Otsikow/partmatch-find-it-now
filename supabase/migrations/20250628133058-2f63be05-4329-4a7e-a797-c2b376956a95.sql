@@ -37,6 +37,7 @@ CREATE OR REPLACE FUNCTION public.is_authorized_admin_email(email_to_check TEXT)
 RETURNS BOOLEAN
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = ''
 AS $$
 DECLARE
     authorized_emails TEXT[] := ARRAY[
@@ -53,6 +54,7 @@ CREATE OR REPLACE FUNCTION public.prevent_unauthorized_admin_assignment()
 RETURNS TRIGGER
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = ''
 AS $$
 DECLARE
     user_email TEXT;
@@ -102,6 +104,7 @@ CREATE OR REPLACE FUNCTION public.log_admin_security_event(
 RETURNS VOID
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = ''
 AS $$
 BEGIN
     INSERT INTO public.admin_audit_logs (user_id, action, details)

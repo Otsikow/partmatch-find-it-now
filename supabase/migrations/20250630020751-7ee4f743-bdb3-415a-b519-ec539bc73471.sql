@@ -8,6 +8,7 @@ CREATE OR REPLACE FUNCTION public.auto_verify_buyers()
 RETURNS trigger
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = ''
 AS $function$
 BEGIN
   -- Auto-verify buyers (owners) upon registration
