@@ -23,6 +23,7 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
   };
 
   const handleGoBack = () => {
+    console.log('AdminHeader: Back button clicked, navigating to home page');
     navigate('/');
   };
 
