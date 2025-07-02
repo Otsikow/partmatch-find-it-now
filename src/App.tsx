@@ -10,6 +10,7 @@ import AuthTypeSelector from "./components/AuthTypeSelector";
 import BuyerAuth from "./pages/BuyerAuth";
 import SellerAuth from "./pages/SellerAuth";
 import AdminAuth from "./pages/AdminAuth";
+import AdminSetup from "./components/AdminSetup";
 import UserDashboard from "./pages/UserDashboard";
 import BuyerDashboard from "./pages/BuyerDashboard";
 import SupplierDashboard from "./pages/SupplierDashboard";
@@ -44,6 +45,7 @@ const App = () => (
             <Route path="/buyer-auth" element={<BuyerAuth />} />
             <Route path="/seller-auth" element={<SellerAuth />} />
             <Route path="/admin-auth" element={<AdminAuth />} />
+            <Route path="/admin-setup" element={<AdminSetup />} />
             <Route path="/request-part" element={<RequestPart />} />
             <Route path="/request" element={<RequestPart />} />
             <Route path="/search-parts" element={<SearchParts />} />

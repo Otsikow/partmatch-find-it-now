@@ -52,6 +52,11 @@ const AdminDashboard = () => {
   const isMobile = useIsMobile();
   const refreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
+  const pendingRequestsCount = useMemo(() => requests.filter(r => r.status === 'pending').length, [requests]);
+  const matchedRequestsCount = useMemo(() => requests.filter(r => r.status === 'matched').length, [requests]);
+  const completedRequestsCount = useMemo(() => requests.filter(r => r.status === 'completed').length, [requests]);
+  const pendingVerificationsCount = useMemo(() => verifications.filter(v => v.verification_status === 'pending').length, [verifications]);
+
   const handleViewUserDetails = (user: UserProfile) => {
     setSelectedUser(user);
     setShowUserDetails(true);
@@ -108,11 +113,11 @@ const AdminDashboard = () => {
       <main className="container mx-auto px-2 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8 max-w-7xl">
         <div className="mb-4 sm:mb-6 lg:mb-8">
           <AdminStats
-            pendingRequests={useMemo(() => requests.filter(r => r.status === 'pending').length, [requests])}
-            matchedRequests={useMemo(() => requests.filter(r => r.status === 'matched').length, [requests])}
-            completedRequests={useMemo(() => requests.filter(r => r.status === 'completed').length, [requests])}
+            pendingRequests={pendingRequestsCount}
+            matchedRequests={matchedRequestsCount}
+            completedRequests={completedRequestsCount}
             totalRequests={requests.length}
-            pendingVerifications={useMemo(() => verifications.filter(v => v.verification_status === 'pending').length, [verifications])}
+            pendingVerifications={pendingVerificationsCount}
             onNavigateToVerifications={handleNavigateToVerifications}
           />
         </div>
