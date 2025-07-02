@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Upload, X, Image as ImageIcon, CreditCard, Camera } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { toast } from "@/hooks/use-toast";
 
 interface PhotoUploadProps {
   onPhotoChange: (file: File | null) => void;
@@ -20,8 +21,12 @@ const PhotoUpload = ({
 }: PhotoUploadProps) => {
   const [dragActive, setDragActive] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [showCameraModal, setShowCameraModal] = useState(false);
+  const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
+  const [isCapturing, setIsCapturing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const cameraInputRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -70,17 +75,82 @@ const PhotoUpload = ({
     inputRef.current?.click();
   };
 
-  const onCameraClick = () => {
-    cameraInputRef.current?.click();
+  const onCameraClick = async () => {
+    try {
+      setIsCapturing(true);
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: 'environment' } 
+      });
+      setCameraStream(stream);
+      setShowCameraModal(true);
+      
+      setTimeout(() => {
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+      }, 100);
+    } catch (error: any) {
+      console.error('Camera access error:', error);
+      let errorMessage = 'Camera access failed. ';
+      
+      if (error.name === 'NotAllowedError') {
+        errorMessage += 'Please allow camera permissions and try again.';
+      } else if (error.name === 'NotFoundError') {
+        errorMessage += 'No camera found on this device.';
+      } else if (error.name === 'NotSupportedError') {
+        errorMessage += 'Camera not supported on this browser.';
+      } else {
+        errorMessage += 'Please try using the file upload instead.';
+      }
+      
+      toast({
+        title: "Camera Error",
+        description: errorMessage,
+        variant: "destructive",
+      });
+      
+      inputRef.current?.click();
+    } finally {
+      setIsCapturing(false);
+    }
+  };
+
+  const capturePhoto = () => {
+    if (!videoRef.current || !canvasRef.current) return;
+    
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
+    
+    if (!context) return;
+    
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    context.drawImage(video, 0, 0);
+    
+    canvas.toBlob((blob) => {
+      if (blob) {
+        const file = new File([blob], `camera-photo-${Date.now()}.jpg`, { 
+          type: 'image/jpeg' 
+        });
+        handleFile(file);
+        closeCameraModal();
+      }
+    }, 'image/jpeg', 0.8);
+  };
+
+  const closeCameraModal = () => {
+    if (cameraStream) {
+      cameraStream.getTracks().forEach(track => track.stop());
+      setCameraStream(null);
+    }
+    setShowCameraModal(false);
   };
 
   const removePhoto = () => {
     onPhotoChange(null);
     if (inputRef.current) {
       inputRef.current.value = '';
-    }
-    if (cameraInputRef.current) {
-      cameraInputRef.current.value = '';
     }
   };
 
@@ -111,20 +181,11 @@ const PhotoUpload = ({
         </Button>
       </div>
 
-      {/* Hidden file inputs */}
+      {/* Hidden file input */}
       <input
         ref={inputRef}
         type="file"
         accept="image/*"
-        onChange={handleChange}
-        className="hidden"
-      />
-      
-      <input
-        ref={cameraInputRef}
-        type="file"
-        accept="image/*"
-        capture="environment"
         onChange={handleChange}
         className="hidden"
       />
@@ -192,13 +253,57 @@ const PhotoUpload = ({
               size="sm"
               className="flex-1"
               onClick={onCameraClick}
+              disabled={isCapturing}
             >
               <Camera className="h-4 w-4 mr-2" />
-              Take Photo
+              {isCapturing ? 'Opening Camera...' : 'Take Photo'}
             </Button>
           </div>
         </div>
       )}
+
+      {/* Camera Modal */}
+      <Dialog open={showCameraModal} onOpenChange={closeCameraModal}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Camera className="h-5 w-5" />
+              Take Photo
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="relative bg-black rounded-lg overflow-hidden">
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                className="w-full h-64 object-cover"
+              />
+              <canvas
+                ref={canvasRef}
+                className="hidden"
+              />
+            </div>
+            
+            <div className="flex gap-2">
+              <Button 
+                onClick={closeCameraModal}
+                variant="outline" 
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+              <Button 
+                onClick={capturePhoto}
+                className="flex-1 bg-emerald-600 hover:bg-emerald-700"
+              >
+                <Camera className="h-4 w-4 mr-2" />
+                Capture
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Upgrade Modal */}
       <Dialog open={showUpgradeModal} onOpenChange={setShowUpgradeModal}>
@@ -238,7 +343,6 @@ const PhotoUpload = ({
               </Button>
               <Button 
                 onClick={() => {
-                  // TODO: Implement payment flow
                   alert('Payment integration coming soon!');
                   setShowUpgradeModal(false);
                 }}
