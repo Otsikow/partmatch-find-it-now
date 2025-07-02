@@ -50,7 +50,7 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
               />
               <div className="text-left">
                 <h1 className="text-2xl sm:text-3xl lg:text-4xl font-playfair font-bold text-white mb-1 sm:mb-2">
-                  Welcome, {adminName}
+                  {adminName && adminName !== "Admin" ? `Welcome, ${adminName}` : "Admin Dashboard"}
                 </h1>
                 <p className="text-sm sm:text-base text-purple-100 font-crimson">
                   Manage your marketplace with ease
