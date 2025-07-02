@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import PasswordReset from "@/components/PasswordReset";
 import SetNewPassword from "@/components/SetNewPassword";
+import Footer from "@/components/Footer";
 
 const SellerAuth = () => {
   const [formData, setFormData] = useState({
@@ -265,6 +266,7 @@ const SellerAuth = () => {
           )}
         </Card>
       </main>
+      <Footer />
     </div>
   );
 };

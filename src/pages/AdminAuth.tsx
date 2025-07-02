@@ -8,6 +8,7 @@ import AdminAuthForm from "@/components/AdminAuthForm";
 import AdminSecurityAlert from "@/components/AdminSecurityAlert";
 import PasswordReset from "@/components/PasswordReset";
 import SetNewPassword from "@/components/SetNewPassword";
+import Footer from "@/components/Footer";
 
 const AdminAuth = () => {
   const [showPasswordReset, setShowPasswordReset] = useState(false);
@@ -59,6 +60,7 @@ const AdminAuth = () => {
           )}
         </Card>
       </main>
+      <Footer />
     </div>
   );
 };

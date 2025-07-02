@@ -1,4 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
 import { Building2, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -273,6 +274,7 @@ const AdminDashboard = () => {
           onUnblock={handleUnblockUser}
         />
       </main>
+      <Footer />
     </div>
   );
 };

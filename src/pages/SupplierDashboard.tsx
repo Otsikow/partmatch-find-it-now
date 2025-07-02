@@ -1,5 +1,6 @@
 
 import { useState, useMemo } from "react";
+import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Package } from "lucide-react";
@@ -87,6 +88,7 @@ const SupplierDashboard = () => {
           </>
         )}
       </main>
+      <Footer />
     </div>
   );
 };
