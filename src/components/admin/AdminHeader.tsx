@@ -45,7 +45,7 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
             
             <div className="flex items-center gap-2 sm:gap-3">
               <img 
-                src="/lovable-uploads/82ecb905-adea-450b-b104-83fa38679cfb.png" 
+                src="/lovable-uploads/partmatch-hero-logo.png" 
                 alt="PartMatch Logo" 
                 className="h-8 w-auto sm:h-10"
               />
