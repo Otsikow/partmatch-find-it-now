@@ -25,6 +25,7 @@ interface Request {
   description?: string;
   status: string;
   created_at: string;
+  owner_id: string;
 }
 
 interface Offer {
@@ -52,6 +53,7 @@ interface SupplierTabsProps {
   offers: Offer[];
   onOfferSubmit: (requestId: string, price: number, message: string, location: string) => Promise<void>;
   onWhatsAppContact: (phone: string, request: Request | Offer['request']) => void;
+  onChatContact: (requestId: string, ownerId: string) => void;
   isSubmittingOffer: boolean;
 }
 
@@ -62,6 +64,7 @@ const SupplierTabs = ({
   offers, 
   onOfferSubmit, 
   onWhatsAppContact, 
+  onChatContact,
   isSubmittingOffer 
 }: SupplierTabsProps) => {
   const [showPostForm, setShowPostForm] = useState(false);
@@ -154,6 +157,7 @@ const SupplierTabs = ({
             requests={requests}
             onOfferSubmit={onOfferSubmit}
             onWhatsAppContact={onWhatsAppContact}
+            onChatContact={onChatContact}
             isSubmittingOffer={isSubmittingOffer}
           />
         </TabsContent>

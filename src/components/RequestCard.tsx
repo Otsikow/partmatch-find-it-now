@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-import { MapPin, Phone, MessageCircle, Clock } from "lucide-react";
+import { MapPin, Phone, MessageCircle, Clock, MessageSquare } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import LocationSelector from "@/components/LocationSelector";
 
@@ -21,16 +21,18 @@ interface Request {
   description?: string;
   status: string;
   created_at: string;
+  owner_id: string;
 }
 
 interface RequestCardProps {
   request: Request;
   onOfferSubmit: (requestId: string, price: number, message: string, location: string) => Promise<void>;
   onWhatsAppContact: (phone: string, request: Request) => void;
+  onChatContact: (requestId: string, ownerId: string) => void;
   isSubmittingOffer: boolean;
 }
 
-const RequestCard = ({ request, onOfferSubmit, onWhatsAppContact, isSubmittingOffer }: RequestCardProps) => {
+const RequestCard = ({ request, onOfferSubmit, onWhatsAppContact, onChatContact, isSubmittingOffer }: RequestCardProps) => {
   const [showOfferForm, setShowOfferForm] = useState(false);
   const [offerPrice, setOfferPrice] = useState('');
   const [offerMessage, setOfferMessage] = useState('');
@@ -174,6 +176,14 @@ const RequestCard = ({ request, onOfferSubmit, onWhatsAppContact, isSubmittingOf
               className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white shadow-lg text-sm sm:text-base"
             >
               I Have This Part!
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => onChatContact(request.id, request.owner_id)}
+              className="bg-blue-600 hover:bg-blue-700 text-white border-blue-600 text-sm sm:text-base"
+            >
+              <MessageSquare className="h-4 w-4 mr-2" />
+              Chat
             </Button>
             <Button
               variant="outline"

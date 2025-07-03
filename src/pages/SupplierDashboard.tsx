@@ -1,5 +1,6 @@
 
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -13,11 +14,17 @@ import { useOfferHandling } from "@/hooks/useOfferHandling";
 
 const SupplierDashboard = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('my-parts');
   const [showMainDashboard, setShowMainDashboard] = useState(false);
 
   const { requests, myOffers, loading, error, refetch } = useSupplierData();
   const { handleMakeOffer, handleWhatsAppContact, isSubmittingOffer } = useOfferHandling(refetch);
+
+  const handleChatContact = (requestId: string, ownerId: string) => {
+    // Navigate to chat page with the buyer
+    navigate('/chat', { state: { requestId, buyerId: ownerId } });
+  };
 
   // Calculate stats whenever offers change
   const stats = useMemo(() => {
@@ -83,6 +90,7 @@ const SupplierDashboard = () => {
               offers={myOffers}
               onOfferSubmit={handleMakeOffer}
               onWhatsAppContact={handleWhatsAppContact}
+              onChatContact={handleChatContact}
               isSubmittingOffer={isSubmittingOffer}
             />
           </>

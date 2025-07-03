@@ -15,6 +15,7 @@ interface Request {
   description?: string;
   status: string;
   created_at: string;
+  owner_id: string;
 }
 
 interface Offer {

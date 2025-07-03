@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -22,12 +23,18 @@ interface UserProfile {
 
 const HomeDashboard = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   
   // Supplier data hooks
   const { requests, myOffers, loading: supplierLoading, refetch } = useSupplierData();
   const { handleMakeOffer, handleWhatsAppContact, isSubmittingOffer } = useOfferHandling(refetch);
+
+  const handleChatContact = (requestId: string, ownerId: string) => {
+    // Navigate to chat page with the buyer
+    navigate('/chat', { state: { requestId, buyerId: ownerId } });
+  };
   const [activeTab, setActiveTab] = useState('overview');
 
   useEffect(() => {
@@ -214,6 +221,7 @@ const HomeDashboard = () => {
           requests={requests}
           onOfferSubmit={handleMakeOffer}
           onWhatsAppContact={handleWhatsAppContact}
+          onChatContact={handleChatContact}
           isSubmittingOffer={isSubmittingOffer}
         />;
       case 'messages':
