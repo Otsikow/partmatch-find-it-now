@@ -101,9 +101,9 @@ const SupplierTabs = ({
   }
 
   return (
-    <div className="w-full space-y-4 sm:space-y-6">
+    <div className="w-full space-y-3 sm:space-y-4 lg:space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
-        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">Supplier Dashboard</h1>
+        <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-gray-900">Supplier Dashboard</h1>
         <Button
           onClick={() => setShowPostForm(true)}
           className="bg-orange-600 hover:bg-orange-700 text-white w-full sm:w-auto text-sm sm:text-base"
@@ -119,54 +119,54 @@ const SupplierTabs = ({
             value="my-parts" 
             className="flex flex-col items-center justify-center gap-1 text-xs px-1 py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground"
           >
-            <Package className="h-4 w-4" />
-            <span className="text-[10px] leading-tight">My Parts</span>
+            <Package className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="text-[9px] sm:text-[10px] leading-tight">My Parts</span>
             <TabCountBadge count={partsCount} />
           </TabsTrigger>
           <TabsTrigger 
             value="offers" 
             className="flex flex-col items-center justify-center gap-1 text-xs px-1 py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground"
           >
-            <Star className="h-4 w-4" />
-            <span className="text-[10px] leading-tight">Offers</span>
+            <Star className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="text-[9px] sm:text-[10px] leading-tight">Offers</span>
             <TabCountBadge count={offers.length} />
           </TabsTrigger>
           <TabsTrigger 
             value="requests" 
             className="flex flex-col items-center justify-center gap-1 text-xs px-1 py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground"
           >
-            <Settings className="h-4 w-4" />
-            <span className="text-[10px] leading-tight">Requests</span>
+            <Settings className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="text-[9px] sm:text-[10px] leading-tight">Requests</span>
             <TabCountBadge count={requests.length} />
           </TabsTrigger>
           <TabsTrigger 
             value="subscription" 
             className="flex flex-col items-center justify-center gap-1 text-xs px-1 py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground"
           >
-            <CreditCard className="h-4 w-4" />
-            <span className="text-[10px] leading-tight">Sub</span>
+            <CreditCard className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="text-[9px] sm:text-[10px] leading-tight">Sub</span>
           </TabsTrigger>
           <TabsTrigger 
             value="profile" 
             className="flex flex-col items-center justify-center gap-1 text-xs px-1 py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground"
           >
-            <Settings className="h-4 w-4" />
-            <span className="text-[10px] leading-tight">Profile</span>
+            <Settings className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="text-[9px] sm:text-[10px] leading-tight">Profile</span>
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="my-parts" className="space-y-4">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-            <h3 className="font-semibold text-blue-900 mb-1">My Parts</h3>
-            <p className="text-sm text-blue-700">All the car parts you have listed for sale as a supplier. Use this to manage, edit, or remove your own listings (your inventory).</p>
+        <TabsContent value="my-parts" className="space-y-3 sm:space-y-4">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4 mb-3 sm:mb-4">
+            <h3 className="font-semibold text-blue-900 mb-1 text-sm sm:text-base">My Parts</h3>
+            <p className="text-xs sm:text-sm text-blue-700">All the car parts you have listed for sale as a supplier. Use this to manage, edit, or remove your own listings (your inventory).</p>
           </div>
           <MyPartsTab onRefresh={() => {}} />
         </TabsContent>
 
-        <TabsContent value="offers" className="space-y-4">
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
-            <h3 className="font-semibold text-green-900 mb-1">Offers</h3>
-            <p className="text-sm text-green-700">All the offers you have made to buyers who requested parts. Use this to track your price quotes, check if a buyer has accepted, and follow up on deals.</p>
+        <TabsContent value="offers" className="space-y-3 sm:space-y-4">
+          <div className="bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4 mb-3 sm:mb-4">
+            <h3 className="font-semibold text-green-900 mb-1 text-sm sm:text-base">Offers</h3>
+            <p className="text-xs sm:text-sm text-green-700">All the offers you have made to buyers who requested parts. Use this to track your price quotes, check if a buyer has accepted, and follow up on deals.</p>
           </div>
           <OffersTab 
             offers={offers}
@@ -175,10 +175,10 @@ const SupplierTabs = ({
           />
         </TabsContent>
 
-        <TabsContent value="requests" className="space-y-4">
-          <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4">
-            <h3 className="font-semibold text-orange-900 mb-1">Requests</h3>
-            <p className="text-sm text-orange-700">All the requests from buyers for parts (open market demand). Use this to see what buyers are looking for, and decide if you want to respond with an offer.</p>
+        <TabsContent value="requests" className="space-y-3 sm:space-y-4">
+          <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 sm:p-4 mb-3 sm:mb-4">
+            <h3 className="font-semibold text-orange-900 mb-1 text-sm sm:text-base">Requests</h3>
+            <p className="text-xs sm:text-sm text-orange-700">All the requests from buyers for parts (open market demand). Use this to see what buyers are looking for, and decide if you want to respond with an offer.</p>
           </div>
           <RequestsTab 
             requests={requests}
@@ -189,11 +189,11 @@ const SupplierTabs = ({
           />
         </TabsContent>
 
-        <TabsContent value="subscription" className="space-y-4">
+        <TabsContent value="subscription" className="space-y-3 sm:space-y-4">
           <SubscriptionManager sellerId="current-user-id" />
         </TabsContent>
 
-        <TabsContent value="profile" className="space-y-4">
+        <TabsContent value="profile" className="space-y-3 sm:space-y-4">
           <SellerProfileManagement />
         </TabsContent>
       </Tabs>
@@ -202,3 +202,8 @@ const SupplierTabs = ({
 };
 
 export default SupplierTabs;
+
+// Note: This file has grown quite large (200+ lines). Consider refactoring into smaller components:
+// - SupplierTabsList component for the tab navigation
+// - Individual tab content components (MyPartsContent, OffersContent, etc.)
+// - This would improve maintainability and readability

@@ -76,16 +76,20 @@ const AnalyticsCharts = ({
   }));
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <Card className="p-6 bg-gradient-to-br from-white/90 to-blue-50/30">
-        <h3 className="text-lg font-semibold mb-4 bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+      <Card className="p-3 sm:p-4 lg:p-6 bg-gradient-to-br from-white/90 to-blue-50/30">
+        <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">
           Daily New Signups
         </h3>
-        <ChartContainer config={chartConfig} className="h-[300px]">
+        <ChartContainer config={chartConfig} className="h-[200px] sm:h-[250px] lg:h-[300px]">
           <LineChart data={signupsChartData}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis />
+            <XAxis 
+              dataKey="date" 
+              fontSize={12}
+              interval="preserveStartEnd"
+            />
+            <YAxis fontSize={12} />
             <ChartTooltip content={<ChartTooltipContent />} />
             <Line
               type="monotone"
@@ -98,55 +102,63 @@ const AnalyticsCharts = ({
         </ChartContainer>
       </Card>
 
-      <Card className="p-6 bg-gradient-to-br from-white/90 to-purple-50/30">
-        <h3 className="text-lg font-semibold mb-4 bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">
+      <Card className="p-3 sm:p-4 lg:p-6 bg-gradient-to-br from-white/90 to-purple-50/30">
+        <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">
           Daily New Listings
         </h3>
-        <ChartContainer config={chartConfig} className="h-[300px]">
+        <ChartContainer config={chartConfig} className="h-[200px] sm:h-[250px] lg:h-[300px]">
           <BarChart data={listingsChartData}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis />
+            <XAxis 
+              dataKey="date" 
+              fontSize={12}
+              interval="preserveStartEnd"
+            />
+            <YAxis fontSize={12} />
             <ChartTooltip content={<ChartTooltipContent />} />
             <Bar dataKey="listings" fill="var(--color-listings)" />
           </BarChart>
         </ChartContainer>
       </Card>
 
-      <Card className="p-6 bg-gradient-to-br from-white/90 to-green-50/30">
-        <h3 className="text-lg font-semibold mb-4 bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">
+      <Card className="p-3 sm:p-4 lg:p-6 bg-gradient-to-br from-white/90 to-green-50/30">
+        <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">
           Transaction Trends
         </h3>
-        <ChartContainer config={chartConfig} className="h-[300px]">
+        <ChartContainer config={chartConfig} className="h-[200px] sm:h-[250px] lg:h-[300px]">
           <BarChart data={transactionChartData}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis />
+            <XAxis 
+              dataKey="date" 
+              fontSize={12}
+              interval="preserveStartEnd"
+            />
+            <YAxis fontSize={12} />
             <ChartTooltip content={<ChartTooltipContent />} />
             <Bar dataKey="transactions" fill="var(--color-transactions)" />
           </BarChart>
         </ChartContainer>
       </Card>
 
-      <Card className="p-6 bg-gradient-to-br from-white/90 to-yellow-50/30">
-        <h3 className="text-lg font-semibold mb-4 bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">
+      <Card className="p-3 sm:p-4 lg:p-6 bg-gradient-to-br from-white/90 to-yellow-50/30">
+        <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">
           Top 5 Recent Parts
         </h3>
-        <div className="space-y-3">
+        <div className="space-y-2 sm:space-y-3">
           {productMetrics.topRecentParts.length > 0 ? (
             productMetrics.topRecentParts.map((part, index) => (
-              <div key={index} className="flex items-center justify-between p-3 bg-white/50 rounded-lg">
-                <div>
-                  <p className="font-medium text-sm">{part.title}</p>
-                  <p className="text-xs text-gray-600">by {part.supplier}</p>
+              <div key={index} className="flex items-center justify-between p-2 sm:p-3 bg-white/50 rounded-lg">
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium text-xs sm:text-sm truncate">{part.title}</p>
+                  <p className="text-xs text-gray-600 truncate">by {part.supplier}</p>
                 </div>
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-gray-500 ml-2 flex-shrink-0">
                   {new Date(part.created_at).toLocaleDateString()}
                 </div>
               </div>
             ))
           ) : (
-            <p className="text-gray-500 text-sm">No parts listed yet</p>
+            <p className="text-gray-500 text-xs sm:text-sm">No parts listed yet</p>
           )}
         </div>
       </Card>

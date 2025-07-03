@@ -290,3 +290,8 @@ const BuyerProfileManagement = () => {
 };
 
 export default BuyerProfileManagement;
+
+// Note: This file has grown quite large (300+ lines). Consider refactoring into smaller components:
+// - ProfileForm component for the form fields
+// - ProfileActions component for the buttons and delete dialog
+// - This would improve maintainability and readability
