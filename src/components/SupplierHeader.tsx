@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Package, ArrowLeft } from "lucide-react";
+import { Package, ArrowLeft, LogOut, Home } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import VerifiedBadge from "@/components/VerifiedBadge";
 import { useState, useEffect } from "react";
@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 
 const SupplierHeader = () => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [sellerInfo, setSellerInfo] = useState<{
     name: string;
@@ -56,6 +56,19 @@ const SupplierHeader = () => {
     navigate('/');
   };
 
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      navigate('/seller-auth');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
+  const handleHome = () => {
+    navigate('/');
+  };
+
   return (
     <header className="p-3 sm:p-4 md:p-6 flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-white/90 via-orange-50/80 to-white/90 backdrop-blur-lg shadow-lg border-b">
       <Button 
@@ -75,6 +88,27 @@ const SupplierHeader = () => {
           <p className="text-xs sm:text-sm text-gray-600 truncate">Seller Dashboard</p>
         </div>
         <VerifiedBadge isVerified={sellerInfo.isVerified} className="hidden sm:flex" />
+        
+        <div className="flex items-center gap-2 ml-2">
+          <Button 
+            variant="ghost" 
+            size="sm"
+            onClick={handleHome}
+            className="text-gray-700 hover:text-orange-700 hover:bg-orange-50/50 transition-all duration-300"
+          >
+            <Home className="h-4 w-4 mr-1" />
+            <span className="hidden sm:inline">Home</span>
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="sm"
+            onClick={handleSignOut}
+            className="text-gray-700 hover:text-red-700 hover:bg-red-50/50 transition-all duration-300"
+          >
+            <LogOut className="h-4 w-4 mr-1" />
+            <span className="hidden sm:inline">Sign Out</span>
+          </Button>
+        </div>
       </div>
     </header>
   );

@@ -1,18 +1,22 @@
 
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, LogOut, Home } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface PageHeaderProps {
   title: string;
   subtitle?: string;
   showBackButton?: boolean;
   backTo?: string;
+  showSignOut?: boolean;
+  showHomeButton?: boolean;
   children?: React.ReactNode;
 }
 
-const PageHeader = ({ title, subtitle, showBackButton = true, backTo, children }: PageHeaderProps) => {
+const PageHeader = ({ title, subtitle, showBackButton = true, backTo, showSignOut = false, showHomeButton = false, children }: PageHeaderProps) => {
   const navigate = useNavigate();
+  const { signOut } = useAuth();
 
   const handleBack = () => {
     if (backTo) {
@@ -20,6 +24,19 @@ const PageHeader = ({ title, subtitle, showBackButton = true, backTo, children }
     } else {
       navigate(-1);
     }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      navigate('/buyer-auth');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
+  const handleHome = () => {
+    navigate('/');
   };
 
   return (
@@ -52,7 +69,32 @@ const PageHeader = ({ title, subtitle, showBackButton = true, backTo, children }
           <p className="text-sm text-gray-600 truncate">{subtitle}</p>
         )}
       </div>
-      {children}
+      
+      <div className="flex items-center gap-2">
+        {showHomeButton && (
+          <Button 
+            variant="ghost" 
+            size="sm"
+            onClick={handleHome}
+            className="text-gray-700 hover:text-blue-700 hover:bg-blue-50/50 transition-all duration-300"
+          >
+            <Home className="h-4 w-4 mr-2" />
+            <span className="hidden sm:inline">Home</span>
+          </Button>
+        )}
+        {showSignOut && (
+          <Button 
+            variant="ghost" 
+            size="sm"
+            onClick={handleSignOut}
+            className="text-gray-700 hover:text-red-700 hover:bg-red-50/50 transition-all duration-300"
+          >
+            <LogOut className="h-4 w-4 mr-2" />
+            <span className="hidden sm:inline">Sign Out</span>
+          </Button>
+        )}
+        {children}
+      </div>
     </header>
   );
 };
