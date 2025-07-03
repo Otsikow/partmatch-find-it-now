@@ -12,11 +12,13 @@ const RequestHeader = () => {
         </Button>
       </Link>
       <div className="flex items-center gap-1 sm:gap-2 md:gap-3 min-w-0 flex-1">
-        <img 
-          src="/lovable-uploads/partmatch-hero-logo.png" 
-          alt="PartMatch Logo" 
-          className="h-5 w-auto sm:h-6 md:h-8 flex-shrink-0"
-        />
+        <Link to="/" className="hover:opacity-80 transition-opacity flex-shrink-0">
+          <img 
+            src="/lovable-uploads/partmatch-hero-logo.png" 
+            alt="PartMatch Logo" 
+            className="h-5 w-auto sm:h-6 md:h-8 flex-shrink-0"
+          />
+        </Link>
         <h1 className="text-base sm:text-lg md:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent truncate">Request a Part</h1>
       </div>
     </header>

@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, LogOut, Home } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
 interface PageHeaderProps {
@@ -54,13 +54,13 @@ const PageHeader = ({ title, subtitle, showBackButton = false, backTo, showSignO
       )}
       
       {/* Logo */}
-      <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+      <Link to="/" className="flex items-center gap-2 sm:gap-3 flex-shrink-0 hover:opacity-80 transition-opacity">
         <img 
           src="/lovable-uploads/partmatch-hero-logo.png" 
           alt="PartMatch Logo" 
           className="h-6 w-auto sm:h-8"
         />
-      </div>
+      </Link>
       
       <div className="flex flex-col min-w-0 flex-1">
         <h1 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent truncate">

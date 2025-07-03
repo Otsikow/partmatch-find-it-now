@@ -17,11 +17,13 @@ const AdminAuthHeader = ({ isPasswordReset, showPasswordReset }: AdminAuthHeader
         </Button>
       </Link>
       <div className="flex items-center gap-2 sm:gap-3">
-        <img 
-          src="/lovable-uploads/partmatch-hero-logo.png" 
-          alt="PartMatch Logo" 
-          className="h-6 w-auto sm:h-8"
-        />
+        <Link to="/" className="hover:opacity-80 transition-opacity">
+          <img 
+            src="/lovable-uploads/partmatch-hero-logo.png" 
+            alt="PartMatch Logo" 
+            className="h-6 w-auto sm:h-8"
+          />
+        </Link>
         <h1 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-purple-700 to-indigo-700 bg-clip-text text-transparent">
           Admin {isPasswordReset ? 'Password Reset' : showPasswordReset ? 'Password Reset' : 'Sign In'}
         </h1>
