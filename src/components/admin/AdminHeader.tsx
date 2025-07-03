@@ -1,5 +1,5 @@
 
-import { LogOut } from "lucide-react";
+import { LogOut, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
@@ -34,7 +34,7 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3 sm:gap-4">
-            <Link to="/" className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity">
+            <div className="flex items-center gap-2 sm:gap-3">
               <img 
                 src="/lovable-uploads/partmatch-hero-logo.png" 
                 alt="PartMatch Logo" 
@@ -48,7 +48,19 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
                   Welcome back, {displayName}
                 </p>
               </div>
-            </Link>
+            </div>
+            
+            {/* Home Icon Button */}
+            <Button 
+              onClick={handleGoBack}
+              variant="ghost" 
+              size="sm"
+              className="text-white hover:bg-white/20 transition-all duration-300 font-inter ml-2"
+              title="Go to Home Page"
+            >
+              <Home className="h-4 w-4 mr-1 sm:mr-2" />
+              <span className="text-xs sm:text-sm">Home</span>
+            </Button>
           </div>
           
           <div className="flex items-center gap-3">
