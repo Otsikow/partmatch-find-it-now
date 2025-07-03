@@ -1,8 +1,25 @@
 
 import { MapPin, Search, Package } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "@/hooks/use-toast";
 
 const FeaturesSection = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSellPartsClick = (e: React.MouseEvent) => {
+    if (!user) {
+      e.preventDefault();
+      toast({
+        title: "Sign In Required",
+        description: "Please sign in to sell car parts.",
+        variant: "destructive"
+      });
+      navigate('/seller-auth');
+    }
+  };
+
   return (
     <div className="py-16 bg-white">
       <div className="container mx-auto px-4">
@@ -44,15 +61,27 @@ const FeaturesSection = () => {
           </Link>
 
           {/* Sell Car Parts */}
-          <Link to="/seller-auth" className="block bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
-            <div className="w-16 h-16 bg-gradient-to-r from-green-600 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Package className="h-8 w-8 text-white" />
+          {user ? (
+            <Link to="/supplier-dashboard" className="block bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
+              <div className="w-16 h-16 bg-gradient-to-r from-green-600 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Package className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">Sell Car Parts</h3>
+              <p className="text-gray-600 text-center leading-relaxed">
+                List your inventory and reach customers across Ghana. Simple, secure, and profitable.
+              </p>
+            </Link>
+          ) : (
+            <div className="block bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100 cursor-pointer" onClick={handleSellPartsClick}>
+              <div className="w-16 h-16 bg-gradient-to-r from-green-600 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Package className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">Sell Car Parts</h3>
+              <p className="text-gray-600 text-center leading-relaxed">
+                List your inventory and reach customers across Ghana. Simple, secure, and profitable.
+              </p>
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">Sell Car Parts</h3>
-            <p className="text-gray-600 text-center leading-relaxed">
-              List your inventory and reach customers across Ghana. Simple, secure, and profitable.
-            </p>
-          </Link>
+          )}
         </div>
       </div>
     </div>

@@ -21,6 +21,18 @@ const HeroSection = () => {
     }
   };
 
+  const handleSellPartsClick = (e: React.MouseEvent) => {
+    if (!user) {
+      e.preventDefault();
+      toast({
+        title: "Sign In Required",
+        description: "Please sign in to sell car parts.",
+        variant: "destructive"
+      });
+      navigate('/seller-auth');
+    }
+  };
+
   return (
     <div className="relative min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100">
       <div className="container mx-auto px-4 text-center">
@@ -70,12 +82,23 @@ const HeroSection = () => {
             </Button>
           </Link>
 
-          <Link to="/seller-auth" className="w-full sm:w-auto">
-            <Button size="lg" className="w-full bg-gradient-to-r from-green-600 to-red-600 hover:from-green-700 hover:to-red-700 text-white shadow-lg font-semibold">
+          {user ? (
+            <Link to="/supplier-dashboard" className="w-full sm:w-auto">
+              <Button size="lg" className="w-full bg-gradient-to-r from-green-600 to-red-600 hover:from-green-700 hover:to-red-700 text-white shadow-lg font-semibold">
+                <Package className="mr-2 h-5 w-5" />
+                Sell Car Parts
+              </Button>
+            </Link>
+          ) : (
+            <Button 
+              size="lg" 
+              className="w-full sm:w-auto bg-gradient-to-r from-green-600 to-red-600 hover:from-green-700 hover:to-red-700 text-white shadow-lg font-semibold" 
+              onClick={handleSellPartsClick}
+            >
               <Package className="mr-2 h-5 w-5" />
               Sell Car Parts
             </Button>
-          </Link>
+          )}
         </div>
       </div>
     </div>
