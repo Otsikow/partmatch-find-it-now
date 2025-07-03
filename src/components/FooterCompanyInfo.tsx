@@ -14,9 +14,12 @@ const FooterCompanyInfo = () => {
         Your trusted partner for automotive parts. Connecting customers with verified local sellers for quality parts and exceptional service.
       </p>
       <div className="space-y-2">
-        <div className="flex items-center space-x-2 text-sm text-gray-300">
-          <MapPin className="h-4 w-4 text-orange-500 flex-shrink-0" />
-          <span>123 Auto Parts Street, Motor City, MC 12345</span>
+        <div className="flex items-start space-x-2 text-sm text-gray-300">
+          <MapPin className="h-4 w-4 text-orange-500 flex-shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <div>AK-798-9707, Ampayo, Kumasi, Ghana</div>
+            <div>Office 10, Seaview Business Centre, Redcar, UK TS10 1AZ</div>
+          </div>
         </div>
         <div className="flex items-center space-x-2 text-sm text-gray-300">
           <Phone className="h-4 w-4 text-orange-500 flex-shrink-0" />
