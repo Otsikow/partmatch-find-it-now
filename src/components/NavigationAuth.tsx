@@ -30,11 +30,6 @@ const NavigationAuth = () => {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
       
-      toast({
-        title: "Signed out successfully",
-        description: "You have been logged out of your account.",
-      });
-      
       navigate('/');
     } catch (error) {
       console.error('Error signing out:', error);
