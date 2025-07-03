@@ -97,7 +97,7 @@ const SearchControls = ({
               variant={filters.make === '' ? 'default' : 'outline'}
               size="sm"
               onClick={() => handleMakeChange('')}
-              className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 flex-shrink-0 ${filters.make === '' ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
+              className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 flex-shrink-0 min-h-[44px] ${filters.make === '' ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
             >
               All Makes
             </Button>
@@ -107,7 +107,7 @@ const SearchControls = ({
                 variant={filters.make === make ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => handleMakeChange(make)}
-                className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 flex-shrink-0 ${filters.make === make ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
+                className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 flex-shrink-0 min-h-[44px] ${filters.make === make ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
               >
                 {make}
               </Button>
@@ -124,7 +124,7 @@ const SearchControls = ({
                 variant={filters.model === '' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => handleModelChange('')}
-                className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 ${filters.model === '' ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
+                className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 min-h-[44px] ${filters.model === '' ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
               >
                 All Models
               </Button>
@@ -134,7 +134,7 @@ const SearchControls = ({
                   variant={filters.model === model ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => handleModelChange(model)}
-                  className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 ${filters.model === model ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
+                  className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 min-h-[44px] ${filters.model === model ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
                 >
                   {model}
                 </Button>
@@ -152,7 +152,7 @@ const SearchControls = ({
                 variant={filters.year === '' ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => handleYearChange('')}
-                className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 ${filters.year === '' ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
+                className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 min-h-[44px] ${filters.year === '' ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
               >
                 All Years
               </Button>
@@ -162,7 +162,7 @@ const SearchControls = ({
                   variant={filters.year === year ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => handleYearChange(year)}
-                  className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 ${filters.year === year ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
+                  className={`text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 sm:py-2 min-h-[44px] ${filters.year === year ? "bg-gradient-to-r from-emerald-600 to-green-700" : "border-emerald-200 hover:bg-emerald-50"}`}
                 >
                   {year}
                 </Button>

@@ -111,29 +111,29 @@ const SupplierTabs = ({
       </div>
 
       <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="my-parts" className="flex items-center gap-2">
+        <TabsList className="grid w-full grid-cols-2 tablet:grid-cols-3 lg:grid-cols-5 gap-1">
+          <TabsTrigger value="my-parts" className="flex items-center justify-center tablet:justify-start gap-2 min-h-[44px] px-2 tablet:px-4">
             <Package className="h-4 w-4" />
-            My Parts
+            <span className="hidden xs:inline">My Parts</span>
             <TabCountBadge count={partsCount} />
           </TabsTrigger>
-          <TabsTrigger value="offers" className="flex items-center gap-2">
+          <TabsTrigger value="offers" className="flex items-center justify-center tablet:justify-start gap-2 min-h-[44px] px-2 tablet:px-4">
             <Star className="h-4 w-4" />
-            Offers
+            <span className="hidden xs:inline">Offers</span>
             <TabCountBadge count={offers.length} />
           </TabsTrigger>
-          <TabsTrigger value="requests" className="flex items-center gap-2">
+          <TabsTrigger value="requests" className="flex items-center justify-center tablet:justify-start gap-2 min-h-[44px] px-2 tablet:px-4">
             <Settings className="h-4 w-4" />
-            Requests
+            <span className="hidden tablet:inline">Requests</span>
             <TabCountBadge count={requests.length} />
           </TabsTrigger>
-          <TabsTrigger value="subscription" className="flex items-center gap-2">
+          <TabsTrigger value="subscription" className="flex items-center justify-center tablet:justify-start gap-2 min-h-[44px] px-2 tablet:px-4">
             <CreditCard className="h-4 w-4" />
-            Subscription
+            <span className="hidden tablet:inline">Subscription</span>
           </TabsTrigger>
-          <TabsTrigger value="profile" className="flex items-center gap-2">
+          <TabsTrigger value="profile" className="flex items-center justify-center tablet:justify-start gap-2 min-h-[44px] px-2 tablet:px-4">
             <Settings className="h-4 w-4" />
-            Profile
+            <span className="hidden tablet:inline">Profile</span>
           </TabsTrigger>
         </TabsList>
 

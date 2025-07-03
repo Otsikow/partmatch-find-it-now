@@ -16,11 +16,11 @@ const NavigationMobile = ({ isOpen, onClose }: NavigationMobileProps) => {
   if (!isOpen) return null;
 
   return (
-    <div className="md:hidden">
+    <div className="lg:hidden">
       <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
         <Link
           to="/"
-          className="flex flex-col items-center gap-2 px-3 py-3 text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+          className="flex flex-col items-center gap-2 px-3 py-3 text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors min-h-[44px]"
           onClick={onClose}
         >
           <Home className="h-6 w-6" />
@@ -28,7 +28,7 @@ const NavigationMobile = ({ isOpen, onClose }: NavigationMobileProps) => {
         </Link>
         <Link
           to="/search-parts"
-          className="flex flex-col items-center gap-2 px-3 py-3 text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+          className="flex flex-col items-center gap-2 px-3 py-3 text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors min-h-[44px]"
           onClick={onClose}
         >
           <Search className="h-6 w-6" />
@@ -36,7 +36,7 @@ const NavigationMobile = ({ isOpen, onClose }: NavigationMobileProps) => {
         </Link>
         <Link
           to="/request-part"
-          className="flex flex-col items-center gap-2 px-3 py-3 text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+          className="flex flex-col items-center gap-2 px-3 py-3 text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors min-h-[44px]"
           onClick={onClose}
         >
           <Plus className="h-6 w-6" />
@@ -45,7 +45,7 @@ const NavigationMobile = ({ isOpen, onClose }: NavigationMobileProps) => {
         {user && (
           <Link
             to="/chat"
-            className="flex flex-col items-center gap-2 px-3 py-3 text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors relative"
+            className="flex flex-col items-center gap-2 px-3 py-3 text-base font-medium text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors relative min-h-[44px]"
             onClick={onClose}
           >
             <MessageCircle className="h-6 w-6" />

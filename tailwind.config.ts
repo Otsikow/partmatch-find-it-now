@@ -25,6 +25,7 @@ export default {
 		extend: {
 			screens: {
 				'xs': '475px',
+				'tablet': '768px',
 			},
 			fontFamily: {
 				'playfair': ['Playfair Display', 'serif'],

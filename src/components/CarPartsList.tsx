@@ -36,7 +36,7 @@ interface CarPartsListProps {
 const CarPartsList = ({ parts, loading, error }: CarPartsListProps) => {
   if (loading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-5 lg:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 tablet:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-5 lg:gap-6">
         {[...Array(8)].map((_, i) => (
           <div key={i} className="animate-pulse">
             <div className="bg-gray-200 aspect-video rounded-t-lg"></div>
@@ -78,7 +78,7 @@ const CarPartsList = ({ parts, loading, error }: CarPartsListProps) => {
         </h2>
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-5 lg:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 tablet:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-5 lg:gap-6">
         {parts.map((part) => (
           <CarPartCardWithChat key={part.id} part={part} />
         ))}
