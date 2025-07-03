@@ -239,15 +239,15 @@ const MyPartsTab = ({ onRefresh }: MyPartsTabProps) => {
             </div>
           )}
 
-          <div className="flex gap-2 pt-4 border-t">
+          <div className="grid grid-cols-2 sm:flex gap-2 pt-4 border-t">
             <Button
               variant="outline"
               size="sm"
               onClick={() => updatePartStatus(part.id, part.status === 'hidden' ? 'available' : 'hidden')}
-              className="flex items-center gap-1"
+              className="flex items-center justify-center gap-1 text-xs sm:text-sm"
             >
-              {part.status === 'hidden' ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
-              {part.status === 'hidden' ? 'Show' : 'Hide'}
+              {part.status === 'hidden' ? <Eye className="h-3 w-3 sm:h-4 sm:w-4" /> : <EyeOff className="h-3 w-3 sm:h-4 sm:w-4" />}
+              <span className="hidden xs:inline">{part.status === 'hidden' ? 'Show' : 'Hide'}</span>
             </Button>
             <Button
               variant="outline"
@@ -255,27 +255,27 @@ const MyPartsTab = ({ onRefresh }: MyPartsTabProps) => {
               onClick={() => setSelectedPartForBoost(
                 selectedPartForBoost === part.id ? null : part.id
               )}
-              className="flex items-center gap-1"
+              className="flex items-center justify-center gap-1 text-xs sm:text-sm"
             >
-              <Crown className="h-4 w-4" />
-              {selectedPartForBoost === part.id ? 'Hide Options' : 'Promote'}
+              <Crown className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="hidden xs:inline">{selectedPartForBoost === part.id ? 'Hide' : 'Promote'}</span>
             </Button>
             <Button
               variant="outline"
               size="sm"
-              className="flex items-center gap-1"
+              className="flex items-center justify-center gap-1 text-xs sm:text-sm"
             >
-              <Edit className="h-4 w-4" />
-              Edit
+              <Edit className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="hidden xs:inline">Edit</span>
             </Button>
             <Button
               variant="destructive"
               size="sm"
               onClick={() => deletePart(part.id)}
-              className="flex items-center gap-1"
+              className="flex items-center justify-center gap-1 text-xs sm:text-sm"
             >
-              <Trash2 className="h-4 w-4" />
-              Delete
+              <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span className="hidden xs:inline">Delete</span>
             </Button>
           </div>
         </Card>
