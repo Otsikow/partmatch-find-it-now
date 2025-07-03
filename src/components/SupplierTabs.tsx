@@ -114,31 +114,44 @@ const SupplierTabs = ({
       </div>
 
       <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
-        <TabsList className="grid w-full grid-cols-3 sm:grid-cols-5 gap-1 sm:gap-0 h-auto sm:h-10 p-1">
-          <TabsTrigger value="my-parts" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5">
-            <Package className="h-3 w-3 sm:h-4 sm:w-4" />
-            <span className="hidden xs:inline">My Parts</span>
-            <span className="xs:hidden">Parts</span>
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-5 gap-1 h-auto p-1 bg-muted">
+          <TabsTrigger 
+            value="my-parts" 
+            className="flex flex-col items-center justify-center gap-1 text-xs px-1 py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground"
+          >
+            <Package className="h-4 w-4" />
+            <span className="text-[10px] leading-tight">My Parts</span>
             <TabCountBadge count={partsCount} />
           </TabsTrigger>
-          <TabsTrigger value="offers" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5">
-            <Star className="h-3 w-3 sm:h-4 sm:w-4" />
-            <span>Offers</span>
+          <TabsTrigger 
+            value="offers" 
+            className="flex flex-col items-center justify-center gap-1 text-xs px-1 py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground"
+          >
+            <Star className="h-4 w-4" />
+            <span className="text-[10px] leading-tight">Offers</span>
             <TabCountBadge count={offers.length} />
           </TabsTrigger>
-          <TabsTrigger value="requests" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5">
-            <Settings className="h-3 w-3 sm:h-4 sm:w-4" />
-            <span>Requests</span>
+          <TabsTrigger 
+            value="requests" 
+            className="flex flex-col items-center justify-center gap-1 text-xs px-1 py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground"
+          >
+            <Settings className="h-4 w-4" />
+            <span className="text-[10px] leading-tight">Requests</span>
             <TabCountBadge count={requests.length} />
           </TabsTrigger>
-          <TabsTrigger value="subscription" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 col-span-1 sm:col-span-1">
-            <CreditCard className="h-3 w-3 sm:h-4 sm:w-4" />
-            <span className="hidden sm:inline">Subscription</span>
-            <span className="sm:hidden">Sub</span>
+          <TabsTrigger 
+            value="subscription" 
+            className="flex flex-col items-center justify-center gap-1 text-xs px-1 py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground"
+          >
+            <CreditCard className="h-4 w-4" />
+            <span className="text-[10px] leading-tight">Sub</span>
           </TabsTrigger>
-          <TabsTrigger value="profile" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 col-span-2 sm:col-span-1">
-            <Settings className="h-3 w-3 sm:h-4 sm:w-4" />
-            <span>Profile</span>
+          <TabsTrigger 
+            value="profile" 
+            className="flex flex-col items-center justify-center gap-1 text-xs px-1 py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground"
+          >
+            <Settings className="h-4 w-4" />
+            <span className="text-[10px] leading-tight">Profile</span>
           </TabsTrigger>
         </TabsList>
 
