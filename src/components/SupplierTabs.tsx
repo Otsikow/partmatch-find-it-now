@@ -141,10 +141,18 @@ const SupplierTabs = ({
         </TabsList>
 
         <TabsContent value="my-parts" className="space-y-4">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+            <h3 className="font-semibold text-blue-900 mb-1">My Parts</h3>
+            <p className="text-sm text-blue-700">All the car parts you have listed for sale as a supplier. Use this to manage, edit, or remove your own listings (your inventory).</p>
+          </div>
           <MyPartsTab onRefresh={() => {}} />
         </TabsContent>
 
         <TabsContent value="offers" className="space-y-4">
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+            <h3 className="font-semibold text-green-900 mb-1">Offers</h3>
+            <p className="text-sm text-green-700">All the offers you have made to buyers who requested parts. Use this to track your price quotes, check if a buyer has accepted, and follow up on deals.</p>
+          </div>
           <OffersTab 
             offers={offers}
             onWhatsAppContact={onWhatsAppContact}
@@ -153,6 +161,10 @@ const SupplierTabs = ({
         </TabsContent>
 
         <TabsContent value="requests" className="space-y-4">
+          <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4">
+            <h3 className="font-semibold text-orange-900 mb-1">Requests</h3>
+            <p className="text-sm text-orange-700">All the requests from buyers for parts (open market demand). Use this to see what buyers are looking for, and decide if you want to respond with an offer.</p>
+          </div>
           <RequestsTab 
             requests={requests}
             onOfferSubmit={onOfferSubmit}
