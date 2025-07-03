@@ -87,10 +87,29 @@ const RequestCard = ({ request, onOfferSubmit, onWhatsAppContact, onChatContact,
             <p className="text-orange-600 font-semibold text-base sm:text-lg mt-1">
               Part: {request.part_needed}
             </p>
+            
+            {/* Image display */}
+            {(request as any).photo_url && (
+              <div className="mt-3">
+                <img 
+                  src={(request as any).photo_url} 
+                  alt={`${request.part_needed} for ${request.car_make} ${request.car_model}`}
+                  className="w-full max-w-xs h-32 object-cover rounded-lg border"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              </div>
+            )}
+            
+            {/* Description display */}
             {request.description && (
-              <p className="text-sm text-gray-600 mt-2 bg-gray-50 p-2 rounded">
-                {request.description}
-              </p>
+              <div className="mt-3">
+                <h4 className="text-sm font-medium text-gray-700 mb-1">Description:</h4>
+                <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg border">
+                  {request.description}
+                </p>
+              </div>
             )}
           </div>
           <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 flex-shrink-0">
