@@ -111,6 +111,8 @@ const BuyerDashboard = () => {
         subtitle={`Welcome back, ${displayName}`}
         showSignOut={true}
         showHomeButton={true}
+        showBackButton={true}
+        backTo="/"
       />
       
       <div className="flex h-[calc(100vh-4rem)]">
@@ -130,8 +132,9 @@ const BuyerDashboard = () => {
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Mobile Navigation */}
           <div className="lg:hidden bg-white border-b border-gray-200 p-4">
-            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+            <div className="grid grid-cols-3 sm:grid-cols-7 gap-2">
               {[
+                { id: 'home', label: 'Home', icon: '🏠', action: () => window.location.href = '/' },
                 { id: 'orders', label: 'Orders', icon: '📦' },
                 { id: 'messages', label: 'Messages', icon: '💬', badge: unreadMessages },
                 { id: 'saved-parts', label: 'Saved', icon: '❤️' },
@@ -141,9 +144,9 @@ const BuyerDashboard = () => {
               ].map((item) => (
                 <button
                   key={item.id}
-                  onClick={() => setActiveSection(item.id)}
+                  onClick={() => item.action ? item.action() : setActiveSection(item.id)}
                   className={`relative flex flex-col items-center justify-center p-3 rounded-lg transition-all duration-200 ${
-                    activeSection === item.id
+                    activeSection === item.id && !item.action
                       ? 'bg-blue-50 text-blue-700 border-2 border-blue-200'
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 border-2 border-transparent'
                   }`}
