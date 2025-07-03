@@ -57,10 +57,12 @@ const FooterNewsletter = () => {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => handleSocialClick("Facebook")}
+            asChild
             className="text-gray-300 hover:text-white hover:bg-slate-700 h-8 w-8"
           >
-            <Facebook className="h-4 w-4" />
+            <a href="https://www.facebook.com/profile.php?id=61578112765008&locale=en_GB" target="_blank" rel="noopener noreferrer">
+              <Facebook className="h-4 w-4" />
+            </a>
           </Button>
           <Button
             variant="ghost"
