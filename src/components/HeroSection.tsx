@@ -5,30 +5,49 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const HeroSection = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [userType, setUserType] = useState<string>('owner');
+  const [isLoadingUserType, setIsLoadingUserType] = useState(false);
 
   // Fetch user type for authenticated users
   useEffect(() => {
     const fetchUserType = async () => {
-      if (!user) return;
+      if (!user) {
+        setUserType('owner');
+        return;
+      }
 
+      setIsLoadingUserType(true);
       try {
-        const { supabase } = await import("@/integrations/supabase/client");
-        const { data: profile } = await supabase
+        console.log('HeroSection: Fetching user type for user:', user.id);
+        const { data: profile, error } = await supabase
           .from('profiles')
           .select('user_type')
           .eq('id', user.id)
           .single();
 
+        if (error) {
+          console.error('HeroSection: Error fetching profile:', error);
+          setUserType('owner'); // Default fallback
+          return;
+        }
+
         if (profile) {
-          setUserType(profile.user_type);
+          console.log('HeroSection: User type found:', profile.user_type);
+          setUserType(profile.user_type || 'owner');
+        } else {
+          console.log('HeroSection: No profile found, defaulting to owner');
+          setUserType('owner');
         }
       } catch (error) {
-        console.error('Error fetching user type:', error);
+        console.error('HeroSection: Error in fetchUserType:', error);
+        setUserType('owner'); // Default fallback
+      } finally {
+        setIsLoadingUserType(false);
       }
     };
 
@@ -36,6 +55,7 @@ const HeroSection = () => {
   }, [user]);
 
   const getDashboardRoute = () => {
+    console.log('HeroSection: Getting dashboard route for user type:', userType);
     switch (userType) {
       case 'admin': return '/admin';
       case 'supplier': return '/supplier-dashboard';
@@ -45,6 +65,7 @@ const HeroSection = () => {
   };
 
   const getDashboardLabel = () => {
+    console.log('HeroSection: Getting dashboard label for user type:', userType);
     switch (userType) {
       case 'admin': return 'Admin Dashboard';
       case 'supplier': return 'Seller Dashboard';
@@ -104,9 +125,13 @@ const HeroSection = () => {
           {/* Dashboard Button - Only for authenticated users */}
           {user && (
             <Link to={getDashboardRoute()} className="w-full">
-              <Button size="lg" className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg font-semibold">
+              <Button 
+                size="lg" 
+                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg font-semibold"
+                disabled={isLoadingUserType}
+              >
                 <LayoutDashboard className="mr-2 h-5 w-5" />
-                Go to {getDashboardLabel()}
+                {isLoadingUserType ? 'Loading...' : `Go to ${getDashboardLabel()}`}
               </Button>
             </Link>
           )}
