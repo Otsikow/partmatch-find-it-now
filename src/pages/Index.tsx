@@ -5,13 +5,11 @@ import HeroSection from "@/components/HeroSection";
 import StatsSection from "@/components/StatsSection";
 import CTASection from "@/components/CTASection";
 import FeaturesSection from "@/components/FeaturesSection";
+import HomeDashboard from "@/components/HomeDashboard";
 import { useAuth } from "@/contexts/AuthContext";
-import { useUserRedirect } from "@/hooks/useUserRedirect";
 
 const Index = () => {
   const { user, loading } = useAuth();
-  
-  useUserRedirect();
 
   if (loading) {
     return (
@@ -24,6 +22,20 @@ const Index = () => {
     );
   }
 
+  // If user is authenticated, show dashboard instead of landing page
+  if (user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 font-inter">
+        <Navigation />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <HomeDashboard />
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Show landing page for non-authenticated users
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 font-inter">
       <Navigation />
