@@ -109,8 +109,6 @@ const BuyerDashboard = () => {
       <PageHeader 
         title={`Buyer Dashboard - ${getSectionTitle()}`}
         subtitle={`Welcome back, ${displayName}`}
-        showBackButton={true}
-        backTo="/"
         showSignOut={true}
         showHomeButton={true}
       />
