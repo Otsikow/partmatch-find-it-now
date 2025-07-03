@@ -17,7 +17,7 @@ const RequestCardMetadata = ({ location, phone, createdAt }: RequestCardMetadata
   };
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 text-sm text-gray-600 mb-4">
+    <div className="flex flex-col xs:flex-row xs:items-center gap-2 xs:gap-3 sm:gap-6 text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">
       <div className="flex items-center gap-2">
         <MapPin className="h-4 w-4 text-orange-500" />
         <span className="font-medium">{location}</span>

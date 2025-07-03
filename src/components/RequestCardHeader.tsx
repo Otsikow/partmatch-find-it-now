@@ -19,10 +19,10 @@ const RequestCardHeader = ({ request }: RequestCardHeaderProps) => {
     <CardHeader className="pb-3">
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
         <div className="flex-1 min-w-0">
-          <CardTitle className="text-lg sm:text-xl font-bold text-gray-900 truncate">
+          <CardTitle className="text-base sm:text-lg lg:text-xl font-bold text-gray-900 break-words">
             {request.car_make} {request.car_model} {request.car_year}
           </CardTitle>
-          <p className="text-orange-600 font-semibold text-base sm:text-lg mt-1">
+          <p className="text-orange-600 font-semibold text-sm sm:text-base lg:text-lg mt-1 break-words">
             Part: {request.part_needed}
           </p>
           

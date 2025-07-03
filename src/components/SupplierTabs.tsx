@@ -101,12 +101,12 @@ const SupplierTabs = ({
   }
 
   return (
-    <div className="w-full space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-900">Supplier Dashboard</h1>
+    <div className="w-full space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">Supplier Dashboard</h1>
         <Button
           onClick={() => setShowPostForm(true)}
-          className="bg-orange-600 hover:bg-orange-700 text-white"
+          className="bg-orange-600 hover:bg-orange-700 text-white w-full sm:w-auto text-sm sm:text-base"
         >
           <Plus className="h-4 w-4 mr-2" />
           Post New Part
@@ -114,29 +114,31 @@ const SupplierTabs = ({
       </div>
 
       <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="my-parts" className="flex items-center gap-2">
-            <Package className="h-4 w-4" />
-            My Parts
+        <TabsList className="grid w-full grid-cols-3 sm:grid-cols-5 gap-1 sm:gap-0 h-auto sm:h-10 p-1">
+          <TabsTrigger value="my-parts" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5">
+            <Package className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="hidden xs:inline">My Parts</span>
+            <span className="xs:hidden">Parts</span>
             <TabCountBadge count={partsCount} />
           </TabsTrigger>
-          <TabsTrigger value="offers" className="flex items-center gap-2">
-            <Star className="h-4 w-4" />
-            Offers
+          <TabsTrigger value="offers" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5">
+            <Star className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span>Offers</span>
             <TabCountBadge count={offers.length} />
           </TabsTrigger>
-          <TabsTrigger value="requests" className="flex items-center gap-2">
-            <Settings className="h-4 w-4" />
-            Requests
+          <TabsTrigger value="requests" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5">
+            <Settings className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span>Requests</span>
             <TabCountBadge count={requests.length} />
           </TabsTrigger>
-          <TabsTrigger value="subscription" className="flex items-center gap-2">
-            <CreditCard className="h-4 w-4" />
-            Subscription
+          <TabsTrigger value="subscription" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 col-span-1 sm:col-span-1">
+            <CreditCard className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="hidden sm:inline">Subscription</span>
+            <span className="sm:hidden">Sub</span>
           </TabsTrigger>
-          <TabsTrigger value="profile" className="flex items-center gap-2">
-            <Settings className="h-4 w-4" />
-            Profile
+          <TabsTrigger value="profile" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 col-span-2 sm:col-span-1">
+            <Settings className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span>Profile</span>
           </TabsTrigger>
         </TabsList>
 

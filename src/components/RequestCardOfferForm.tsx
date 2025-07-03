@@ -54,9 +54,9 @@ const RequestCardOfferForm = ({
   };
 
   return (
-    <div className="space-y-4 p-4 bg-gradient-to-br from-orange-50 to-white rounded-lg border border-orange-200">
-      <h4 className="font-semibold text-orange-800">Submit Your Offer</h4>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div className="space-y-3 sm:space-y-4 p-3 sm:p-4 bg-gradient-to-br from-orange-50 to-white rounded-lg border border-orange-200">
+      <h4 className="font-semibold text-orange-800 text-sm sm:text-base">Submit Your Offer</h4>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         <div>
           <Label htmlFor={`price-${requestId}`} className="text-sm font-medium">Your Price (GHS) *</Label>
           <Input
