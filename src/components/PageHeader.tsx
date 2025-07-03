@@ -14,7 +14,7 @@ interface PageHeaderProps {
   children?: React.ReactNode;
 }
 
-const PageHeader = ({ title, subtitle, showBackButton = true, backTo, showSignOut = false, showHomeButton = false, children }: PageHeaderProps) => {
+const PageHeader = ({ title, subtitle, showBackButton = false, backTo, showSignOut = false, showHomeButton = false, children }: PageHeaderProps) => {
   const navigate = useNavigate();
   const { signOut } = useAuth();
 

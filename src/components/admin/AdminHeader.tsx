@@ -1,5 +1,5 @@
 
-import { LogOut, ArrowLeft } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -34,15 +34,6 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3 sm:gap-4">
-            <Button 
-              variant="ghost" 
-              size="sm"
-              onClick={handleGoBack}
-              className="text-white hover:bg-white/20 transition-all duration-300 p-2"
-            >
-              <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
-            </Button>
-            
             <div className="flex items-center gap-2 sm:gap-3">
               <img 
                 src="/lovable-uploads/partmatch-hero-logo.png" 
