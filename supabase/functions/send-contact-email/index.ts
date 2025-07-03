@@ -61,7 +61,7 @@ This email was sent from the PartMatch Ghana contact form.
   `.trim();
 
   const emailData = {
-    from: 'noreply@partmatchgh.com',
+    from: 'onboarding@resend.dev',
     to: 'support@partmatchgh.com',
     subject: `Contact Form: ${formData.subject}`,
     text: emailContent,
