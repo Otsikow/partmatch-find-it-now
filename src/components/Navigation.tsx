@@ -73,12 +73,10 @@ const Navigation = () => {
       </div>
 
       {/* Mobile Navigation */}
-      {showNavigationItems && (
-        <NavigationMobile 
-          isOpen={isMobileMenuOpen} 
-          onClose={() => setIsMobileMenuOpen(false)} 
-        />
-      )}
+      <NavigationMobile 
+        isOpen={isMobileMenuOpen} 
+        onClose={() => setIsMobileMenuOpen(false)} 
+      />
     </nav>
   );
 };
