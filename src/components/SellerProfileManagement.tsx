@@ -255,11 +255,11 @@ const SellerProfileManagement = () => {
             />
           </div>
 
-          <div className="flex justify-between pt-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:justify-between pt-4">
             <Button
               onClick={handleUpdateProfile}
               disabled={loading}
-              className="bg-blue-600 hover:bg-blue-700"
+              className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto order-2 sm:order-1"
             >
               <Save className="h-4 w-4 mr-2" />
               {loading ? 'Updating...' : 'Update Profile'}
@@ -267,7 +267,7 @@ const SellerProfileManagement = () => {
 
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="destructive" disabled={deleting}>
+                <Button variant="destructive" disabled={deleting} className="w-full sm:w-auto order-1 sm:order-2">
                   <Trash2 className="h-4 w-4 mr-2" />
                   Delete Account
                 </Button>
