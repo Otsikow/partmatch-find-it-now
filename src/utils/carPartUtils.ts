@@ -33,3 +33,7 @@ export const getImageUrl = (images?: string[]) => {
   }
   return null;
 };
+
+export const formatPrice = (price: number, currency: string) => {
+  return `${currency} ${price.toLocaleString()}`;
+};
