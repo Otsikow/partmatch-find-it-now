@@ -109,15 +109,15 @@ const UserCategoryTabs = ({
   return (
     <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
       <TabsList className={`grid w-full grid-cols-3 bg-gradient-to-r from-white/90 to-purple-50/50 backdrop-blur-sm ${isMobile ? 'mb-3' : 'mb-4'}`}>
-        <TabsTrigger value="sellers" className={`${isMobile ? 'text-xs px-1' : 'text-base'} font-inter`}>
+        <TabsTrigger value="sellers" className={`${isMobile ? 'text-xs px-1' : 'text-base'} font-inter min-h-[44px] flex items-center justify-center`}>
           <ShoppingCart className={`${isMobile ? 'h-3 w-3 mr-1' : 'h-4 w-4 mr-2'}`} />
           {isMobile ? `Sellers (${sellerUsers.length})` : `Sellers (${sellerUsers.length})`}
         </TabsTrigger>
-        <TabsTrigger value="buyers" className={`${isMobile ? 'text-xs px-1' : 'text-base'} font-inter`}>
+        <TabsTrigger value="buyers" className={`${isMobile ? 'text-xs px-1' : 'text-base'} font-inter min-h-[44px] flex items-center justify-center`}>
           <User className={`${isMobile ? 'h-3 w-3 mr-1' : 'h-4 w-4 mr-2'}`} />
           {isMobile ? `Buyers (${buyerUsers.length})` : `Buyers (${buyerUsers.length})`}
         </TabsTrigger>
-        <TabsTrigger value="admins" className={`${isMobile ? 'text-xs px-1' : 'text-base'} font-inter`}>
+        <TabsTrigger value="admins" className={`${isMobile ? 'text-xs px-1' : 'text-base'} font-inter min-h-[44px] flex items-center justify-center`}>
           <Shield className={`${isMobile ? 'h-3 w-3 mr-1' : 'h-4 w-4 mr-2'}`} />
           {isMobile ? `Admins (${adminUsers.length})` : `Admins (${adminUsers.length})`}
         </TabsTrigger>

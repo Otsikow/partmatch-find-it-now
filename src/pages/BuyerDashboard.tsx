@@ -130,7 +130,7 @@ const BuyerDashboard = () => {
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Mobile Navigation */}
           <div className="lg:hidden bg-white border-b border-gray-200 p-4">
-            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+            <div className="grid grid-cols-3 tablet:grid-cols-6 gap-3">
               {[
                 { id: 'orders', label: 'Orders', icon: '📦' },
                 { id: 'messages', label: 'Messages', icon: '💬', badge: unreadMessages },
@@ -142,7 +142,7 @@ const BuyerDashboard = () => {
                 <button
                   key={item.id}
                   onClick={() => setActiveSection(item.id)}
-                  className={`relative flex flex-col items-center justify-center p-3 rounded-lg transition-all duration-200 ${
+                  className={`relative flex flex-col items-center justify-center p-3 rounded-lg transition-all duration-200 min-h-[44px] ${
                     activeSection === item.id
                       ? 'bg-blue-50 text-blue-700 border-2 border-blue-200'
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 border-2 border-transparent'

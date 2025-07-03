@@ -45,7 +45,7 @@ const ChatInterface = ({ chatId, onBack }: ChatInterfaceProps) => {
   }
 
   return (
-    <Card className="h-full flex flex-col bg-white shadow-lg">
+    <Card className="h-full flex flex-col bg-white shadow-lg tablet:max-w-none">
       <ChatHeader otherUser={otherUser} onBack={onBack} />
 
       <CardContent className="flex-1 flex flex-col p-0 min-h-0">

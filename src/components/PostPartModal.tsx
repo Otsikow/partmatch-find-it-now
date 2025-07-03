@@ -514,7 +514,7 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
                   </p>
                 </div>
                 
-                <div className="flex gap-2 mt-4 justify-center">
+                <div className="flex flex-col tablet:flex-row gap-3 mt-4 justify-center">
                   <input
                     type="file"
                     accept="image/*"
@@ -530,6 +530,7 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
                     size="sm"
                     onClick={handleCameraClick}
                     disabled={isCapturing}
+                    className="min-h-[44px]"
                   >
                     <Camera className="h-4 w-4 mr-2" />
                     {isCapturing ? 'Opening Camera...' : 'Take Photo'}
@@ -539,6 +540,7 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
                     variant="outline"
                     size="sm"
                     onClick={() => document.getElementById('file-input')?.click()}
+                    className="min-h-[44px]"
                   >
                     <Upload className="h-4 w-4 mr-2" />
                     Choose Files
@@ -549,20 +551,20 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
             
             {/* Photo Preview Grid */}
             {photos.length > 0 && (
-              <div className="grid grid-cols-3 gap-3 mt-4">
+              <div className="grid grid-cols-2 tablet:grid-cols-3 lg:grid-cols-4 gap-3 mt-4">
                 {photos.map((photo, index) => (
                   <div key={index} className="relative">
                     <img
                       src={URL.createObjectURL(photo)}
                       alt={`Photo ${index + 1}`}
-                      className="w-full h-24 object-cover rounded border"
+                      className="w-full h-24 tablet:h-28 object-cover rounded border"
                     />
                     <Button
                       type="button"
                       variant="destructive"
                       size="sm"
                       onClick={() => removePhoto(index)}
-                      className="absolute -top-2 -right-2 h-6 w-6 p-0"
+                      className="absolute -top-2 -right-2 h-6 w-6 p-0 min-h-[32px] min-w-[32px]"
                     >
                       <X className="h-3 w-3" />
                     </Button>
@@ -584,11 +586,11 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
             </div>
           </div>
 
-          <div className="flex gap-2 pt-4">
-            <Button type="button" variant="outline" onClick={onClose} className="flex-1">
+          <div className="flex flex-col tablet:flex-row gap-3 pt-4">
+            <Button type="button" variant="outline" onClick={onClose} className="flex-1 min-h-[44px] tablet:order-1">
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting} className="flex-1">
+            <Button type="submit" disabled={isSubmitting} className="flex-1 min-h-[44px] tablet:order-2">
               {isSubmitting ? "Posting..." : "Post Part"}
             </Button>
           </div>
@@ -618,17 +620,17 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
               />
             </div>
             
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               <Button 
                 onClick={closeCameraModal}
                 variant="outline" 
-                className="flex-1"
+                className="flex-1 min-h-[44px]"
               >
                 Cancel
               </Button>
               <Button 
                 onClick={capturePhoto}
-                className="flex-1 bg-emerald-600 hover:bg-emerald-700"
+                className="flex-1 bg-emerald-600 hover:bg-emerald-700 min-h-[44px]"
               >
                 <Camera className="h-4 w-4 mr-2" />
                 Capture
