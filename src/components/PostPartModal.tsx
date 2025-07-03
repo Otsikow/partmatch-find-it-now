@@ -514,7 +514,7 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
                   </p>
                 </div>
                 
-                <div className="flex flex-col tablet:flex-row gap-3 mt-4 justify-center">
+                <div className="flex flex-col md:flex-row gap-3 mt-4 justify-center">
                   <input
                     type="file"
                     accept="image/*"
@@ -551,13 +551,13 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
             
             {/* Photo Preview Grid */}
             {photos.length > 0 && (
-              <div className="grid grid-cols-2 tablet:grid-cols-3 lg:grid-cols-4 gap-3 mt-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-4">
                 {photos.map((photo, index) => (
                   <div key={index} className="relative">
                     <img
                       src={URL.createObjectURL(photo)}
                       alt={`Photo ${index + 1}`}
-                      className="w-full h-24 tablet:h-28 object-cover rounded border"
+                      className="w-full h-24 md:h-28 object-cover rounded border"
                     />
                     <Button
                       type="button"

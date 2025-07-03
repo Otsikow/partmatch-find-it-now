@@ -30,7 +30,7 @@ const Navigation = () => {
           
           {/* Desktop Navigation */}
           {showNavigationItems && (
-            <div className="hidden lg:flex items-center space-x-4 lg:space-x-6">
+            <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
               <Link to="/search-parts" className="flex flex-col items-center gap-1 text-gray-700 hover:text-purple-600 font-medium transition-colors px-3 py-2 rounded-lg hover:bg-purple-50 group">
                 <Search className="h-5 w-5" />
                 <span className="text-xs">Browse Parts</span>
@@ -55,7 +55,7 @@ const Navigation = () => {
           </div>
 
           {/* Mobile menu button */}
-          <div className="lg:hidden">
+          <div className="md:hidden">
             <Button
               variant="ghost"
               size="sm"

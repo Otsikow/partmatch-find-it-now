@@ -130,7 +130,7 @@ const BuyerDashboard = () => {
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Mobile Navigation */}
           <div className="lg:hidden bg-white border-b border-gray-200 p-4">
-            <div className="grid grid-cols-3 tablet:grid-cols-6 gap-3">
+            <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
               {[
                 { id: 'orders', label: 'Orders', icon: '📦' },
                 { id: 'messages', label: 'Messages', icon: '💬', badge: unreadMessages },
