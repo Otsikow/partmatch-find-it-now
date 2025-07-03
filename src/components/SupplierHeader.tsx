@@ -66,7 +66,8 @@ const SupplierHeader = () => {
   };
 
   const handleHome = () => {
-    navigate('/');
+    console.log('SupplierHeader: Home button clicked, navigating to /');
+    window.location.href = '/';
   };
 
   return (

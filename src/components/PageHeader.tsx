@@ -36,7 +36,8 @@ const PageHeader = ({ title, subtitle, showBackButton = true, backTo, showSignOu
   };
 
   const handleHome = () => {
-    navigate('/');
+    console.log('PageHeader: Home button clicked, navigating to /');
+    window.location.href = '/';
   };
 
   return (
