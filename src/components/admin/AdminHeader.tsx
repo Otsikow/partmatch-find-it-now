@@ -2,7 +2,7 @@
 import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useUserDisplayName } from "@/hooks/useUserDisplayName";
 import AdminNotificationBell from "./AdminNotificationBell";
 
@@ -34,7 +34,7 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3 sm:gap-4">
-            <div className="flex items-center gap-2 sm:gap-3">
+            <Link to="/" className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity">
               <img 
                 src="/lovable-uploads/partmatch-hero-logo.png" 
                 alt="PartMatch Logo" 
@@ -48,7 +48,7 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
                   Welcome back, {displayName}
                 </p>
               </div>
-            </div>
+            </Link>
           </div>
           
           <div className="flex items-center gap-3">
