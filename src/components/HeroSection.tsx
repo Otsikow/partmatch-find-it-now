@@ -34,29 +34,29 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="relative min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100">
-      <div className="container mx-auto px-4 text-center">
-        <div className="mb-8">
-          <div className="flex items-center justify-center mb-6">
+    <div className="relative min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto text-center">
+        <div className="mb-6 sm:mb-8">
+          <div className="flex items-center justify-center mb-4 sm:mb-6">
             <img 
               src="/lovable-uploads/partmatch-hero-logo.png" 
               alt="PartMatch Logo" 
-              className="h-48 w-auto object-cover"
+              className="h-32 sm:h-40 md:h-48 w-auto object-cover"
             />
           </div>
         </div>
         
-        <div className="flex items-center justify-center space-x-3 mb-6">
-          <Zap className="h-8 w-8 text-yellow-500" />
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-playfair font-bold text-gray-900 leading-tight">
+        <div className="flex flex-col sm:flex-row items-center justify-center sm:space-x-3 mb-4 sm:mb-6">
+          <Zap className="h-6 w-6 sm:h-8 sm:w-8 text-yellow-500 mb-2 sm:mb-0" />
+          <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-playfair font-bold text-gray-900 leading-tight text-center">
             Find Car Parts in Ghana
           </h2>
         </div>
-        <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed px-4">
           The easiest way to find and order car parts in Ghana. Compare prices from trusted suppliers and get quality parts delivered to your door.
         </p>
         
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-lg mx-auto">
+        <div className="flex flex-col gap-3 sm:gap-4 justify-center items-stretch max-w-sm sm:max-w-lg mx-auto px-4">
           {user ? (
             <Link to="/request-part" className="w-full sm:w-auto">
               <Button size="lg" className="w-full bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700 text-white shadow-lg font-semibold">
