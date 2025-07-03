@@ -81,6 +81,7 @@ const SupplierDashboard = () => {
               totalOffers={stats.totalOffers}
               pendingOffers={stats.pendingOffers}
               acceptedOffers={stats.acceptedOffers}
+              onNavigateToOffers={() => setActiveTab('offers')}
             />
 
             <SupplierTabs

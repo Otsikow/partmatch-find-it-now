@@ -6,12 +6,16 @@ interface SellerStatsProps {
   totalOffers: number;
   pendingOffers: number;
   acceptedOffers: number;
+  onNavigateToOffers?: () => void;
 }
 
-const SellerStats = ({ totalOffers, pendingOffers, acceptedOffers }: SellerStatsProps) => {
+const SellerStats = ({ totalOffers, pendingOffers, acceptedOffers, onNavigateToOffers }: SellerStatsProps) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-4 sm:mb-6 lg:mb-8">
-      <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 hover:shadow-lg transition-shadow duration-300">
+      <Card 
+        className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 hover:shadow-lg transition-all duration-300 cursor-pointer hover:scale-105"
+        onClick={onNavigateToOffers}
+      >
         <CardContent className="p-3 sm:p-4 lg:p-6">
           <div className="flex items-center justify-between">
             <div>
@@ -23,7 +27,10 @@ const SellerStats = ({ totalOffers, pendingOffers, acceptedOffers }: SellerStats
         </CardContent>
       </Card>
       
-      <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200 hover:shadow-lg transition-shadow duration-300">
+      <Card 
+        className="bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200 hover:shadow-lg transition-all duration-300 cursor-pointer hover:scale-105"
+        onClick={onNavigateToOffers}
+      >
         <CardContent className="p-3 sm:p-4 lg:p-6">
           <div className="flex items-center justify-between">
             <div>
@@ -35,7 +42,10 @@ const SellerStats = ({ totalOffers, pendingOffers, acceptedOffers }: SellerStats
         </CardContent>
       </Card>
       
-      <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200 hover:shadow-lg transition-shadow duration-300">
+      <Card 
+        className="bg-gradient-to-br from-green-50 to-green-100 border-green-200 hover:shadow-lg transition-all duration-300 cursor-pointer hover:scale-105"
+        onClick={onNavigateToOffers}
+      >
         <CardContent className="p-3 sm:p-4 lg:p-6">
           <div className="flex items-center justify-between">
             <div>
