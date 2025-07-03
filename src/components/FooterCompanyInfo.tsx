@@ -21,9 +21,12 @@ const FooterCompanyInfo = () => {
             <div>Office 10, Seaview Business Centre, Redcar, UK TS10 1AZ</div>
           </div>
         </div>
-        <div className="flex items-center space-x-2 text-sm text-gray-300">
-          <Phone className="h-4 w-4 text-orange-500 flex-shrink-0" />
-          <span>+233 55 123-PART</span>
+        <div className="flex items-start space-x-2 text-sm text-gray-300">
+          <Phone className="h-4 w-4 text-orange-500 flex-shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <div>+233205934505</div>
+            <div>+447360961803</div>
+          </div>
         </div>
         <div className="flex items-center space-x-2 text-sm text-gray-300">
           <Mail className="h-4 w-4 text-orange-500 flex-shrink-0" />
