@@ -1,13 +1,57 @@
 
 import { Button } from "@/components/ui/button";
-import { MessageSquare, MapPin, Package, Zap } from "lucide-react";
+import { MessageSquare, MapPin, Package, Zap, LayoutDashboard } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
+import { useState, useEffect } from "react";
 
 const HeroSection = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [userType, setUserType] = useState<string>('owner');
+
+  // Fetch user type for authenticated users
+  useEffect(() => {
+    const fetchUserType = async () => {
+      if (!user) return;
+
+      try {
+        const { supabase } = await import("@/integrations/supabase/client");
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('user_type')
+          .eq('id', user.id)
+          .single();
+
+        if (profile) {
+          setUserType(profile.user_type);
+        }
+      } catch (error) {
+        console.error('Error fetching user type:', error);
+      }
+    };
+
+    fetchUserType();
+  }, [user]);
+
+  const getDashboardRoute = () => {
+    switch (userType) {
+      case 'admin': return '/admin';
+      case 'supplier': return '/supplier-dashboard';
+      case 'owner':
+      default: return '/buyer-dashboard';
+    }
+  };
+
+  const getDashboardLabel = () => {
+    switch (userType) {
+      case 'admin': return 'Admin Dashboard';
+      case 'supplier': return 'Seller Dashboard';
+      case 'owner':
+      default: return 'Buyer Dashboard';
+    }
+  };
 
   const handleRequestPartClick = (e: React.MouseEvent) => {
     if (!user) {
@@ -57,6 +101,16 @@ const HeroSection = () => {
         </p>
         
         <div className="flex flex-col gap-3 sm:gap-4 justify-center items-stretch max-w-sm sm:max-w-lg mx-auto px-4">
+          {/* Dashboard Button - Only for authenticated users */}
+          {user && (
+            <Link to={getDashboardRoute()} className="w-full">
+              <Button size="lg" className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg font-semibold">
+                <LayoutDashboard className="mr-2 h-5 w-5" />
+                Go to {getDashboardLabel()}
+              </Button>
+            </Link>
+          )}
+
           {user ? (
             <Link to="/request-part" className="w-full sm:w-auto">
               <Button size="lg" className="w-full bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700 text-white shadow-lg font-semibold">
