@@ -1,11 +1,25 @@
 
 import { Button } from "@/components/ui/button";
 import { Search, Users, Package, Rocket } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "@/hooks/use-toast";
 
 const CTASection = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSellPartsClick = (e: React.MouseEvent) => {
+    if (!user) {
+      e.preventDefault();
+      toast({
+        title: "Sign In Required",
+        description: "Please sign in to sell car parts.",
+        variant: "destructive"
+      });
+      navigate('/seller-auth');
+    }
+  };
 
   return (
     <div className="bg-gradient-to-r from-red-600 via-yellow-600 to-green-600 text-white py-16">
@@ -35,12 +49,23 @@ const CTASection = () => {
             </Button>
           </Link>
 
-          <Link to="/seller-auth" className="w-full sm:w-auto">
-            <Button size="lg" className="w-full bg-white text-gray-900 hover:bg-gray-50 shadow-lg font-semibold border-2 border-white">
+          {user ? (
+            <Link to="/supplier-dashboard" className="w-full sm:w-auto">
+              <Button size="lg" className="w-full bg-white text-gray-900 hover:bg-gray-50 shadow-lg font-semibold border-2 border-white">
+                <Package className="mr-2 h-5 w-5" />
+                Sell Car Parts
+              </Button>
+            </Link>
+          ) : (
+            <Button 
+              size="lg" 
+              className="w-full sm:w-auto bg-white text-gray-900 hover:bg-gray-50 shadow-lg font-semibold border-2 border-white" 
+              onClick={handleSellPartsClick}
+            >
               <Package className="mr-2 h-5 w-5" />
               Sell Car Parts
             </Button>
-          </Link>
+          )}
 
           {!user && (
             <Link to="/auth" className="w-full sm:w-auto">
