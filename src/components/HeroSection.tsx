@@ -99,7 +99,7 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="relative min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 px-4 sm:px-6 lg:px-8">
+    <div className="relative min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-hero-gradient-start via-hero-gradient-end to-hero-gradient-start px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto text-center">
         <div className="mb-6 sm:mb-8">
           <div className="flex items-center justify-center mb-4 sm:mb-6">
@@ -112,12 +112,12 @@ const HeroSection = () => {
         </div>
         
         <div className="flex flex-col sm:flex-row items-center justify-center sm:space-x-3 mb-4 sm:mb-6">
-          <Zap className="h-6 w-6 sm:h-8 sm:w-8 text-yellow-500 mb-2 sm:mb-0" />
-          <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-playfair font-bold text-gray-900 leading-tight text-center">
+          <Zap className="h-6 w-6 sm:h-8 sm:w-8 text-hero-accent mb-2 sm:mb-0" />
+          <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-playfair font-bold text-foreground leading-tight text-center">
             Find Car Parts in Ghana
           </h2>
         </div>
-        <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed px-4">
+        <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed px-4">
           The easiest way to find and order car parts in Ghana. Compare prices from trusted suppliers and get quality parts delivered to your door.
         </p>
         
@@ -155,7 +155,7 @@ const HeroSection = () => {
           )}
           
           <Link to="/search-parts" className="w-full sm:w-auto">
-            <Button size="lg" variant="outline" className="w-full border-2 border-green-600 text-green-700 hover:bg-green-50 shadow-lg font-semibold">
+            <Button size="lg" variant="outline" className="w-full border-2 border-success text-success hover:bg-success/10 shadow-lg font-semibold">
               <MapPin className="mr-2 h-5 w-5" />
               Find Car Parts
             </Button>

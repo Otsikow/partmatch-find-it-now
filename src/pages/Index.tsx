@@ -25,7 +25,7 @@ const Index = () => {
 
   // Show landing page for all users
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 font-inter">
+    <div className="min-h-screen bg-gradient-to-br from-hero-gradient-start via-hero-gradient-end to-hero-gradient-start font-inter">
       <Navigation />
       <HeroSection />
       <FeaturesSection />

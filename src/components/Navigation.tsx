@@ -23,7 +23,7 @@ const Navigation = () => {
   const showNavigationItems = !user || !isHomePage;
 
   return (
-    <nav className="bg-white/95 backdrop-blur-md shadow-lg sticky top-0 z-50 border-b">
+    <nav className="bg-nav/95 backdrop-blur-md shadow-lg sticky top-0 z-50 border-b border-border">
       <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
         <div className="flex justify-between items-center h-14 sm:h-16">
           <NavigationLogo />
@@ -31,16 +31,16 @@ const Navigation = () => {
           {/* Desktop Navigation */}
           {showNavigationItems && (
             <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
-              <Link to="/search-parts" className="flex flex-col items-center gap-1 text-gray-700 hover:text-purple-600 font-medium transition-colors px-3 py-2 rounded-lg hover:bg-purple-50 group">
+              <Link to="/search-parts" className="flex flex-col items-center gap-1 text-nav-muted hover:text-nav-accent font-medium transition-colors px-3 py-2 rounded-lg hover:bg-accent group">
                 <Search className="h-5 w-5" />
                 <span className="text-xs">Browse Parts</span>
               </Link>
-              <Link to="/request-part" className="flex flex-col items-center gap-1 text-gray-700 hover:text-purple-600 font-medium transition-colors px-3 py-2 rounded-lg hover:bg-purple-50 group">
+              <Link to="/request-part" className="flex flex-col items-center gap-1 text-nav-muted hover:text-nav-accent font-medium transition-colors px-3 py-2 rounded-lg hover:bg-accent group">
                 <Plus className="h-5 w-5" />
                 <span className="text-xs">Request Part</span>
               </Link>
               {user && (
-                <Link to="/chat" className="flex flex-col items-center gap-1 text-gray-700 hover:text-purple-600 font-medium transition-colors px-3 py-2 rounded-lg hover:bg-purple-50 relative group">
+                <Link to="/chat" className="flex flex-col items-center gap-1 text-nav-muted hover:text-nav-accent font-medium transition-colors px-3 py-2 rounded-lg hover:bg-accent relative group">
                   <MessageCircle className="h-5 w-5" />
                   <span className="text-xs">Messages</span>
                   <ChatNotificationBadge />
@@ -60,7 +60,7 @@ const Navigation = () => {
               variant="ghost"
               size="sm"
               onClick={toggleMobileMenu}
-              className="p-2"
+              className="p-2 text-nav-foreground"
             >
               {isMobileMenuOpen ? (
                 <X className="h-6 w-6" />

@@ -102,10 +102,10 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
 
   return (
     <>
-      <Card className="w-full hover:shadow-xl transition-all duration-300 cursor-pointer group bg-white border-0 shadow-md">
+      <Card className="w-full hover:shadow-xl transition-all duration-300 cursor-pointer group bg-card border-0 shadow-md">
         {/* Image Section */}
         <div 
-          className="relative aspect-video w-full overflow-hidden bg-gray-100 rounded-t-lg"
+          className="relative aspect-video w-full overflow-hidden bg-muted rounded-t-lg"
           onClick={() => setIsExpanded(true)}
         >
           {part.images && part.images.length > 0 ? (
@@ -119,7 +119,7 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
               }}
             />
           ) : null}
-          <div className={`${part.images && part.images.length > 0 ? 'hidden' : ''} w-full h-full flex items-center justify-center bg-gray-100 text-gray-500`}>
+          <div className={`${part.images && part.images.length > 0 ? 'hidden' : ''} w-full h-full flex items-center justify-center bg-muted text-muted-foreground`}>
             <div className="text-center p-3 sm:p-4">
               <div className="text-xl sm:text-2xl mb-1 sm:mb-2">📦</div>
               <p className="text-xs font-medium">Image not available yet</p>
@@ -135,39 +135,39 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
           
           {/* Expand Button */}
           <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-            <Button size="sm" variant="secondary" className="bg-white/90 hover:bg-white h-7 w-7 p-0">
+            <Button size="sm" variant="secondary" className="bg-background/90 hover:bg-background h-7 w-7 p-0">
               <Expand className="h-3 w-3" />
             </Button>
           </div>
         </div>
         
-        <CardContent className="p-4 sm:p-5 lg:p-6" onClick={() => setIsExpanded(true)}>
+        <CardContent className="p-4 sm:p-5 lg:p-6 bg-card" onClick={() => setIsExpanded(true)}>
           <div className="space-y-3 sm:space-y-4">
             {/* Title and Price */}
             <div className="space-y-2">
-              <h3 className="font-bold text-base sm:text-lg lg:text-xl line-clamp-2 leading-tight text-gray-900">
+              <h3 className="font-bold text-base sm:text-lg lg:text-xl line-clamp-2 leading-tight text-card-foreground">
                 {part.title}
               </h3>
-              <p className="text-green-600 font-bold text-lg sm:text-xl lg:text-2xl">
+              <p className="text-success font-bold text-lg sm:text-xl lg:text-2xl">
                 {formatPrice(part.price, part.currency)}
               </p>
             </div>
 
             {/* Vehicle Info */}
-            <div className="text-gray-600 text-sm sm:text-base">
+            <div className="text-muted-foreground text-sm sm:text-base">
               <p className="font-medium">{part.make} {part.model} ({part.year}) - {part.part_type}</p>
             </div>
 
             {/* Description Preview */}
             {part.description && (
-              <p className="text-gray-600 text-sm sm:text-base line-clamp-2 leading-relaxed">
+              <p className="text-muted-foreground text-sm sm:text-base line-clamp-2 leading-relaxed">
                 {part.description}
               </p>
             )}
 
             {/* Seller Info with Avatar */}
             {part.profiles && (
-              <div className="border-t pt-3 space-y-2">
+              <div className="border-t border-border pt-3 space-y-2">
                 <div className="flex items-center gap-2">
                   <Avatar className="h-7 w-7 sm:h-8 sm:w-8">
                     <AvatarImage src={part.profiles.profile_photo_url} alt={supplierName} />
@@ -175,7 +175,7 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
                       {initials}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="text-sm sm:text-base font-medium">{supplierName}</span>
+                  <span className="text-sm sm:text-base font-medium text-card-foreground">{supplierName}</span>
                   {part.profiles.is_verified && (
                     <Badge variant="secondary" className="text-xs">Verified</Badge>
                   )}
@@ -191,10 +191,10 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
             )}
 
             {/* Location and Date */}
-            <div className="flex flex-col gap-1 text-sm text-gray-500">
+            <div className="flex flex-col gap-1 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <MapPin className="h-4 w-4 flex-shrink-0" />
-                <span className={`truncate ${inSameCity ? 'text-green-600 font-medium' : ''}`}>
+                <span className={`truncate ${inSameCity ? 'text-success font-medium' : ''}`}>
                   {locationDisplayText}
                 </span>
               </div>
@@ -207,7 +207,7 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
         </CardContent>
 
         {/* Action Buttons */}
-        <div className="p-4 sm:p-5 lg:p-6 pt-0 border-t bg-gray-50/50 rounded-b-lg" onClick={(e) => e.stopPropagation()}>
+        <div className="p-4 sm:p-5 lg:p-6 pt-0 border-t border-border bg-muted/30 rounded-b-lg" onClick={(e) => e.stopPropagation()}>
           <div className="flex gap-2 sm:gap-3">
             <ChatButton
               sellerId={part.supplier_id}
