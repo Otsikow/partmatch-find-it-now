@@ -78,23 +78,14 @@ const AdminDashboard = () => {
     navigate('/');
   };
 
-  // Reduced auto-refresh frequency to prevent shaking - only refresh every 30 seconds
+  // Auto-refresh disabled to prevent UI instability - data will refresh on user actions
   useEffect(() => {
-    if (refreshIntervalRef.current) {
-      clearInterval(refreshIntervalRef.current);
-    }
-
-    refreshIntervalRef.current = setInterval(() => {
-      console.log('Auto-refreshing admin data at:', new Date().toLocaleTimeString());
-      refetchData();
-    }, 30000); // Changed from 10 seconds to 30 seconds
-
     return () => {
       if (refreshIntervalRef.current) {
         clearInterval(refreshIntervalRef.current);
       }
     };
-  }, [refetchData]);
+  }, []);
 
   if (loading) {
     return (
