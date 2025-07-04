@@ -35,16 +35,18 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3 sm:gap-4">
             <div className="flex items-center gap-2 sm:gap-3">
-              <img 
-                src="/lovable-uploads/partmatch-hero-logo.png" 
-                alt="PartMatch Logo" 
-                className="h-8 w-auto sm:h-10"
-              />
+              <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
+                <img 
+                  src="/lovable-uploads/partmatch-hero-logo.png" 
+                  alt="PartMatch Logo" 
+                  className="h-6 w-auto sm:h-8 brightness-0 invert"
+                />
+              </div>
               <div className="text-left">
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-playfair font-bold text-white mb-1 sm:mb-2">
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-bold text-white mb-1">
                   Admin Dashboard
                 </h1>
-                <p className="text-sm sm:text-base text-purple-100 font-crimson">
+                <p className="text-xs sm:text-sm text-purple-100 font-crimson">
                   Welcome back, {displayName}
                 </p>
               </div>
@@ -55,11 +57,10 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
               onClick={handleGoBack}
               variant="ghost" 
               size="sm"
-              className="text-white hover:bg-white/20 transition-all duration-300 font-inter ml-2"
+              className="text-white hover:bg-white/20 transition-all duration-300 font-inter ml-2 p-2"
               title="Go to Home Page"
             >
-              <Home className="h-4 w-4 mr-1 sm:mr-2" />
-              <span className="text-xs sm:text-sm">Home</span>
+              <Home className="h-4 w-4" />
             </Button>
           </div>
           
