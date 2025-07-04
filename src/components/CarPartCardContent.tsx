@@ -6,6 +6,8 @@ import { CarPart } from "@/types/CarPart";
 import VerifiedSellerBadge from "./VerifiedSellerBadge";
 import SellerRatingDisplay from "./SellerRatingDisplay";
 import { formatDate } from "@/utils/carPartUtils";
+import { useLocationDetection } from "@/hooks/useLocationDetection";
+import { getLocationDisplayText, isInSameCity, calculateDistance } from "@/utils/distanceUtils";
 
 interface CarPartCardContentProps {
   part: CarPart;
@@ -13,6 +15,12 @@ interface CarPartCardContentProps {
 }
 
 const CarPartCardContent = ({ part, onExpand }: CarPartCardContentProps) => {
+  // Get user's location for distance calculation
+  const { location: userLocation } = useLocationDetection({
+    requestOnMount: false, // Don't auto-request on mount for privacy
+    includeAddress: false
+  });
+
   // Fix the seller name construction to handle the profiles structure properly
   const sellerName = part.profiles?.first_name && part.profiles?.last_name 
     ? `${part.profiles.first_name} ${part.profiles.last_name}`.trim()
@@ -21,6 +29,25 @@ const CarPartCardContent = ({ part, onExpand }: CarPartCardContentProps) => {
   const initials = sellerName === 'Seller' 
     ? 'S' 
     : sellerName.split(' ').map(n => n.charAt(0)).join('').slice(0, 2).toUpperCase();
+
+  // Calculate distance and location display text
+  const locationDisplayText = getLocationDisplayText(
+    userLocation?.latitude,
+    userLocation?.longitude,
+    part.latitude,
+    part.longitude,
+    part.address
+  );
+
+  // Check if this part is in the same city for styling
+  const inSameCity = userLocation?.latitude && userLocation?.longitude && 
+    part.latitude && part.longitude &&
+    isInSameCity(calculateDistance(
+      userLocation.latitude, 
+      userLocation.longitude, 
+      part.latitude, 
+      part.longitude
+    ));
 
   console.log('CarPartCardContent - sellerName:', sellerName, 'for part:', part.title);
   console.log('CarPartCardContent - profiles data:', part.profiles);
@@ -73,12 +100,12 @@ const CarPartCardContent = ({ part, onExpand }: CarPartCardContentProps) => {
             />
           </div>
 
-          {part.address && (
-            <div className="flex items-center gap-2 text-sm sm:text-base text-gray-500">
-              <MapPin className="h-4 w-4" />
-              <span className="truncate">{part.address}</span>
-            </div>
-          )}
+          <div className="flex items-center gap-2 text-sm sm:text-base text-gray-500">
+            <MapPin className="h-4 w-4" />
+            <span className={`truncate ${inSameCity ? 'text-green-600 font-medium' : ''}`}>
+              {locationDisplayText}
+            </span>
+          </div>
           
           <div className="flex items-center gap-2 text-sm sm:text-base text-gray-500">
             <Calendar className="h-4 w-4" />

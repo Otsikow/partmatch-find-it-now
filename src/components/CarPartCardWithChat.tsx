@@ -9,6 +9,8 @@ import ChatButton from "@/components/chat/ChatButton";
 import SellerRatingDisplay from "@/components/SellerRatingDisplay";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { format } from 'date-fns';
+import { useLocationDetection } from "@/hooks/useLocationDetection";
+import { getLocationDisplayText, isInSameCity, calculateDistance } from "@/utils/distanceUtils";
 
 interface CarPart {
   id: string;
@@ -23,6 +25,8 @@ interface CarPart {
   description?: string;
   images?: string[];
   address?: string;
+  latitude?: number;
+  longitude?: number;
   created_at: string;
   supplier_id: string;
   profiles?: {
@@ -42,6 +46,12 @@ interface CarPartCardWithChatProps {
 
 const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  
+  // Get user's location for distance calculation
+  const { location: userLocation } = useLocationDetection({
+    requestOnMount: false, // Don't auto-request on mount for privacy
+    includeAddress: false
+  });
 
   const getConditionColor = (condition: string) => {
     switch (condition?.toLowerCase()) {
@@ -63,6 +73,25 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
   const initials = supplierName === 'Seller' 
     ? 'S' 
     : supplierName.split(' ').map(n => n.charAt(0)).join('').slice(0, 2).toUpperCase();
+
+  // Calculate distance and location display text
+  const locationDisplayText = getLocationDisplayText(
+    userLocation?.latitude,
+    userLocation?.longitude,
+    part.latitude,
+    part.longitude,
+    part.address
+  );
+
+  // Check if this part is in the same city for styling
+  const inSameCity = userLocation?.latitude && userLocation?.longitude && 
+    part.latitude && part.longitude &&
+    isInSameCity(calculateDistance(
+      userLocation.latitude, 
+      userLocation.longitude, 
+      part.latitude, 
+      part.longitude
+    ));
 
   const openDirections = () => {
     if (part.address) {
@@ -163,12 +192,12 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
 
             {/* Location and Date */}
             <div className="flex flex-col gap-1 text-sm text-gray-500">
-              {part.address && (
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4 flex-shrink-0" />
-                  <span className="truncate">{part.address}</span>
-                </div>
-              )}
+              <div className="flex items-center gap-2">
+                <MapPin className="h-4 w-4 flex-shrink-0" />
+                <span className={`truncate ${inSameCity ? 'text-green-600 font-medium' : ''}`}>
+                  {locationDisplayText}
+                </span>
+              </div>
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4 flex-shrink-0" />
                 <span>{format(new Date(part.created_at), 'MMM dd')}</span>
@@ -255,15 +284,20 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
                   </div>
                 </div>
                 
-                {part.address && (
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-2">Location</h4>
-                    <div className="flex items-center gap-2 text-sm sm:text-base text-gray-600">
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-2">Location</h4>
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2 text-sm sm:text-base">
                       <MapPin className="h-4 w-4 flex-shrink-0" />
-                      <span>{part.address}</span>
+                      <span className={`${inSameCity ? 'text-green-600 font-medium' : 'text-gray-600'}`}>
+                        {locationDisplayText}
+                      </span>
                     </div>
+                    {part.address && locationDisplayText !== part.address && (
+                      <p className="text-xs text-gray-500 ml-6">{part.address}</p>
+                    )}
                   </div>
-                )}
+                </div>
               </div>
               
               <div className="space-y-3">
