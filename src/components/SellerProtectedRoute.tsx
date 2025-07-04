@@ -92,10 +92,15 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
     console.log('SellerProtectedRoute: Access denied, userType:', userType);
     toast({
       title: "Access Denied",
-      description: "Only sellers and administrators can access this dashboard. Please register as a seller to continue.",
+      description: "Only registered sellers can access this dashboard. Please register as a seller first.",
       variant: "destructive"
     });
     return <Navigate to="/buyer-dashboard" replace />;
+  }
+
+  // Special case: If user is admin, show a warning but allow access
+  if (userType === 'admin') {
+    console.log('SellerProtectedRoute: Admin accessing seller dashboard');
   }
 
   console.log('SellerProtectedRoute: Access granted for supplier or admin');
