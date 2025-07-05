@@ -42,7 +42,7 @@ const UserDashboard = () => {
     }
   };
   return <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 font-inter">
-      <PageHeader title={`Welcome to PartMatch`} subtitle={`Hello, ${displayName}`} backTo="/">
+      <PageHeader title={`Welcome to Ghana`} subtitle={`Hello, ${displayName}`} backTo="/">
         <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-gray-700 hover:text-red-700 hover:bg-red-50/50 font-medium">
           Sign Out
         </Button>

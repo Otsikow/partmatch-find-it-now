@@ -20,24 +20,26 @@ const SearchParts = () => {
   const { parts, loading, error } = useCarParts({ searchTerm, filters });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100">
+    <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-background">
       <PageHeader 
-        title="Browse Car Parts"
-        subtitle="Find the perfect part for your vehicle"
+        title="Browse Parts"
+        subtitle="Find your perfect car part"
         showBackButton={true}
         backTo="/"
       />
       
-      <main className="container mx-auto px-3 sm:px-4 lg:px-6 py-6 sm:py-8">
+      <main className="container mx-auto px-2 sm:px-4 lg:px-6 py-4 sm:py-6">
         <PendingRatingNotification />
         
-        <div className="space-y-6 sm:space-y-8">
-          <SearchControls
-            searchTerm={searchTerm}
-            onSearchChange={setSearchTerm}
-            filters={filters}
-            onFiltersChange={setFilters}
-          />
+        <div className="space-y-4 sm:space-y-6">
+          <div className="mx-auto max-w-sm sm:max-w-none">
+            <SearchControls
+              searchTerm={searchTerm}
+              onSearchChange={setSearchTerm}
+              filters={filters}
+              onFiltersChange={setFilters}
+            />
+          </div>
           
           <CarPartsList 
             parts={parts} 

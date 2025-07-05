@@ -102,7 +102,7 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
                 <User className="h-10 w-10 sm:h-12 sm:w-12 text-white" />
               </div>
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-semibold mb-2 sm:mb-3 bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
-                {isLogin ? 'Welcome Back' : 'Join PartMatch Ghana'}
+                {isLogin ? 'Welcome Back' : 'Join Ghana'}
               </h2>
               <p className="text-gray-600 text-sm sm:text-base font-crimson">
                 {isLogin 

@@ -18,7 +18,7 @@ const NavigationLogo = ({ onLinkClick }: NavigationLogoProps) => {
         className="h-8 sm:h-9 lg:h-10 w-auto flex-shrink-0 bg-card dark:bg-white rounded-sm p-1 border"
       />
       <h1 className="text-lg sm:text-xl lg:text-2xl font-playfair font-bold bg-gradient-to-r from-red-600 to-green-700 bg-clip-text text-transparent truncate">
-        PartMatch Ghana
+        Ghana
       </h1>
     </Link>
   );

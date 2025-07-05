@@ -28,7 +28,7 @@ const AuthTypeSelector = () => {
       <main className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-4xl">
         <div className="text-center mb-8 sm:mb-12">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-playfair font-bold mb-4 text-foreground">
-            How would you like to join PartMatch Ghana?
+            How would you like to join Ghana?
           </h2>
           <p className="text-muted-foreground text-lg sm:text-xl font-crimson max-w-2xl mx-auto">
             Select the type of account that best describes your role in our car parts marketplace
@@ -91,7 +91,7 @@ const AuthTypeSelector = () => {
                 Administrator
               </h3>
               <p className="text-muted-foreground text-sm sm:text-base font-crimson mb-6">
-                Manage and oversee the PartMatch Ghana platform
+                Manage and oversee the Ghana platform
               </p>
               <div className="bg-secondary/30 rounded-lg p-4 text-sm text-secondary-foreground font-medium mb-6">
                 ✓ Platform oversight<br/>

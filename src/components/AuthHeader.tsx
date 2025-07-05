@@ -24,7 +24,7 @@ const AuthHeader = ({ isLogin }: AuthHeaderProps) => {
           />
         </Link>
         <h1 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
-          {isLogin ? 'Sign In' : 'Join PartMatch Ghana'}
+          {isLogin ? 'Sign In' : 'Join Ghana'}
         </h1>
       </div>
     </header>
