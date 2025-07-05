@@ -39,8 +39,8 @@ const MobileBottomTabs = () => {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 safe-area-pb">
-      <div className="flex items-center justify-around py-2 px-1">
+    <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-border z-50 safe-area-pb">
+      <div className="flex items-center justify-around py-1 px-1">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const active = isActive(tab.path);
@@ -49,18 +49,18 @@ const MobileBottomTabs = () => {
             <Link
               key={tab.path}
               to={tab.path}
-              className={`flex flex-col items-center justify-center min-w-0 flex-1 py-2 px-1 relative ${
+              className={`flex flex-col items-center justify-center min-w-0 flex-1 py-2 px-1 relative min-h-[60px] touch-manipulation active:scale-95 transition-all duration-200 rounded-lg ${
                 active
-                  ? "text-blue-600"
-                  : "text-gray-500"
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               <div className="relative">
-                <Icon className={`w-6 h-6 ${active ? "text-blue-600" : "text-gray-500"}`} />
+                <Icon className={`w-6 h-6 mb-1 ${active ? "text-primary" : "text-muted-foreground"}`} />
                 {tab.hasNotification && <ChatNotificationBadge />}
               </div>
-              <span className={`text-xs mt-1 truncate ${
-                active ? "text-blue-600 font-medium" : "text-gray-500"
+              <span className={`text-xs font-medium truncate ${
+                active ? "text-primary" : "text-muted-foreground"
               }`}>
                 {tab.label}
               </span>
