@@ -47,12 +47,15 @@ const AuthTypeSelector = () => {
               <p className="text-gray-600 text-sm sm:text-base font-crimson mb-6">
                 Find and purchase car parts from verified sellers across Ghana
               </p>
-              <div className="bg-blue-100 rounded-lg p-4 text-sm text-blue-800 font-medium">
+              <div className="bg-blue-100 rounded-lg p-4 text-sm text-blue-800 font-medium mb-6">
                 ✓ Browse available parts<br/>
                 ✓ Request specific parts<br/>
                 ✓ Connect with sellers<br/>
                 ✓ Secure payments
               </div>
+              <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-semibold py-2 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300">
+                Sign In / Register as Buyer
+              </Button>
             </Card>
           </Link>
 
@@ -67,12 +70,15 @@ const AuthTypeSelector = () => {
               <p className="text-gray-600 text-sm sm:text-base font-crimson mb-6">
                 Sell and supply car parts to buyers across Ghana
               </p>
-              <div className="bg-orange-100 rounded-lg p-4 text-sm text-orange-800 font-medium">
+              <div className="bg-orange-100 rounded-lg p-4 text-sm text-orange-800 font-medium mb-6">
                 ✓ List your inventory<br/>
                 ✓ Respond to requests<br/>
                 ✓ Manage offers<br/>
                 ✓ Grow your business
               </div>
+              <Button className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white font-semibold py-2 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300">
+                Sign In / Register as Seller
+              </Button>
             </Card>
           </Link>
 
@@ -87,12 +93,15 @@ const AuthTypeSelector = () => {
               <p className="text-gray-600 text-sm sm:text-base font-crimson mb-6">
                 Manage and oversee the PartMatch Ghana platform
               </p>
-              <div className="bg-purple-100 rounded-lg p-4 text-sm text-purple-800 font-medium">
+              <div className="bg-purple-100 rounded-lg p-4 text-sm text-purple-800 font-medium mb-6">
                 ✓ Platform oversight<br/>
                 ✓ User management<br/>
                 ✓ Content moderation<br/>
                 ✓ System analytics
               </div>
+              <Button className="w-full bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 text-white font-semibold py-2 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300">
+                Sign In / Register as Admin
+              </Button>
             </Card>
           </Link>
         </div>
