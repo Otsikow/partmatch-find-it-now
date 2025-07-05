@@ -144,43 +144,43 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
           </div>
         </div>
         
-        <CardContent className="p-4 sm:p-5 lg:p-6 bg-card" onClick={() => setIsExpanded(true)}>
-          <div className="space-y-3 sm:space-y-4">
+        <CardContent className="p-3 sm:p-4 lg:p-5 bg-card" onClick={() => setIsExpanded(true)}>
+          <div className="space-y-2 sm:space-y-3">
             {/* Title and Price */}
-            <div className="space-y-2">
-              <h3 className="font-bold text-base sm:text-lg lg:text-xl line-clamp-2 leading-tight text-card-foreground">
+            <div className="space-y-1 sm:space-y-2">
+              <h3 className="font-bold text-sm sm:text-base lg:text-lg line-clamp-2 leading-tight text-card-foreground">
                 {part.title}
               </h3>
-              <p className="text-success font-bold text-lg sm:text-xl lg:text-2xl">
+              <p className="text-success font-bold text-base sm:text-lg lg:text-xl">
                 {formatPrice(part.price, part.currency)}
               </p>
             </div>
 
             {/* Vehicle Info */}
-            <div className="text-muted-foreground text-sm sm:text-base">
-              <p className="font-medium">{part.make} {part.model} ({part.year}) - {part.part_type}</p>
+            <div className="text-muted-foreground text-xs sm:text-sm">
+              <p className="font-medium line-clamp-1">{part.make} {part.model} ({part.year}) - {part.part_type}</p>
             </div>
 
             {/* Description Preview */}
             {part.description && (
-              <p className="text-muted-foreground text-sm sm:text-base line-clamp-2 leading-relaxed">
+              <p className="text-muted-foreground text-xs sm:text-sm line-clamp-2 leading-relaxed">
                 {part.description}
               </p>
             )}
 
             {/* Seller Info with Avatar */}
             {part.profiles && (
-              <div className="border-t border-border pt-3 space-y-2">
+              <div className="border-t border-border pt-2 sm:pt-3 space-y-1 sm:space-y-2">
                 <div className="flex items-center gap-2">
-                  <Avatar className="h-7 w-7 sm:h-8 sm:w-8">
+                  <Avatar className="h-6 w-6 sm:h-7 sm:w-7">
                     <AvatarImage src={part.profiles.profile_photo_url} alt={supplierName} />
-                    <AvatarFallback className="text-xs sm:text-sm font-medium">
+                    <AvatarFallback className="text-xs font-medium">
                       {initials}
                     </AvatarFallback>
                   </Avatar>
-                  <span className="text-sm sm:text-base font-medium text-card-foreground">{supplierName}</span>
+                  <span className="text-xs sm:text-sm font-medium text-card-foreground line-clamp-1">{supplierName}</span>
                   {part.profiles.is_verified && (
-                    <Badge variant="secondary" className="text-xs">Verified</Badge>
+                    <Badge variant="secondary" className="text-[10px] sm:text-xs px-1 py-0">Verified</Badge>
                   )}
                 </div>
                 
@@ -194,58 +194,62 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
             )}
 
             {/* Location and Date */}
-            <div className="flex flex-col gap-1 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 flex-shrink-0" />
+            <div className="flex flex-col gap-1 text-xs sm:text-sm text-muted-foreground">
+              <div className="flex items-center gap-1 sm:gap-2">
+                <MapPin className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
                 <span className={`truncate ${inSameCity ? 'text-success font-medium' : ''}`}>
                   {locationDisplayText}
                 </span>
               </div>
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 flex-shrink-0" />
+              <div className="flex items-center gap-1 sm:gap-2">
+                <Calendar className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
                 <span>{format(new Date(part.created_at), 'MMM dd')}</span>
               </div>
             </div>
           </div>
         </CardContent>
 
-        {/* Action Buttons */}
-        <div className="p-4 sm:p-5 lg:p-6 pt-0 border-t border-border bg-muted/30 rounded-b-lg" onClick={(e) => e.stopPropagation()}>
-          <div className="flex gap-2 sm:gap-3 mb-2">
-            <ChatButton
-              sellerId={part.supplier_id}
-              partId={part.id}
-              size="sm"
-              variant="outline"
-              className="flex-1 text-sm h-9 sm:h-10 font-medium"
-            />
-            <SaveButton 
-              partId={part.id} 
-              size="sm"
-              variant="outline"
-              className="border-red-200 hover:bg-red-50 h-9 sm:h-10"
-            />
-            {part.address && (
+        <div className="p-3 sm:p-4 lg:p-5 pt-0 border-t border-border bg-muted/30 rounded-b-lg" onClick={(e) => e.stopPropagation()}>
+          <div className="flex flex-col gap-2 sm:gap-3">
+            <div className="flex gap-2">
+              <ChatButton
+                sellerId={part.supplier_id}
+                partId={part.id}
+                size="sm"
+                variant="outline"
+                className="flex-1 text-xs sm:text-sm h-8 sm:h-9 font-medium"
+              />
+              <SaveButton 
+                partId={part.id} 
+                size="sm"
+                variant="outline"
+                className="border-red-200 hover:bg-red-50 h-8 sm:h-9 px-2 sm:px-3"
+              />
+            </div>
+            
+            <div className="flex gap-2">
+              {part.address && (
+                <Button 
+                  size="sm" 
+                  variant="default" 
+                  onClick={openDirections} 
+                  className="flex-1 text-xs sm:text-sm h-8 sm:h-9 font-medium"
+                >
+                  <Navigation className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                  <span className="hidden sm:inline">Get Directions</span>
+                  <span className="sm:hidden">Directions</span>
+                </Button>
+              )}
               <Button 
                 size="sm" 
-                variant="default" 
-                onClick={openDirections} 
-                className="flex-1 text-sm h-9 sm:h-10 font-medium"
+                variant="secondary" 
+                onClick={() => setShowRatingModal(true)}
+                className="flex-1 text-xs sm:text-sm h-8 sm:h-9 font-medium"
               >
-                <Navigation className="h-4 w-4 mr-1" />
-                <span className="hidden sm:inline">Get Directions</span>
-                <span className="sm:hidden">Directions</span>
+                Rate Seller
               </Button>
-            )}
+            </div>
           </div>
-          <Button 
-            size="sm" 
-            variant="secondary" 
-            onClick={() => setShowRatingModal(true)}
-            className="w-full text-sm h-9 sm:h-10 font-medium"
-          >
-            Rate Seller
-          </Button>
         </div>
       </Card>
 
