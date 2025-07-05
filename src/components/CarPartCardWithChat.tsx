@@ -13,6 +13,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { format } from 'date-fns';
 import { useLocationDetection } from "@/hooks/useLocationDetection";
 import { getLocationDisplayText, isInSameCity, calculateDistance } from "@/utils/distanceUtils";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "@/hooks/use-toast";
 
 interface CarPart {
   id: string;
@@ -49,6 +51,7 @@ interface CarPartCardWithChatProps {
 const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
+  const { user } = useAuth();
   
   // Get user's location for distance calculation
   const { location: userLocation } = useLocationDetection({
@@ -101,6 +104,18 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
       const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(part.address)}`;
       window.open(mapsUrl, '_blank');
     }
+  };
+
+  const handleRateSellerClick = () => {
+    if (!user) {
+      toast({
+        title: "Sign In Required",
+        description: "Please sign in to rate sellers.",
+        variant: "destructive"
+      });
+      return;
+    }
+    setShowRatingModal(true);
   };
 
   return (
@@ -240,13 +255,14 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
                   <span className="sm:hidden">Directions</span>
                 </Button>
               )}
+              {/* Only show Rate Seller button for authenticated users */}
               <Button 
                 size="sm" 
                 variant="secondary" 
-                onClick={() => setShowRatingModal(true)}
+                onClick={handleRateSellerClick}
                 className="flex-1 text-xs sm:text-sm h-8 sm:h-9 font-medium"
               >
-                Rate Seller
+                {user ? 'Rate Seller' : 'Sign In to Rate'}
               </Button>
             </div>
           </div>
@@ -395,32 +411,34 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
               )}
             </div>
             
-            {/* Rating Button */}
+            {/* Rating Button - Only for authenticated users */}
             <div className="pt-3 border-t">
               <Button 
-                onClick={() => setShowRatingModal(true)}
+                onClick={handleRateSellerClick}
                 variant="secondary"
                 className="w-full text-sm sm:text-base"
               >
-                Rate Seller
+                {user ? 'Rate Seller' : 'Sign In to Rate'}
               </Button>
             </div>
           </div>
         </DialogContent>
       </Dialog>
 
-      {/* Rating Modal */}
-      <RatingModal
-        isOpen={showRatingModal}
-        onClose={() => setShowRatingModal(false)}
-        offerId="" // This would need to be passed from a completed transaction
-        sellerId={part.supplier_id}
-        sellerName={supplierName}
-        onRatingSubmitted={() => {
-          setShowRatingModal(false);
-          // Could refresh seller rating here
-        }}
-      />
+      {/* Rating Modal - Only show when user is authenticated */}
+      {user && (
+        <RatingModal
+          isOpen={showRatingModal}
+          onClose={() => setShowRatingModal(false)}
+          offerId="" // This would need to be passed from a completed transaction
+          sellerId={part.supplier_id}
+          sellerName={supplierName}
+          onRatingSubmitted={() => {
+            setShowRatingModal(false);
+            // Could refresh seller rating here
+          }}
+        />
+      )}
     </>
   );
 };
