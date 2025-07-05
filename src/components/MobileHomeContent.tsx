@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useRealTimeStats } from "@/hooks/useRealTimeStats";
 
 const MobileHomeContent = () => {
-  const { activeParts, sellers, regions, categories, loading } = useRealTimeStats();
+  const { activeParts, sellers, totalUsers, regions, categories, loading } = useRealTimeStats();
   
   return (
     <div className="px-4 py-6 space-y-6">
@@ -126,7 +126,7 @@ const MobileHomeContent = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-3 gap-4 mt-6">
+        <div className="grid grid-cols-2 gap-4 mt-6">
           <div className="text-center">
             <div className="text-xl font-bold text-blue-600">
               {loading ? '...' : `${activeParts}+`}
@@ -138,6 +138,12 @@ const MobileHomeContent = () => {
               {loading ? '...' : `${sellers}+`}
             </div>
             <div className="text-xs text-gray-500">Sellers</div>
+          </div>
+          <div className="text-center">
+            <div className="text-xl font-bold text-purple-600">
+              {loading ? '...' : `${totalUsers}+`}
+            </div>
+            <div className="text-xs text-gray-500">Users</div>
           </div>
           <div className="text-center">
             <div className="text-xl font-bold text-orange-600">
