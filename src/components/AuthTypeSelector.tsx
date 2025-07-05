@@ -53,9 +53,8 @@ const AuthTypeSelector = () => {
                 ✓ Connect with sellers<br/>
                 ✓ Secure payments
               </div>
-              <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-semibold py-2 sm:py-3 px-3 sm:px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm">
-                <span className="hidden sm:inline">Sign In / Register as Buyer</span>
-                <span className="sm:hidden">Sign In / Register<br/>as Buyer</span>
+              <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-semibold py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight">
+                Sign In / Register as Buyer
               </Button>
             </Card>
           </Link>
@@ -77,9 +76,8 @@ const AuthTypeSelector = () => {
                 ✓ Manage offers<br/>
                 ✓ Grow your business
               </div>
-              <Button className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white font-semibold py-2 sm:py-3 px-3 sm:px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm">
-                <span className="hidden sm:inline">Sign In / Register as Seller</span>
-                <span className="sm:hidden">Sign In / Register<br/>as Seller</span>
+              <Button className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white font-semibold py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight">
+                Sign In / Register as Seller
               </Button>
             </Card>
           </Link>
@@ -101,9 +99,8 @@ const AuthTypeSelector = () => {
                 ✓ Content moderation<br/>
                 ✓ System analytics
               </div>
-              <Button className="w-full bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 text-white font-semibold py-2 sm:py-3 px-3 sm:px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm">
-                <span className="hidden sm:inline">Sign In / Register as Admin</span>
-                <span className="sm:hidden">Sign In / Register<br/>as Admin</span>
+              <Button className="w-full bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 text-white font-semibold py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight">
+                Sign In / Register as Admin
               </Button>
             </Card>
           </Link>
