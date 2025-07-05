@@ -106,7 +106,7 @@ const HeroSection = () => {
             <img 
               src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
               alt="PartMatch Logo" 
-              className="h-32 sm:h-40 md:h-48 w-auto object-cover"
+              className="h-32 sm:h-40 md:h-48 w-auto object-cover bg-white rounded-lg p-3 shadow-lg"
             />
           </div>
         </div>
