@@ -82,6 +82,8 @@ const RequestPart = () => {
         title="Request Car Part"
         subtitle="Tell us what you need and we'll connect you with suppliers"
         backTo="/"
+        showHomeButton={true}
+        showSignOut={true}
       />
       
       <main className="container mx-auto px-4 py-8 max-w-2xl">

@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, LogOut, Home } from "lucide-react";
+import { ArrowLeft, LogOut, Home, Bell, X } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -53,13 +53,14 @@ const PageHeader = ({ title, subtitle, showBackButton = false, backTo, showSignO
         </Button>
       )}
       
-      {/* Logo */}
+      {/* Logo and PartMatch Ghana */}
       <Link to="/" className="flex items-center gap-2 sm:gap-3 flex-shrink-0 hover:opacity-80 transition-opacity">
         <img 
           src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
           alt="PartMatch Logo" 
           className="h-6 w-auto sm:h-8"
         />
+        <span className="text-lg sm:text-xl font-bold text-gray-700">PartMatch Ghana</span>
       </Link>
       
       <div className="flex flex-col min-w-0 flex-1">
@@ -72,6 +73,16 @@ const PageHeader = ({ title, subtitle, showBackButton = false, backTo, showSignO
       </div>
       
       <div className="flex items-center gap-2">
+        {/* Notification Bell */}
+        <Button 
+          variant="ghost" 
+          size="sm"
+          onClick={() => console.log('Notification clicked')}
+          className="text-gray-700 hover:text-blue-700 hover:bg-blue-50/50 transition-all duration-300 p-2"
+        >
+          <Bell className="h-5 w-5" />
+        </Button>
+        
         {showHomeButton && (
           <Button 
             variant="ghost" 
@@ -88,10 +99,9 @@ const PageHeader = ({ title, subtitle, showBackButton = false, backTo, showSignO
             variant="ghost" 
             size="sm"
             onClick={handleSignOut}
-            className="text-gray-700 hover:text-red-700 hover:bg-red-50/50 transition-all duration-300"
+            className="text-gray-700 hover:text-red-700 hover:bg-red-50/50 transition-all duration-300 p-2"
           >
-            <LogOut className="h-4 w-4 mr-2" />
-            <span className="hidden sm:inline">Sign Out</span>
+            <X className="h-5 w-5" />
           </Button>
         )}
         {children}
