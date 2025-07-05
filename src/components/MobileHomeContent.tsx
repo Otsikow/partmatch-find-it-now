@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useRealTimeStats } from "@/hooks/useRealTimeStats";
 
 const MobileHomeContent = () => {
-  const { activeParts, sellers, categories, buyers, loading } = useRealTimeStats();
+  const { activeParts, sellers, regions, categories, loading } = useRealTimeStats();
   
   return (
     <div className="px-4 py-6 space-y-6">
@@ -141,9 +141,9 @@ const MobileHomeContent = () => {
           </div>
           <div className="text-center">
             <div className="text-xl font-bold text-orange-600">
-              {loading ? '...' : `${buyers.averageRating}★`}
+              {loading ? '...' : `${regions}`}
             </div>
-            <div className="text-xs text-gray-500">Rating</div>
+            <div className="text-xs text-gray-500">Regions</div>
           </div>
         </div>
       </div>
