@@ -10,6 +10,7 @@ import PageHeader from "@/components/PageHeader";
 const UserDashboard = () => {
   const { user, signOut } = useAuth();
   const [displayName, setDisplayName] = useState<string>('User');
+  const [userType, setUserType] = useState<string>('owner');
 
   useEffect(() => {
     const fetchUserName = async () => {
@@ -18,13 +19,14 @@ const UserDashboard = () => {
       try {
         const { data: profile } = await supabase
           .from('profiles')
-          .select('first_name, last_name')
+          .select('first_name, last_name, user_type')
           .eq('id', user.id)
           .single();
 
         if (profile) {
           const name = `${profile.first_name || ''} ${profile.last_name || ''}`.trim();
           setDisplayName(name || user.email?.split('@')[0] || 'User');
+          setUserType(profile.user_type || 'owner');
         } else {
           setDisplayName(user.email?.split('@')[0] || 'User');
         }
@@ -117,23 +119,41 @@ const UserDashboard = () => {
             </CardContent>
           </Card>
 
-          {/* Post Car Parts */}
+          {/* Supplier Section - Conditional Content */}
           <Card className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 bg-gradient-to-br from-white/90 to-orange-50/50 backdrop-blur-sm border-0 shadow-lg">
             <CardContent className="p-6 sm:p-8 text-center">
               <div className="bg-gradient-to-br from-orange-500 to-red-600 rounded-full p-4 w-fit mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
                 <Plus className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl sm:text-2xl font-playfair font-semibold mb-4 text-orange-700">
-                Become a Supplier
-              </h3>
-              <p className="text-gray-600 mb-6 font-crimson">
-                Join as a supplier to sell car parts and grow your business
-              </p>
-              <Link to="/supplier-dashboard">
-                <Button className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white shadow-lg hover:shadow-xl transition-all duration-300">
-                  Go to Dashboard
-                </Button>
-              </Link>
+              {userType === 'supplier' ? (
+                <>
+                  <h3 className="text-xl sm:text-2xl font-playfair font-semibold mb-4 text-orange-700">
+                    Sell Car Parts
+                  </h3>
+                  <p className="text-gray-600 mb-6 font-crimson">
+                    Manage your inventory and sell car parts to grow your business
+                  </p>
+                  <Link to="/seller-dashboard">
+                    <Button className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white shadow-lg hover:shadow-xl transition-all duration-300">
+                      Go to Seller Dashboard
+                    </Button>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <h3 className="text-xl sm:text-2xl font-playfair font-semibold mb-4 text-orange-700">
+                    Become a Supplier
+                  </h3>
+                  <p className="text-gray-600 mb-6 font-crimson">
+                    Join as a supplier to sell car parts and grow your business
+                  </p>
+                  <Link to="/seller-auth">
+                    <Button className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white shadow-lg hover:shadow-xl transition-all duration-300">
+                      Get Started
+                    </Button>
+                  </Link>
+                </>
+              )}
             </CardContent>
           </Card>
         </div>
