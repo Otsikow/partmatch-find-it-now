@@ -1,11 +1,19 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
+interface CategoryStats {
+  engineParts: number;
+  brakeParts: number;
+  suspensionParts: number;
+  bodyParts: number;
+}
+
 interface RealTimeStats {
   activeParts: number;
   sellers: number;
   totalUsers: number;
   regions: number;
+  categories: CategoryStats;
   loading: boolean;
 }
 
@@ -15,6 +23,12 @@ export const useRealTimeStats = () => {
     sellers: 0,
     totalUsers: 0,
     regions: 16, // Static for now as regions don't change often
+    categories: {
+      engineParts: 0,
+      brakeParts: 0,
+      suspensionParts: 0,
+      bodyParts: 0
+    },
     loading: true
   });
 
@@ -37,11 +51,25 @@ export const useRealTimeStats = () => {
         .from('profiles')
         .select('*', { count: 'exact', head: true });
 
+      // Get category counts
+      const [engineResult, brakeResult, suspensionResult, bodyResult] = await Promise.all([
+        supabase.from('car_parts').select('*', { count: 'exact', head: true }).ilike('part_type', '%engine%').eq('status', 'available'),
+        supabase.from('car_parts').select('*', { count: 'exact', head: true }).ilike('part_type', '%brake%').eq('status', 'available'),
+        supabase.from('car_parts').select('*', { count: 'exact', head: true }).ilike('part_type', '%suspension%').eq('status', 'available'),
+        supabase.from('car_parts').select('*', { count: 'exact', head: true }).ilike('part_type', '%body%').eq('status', 'available')
+      ]);
+
       setStats({
         activeParts: partsCount || 0,
         sellers: sellersCount || 0,
         totalUsers: usersCount || 0,
         regions: 16,
+        categories: {
+          engineParts: engineResult.count || 0,
+          brakeParts: brakeResult.count || 0,
+          suspensionParts: suspensionResult.count || 0,
+          bodyParts: bodyResult.count || 0
+        },
         loading: false
       });
     } catch (error) {

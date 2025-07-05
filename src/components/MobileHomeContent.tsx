@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useRealTimeStats } from "@/hooks/useRealTimeStats";
 
 const MobileHomeContent = () => {
-  const { activeParts, sellers, loading } = useRealTimeStats();
+  const { activeParts, sellers, categories, loading } = useRealTimeStats();
   
   return (
     <div className="px-4 py-6 space-y-6">
@@ -61,6 +61,22 @@ const MobileHomeContent = () => {
             </Card>
           </Link>
         </div>
+        
+        <div className="mt-3">
+          <Link to="/seller-dashboard">
+            <Card className="h-full">
+              <CardContent className="p-4 text-center space-y-3">
+                <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mx-auto">
+                  <Package className="w-6 h-6 text-purple-600" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-900">Sell Car Parts</h4>
+                  <p className="text-xs text-gray-500">List your parts for sale</p>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+        </div>
       </div>
 
       {/* Popular Categories */}
@@ -69,10 +85,10 @@ const MobileHomeContent = () => {
         
         <div className="space-y-2">
           {[
-            { name: "Engine Parts", count: "120+ parts" },
-            { name: "Brake System", count: "85+ parts" },
-            { name: "Suspension", count: "95+ parts" },
-            { name: "Body Parts", count: "200+ parts" },
+            { name: "Engine Parts", count: loading ? "..." : `${categories.engineParts}+ parts` },
+            { name: "Brake System", count: loading ? "..." : `${categories.brakeParts}+ parts` },
+            { name: "Suspension", count: loading ? "..." : `${categories.suspensionParts}+ parts` },
+            { name: "Body Parts", count: loading ? "..." : `${categories.bodyParts}+ parts` },
           ].map((category) => (
             <Link
               key={category.name}
