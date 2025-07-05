@@ -14,7 +14,7 @@ const MobileHeader = () => {
             className="h-8 w-auto"
           />
           <div>
-            <p className="text-xs text-gray-500">Ghana</p>
+            <p className="text-sm text-gray-600 font-playfair font-semibold">PartMatch Ghana</p>
           </div>
         </div>
         
