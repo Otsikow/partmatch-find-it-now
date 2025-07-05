@@ -42,10 +42,10 @@
     --nav-accent-hover: 271.5 81% 66%;
 
     /* Hero section colors */
-    --hero-background: 217 91% 96%;
+    --hero-background: 0 0% 100%;
     --hero-accent: 43 74% 66%;
-    --hero-gradient-start: 213 27% 84%;
-    --hero-gradient-end: 252 87% 89%;
+    --hero-gradient-start: 0 0% 100%;
+    --hero-gradient-end: 0 0% 100%;
 
     /* Success/Error colors */
     --success: 142 76% 36%;
