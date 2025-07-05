@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import PWANotificationManager from "@/components/PWANotificationManager";
 import Index from "./pages/Index";
 import AuthTypeSelector from "./components/AuthTypeSelector";
 import BuyerAuth from "./pages/BuyerAuth";
@@ -123,6 +124,9 @@ const App = () => (
             <Route path="/button-test" element={<ButtonTestPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          
+          {/* PWA Notification Manager */}
+          <PWANotificationManager />
         </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>
