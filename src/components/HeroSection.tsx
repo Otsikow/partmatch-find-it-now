@@ -102,7 +102,7 @@ const HeroSection = () => {
     <div className="relative min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-hero-gradient-start via-hero-gradient-end to-hero-gradient-start px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto text-center">
         <div className="mb-6 sm:mb-8">
-          <div className="flex items-center justify-center mb-4 sm:mb-6">
+          <div className="flex items-center justify-center mb-2 sm:mb-3">
             <img 
               src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
               alt="PartMatch Logo" 
@@ -114,7 +114,7 @@ const HeroSection = () => {
         <div className="flex flex-col sm:flex-row items-center justify-center sm:space-x-3 mb-4 sm:mb-6">
           <Zap className="h-6 w-6 sm:h-8 sm:w-8 text-hero-accent mb-2 sm:mb-0" />
           <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-playfair font-bold text-foreground leading-tight text-center">
-            Find Car Parts in Ghana
+            Find & Sell Car Parts in Ghana
           </h2>
         </div>
         <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed px-4">

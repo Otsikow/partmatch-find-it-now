@@ -10,7 +10,7 @@ const MobileHomeContent = () => {
   return (
     <div className="px-4 py-6 space-y-6">
       {/* Hero Section */}
-      <div className="text-center space-y-4">
+      <div className="text-center space-y-2">
         <div className="mx-auto">
           <img 
             src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
@@ -20,7 +20,7 @@ const MobileHomeContent = () => {
         </div>
         <div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Find Car Parts in Ghana
+            Find & Sell Car Parts in Ghana
           </h2>
           <p className="text-gray-600 text-sm leading-relaxed">
             The easiest way to find and order car parts in Ghana. Compare prices from trusted sellers.
