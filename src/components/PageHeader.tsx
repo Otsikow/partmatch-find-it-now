@@ -1,8 +1,11 @@
 
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, LogOut, Home, Bell, X } from "lucide-react";
+import { ArrowLeft, LogOut, Home, Bell, X, User } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 interface PageHeaderProps {
   title: string;
@@ -16,7 +19,20 @@ interface PageHeaderProps {
 
 const PageHeader = ({ title, subtitle, showBackButton = false, backTo, showSignOut = false, showHomeButton = false, children }: PageHeaderProps) => {
   const navigate = useNavigate();
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
+
+  const getInitials = (email: string) => {
+    return email.charAt(0).toUpperCase();
+  };
+
+  const handleNotificationClick = () => {
+    // TODO: Implement notification panel
+    console.log('Opening notifications...');
+  };
+
+  const handleProfileClick = () => {
+    navigate('/dashboard');
+  };
 
   const handleBack = () => {
     if (backTo) {
@@ -74,14 +90,50 @@ const PageHeader = ({ title, subtitle, showBackButton = false, backTo, showSignO
       
       <div className="flex items-center gap-2">
         {/* Notification Bell */}
-        <Button 
-          variant="ghost" 
-          size="sm"
-          onClick={() => console.log('Notification clicked')}
-          className="text-gray-700 hover:text-blue-700 hover:bg-blue-50/50 transition-all duration-300 p-2"
-        >
-          <Bell className="h-5 w-5" />
-        </Button>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button 
+              variant="ghost" 
+              size="sm"
+              className="text-gray-700 hover:text-blue-700 hover:bg-blue-50/50 transition-all duration-300 p-2"
+            >
+              <Bell className="h-5 w-5" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-80">
+            <div className="space-y-4">
+              <h4 className="font-medium">Notifications</h4>
+              <div className="text-sm text-gray-500">
+                No new notifications
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
+
+        {/* Profile Icon */}
+        {user && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                <Avatar className="h-8 w-8">
+                  <AvatarFallback className="bg-primary text-primary-foreground">
+                    {getInitials(user.email || 'U')}
+                  </AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end" forceMount>
+              <DropdownMenuItem onClick={handleProfileClick}>
+                <User className="mr-2 h-4 w-4" />
+                <span>Dashboard</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleSignOut}>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Sign out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
         
         {showHomeButton && (
           <Button 
