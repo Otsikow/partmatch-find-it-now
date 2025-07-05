@@ -1,11 +1,7 @@
 
-import Footer from "@/components/Footer";
-import Navigation from "@/components/Navigation";
-import HeroSection from "@/components/HeroSection";
-import StatsSection from "@/components/StatsSection";
-import CTASection from "@/components/CTASection";
-import FeaturesSection from "@/components/FeaturesSection";
-import HomeDashboard from "@/components/HomeDashboard";
+import MobileHeader from "@/components/MobileHeader";
+import MobileBottomTabs from "@/components/MobileBottomTabs";
+import MobileHomeContent from "@/components/MobileHomeContent";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
@@ -23,15 +19,14 @@ const Index = () => {
   }
 
 
-  // Show landing page for all users
+  // Show mobile app layout
   return (
-    <div className="min-h-screen bg-gradient-to-br from-hero-gradient-start via-hero-gradient-end to-hero-gradient-start font-inter">
-      <Navigation />
-      <HeroSection />
-      <FeaturesSection />
-      <CTASection />
-      <StatsSection />
-      <Footer />
+    <div className="min-h-screen bg-gray-50 font-inter">
+      <MobileHeader />
+      <div className="pt-16 pb-20">
+        <MobileHomeContent />
+      </div>
+      <MobileBottomTabs />
     </div>
   );
 };
