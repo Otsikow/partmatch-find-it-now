@@ -1,77 +1,19 @@
-const CACHE_NAME = 'partmatch-v2';
-const urlsToCache = [
+// Simplified service worker for better browser compatibility
+const CACHE_NAME = 'partmatch-v3';
+const STATIC_ASSETS = [
   '/',
   '/manifest.json',
   '/app-icon-192.png',
-  '/app-icon-512.png',
-  '/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png'
+  '/app-icon-512.png'
 ];
 
-// Install event - cache resources
+// Install event - minimal caching
 self.addEventListener('install', (event) => {
   console.log('Service Worker installing...');
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log('Opened cache');
-        return cache.addAll(urlsToCache).catch((error) => {
-          console.error('Failed to cache resources:', error);
-          // Don't fail installation if some resources can't be cached
-          return Promise.resolve();
-        });
-      })
-  );
-  // Force the waiting service worker to become the active service worker
-  self.skipWaiting();
+  self.skipWaiting(); // Activate immediately
 });
 
-// Fetch event - Network first strategy for better compatibility
-self.addEventListener('fetch', (event) => {
-  // Skip cross-origin requests and chrome-extension requests
-  if (event.request.url.startsWith('chrome-extension://') || 
-      event.request.url.startsWith('moz-extension://') ||
-      !event.request.url.startsWith(self.location.origin)) {
-    return;
-  }
-
-  event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        // If network request succeeds, cache the response
-        if (response && response.status === 200 && response.type === 'basic') {
-          const responseToCache = response.clone();
-          caches.open(CACHE_NAME)
-            .then((cache) => {
-              // Only cache GET requests
-              if (event.request.method === 'GET') {
-                cache.put(event.request, responseToCache);
-              }
-            })
-            .catch(() => {
-              // Ignore cache errors
-            });
-        }
-        return response;
-      })
-      .catch(() => {
-        // If network fails, try to serve from cache
-        return caches.match(event.request)
-          .then((cachedResponse) => {
-            if (cachedResponse) {
-              return cachedResponse;
-            }
-            // For navigation requests, return the cached main page
-            if (event.request.destination === 'document') {
-              return caches.match('/');
-            }
-            // For other requests, return a simple offline response
-            return new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
-          });
-      })
-  );
-});
-
-// Activate event - clean up old caches and take control
+// Activate event - clean up and take control
 self.addEventListener('activate', (event) => {
   console.log('Service Worker activating...');
   event.waitUntil(
@@ -87,10 +29,33 @@ self.addEventListener('activate', (event) => {
           })
         );
       }),
-      // Take control of all pages immediately
+      // Take control immediately
       self.clients.claim()
     ])
   );
+});
+
+// Simplified fetch strategy - just pass through most requests
+self.addEventListener('fetch', (event) => {
+  // Skip non-GET requests and external requests
+  if (event.request.method !== 'GET' || 
+      !event.request.url.startsWith(self.location.origin)) {
+    return;
+  }
+
+  // For navigation requests, use network with fallback
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request).catch(() => {
+        return caches.match('/') || 
+               new Response('App offline', { status: 503 });
+      })
+    );
+    return;
+  }
+
+  // For other requests, just use network
+  event.respondWith(fetch(event.request));
 });
 
 // Push notification event

@@ -1,46 +1,52 @@
 // PWA utility functions
 
-// Register service worker
+// Register service worker with better error handling
 export const registerServiceWorker = async (): Promise<void> => {
-  if ('serviceWorker' in navigator) {
-    try {
-      const registration = await navigator.serviceWorker.register('/service-worker.js', {
-        scope: '/'
-      });
-      console.log('SW registered successfully:', registration.scope);
-      
-      // Handle updates more gracefully
-      registration.addEventListener('updatefound', () => {
-        const newWorker = registration.installing;
-        if (newWorker) {
-          newWorker.addEventListener('statechange', () => {
-            if (newWorker.state === 'installed') {
-              if (navigator.serviceWorker.controller) {
-                // New version available - reload silently after a delay
-                console.log('New version available, updating...');
-                setTimeout(() => {
-                  window.location.reload();
-                }, 1000);
-              } else {
-                // First time install
-                console.log('App is ready for offline use');
-              }
+  // Skip in development to avoid caching issues
+  if (import.meta.env.DEV) {
+    console.log('Service Worker skipped in development mode');
+    return;
+  }
+
+  if (!('serviceWorker' in navigator)) {
+    console.log('Service Worker not supported');
+    return;
+  }
+
+  try {
+    // Wait a moment to ensure the page is fully loaded
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    const registration = await navigator.serviceWorker.register('/service-worker.js', {
+      scope: '/',
+      updateViaCache: 'none' // Always check for updates
+    });
+    
+    console.log('SW registered successfully:', registration.scope);
+    
+    // Handle updates gracefully
+    registration.addEventListener('updatefound', () => {
+      const newWorker = registration.installing;
+      if (newWorker) {
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'installed') {
+            if (navigator.serviceWorker.controller) {
+              console.log('New version available');
+              // Auto-update after a delay
+              setTimeout(() => {
+                window.location.reload();
+              }, 2000);
+            } else {
+              console.log('App cached for offline use');
             }
-          });
-        }
-      });
+          }
+        });
+      }
+    });
 
-      // Handle service worker errors
-      registration.addEventListener('error', (error) => {
-        console.error('Service Worker error:', error);
-      });
-
-    } catch (error) {
-      console.warn('SW registration failed:', error);
-      // Continue without service worker - don't block app loading
-    }
-  } else {
-    console.log('Service Worker not supported in this browser');
+  } catch (error) {
+    console.warn('SW registration failed (app will work normally):', error);
+    // Don't throw - app should continue working without PWA features
   }
 };
 
@@ -81,21 +87,33 @@ export const isPWA = (): boolean => {
          document.referrer.includes('android-app://');
 };
 
-// Install prompt for PWA
+// Install prompt for PWA with better browser compatibility
 export const handleInstallPrompt = (): void => {
+  // Skip in development or if already a PWA
+  if (import.meta.env.DEV || isPWA()) {
+    return;
+  }
+
   let deferredPrompt: any;
+  let promptShown = false;
 
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
     
-    // Show custom install button or banner
-    showInstallPrompt(deferredPrompt);
+    // Don't show prompt immediately - wait for user engagement
+    setTimeout(() => {
+      if (!promptShown && deferredPrompt) {
+        showInstallPrompt(deferredPrompt);
+        promptShown = true;
+      }
+    }, 5000); // Wait 5 seconds after page load
   });
 
   window.addEventListener('appinstalled', () => {
-    console.log('PWA was installed');
+    console.log('PWA installed successfully');
     deferredPrompt = null;
+    promptShown = true;
   });
 };
 
