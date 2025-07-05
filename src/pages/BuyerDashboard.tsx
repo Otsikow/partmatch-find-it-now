@@ -105,15 +105,58 @@ const BuyerDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header with Logo and Back Arrow */}
-      <PageHeader 
-        title={`Buyer Dashboard - ${getSectionTitle()}`}
-        subtitle={`Welcome back, ${displayName}`}
-        showSignOut={true}
-        showHomeButton={true}
-        showBackButton={true}
-        backTo="/"
-      />
+      {/* Optimized Mobile Header */}
+      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div className="px-4 py-3">
+          <div className="flex items-center justify-between">
+            {/* Left: Back button and Logo */}
+            <div className="flex items-center space-x-3">
+              <button 
+                onClick={() => window.history.back()}
+                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <img 
+                src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
+                alt="PartMatch Logo" 
+                className="h-8 w-auto"
+              />
+            </div>
+
+            {/* Center: Title (hidden on very small screens) */}
+            <div className="hidden sm:block text-center flex-1 mx-4">
+              <h1 className="text-lg font-semibold text-blue-600">Buyer Dashboard</h1>
+              <p className="text-sm text-gray-500 truncate">Welcome back, {displayName}</p>
+            </div>
+
+            {/* Right: Home and Profile */}
+            <div className="flex items-center space-x-2">
+              <button 
+                onClick={() => window.location.href = '/'}
+                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+              </button>
+              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                <span className="text-blue-600 font-medium text-sm">
+                  {displayName.charAt(0).toUpperCase()}
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          {/* Mobile title (shown on small screens) */}
+          <div className="sm:hidden mt-3 text-center">
+            <h1 className="text-lg font-semibold text-blue-600">Buyer Dashboard</h1>
+            <p className="text-sm text-gray-500">{getSectionTitle()}</p>
+          </div>
+        </div>
+      </div>
       
       <div className="flex h-[calc(100vh-4rem)]">
         {/* Sidebar - Hidden on mobile, visible on desktop */}
@@ -130,11 +173,10 @@ const BuyerDashboard = () => {
 
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Mobile Navigation */}
-          <div className="lg:hidden bg-white border-b border-gray-200 p-4">
-            <div className="grid grid-cols-3 sm:grid-cols-7 gap-2">
+          {/* Improved Mobile Navigation */}
+          <div className="lg:hidden bg-white border-b border-gray-200 px-2 py-3">
+            <div className="grid grid-cols-4 sm:grid-cols-7 gap-1 max-w-md mx-auto sm:max-w-none">
               {[
-                { id: 'home', label: 'Home', icon: '🏠', action: () => window.location.href = '/' },
                 { id: 'orders', label: 'Orders', icon: '📦' },
                 { id: 'messages', label: 'Messages', icon: '💬', badge: unreadMessages },
                 { id: 'saved-parts', label: 'Saved', icon: '❤️' },
@@ -144,19 +186,19 @@ const BuyerDashboard = () => {
               ].map((item) => (
                 <button
                   key={item.id}
-                  onClick={() => item.action ? item.action() : setActiveSection(item.id)}
-                  className={`relative flex flex-col items-center justify-center p-3 rounded-lg transition-all duration-200 ${
-                    activeSection === item.id && !item.action
-                      ? 'bg-blue-50 text-blue-700 border-2 border-blue-200'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 border-2 border-transparent'
+                  onClick={() => setActiveSection(item.id)}
+                  className={`relative flex flex-col items-center justify-center p-2 sm:p-3 rounded-xl transition-all duration-200 ${
+                    activeSection === item.id
+                      ? 'bg-blue-50 text-blue-600 border border-blue-200 shadow-sm'
+                      : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
                   }`}
                 >
-                  <span className="text-lg mb-1">{item.icon}</span>
-                  <span className="text-xs font-medium truncate w-full text-center">
+                  <span className="text-base sm:text-lg mb-1">{item.icon}</span>
+                  <span className="text-xs font-medium truncate w-full text-center leading-tight">
                     {item.label}
                   </span>
                   {item.badge && item.badge > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center">
                       {item.badge > 99 ? '99+' : item.badge}
                     </span>
                   )}
