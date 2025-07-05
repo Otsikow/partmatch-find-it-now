@@ -428,7 +428,7 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
         <RatingModal
           isOpen={showRatingModal}
           onClose={() => setShowRatingModal(false)}
-          offerId="" // This would need to be passed from a completed transaction
+          offerId={null} // No offer ID for direct seller ratings
           sellerId={part.supplier_id}
           sellerName={supplierName}
           onRatingSubmitted={() => {
