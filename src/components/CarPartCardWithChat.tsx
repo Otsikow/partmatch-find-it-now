@@ -15,6 +15,7 @@ import { useLocationDetection } from "@/hooks/useLocationDetection";
 import { getLocationDisplayText, isInSameCity, calculateDistance } from "@/utils/distanceUtils";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 interface CarPart {
   id: string;
@@ -52,6 +53,7 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
   const { user } = useAuth();
+  const navigate = useNavigate();
   
   // Get user's location for distance calculation
   const { location: userLocation } = useLocationDetection({
@@ -108,11 +110,7 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
 
   const handleRateSellerClick = () => {
     if (!user) {
-      toast({
-        title: "Sign In Required",
-        description: "Please sign in to rate sellers.",
-        variant: "destructive"
-      });
+      navigate('/auth');
       return;
     }
     setShowRatingModal(true);
