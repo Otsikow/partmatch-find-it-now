@@ -12,7 +12,7 @@ const MobileHeader = () => {
           <img 
             src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
             alt="PartMatch Logo" 
-            className="h-8 w-auto"
+            className="h-8 w-auto bg-white rounded-sm p-1"
           />
           <div>
             <p className="text-sm text-gray-600 font-playfair font-semibold">PartMatch Ghana</p>

@@ -74,7 +74,7 @@ const PageHeader = ({ title, subtitle, showBackButton = false, backTo, showSignO
         <img 
           src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
           alt="PartMatch Logo" 
-          className="h-6 w-auto sm:h-8"
+          className="h-6 w-auto sm:h-8 bg-white rounded-sm p-1"
         />
         <span className="text-lg sm:text-xl font-bold text-gray-700">PartMatch Ghana</span>
       </Link>
