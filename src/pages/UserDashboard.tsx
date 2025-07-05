@@ -6,23 +6,20 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import PageHeader from "@/components/PageHeader";
-
 const UserDashboard = () => {
-  const { user, signOut } = useAuth();
+  const {
+    user,
+    signOut
+  } = useAuth();
   const [displayName, setDisplayName] = useState<string>('User');
   const [userType, setUserType] = useState<string>('owner');
-
   useEffect(() => {
     const fetchUserName = async () => {
       if (!user) return;
-
       try {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('first_name, last_name, user_type')
-          .eq('id', user.id)
-          .single();
-
+        const {
+          data: profile
+        } = await supabase.from('profiles').select('first_name, last_name, user_type').eq('id', user.id).single();
         if (profile) {
           const name = `${profile.first_name || ''} ${profile.last_name || ''}`.trim();
           setDisplayName(name || user.email?.split('@')[0] || 'User');
@@ -35,10 +32,8 @@ const UserDashboard = () => {
         setDisplayName(user.email?.split('@')[0] || 'User');
       }
     };
-
     fetchUserName();
   }, [user]);
-
   const handleSignOut = async () => {
     try {
       await signOut();
@@ -46,20 +41,9 @@ const UserDashboard = () => {
       console.log('Sign out completed with graceful error handling');
     }
   };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 font-inter">
-      <PageHeader 
-        title={`Welcome to PartMatch`}
-        subtitle={`Hello, ${displayName}`}
-        backTo="/"
-      >
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          onClick={handleSignOut}
-          className="text-gray-700 hover:text-red-700 hover:bg-red-50/50 font-medium"
-        >
+  return <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 font-inter">
+      <PageHeader title={`Welcome to PartMatch`} subtitle={`Hello, ${displayName}`} backTo="/">
+        <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-gray-700 hover:text-red-700 hover:bg-red-50/50 font-medium">
           Sign Out
         </Button>
       </PageHeader>
@@ -125,8 +109,7 @@ const UserDashboard = () => {
               <div className="bg-gradient-to-br from-orange-500 to-red-600 rounded-full p-4 w-fit mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
                 <Plus className="h-8 w-8 text-white" />
               </div>
-              {userType === 'supplier' ? (
-                <>
+              {userType === 'supplier' ? <>
                   <h3 className="text-xl sm:text-2xl font-playfair font-semibold mb-4 text-orange-700">
                     Sell Car Parts
                   </h3>
@@ -138,28 +121,21 @@ const UserDashboard = () => {
                       Go to Seller Dashboard
                     </Button>
                   </Link>
-                </>
-              ) : (
-                <>
+                </> : <>
                   <h3 className="text-xl sm:text-2xl font-playfair font-semibold mb-4 text-orange-700">
-                    Become a Seller
+                    Become a Supplier
                   </h3>
-                  <p className="text-gray-600 mb-6 font-crimson">
-                    Join as a supplier to sell car parts and grow your business
-                  </p>
+                  <p className="text-gray-600 mb-6 font-crimson">Join as a seller to sell car parts and grow your business</p>
                   <Link to="/seller-auth">
                     <Button className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white shadow-lg hover:shadow-xl transition-all duration-300">
                       Get Started
                     </Button>
                   </Link>
-                </>
-              )}
+                </>}
             </CardContent>
           </Card>
         </div>
       </main>
-    </div>
-  );
+    </div>;
 };
-
 export default UserDashboard;
