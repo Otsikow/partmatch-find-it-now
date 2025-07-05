@@ -142,7 +142,7 @@ const UserDashboard = () => {
               ) : (
                 <>
                   <h3 className="text-xl sm:text-2xl font-playfair font-semibold mb-4 text-orange-700">
-                    Become a Supplier
+                    Become a Seller
                   </h3>
                   <p className="text-gray-600 mb-6 font-crimson">
                     Join as a supplier to sell car parts and grow your business
