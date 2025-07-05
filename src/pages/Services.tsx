@@ -1,6 +1,6 @@
 
 import Footer from "@/components/Footer";
-import Navigation from "@/components/Navigation";
+import PageHeader from "@/components/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -19,20 +19,22 @@ import {
 
 const Services = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-pink-100 font-inter">
-      <Navigation />
+    <div className="min-h-screen bg-gradient-to-br from-background via-gradient-accent to-gradient-secondary font-inter">
+      <PageHeader 
+        title="Our Services" 
+        subtitle="Comprehensive automotive parts solutions"
+        showBackButton={true}
+        backTo="/"
+      />
       
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
         {/* Header */}
-        <div className="text-center mb-16">
-          <div className="flex items-center justify-center space-x-3 mb-6">
-            <Wrench className="h-12 w-12 text-purple-500" />
-            <h1 className="text-4xl md:text-5xl font-playfair font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              Our Services
-            </h1>
+        <div className="text-center mb-12 sm:mb-16">
+          <div className="flex items-center justify-center space-x-2 sm:space-x-3 mb-4 sm:mb-6">
+            <Wrench className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-primary" />
           </div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto font-crimson leading-relaxed">
-            Comprehensive automotive parts solutions designed to make your car maintenance and repairs easier, faster, and more reliable.
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto font-crimson leading-relaxed px-4">
+            Designed to make your car maintenance and repairs easier, faster, and more reliable.
           </p>
         </div>
 

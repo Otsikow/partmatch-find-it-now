@@ -1,25 +1,27 @@
 
 import Footer from "@/components/Footer";
-import Navigation from "@/components/Navigation";
+import PageHeader from "@/components/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
 import { Package, Users, Shield, Award, MapPin, Mail, Phone, Target, Eye, Star, CheckCircle, Clock } from "lucide-react";
 
 const About = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-emerald-50 to-green-100 font-inter">
-      <Navigation />
+    <div className="min-h-screen bg-gradient-to-br from-background via-gradient-accent to-gradient-secondary font-inter">
+      <PageHeader 
+        title="About PartMatch" 
+        subtitle="Your trusted partner for automotive parts in Ghana"
+        showBackButton={true}
+        backTo="/"
+      />
       
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
         {/* Hero Section */}
-        <div className="text-center mb-16">
-          <div className="flex items-center justify-center space-x-3 mb-6">
-            <Package className="h-12 w-12 text-orange-500" />
-            <h1 className="text-4xl md:text-5xl font-playfair font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-              About PartMatch
-            </h1>
+        <div className="text-center mb-12 sm:mb-16">
+          <div className="flex items-center justify-center space-x-2 sm:space-x-3 mb-4 sm:mb-6">
+            <Package className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-primary" />
           </div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto font-crimson leading-relaxed">
-            Your trusted partner for automotive parts in Ghana. We connect customers with verified local sellers for quality parts and exceptional service.
+          <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto font-crimson leading-relaxed px-4">
+            We connect customers with verified local sellers for quality parts and exceptional service.
           </p>
         </div>
 
