@@ -7,6 +7,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MapPin, Phone, Calendar, Navigation, Expand, X } from "lucide-react";
 import ChatButton from "@/components/chat/ChatButton";
 import SellerRatingDisplay from "@/components/SellerRatingDisplay";
+import SaveButton from "@/components/SaveButton";
+import RatingModal from "@/components/RatingModal";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { format } from 'date-fns';
 import { useLocationDetection } from "@/hooks/useLocationDetection";
@@ -46,6 +48,7 @@ interface CarPartCardWithChatProps {
 
 const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [showRatingModal, setShowRatingModal] = useState(false);
   
   // Get user's location for distance calculation
   const { location: userLocation } = useLocationDetection({
@@ -208,13 +211,19 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
 
         {/* Action Buttons */}
         <div className="p-4 sm:p-5 lg:p-6 pt-0 border-t border-border bg-muted/30 rounded-b-lg" onClick={(e) => e.stopPropagation()}>
-          <div className="flex gap-2 sm:gap-3">
+          <div className="flex gap-2 sm:gap-3 mb-2">
             <ChatButton
               sellerId={part.supplier_id}
               partId={part.id}
               size="sm"
               variant="outline"
               className="flex-1 text-sm h-9 sm:h-10 font-medium"
+            />
+            <SaveButton 
+              partId={part.id} 
+              size="sm"
+              variant="outline"
+              className="border-red-200 hover:bg-red-50 h-9 sm:h-10"
             />
             {part.address && (
               <Button 
@@ -229,6 +238,14 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
               </Button>
             )}
           </div>
+          <Button 
+            size="sm" 
+            variant="secondary" 
+            onClick={() => setShowRatingModal(true)}
+            className="w-full text-sm h-9 sm:h-10 font-medium"
+          >
+            Rate Seller
+          </Button>
         </div>
       </Card>
 
@@ -355,6 +372,13 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
                 partId={part.id}
                 className="flex-1 bg-gradient-to-r from-blue-600 to-purple-700 hover:from-blue-700 hover:to-purple-800 text-sm sm:text-base"
               />
+              <SaveButton 
+                partId={part.id} 
+                size="default"
+                variant="outline"
+                className="border-red-200 hover:bg-red-50"
+                showText={true}
+              />
               {part.address && (
                 <Button 
                   onClick={openDirections}
@@ -366,9 +390,33 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
                 </Button>
               )}
             </div>
+            
+            {/* Rating Button */}
+            <div className="pt-3 border-t">
+              <Button 
+                onClick={() => setShowRatingModal(true)}
+                variant="secondary"
+                className="w-full text-sm sm:text-base"
+              >
+                Rate Seller
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Rating Modal */}
+      <RatingModal
+        isOpen={showRatingModal}
+        onClose={() => setShowRatingModal(false)}
+        offerId="" // This would need to be passed from a completed transaction
+        sellerId={part.supplier_id}
+        sellerName={supplierName}
+        onRatingSubmitted={() => {
+          setShowRatingModal(false);
+          // Could refresh seller rating here
+        }}
+      />
     </>
   );
 };
