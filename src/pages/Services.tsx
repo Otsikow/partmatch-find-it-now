@@ -22,7 +22,7 @@ const Services = () => {
     <div className="min-h-screen bg-gradient-to-br from-background via-gradient-accent to-gradient-secondary font-inter">
       <PageHeader 
         title="Our Services" 
-        subtitle="Comprehensive automotive parts solutions"
+        subtitle="Comprehensive automotive parts solutions for Ghana"
         showBackButton={true}
         backTo="/"
       />
@@ -168,8 +168,8 @@ const Services = () => {
           <CardContent className="p-12 text-center">
             <Package className="h-16 w-16 text-gray-600 mx-auto mb-6" />
             <h2 className="text-3xl font-playfair font-bold text-gray-800 mb-6">Ready to Get Started?</h2>
-            <p className="text-xl text-gray-600 font-crimson leading-relaxed mb-8 max-w-2xl mx-auto">
-              Join thousands of satisfied customers who trust PartMatch for their automotive parts needs. Start searching for parts or become a verified seller today.
+              <p className="text-xl text-gray-600 font-crimson leading-relaxed mb-8 max-w-2xl mx-auto">
+              Join thousands of satisfied customers who trust our platform for their automotive parts needs. Start searching for parts or become a verified seller today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/search-parts">

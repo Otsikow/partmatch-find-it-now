@@ -8,7 +8,7 @@ const About = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-gradient-accent to-gradient-secondary font-inter">
       <PageHeader 
-        title="About PartMatch" 
+        title="About Us" 
         subtitle="Your trusted partner for automotive parts in Ghana"
         showBackButton={true}
         backTo="/"
@@ -61,10 +61,10 @@ const About = () => {
             </div>
             <div className="max-w-4xl mx-auto space-y-6 text-gray-600 font-crimson leading-relaxed">
               <p>
-                PartMatch was born from a simple observation: finding quality automotive parts in Ghana was unnecessarily complicated and time-consuming. Car buyers often struggled to locate the right parts, while parts sellers had difficulty reaching potential customers.
+                Our platform was born from a simple observation: finding quality automotive parts in Ghana was unnecessarily complicated and time-consuming. Car buyers often struggled to locate the right parts, while parts sellers had difficulty reaching potential customers.
               </p>
               <p>
-                Founded in 2024, PartMatch bridges this gap by creating a comprehensive platform where verified sellers can showcase their inventory and customers can easily find exactly what they need. Our team combines deep understanding of the local automotive market with modern technology to deliver a seamless experience.
+                Founded in 2024, our platform bridges this gap by creating a comprehensive marketplace where verified sellers can showcase their inventory and customers can easily find exactly what they need. Our team combines deep understanding of the local automotive market with modern technology to deliver a seamless experience.
               </p>
               <p>
                 Today, we're proud to serve customers across Ghana, connecting them with trusted sellers and quality parts. Our commitment to transparency, security, and customer satisfaction drives everything we do.
@@ -77,7 +77,7 @@ const About = () => {
         <div className="mb-16">
           <div className="flex items-center justify-center space-x-3 mb-8">
             <CheckCircle className="h-8 w-8 text-green-500" />
-            <h2 className="text-3xl font-playfair font-bold text-gray-800">Why Choose PartMatch?</h2>
+            <h2 className="text-3xl font-playfair font-bold text-gray-800">Why Choose Us?</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-blue-50/50">
