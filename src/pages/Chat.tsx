@@ -30,23 +30,24 @@ const Chat = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <PageHeader 
         title="Messages"
         subtitle="Chat with buyers and sellers"
         backTo="/dashboard"
+        showHomeButton={true}
       />
       
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-12rem)]">
+      <div className="flex-1 flex overflow-hidden">
+        <div className="w-full max-w-7xl mx-auto flex h-full">
           {/* Chat List - Hidden on mobile when chat is selected */}
-          <div className={`lg:col-span-1 ${selectedChatId && isMobile ? 'hidden' : 'block'}`}>
+          <div className={`w-full lg:w-1/3 xl:w-1/4 border-r border-gray-200 bg-white ${selectedChatId && isMobile ? 'hidden' : 'block'}`}>
             <ChatList onChatSelect={handleChatSelect} />
           </div>
           
           {/* Chat Interface - Only show when chat is selected */}
           {selectedChatId && (
-            <div className="lg:col-span-2">
+            <div className="flex-1 bg-white">
               <ChatInterface 
                 chatId={selectedChatId} 
                 onBack={handleBack}
@@ -56,8 +57,13 @@ const Chat = () => {
           
           {/* Placeholder when no chat selected (desktop only) */}
           {!selectedChatId && !isMobile && (
-            <div className="lg:col-span-2 flex items-center justify-center">
+            <div className="flex-1 flex items-center justify-center bg-gray-50">
               <div className="text-center text-gray-500">
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-200 flex items-center justify-center">
+                  <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                </div>
                 <h3 className="text-lg font-medium mb-2">Select a conversation</h3>
                 <p className="text-sm">Choose a chat from the list to start messaging</p>
               </div>

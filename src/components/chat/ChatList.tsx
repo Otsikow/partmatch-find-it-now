@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -153,23 +152,16 @@ const ChatList = ({ onChatSelect }: ChatListProps) => {
 
   if (loading) {
     return (
-      <Card className="h-full">
-        <CardContent className="p-4">
-          <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="h-full flex items-center justify-center bg-white">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+      </div>
     );
   }
 
   return (
-    <Card className="h-full">
-      <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2">
-          <MessageCircle className="h-5 w-5" />
-          Messages
-        </CardTitle>
+    <div className="h-full flex flex-col bg-white">
+      <div className="p-4 border-b">
+        <h2 className="text-lg font-semibold text-gray-900 mb-3">Messages</h2>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
           <Input
@@ -179,49 +171,58 @@ const ChatList = ({ onChatSelect }: ChatListProps) => {
             className="pl-10"
           />
         </div>
-      </CardHeader>
+      </div>
 
-      <CardContent className="p-0">
-        <div className="max-h-96 overflow-y-auto">
-          {filteredChats.length === 0 ? (
-            <div className="p-4 text-center text-gray-500">
-              <MessageCircle className="h-12 w-12 mx-auto mb-2 opacity-50" />
-              <p className="text-sm">No conversations yet</p>
-              <p className="text-xs">Start chatting with sellers or buyers</p>
+      <div className="flex-1 overflow-y-auto">
+        {filteredChats.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-12 text-gray-500">
+            <div className="w-16 h-16 mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+              <MessageCircle className="w-8 h-8 text-gray-400" />
             </div>
-          ) : (
-            filteredChats.map((chat) => {
+            <p className="text-lg font-medium mb-2">No conversations yet</p>
+            <p className="text-sm text-center px-4">Start messaging with buyers and sellers to see your chats here</p>
+          </div>
+        ) : (
+          <div className="divide-y divide-gray-100">
+            {filteredChats.map((chat) => {
               const unreadCount = getUnreadCount(chat);
               
               return (
                 <div
                   key={chat.id}
                   onClick={() => onChatSelect(chat.id)}
-                  className="p-4 border-b hover:bg-gray-50 cursor-pointer transition-colors"
+                  className="p-4 hover:bg-gray-50 cursor-pointer transition-colors"
                 >
                   <div className="flex items-start gap-3">
-                    <Avatar className="h-10 w-10 flex-shrink-0">
-                      <AvatarFallback>
-                        {getInitials(chat.other_user?.first_name, chat.other_user?.last_name)}
-                      </AvatarFallback>
-                    </Avatar>
+                    <div className="relative">
+                      <Avatar className="h-12 w-12 flex-shrink-0">
+                        <AvatarFallback className="bg-purple-100 text-purple-700">
+                          {getInitials(chat.other_user?.first_name, chat.other_user?.last_name)}
+                        </AvatarFallback>
+                      </Avatar>
+                      {unreadCount > 0 && (
+                        <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                          {unreadCount > 99 ? '99+' : unreadCount}
+                        </div>
+                      )}
+                    </div>
                     
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-2">
-                          <h4 className="font-medium text-sm truncate">
+                          <h4 className="font-semibold text-sm text-gray-900 truncate">
                             {chat.other_user?.first_name} {chat.other_user?.last_name}
                           </h4>
                           {chat.other_user?.is_verified && (
-                            <Badge variant="secondary" className="text-xs">
+                            <Badge variant="secondary" className="text-xs bg-green-100 text-green-700">
                               Verified
                             </Badge>
                           )}
                         </div>
-                        {unreadCount > 0 && (
-                          <Badge className="bg-purple-600 text-white text-xs">
-                            {unreadCount}
-                          </Badge>
+                        {chat.last_message_at && (
+                          <span className="text-xs text-gray-500 flex-shrink-0 ml-2">
+                            {formatDistanceToNow(new Date(chat.last_message_at), { addSuffix: true })}
+                          </span>
                         )}
                       </div>
                       
@@ -231,25 +232,22 @@ const ChatList = ({ onChatSelect }: ChatListProps) => {
                         </p>
                       )}
                       
-                      <div className="flex items-center justify-between">
-                        <p className="text-sm text-gray-600 truncate">
-                          {chat.last_message || 'No messages yet'}
-                        </p>
-                        {chat.last_message_at && (
-                          <span className="text-xs text-gray-400 flex-shrink-0 ml-2">
-                            {formatDistanceToNow(new Date(chat.last_message_at), { addSuffix: true })}
-                          </span>
-                        )}
-                      </div>
+                      <p className="text-sm text-gray-600 truncate">
+                        {chat.last_message || 'No messages yet'}
+                      </p>
+                      
+                      <span className="text-xs text-gray-500 capitalize mt-1 inline-block">
+                        {chat.other_user?.user_type}
+                      </span>
                     </div>
                   </div>
                 </div>
               );
-            })
-          )}
-        </div>
-      </CardContent>
-    </Card>
+            })}
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 

@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from '@/contexts/AuthContext';
 import { useChatData } from '@/hooks/useChatData';
 import { useChatRealtime } from '@/hooks/useChatRealtime';
@@ -45,18 +44,18 @@ const ChatInterface = ({ chatId, onBack }: ChatInterfaceProps) => {
   }
 
   return (
-    <Card className="h-full flex flex-col bg-white shadow-lg">
+    <div className="h-full flex flex-col bg-white">
       <ChatHeader otherUser={otherUser} onBack={onBack} />
 
-      <CardContent className="flex-1 flex flex-col p-0 min-h-0">
+      <div className="flex-1 flex flex-col min-h-0">
         <MessageList messages={messages} currentUserId={user?.id} />
         <MessageInput 
           chatId={chatId} 
           userId={user?.id} 
           onTyping={handleTyping}
         />
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

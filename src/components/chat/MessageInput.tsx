@@ -62,8 +62,8 @@ const MessageInput = ({ chatId, userId, onTyping }: MessageInputProps) => {
   };
 
   return (
-    <div className="border-t bg-white p-4">
-      <div className="flex items-end gap-3">
+    <div className="border-t bg-white p-4 flex-shrink-0">
+      <div className="flex items-end gap-3 max-w-4xl mx-auto">
         <div className="flex-1">
           <Textarea
             value={newMessage}
@@ -73,7 +73,7 @@ const MessageInput = ({ chatId, userId, onTyping }: MessageInputProps) => {
             }}
             onKeyPress={handleKeyPress}
             placeholder="Type your message here..."
-            className="min-h-[44px] max-h-32 resize-none border-gray-200 focus:border-purple-400 focus:ring-purple-400"
+            className="min-h-[48px] max-h-32 resize-none border-gray-300 focus:border-purple-400 focus:ring-purple-400 rounded-xl"
             disabled={loading}
             rows={1}
           />
@@ -81,12 +81,12 @@ const MessageInput = ({ chatId, userId, onTyping }: MessageInputProps) => {
         <Button
           onClick={sendMessage}
           disabled={!newMessage.trim() || loading}
-          className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-6 py-3 h-11"
+          className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-6 py-3 h-12 rounded-xl shadow-md"
         >
           {loading ? (
-            <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
+            <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
           ) : (
-            <Send className="h-4 w-4" />
+            <Send className="h-5 w-5" />
           )}
         </Button>
       </div>
