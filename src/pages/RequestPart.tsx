@@ -80,7 +80,7 @@ const RequestPart = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100">
       <PageHeader 
         title="Request Car Part"
-        subtitle="Tell us what you need and we'll connect you with suppliers"
+        subtitle="Tell us what you need and we'll connect you with sellers"
         backTo="/"
         showHomeButton={true}
         showSignOut={true}

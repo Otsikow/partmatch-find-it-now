@@ -119,7 +119,7 @@ export const useRequestSubmission = () => {
             if (aiApproved) {
               toast({
                 title: "Request Approved!",
-                description: "Your request has been approved and suppliers are being notified.",
+                description: "Your request has been approved and sellers are being notified.",
               });
               await triggerNotification('new_request', { requestId: requestData.id });
               return { success: true };
@@ -148,7 +148,7 @@ export const useRequestSubmission = () => {
         await triggerNotification('new_request', { requestId: requestData.id });
         toast({
           title: "Request Submitted!",
-          description: "We're notifying suppliers in your area. You'll hear from them soon.",
+          description: "We're notifying sellers in your area. You'll hear from them soon.",
         });
         return { success: true };
       }

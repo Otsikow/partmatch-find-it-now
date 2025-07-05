@@ -5,20 +5,20 @@ import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Package } from "lucide-react";
-import SupplierHeader from "@/components/SupplierHeader";
-import SupplierStats from "@/components/SupplierStats";
-import SupplierTabs from "@/components/SupplierTabs";
-import SupplierWelcomeDashboard from "@/components/SupplierWelcomeDashboard";
-import { useSupplierData } from "@/hooks/useSupplierData";
+import SellerHeader from "@/components/SellerHeader";
+import SellerStats from "@/components/SellerStats";
+import SellerTabs from "@/components/SellerTabs";
+import SellerWelcomeDashboard from "@/components/SellerWelcomeDashboard";
+import { useSellerData } from "@/hooks/useSellerData";
 import { useOfferHandling } from "@/hooks/useOfferHandling";
 
-const SupplierDashboard = () => {
+const SellerDashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('my-parts');
   const [showMainDashboard, setShowMainDashboard] = useState(false);
 
-  const { requests, myOffers, loading, error, refetch } = useSupplierData();
+  const { requests, myOffers, loading, error, refetch } = useSellerData();
   const { handleMakeOffer, handleWhatsAppContact, isSubmittingOffer } = useOfferHandling(refetch);
 
   const handleChatContact = (requestId: string, ownerId: string) => {
@@ -36,7 +36,7 @@ const SupplierDashboard = () => {
   }, [myOffers]);
 
   const handleRetry = () => {
-    console.log('SupplierDashboard: Retrying data fetch');
+    console.log('SellerDashboard: Retrying data fetch');
     refetch();
   };
 
@@ -70,21 +70,21 @@ const SupplierDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white">
-      <SupplierHeader />
+      <SellerHeader />
 
       <main className="container mx-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4 md:py-6 lg:py-8 max-w-full sm:max-w-2xl md:max-w-4xl lg:max-w-6xl xl:max-w-7xl">
         {showMainDashboard ? (
-          <SupplierWelcomeDashboard onGoToSellerTools={() => setShowMainDashboard(false)} />
+          <SellerWelcomeDashboard onGoToSellerTools={() => setShowMainDashboard(false)} />
         ) : (
           <>
-            <SupplierStats
+            <SellerStats
               totalOffers={stats.totalOffers}
               pendingOffers={stats.pendingOffers}
               acceptedOffers={stats.acceptedOffers}
               onNavigateToOffers={() => setActiveTab('offers')}
             />
 
-            <SupplierTabs
+            <SellerTabs
               activeTab={activeTab}
               onTabChange={setActiveTab}
               requests={requests}
@@ -102,4 +102,4 @@ const SupplierDashboard = () => {
   );
 };
 
-export default SupplierDashboard;
+export default SellerDashboard;

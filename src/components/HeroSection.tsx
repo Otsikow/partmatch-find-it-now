@@ -118,7 +118,7 @@ const HeroSection = () => {
           </h2>
         </div>
         <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed px-4">
-          The easiest way to find and order car parts in Ghana. Compare prices from trusted suppliers and get quality parts delivered to your door.
+          The easiest way to find and order car parts in Ghana. Compare prices from trusted sellers and get quality parts delivered to your door.
         </p>
         
         <div className="flex flex-col gap-3 sm:gap-4 justify-center items-stretch max-w-sm sm:max-w-lg mx-auto px-4">

@@ -45,7 +45,7 @@ const FeaturesSection = () => {
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">Request Car Parts</h3>
             <p className="text-gray-600 text-center leading-relaxed">
-              Tell us what you need and get multiple competitive offers from verified suppliers near you.
+              Tell us what you need and get multiple competitive offers from verified sellers near you.
             </p>
           </Link>
 
@@ -56,7 +56,7 @@ const FeaturesSection = () => {
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">Browse Car Parts</h3>
             <p className="text-gray-600 text-center leading-relaxed">
-              Search through available car parts from verified suppliers across Ghana.
+              Search through available car parts from verified sellers across Ghana.
             </p>
           </Link>
 

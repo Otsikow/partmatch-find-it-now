@@ -2,8 +2,11 @@ import { Search, Plus, Package, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useRealTimeStats } from "@/hooks/useRealTimeStats";
 
 const MobileHomeContent = () => {
+  const { activeParts, sellers, loading } = useRealTimeStats();
+  
   return (
     <div className="px-4 py-6 space-y-6">
       {/* Hero Section */}
@@ -20,7 +23,7 @@ const MobileHomeContent = () => {
             Find Car Parts in Ghana
           </h2>
           <p className="text-gray-600 text-sm leading-relaxed">
-            The easiest way to find and order car parts in Ghana. Compare prices from trusted suppliers.
+            The easiest way to find and order car parts in Ghana. Compare prices from trusted sellers.
           </p>
         </div>
       </div>
@@ -103,18 +106,22 @@ const MobileHomeContent = () => {
           <Zap className="w-8 h-8 text-blue-600 mx-auto" />
           <h3 className="font-semibold text-gray-900">Fast & Reliable</h3>
           <p className="text-sm text-gray-600">
-            Connect with verified suppliers across Ghana
+            Connect with verified sellers across Ghana
           </p>
         </div>
         
         <div className="grid grid-cols-3 gap-4 mt-6">
           <div className="text-center">
-            <div className="text-xl font-bold text-blue-600">500+</div>
+            <div className="text-xl font-bold text-blue-600">
+              {loading ? '...' : `${activeParts}+`}
+            </div>
             <div className="text-xs text-gray-500">Active Parts</div>
           </div>
           <div className="text-center">
-            <div className="text-xl font-bold text-green-600">150+</div>
-            <div className="text-xs text-gray-500">Suppliers</div>
+            <div className="text-xl font-bold text-green-600">
+              {loading ? '...' : `${sellers}+`}
+            </div>
+            <div className="text-xs text-gray-500">Sellers</div>
           </div>
           <div className="text-center">
             <div className="text-xl font-bold text-orange-600">4.8★</div>

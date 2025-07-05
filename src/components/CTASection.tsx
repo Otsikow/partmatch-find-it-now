@@ -31,7 +31,7 @@ const CTASection = () => {
           </h2>
         </div>
         <p className="text-base sm:text-xl mb-6 sm:mb-8 text-white/95 max-w-2xl mx-auto drop-shadow-md px-4">
-          Join thousands of satisfied customers and suppliers across Ghana.
+          Join thousands of satisfied customers and sellers across Ghana.
         </p>
         
         <div className="flex flex-col gap-3 sm:gap-4 justify-center items-stretch max-w-sm sm:max-w-2xl mx-auto px-4">

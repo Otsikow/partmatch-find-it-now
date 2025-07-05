@@ -12,7 +12,7 @@ import MyPartsTab from "@/components/MyPartsTab";
 import OffersTab from "@/components/OffersTab";
 import RequestsTab from "@/components/RequestsTab";
 import Chat from "@/pages/Chat";
-import { useSupplierData } from "@/hooks/useSupplierData";
+import { useSellerData } from "@/hooks/useSellerData";
 import { useOfferHandling } from "@/hooks/useOfferHandling";
 
 interface UserProfile {
@@ -27,8 +27,8 @@ const HomeDashboard = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   
-  // Supplier data hooks
-  const { requests, myOffers, loading: supplierLoading, refetch } = useSupplierData();
+  // Seller data hooks
+  const { requests, myOffers, loading: sellerLoading, refetch } = useSellerData();
   const { handleMakeOffer, handleWhatsAppContact, isSubmittingOffer } = useOfferHandling(refetch);
 
   const handleChatContact = (requestId: string, ownerId: string) => {

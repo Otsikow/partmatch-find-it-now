@@ -12,7 +12,7 @@ import SellerAuth from "./pages/SellerAuth";
 import AdminAuth from "./pages/AdminAuth";
 import UserDashboard from "./pages/UserDashboard";
 import BuyerDashboard from "./pages/BuyerDashboard";
-import SupplierDashboard from "./pages/SupplierDashboard";
+import SellerDashboard from "./pages/SellerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import RequestPart from "./pages/RequestPart";
 import SearchParts from "./pages/SearchParts";
@@ -81,10 +81,26 @@ const App = () => (
               } 
             />
             <Route 
+              path="/seller-dashboard" 
+              element={
+                <SellerProtectedRoute>
+                  <SellerDashboard />
+                </SellerProtectedRoute>
+              } 
+            />
+            <Route 
               path="/supplier-dashboard" 
               element={
                 <SellerProtectedRoute>
-                  <SupplierDashboard />
+                  <SellerDashboard />
+                </SellerProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/seller" 
+              element={
+                <SellerProtectedRoute>
+                  <SellerDashboard />
                 </SellerProtectedRoute>
               } 
             />
@@ -92,7 +108,7 @@ const App = () => (
               path="/supplier" 
               element={
                 <SellerProtectedRoute>
-                  <SupplierDashboard />
+                  <SellerDashboard />
                 </SellerProtectedRoute>
               } 
             />

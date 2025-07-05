@@ -87,7 +87,7 @@ const UserDashboard = () => {
                 Browse Car Parts
               </h3>
               <p className="text-gray-600 mb-6 font-crimson">
-                Search through available car parts from verified suppliers
+                Search through available car parts from verified sellers
               </p>
               <Link to="/search-parts">
                 <Button className="w-full bg-gradient-to-r from-emerald-600 to-green-700 hover:from-emerald-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl transition-all duration-300">
@@ -107,7 +107,7 @@ const UserDashboard = () => {
                 Request Car Parts
               </h3>
               <p className="text-gray-600 mb-6 font-crimson">
-                Can't find what you need? Request it and suppliers will reach out
+                Can't find what you need? Request it and sellers will reach out
               </p>
               <Link to="/request-part">
                 <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white shadow-lg hover:shadow-xl transition-all duration-300">
