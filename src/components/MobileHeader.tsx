@@ -15,7 +15,7 @@ const MobileHeader = () => {
           <img 
             src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
             alt="Logo" 
-            className="h-8 w-auto bg-card dark:bg-white rounded-sm p-1.5 border flex-shrink-0"
+            className="h-10 w-auto bg-card dark:bg-white rounded-sm p-1.5 border flex-shrink-0"
           />
           <div className="min-w-0 flex-1">
             <h1 className="text-sm font-playfair font-bold bg-gradient-to-r from-red-600 to-green-700 bg-clip-text text-transparent truncate">
