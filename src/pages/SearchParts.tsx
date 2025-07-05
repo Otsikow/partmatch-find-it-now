@@ -24,6 +24,7 @@ const SearchParts = () => {
       <PageHeader 
         title="Browse Car Parts"
         subtitle="Find the perfect part for your vehicle"
+        showBackButton={true}
         backTo="/"
       />
       

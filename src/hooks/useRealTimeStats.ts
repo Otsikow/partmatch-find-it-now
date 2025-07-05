@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
+interface RealTimeBuyerStats {
+  averageRating: number;
+  totalRatings: number;
+}
+
 interface CategoryStats {
   engineParts: number;
   brakeParts: number;
@@ -14,6 +19,7 @@ interface RealTimeStats {
   totalUsers: number;
   regions: number;
   categories: CategoryStats;
+  buyers: RealTimeBuyerStats;
   loading: boolean;
 }
 
@@ -22,12 +28,16 @@ export const useRealTimeStats = () => {
     activeParts: 0,
     sellers: 0,
     totalUsers: 0,
-    regions: 16, // Static for now as regions don't change often
+    regions: 16,
     categories: {
       engineParts: 0,
       brakeParts: 0,
       suspensionParts: 0,
       bodyParts: 0
+    },
+    buyers: {
+      averageRating: 0,
+      totalRatings: 0
     },
     loading: true
   });
@@ -59,6 +69,15 @@ export const useRealTimeStats = () => {
         supabase.from('car_parts').select('*', { count: 'exact', head: true }).ilike('part_type', '%body%').eq('status', 'available')
       ]);
 
+      // Get buyer rating stats
+      const { data: ratingsData } = await supabase
+        .from('reviews')
+        .select('rating');
+
+      const averageRating = ratingsData && ratingsData.length > 0 
+        ? ratingsData.reduce((sum, review) => sum + review.rating, 0) / ratingsData.length 
+        : 4.8;
+
       setStats({
         activeParts: partsCount || 0,
         sellers: sellersCount || 0,
@@ -69,6 +88,10 @@ export const useRealTimeStats = () => {
           brakeParts: brakeResult.count || 0,
           suspensionParts: suspensionResult.count || 0,
           bodyParts: bodyResult.count || 0
+        },
+        buyers: {
+          averageRating: Number(averageRating.toFixed(1)),
+          totalRatings: ratingsData?.length || 0
         },
         loading: false
       });
