@@ -1,6 +1,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { formatDistanceToNow } from 'date-fns';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Message {
   id: string;
@@ -19,6 +20,7 @@ interface MessageListProps {
 
 const MessageList = ({ messages, currentUserId }: MessageListProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -29,7 +31,8 @@ const MessageList = ({ messages, currentUserId }: MessageListProps) => {
   }, [messages]);
 
   return (
-    <div className="flex-1 overflow-y-auto px-4 py-6 bg-gray-50" style={{ maxHeight: 'calc(100vh - 200px)' }}>
+    <div className={`flex-1 overflow-y-auto ${isMobile ? 'px-3 py-4' : 'px-4 py-6'} bg-gradient-to-b from-gray-50 to-white`} 
+         style={{ maxHeight: isMobile ? 'calc(100vh - 180px)' : 'calc(100vh - 200px)' }}>
       {messages.length === 0 ? (
         <div className="flex items-center justify-center h-full text-gray-500">
           <div className="text-center">
@@ -43,28 +46,45 @@ const MessageList = ({ messages, currentUserId }: MessageListProps) => {
           </div>
         </div>
       ) : (
-        <div className="space-y-4 pb-4">
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={`flex ${message.sender_id === currentUserId ? 'justify-end' : 'justify-start'}`}
-            >
-              <div
-                className={`max-w-xs sm:max-w-md lg:max-w-lg px-4 py-3 rounded-2xl shadow-sm ${
-                  message.sender_id === currentUserId
-                    ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white'
-                    : 'bg-white text-gray-900 border border-gray-200'
-                }`}
-              >
-                <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
-                <p className={`text-xs mt-2 ${
-                  message.sender_id === currentUserId ? 'text-purple-200' : 'text-gray-500'
-                }`}>
-                  {formatDistanceToNow(new Date(message.created_at), { addSuffix: true })}
-                </p>
+        <div className={`space-y-3 pb-4 ${isMobile ? 'pb-6' : ''}`}>
+          {messages.map((message, index) => {
+            const isCurrentUser = message.sender_id === currentUserId;
+            const showTimestamp = index === 0 || 
+              (new Date(message.created_at).getTime() - new Date(messages[index - 1].created_at).getTime()) > 300000; // 5 minutes
+            
+            return (
+              <div key={message.id}>
+                {showTimestamp && (
+                  <div className="flex justify-center mb-4">
+                    <span className="text-xs text-gray-500 bg-white px-3 py-1 rounded-full border">
+                      {formatDistanceToNow(new Date(message.created_at), { addSuffix: true })}
+                    </span>
+                  </div>
+                )}
+                <div className={`flex ${isCurrentUser ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`relative ${isMobile ? 'max-w-[280px]' : 'max-w-xs sm:max-w-md lg:max-w-lg'}`}>
+                    <div
+                      className={`px-4 py-3 rounded-2xl shadow-sm transition-all duration-200 ${
+                        isCurrentUser
+                          ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-br-md'
+                          : 'bg-white text-gray-900 border border-gray-200 rounded-bl-md shadow-md'
+                      }`}
+                    >
+                      <p className={`${isMobile ? 'text-sm' : 'text-sm'} leading-relaxed whitespace-pre-wrap break-words`}>
+                        {message.content}
+                      </p>
+                    </div>
+                    {/* Message tail */}
+                    <div className={`absolute bottom-0 ${
+                      isCurrentUser 
+                        ? 'right-0 w-0 h-0 border-l-[8px] border-l-transparent border-t-[8px] border-t-purple-600' 
+                        : 'left-0 w-0 h-0 border-r-[8px] border-r-transparent border-t-[8px] border-t-white'
+                    }`} />
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
           <div ref={messagesEndRef} />
         </div>
       )}
