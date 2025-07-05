@@ -7,12 +7,13 @@ const MobileHeader = () => {
   return (
     <div className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-40 safe-area-pt">
       <div className="flex items-center justify-between px-4 py-3">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-green-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">PM</span>
-          </div>
+        <div className="flex items-center space-x-3">
+          <img 
+            src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
+            alt="PartMatch Logo" 
+            className="h-8 w-auto"
+          />
           <div>
-            <h1 className="text-lg font-bold text-gray-900">PartMatch</h1>
             <p className="text-xs text-gray-500">Ghana</p>
           </div>
         </div>

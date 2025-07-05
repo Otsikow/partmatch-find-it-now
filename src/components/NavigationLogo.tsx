@@ -13,7 +13,7 @@ const NavigationLogo = ({ onLinkClick }: NavigationLogoProps) => {
       onClick={onLinkClick}
     >
       <img 
-        src="/lovable-uploads/partmatch-hero-logo.png" 
+        src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
         alt="PartMatch Logo" 
         className="h-8 sm:h-9 lg:h-10 w-auto flex-shrink-0"
       />

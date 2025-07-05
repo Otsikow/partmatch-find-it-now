@@ -19,7 +19,7 @@ const AdminAuthHeader = ({ isPasswordReset, showPasswordReset }: AdminAuthHeader
       <div className="flex items-center gap-2 sm:gap-3">
         <Link to="/" className="hover:opacity-80 transition-opacity">
           <img 
-            src="/lovable-uploads/partmatch-hero-logo.png" 
+            src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
             alt="PartMatch Logo" 
             className="h-6 w-auto sm:h-8"
           />

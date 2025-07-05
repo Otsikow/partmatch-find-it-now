@@ -8,8 +8,12 @@ const MobileHomeContent = () => {
     <div className="px-4 py-6 space-y-6">
       {/* Hero Section */}
       <div className="text-center space-y-4">
-        <div className="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-green-500 rounded-2xl flex items-center justify-center shadow-lg">
-          <Package className="w-10 h-10 text-white" />
+        <div className="mx-auto">
+          <img 
+            src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
+            alt="PartMatch Logo" 
+            className="h-16 w-auto mx-auto"
+          />
         </div>
         <div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">

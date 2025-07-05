@@ -14,7 +14,7 @@ const RequestHeader = () => {
       <div className="flex items-center gap-1 sm:gap-2 md:gap-3 min-w-0 flex-1">
         <Link to="/" className="hover:opacity-80 transition-opacity flex-shrink-0">
           <img 
-            src="/lovable-uploads/partmatch-hero-logo.png" 
+            src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
             alt="PartMatch Logo" 
             className="h-5 w-auto sm:h-6 md:h-8 flex-shrink-0"
           />
