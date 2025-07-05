@@ -15,7 +15,7 @@ const NavigationLogo = ({ onLinkClick }: NavigationLogoProps) => {
       <img 
         src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
         alt="PartMatch Logo" 
-        className="h-8 sm:h-9 lg:h-10 w-auto flex-shrink-0 bg-white rounded-sm p-1"
+        className="h-8 sm:h-9 lg:h-10 w-auto flex-shrink-0 bg-card dark:bg-white rounded-sm p-1 border"
       />
       <h1 className="text-lg sm:text-xl lg:text-2xl font-playfair font-bold bg-gradient-to-r from-red-600 to-green-700 bg-clip-text text-transparent truncate">
         PartMatch Ghana

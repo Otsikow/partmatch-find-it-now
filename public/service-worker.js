@@ -1,5 +1,5 @@
-// Simplified service worker for better browser compatibility
-const CACHE_NAME = 'partmatch-v3';
+// Enhanced service worker for better browser compatibility (especially Brave)
+const CACHE_NAME = 'partmatch-v4';
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
@@ -7,9 +7,22 @@ const STATIC_ASSETS = [
   '/app-icon-512.png'
 ];
 
-// Install event - minimal caching
+// Brave browser specific compatibility fixes
+const isBrave = () => {
+  return (navigator.brave && navigator.brave.isBrave) || false;
+};
+
+// Install event - improved for Brave compatibility
 self.addEventListener('install', (event) => {
   console.log('Service Worker installing...');
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      console.log('Opened cache');
+      return cache.addAll(STATIC_ASSETS.map(url => new Request(url, {cache: 'reload'})));
+    }).catch((error) => {
+      console.warn('Cache installation failed:', error);
+    })
+  );
   self.skipWaiting(); // Activate immediately
 });
 
@@ -35,7 +48,7 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Simplified fetch strategy - just pass through most requests
+// Enhanced fetch strategy with Brave browser compatibility
 self.addEventListener('fetch', (event) => {
   // Skip non-GET requests and external requests
   if (event.request.method !== 'GET' || 
@@ -43,19 +56,53 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Special handling for Brave browser
+  const request = event.request.clone();
+  
   // For navigation requests, use network with fallback
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request).catch(() => {
-        return caches.match('/') || 
-               new Response('App offline', { status: 503 });
+      fetch(request, {
+        credentials: 'same-origin',
+        cache: 'no-cache'
+      }).catch(() => {
+        return caches.match('/').then(response => {
+          return response || new Response('App offline', { 
+            status: 503,
+            headers: {'Content-Type': 'text/html'}
+          });
+        });
       })
     );
     return;
   }
 
-  // For other requests, just use network
-  event.respondWith(fetch(event.request));
+  // For static assets, try cache first, then network
+  if (STATIC_ASSETS.includes(new URL(event.request.url).pathname)) {
+    event.respondWith(
+      caches.match(event.request).then(response => {
+        return response || fetch(request).then(fetchResponse => {
+          const responseClone = fetchResponse.clone();
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, responseClone);
+          });
+          return fetchResponse;
+        });
+      }).catch(() => {
+        return new Response('Resource unavailable', { status: 503 });
+      })
+    );
+    return;
+  }
+
+  // For other requests, just use network with better error handling
+  event.respondWith(
+    fetch(request, {
+      credentials: 'same-origin'
+    }).catch(() => {
+      return new Response('Network error', { status: 503 });
+    })
+  );
 });
 
 // Push notification event

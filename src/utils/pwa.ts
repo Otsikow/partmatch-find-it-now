@@ -1,6 +1,14 @@
-// PWA utility functions
+// Enhanced PWA utility functions with improved Brave browser support
 
-// Register service worker with better error handling
+// Detect Brave browser specifically
+const isBrave = async (): Promise<boolean> => {
+  if ((navigator as any).brave && (navigator as any).brave.isBrave) {
+    return await (navigator as any).brave.isBrave();
+  }
+  return false;
+};
+
+// Register service worker with enhanced error handling and Brave compatibility
 export const registerServiceWorker = async (): Promise<void> => {
   // Skip in development to avoid caching issues
   if (import.meta.env.DEV) {
@@ -13,18 +21,23 @@ export const registerServiceWorker = async (): Promise<void> => {
     return;
   }
 
+  const brave = await isBrave();
+  if (brave) {
+    console.log('Brave browser detected - using enhanced compatibility mode');
+  }
+
   try {
     // Wait a moment to ensure the page is fully loaded
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     const registration = await navigator.serviceWorker.register('/service-worker.js', {
       scope: '/',
-      updateViaCache: 'none' // Always check for updates
+      updateViaCache: 'none' // Always check for updates - important for Brave
     });
     
     console.log('SW registered successfully:', registration.scope);
     
-    // Handle updates gracefully
+    // Enhanced update handling for Brave compatibility
     registration.addEventListener('updatefound', () => {
       const newWorker = registration.installing;
       if (newWorker) {
@@ -32,10 +45,11 @@ export const registerServiceWorker = async (): Promise<void> => {
           if (newWorker.state === 'installed') {
             if (navigator.serviceWorker.controller) {
               console.log('New version available');
-              // Auto-update after a delay
+              // For Brave, give more time before auto-update
+              const updateDelay = brave ? 5000 : 2000;
               setTimeout(() => {
                 window.location.reload();
-              }, 2000);
+              }, updateDelay);
             } else {
               console.log('App cached for offline use');
             }
@@ -43,6 +57,13 @@ export const registerServiceWorker = async (): Promise<void> => {
         });
       }
     });
+
+    // Force update check for Brave
+    if (brave) {
+      setTimeout(() => {
+        registration.update();
+      }, 2000);
+    }
 
   } catch (error) {
     console.warn('SW registration failed (app will work normally):', error);
@@ -80,20 +101,27 @@ export const showNotification = (title: string, options?: NotificationOptions): 
   }
 };
 
-// Check if app is running as PWA
+// Enhanced PWA detection with Brave browser support
 export const isPWA = (): boolean => {
-  return window.matchMedia('(display-mode: standalone)').matches ||
-         (window.navigator as any).standalone ||
-         document.referrer.includes('android-app://');
+  // Standard PWA detection
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+  const isIosStandalone = (window.navigator as any).standalone;
+  const isAndroidApp = document.referrer.includes('android-app://');
+  
+  // Brave browser specific detection
+  const isBraveStandalone = window.matchMedia('(display-mode: window-controls-overlay)').matches;
+  
+  return isStandalone || isIosStandalone || isAndroidApp || isBraveStandalone;
 };
 
-// Install prompt for PWA with better browser compatibility
-export const handleInstallPrompt = (): void => {
+// Enhanced install prompt with better Brave browser support
+export const handleInstallPrompt = async (): Promise<void> => {
   // Skip in development or if already a PWA
   if (import.meta.env.DEV || isPWA()) {
     return;
   }
 
+  const brave = await isBrave();
   let deferredPrompt: any;
   let promptShown = false;
 
@@ -101,13 +129,14 @@ export const handleInstallPrompt = (): void => {
     e.preventDefault();
     deferredPrompt = e;
     
-    // Don't show prompt immediately - wait for user engagement
+    // For Brave, show prompt with different timing
+    const promptDelay = brave ? 8000 : 5000;
     setTimeout(() => {
       if (!promptShown && deferredPrompt) {
-        showInstallPrompt(deferredPrompt);
+        showInstallPrompt(deferredPrompt, brave);
         promptShown = true;
       }
-    }, 5000); // Wait 5 seconds after page load
+    }, promptDelay);
   });
 
   window.addEventListener('appinstalled', () => {
@@ -117,14 +146,15 @@ export const handleInstallPrompt = (): void => {
   });
 };
 
-const showInstallPrompt = (deferredPrompt: any): void => {
+const showInstallPrompt = (deferredPrompt: any, isBrave: boolean = false): void => {
   // Create install banner if not already a PWA
   if (!isPWA() && deferredPrompt) {
+    const braveText = isBrave ? ' (Brave Browser)' : '';
     const installBanner = document.createElement('div');
     installBanner.innerHTML = `
       <div style="position: fixed; bottom: 20px; left: 20px; right: 20px; background: #1e40af; color: white; padding: 16px; border-radius: 8px; z-index: 1000; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
         <div>
-          <strong>Install PartMatch Ghana</strong>
+          <strong>Install PartMatch Ghana${braveText}</strong>
           <p style="margin: 4px 0 0 0; font-size: 14px; opacity: 0.9;">Get quick access from your home screen</p>
         </div>
         <div>
@@ -137,9 +167,13 @@ const showInstallPrompt = (deferredPrompt: any): void => {
     document.body.appendChild(installBanner);
     
     document.getElementById('install-btn')?.addEventListener('click', async () => {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      console.log(`User response to the install prompt: ${outcome}`);
+      try {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`User response to the install prompt: ${outcome}`);
+      } catch (error) {
+        console.warn('Install prompt failed:', error);
+      }
       installBanner.remove();
     });
     
