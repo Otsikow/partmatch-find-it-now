@@ -11,7 +11,7 @@ interface ChatButtonProps {
   sellerId: string;
   partId?: string;
   className?: string;
-  size?: "sm" | "default" | "lg";
+  size?: "sm" | "default" | "lg" | "mobile-sm" | "mobile-default" | "mobile-lg";
   variant?: "default" | "outline" | "ghost";
   children?: React.ReactNode;
 }

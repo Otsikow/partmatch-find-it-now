@@ -9,11 +9,13 @@ import { format } from 'date-fns';
 import { useSavedParts } from '@/hooks/useSavedParts';
 import ChatButton from '@/components/chat/ChatButton';
 import { useNavigate } from 'react-router-dom';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const SavedParts = () => {
   const { savedParts, loading, removeSavedPart } = useSavedParts();
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   const handleRemoveSaved = async (partId: string) => {
     await removeSavedPart(partId);
@@ -79,8 +81,10 @@ const SavedParts = () => {
               }
             </p>
             <Button 
-              variant="outline" 
+              variant="outline"
+              size={isMobile ? "mobile-default" : "default"}
               onClick={() => navigate('/search-parts')}
+              className="shadow-sm"
             >
               Browse Parts
             </Button>
@@ -141,21 +145,22 @@ const SavedParts = () => {
                     Saved {format(new Date(item.created_at), 'MMM dd, yyyy')}
                   </div>
 
-                  <div className="flex gap-2 pt-2">
+                  <div className={`flex gap-2 pt-2 ${isMobile ? 'flex-col' : 'flex-row'}`}>
                     <ChatButton
                       sellerId={item.car_parts.supplier_id}
                       partId={item.car_parts.id}
-                      size="sm"
+                      size={isMobile ? "mobile-default" : "sm"}
                       variant="outline"
-                      className="flex-1"
+                      className="flex-1 justify-center"
                     />
                     <Button 
                       variant="outline" 
-                      size="sm"
+                      size={isMobile ? "mobile-default" : "sm"}
                       onClick={() => handleRemoveSaved(item.part_id)}
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      className={`text-red-600 hover:text-red-700 hover:bg-red-50 ${isMobile ? 'justify-center' : ''}`}
                     >
                       <Trash2 className="h-4 w-4" />
+                      {isMobile && <span className="ml-2">Remove</span>}
                     </Button>
                   </div>
                 </div>

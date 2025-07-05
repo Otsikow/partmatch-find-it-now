@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 
 interface SaveButtonProps {
   partId: string;
-  size?: 'sm' | 'default' | 'lg';
+  size?: 'sm' | 'default' | 'lg' | 'mobile-sm' | 'mobile-default' | 'mobile-lg';
   variant?: 'default' | 'outline' | 'ghost';
   className?: string;
   showText?: boolean;

@@ -16,6 +16,7 @@ import { getLocationDisplayText, isInSameCity, calculateDistance } from "@/utils
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface CarPart {
   id: string;
@@ -54,6 +55,7 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
   const [showRatingModal, setShowRatingModal] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   
   // Get user's location for distance calculation
   const { location: userLocation } = useLocationDetection({
@@ -224,41 +226,41 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
 
         <div className="p-3 sm:p-4 lg:p-5 pt-0 border-t border-border bg-muted/30 rounded-b-lg" onClick={(e) => e.stopPropagation()}>
           <div className="flex flex-col gap-2 sm:gap-3">
-            <div className="flex gap-2">
+            <div className={`flex gap-2 ${isMobile ? 'flex-col' : 'flex-row'}`}>
               <ChatButton
                 sellerId={part.supplier_id}
                 partId={part.id}
-                size="sm"
+                size={isMobile ? "mobile-default" : "sm"}
                 variant="outline"
-                className="flex-1 text-xs sm:text-sm h-8 sm:h-9 font-medium"
+                className="flex-1 justify-center font-medium"
               />
               <SaveButton 
                 partId={part.id} 
-                size="sm"
+                size={isMobile ? "mobile-default" : "sm"}
                 variant="outline"
-                className="border-red-200 hover:bg-red-50 h-8 sm:h-9 px-2 sm:px-3"
+                className="border-red-200 hover:bg-red-50"
               />
             </div>
             
-            <div className="flex gap-2">
+            <div className={`flex gap-2 ${isMobile ? 'flex-col' : 'flex-row'}`}>
               {part.address && (
                 <Button 
-                  size="sm" 
+                  size={isMobile ? "mobile-default" : "sm"}
                   variant="default" 
                   onClick={openDirections} 
-                  className="flex-1 text-xs sm:text-sm h-8 sm:h-9 font-medium"
+                  className="flex-1 justify-center font-medium"
                 >
-                  <Navigation className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-                  <span className="hidden sm:inline">Get Directions</span>
-                  <span className="sm:hidden">Directions</span>
+                  <Navigation className="h-3 w-3 sm:h-4 sm:w-4 mr-1 flex-shrink-0" />
+                  <span className={isMobile ? "" : "hidden sm:inline"}>Get Directions</span>
+                  <span className={isMobile ? "hidden" : "sm:hidden"}>Directions</span>
                 </Button>
               )}
               {/* Only show Rate Seller button for authenticated users */}
               <Button 
-                size="sm" 
+                size={isMobile ? "mobile-default" : "sm"}
                 variant="secondary" 
                 onClick={handleRateSellerClick}
-                className="flex-1 text-xs sm:text-sm h-8 sm:h-9 font-medium"
+                className="flex-1 justify-center font-medium"
               >
                 {user ? 'Rate Seller' : 'Sign In to Rate'}
               </Button>
@@ -384,15 +386,16 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
             )}
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t">
+            <div className={`flex ${isMobile ? 'flex-col' : 'flex-col sm:flex-row'} gap-3 pt-4 border-t`}>
               <ChatButton
                 sellerId={part.supplier_id}
                 partId={part.id}
-                className="flex-1 bg-gradient-to-r from-blue-600 to-purple-700 hover:from-blue-700 hover:to-purple-800 text-sm sm:text-base"
+                size={isMobile ? "mobile-default" : "default"}
+                className="flex-1 bg-gradient-to-r from-blue-600 to-purple-700 hover:from-blue-700 hover:to-purple-800 justify-center"
               />
               <SaveButton 
                 partId={part.id} 
-                size="default"
+                size={isMobile ? "mobile-default" : "default"}
                 variant="outline"
                 className="border-red-200 hover:bg-red-50"
                 showText={true}
@@ -401,7 +404,8 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
                 <Button 
                   onClick={openDirections}
                   variant="outline"
-                  className="flex-1 border-green-600 text-green-700 hover:bg-green-50 text-sm sm:text-base"
+                  size={isMobile ? "mobile-default" : "default"}
+                  className="flex-1 border-green-600 text-green-700 hover:bg-green-50 justify-center"
                 >
                   <Navigation className="h-4 w-4 mr-2" />
                   Get Directions
@@ -414,7 +418,8 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
               <Button 
                 onClick={handleRateSellerClick}
                 variant="secondary"
-                className="w-full text-sm sm:text-base"
+                size={isMobile ? "mobile-default" : "default"}
+                className="w-full justify-center"
               >
                 {user ? 'Rate Seller' : 'Sign In to Rate'}
               </Button>

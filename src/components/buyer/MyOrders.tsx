@@ -12,6 +12,7 @@ import RatingModal from '@/components/RatingModal';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Order {
   id: string;
@@ -38,6 +39,7 @@ interface Order {
 const MyOrders = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -242,7 +244,8 @@ const MyOrders = () => {
             {!searchTerm && statusFilter === 'all' && (
               <Button 
                 onClick={handleStartShopping}
-                className="bg-blue-600 hover:bg-blue-700"
+                size={isMobile ? "mobile-default" : "default"}
+                className="bg-primary hover:bg-primary/90 shadow-md"
               >
                 Start Shopping
               </Button>
@@ -289,35 +292,44 @@ const MyOrders = () => {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex flex-row xl:flex-col gap-3">
-                    <Button variant="outline" size="sm" className="flex items-center gap-2 hover:bg-gray-50">
-                      <Eye className="h-4 w-4" />
-                      View Details
+                  <div className={`flex ${isMobile ? 'flex-col' : 'flex-row xl:flex-col'} gap-3`}>
+                    <Button 
+                      variant="outline" 
+                      size={isMobile ? "mobile-default" : "sm"} 
+                      className="flex items-center justify-center gap-2 hover:bg-accent min-w-0"
+                    >
+                      <Eye className="h-4 w-4 flex-shrink-0" />
+                      <span className={isMobile ? "" : "hidden xl:inline"}>View Details</span>
                     </Button>
                     
                     <ChatButton
                       sellerId={order.seller_id}
                       partId={undefined}
-                      size="sm"
+                      size={isMobile ? "mobile-default" : "sm"}
                       variant="outline"
-                      className="flex items-center gap-2 hover:bg-blue-50"
+                      className="flex items-center justify-center gap-2 hover:bg-accent min-w-0"
                     />
                     
                     {order.status === 'completed' && !order.has_rated && (
                       <Button 
                         onClick={() => handleRateClick(order)}
-                        size="sm" 
-                        className="bg-yellow-500 hover:bg-yellow-600 text-white flex items-center gap-2"
+                        size={isMobile ? "mobile-default" : "sm"}
+                        className="bg-yellow-500 hover:bg-yellow-600 text-white flex items-center justify-center gap-2 shadow-md min-w-0"
                       >
-                        <Star className="h-4 w-4" />
-                        Rate Seller
+                        <Star className="h-4 w-4 flex-shrink-0" />
+                        <span className={isMobile ? "" : "hidden xl:inline"}>Rate Seller</span>
                       </Button>
                     )}
                     
                     {order.has_rated && (
-                      <Button variant="outline" size="sm" disabled className="flex items-center gap-2">
-                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                        Rated
+                      <Button 
+                        variant="outline" 
+                        size={isMobile ? "mobile-default" : "sm"}
+                        disabled 
+                        className="flex items-center justify-center gap-2 min-w-0"
+                      >
+                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 flex-shrink-0" />
+                        <span className={isMobile ? "" : "hidden xl:inline"}>Rated</span>
                       </Button>
                     )}
                   </div>
