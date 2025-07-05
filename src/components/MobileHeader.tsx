@@ -1,5 +1,6 @@
 import { Bell } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import NotificationBell from "./NotificationBell";
 
 const MobileHeader = () => {
   const { user } = useAuth();
@@ -20,7 +21,7 @@ const MobileHeader = () => {
         
         {user && (
           <div className="flex items-center space-x-4">
-            <Bell className="w-6 h-6 text-gray-500" />
+            <NotificationBell />
             <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
               <span className="text-blue-600 font-medium text-sm">
                 {user.email?.charAt(0).toUpperCase()}

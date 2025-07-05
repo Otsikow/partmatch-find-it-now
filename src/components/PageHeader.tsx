@@ -5,7 +5,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import NotificationBell from "./NotificationBell";
 
 interface PageHeaderProps {
   title: string;
@@ -90,25 +90,7 @@ const PageHeader = ({ title, subtitle, showBackButton = false, backTo, showSignO
       
       <div className="flex items-center gap-2">
         {/* Notification Bell */}
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button 
-              variant="ghost" 
-              size="sm"
-              className="text-gray-700 hover:text-blue-700 hover:bg-blue-50/50 transition-all duration-300 p-2"
-            >
-              <Bell className="h-5 w-5" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-80">
-            <div className="space-y-4">
-              <h4 className="font-medium">Notifications</h4>
-              <div className="text-sm text-gray-500">
-                No new notifications
-              </div>
-            </div>
-          </PopoverContent>
-        </Popover>
+        <NotificationBell />
 
         {/* Profile Icon */}
         {user && (
