@@ -4,6 +4,7 @@
   "description": "Buy and sell car parts easily in Ghana.",
   "start_url": "/",
   "display": "standalone",
+  "prefer_related_applications": false,
   "background_color": "#ffffff",
   "theme_color": "#1e40af",
   "orientation": "portrait-primary",

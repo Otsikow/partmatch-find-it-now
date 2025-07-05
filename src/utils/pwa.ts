@@ -4,26 +4,43 @@
 export const registerServiceWorker = async (): Promise<void> => {
   if ('serviceWorker' in navigator) {
     try {
-      const registration = await navigator.serviceWorker.register('/service-worker.js');
-      console.log('SW registered: ', registration);
+      const registration = await navigator.serviceWorker.register('/service-worker.js', {
+        scope: '/'
+      });
+      console.log('SW registered successfully:', registration.scope);
       
-      // Check for updates
+      // Handle updates more gracefully
       registration.addEventListener('updatefound', () => {
         const newWorker = registration.installing;
         if (newWorker) {
           newWorker.addEventListener('statechange', () => {
-            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              // New version available
-              if (confirm('New version available! Refresh to update?')) {
-                window.location.reload();
+            if (newWorker.state === 'installed') {
+              if (navigator.serviceWorker.controller) {
+                // New version available - reload silently after a delay
+                console.log('New version available, updating...');
+                setTimeout(() => {
+                  window.location.reload();
+                }, 1000);
+              } else {
+                // First time install
+                console.log('App is ready for offline use');
               }
             }
           });
         }
       });
+
+      // Handle service worker errors
+      registration.addEventListener('error', (error) => {
+        console.error('Service Worker error:', error);
+      });
+
     } catch (error) {
-      console.log('SW registration failed: ', error);
+      console.warn('SW registration failed:', error);
+      // Continue without service worker - don't block app loading
     }
+  } else {
+    console.log('Service Worker not supported in this browser');
   }
 };
 
