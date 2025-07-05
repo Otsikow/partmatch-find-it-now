@@ -103,11 +103,13 @@ const HeroSection = () => {
       <div className="container mx-auto text-center">
         <div className="mb-6 sm:mb-8">
           <div className="flex items-center justify-center mb-2 sm:mb-3">
-            <img 
-              src="/lovable-uploads/29637275-f42b-4415-b255-b8ae5e5837e1.png" 
-              alt="PartMatch Logo" 
-              className="h-48 sm:h-56 md:h-64 lg:h-72 w-auto object-contain bg-white dark:bg-white rounded-lg p-4 shadow-lg"
-            />
+            <div className="bg-white rounded-lg p-4 shadow-lg">
+              <img 
+                src="/lovable-uploads/29637275-f42b-4415-b255-b8ae5e5837e1.png" 
+                alt="PartMatch Logo" 
+                className="h-48 sm:h-56 md:h-64 lg:h-72 w-auto object-contain"
+              />
+            </div>
           </div>
         </div>
         
