@@ -12,7 +12,7 @@ const MobileHomeContent = () => {
           <img 
             src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
             alt="PartMatch Logo" 
-            className="h-16 w-auto mx-auto"
+            className="h-24 w-auto mx-auto"
           />
         </div>
         <div>
