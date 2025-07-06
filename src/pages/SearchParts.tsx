@@ -112,7 +112,7 @@ const SearchParts = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-background">
       <PageHeader 
-        title="Browse Parts for Sale & Requested Parts"
+        title="Browse Parts for Sale & Requeted Parts"
         subtitle="Find parts for sale and buyer requests"
         showBackButton={true}
         backTo="/"
