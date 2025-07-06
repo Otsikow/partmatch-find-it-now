@@ -12,6 +12,7 @@ import {
 import { toast } from "@/hooks/use-toast";
 import NotificationBell from "./NotificationBell";
 import LanguageSelector from "./LanguageSelector";
+import CountryCurrencySelector from "./CountryCurrencySelector";
 const MobileHeader = () => {
   const { user, signOut } = useAuth();
   const location = useLocation();
@@ -75,6 +76,10 @@ const MobileHeader = () => {
                 <DropdownMenuSeparator />
                 <div className="p-2">
                   <LanguageSelector showLabel={false} variant="select" />
+                </div>
+                <DropdownMenuSeparator />
+                <div className="p-2">
+                  <CountryCurrencySelector trigger="button" showCurrencyInfo={true} />
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem 
