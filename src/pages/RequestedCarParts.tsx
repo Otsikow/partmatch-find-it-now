@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Search, MapPin, Calendar, Phone, MessageCircle } from "lucide-react";
+import { Search, MapPin, Calendar, Phone, MessageCircle, ArrowLeft } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 interface PartRequest {
@@ -110,9 +110,19 @@ const RequestedCarParts = () => {
       <MobileHeader />
       <div className="pt-16 pb-20 px-4 py-6 space-y-6">
         {/* Header */}
-        <div className="text-center space-y-2">
-          <h1 className="text-2xl font-bold text-gray-900">{t('requestedCarParts')}</h1>
-          <p className="text-gray-600">{t('browseAndRespondRequests')}</p>
+        <div className="space-y-4">
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => navigate('/')}
+              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              <ArrowLeft className="w-5 h-5 text-gray-600" />
+            </button>
+            <div className="text-center flex-1">
+              <h1 className="text-2xl font-bold text-gray-900">{t('requestedCarParts')}</h1>
+              <p className="text-gray-600">{t('browseAndRespondRequests')}</p>
+            </div>
+          </div>
         </div>
 
         {/* Search */}
@@ -144,16 +154,30 @@ const RequestedCarParts = () => {
             filteredRequests.map((request) => (
               <Card key={request.id} className="hover:shadow-md transition-shadow">
                 <CardHeader className="pb-3">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <CardTitle className="text-lg font-semibold text-gray-900">
-                        {request.part_needed}
-                      </CardTitle>
-                      <p className="text-sm text-gray-600 mt-1">
-                        {request.car_make} {request.car_model} ({request.car_year})
-                      </p>
+                  <div className="flex justify-between items-start gap-3">
+                    <div className="flex gap-3 flex-1">
+                      {request.photo_url && (
+                        <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                          <img 
+                            src={request.photo_url} 
+                            alt={request.part_needed}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                            }}
+                          />
+                        </div>
+                      )}
+                      <div className="flex-1">
+                        <CardTitle className="text-lg font-semibold text-gray-900">
+                          {request.part_needed}
+                        </CardTitle>
+                        <p className="text-sm text-gray-600 mt-1">
+                          {request.car_make} {request.car_model} ({request.car_year})
+                        </p>
+                      </div>
                     </div>
-                    <Badge variant="secondary" className="bg-green-100 text-green-800">
+                    <Badge variant="secondary" className="bg-green-100 text-green-800 flex-shrink-0">
                       {t('active')}
                     </Badge>
                   </div>
