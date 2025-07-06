@@ -30,8 +30,8 @@ const resources = {
       signUp: "Sign Up",
       
       // Hero Section
-      heroTitle: "Find & Sell Car Parts in Ghana",
-      heroSubtitle: "The easiest way to find and order car parts in Ghana. Compare prices from trusted sellers and get quality parts delivered to your door.",
+      heroTitle: "Find & Sell Car Parts",
+      heroSubtitle: "The easiest way to find and order car parts. Compare prices from trusted sellers and get quality parts delivered to your door.",
       requestCarParts: "Request Car Parts",
       findCarParts: "Find Car Parts",
       sellCarParts: "Sell Car Parts",
@@ -52,7 +52,7 @@ const resources = {
       
       // Stats
       fastReliable: "Fast & Reliable",
-      connectWithSellers: "Connect with verified sellers across Ghana",
+      connectWithSellers: "Connect with verified sellers in your region",
       activeParts: "Active Parts",
       sellers: "Sellers",
       users: "Users",
@@ -122,8 +122,8 @@ const resources = {
       signUp: "S'inscrire",
       
       // Hero Section
-      heroTitle: "Trouver et vendre des pièces auto au Ghana",
-      heroSubtitle: "Le moyen le plus simple de trouver et commander des pièces auto au Ghana. Comparez les prix de vendeurs de confiance.",
+      heroTitle: "Trouver et vendre des pièces auto",
+      heroSubtitle: "Le moyen le plus simple de trouver et commander des pièces auto. Comparez les prix de vendeurs de confiance.",
       requestCarParts: "Demander des pièces auto",
       findCarParts: "Trouver des pièces auto",
       sellCarParts: "Vendre des pièces auto",
@@ -144,7 +144,7 @@ const resources = {
       
       // Stats
       fastReliable: "Rapide et fiable",
-      connectWithSellers: "Connectez-vous avec des vendeurs vérifiés au Ghana",
+      connectWithSellers: "Connectez-vous avec des vendeurs vérifiés dans votre région",
       activeParts: "Pièces actives",
       sellers: "Vendeurs",
       users: "Utilisateurs",
@@ -214,8 +214,8 @@ const resources = {
       signUp: "Jisajili",
       
       // Hero Section
-      heroTitle: "Pata na Uze Vipengee vya Magari Kenya",
-      heroSubtitle: "Njia rahisi ya kupata na kuagiza vipengee vya magari Kenya. Linganisha bei kutoka kwa wachuuzi waaminifu na upate vipengee vya ubora vililetwe mlangoni mwako.",
+      heroTitle: "Pata na Uze Vipengee vya Magari",
+      heroSubtitle: "Njia rahisi ya kupata na kuagiza vipengee vya magari. Linganisha bei kutoka kwa wachuuzi waaminifu na upate vipengee vya ubora.",
       requestCarParts: "Omba Vipengee vya Gari",
       findCarParts: "Pata Vipengee vya Gari",
       sellCarParts: "Uza Vipengee vya Gari",
@@ -236,7 +236,7 @@ const resources = {
       
       // Stats
       fastReliable: "Haraka na Kuaminika",
-      connectWithSellers: "Unganishwa na wachuuzi waliohakikishwa nchini Kenya",
+      connectWithSellers: "Unganishwa na wachuuzi waliohakikishwa katika eneo lako",
       activeParts: "Vipengee hai",
       sellers: "Wachuuzi",
       users: "Watumiaji",
@@ -306,8 +306,8 @@ const resources = {
       signUp: "Kyerɛw wo din",
       
       // Hero Section
-      heroTitle: "Hwehwɛ na Tɔn Kar Nneɛma wɔ Ghana",
-      heroSubtitle: "Ɔkwan a ɛyɛ mmerɛw sen biara a wobɛfa so ahwehwɛ na woatɔ kar nneɛma wɔ Ghana. Ka bo ahodoɔ ho asɛm kyerɛ adetɔnfoɔ a wogye wɔn di na nya nneɛma pa a wɔde bɛba wo nkyɛn.",
+      heroTitle: "Hwehwɛ na Tɔn Kar Nneɛma",
+      heroSubtitle: "Ɔkwan a ɛyɛ mmerɛw sen biara a wobɛfa so ahwehwɛ na woatɔ kar nneɛma. Ka bo ahodoɔ ho asɛm kyerɛ adetɔnfoɔ a wogye wɔn di.",
       requestCarParts: "Bisa Kar Nneɛma",
       findCarParts: "Hwehwɛ Kar Nneɛma",
       sellCarParts: "Tɔn Kar Nneɛma",
@@ -328,7 +328,7 @@ const resources = {
       
       // Stats
       fastReliable: "Ntɛm & Ahotoso",
-      connectWithSellers: "Fa wo ho ka adetɔnfoɔ a wɔahwɛ wɔn ho wɔ Ghana",
+      connectWithSellers: "Fa wo ho ka adetɔnfoɔ a wɔahwɛ wɔn ho wɔ wo mpɔtam",
       activeParts: "Nneɛma a Ɛreyɛ Adwuma",
       sellers: "Adetɔnfoɔ",
       users: "Adefoofoɔ",
@@ -398,8 +398,8 @@ const resources = {
       signUp: "Forukọsilẹ",
       
       // Hero Section
-      heroTitle: "Wa ati Ta Awọn Ẹya Ọkọ ni Nigeria",
-      heroSubtitle: "Ọna ti o rọrun julọ lati wa ati gba awọn ẹya ọkọ ni Nigeria. Ṣe afiwe awọn idiyele lati ọdọ awọn oluta ti o gbẹkẹle ati gba awọn ẹya didara ti a gbe de ẹnu-ọna rẹ.",
+      heroTitle: "Wa ati Ta Awọn Ẹya Ọkọ",
+      heroSubtitle: "Ọna ti o rọrun julọ lati wa ati gba awọn ẹya ọkọ. Ṣe afiwe awọn idiyele lati ọdọ awọn oluta ti o gbẹkẹle.",
       requestCarParts: "Beere Awọn Ẹya Ọkọ",
       findCarParts: "Wa Awọn Ẹya Ọkọ",
       sellCarParts: "Ta Awọn Ẹya Ọkọ",
@@ -420,7 +420,7 @@ const resources = {
       
       // Stats
       fastReliable: "Kiakia & Gbẹkẹle",
-      connectWithSellers: "Sopọ pẹlu awọn oluta ti a ti rii daju ni gbogbo Nigeria",
+      connectWithSellers: "Sopọ pẹlu awọn oluta ti a ti rii daju ni agbegbe rẹ",
       activeParts: "Awọn Ẹya Lilo",
       sellers: "Awọn Oluta",
       users: "Awọn Olumulo",
