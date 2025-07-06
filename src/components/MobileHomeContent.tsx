@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRealTimeStats } from "@/hooks/useRealTimeStats";
+import { useTranslation } from 'react-i18next';
 const MobileHomeContent = () => {
+  const { t } = useTranslation();
   const {
     activeParts,
     sellers,
@@ -19,14 +21,14 @@ const MobileHomeContent = () => {
           <img src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" alt="PartMatch Logo" className="h-32 w-auto mx-auto" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Find & Sell Car Parts</h2>
-          <p className="text-gray-600 text-sm leading-relaxed">The easiest way to find and order car parts. Compare prices from trusted sellers.</p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('heroTitle')}</h2>
+          <p className="text-gray-600 text-sm leading-relaxed">{t('heroSubtitle')}</p>
         </div>
       </div>
 
       {/* Quick Actions */}
       <div className="space-y-3">
-        <h3 className="text-lg font-semibold text-gray-900">Quick Actions</h3>
+        <h3 className="text-lg font-semibold text-gray-900">{t('quickActions')}</h3>
         
         <div className="grid grid-cols-2 gap-3">
           <Link to="/search-parts">
@@ -36,8 +38,8 @@ const MobileHomeContent = () => {
                   <Search className="w-6 h-6 text-green-600" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900">Browse Parts</h4>
-                  <p className="text-xs text-gray-500">Find available parts</p>
+                  <h4 className="font-semibold text-gray-900">{t('browse')}</h4>
+                  <p className="text-xs text-gray-500">{t('findAvailableParts')}</p>
                 </div>
               </CardContent>
             </Card>
@@ -50,8 +52,8 @@ const MobileHomeContent = () => {
                   <Plus className="w-6 h-6 text-orange-600" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900">Request Part</h4>
-                  <p className="text-xs text-gray-500">Can't find it? Ask here</p>
+                  <h4 className="font-semibold text-gray-900">{t('request')}</h4>
+                  <p className="text-xs text-gray-500">{t('cantFindAskHere')}</p>
                 </div>
               </CardContent>
             </Card>
@@ -66,8 +68,8 @@ const MobileHomeContent = () => {
                   <Package className="w-6 h-6 text-purple-600" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900">Sell Car Parts</h4>
-                  <p className="text-xs text-gray-500">List your parts for sale</p>
+                  <h4 className="font-semibold text-gray-900">{t('sellCarParts')}</h4>
+                  <p className="text-xs text-gray-500">{t('listPartsForSale')}</p>
                 </div>
               </CardContent>
             </Card>
@@ -77,21 +79,21 @@ const MobileHomeContent = () => {
 
       {/* Popular Categories */}
       <div className="space-y-3">
-        <h3 className="text-lg font-semibold text-gray-900">Popular Categories</h3>
+        <h3 className="text-lg font-semibold text-gray-900">{t('popularCategories')}</h3>
         
         <div className="space-y-2">
           {[{
-          name: "Engine Parts",
-          count: loading ? "..." : `${categories.engineParts}+ parts`
+          name: t('engineParts'),
+          count: loading ? "..." : `${categories.engineParts}+ ${t('parts')}`
         }, {
-          name: "Brake System",
-          count: loading ? "..." : `${categories.brakeParts}+ parts`
+          name: t('brakeSystem'),
+          count: loading ? "..." : `${categories.brakeParts}+ ${t('parts')}`
         }, {
-          name: "Suspension",
-          count: loading ? "..." : `${categories.suspensionParts}+ parts`
+          name: t('suspension'),
+          count: loading ? "..." : `${categories.suspensionParts}+ ${t('parts')}`
         }, {
-          name: "Body Parts",
-          count: loading ? "..." : `${categories.bodyParts}+ parts`
+          name: t('bodyParts'),
+          count: loading ? "..." : `${categories.bodyParts}+ ${t('parts')}`
         }].map(category => <Link key={category.name} to="/search-parts" className="block">
               <Card className="hover:shadow-md transition-shadow">
                 <CardContent className="p-4 flex items-center justify-between">
@@ -117,9 +119,9 @@ const MobileHomeContent = () => {
       <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-2xl p-6">
         <div className="text-center space-y-2">
           <Zap className="w-8 h-8 text-blue-600 mx-auto" />
-          <h3 className="font-semibold text-gray-900">Fast & Reliable</h3>
+          <h3 className="font-semibold text-gray-900">{t('fastReliable')}</h3>
           <p className="text-sm text-gray-600">
-            Connect with verified sellers across Ghana
+            {t('connectWithSellers')}
           </p>
         </div>
         
@@ -128,25 +130,25 @@ const MobileHomeContent = () => {
             <div className="text-xl font-bold text-blue-600">
               {loading ? '...' : `${activeParts}+`}
             </div>
-            <div className="text-xs text-gray-500">Active Parts</div>
+            <div className="text-xs text-gray-500">{t('activeParts')}</div>
           </div>
           <div className="text-center">
             <div className="text-xl font-bold text-green-600">
               {loading ? '...' : `${sellers}+`}
             </div>
-            <div className="text-xs text-gray-500">Sellers</div>
+            <div className="text-xs text-gray-500">{t('sellers')}</div>
           </div>
           <div className="text-center">
             <div className="text-xl font-bold text-purple-600">
               {loading ? '...' : `${totalUsers}+`}
             </div>
-            <div className="text-xs text-gray-500">Users</div>
+            <div className="text-xs text-gray-500">{t('users')}</div>
           </div>
           <div className="text-center">
             <div className="text-xl font-bold text-orange-600">
               {loading ? '...' : `${regions}`}
             </div>
-            <div className="text-xs text-gray-500">Regions</div>
+            <div className="text-xs text-gray-500">{t('regions')}</div>
           </div>
         </div>
       </div>

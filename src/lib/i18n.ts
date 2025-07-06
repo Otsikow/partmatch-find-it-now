@@ -36,6 +36,28 @@ const resources = {
       findCarParts: "Find Car Parts",
       sellCarParts: "Sell Car Parts",
       
+      // Quick Actions & Navigation
+      quickActions: "Quick Actions",
+      findAvailableParts: "Find available parts",
+      cantFindAskHere: "Can't find it? Ask here",
+      listPartsForSale: "List your parts for sale",
+      
+      // Categories
+      popularCategories: "Popular Categories",
+      engineParts: "Engine Parts",
+      brakeSystem: "Brake System",
+      suspension: "Suspension",
+      bodyParts: "Body Parts",
+      parts: "parts",
+      
+      // Stats
+      fastReliable: "Fast & Reliable",
+      connectWithSellers: "Connect with verified sellers across Ghana",
+      activeParts: "Active Parts",
+      sellers: "Sellers",
+      users: "Users",
+      regions: "Regions",
+      
       // Authentication
       email: "Email",
       password: "Password",
@@ -105,6 +127,28 @@ const resources = {
       requestCarParts: "Omba Vipengee vya Gari",
       findCarParts: "Pata Vipengee vya Gari",
       sellCarParts: "Uza Vipengee vya Gari",
+      
+      // Quick Actions & Navigation
+      quickActions: "Vitendo vya Haraka",
+      findAvailableParts: "Pata vipengee vinavyopatikana",
+      cantFindAskHere: "Huwezi kupata? Uliza hapa",
+      listPartsForSale: "Orodhesha vipengee vyako vya kuuza",
+      
+      // Categories
+      popularCategories: "Makundi Maarufu",
+      engineParts: "Vipengee vya Injini",
+      brakeSystem: "Mfumo wa Breki",
+      suspension: "Kusimamisha",
+      bodyParts: "Vipengee vya Mwili",
+      parts: "vipengee",
+      
+      // Stats
+      fastReliable: "Haraka na Kuaminika",
+      connectWithSellers: "Unganishwa na wachuuzi waliohakikishwa nchini Kenya",
+      activeParts: "Vipengee hai",
+      sellers: "Wachuuzi",
+      users: "Watumiaji",
+      regions: "Mikoa",
       
       // Authentication
       email: "Barua pepe",
@@ -176,6 +220,28 @@ const resources = {
       findCarParts: "Hwehwɛ Kar Nneɛma",
       sellCarParts: "Tɔn Kar Nneɛma",
       
+      // Quick Actions & Navigation
+      quickActions: "Ntɛm Dwumadie",
+      findAvailableParts: "Hwehwɛ nneɛma a ɛwɔ hɔ",
+      cantFindAskHere: "Woanhu? Bisa wɔ ha",
+      listPartsForSale: "Kyerɛw wo nneɛma a wobɛtɔn",
+      
+      // Categories
+      popularCategories: "Nneɛma a Agye Din",
+      engineParts: "Injin Nneɛma",
+      brakeSystem: "Breki Nhyehyɛe",
+      suspension: "Ntwentwɛn",
+      bodyParts: "Nipadua Nneɛma",
+      parts: "nneɛma",
+      
+      // Stats
+      fastReliable: "Ntɛm & Ahotoso",
+      connectWithSellers: "Fa wo ho ka adetɔnfoɔ a wɔahwɛ wɔn ho wɔ Ghana",
+      activeParts: "Nneɛma a Ɛreyɛ Adwuma",
+      sellers: "Adetɔnfoɔ",
+      users: "Adefoofoɔ",
+      regions: "Mpɔtam",
+      
       // Authentication
       email: "Email",
       password: "Password",
@@ -245,6 +311,28 @@ const resources = {
       requestCarParts: "Beere Awọn Ẹya Ọkọ",
       findCarParts: "Wa Awọn Ẹya Ọkọ",
       sellCarParts: "Ta Awọn Ẹya Ọkọ",
+      
+      // Quick Actions & Navigation
+      quickActions: "Awọn Iṣe Kiakia",
+      findAvailableParts: "Wa awọn ẹya ti o wa",
+      cantFindAskHere: "Ko le ri? Beere nibi",
+      listPartsForSale: "Ṣe akojọ awọn ẹya rẹ fun tita",
+      
+      // Categories
+      popularCategories: "Awọn Ẹka Olokiki",
+      engineParts: "Awọn Ẹya Enjini",
+      brakeSystem: "Eto Breki",
+      suspension: "Duduro",
+      bodyParts: "Awọn Ẹya Ara",
+      parts: "awọn ẹya",
+      
+      // Stats
+      fastReliable: "Kiakia & Gbẹkẹle",
+      connectWithSellers: "Sopọ pẹlu awọn oluta ti a ti rii daju ni gbogbo Nigeria",
+      activeParts: "Awọn Ẹya Lilo",
+      sellers: "Awọn Oluta",
+      users: "Awọn Olumulo",
+      regions: "Awọn Agbegbe",
       
       // Authentication
       email: "Email",
