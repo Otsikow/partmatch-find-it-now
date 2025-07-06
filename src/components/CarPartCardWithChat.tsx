@@ -17,6 +17,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
+import ImageGallery from "./ImageGallery";
 
 interface CarPart {
   id: string;
@@ -279,28 +280,11 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
           <div className="space-y-4 sm:space-y-6">
             {/* Image Gallery */}
             {part.images && part.images.length > 0 ? (
-              <div className="space-y-3">
-                <img
-                  src={part.images[0]}
-                  alt={part.title}
-                  className="w-full h-48 sm:h-64 lg:h-80 object-cover rounded-lg"
-                />
-                {part.images.length > 1 && (
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                    {part.images.slice(1, 5).map((image, index) => (
-                      <img
-                        key={index}
-                        src={image}
-                        alt={`${part.title} ${index + 2}`}
-                        className="w-full h-16 sm:h-20 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity"
-                        onClick={() => {
-                          // Could implement image carousel here
-                        }}
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
+              <ImageGallery 
+                images={part.images} 
+                title={part.title}
+                className="mb-6"
+              />
             ) : (
               <div className="w-full h-48 sm:h-64 bg-gray-100 rounded-lg flex items-center justify-center">
                 <div className="text-center text-gray-500">
