@@ -435,9 +435,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const resetPassword = async (email: string) => {
     console.log('AuthProvider: Password reset attempt:', { email });
     
+    // Determine redirect URL based on current path
+    const isSellerAuth = window.location.pathname.includes('seller');
+    const isBuyerAuth = window.location.pathname.includes('buyer');
+    const redirectPath = isSellerAuth ? '/seller-auth' : isBuyerAuth ? '/buyer-auth' : '/buyer-auth';
+    
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth`
+        redirectTo: `${window.location.origin}${redirectPath}`
       });
       
       console.log('AuthProvider: Password reset result:', { error });

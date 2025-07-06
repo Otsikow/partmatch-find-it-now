@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import PasswordReset from "@/components/PasswordReset";
+import SetNewPassword from "@/components/SetNewPassword";
 
 interface BuyerAuthFormProps {
   isLogin: boolean;
@@ -29,7 +30,7 @@ const BuyerAuthForm = ({ isLogin, setIsLogin, showPasswordReset, setShowPassword
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   
-  const { signUp, signIn } = useAuth();
+  const { signUp, signIn, isPasswordReset } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -72,11 +73,29 @@ const BuyerAuthForm = ({ isLogin, setIsLogin, showPasswordReset, setShowPassword
     setIsLogin(true);
   };
 
+  const handlePasswordResetSuccess = () => {
+    navigate('/buyer-dashboard');
+  };
+
   return (
     <main className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-md">
       <Card className="p-6 sm:p-8 bg-gradient-to-br from-white/90 to-blue-50/50 backdrop-blur-sm shadow-2xl border-0">
-        {showPasswordReset ? (
-          <PasswordReset onBack={handleBackToLogin} />
+        {isPasswordReset ? (
+          <SetNewPassword 
+            onSuccess={handlePasswordResetSuccess}
+            borderColor="border-blue-200"
+            focusColor="focus:border-blue-400"
+            buttonGradient="from-blue-600 to-indigo-700"
+            buttonHoverGradient="hover:from-blue-700 hover:to-indigo-800"
+          />
+        ) : showPasswordReset ? (
+          <PasswordReset 
+            onBack={handleBackToLogin}
+            borderColor="border-blue-200"
+            focusColor="focus:border-blue-400"
+            buttonGradient="from-blue-600 to-indigo-700"
+            buttonHoverGradient="hover:from-blue-700 hover:to-indigo-800"
+          />
         ) : (
           <>
             <div className="text-center mb-6 sm:mb-8">
