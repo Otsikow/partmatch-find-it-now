@@ -5,12 +5,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Separator } from "@/components/ui/separator";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { User, Phone, MapPin, Trash2, Save } from "lucide-react";
+import { User, Phone, MapPin, Trash2, Save, Shield, FileText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import SellerVerificationForm from "./SellerVerificationForm";
+import SellerVerificationStatus from "./SellerVerificationStatus";
 
 interface ProfileData {
   first_name: string;
@@ -20,11 +23,23 @@ interface ProfileData {
   address: string;
 }
 
+interface VerificationData {
+  id: string;
+  verification_status: string;
+  full_name: string;
+  seller_type: string;
+  admin_notes?: string;
+  created_at: string;
+  verified_at?: string;
+}
+
 const SellerProfileManagement = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [verification, setVerification] = useState<VerificationData | null>(null);
+  const [showVerificationForm, setShowVerificationForm] = useState(false);
   const [profileData, setProfileData] = useState<ProfileData>({
     first_name: '',
     last_name: '',
@@ -36,8 +51,27 @@ const SellerProfileManagement = () => {
   useEffect(() => {
     if (user) {
       fetchProfile();
+      fetchVerificationStatus();
     }
   }, [user]);
+
+  const fetchVerificationStatus = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('seller_verifications')
+        .select('*')
+        .eq('user_id', user?.id)
+        .maybeSingle();
+
+      if (error && error.code !== 'PGRST116') {
+        throw error;
+      }
+
+      setVerification(data);
+    } catch (error) {
+      console.error('Error fetching verification status:', error);
+    }
+  };
 
   const fetchProfile = async () => {
     try {
@@ -185,8 +219,72 @@ const SellerProfileManagement = () => {
     }
   };
 
+  const handleVerificationSubmitted = () => {
+    setShowVerificationForm(false);
+    fetchVerificationStatus();
+  };
+
   return (
     <div className="max-w-2xl mx-auto space-y-6">
+      {/* Seller Verification Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Shield className="h-5 w-5" />
+            Seller Verification
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {verification ? (
+            <SellerVerificationStatus 
+              verification={{
+                ...verification,
+                verification_status: verification.verification_status as 'pending' | 'approved' | 'rejected'
+              }} 
+            />
+          ) : (
+            <div className="space-y-4">
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                  <FileText className="h-5 w-5 text-yellow-600 mt-0.5" />
+                  <div>
+                    <h3 className="font-semibold text-yellow-800">Verification Required</h3>
+                    <p className="text-sm text-yellow-700 mt-1">
+                      To sell car parts on our platform, you need to complete seller verification. 
+                      This helps build trust with buyers and ensures a safe marketplace for everyone.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              {!showVerificationForm ? (
+                <Button 
+                  onClick={() => setShowVerificationForm(true)}
+                  className="w-full bg-orange-600 hover:bg-orange-700"
+                >
+                  <Shield className="h-4 w-4 mr-2" />
+                  Start Verification Process
+                </Button>
+              ) : (
+                <div className="space-y-4">
+                  <SellerVerificationForm onVerificationSubmitted={handleVerificationSubmitted} />
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setShowVerificationForm(false)}
+                    className="w-full"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      <Separator />
+
+      {/* Profile Management Section */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
