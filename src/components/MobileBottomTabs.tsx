@@ -1,4 +1,4 @@
-import { Home, Search, Plus, MessageCircle, User } from "lucide-react";
+import { Home, Search, Plus, MessageCircle, User, Package } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import ChatNotificationBadge from "./chat/ChatNotificationBadge";
@@ -24,6 +24,11 @@ const MobileBottomTabs = () => {
       icon: Plus,
       label: "Request",
       path: "/request-part",
+    },
+    {
+      icon: Package,
+      label: "Sell Parts",
+      path: "/seller-dashboard",
     },
     ...(user ? [{
       icon: MessageCircle,
