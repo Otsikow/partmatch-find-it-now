@@ -112,8 +112,8 @@ const SearchParts = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-background">
       <PageHeader 
-        title={t('browseParts')}
-        subtitle={t('findPartsAndRequests')}
+        title="Browse Parts for Sale & Requested Parts"
+        subtitle="Find parts for sale and buyer requests"
         showBackButton={true}
         backTo="/"
       />
@@ -122,14 +122,20 @@ const SearchParts = () => {
         <PendingRatingNotification />
         
         <Tabs defaultValue="parts" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6">
-            <TabsTrigger value="parts" className="flex items-center gap-2">
-              <Package className="w-4 h-4" />
-              {t('partsForSale')}
+          <TabsList className="grid w-full grid-cols-2 mb-6 bg-background border-2 border-border p-2 h-auto">
+            <TabsTrigger 
+              value="parts" 
+              className="flex items-center gap-2 h-12 text-base font-semibold bg-primary text-primary-foreground hover:bg-primary/90 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200"
+            >
+              <Package className="w-5 h-5" />
+              Parts for Sale
             </TabsTrigger>
-            <TabsTrigger value="requests" className="flex items-center gap-2">
-              <ClipboardList className="w-4 h-4" />
-              {t('requestedParts')}
+            <TabsTrigger 
+              value="requests" 
+              className="flex items-center gap-2 h-12 text-base font-semibold bg-secondary text-secondary-foreground hover:bg-secondary/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200"
+            >
+              <ClipboardList className="w-5 h-5" />
+              Requested Parts
             </TabsTrigger>
           </TabsList>
           
