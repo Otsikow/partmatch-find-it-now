@@ -64,14 +64,14 @@ const PageHeader = ({
       
       {/* Logo and Ghana */}
       <Link to="/" className="flex items-center gap-2 sm:gap-3 flex-shrink-0 hover:opacity-80 transition-opacity">
-        <img src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" alt="PartMatch Logo" className="h-6 w-auto sm:h-8 bg-white rounded-sm p-1 object-fill" />
+        <img src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" alt="PartMatch Logo" className="h-10 w-auto sm:h-12 bg-white rounded-sm p-1 object-fill" />
         <span className="text-lg sm:text-xl font-bold text-gray-700">
       </span>
       </Link>
       
       <div className="flex flex-col min-w-0 flex-1">
         <h1 className="page-header text-xl sm:text-2xl lg:text-3xl bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent truncate">
-          {title}
+          Welcome to PartMatch
         </h1>
         {subtitle && <p className="section-subtitle text-sm truncate">{subtitle}</p>}
       </div>

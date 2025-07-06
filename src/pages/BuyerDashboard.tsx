@@ -122,7 +122,7 @@ const BuyerDashboard = () => {
               <img 
                 src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
                 alt="PartMatch Logo" 
-                className="h-8 w-auto"
+                className="h-10 w-auto"
               />
             </div>
 
