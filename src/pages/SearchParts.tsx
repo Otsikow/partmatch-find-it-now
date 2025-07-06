@@ -239,10 +239,10 @@ const SearchParts = () => {
                         <Button 
                           variant="outline" 
                           onClick={() => handleContact(request.phone, request)}
-                          className="flex items-center gap-2"
+                          className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white border-green-600"
                         >
                           <MessageCircle className="w-4 h-4" />
-                          {t('contact')}
+                          WhatsApp
                         </Button>
                       </div>
                     </CardContent>
