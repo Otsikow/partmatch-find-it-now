@@ -44,7 +44,7 @@ const MobileHeader = () => {
           />
           <div className="min-w-0 flex-1">
             <h1 className="font-playfair font-bold bg-gradient-to-r from-red-600 to-green-700 bg-clip-text text-transparent truncate text-lg sm:text-xl">
-              {isHomePage ? 'PartMatch Ghana' : 'PartMatch'}
+              PartMatch
             </h1>
           </div>
         </div>
