@@ -95,6 +95,98 @@ const resources = {
       tryAgain: "Please try again",
     }
   },
+  fr: {
+    translation: {
+      // Common (French)
+      welcome: "Bienvenue",
+      loading: "Chargement...",
+      save: "Enregistrer",
+      cancel: "Annuler",
+      continue: "Continuer",
+      next: "Suivant",
+      back: "Retour",
+      edit: "Modifier",
+      delete: "Supprimer",
+      search: "Rechercher",
+      filter: "Filtrer",
+      
+      // Navigation
+      home: "Accueil",
+      browse: "Parcourir les pièces",
+      request: "Demander une pièce",
+      messages: "Messages",
+      dashboard: "Tableau de bord",
+      profile: "Profil",
+      signIn: "Se connecter",
+      signOut: "Se déconnecter",
+      signUp: "S'inscrire",
+      
+      // Hero Section
+      heroTitle: "Trouver et vendre des pièces auto au Ghana",
+      heroSubtitle: "Le moyen le plus simple de trouver et commander des pièces auto au Ghana. Comparez les prix de vendeurs de confiance.",
+      requestCarParts: "Demander des pièces auto",
+      findCarParts: "Trouver des pièces auto",
+      sellCarParts: "Vendre des pièces auto",
+      
+      // Quick Actions & Navigation
+      quickActions: "Actions rapides",
+      findAvailableParts: "Trouver les pièces disponibles",
+      cantFindAskHere: "Vous ne trouvez pas? Demandez ici",
+      listPartsForSale: "Lister vos pièces à vendre",
+      
+      // Categories
+      popularCategories: "Catégories populaires",
+      engineParts: "Pièces moteur",
+      brakeSystem: "Système de freinage",
+      suspension: "Suspension",
+      bodyParts: "Pièces de carrosserie",
+      parts: "pièces",
+      
+      // Stats
+      fastReliable: "Rapide et fiable",
+      connectWithSellers: "Connectez-vous avec des vendeurs vérifiés au Ghana",
+      activeParts: "Pièces actives",
+      sellers: "Vendeurs",
+      users: "Utilisateurs",
+      regions: "Régions",
+      
+      // Authentication
+      email: "Email",
+      password: "Mot de passe",
+      firstName: "Prénom",
+      lastName: "Nom",
+      phone: "Téléphone/WhatsApp",
+      location: "Localisation",
+      city: "Ville",
+      country: "Pays",
+      language: "Langue",
+      currency: "Devise",
+      
+      // User Types
+      buyer: "Acheteur",
+      seller: "Vendeur",
+      admin: "Administrateur",
+      
+      // Country & Location
+      selectCountry: "Sélectionner votre pays",
+      autoDetectLocation: "Détecter automatiquement ma position",
+      detecting: "Détection...",
+      
+      // Form Validation
+      required: "Requis",
+      invalidEmail: "Adresse email invalide",
+      passwordTooShort: "Le mot de passe doit contenir au moins 6 caractères",
+      
+      // Success Messages
+      profileUpdated: "Profil mis à jour avec succès",
+      registrationSuccessful: "Inscription réussie!",
+      
+      // Error Messages
+      error: "Erreur",
+      somethingWentWrong: "Quelque chose s'est mal passé",
+      tryAgain: "Veuillez réessayer",
+    }
+  },
   sw: {
     translation: {
       // Common (Swahili)
