@@ -80,30 +80,29 @@ const SearchControls = ({
     });
   };
 
-  const buttonSize = isMobile ? "mobile-sm" : "sm";
-  const buttonSpacing = isMobile ? "gap-2" : "gap-1 sm:gap-2";
-
+  const buttonSize = isMobile ? "sm" : "sm";
+  
   return (  
-    <Card className="p-3 sm:p-4 md:p-6 mb-4 sm:mb-6 bg-gradient-to-br from-card/90 to-muted/50 backdrop-blur-sm shadow-lg border-0 hover:shadow-xl transition-all duration-300">
+    <Card className="p-2 sm:p-4 md:p-6 mb-4 sm:mb-6 bg-gradient-to-br from-card/90 to-muted/50 backdrop-blur-sm shadow-lg border-0 hover:shadow-xl transition-all duration-300">
       <div className="space-y-3 sm:space-y-4">
         <div>
           <Input
             placeholder="Search parts (e.g. alternator, brake pads)"
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-            className={`w-full border-border focus:border-primary focus:ring-primary/20 ${isMobile ? 'h-12 text-base' : 'text-sm'}`}
+            className={`w-full border-border focus:border-primary focus:ring-primary/20 ${isMobile ? 'h-11 text-sm px-3' : 'h-10 text-sm'}`}
           />
         </div>
         
         {/* Make Filter */}
         <div>
-          <p className="text-sm font-semibold text-foreground mb-2 sm:mb-3">Make</p>
-          <div className={`flex ${buttonSpacing} flex-wrap ${isMobile ? 'max-h-32' : 'max-h-24 sm:max-h-32'} overflow-y-auto`}>
+          <p className="text-xs sm:text-sm font-semibold text-foreground mb-2 sm:mb-3">Make</p>
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-1.5 sm:gap-2 max-h-32 sm:max-h-40 overflow-y-auto">
             <Button
               variant={filters.make === '' ? 'default' : 'outline'}
               size={buttonSize}
               onClick={() => handleMakeChange('')}
-              className={`flex-shrink-0 ${filters.make === '' ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
+              className={`text-xs sm:text-sm ${filters.make === '' ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
             >
               All Makes
             </Button>
@@ -113,7 +112,7 @@ const SearchControls = ({
                 variant={filters.make === make ? 'default' : 'outline'}
                 size={buttonSize}
                 onClick={() => handleMakeChange(make)}
-                className={`flex-shrink-0 ${filters.make === make ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
+                className={`text-xs sm:text-sm ${filters.make === make ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
               >
                 {make}
               </Button>
@@ -124,13 +123,13 @@ const SearchControls = ({
         {/* Model Filter */}
         {filters.make && (
           <div>
-            <p className="text-sm font-semibold text-foreground mb-2 sm:mb-3">Model</p>
-            <div className={`flex ${buttonSpacing} flex-wrap`}>
+            <p className="text-xs sm:text-sm font-semibold text-foreground mb-2 sm:mb-3">Model</p>
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-1.5 sm:gap-2">
               <Button
                 variant={filters.model === '' ? 'default' : 'outline'}
                 size={buttonSize}
                 onClick={() => handleModelChange('')}
-                className={`flex-shrink-0 ${filters.model === '' ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
+                className={`text-xs sm:text-sm ${filters.model === '' ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
               >
                 All Models
               </Button>
@@ -140,7 +139,7 @@ const SearchControls = ({
                   variant={filters.model === model ? 'default' : 'outline'}
                   size={buttonSize}
                   onClick={() => handleModelChange(model)}
-                  className={`flex-shrink-0 ${filters.model === model ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
+                  className={`text-xs sm:text-sm ${filters.model === model ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
                 >
                   {model}
                 </Button>
@@ -152,13 +151,13 @@ const SearchControls = ({
         {/* Year Filter */}
         {filters.make && filters.model && (
           <div>
-            <p className="text-sm font-semibold text-foreground mb-2 sm:mb-3">Year</p>
-            <div className={`flex ${buttonSpacing} flex-wrap`}>
+            <p className="text-xs sm:text-sm font-semibold text-foreground mb-2 sm:mb-3">Year</p>
+            <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-1.5 sm:gap-2">
               <Button
                 variant={filters.year === '' ? 'default' : 'outline'}
                 size={buttonSize}
                 onClick={() => handleYearChange('')}
-                className={`flex-shrink-0 ${filters.year === '' ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
+                className={`text-xs sm:text-sm ${filters.year === '' ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
               >
                 All Years
               </Button>
@@ -168,7 +167,7 @@ const SearchControls = ({
                   variant={filters.year === year ? 'default' : 'outline'}
                   size={buttonSize}
                   onClick={() => handleYearChange(year)}
-                  className={`flex-shrink-0 ${filters.year === year ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
+                  className={`text-xs sm:text-sm ${filters.year === year ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
                 >
                   {year}
                 </Button>
