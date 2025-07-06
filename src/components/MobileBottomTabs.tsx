@@ -1,7 +1,6 @@
-import { Home, Search, Plus, MessageCircle, User, Package } from "lucide-react";
+import { Home, Search, Plus, User, Package } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import ChatNotificationBadge from "./chat/ChatNotificationBadge";
 
 const MobileBottomTabs = () => {
   const location = useLocation();
@@ -30,12 +29,6 @@ const MobileBottomTabs = () => {
       label: "Sell Parts",
       path: "/seller-dashboard",
     },
-    ...(user ? [{
-      icon: MessageCircle,
-      label: "Messages",
-      path: "/chat",
-      hasNotification: true,
-    }] : []),
     {
       icon: User,
       label: user ? "Profile" : "Sign In",
@@ -62,7 +55,6 @@ const MobileBottomTabs = () => {
             >
               <div className="relative">
                 <Icon className={`w-6 h-6 mb-1 ${active ? "text-primary" : "text-muted-foreground"}`} />
-                {tab.hasNotification && <ChatNotificationBadge />}
               </div>
               <span className={`text-xs font-medium truncate ${
                 active ? "text-primary" : "text-muted-foreground"

@@ -66,6 +66,10 @@ const resources = {
       requestCarParts: "Request Car Parts",
       findCarParts: "Find Car Parts",
       sellCarParts: "Sell Car Parts",
+      browseParts: "Browse Parts",
+      findPartsAndRequests: "Find parts for sale and buyer requests",
+      partsForSale: "Parts for Sale",
+      requestedParts: "Requested Parts",
       
       // Quick Actions & Navigation
       quickActions: "Quick Actions",
@@ -191,6 +195,10 @@ const resources = {
       requestCarParts: "Demander des pièces auto",
       findCarParts: "Trouver des pièces auto",
       sellCarParts: "Vendre des pièces auto",
+      browseParts: "Parcourir les pièces",
+      findPartsAndRequests: "Trouver des pièces à vendre et des demandes d'acheteurs",
+      partsForSale: "Pièces à vendre",
+      requestedParts: "Pièces demandées",
       
       // Quick Actions & Navigation
       quickActions: "Actions rapides",
@@ -317,6 +325,10 @@ const resources = {
       requestCarParts: "Omba Vipengee vya Gari",
       findCarParts: "Pata Vipengee vya Gari",
       sellCarParts: "Uza Vipengee vya Gari",
+      browseParts: "Vinjari Vipengee",
+      findPartsAndRequests: "Pata vipengee vya kuuza na maombi ya wanunuzi",
+      partsForSale: "Vipengee vya Kuuza",
+      requestedParts: "Vipengee Vilivyoombwa",
       
       // Quick Actions & Navigation
       quickActions: "Vitendo vya Haraka",
@@ -443,6 +455,10 @@ const resources = {
       requestCarParts: "Bisa Kar Nneɛma",
       findCarParts: "Hwehwɛ Kar Nneɛma",
       sellCarParts: "Tɔn Kar Nneɛma",
+      browseParts: "Hwɛ Nneɛma",
+      findPartsAndRequests: "Hwehwɛ nneɛma a wobɛtɔn ne nsɛm a wɔabisa",
+      partsForSale: "Nneɛma a Wobɛtɔn",
+      requestedParts: "Nneɛma a Wɔabisa",
       
       // Quick Actions & Navigation
       quickActions: "Ntɛm Dwumadie",
@@ -569,6 +585,10 @@ const resources = {
       requestCarParts: "Beere Awọn Ẹya Ọkọ",
       findCarParts: "Wa Awọn Ẹya Ọkọ",
       sellCarParts: "Ta Awọn Ẹya Ọkọ",
+      browseParts: "Wo Awọn Ẹya",
+      findPartsAndRequests: "Wa awọn ẹya fun tita ati awọn ibeere oniranu",
+      partsForSale: "Awọn Ẹya Fun Tita",
+      requestedParts: "Awọn Ẹya Ti A Beere",
       
       // Quick Actions & Navigation
       quickActions: "Awọn Iṣe Kiakia",
