@@ -73,6 +73,10 @@ const MobileHeader = () => {
                   <span>Profile</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
+                <div className="p-2">
+                  <LanguageSelector showLabel={false} variant="select" />
+                </div>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem 
                   className="flex items-center gap-2 cursor-pointer text-destructive focus:text-destructive"
                   onClick={handleSignOut}
