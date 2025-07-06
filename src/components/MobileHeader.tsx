@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/hooks/use-toast";
 import NotificationBell from "./NotificationBell";
+import LanguageSelector from "./LanguageSelector";
 const MobileHeader = () => {
   const { user, signOut } = useAuth();
   const location = useLocation();
@@ -81,6 +82,12 @@ const MobileHeader = () => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+          </div>
+        )}
+        
+        {!user && (
+          <div className="flex items-center space-x-2 flex-shrink-0">
+            <LanguageSelector showLabel={false} variant="button" />
           </div>
         )}
       </div>
