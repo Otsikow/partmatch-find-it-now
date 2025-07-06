@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 const PWANotificationManager = () => {
   const [showNotificationPrompt, setShowNotificationPrompt] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [showInstallPrompt, setShowInstallPrompt] = useState(true);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -21,6 +22,17 @@ const PWANotificationManager = () => {
       }
     }
   }, [user]);
+
+  // Auto-hide install prompt after 15 seconds
+  useEffect(() => {
+    if (!isPWA() && showInstallPrompt) {
+      const timer = setTimeout(() => {
+        setShowInstallPrompt(false);
+      }, 15000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [showInstallPrompt]);
 
   const handleEnableNotifications = async () => {
     const granted = await requestNotificationPermission();
@@ -42,7 +54,7 @@ const PWANotificationManager = () => {
     });
   };
 
-  if (!showNotificationPrompt && !notificationsEnabled) return null;
+  if (!showNotificationPrompt && !notificationsEnabled && (!showInstallPrompt || isPWA())) return null;
 
   return (
     <>
@@ -91,7 +103,7 @@ const PWANotificationManager = () => {
       )}
 
       {/* PWA Installation Prompt */}
-      {!isPWA() && (
+      {!isPWA() && showInstallPrompt && (
         <div className="fixed top-4 right-4 z-40">
           <Card className="w-64 shadow-lg">
             <CardHeader className="pb-3">
