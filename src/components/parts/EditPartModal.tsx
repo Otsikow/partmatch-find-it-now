@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { CarPart } from "@/types/CarPart";
+import PhotoUpload from "@/components/PhotoUpload";
 
 interface EditPartModalProps {
   part: CarPart | null;
@@ -30,6 +31,8 @@ interface EditFormData {
 
 const EditPartModal = ({ part, isOpen, onClose, onUpdate }: EditPartModalProps) => {
   const [loading, setLoading] = useState(false);
+  const [currentPhoto, setCurrentPhoto] = useState<File | null>(null);
+  const [newImages, setNewImages] = useState<File[]>([]);
   const [formData, setFormData] = useState<EditFormData>({
     title: part?.title || '',
     description: part?.description || '',
@@ -41,6 +44,36 @@ const EditPartModal = ({ part, isOpen, onClose, onUpdate }: EditPartModalProps) 
     price: part?.price.toString() || '',
     address: part?.address || ''
   });
+
+  const handlePhotoChange = (file: File | null) => {
+    setCurrentPhoto(file);
+    if (file) {
+      setNewImages(prev => [...prev.slice(0, 4), file]);
+    }
+  };
+
+  const uploadImages = async (images: File[]): Promise<string[]> => {
+    if (images.length === 0) return [];
+    
+    const uploadPromises = images.map(async (image, index) => {
+      const timestamp = Date.now();
+      const fileName = `${part?.id}/${timestamp}-${index}.${image.name.split('.').pop()}`;
+      
+      const { data, error } = await supabase.storage
+        .from('car-part-images')
+        .upload(fileName, image);
+
+      if (error) throw error;
+      
+      const { data: { publicUrl } } = supabase.storage
+        .from('car-part-images')
+        .getPublicUrl(fileName);
+      
+      return publicUrl;
+    });
+
+    return Promise.all(uploadPromises);
+  };
 
   // Update form data when part changes
   const updateFormData = (newPart: CarPart | null) => {
@@ -285,6 +318,17 @@ const EditPartModal = ({ part, isOpen, onClose, onUpdate }: EditPartModalProps) 
                 required
               />
             </div>
+          </div>
+
+          {/* Photo Upload */}
+          <div>
+            <Label>Part Photos</Label>
+            <PhotoUpload onPhotoChange={handlePhotoChange} currentPhoto={currentPhoto} />
+            {newImages.length > 0 && (
+              <p className="text-sm text-gray-600 mt-2">
+                {newImages.length} new photo{newImages.length > 1 ? 's' : ''} selected
+              </p>
+            )}
           </div>
 
           <div className="flex gap-2 pt-4">
