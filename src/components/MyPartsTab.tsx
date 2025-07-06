@@ -2,6 +2,11 @@ import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { Edit, Trash2, Eye, EyeOff, Star, TrendingUp, Crown } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -20,6 +25,19 @@ const MyPartsTab = ({ onRefresh }: MyPartsTabProps) => {
   const [parts, setParts] = useState<CarPart[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedPartForBoost, setSelectedPartForBoost] = useState<string | null>(null);
+  const [editingPart, setEditingPart] = useState<CarPart | null>(null);
+  const [editLoading, setEditLoading] = useState(false);
+  const [editFormData, setEditFormData] = useState({
+    title: '',
+    description: '',
+    make: '',
+    model: '',
+    year: '',
+    part_type: '',
+    condition: '',
+    price: '',
+    address: ''
+  });
 
   useEffect(() => {
     fetchMyParts();
@@ -136,6 +154,101 @@ const MyPartsTab = ({ onRefresh }: MyPartsTabProps) => {
 
   const isPartBoosted = (part: CarPart) => {
     return part.boosted_until && new Date(part.boosted_until) > new Date();
+  };
+
+  const handleEditPart = (part: CarPart) => {
+    setEditingPart(part);
+    setEditFormData({
+      title: part.title,
+      description: part.description || '',
+      make: part.make,
+      model: part.model,
+      year: part.year.toString(),
+      part_type: part.part_type,
+      condition: part.condition,
+      price: part.price.toString(),
+      address: part.address || ''
+    });
+  };
+
+  const handleUpdatePart = async () => {
+    if (!editingPart) return;
+
+    setEditLoading(true);
+    try {
+      const price = parseFloat(editFormData.price);
+      const year = parseInt(editFormData.year);
+
+      if (isNaN(price) || price <= 0) {
+        toast({
+          title: "Invalid Price",
+          description: "Please enter a valid price.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      if (isNaN(year) || year < 1990 || year > new Date().getFullYear()) {
+        toast({
+          title: "Invalid Year",
+          description: "Please enter a valid year.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      const { error } = await supabase
+        .from('car_parts')
+        .update({
+          title: editFormData.title.trim(),
+          description: editFormData.description.trim() || null,
+          make: editFormData.make.trim(),
+          model: editFormData.model.trim(),
+          year: year,
+          part_type: editFormData.part_type,
+          condition: editFormData.condition,
+          price: price,
+          address: editFormData.address.trim(),
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', editingPart.id);
+
+      if (error) throw error;
+
+      // Update the local state
+      setParts(prev => prev.map(part => 
+        part.id === editingPart.id 
+          ? { 
+              ...part, 
+              title: editFormData.title.trim(),
+              description: editFormData.description.trim() || null,
+              make: editFormData.make.trim(),
+              model: editFormData.model.trim(),
+              year: year,
+              part_type: editFormData.part_type,
+              condition: editFormData.condition as 'New' | 'Used' | 'Refurbished',
+              price: price,
+              address: editFormData.address.trim()
+            }
+          : part
+      ));
+
+      toast({
+        title: "Success",
+        description: "Part updated successfully.",
+      });
+
+      setEditingPart(null);
+    } catch (error) {
+      console.error('Error updating part:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update part.",
+        variant: "destructive"
+      });
+    } finally {
+      setEditLoading(false);
+    }
   };
 
   if (loading) {
@@ -263,6 +376,7 @@ const MyPartsTab = ({ onRefresh }: MyPartsTabProps) => {
             <Button
               variant="outline"
               size="sm"
+              onClick={() => handleEditPart(part)}
               className="flex items-center justify-center gap-1 text-xs sm:text-sm"
             >
               <Edit className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -280,6 +394,159 @@ const MyPartsTab = ({ onRefresh }: MyPartsTabProps) => {
           </div>
         </Card>
       ))}
+
+      {/* Edit Part Modal */}
+      <Dialog open={!!editingPart} onOpenChange={() => setEditingPart(null)}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Edit Car Part</DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="edit-title">Part Title *</Label>
+              <Input
+                id="edit-title"
+                value={editFormData.title}
+                onChange={(e) => setEditFormData(prev => ({ ...prev, title: e.target.value }))}
+                placeholder="e.g., Front Brake Pads for Toyota Camry"
+                required
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="edit-description">Description</Label>
+              <Textarea
+                id="edit-description"
+                value={editFormData.description}
+                onChange={(e) => setEditFormData(prev => ({ ...prev, description: e.target.value }))}
+                placeholder="Describe the condition, compatibility, and any additional details..."
+                rows={3}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <Label htmlFor="edit-make">Car Make *</Label>
+                <Input
+                  id="edit-make"
+                  value={editFormData.make}
+                  onChange={(e) => setEditFormData(prev => ({ ...prev, make: e.target.value }))}
+                  placeholder="Toyota"
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="edit-model">Car Model *</Label>
+                <Input
+                  id="edit-model"
+                  value={editFormData.model}
+                  onChange={(e) => setEditFormData(prev => ({ ...prev, model: e.target.value }))}
+                  placeholder="Camry"
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="edit-year">Year *</Label>
+                <Input
+                  id="edit-year"
+                  type="number"
+                  value={editFormData.year}
+                  onChange={(e) => setEditFormData(prev => ({ ...prev, year: e.target.value }))}
+                  placeholder="2020"
+                  min="1990"
+                  max={new Date().getFullYear()}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label>Part Type *</Label>
+                <Select 
+                  value={editFormData.part_type} 
+                  onValueChange={(value) => setEditFormData(prev => ({ ...prev, part_type: value }))}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select part type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Engine">Engine</SelectItem>
+                    <SelectItem value="Transmission">Transmission</SelectItem>
+                    <SelectItem value="Brakes">Brakes</SelectItem>
+                    <SelectItem value="Suspension">Suspension</SelectItem>
+                    <SelectItem value="Electrical">Electrical</SelectItem>
+                    <SelectItem value="Body">Body</SelectItem>
+                    <SelectItem value="Interior">Interior</SelectItem>
+                    <SelectItem value="Tires & Wheels">Tires & Wheels</SelectItem>
+                    <SelectItem value="Other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label>Condition *</Label>
+                <Select 
+                  value={editFormData.condition} 
+                  onValueChange={(value) => setEditFormData(prev => ({ ...prev, condition: value }))}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select condition" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="New">New</SelectItem>
+                    <SelectItem value="Used">Used</SelectItem>
+                    <SelectItem value="Refurbished">Refurbished</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="edit-price">Price (GHS) *</Label>
+                <Input
+                  id="edit-price"
+                  type="number"
+                  value={editFormData.price}
+                  onChange={(e) => setEditFormData(prev => ({ ...prev, price: e.target.value }))}
+                  placeholder="150.00"
+                  min="0"
+                  step="0.01"
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="edit-address">Location/Address *</Label>
+                <Input
+                  id="edit-address"
+                  value={editFormData.address}
+                  onChange={(e) => setEditFormData(prev => ({ ...prev, address: e.target.value }))}
+                  placeholder="Accra, Greater Accra"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-2 pt-4">
+              <Button
+                onClick={handleUpdatePart}
+                disabled={editLoading}
+                className="flex-1 bg-orange-600 hover:bg-orange-700"
+              >
+                {editLoading ? 'Updating...' : 'Update Part'}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setEditingPart(null)}
+                disabled={editLoading}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
