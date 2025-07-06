@@ -1,4 +1,4 @@
-import { Search, Plus, Package, Zap } from "lucide-react";
+import { Search, Plus, Package, Zap, ClipboardList } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -60,7 +60,21 @@ const MobileHomeContent = () => {
           </Link>
         </div>
         
-        <div className="mt-3">
+        <div className="grid grid-cols-2 gap-3 mt-3">
+          <Link to="/requested-car-parts">
+            <Card className="h-full">
+              <CardContent className="p-4 text-center space-y-3">
+                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto">
+                  <ClipboardList className="w-6 h-6 text-blue-600" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-gray-900">{t('requestedCarParts')}</h4>
+                  <p className="text-xs text-gray-500">{t('browseAndRespondRequests')}</p>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+
           <Link to="/seller-dashboard">
             <Card className="h-full">
               <CardContent className="p-4 text-center space-y-3">

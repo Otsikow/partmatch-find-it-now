@@ -72,6 +72,14 @@ const resources = {
       findAvailableParts: "Find available parts",
       cantFindAskHere: "Can't find it? Ask here",
       listPartsForSale: "List your parts for sale",
+      requestedCarParts: "Requested Car Parts",
+      browseAndRespondRequests: "Browse and respond to buyer requests",
+      searchRequests: "Search requests...",
+      activeRequests: "Active Requests",
+      noRequestsFound: "No requests found",
+      active: "Active",
+      makeOffer: "Make Offer",
+      contact: "Contact",
       
       // Categories
       popularCategories: "Popular Categories",
@@ -116,7 +124,6 @@ const resources = {
       registrationSuccessful: "Registration successful!",
       
       // Error Messages
-      error: "Error",
       somethingWentWrong: "Something went wrong",
       tryAgain: "Please try again",
     }
@@ -190,6 +197,14 @@ const resources = {
       findAvailableParts: "Trouver les pièces disponibles",
       cantFindAskHere: "Vous ne trouvez pas? Demandez ici",
       listPartsForSale: "Lister vos pièces à vendre",
+      requestedCarParts: "Pièces auto demandées",
+      browseAndRespondRequests: "Parcourir et répondre aux demandes",
+      searchRequests: "Rechercher demandes...",
+      activeRequests: "Demandes actives",
+      noRequestsFound: "Aucune demande trouvée",
+      active: "Actif",
+      makeOffer: "Faire une offre",
+      contact: "Contact",
       
       // Categories
       popularCategories: "Catégories populaires",
@@ -308,6 +323,14 @@ const resources = {
       findAvailableParts: "Pata vipengee vinavyopatikana",
       cantFindAskHere: "Huwezi kupata? Uliza hapa",
       listPartsForSale: "Orodhesha vipengee vyako vya kuuza",
+      requestedCarParts: "Vipengee vya Magari Vilivyoombwa",
+      browseAndRespondRequests: "Vinjari na jibu maombi",
+      searchRequests: "Tafuta maombi...",
+      activeRequests: "Maombi hai",
+      noRequestsFound: "Hakuna maombi yaliyopatikana",
+      active: "Hai",
+      makeOffer: "Toa Onyesho",
+      contact: "Mawasiliano",
       
       // Categories
       popularCategories: "Makundi Maarufu",
@@ -426,6 +449,14 @@ const resources = {
       findAvailableParts: "Hwehwɛ nneɛma a ɛwɔ hɔ",
       cantFindAskHere: "Woanhu? Bisa wɔ ha",
       listPartsForSale: "Kyerɛw wo nneɛma a wobɛtɔn",
+      requestedCarParts: "Kar Nneɛma a Wɔabisa",
+      browseAndRespondRequests: "Hwɛ na bua nsɛm a wɔabisa",
+      searchRequests: "Hwehwɛ nsɛm a wɔabisa...",
+      activeRequests: "Nsɛm a Ɛreyɛ Adwuma",
+      noRequestsFound: "Wɔanhu nsɛm biara",
+      active: "Ɛreyɛ Adwuma",
+      makeOffer: "Ma Nhyɛsoɔ",
+      contact: "Kasa",
       
       // Categories
       popularCategories: "Nneɛma a Agye Din",
@@ -544,6 +575,14 @@ const resources = {
       findAvailableParts: "Wa awọn ẹya ti o wa",
       cantFindAskHere: "Ko le ri? Beere nibi",
       listPartsForSale: "Ṣe akojọ awọn ẹya rẹ fun tita",
+      requestedCarParts: "Awọn Ẹya Ọkọ Ti A Beere",
+      browseAndRespondRequests: "Wa ati dahun si awọn ibeere",
+      searchRequests: "Wa awọn ibeere...",
+      activeRequests: "Awọn Ibeere Ti N Lọ",
+      noRequestsFound: "Ko si awọn ibeere ti a ri",
+      active: "Ti N Lọ",
+      makeOffer: "Ṣe Ifilagba",
+      contact: "Kan Si",
       
       // Categories
       popularCategories: "Awọn Ẹka Olokiki",

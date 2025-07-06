@@ -16,6 +16,7 @@ import BuyerDashboard from "./pages/BuyerDashboard";
 import SellerDashboard from "./pages/SellerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import RequestPart from "./pages/RequestPart";
+import RequestedCarParts from "./pages/RequestedCarParts";
 import SearchParts from "./pages/SearchParts";
 import SearchPartsWithMap from "./pages/SearchPartsWithMap";
 import Chat from "./pages/Chat";
@@ -48,6 +49,7 @@ const App = () => (
             <Route path="/admin-auth" element={<AdminAuth />} />
             <Route path="/request-part" element={<RequestPart />} />
             <Route path="/request" element={<RequestPart />} />
+            <Route path="/requested-car-parts" element={<RequestedCarParts />} />
             <Route path="/search-parts" element={<SearchParts />} />
             <Route path="/search-parts-with-map" element={<SearchPartsWithMap />} />
             <Route path="/search-map" element={<SearchPartsWithMap />} />
