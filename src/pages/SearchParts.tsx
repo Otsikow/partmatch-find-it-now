@@ -125,7 +125,7 @@ const SearchParts = () => {
           <TabsList className="grid w-full grid-cols-2 mb-6 bg-background border-2 border-border p-2 h-auto">
             <TabsTrigger 
               value="parts" 
-              className="flex items-center gap-2 h-12 text-base font-semibold bg-primary text-primary-foreground hover:bg-primary/90 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200"
+              className="flex items-center gap-2 h-12 text-base font-semibold bg-secondary text-secondary-foreground hover:bg-secondary/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200"
             >
               <Package className="w-5 h-5" />
               Parts for Sale
