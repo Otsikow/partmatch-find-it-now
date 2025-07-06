@@ -10,6 +10,8 @@ import PasswordReset from "./PasswordReset";
 import SetNewPassword from "./SetNewPassword";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import LanguageSelector from "./LanguageSelector";
 
 interface AuthFormProps {
   isLogin: boolean;
@@ -17,6 +19,7 @@ interface AuthFormProps {
 }
 
 const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -62,7 +65,7 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
         
         if (!error) {
           toast({
-            title: "Registration Successful!",
+            title: t('registrationSuccessful'),
             description: "Please check your email and click the verification link before signing in.",
           });
           setIsLogin(true);

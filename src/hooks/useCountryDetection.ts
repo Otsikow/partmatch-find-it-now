@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getSupportedCountries, getCountryByName } from '@/lib/countryConfig';
 
 export interface Country {
   code: string;
@@ -7,13 +8,12 @@ export interface Country {
   flag: string;
 }
 
-export const SUPPORTED_COUNTRIES: Country[] = [
-  { code: 'GH', name: 'Ghana', currency: 'GHS', flag: '🇬🇭' },
-  { code: 'NG', name: 'Nigeria', currency: 'NGN', flag: '🇳🇬' },
-  { code: 'KE', name: 'Kenya', currency: 'KES', flag: '🇰🇪' },
-  { code: 'ZA', name: 'South Africa', currency: 'ZAR', flag: '🇿🇦' },
-  { code: 'UG', name: 'Uganda', currency: 'UGX', flag: '🇺🇬' },
-];
+export const SUPPORTED_COUNTRIES = getSupportedCountries().map(config => ({
+  code: config.code,
+  name: config.name,
+  currency: config.currency,
+  flag: config.flag
+}));
 
 interface CountryDetectionState {
   country: Country | null;
