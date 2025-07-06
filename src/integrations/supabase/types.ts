@@ -113,7 +113,9 @@ export type Database = {
       car_parts: {
         Row: {
           address: string | null
+          city: string | null
           condition: string
+          country: string | null
           created_at: string | null
           currency: string
           description: string | null
@@ -133,7 +135,9 @@ export type Database = {
         }
         Insert: {
           address?: string | null
+          city?: string | null
           condition: string
+          country?: string | null
           created_at?: string | null
           currency?: string
           description?: string | null
@@ -153,7 +157,9 @@ export type Database = {
         }
         Update: {
           address?: string | null
+          city?: string | null
           condition?: string
+          country?: string | null
           created_at?: string | null
           currency?: string
           description?: string | null
@@ -426,7 +432,9 @@ export type Database = {
           car_make: string
           car_model: string
           car_year: number
+          country: string | null
           created_at: string | null
+          currency: string | null
           description: string | null
           id: string
           location: string
@@ -441,7 +449,9 @@ export type Database = {
           car_make: string
           car_model: string
           car_year: number
+          country?: string | null
           created_at?: string | null
+          currency?: string | null
           description?: string | null
           id?: string
           location: string
@@ -456,7 +466,9 @@ export type Database = {
           car_make?: string
           car_model?: string
           car_year?: number
+          country?: string | null
           created_at?: string | null
+          currency?: string | null
           description?: string | null
           id?: string
           location?: string
@@ -540,11 +552,15 @@ export type Database = {
       profiles: {
         Row: {
           address: string | null
+          city: string | null
+          country: string | null
           created_at: string | null
+          currency: string | null
           first_name: string | null
           id: string
           is_blocked: boolean | null
           is_verified: boolean | null
+          language: string | null
           last_name: string | null
           latitude: number | null
           location: string | null
@@ -562,11 +578,15 @@ export type Database = {
         }
         Insert: {
           address?: string | null
+          city?: string | null
+          country?: string | null
           created_at?: string | null
+          currency?: string | null
           first_name?: string | null
           id: string
           is_blocked?: boolean | null
           is_verified?: boolean | null
+          language?: string | null
           last_name?: string | null
           latitude?: number | null
           location?: string | null
@@ -584,11 +604,15 @@ export type Database = {
         }
         Update: {
           address?: string | null
+          city?: string | null
+          country?: string | null
           created_at?: string | null
+          currency?: string | null
           first_name?: string | null
           id?: string
           is_blocked?: boolean | null
           is_verified?: boolean | null
+          language?: string | null
           last_name?: string | null
           latitude?: number | null
           location?: string | null
