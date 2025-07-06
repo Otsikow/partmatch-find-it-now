@@ -121,6 +121,12 @@ export const handleInstallPrompt = async (): Promise<void> => {
     return;
   }
 
+  // Check if user has previously dismissed the install prompt
+  const hasInstalledOrDismissed = localStorage.getItem('pwa-install-dismissed') === 'true';
+  if (hasInstalledOrDismissed) {
+    return;
+  }
+
   const brave = await isBrave();
   let deferredPrompt: any;
   let promptShown = false;
@@ -141,6 +147,7 @@ export const handleInstallPrompt = async (): Promise<void> => {
 
   window.addEventListener('appinstalled', () => {
     console.log('PWA installed successfully');
+    localStorage.setItem('pwa-install-dismissed', 'true');
     deferredPrompt = null;
     promptShown = true;
   });
@@ -154,7 +161,7 @@ const showInstallPrompt = (deferredPrompt: any, isBrave: boolean = false): void 
     installBanner.innerHTML = `
       <div style="position: fixed; bottom: 20px; left: 20px; right: 20px; background: #1e40af; color: white; padding: 16px; border-radius: 8px; z-index: 1000; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
         <div>
-          <strong>Install PartMatch Ghana${braveText}</strong>
+          <strong>Install PartMatch${braveText}</strong>
           <p style="margin: 4px 0 0 0; font-size: 14px; opacity: 0.9;">Get quick access from your home screen</p>
         </div>
         <div>
