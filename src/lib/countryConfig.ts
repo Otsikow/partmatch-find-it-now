@@ -106,6 +106,85 @@ export const COUNTRY_CONFIGS: Record<string, CountryConfig> = {
       { id: 'bank-transfer-ug', name: 'Bank Transfer', type: 'bank_transfer', icon: '🏦' },
     ]
   },
+  TZ: {
+    code: 'TZ',
+    name: 'Tanzania',
+    currency: 'TZS',
+    flag: '🇹🇿',
+    languages: ['en', 'sw'],
+    phonePrefix: '+255',
+    regions: ['Dar es Salaam', 'Arusha', 'Mwanza', 'Dodoma', 'Mbeya'],
+    popularCities: ['Dar es Salaam', 'Arusha', 'Mwanza', 'Dodoma', 'Mbeya', 'Tanga', 'Morogoro', 'Tabora', 'Kigoma', 'Iringa'],
+    paymentMethods: [
+      { id: 'vodacom-mpesa-tz', name: 'Vodacom M-Pesa', type: 'mobile_money', provider: 'Vodacom', icon: '📱' },
+      { id: 'tigo-pesa', name: 'Tigo Pesa', type: 'mobile_money', provider: 'Tigo', icon: '📱' },
+      { id: 'airtel-money-tz', name: 'Airtel Money', type: 'mobile_money', provider: 'Airtel', icon: '📱' },
+      { id: 'card-tz', name: 'Credit/Debit Card', type: 'card', icon: '💳' },
+    ]
+  },
+  US: {
+    code: 'US',
+    name: 'United States',
+    currency: 'USD',
+    flag: '🇺🇸',
+    languages: ['en'],
+    phonePrefix: '+1',
+    regions: ['California', 'Texas', 'Florida', 'New York', 'Pennsylvania', 'Illinois'],
+    popularCities: ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelphia', 'San Antonio', 'San Diego', 'Dallas', 'San Jose'],
+    paymentMethods: [
+      { id: 'stripe-us', name: 'Credit/Debit Card', type: 'card', provider: 'Stripe', icon: '💳' },
+      { id: 'paypal-us', name: 'PayPal', type: 'card', provider: 'PayPal', icon: '💳' },
+      { id: 'apple-pay', name: 'Apple Pay', type: 'mobile_money', provider: 'Apple', icon: '📱' },
+      { id: 'google-pay', name: 'Google Pay', type: 'mobile_money', provider: 'Google', icon: '📱' },
+      { id: 'bank-transfer-us', name: 'Bank Transfer', type: 'bank_transfer', icon: '🏦' },
+    ]
+  },
+  GB: {
+    code: 'GB',
+    name: 'United Kingdom',
+    currency: 'GBP',
+    flag: '🇬🇧',
+    languages: ['en'],
+    phonePrefix: '+44',
+    regions: ['England', 'Scotland', 'Wales', 'Northern Ireland'],
+    popularCities: ['London', 'Manchester', 'Birmingham', 'Leeds', 'Glasgow', 'Sheffield', 'Bradford', 'Liverpool', 'Edinburgh', 'Bristol'],
+    paymentMethods: [
+      { id: 'stripe-gb', name: 'Credit/Debit Card', type: 'card', provider: 'Stripe', icon: '💳' },
+      { id: 'paypal-gb', name: 'PayPal', type: 'card', provider: 'PayPal', icon: '💳' },
+      { id: 'bank-transfer-gb', name: 'Bank Transfer', type: 'bank_transfer', icon: '🏦' },
+    ]
+  },
+  IN: {
+    code: 'IN',
+    name: 'India',
+    currency: 'INR',
+    flag: '🇮🇳',
+    languages: ['en', 'hi'],
+    phonePrefix: '+91',
+    regions: ['Maharashtra', 'Delhi', 'Karnataka', 'Tamil Nadu', 'West Bengal', 'Gujarat'],
+    popularCities: ['Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Kolkata', 'Hyderabad', 'Pune', 'Ahmedabad', 'Surat', 'Jaipur'],
+    paymentMethods: [
+      { id: 'razorpay', name: 'Razorpay', type: 'card', provider: 'Razorpay', icon: '💳' },
+      { id: 'paytm', name: 'Paytm', type: 'mobile_money', provider: 'Paytm', icon: '📱' },
+      { id: 'upi', name: 'UPI Payment', type: 'mobile_money', provider: 'UPI', icon: '📱' },
+      { id: 'phonepe', name: 'PhonePe', type: 'mobile_money', provider: 'PhonePe', icon: '📱' },
+    ]
+  },
+  BR: {
+    code: 'BR',
+    name: 'Brazil',
+    currency: 'BRL',
+    flag: '🇧🇷',
+    languages: ['pt'],
+    phonePrefix: '+55',
+    regions: ['São Paulo', 'Rio de Janeiro', 'Minas Gerais', 'Bahia', 'Paraná'],
+    popularCities: ['São Paulo', 'Rio de Janeiro', 'Brasília', 'Salvador', 'Fortaleza', 'Belo Horizonte', 'Manaus', 'Curitiba', 'Recife', 'Porto Alegre'],
+    paymentMethods: [
+      { id: 'pix-br', name: 'PIX', type: 'mobile_money', provider: 'PIX', icon: '📱' },
+      { id: 'card-br', name: 'Credit/Debit Card', type: 'card', icon: '💳' },
+      { id: 'boleto', name: 'Boleto Bancário', type: 'bank_transfer', icon: '🏦' },
+    ]
+  },
 };
 
 // Helper functions
@@ -143,3 +222,22 @@ export const SUPPORTED_COUNTRIES = getSupportedCountries().map(config => ({
   currency: config.currency,
   flag: config.flag
 }));
+
+// Currency symbol mapping
+export const CURRENCY_SYMBOLS: Record<string, string> = {
+  'GHS': '₵',
+  'NGN': '₦',
+  'KES': 'KSh',
+  'ZAR': 'R',
+  'UGX': 'USh',
+  'TZS': 'TSh',
+  'USD': '$',
+  'GBP': '£',
+  'EUR': '€',
+  'INR': '₹',
+  'BRL': 'R$',
+};
+
+export const getCurrencySymbol = (currency: string): string => {
+  return CURRENCY_SYMBOLS[currency] || currency;
+};
