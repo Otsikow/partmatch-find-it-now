@@ -1,21 +1,46 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut } from "lucide-react";
 
 interface ImageGalleryProps {
-  images: string[];
+  images: string[] | any;
   title: string;
   className?: string;
 }
 
 const ImageGallery = ({ images, title, className = "" }: ImageGalleryProps) => {
+  // Handle different image data formats and filter out invalid images
+  const validImages = useMemo(() => {
+    if (!images) return [];
+    
+    // If images is not an array (could be an object or undefined), return empty array
+    if (!Array.isArray(images)) {
+      console.warn('Images is not an array:', images);
+      return [];
+    }
+    
+    // Filter out invalid image URLs
+    return images.filter(img => 
+      typeof img === 'string' && 
+      img.trim() !== '' && 
+      (img.startsWith('http') || img.startsWith('data:'))
+    );
+  }, [images]);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(1);
   const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [lastMousePosition, setLastMousePosition] = useState({ x: 0, y: 0 });
+
+  // Reset current index if it's out of bounds
+  useEffect(() => {
+    if (currentIndex >= validImages.length && validImages.length > 0) {
+      setCurrentIndex(0);
+    }
+  }, [validImages.length, currentIndex]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -56,14 +81,14 @@ const ImageGallery = ({ images, title, className = "" }: ImageGalleryProps) => {
   }, [isLightboxOpen, currentIndex]);
 
   const goToNext = useCallback(() => {
-    setCurrentIndex((prev) => (prev + 1) % images.length);
+    setCurrentIndex((prev) => (prev + 1) % validImages.length);
     resetZoom();
-  }, [images.length]);
+  }, [validImages.length]);
 
   const goToPrevious = useCallback(() => {
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+    setCurrentIndex((prev) => (prev - 1 + validImages.length) % validImages.length);
     resetZoom();
-  }, [images.length]);
+  }, [validImages.length]);
 
   const openLightbox = (index: number) => {
     setCurrentIndex(index);
@@ -115,7 +140,7 @@ const ImageGallery = ({ images, title, className = "" }: ImageGalleryProps) => {
     setIsDragging(false);
   };
 
-  if (!images || images.length === 0) return null;
+  if (!validImages || validImages.length === 0) return null;
 
   return (
     <div className={className}>
@@ -123,7 +148,7 @@ const ImageGallery = ({ images, title, className = "" }: ImageGalleryProps) => {
       <div className="space-y-3">
         <div className="relative group">
           <img
-            src={images[currentIndex]}
+            src={validImages[currentIndex]}
             alt={`${title} - Image ${currentIndex + 1}`}
             className="w-full h-64 object-cover rounded-lg cursor-pointer transition-transform hover:scale-[1.02]"
             onClick={() => openLightbox(currentIndex)}
@@ -140,7 +165,7 @@ const ImageGallery = ({ images, title, className = "" }: ImageGalleryProps) => {
             </Button>
           </div>
           
-          {images.length > 1 && (
+          {validImages.length > 1 && (
             <>
               <Button
                 variant="ghost"
@@ -167,17 +192,17 @@ const ImageGallery = ({ images, title, className = "" }: ImageGalleryProps) => {
             </>
           )}
           
-          {images.length > 1 && (
+          {validImages.length > 1 && (
             <div className="absolute bottom-2 right-2 bg-black/50 text-white px-2 py-1 rounded text-sm">
-              {currentIndex + 1} / {images.length}
+              {currentIndex + 1} / {validImages.length}
             </div>
           )}
         </div>
 
         {/* Thumbnail Navigation */}
-        {images.length > 1 && (
+        {validImages.length > 1 && (
           <div className="grid grid-cols-5 gap-2">
-            {images.map((image, index) => (
+            {validImages.map((image, index) => (
               <div
                 key={index}
                 className={`relative cursor-pointer rounded overflow-hidden transition-all duration-200 ${
@@ -246,7 +271,7 @@ const ImageGallery = ({ images, title, className = "" }: ImageGalleryProps) => {
             </div>
 
             {/* Navigation Arrows */}
-            {images.length > 1 && (
+            {validImages.length > 1 && (
               <>
                 <Button
                   variant="ghost"
@@ -269,7 +294,7 @@ const ImageGallery = ({ images, title, className = "" }: ImageGalleryProps) => {
 
             {/* Main Image */}
             <img
-              src={images[currentIndex]}
+              src={validImages[currentIndex]}
               alt={`${title} - Full size ${currentIndex + 1}`}
               className="max-w-full max-h-full object-contain transition-transform duration-200 select-none"
               style={{
@@ -284,16 +309,16 @@ const ImageGallery = ({ images, title, className = "" }: ImageGalleryProps) => {
             />
 
             {/* Image Counter */}
-            {images.length > 1 && (
+            {validImages.length > 1 && (
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded">
-                {currentIndex + 1} of {images.length}
+                {currentIndex + 1} of {validImages.length}
               </div>
             )}
 
             {/* Thumbnail Strip */}
-            {images.length > 1 && (
+            {validImages.length > 1 && (
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 bg-black/50 p-2 rounded max-w-[80vw] overflow-x-auto">
-                {images.map((image, index) => (
+                {validImages.map((image, index) => (
                   <img
                     key={index}
                     src={image}
