@@ -83,7 +83,7 @@ const HeroSection = () => {
         description: "Please sign in to request car parts.",
         variant: "destructive"
       });
-      navigate('/auth');
+      navigate('/buyer-auth');
     }
   };
 

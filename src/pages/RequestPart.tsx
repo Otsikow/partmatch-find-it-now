@@ -31,7 +31,7 @@ const RequestPart = () => {
         description: "Please sign in to request car parts.",
         variant: "destructive"
       });
-      navigate('/auth');
+      navigate('/buyer-auth');
     }
   }, [user, loading, navigate]);
 
@@ -52,7 +52,7 @@ const RequestPart = () => {
         description: "Please sign in to request car parts.",
         variant: "destructive"
       });
-      navigate('/auth');
+      navigate('/buyer-auth');
       return;
     }
 
