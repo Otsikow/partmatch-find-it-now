@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
 
 interface ImageGalleryProps {
   images: string[] | any;
@@ -34,6 +34,8 @@ const ImageGallery = ({ images, title, className = "" }: ImageGalleryProps) => {
   const [imagePosition, setImagePosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [lastMousePosition, setLastMousePosition] = useState({ x: 0, y: 0 });
+  const [touchStart, setTouchStart] = useState({ x: 0, y: 0 });
+  const [showControls, setShowControls] = useState(true);
 
   // Reset current index if it's out of bounds
   useEffect(() => {
@@ -140,6 +142,68 @@ const ImageGallery = ({ images, title, className = "" }: ImageGalleryProps) => {
     setIsDragging(false);
   };
 
+  // Touch handlers for mobile swipe navigation
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
+      setTouchStart({
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+      });
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStart.x || !touchStart.y) return;
+    
+    const touchEnd = {
+      x: e.changedTouches[0].clientX,
+      y: e.changedTouches[0].clientY,
+    };
+    
+    const deltaX = touchStart.x - touchEnd.x;
+    const deltaY = touchStart.y - touchEnd.y;
+    
+    // Check if it's a horizontal swipe (more horizontal than vertical)
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+      if (deltaX > 0) {
+        // Swiped left, go to next image
+        goToNext();
+      } else {
+        // Swiped right, go to previous image
+        goToPrevious();
+      }
+    }
+    
+    setTouchStart({ x: 0, y: 0 });
+  };
+
+  // Auto-hide controls after 3 seconds of inactivity
+  useEffect(() => {
+    if (!isLightboxOpen) return;
+    
+    let timeout: NodeJS.Timeout;
+    const resetTimeout = () => {
+      setShowControls(true);
+      clearTimeout(timeout);
+      timeout = setTimeout(() => setShowControls(false), 3000);
+    };
+    
+    resetTimeout();
+    
+    const handleActivity = () => resetTimeout();
+    
+    window.addEventListener('mousemove', handleActivity);
+    window.addEventListener('keydown', handleActivity);
+    window.addEventListener('touchstart', handleActivity);
+    
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener('mousemove', handleActivity);
+      window.removeEventListener('keydown', handleActivity);
+      window.removeEventListener('touchstart', handleActivity);
+    };
+  }, [isLightboxOpen]);
+
   if (!validImages || validImages.length === 0) return null;
 
   return (
@@ -153,6 +217,17 @@ const ImageGallery = ({ images, title, className = "" }: ImageGalleryProps) => {
             className="w-full h-64 object-cover rounded-lg cursor-pointer transition-transform hover:scale-[1.02]"
             onClick={() => openLightbox(currentIndex)}
           />
+          
+          {/* Multiple Images Indicator */}
+          {validImages.length > 1 && (
+            <div className="absolute top-2 left-2 bg-black/70 text-white px-2 py-1 rounded text-sm font-medium flex items-center gap-1">
+              <div className="w-2 h-2 bg-white rounded-full"></div>
+              <div className="w-2 h-2 bg-white/50 rounded-full"></div>
+              <div className="w-2 h-2 bg-white/50 rounded-full"></div>
+              <span className="ml-1">{validImages.length} Photos</span>
+            </div>
+          )}
+          
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded-lg flex items-center justify-center">
             <Button
               variant="secondary"
@@ -161,7 +236,7 @@ const ImageGallery = ({ images, title, className = "" }: ImageGalleryProps) => {
               onClick={() => openLightbox(currentIndex)}
             >
               <ZoomIn className="h-4 w-4 mr-2" />
-              View Full Size
+              {validImages.length > 1 ? `View All ${validImages.length} Photos` : 'View Full Size'}
             </Button>
           </div>
           
@@ -170,7 +245,7 @@ const ImageGallery = ({ images, title, className = "" }: ImageGalleryProps) => {
               <Button
                 variant="ghost"
                 size="sm"
-                className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white hover:bg-black/70"
+                className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white hover:bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                 onClick={(e) => {
                   e.stopPropagation();
                   goToPrevious();
@@ -181,7 +256,7 @@ const ImageGallery = ({ images, title, className = "" }: ImageGalleryProps) => {
               <Button
                 variant="ghost"
                 size="sm"
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white hover:bg-black/70"
+                className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-white hover:bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                 onClick={(e) => {
                   e.stopPropagation();
                   goToNext();
@@ -193,7 +268,7 @@ const ImageGallery = ({ images, title, className = "" }: ImageGalleryProps) => {
           )}
           
           {validImages.length > 1 && (
-            <div className="absolute bottom-2 right-2 bg-black/50 text-white px-2 py-1 rounded text-sm">
+            <div className="absolute bottom-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-sm font-medium">
               {currentIndex + 1} / {validImages.length}
             </div>
           )}
@@ -305,6 +380,8 @@ const ImageGallery = ({ images, title, className = "" }: ImageGalleryProps) => {
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUp}
               onMouseLeave={handleMouseUp}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
               draggable={false}
             />
 
