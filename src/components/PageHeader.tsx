@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useTranslation } from "react-i18next";
 import NotificationBell from "./NotificationBell";
 interface PageHeaderProps {
   title: string;
@@ -24,6 +25,7 @@ const PageHeader = ({
   children
 }: PageHeaderProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const {
     signOut,
     user
@@ -71,7 +73,7 @@ const PageHeader = ({
       
       <div className="flex flex-col min-w-0 flex-1">
         <h1 className="page-header text-xl sm:text-2xl lg:text-3xl bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent truncate">
-          Welcome to PartMatch
+          {t('welcomeToPartMatch')}
         </h1>
         {subtitle && <p className="section-subtitle text-sm truncate">{subtitle}</p>}
       </div>
@@ -94,18 +96,18 @@ const PageHeader = ({
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuItem onClick={handleProfileClick}>
                 <User className="mr-2 h-4 w-4" />
-                <span>Dashboard</span>
+                <span>{t('dashboard')}</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={handleSignOut}>
                 <LogOut className="mr-2 h-4 w-4" />
-                <span>Sign out</span>
+                <span>{t('signOut')}</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>}
         
         {showHomeButton && <Button variant="ghost" size="sm" onClick={handleHome} className="text-gray-700 hover:text-blue-700 hover:bg-blue-50/50 transition-all duration-300">
             <Home className="h-4 w-4 mr-2" />
-            <span className="hidden sm:inline">Home</span>
+            <span className="hidden sm:inline">{t('home')}</span>
           </Button>}
         {showSignOut && <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-gray-700 hover:text-red-700 hover:bg-red-50/50 transition-all duration-300 p-2">
             <X className="h-5 w-5" />

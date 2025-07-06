@@ -12,10 +12,12 @@ import Chat from "@/pages/Chat";
 import PendingRatingNotification from "@/components/PendingRatingNotification";
 import { useTransactionRating } from "@/hooks/useTransactionRating";
 import { useNotifications } from "@/hooks/useNotifications";
+import { useTranslation } from "react-i18next";
 
 const BuyerDashboard = () => {
   const { user } = useAuth();
-  const [displayName, setDisplayName] = useState<string>('Buyer');
+  const { t } = useTranslation();
+  const [displayName, setDisplayName] = useState<string>(t('buyer'));
   const [activeSection, setActiveSection] = useState('orders');
   const [unreadMessages, setUnreadMessages] = useState(0);
   const { notifications } = useNotifications();
@@ -36,13 +38,13 @@ const BuyerDashboard = () => {
 
         if (profile) {
           const name = `${profile.first_name || ''} ${profile.last_name || ''}`.trim();
-          setDisplayName(name || user.email?.split('@')[0] || 'Buyer');
+          setDisplayName(name || user.email?.split('@')[0] || t('buyer'));
         } else {
-          setDisplayName(user.email?.split('@')[0] || 'Buyer');
+          setDisplayName(user.email?.split('@')[0] || t('buyer'));
         }
       } catch (error) {
         console.error('Error fetching user name:', error);
-        setDisplayName(user.email?.split('@')[0] || 'Buyer');
+        setDisplayName(user.email?.split('@')[0] || t('buyer'));
       }
     };
 
@@ -93,13 +95,13 @@ const BuyerDashboard = () => {
 
   const getSectionTitle = () => {
     switch (activeSection) {
-      case 'orders': return 'My Orders';
-      case 'messages': return 'Messages';
-      case 'saved-parts': return 'Saved Parts';
-      case 'rate-sellers': return 'Rate Sellers';
-      case 'notifications': return 'Notifications';
-      case 'profile': return 'Profile Settings';
-      default: return 'Dashboard';
+      case 'orders': return t('myOrders');
+      case 'messages': return t('messages');
+      case 'saved-parts': return t('savedParts');
+      case 'rate-sellers': return t('rateSellers');
+      case 'notifications': return t('notifications');
+      case 'profile': return t('profileSettings');
+      default: return t('dashboard');
     }
   };
 
@@ -128,8 +130,8 @@ const BuyerDashboard = () => {
 
             {/* Center: Title (hidden on very small screens) */}
             <div className="hidden sm:block text-center flex-1 mx-4">
-              <h1 className="text-lg font-semibold text-blue-600">Buyer Dashboard</h1>
-              <p className="text-sm text-gray-500 truncate">Welcome back, {displayName}</p>
+              <h1 className="text-lg font-semibold text-blue-600">{t('buyerDashboard')}</h1>
+              <p className="text-sm text-gray-500 truncate">{t('welcomeBack')}, {displayName}</p>
             </div>
 
             {/* Right: Home and Profile */}
@@ -152,7 +154,7 @@ const BuyerDashboard = () => {
           
           {/* Mobile title (shown on small screens) */}
           <div className="sm:hidden mt-3 text-center">
-            <h1 className="text-lg font-semibold text-blue-600">Buyer Dashboard</h1>
+            <h1 className="text-lg font-semibold text-blue-600">{t('buyerDashboard')}</h1>
             <p className="text-sm text-gray-500">{getSectionTitle()}</p>
           </div>
         </div>
@@ -177,12 +179,12 @@ const BuyerDashboard = () => {
           <div className="lg:hidden bg-white border-b border-gray-200 px-2 py-3">
             <div className="grid grid-cols-4 sm:grid-cols-7 gap-1 max-w-md mx-auto sm:max-w-none">
               {[
-                { id: 'orders', label: 'Orders', icon: '📦' },
-                { id: 'messages', label: 'Messages', icon: '💬', badge: unreadMessages },
-                { id: 'saved-parts', label: 'Saved', icon: '❤️' },
-                { id: 'notifications', label: 'Alerts', icon: '🔔', badge: unreadNotifications },
-                { id: 'profile', label: 'Profile', icon: '👤' },
-                { id: 'rate-sellers', label: 'Rate', icon: '⭐' }
+                { id: 'orders', label: t('orders'), icon: '📦' },
+                { id: 'messages', label: t('messages'), icon: '💬', badge: unreadMessages },
+                { id: 'saved-parts', label: t('saved'), icon: '❤️' },
+                { id: 'notifications', label: t('alerts'), icon: '🔔', badge: unreadNotifications },
+                { id: 'profile', label: t('profile'), icon: '👤' },
+                { id: 'rate-sellers', label: t('rate'), icon: '⭐' }
               ].map((item) => (
                 <button
                   key={item.id}

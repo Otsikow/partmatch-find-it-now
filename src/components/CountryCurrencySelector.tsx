@@ -9,6 +9,7 @@ import { getSupportedCountries, getCountryConfig, getCurrencySymbol } from '@/li
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
+import { useTranslation } from 'react-i18next';
 
 interface CountryCurrencySelectorProps {
   trigger?: 'button' | 'card';
@@ -22,6 +23,7 @@ const CountryCurrencySelector = ({
   onCountryChange 
 }: CountryCurrencySelectorProps) => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState<string>('');
   const [loading, setLoading] = useState(false);
@@ -51,8 +53,8 @@ const CountryCurrencySelector = ({
       setOpen(false);
       
       toast({
-        title: "Country Updated",
-        description: `Your location has been set to ${country.name} and currency to ${country.currency} (${getCurrencySymbol(country.currency)})`,
+        title: t('countryUpdated'),
+        description: `${t('locationSetTo')} ${country.name} ${t('andCurrencyTo')} ${country.currency} (${getCurrencySymbol(country.currency)})`,
       });
 
       // Call the callback if provided

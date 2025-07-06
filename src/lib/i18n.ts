@@ -7,6 +7,9 @@ const resources = {
     translation: {
       // Common
       welcome: "Welcome",
+      welcomeToPartMatch: "Welcome to PartMatch",
+      partMatch: "PartMatch",
+      ghana: "Ghana",
       loading: "Loading...",
       save: "Save",
       cancel: "Cancel",
@@ -18,11 +21,39 @@ const resources = {
       search: "Search",
       filter: "Filter",
       
+      // Dashboard
+      buyerDashboard: "Buyer Dashboard",
+      welcomeBack: "Welcome back",
+      myOrders: "My Orders",
+      savedParts: "Saved Parts",
+      rateSellers: "Rate Sellers",
+      notifications: "Notifications",
+      profileSettings: "Profile Settings",
+      orders: "Orders",
+      messages: "Messages",
+      saved: "Saved",
+      alerts: "Alerts",
+      rate: "Rate",
+      
+      // Country & Currency
+      selectCountry: "Select Country",
+      countryCurrency: "Country & Currency",
+      selectCountryToSetCurrency: "Select your country to set currency",
+      countryUpdated: "Country Updated",
+      locationSetTo: "Your location has been set to",
+      andCurrencyTo: "and currency to",
+      updateFailed: "Update Failed",
+      failedToUpdateCountry: "Failed to update your country. Please try again.",
+      autoDetectLocation: "Auto-detect my location",
+      detecting: "Detecting...",
+      detectingLocation: "Detecting location...",
+      selectYourCountry: "Select Your Country",
+      chooseCountryDescription: "Choose your country to automatically set the appropriate currency for pricing.",
+      
       // Navigation
       home: "Home",
       browse: "Browse Parts",
       request: "Request Part",
-      messages: "Messages",
       dashboard: "Dashboard",
       profile: "Profile",
       signIn: "Sign In",
@@ -75,11 +106,6 @@ const resources = {
       seller: "Seller",
       admin: "Administrator",
       
-      // Country & Location
-      selectCountry: "Select your country",
-      autoDetectLocation: "Auto-detect my location",
-      detecting: "Detecting...",
-      
       // Form Validation
       required: "Required",
       invalidEmail: "Invalid email address",
@@ -99,6 +125,9 @@ const resources = {
     translation: {
       // Common (French)
       welcome: "Bienvenue",
+      welcomeToPartMatch: "Bienvenue sur PartMatch",
+      partMatch: "PartMatch",
+      ghana: "Ghana",
       loading: "Chargement...",
       save: "Enregistrer",
       cancel: "Annuler",
@@ -110,11 +139,39 @@ const resources = {
       search: "Rechercher",
       filter: "Filtrer",
       
+      // Dashboard
+      buyerDashboard: "Tableau de bord acheteur",
+      welcomeBack: "Bon retour",
+      myOrders: "Mes commandes",
+      savedParts: "Pièces sauvegardées",
+      rateSellers: "Noter les vendeurs",
+      notifications: "Notifications",
+      profileSettings: "Paramètres du profil",
+      orders: "Commandes",
+      messages: "Messages",
+      saved: "Sauvé",
+      alerts: "Alertes",
+      rate: "Noter",
+      
+      // Country & Currency
+      selectCountry: "Sélectionner le pays",
+      countryCurrency: "Pays et devise",
+      selectCountryToSetCurrency: "Sélectionnez votre pays pour définir la devise",
+      countryUpdated: "Pays mis à jour",
+      locationSetTo: "Votre emplacement a été défini sur",
+      andCurrencyTo: "et la devise sur",
+      updateFailed: "Échec de la mise à jour",
+      failedToUpdateCountry: "Échec de la mise à jour de votre pays. Veuillez réessayer.",
+      autoDetectLocation: "Détecter automatiquement ma position",
+      detecting: "Détection...",
+      detectingLocation: "Détection de l'emplacement...",
+      selectYourCountry: "Sélectionnez votre pays",
+      chooseCountryDescription: "Choisissez votre pays pour définir automatiquement la devise appropriée pour la tarification.",
+      
       // Navigation
       home: "Accueil",
       browse: "Parcourir les pièces",
       request: "Demander une pièce",
-      messages: "Messages",
       dashboard: "Tableau de bord",
       profile: "Profil",
       signIn: "Se connecter",
@@ -167,11 +224,6 @@ const resources = {
       seller: "Vendeur",
       admin: "Administrateur",
       
-      // Country & Location
-      selectCountry: "Sélectionner votre pays",
-      autoDetectLocation: "Détecter automatiquement ma position",
-      detecting: "Détection...",
-      
       // Form Validation
       required: "Requis",
       invalidEmail: "Adresse email invalide",
@@ -191,6 +243,9 @@ const resources = {
     translation: {
       // Common (Swahili)
       welcome: "Karibu",
+      welcomeToPartMatch: "Karibu PartMatch",
+      partMatch: "PartMatch",
+      ghana: "Ghana",
       loading: "Inapakia...",
       save: "Hifadhi",
       cancel: "Ghairi",
@@ -202,11 +257,39 @@ const resources = {
       search: "Tafuta",
       filter: "Chuja",
       
+      // Dashboard
+      buyerDashboard: "Dashibodi ya Mnunuzi",
+      welcomeBack: "Karibu tena",
+      myOrders: "Maagizo Yangu",
+      savedParts: "Vipengee Vilivyohifadhiwa",
+      rateSellers: "Kadiria Wachuuzi",
+      notifications: "Arifa",
+      profileSettings: "Mipangilio ya Wasifu",
+      orders: "Maagizo",
+      messages: "Ujumbe",
+      saved: "Imehifadhiwa",
+      alerts: "Arifa",
+      rate: "Kadiria",
+      
+      // Country & Currency
+      selectCountry: "Chagua Nchi",
+      countryCurrency: "Nchi na Sarafu",
+      selectCountryToSetCurrency: "Chagua nchi yako kuweka sarafu",
+      countryUpdated: "Nchi Imesasishwa",
+      locationSetTo: "Mahali pako pamewekwa",
+      andCurrencyTo: "na sarafu",
+      updateFailed: "Kusasisha Kumeshindikana",
+      failedToUpdateCountry: "Kushindikana kusasisha nchi yako. Tafadhali jaribu tena.",
+      autoDetectLocation: "Gundua mahali pangu kiotomatiki",
+      detecting: "Inapata...",
+      detectingLocation: "Inapata mahali...",
+      selectYourCountry: "Chagua Nchi Yako",
+      chooseCountryDescription: "Chagua nchi yako ili kuwezesha sarafu inayofaa kwa bei kiotomatiki.",
+      
       // Navigation
       home: "Nyumbani",
       browse: "Angalia Vipengee",
       request: "Omba Kipengee",
-      messages: "Ujumbe",
       dashboard: "Dashibodi",
       profile: "Wasifu",
       signIn: "Ingia",
@@ -259,11 +342,6 @@ const resources = {
       seller: "Muuzaji",
       admin: "Msimamizi",
       
-      // Country & Location
-      selectCountry: "Chagua nchi yako",
-      autoDetectLocation: "Gundua mahali pangu kiotomatiki",
-      detecting: "Inapata...",
-      
       // Form Validation
       required: "Inahitajika",
       invalidEmail: "Anwani ya barua pepe si sahihi",
@@ -283,6 +361,9 @@ const resources = {
     translation: {
       // Common (Twi)
       welcome: "Akwaaba",
+      welcomeToPartMatch: "Akwaaba wo PartMatch",
+      partMatch: "PartMatch",
+      ghana: "Ghana",
       loading: "Ɛreloading...",
       save: "Koraa",
       cancel: "Gyae",
@@ -294,11 +375,39 @@ const resources = {
       search: "Hwehwɛ",
       filter: "Susuw",
       
+      // Dashboard
+      buyerDashboard: "Otɔni Dashboard",
+      welcomeBack: "Yɛma wo akwaaba bio",
+      myOrders: "Me Orders",
+      savedParts: "Nneɛma a wɔakoraa",
+      rateSellers: "Bu adetɔnfoɔ",
+      notifications: "Amanebɔ",
+      profileSettings: "Profile Settings",
+      orders: "Orders",
+      messages: "Nkrasɛm",
+      saved: "Wɔakoraa",
+      alerts: "Amanebɔ",
+      rate: "Bu",
+      
+      // Country & Currency
+      selectCountry: "Paw Ɔman",
+      countryCurrency: "Ɔman ne Sika",
+      selectCountryToSetCurrency: "Paw wo man na wo asɛe sika",
+      countryUpdated: "Wɔasesa Ɔman",
+      locationSetTo: "Wɔde wo baabi ato",
+      andCurrencyTo: "ne sika",
+      updateFailed: "Nsesaeɛ Ankɔ Yie",
+      failedToUpdateCountry: "Wɔantumi ansesa wo man. Yɛ srɛ wo sɔ bio.",
+      autoDetectLocation: "Hu me baabi ankasa",
+      detecting: "Ɛrehwehwɛ...",
+      detectingLocation: "Ɛrehwehwɛ baabi...",
+      selectYourCountry: "Paw Wo Man",
+      chooseCountryDescription: "Paw wo man na sika a ɛfata no bɛba ankasa.",
+      
       // Navigation
       home: "Fie",
       browse: "Hwɛ Nneɛma",
       request: "Bisa Nneɛma",
-      messages: "Nkrasɛm",
       dashboard: "Dashboard",
       profile: "Profile",
       signIn: "Wuraa mu",
@@ -351,11 +460,6 @@ const resources = {
       seller: "Odetɔnni",
       admin: "Ɔsoadwumayɛni",
       
-      // Country & Location
-      selectCountry: "Paw wo man",
-      autoDetectLocation: "Hu me baabi ankasa",
-      detecting: "Ɛrehwehwɛ...",
-      
       // Form Validation
       required: "Ɛho hia",
       invalidEmail: "Email address no nyɛ",
@@ -375,6 +479,9 @@ const resources = {
     translation: {
       // Common (Yoruba)
       welcome: "Eku abo",
+      welcomeToPartMatch: "Eku abo si PartMatch",
+      partMatch: "PartMatch",
+      ghana: "Ghana",
       loading: "N gbagbe...",
       save: "Fi pamo",
       cancel: "Fagilee",
@@ -386,11 +493,39 @@ const resources = {
       search: "Wa",
       filter: "Se ayẹwo",
       
+      // Dashboard
+      buyerDashboard: "Dashboard Oniranu",
+      welcomeBack: "Eku abo pada",
+      myOrders: "Awọn Ibere Mi",
+      savedParts: "Awọn Ẹya Ti A Fi Pamọ",
+      rateSellers: "Ṣe idajo Awọn Oluta",
+      notifications: "Awọn Iwifun",
+      profileSettings: "Awọn Eto Profil",
+      orders: "Awọn Ibere",
+      messages: "Awọn Ifiranṣẹ",
+      saved: "Ti a fi pamọ",
+      alerts: "Awọn Iwifun",
+      rate: "Ṣe idajo",
+      
+      // Country & Currency
+      selectCountry: "Yan Orilẹ-ede",
+      countryCurrency: "Orilẹ-ede ati Owọ",
+      selectCountryToSetCurrency: "Yan orilẹ-ede rẹ lati fi owọ lẹlẹ",
+      countryUpdated: "Orilẹ-ede Ti Yipada",
+      locationSetTo: "Ipo rẹ ti fi si",
+      andCurrencyTo: "ati owọ si",
+      updateFailed: "Imudojuiwọn Ko Ṣaṣeyọri",
+      failedToUpdateCountry: "Ko ṣaṣeyọri lati mu orilẹ-ede rẹ ṣe imudojuiwọn. Jọwọ gbiyanju lẹẹkansi.",
+      autoDetectLocation: "Ṣe ayẹwo ipo mi laifọwọyi",
+      detecting: "N wa...",
+      detectingLocation: "N wa ipo...",
+      selectYourCountry: "Yan Orilẹ-ede Rẹ",
+      chooseCountryDescription: "Yan orilẹ-ede rẹ lati ṣeto owọ ti o yẹ fun idiyele laifọwọyi.",
+      
       // Navigation
       home: "Ile",
       browse: "Wo awọn ẹya",
       request: "Beere ẹya",
-      messages: "Ifiranṣẹ",
       dashboard: "Dashboard",
       profile: "Profile",
       signIn: "Wọle",
@@ -442,11 +577,6 @@ const resources = {
       buyer: "Oniranu",
       seller: "Oluta",
       admin: "Alakoso",
-      
-      // Country & Location
-      selectCountry: "Yan orilẹ-ede rẹ",
-      autoDetectLocation: "Ṣe ayẹwo ipo mi laifọwọyi",
-      detecting: "N wa...",
       
       // Form Validation
       required: "O nilo",

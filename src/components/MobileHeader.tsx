@@ -10,11 +10,13 @@ import {
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
 import NotificationBell from "./NotificationBell";
 import LanguageSelector from "./LanguageSelector";
 import CountryCurrencySelector from "./CountryCurrencySelector";
 const MobileHeader = () => {
   const { user, signOut } = useAuth();
+  const { t } = useTranslation();
   const location = useLocation();
   const isHomePage = location.pathname === '/';
 
@@ -22,7 +24,7 @@ const MobileHeader = () => {
     try {
       await signOut();
       toast({
-        title: "Signed out successfully",
+        title: t('signOut'),
         description: "You have been signed out of your account.",
       });
     } catch (error) {
@@ -45,7 +47,7 @@ const MobileHeader = () => {
           />
           <div className="min-w-0 flex-1">
             <h1 className="brand-title truncate text-lg sm:text-xl">
-              PartMatch
+              {t('partMatch')}
             </h1>
           </div>
         </div>
@@ -71,7 +73,7 @@ const MobileHeader = () => {
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
                   <User className="h-4 w-4" />
-                  <span>Profile</span>
+                  <span>{t('profile')}</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <div className="p-2">
@@ -87,7 +89,7 @@ const MobileHeader = () => {
                   onClick={handleSignOut}
                 >
                   <LogOut className="h-4 w-4" />
-                  <span>Sign Out</span>
+                  <span>{t('signOut')}</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

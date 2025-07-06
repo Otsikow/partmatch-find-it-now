@@ -1,11 +1,14 @@
 
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface NavigationLogoProps {
   onLinkClick?: () => void;
 }
 
 const NavigationLogo = ({ onLinkClick }: NavigationLogoProps) => {
+  const { t } = useTranslation();
+  
   return (
     <Link 
       to="/" 
@@ -18,7 +21,7 @@ const NavigationLogo = ({ onLinkClick }: NavigationLogoProps) => {
         className="h-10 sm:h-12 lg:h-14 w-auto flex-shrink-0 bg-card dark:bg-white rounded-sm p-1 border"
       />
       <h1 className="text-lg sm:text-xl lg:text-2xl font-playfair font-bold bg-gradient-to-r from-red-600 to-green-700 bg-clip-text text-transparent truncate">
-        Ghana
+        {t('ghana')}
       </h1>
     </Link>
   );
