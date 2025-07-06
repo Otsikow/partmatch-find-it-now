@@ -71,9 +71,12 @@ const MobileHeader = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+                <DropdownMenuItem 
+                  className="flex items-center gap-2 cursor-pointer"
+                  onClick={() => window.location.href = '/buyer-dashboard'}
+                >
                   <User className="h-4 w-4" />
-                  <span>{t('profile')}</span>
+                  <span>{t('dashboard')}</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <div className="p-2">
