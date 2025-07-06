@@ -19,7 +19,7 @@ const AuthTypeSelector = () => {
             alt="PartMatch Logo" 
             className="h-6 w-auto sm:h-8 bg-card dark:bg-white rounded-sm p-1 border"
           />
-          <h1 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-bold text-foreground">
+          <h1 className="page-subheader text-xl sm:text-2xl lg:text-3xl text-foreground">
             Choose Your Account Type
           </h1>
         </div>
@@ -27,10 +27,10 @@ const AuthTypeSelector = () => {
 
       <main className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-4xl">
         <div className="text-center mb-8 sm:mb-12">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-playfair font-bold mb-4 text-foreground">
+          <h2 className="page-header text-2xl sm:text-3xl lg:text-4xl mb-4 text-foreground">
             How would you like to join Ghana?
           </h2>
-          <p className="text-muted-foreground text-lg sm:text-xl font-crimson max-w-2xl mx-auto">
+          <p className="section-subtitle text-lg sm:text-xl max-w-2xl mx-auto">
             Select the type of account that best describes your role in our car parts marketplace
           </p>
         </div>
@@ -41,10 +41,10 @@ const AuthTypeSelector = () => {
               <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full p-4 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
                 <ShoppingCart className="h-10 w-10 sm:h-12 sm:w-12 text-white" />
               </div>
-              <h3 className="text-xl sm:text-2xl font-playfair font-bold mb-3 text-blue-800">
+              <h3 className="section-title text-xl sm:text-2xl mb-3 text-blue-800">
                 Buyer
               </h3>
-              <p className="text-muted-foreground text-sm sm:text-base font-crimson mb-6">
+              <p className="card-description text-sm sm:text-base mb-6">
                 Find and purchase car parts from verified sellers across Ghana
               </p>
               <div className="bg-primary/10 rounded-lg p-4 text-sm text-primary font-medium mb-6">
@@ -53,7 +53,7 @@ const AuthTypeSelector = () => {
                 ✓ Connect with sellers<br/>
                 ✓ Secure payments
               </div>
-              <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white font-semibold py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight">
+              <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight">
                 Sign In / Register as Buyer
               </Button>
             </Card>
@@ -64,10 +64,10 @@ const AuthTypeSelector = () => {
               <div className="bg-gradient-to-br from-orange-500 to-red-600 rounded-full p-4 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
                 <Store className="h-10 w-10 sm:h-12 sm:w-12 text-white" />
               </div>
-              <h3 className="text-xl sm:text-2xl font-playfair font-bold mb-3 text-foreground">
+              <h3 className="section-title text-xl sm:text-2xl mb-3 text-foreground">
                 Seller
               </h3>
-              <p className="text-muted-foreground text-sm sm:text-base font-crimson mb-6">
+              <p className="card-description text-sm sm:text-base mb-6">
                 Sell and supply car parts to buyers across Ghana
               </p>
               <div className="bg-destructive/10 rounded-lg p-4 text-sm text-destructive font-medium mb-6">
@@ -76,7 +76,7 @@ const AuthTypeSelector = () => {
                 ✓ Manage offers<br/>
                 ✓ Grow your business
               </div>
-              <Button className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white font-semibold py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight">
+              <Button className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight">
                 Sign In / Register as Seller
               </Button>
             </Card>
@@ -87,10 +87,10 @@ const AuthTypeSelector = () => {
               <div className="bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full p-4 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
                 <Shield className="h-10 w-10 sm:h-12 sm:w-12 text-white" />
               </div>
-              <h3 className="text-xl sm:text-2xl font-playfair font-bold mb-3 text-foreground">
+              <h3 className="section-title text-xl sm:text-2xl mb-3 text-foreground">
                 Administrator
               </h3>
-              <p className="text-muted-foreground text-sm sm:text-base font-crimson mb-6">
+              <p className="card-description text-sm sm:text-base mb-6">
                 Manage and oversee the Ghana platform
               </p>
               <div className="bg-secondary/30 rounded-lg p-4 text-sm text-secondary-foreground font-medium mb-6">
@@ -99,7 +99,7 @@ const AuthTypeSelector = () => {
                 ✓ Content moderation<br/>
                 ✓ System analytics
               </div>
-              <Button className="w-full bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 text-white font-semibold py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight">
+              <Button className="w-full bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 text-white ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight">
                 Sign In / Register as Admin
               </Button>
             </Card>
@@ -107,7 +107,7 @@ const AuthTypeSelector = () => {
         </div>
 
         <div className="text-center mt-8 sm:mt-12">
-          <p className="text-muted-foreground text-sm sm:text-base font-crimson">
+          <p className="body-text-small text-sm sm:text-base">
             Already have an account? Use the specific login page for your account type above.
           </p>
         </div>

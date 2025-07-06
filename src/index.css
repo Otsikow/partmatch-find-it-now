@@ -164,3 +164,60 @@
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
+
+/* Consistent Typography System */
+@layer components {
+  /* Brand Typography */
+  .brand-title {
+    @apply font-playfair font-bold bg-gradient-to-r from-red-600 to-green-700 bg-clip-text text-transparent;
+  }
+  
+  /* Page Headers */
+  .page-header {
+    @apply font-playfair font-bold text-foreground text-2xl sm:text-3xl md:text-4xl;
+  }
+  
+  .page-subheader {
+    @apply font-playfair font-semibold text-foreground text-xl sm:text-2xl;
+  }
+  
+  /* Section Headers */
+  .section-title {
+    @apply font-playfair font-bold text-foreground text-lg sm:text-xl md:text-2xl;
+  }
+  
+  .section-subtitle {
+    @apply font-crimson text-muted-foreground text-base sm:text-lg;
+  }
+  
+  /* Body Text */
+  .body-text {
+    @apply font-inter text-foreground text-sm sm:text-base;
+  }
+  
+  .body-text-large {
+    @apply font-inter text-foreground text-base sm:text-lg;
+  }
+  
+  .body-text-small {
+    @apply font-inter text-muted-foreground text-xs sm:text-sm;
+  }
+  
+  /* UI Elements */
+  .ui-label {
+    @apply font-inter font-medium text-foreground text-sm;
+  }
+  
+  .ui-button-text {
+    @apply font-inter font-semibold;
+  }
+  
+  /* Card Content */
+  .card-title {
+    @apply font-playfair font-semibold text-foreground text-lg;
+  }
+  
+  .card-description {
+    @apply font-crimson text-muted-foreground text-sm;
+  }
+}

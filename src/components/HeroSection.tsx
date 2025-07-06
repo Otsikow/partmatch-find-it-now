@@ -108,11 +108,11 @@ const HeroSection = () => {
         
         <div className="flex flex-col sm:flex-row items-center justify-center sm:space-x-3 mb-4 sm:mb-6">
           <Zap className="h-6 w-6 sm:h-8 sm:w-8 text-hero-accent mb-2 sm:mb-0" />
-          <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-playfair font-bold text-foreground leading-tight text-center">
+          <h2 className="page-header text-4xl md:text-5xl lg:text-6xl leading-tight text-center">
             Find & Sell Car Parts in Ghana
           </h2>
         </div>
-        <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed px-4">
+        <p className="body-text-large md:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed px-4">
           The easiest way to find and order car parts in Ghana. Compare prices from trusted sellers and get quality parts delivered to your door.
         </p>
         
@@ -122,7 +122,7 @@ const HeroSection = () => {
             <Link to={getDashboardRoute()} className="w-full">
               <Button 
                 size="lg" 
-                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg font-semibold"
+                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg ui-button-text"
                 disabled={isLoadingUserType}
               >
                 <LayoutDashboard className="mr-2 h-5 w-5" />
@@ -133,7 +133,7 @@ const HeroSection = () => {
 
           {user ? (
             <Link to="/request-part" className="w-full sm:w-auto">
-              <Button size="lg" className="w-full bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700 text-white shadow-lg font-semibold">
+              <Button size="lg" className="w-full bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700 text-white shadow-lg ui-button-text">
                 <MessageSquare className="mr-2 h-5 w-5" />
                 Request Car Parts
               </Button>
@@ -141,7 +141,7 @@ const HeroSection = () => {
           ) : (
             <Button 
               size="lg" 
-              className="w-full sm:w-auto bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700 text-white shadow-lg font-semibold" 
+              className="w-full sm:w-auto bg-gradient-to-r from-red-600 to-yellow-600 hover:from-red-700 hover:to-yellow-700 text-white shadow-lg ui-button-text" 
               onClick={handleRequestPartClick}
             >
               <MessageSquare className="mr-2 h-5 w-5" />
@@ -150,7 +150,7 @@ const HeroSection = () => {
           )}
           
           <Link to="/search-parts" className="w-full sm:w-auto">
-            <Button size="lg" variant="outline" className="w-full border-2 border-success text-success hover:bg-success/10 shadow-lg font-semibold">
+            <Button size="lg" variant="outline" className="w-full border-2 border-success text-success hover:bg-success/10 shadow-lg ui-button-text">
               <MapPin className="mr-2 h-5 w-5" />
               Find Car Parts
             </Button>
@@ -158,7 +158,7 @@ const HeroSection = () => {
 
           {user ? (
             <Link to="/supplier-dashboard" className="w-full sm:w-auto">
-              <Button size="lg" className="w-full bg-gradient-to-r from-green-600 to-red-600 hover:from-green-700 hover:to-red-700 text-white shadow-lg font-semibold">
+              <Button size="lg" className="w-full bg-gradient-to-r from-green-600 to-red-600 hover:from-green-700 hover:to-red-700 text-white shadow-lg ui-button-text">
                 <Package className="mr-2 h-5 w-5" />
                 Sell Car Parts
               </Button>
@@ -166,7 +166,7 @@ const HeroSection = () => {
           ) : (
             <Button 
               size="lg" 
-              className="w-full sm:w-auto bg-gradient-to-r from-green-600 to-red-600 hover:from-green-700 hover:to-red-700 text-white shadow-lg font-semibold" 
+              className="w-full sm:w-auto bg-gradient-to-r from-green-600 to-red-600 hover:from-green-700 hover:to-red-700 text-white shadow-lg ui-button-text" 
               onClick={handleSellPartsClick}
             >
               <Package className="mr-2 h-5 w-5" />

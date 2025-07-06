@@ -70,10 +70,10 @@ const PageHeader = ({
       </Link>
       
       <div className="flex flex-col min-w-0 flex-1">
-        <h1 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent truncate">
+        <h1 className="page-header text-xl sm:text-2xl lg:text-3xl bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent truncate">
           {title}
         </h1>
-        {subtitle && <p className="text-sm text-gray-600 truncate">{subtitle}</p>}
+        {subtitle && <p className="section-subtitle text-sm truncate">{subtitle}</p>}
       </div>
       
       <div className="flex items-center gap-2">
