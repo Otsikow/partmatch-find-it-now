@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Check, Globe, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -69,8 +69,10 @@ const CountryCurrencySelector = ({
     }
   };
 
-  const TriggerButton = () => (
+  const TriggerButton = React.forwardRef<HTMLButtonElement>((props, ref) => (
     <Button 
+      {...props}
+      ref={ref}
       variant="outline" 
       role="combobox"
       aria-expanded={open}
@@ -87,7 +89,7 @@ const CountryCurrencySelector = ({
       </div>
       <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
     </Button>
-  );
+  ));
 
   const TriggerCard = () => (
     <Card className="cursor-pointer hover:shadow-md transition-shadow">
