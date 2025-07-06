@@ -3,28 +3,24 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRealTimeStats } from "@/hooks/useRealTimeStats";
-
 const MobileHomeContent = () => {
-  const { activeParts, sellers, totalUsers, regions, categories, loading } = useRealTimeStats();
-  
-  return (
-    <div className="px-4 py-6 space-y-6">
+  const {
+    activeParts,
+    sellers,
+    totalUsers,
+    regions,
+    categories,
+    loading
+  } = useRealTimeStats();
+  return <div className="px-4 py-6 space-y-6">
       {/* Hero Section */}
       <div className="text-center space-y-2">
         <div className="mx-auto">
-          <img 
-            src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
-            alt="PartMatch Logo" 
-            className="h-32 w-auto mx-auto"
-          />
+          <img src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" alt="PartMatch Logo" className="h-32 w-auto mx-auto" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Find & Sell Car Parts in Ghana
-          </h2>
-          <p className="text-gray-600 text-sm leading-relaxed">
-            The easiest way to find and order car parts in Ghana. Compare prices from trusted sellers.
-          </p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Find & Sell Car Parts</h2>
+          <p className="text-gray-600 text-sm leading-relaxed">The easiest way to find and order car parts. Compare prices from trusted sellers.</p>
         </div>
       </div>
 
@@ -84,17 +80,19 @@ const MobileHomeContent = () => {
         <h3 className="text-lg font-semibold text-gray-900">Popular Categories</h3>
         
         <div className="space-y-2">
-          {[
-            { name: "Engine Parts", count: loading ? "..." : `${categories.engineParts}+ parts` },
-            { name: "Brake System", count: loading ? "..." : `${categories.brakeParts}+ parts` },
-            { name: "Suspension", count: loading ? "..." : `${categories.suspensionParts}+ parts` },
-            { name: "Body Parts", count: loading ? "..." : `${categories.bodyParts}+ parts` },
-          ].map((category) => (
-            <Link
-              key={category.name}
-              to="/search-parts"
-              className="block"
-            >
+          {[{
+          name: "Engine Parts",
+          count: loading ? "..." : `${categories.engineParts}+ parts`
+        }, {
+          name: "Brake System",
+          count: loading ? "..." : `${categories.brakeParts}+ parts`
+        }, {
+          name: "Suspension",
+          count: loading ? "..." : `${categories.suspensionParts}+ parts`
+        }, {
+          name: "Body Parts",
+          count: loading ? "..." : `${categories.bodyParts}+ parts`
+        }].map(category => <Link key={category.name} to="/search-parts" className="block">
               <Card className="hover:shadow-md transition-shadow">
                 <CardContent className="p-4 flex items-center justify-between">
                   <div className="flex items-center space-x-3">
@@ -111,8 +109,7 @@ const MobileHomeContent = () => {
                   </div>
                 </CardContent>
               </Card>
-            </Link>
-          ))}
+            </Link>)}
         </div>
       </div>
 
@@ -153,8 +150,6 @@ const MobileHomeContent = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default MobileHomeContent;
