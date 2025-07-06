@@ -84,8 +84,8 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
   }
 
   if (!user) {
-    console.log('SellerProtectedRoute: No user, redirecting to auth');
-    return <Navigate to="/auth" replace />;
+    console.log('SellerProtectedRoute: No user, redirecting to seller auth');
+    return <Navigate to="/seller-auth" replace />;
   }
 
   if (userType !== 'supplier' && userType !== 'admin') {
