@@ -28,7 +28,7 @@ const AuthTypeSelector = () => {
       <main className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-4xl">
         <div className="text-center mb-8 sm:mb-12">
           <h2 className="page-header text-2xl sm:text-3xl lg:text-4xl mb-4 text-foreground">
-            How would you like to join Ghana?
+            How would you like to join?
           </h2>
           <p className="section-subtitle text-lg sm:text-xl max-w-2xl mx-auto">
             Select the type of account that best describes your role in our car parts marketplace
@@ -45,7 +45,7 @@ const AuthTypeSelector = () => {
                 Buyer
               </h3>
               <p className="card-description text-sm sm:text-base mb-6">
-                Find and purchase car parts from verified sellers across Ghana
+                Find and purchase car parts from verified sellers
               </p>
               <div className="bg-primary/10 rounded-lg p-4 text-sm text-primary font-medium mb-6">
                 ✓ Browse available parts<br/>
@@ -68,7 +68,7 @@ const AuthTypeSelector = () => {
                 Seller
               </h3>
               <p className="card-description text-sm sm:text-base mb-6">
-                Sell and supply car parts to buyers across Ghana
+                Sell and supply car parts to buyers
               </p>
               <div className="bg-destructive/10 rounded-lg p-4 text-sm text-destructive font-medium mb-6">
                 ✓ List your inventory<br/>
@@ -91,7 +91,7 @@ const AuthTypeSelector = () => {
                 Administrator
               </h3>
               <p className="card-description text-sm sm:text-base mb-6">
-                Manage and oversee the Ghana platform
+                Manage and oversee the platform
               </p>
               <div className="bg-secondary/30 rounded-lg p-4 text-sm text-secondary-foreground font-medium mb-6">
                 ✓ Platform oversight<br/>
