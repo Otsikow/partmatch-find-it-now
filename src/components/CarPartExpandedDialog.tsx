@@ -9,6 +9,7 @@ import ChatButton from "./chat/ChatButton";
 import VerifiedSellerBadge from "./VerifiedSellerBadge";
 import SellerRatingDisplay from "./SellerRatingDisplay";
 import PriceComparisonSection from "./PriceComparisonSection";
+import ImageGallery from "./ImageGallery";
 
 interface CarPartExpandedDialogProps {
   part: CarPart;
@@ -47,25 +48,11 @@ const CarPartExpandedDialog = ({ part, isOpen, onOpenChange, onContact }: CarPar
         <div className="space-y-4">
           {/* Image Gallery */}
           {part.images && part.images.length > 0 && (
-            <div className="space-y-2">
-              <img
-                src={part.images[0]}
-                alt={part.title}
-                className="w-full h-64 object-cover rounded-lg"
-              />
-              {part.images.length > 1 && (
-                <div className="grid grid-cols-4 gap-2">
-                  {part.images.slice(1, 5).map((image, index) => (
-                    <img
-                      key={index}
-                      src={image}
-                      alt={`${part.title} ${index + 2}`}
-                      className="w-full h-16 object-cover rounded"
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
+            <ImageGallery 
+              images={part.images} 
+              title={part.title}
+              className="mb-6"
+            />
           )}
 
           <div>
