@@ -113,14 +113,17 @@ export type Database = {
       car_parts: {
         Row: {
           address: string | null
+          boosted_until: string | null
           city: string | null
           condition: string
           country: string | null
           created_at: string | null
           currency: string
           description: string | null
+          featured_until: string | null
           id: string
           images: string[] | null
+          is_featured: boolean | null
           latitude: number | null
           longitude: number | null
           make: string
@@ -135,14 +138,17 @@ export type Database = {
         }
         Insert: {
           address?: string | null
+          boosted_until?: string | null
           city?: string | null
           condition: string
           country?: string | null
           created_at?: string | null
           currency?: string
           description?: string | null
+          featured_until?: string | null
           id?: string
           images?: string[] | null
+          is_featured?: boolean | null
           latitude?: number | null
           longitude?: number | null
           make: string
@@ -157,14 +163,17 @@ export type Database = {
         }
         Update: {
           address?: string | null
+          boosted_until?: string | null
           city?: string | null
           condition?: string
           country?: string | null
           created_at?: string | null
           currency?: string
           description?: string | null
+          featured_until?: string | null
           id?: string
           images?: string[] | null
+          is_featured?: boolean | null
           latitude?: number | null
           longitude?: number | null
           make?: string
