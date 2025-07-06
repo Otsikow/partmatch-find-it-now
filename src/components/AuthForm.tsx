@@ -24,7 +24,11 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
     lastName: '',
     phone: '',
     location: '',
-    userType: 'owner'
+    userType: 'owner',
+    country: '',
+    city: '',
+    language: 'en',
+    currency: 'GHS'
   });
   const [loading, setLoading] = useState(false);
   const [showPasswordReset, setShowPasswordReset] = useState(false);
@@ -49,7 +53,11 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
           last_name: formData.lastName,
           phone: formData.phone,
           location: formData.location,
-          user_type: formData.userType
+          user_type: formData.userType,
+          country: formData.country,
+          city: formData.city,
+          language: formData.language,
+          currency: formData.currency
         });
         
         if (!error) {
