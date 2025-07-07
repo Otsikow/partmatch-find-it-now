@@ -140,6 +140,40 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const signUp = async (email: string, password: string, userData: any) => {
     console.log('AuthProvider: SignUp attempt:', { email, userData });
     
+    // Validate required fields
+    const requiredFields = ['first_name', 'last_name', 'phone', 'location'];
+    const missingFields = requiredFields.filter(field => !userData[field] || userData[field].trim() === '');
+    
+    if (!email || email.trim() === '') {
+      const error = new Error('Email is required');
+      toast({
+        title: "Validation Error",
+        description: "Email is required",
+        variant: "destructive"
+      });
+      return { error };
+    }
+    
+    if (!password || password.length < 6) {
+      const error = new Error('Password must be at least 6 characters');
+      toast({
+        title: "Validation Error", 
+        description: "Password must be at least 6 characters",
+        variant: "destructive"
+      });
+      return { error };
+    }
+    
+    if (missingFields.length > 0) {
+      const error = new Error(`Required fields missing: ${missingFields.join(', ')}`);
+      toast({
+        title: "Validation Error",
+        description: `Please fill in all required fields: ${missingFields.join(', ')}`,
+        variant: "destructive"
+      });
+      return { error };
+    }
+    
     // Prevent admin registration from public forms
     if (userData.user_type === 'admin') {
       console.log('AuthProvider: Admin signup attempt blocked - not allowed from public form');
@@ -173,11 +207,28 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
       
       console.log('AuthProvider: SignUp result:', { error });
+      console.log('AuthProvider: Full error details:', JSON.stringify(error, null, 2));
       
       if (error) {
+        let errorMessage = error.message;
+        
+        // Handle specific error cases with user-friendly messages
+        if (error.message.includes('User already registered')) {
+          errorMessage = 'This email is already registered. Please use another email or try signing in.';
+        } else if (error.message.includes('Email not confirmed')) {
+          errorMessage = 'Please verify your email address before signing in. Check your inbox for a confirmation email.';
+        } else if (error.message.includes('Invalid email')) {
+          errorMessage = 'Please enter a valid email address.';
+        } else if (error.message.includes('Weak password')) {
+          errorMessage = 'Password is too weak. Please choose a stronger password.';
+        } else if (error.message.includes('Database error saving new user')) {
+          console.error('AuthProvider: Database error during signup. Full error:', error);
+          errorMessage = 'Unable to create account due to a server error. Please try again in a moment.';
+        }
+        
         toast({
           title: "Sign Up Error",
-          description: error.message,
+          description: errorMessage,
           variant: "destructive"
         });
       } else {
@@ -190,9 +241,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       return { error };
     } catch (error: any) {
       console.error('AuthProvider: SignUp unexpected error:', error);
+      console.error('AuthProvider: Error details:', JSON.stringify(error, null, 2));
+      
+      let errorMessage = "An unexpected error occurred during sign up.";
+      if (error.message.includes('duplicate key value')) {
+        errorMessage = 'This email is already registered. Please use another email.';
+      }
+      
       toast({
         title: "Sign Up Error",
-        description: "An unexpected error occurred during sign up.",
+        description: errorMessage,
         variant: "destructive"
       });
       return { error };
