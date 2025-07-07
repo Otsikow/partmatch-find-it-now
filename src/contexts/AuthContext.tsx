@@ -197,6 +197,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const redirectUrl = `${window.location.origin}/`;
     
     try {
+      console.log('AuthProvider: Attempting Supabase signup...');
       const { error } = await supabase.auth.signUp({
         email,
         password,
