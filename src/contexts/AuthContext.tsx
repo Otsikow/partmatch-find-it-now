@@ -197,6 +197,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const redirectUrl = `${window.location.origin}/`;
     
     try {
+      // Test Supabase connectivity first
+      console.log('AuthProvider: Testing Supabase connectivity...');
+      const { data: testData, error: testError } = await supabase.from('profiles').select('count').limit(1);
+      console.log('AuthProvider: Connectivity test result:', { testData, testError });
+      
       console.log('AuthProvider: Attempting Supabase signup...');
       const { error } = await supabase.auth.signUp({
         email,
@@ -245,7 +250,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.error('AuthProvider: Error details:', JSON.stringify(error, null, 2));
       
       let errorMessage = "An unexpected error occurred during sign up.";
-      if (error.message.includes('duplicate key value')) {
+      
+      // Handle network/connectivity errors specifically
+      if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        errorMessage = 'Network connection error. Please check your internet connection and try again.';
+      } else if (error.message.includes('CORS')) {
+        errorMessage = 'Connection error due to browser security settings. Please try refreshing the page.';
+      } else if (error.message.includes('duplicate key value')) {
         errorMessage = 'This email is already registered. Please use another email.';
       }
       
