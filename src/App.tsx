@@ -27,6 +27,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import CookiePolicy from "./pages/CookiePolicy";
 import NotFound from "./pages/NotFound";
+import SimpleAuth from "./pages/SimpleAuth";
 import ButtonTestPage from "./pages/ButtonTestPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import SellerProtectedRoute from "./components/SellerProtectedRoute";
@@ -123,6 +124,7 @@ const App = () => (
                 </AdminProtectedRoute>
               } 
             />
+            <Route path="/simple-auth" element={<SimpleAuth />} />
             <Route path="/button-test" element={<ButtonTestPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
