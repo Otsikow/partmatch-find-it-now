@@ -18,7 +18,7 @@ const MobileHomeContent = () => {
       {/* Hero Section */}
       <div className="text-center space-y-2">
         <div className="mx-auto">
-          <img src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" alt="PartMatch Logo" className="h-32 w-auto mx-auto" />
+          <img src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" alt="PartMatch Logo" className="h-44 w-auto mx-auto" />
         </div>
         <div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('heroTitle')}</h2>
