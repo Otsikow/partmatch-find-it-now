@@ -35,7 +35,7 @@ const AuthTypeSelector = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto">
           <Link to="/buyer-auth" className="block group">
             <Card className="p-6 sm:p-8 text-center bg-gradient-to-br from-card to-accent/10 hover:from-card hover:to-accent/20 transition-all duration-300 group-hover:shadow-xl group-hover:scale-105 border-2 border-primary/20 group-hover:border-primary/40">
               <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full p-4 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
@@ -78,29 +78,6 @@ const AuthTypeSelector = () => {
               </div>
               <Button className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight">
                 Sign In / Register as Seller
-              </Button>
-            </Card>
-          </Link>
-
-          <Link to="/admin-auth" className="block group">
-            <Card className="p-6 sm:p-8 text-center bg-gradient-to-br from-card to-secondary/30 hover:from-card hover:to-secondary/50 transition-all duration-300 group-hover:shadow-xl group-hover:scale-105 border-2 border-secondary/30 group-hover:border-secondary/50">
-              <div className="bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full p-4 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                <Shield className="h-10 w-10 sm:h-12 sm:w-12 text-white" />
-              </div>
-              <h3 className="section-title text-xl sm:text-2xl mb-3 text-foreground">
-                Administrator
-              </h3>
-              <p className="card-description text-sm sm:text-base mb-6">
-                Manage and oversee the platform
-              </p>
-              <div className="bg-secondary/30 rounded-lg p-4 text-sm text-secondary-foreground font-medium mb-6">
-                ✓ Platform oversight<br/>
-                ✓ User management<br/>
-                ✓ Content moderation<br/>
-                ✓ System analytics
-              </div>
-              <Button className="w-full bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 text-white ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight">
-                Sign In / Register as Admin
               </Button>
             </Card>
           </Link>
