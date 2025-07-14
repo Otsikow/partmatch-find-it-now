@@ -4,6 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRealTimeStats } from "@/hooks/useRealTimeStats";
 import { useTranslation } from 'react-i18next';
+
+// Import category images
+import enginePartsImg from "@/assets/engine-parts.jpg";
+import brakeSystemImg from "@/assets/brake-system.jpg";
+import suspensionImg from "@/assets/suspension.jpg";
+import bodyPartsImg from "@/assets/body-parts.jpg";
 const MobileHomeContent = () => {
   const { t } = useTranslation();
   const {
@@ -98,22 +104,30 @@ const MobileHomeContent = () => {
         <div className="space-y-2">
           {[{
           name: t('engineParts'),
-          count: loading ? "..." : `${categories.engineParts}+ ${t('parts')}`
+          count: loading ? "..." : `${categories.engineParts}+ ${t('parts')}`,
+          image: enginePartsImg
         }, {
           name: t('brakeSystem'),
-          count: loading ? "..." : `${categories.brakeParts}+ ${t('parts')}`
+          count: loading ? "..." : `${categories.brakeParts}+ ${t('parts')}`,
+          image: brakeSystemImg
         }, {
           name: t('suspension'),
-          count: loading ? "..." : `${categories.suspensionParts}+ ${t('parts')}`
+          count: loading ? "..." : `${categories.suspensionParts}+ ${t('parts')}`,
+          image: suspensionImg
         }, {
           name: t('bodyParts'),
-          count: loading ? "..." : `${categories.bodyParts}+ ${t('parts')}`
+          count: loading ? "..." : `${categories.bodyParts}+ ${t('parts')}`,
+          image: bodyPartsImg
         }].map(category => <Link key={category.name} to="/search-parts" className="block">
               <Card className="hover:shadow-md transition-shadow">
                 <CardContent className="p-4 flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <Package className="w-5 h-5 text-blue-600" />
+                    <div className="w-10 h-10 rounded-lg overflow-hidden bg-gray-50 flex items-center justify-center">
+                      <img 
+                        src={category.image} 
+                        alt={category.name}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                     <div>
                       <h4 className="font-medium text-gray-900">{category.name}</h4>
