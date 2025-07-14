@@ -1,15 +1,17 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { MessageCircle } from "lucide-react";
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
+import GuestInquiryModal from '@/components/GuestInquiryModal';
 
 interface ChatButtonProps {
   sellerId: string;
   partId?: string;
+  partTitle?: string;
   className?: string;
   size?: "sm" | "default" | "lg" | "mobile-sm" | "mobile-default" | "mobile-lg";
   variant?: "default" | "outline" | "ghost";
@@ -19,6 +21,7 @@ interface ChatButtonProps {
 const ChatButton = ({ 
   sellerId, 
   partId, 
+  partTitle = "this part",
   className = "", 
   size = "default",
   variant = "default",
@@ -27,15 +30,12 @@ const ChatButton = ({
   const { user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [showGuestInquiry, setShowGuestInquiry] = useState(false);
 
   const handleChatClick = async () => {
+    // If user is not logged in, show guest inquiry options
     if (!user) {
-      toast({
-        title: "Login Required",
-        description: "Please login to start a conversation",
-        variant: "destructive"
-      });
-      navigate('/auth');
+      setShowGuestInquiry(true);
       return;
     }
 
@@ -120,15 +120,26 @@ const ChatButton = ({
   };
 
   return (
-    <Button
-      onClick={handleChatClick}
-      size={size}
-      variant={variant}
-      className={`flex items-center gap-2 ${className}`}
-    >
-      <MessageCircle className="h-4 w-4" />
-      {children || "Chat with Seller"}
-    </Button>
+    <>
+      <Button
+        onClick={handleChatClick}
+        size={size}
+        variant={variant}
+        className={`flex items-center gap-2 ${className}`}
+      >
+        <MessageCircle className="h-4 w-4" />
+        {children || (user ? "Chat with Seller" : "Inquire About Part")}
+      </Button>
+      
+      {/* Guest Inquiry Modal */}
+      <GuestInquiryModal
+        isOpen={showGuestInquiry}
+        onOpenChange={setShowGuestInquiry}
+        partTitle={partTitle}
+        partId={partId || ''}
+        sellerId={sellerId}
+      />
+    </>
   );
 };
 
