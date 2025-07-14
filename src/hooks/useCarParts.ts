@@ -12,6 +12,8 @@ interface UseCarPartsParams {
     category: string;
     location: string;
     priceRange: [number, number];
+    condition: string;
+    locationRadius: number;
   };
 }
 
@@ -77,6 +79,27 @@ export const useCarParts = (params?: UseCarPartsParams) => {
         if (params.filters.year) {
           query = query.eq('year', parseInt(params.filters.year));
           console.log('Applied year filter:', params.filters.year);
+        }
+        if (params.filters.condition) {
+          query = query.eq('condition', params.filters.condition);
+          console.log('Applied condition filter:', params.filters.condition);
+        }
+        if (params.filters.category) {
+          query = query.ilike('part_type', `%${params.filters.category}%`);
+          console.log('Applied category filter:', params.filters.category);
+        }
+        if (params.filters.location) {
+          query = query.or(
+            `address.ilike.%${params.filters.location}%,city.ilike.%${params.filters.location}%,country.ilike.%${params.filters.location}%`
+          );
+          console.log('Applied location filter:', params.filters.location);
+        }
+        // Price range filter
+        if (params.filters.priceRange[0] > 0 || params.filters.priceRange[1] < 50000) {
+          query = query
+            .gte('price', params.filters.priceRange[0])
+            .lte('price', params.filters.priceRange[1]);
+          console.log('Applied price range filter:', params.filters.priceRange);
         }
       }
 

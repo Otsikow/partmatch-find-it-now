@@ -44,6 +44,8 @@ const SearchParts = () => {
     category: "",
     location: "",
     priceRange: [0, 10000] as [number, number],
+    condition: "",
+    locationRadius: 50,
   });
 
   // For car parts
