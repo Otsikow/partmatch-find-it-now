@@ -235,12 +235,12 @@ const SearchControls = ({
             <Filter className="w-4 h-4 text-primary" />
             <p className="text-xs sm:text-sm font-semibold text-foreground">Category</p>
           </div>
-          <Select value={filters.category} onValueChange={(value) => onFiltersChange({ ...filters, category: value })}>
+          <Select value={filters.category || "all"} onValueChange={(value) => onFiltersChange({ ...filters, category: value === "all" ? "" : value })}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="All Categories" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Categories</SelectItem>
+              <SelectItem value="all">All Categories</SelectItem>
               <SelectItem value="Engine">Engine Parts</SelectItem>
               <SelectItem value="Brake">Brake System</SelectItem>
               <SelectItem value="Suspension">Suspension</SelectItem>
