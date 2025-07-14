@@ -221,3 +221,20 @@
     @apply font-crimson text-muted-foreground text-sm;
   }
 }
+
+/* Slider Animation Styles */
+.slider-thumb {
+  transition: all 0.2s ease-in-out;
+}
+
+.slider-thumb:hover {
+  transform: scale(1.1);
+}
+
+.slider-track {
+  transition: background-color 0.2s ease-in-out;
+}
+
+.slider-range {
+  transition: width 0.2s ease-in-out;
+}

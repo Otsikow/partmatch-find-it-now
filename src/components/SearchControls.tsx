@@ -75,11 +75,11 @@ const PriceRangeSlider = ({ priceRange, onPriceChange }: { priceRange: [number, 
         min={MIN_PRICE}
         step={1000}
       >
-        <RadixSlider.Track className="bg-muted relative grow rounded-full h-2">
-          <RadixSlider.Range className="absolute bg-primary rounded-full h-full" />
+        <RadixSlider.Track className="slider-track bg-muted relative grow rounded-full h-2">
+          <RadixSlider.Range className="slider-range absolute bg-primary rounded-full h-full" />
         </RadixSlider.Track>
-        <RadixSlider.Thumb className="block w-5 h-5 bg-primary shadow-lg rounded-full hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer" />
-        <RadixSlider.Thumb className="block w-5 h-5 bg-primary shadow-lg rounded-full hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer" />
+        <RadixSlider.Thumb className="slider-thumb block w-5 h-5 bg-primary shadow-lg rounded-full hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer" />
+        <RadixSlider.Thumb className="slider-thumb block w-5 h-5 bg-primary shadow-lg rounded-full hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer" />
       </RadixSlider.Root>
 
       {/* Input Fields */}
