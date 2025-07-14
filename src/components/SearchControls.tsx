@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
+import * as RadixSlider from '@radix-ui/react-slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { mockParts } from "@/data/mockParts";
@@ -34,6 +35,79 @@ interface SearchControlsProps {
     locationRadius: number;
   }) => void;
 }
+
+// Custom Price Range Slider Component
+const PriceRangeSlider = ({ priceRange, onPriceChange }: { priceRange: [number, number]; onPriceChange: (value: [number, number]) => void }) => {
+  const MIN_PRICE = 0;
+  const MAX_PRICE = 50000;
+
+  // Handle slider value changes
+  const handleSliderChange = (value: number[]) => {
+    onPriceChange(value as [number, number]);
+  };
+
+  // Handle input changes
+  const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Math.max(MIN_PRICE, Math.min(parseInt(e.target.value) || 0, priceRange[1]));
+    const newRange: [number, number] = [value, priceRange[1]];
+    onPriceChange(newRange);
+  };
+
+  const handleMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = Math.min(MAX_PRICE, Math.max(parseInt(e.target.value) || 0, priceRange[0]));
+    const newRange: [number, number] = [priceRange[0], value];
+    onPriceChange(newRange);
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Price Range Display */}
+      <div className="flex items-center justify-between">
+        <span className="text-sm font-medium">Price Range: GHS {priceRange[0].toLocaleString()} - GHS {priceRange[1].toLocaleString()}</span>
+      </div>
+
+      {/* Slider Component */}
+      <RadixSlider.Root
+        className="relative flex items-center select-none touch-none w-full h-5"
+        value={priceRange}
+        onValueChange={handleSliderChange}
+        max={MAX_PRICE}
+        min={MIN_PRICE}
+        step={1000}
+      >
+        <RadixSlider.Track className="bg-muted relative grow rounded-full h-2">
+          <RadixSlider.Range className="absolute bg-primary rounded-full h-full" />
+        </RadixSlider.Track>
+        <RadixSlider.Thumb className="block w-5 h-5 bg-primary shadow-lg rounded-full hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer" />
+        <RadixSlider.Thumb className="block w-5 h-5 bg-primary shadow-lg rounded-full hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer" />
+      </RadixSlider.Root>
+
+      {/* Input Fields */}
+      <div className="flex space-x-4">
+        <div className="flex-1">
+          <label className="block text-sm font-medium text-muted-foreground mb-1">Min Price</label>
+          <Input
+            type="number"
+            value={priceRange[0]}
+            onChange={handleMinChange}
+            className="w-full"
+            placeholder="0"
+          />
+        </div>
+        <div className="flex-1">
+          <label className="block text-sm font-medium text-muted-foreground mb-1">Max Price</label>
+          <Input
+            type="number"
+            value={priceRange[1]}
+            onChange={handleMaxChange}
+            className="w-full"
+            placeholder="50000"
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const SearchControls = ({ 
   searchTerm, 
@@ -188,23 +262,13 @@ const SearchControls = ({
         <div>
           <div className="flex items-center gap-2 mb-2 sm:mb-3">
             <DollarSign className="w-4 h-4 text-primary" />
-            <p className="text-xs sm:text-sm font-semibold text-foreground">
-              Price Range: GHS {filters.priceRange[0]} - GHS {filters.priceRange[1]}
-            </p>
+            <p className="text-xs sm:text-sm font-semibold text-foreground">Price Range</p>
           </div>
           <div className="px-2">
-            <Slider
-              value={filters.priceRange}
-              onValueChange={(value) => onFiltersChange({ ...filters, priceRange: value as [number, number] })}
-              max={50000}
-              min={0}
-              step={500}
-              className="w-full"
+            <PriceRangeSlider
+              priceRange={filters.priceRange}
+              onPriceChange={(value) => onFiltersChange({ ...filters, priceRange: value })}
             />
-            <div className="flex justify-between text-xs text-muted-foreground mt-1">
-              <span>GHS 0</span>
-              <span>GHS 50,000</span>
-            </div>
           </div>
         </div>
 
