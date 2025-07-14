@@ -109,6 +109,75 @@ const PriceRangeSlider = ({ priceRange, onPriceChange }: { priceRange: [number, 
   );
 };
 
+// Custom Location Radius Slider Component
+const LocationRadiusSlider = ({ 
+  location, 
+  radius, 
+  onLocationChange, 
+  onRadiusChange 
+}: { 
+  location: string; 
+  radius: number; 
+  onLocationChange: (location: string) => void; 
+  onRadiusChange: (radius: number) => void; 
+}) => {
+  const MIN_RADIUS = 5;
+  const MAX_RADIUS = 500;
+
+  const handleRadiusChange = (value: number[]) => {
+    onRadiusChange(value[0]);
+  };
+
+  const getRadiusLabel = (radius: number) => {
+    if (radius < 25) return 'Local';
+    if (radius < 100) return 'Regional';
+    return 'Nationwide';
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Location Input */}
+      <div>
+        <Input
+          placeholder="Enter location (e.g., Accra, Kumasi)"
+          value={location}
+          onChange={(e) => onLocationChange(e.target.value)}
+          className="w-full text-sm sm:text-base"
+        />
+      </div>
+
+      {/* Radius Display and Badge */}
+      <div className="flex items-center justify-between">
+        <span className="text-sm font-medium">Search radius: {radius} km</span>
+        <Badge variant="outline" className="text-xs font-medium">
+          {getRadiusLabel(radius)}
+        </Badge>
+      </div>
+
+      {/* Slider Component */}
+      <RadixSlider.Root
+        className="relative flex items-center select-none touch-none w-full h-5"
+        value={[radius]}
+        onValueChange={handleRadiusChange}
+        max={MAX_RADIUS}
+        min={MIN_RADIUS}
+        step={5}
+      >
+        <RadixSlider.Track className="slider-track bg-muted relative grow rounded-full h-2">
+          <RadixSlider.Range className="slider-range absolute bg-primary rounded-full h-full" />
+        </RadixSlider.Track>
+        <RadixSlider.Thumb className="slider-thumb block w-5 h-5 bg-primary shadow-lg rounded-full hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer" />
+      </RadixSlider.Root>
+
+      {/* Range Labels */}
+      <div className="flex justify-between text-xs text-muted-foreground">
+        <span>{MIN_RADIUS} km</span>
+        <span>{MAX_RADIUS} km</span>
+      </div>
+    </div>
+  );
+};
+
 const SearchControls = ({ 
   searchTerm, 
   onSearchChange, 
@@ -327,33 +396,13 @@ const SearchControls = ({
             <MapPin className="w-4 h-4 text-primary" />
             <p className="text-xs sm:text-sm font-semibold text-foreground">Location & Radius</p>
           </div>
-          <div className="space-y-3">
-            <Input
-              placeholder="Enter location (e.g., Accra, Kumasi)"
-              value={filters.location}
-              onChange={(e) => onFiltersChange({ ...filters, location: e.target.value })}
-              className="w-full"
+          <div className="px-2">
+            <LocationRadiusSlider
+              location={filters.location}
+              radius={filters.locationRadius}
+              onLocationChange={(location) => onFiltersChange({ ...filters, location })}
+              onRadiusChange={(radius) => onFiltersChange({ ...filters, locationRadius: radius })}
             />
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-xs text-muted-foreground">Search radius: {filters.locationRadius} km</span>
-                <Badge variant="outline" className="text-xs">
-                  {filters.locationRadius < 25 ? 'Local' : filters.locationRadius < 100 ? 'Regional' : 'Nationwide'}
-                </Badge>
-              </div>
-              <Slider
-                value={[filters.locationRadius]}
-                onValueChange={(value) => onFiltersChange({ ...filters, locationRadius: value[0] })}
-                max={500}
-                min={5}
-                step={5}
-                className="w-full"
-              />
-              <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                <span>5 km</span>
-                <span>500 km</span>
-              </div>
-            </div>
           </div>
         </div>
 
