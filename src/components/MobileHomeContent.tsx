@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRealTimeStats } from "@/hooks/useRealTimeStats";
+import { useFeaturedParts } from "@/hooks/useFeaturedParts";
 import { useTranslation } from 'react-i18next';
+import CarPartCard from "./CarPartCard";
 
 // Import category images
 import enginePartsImg from "@/assets/engine-parts.jpg";
@@ -20,6 +22,7 @@ const MobileHomeContent = () => {
     categories,
     loading
   } = useRealTimeStats();
+  const { featuredParts, loading: featuredLoading } = useFeaturedParts();
   return <div className="px-4 py-6 space-y-6">
       {/* Hero Section */}
       <div className="text-center space-y-2">
@@ -31,6 +34,33 @@ const MobileHomeContent = () => {
           <p className="text-gray-600 text-sm leading-relaxed">{t('heroSubtitle')}</p>
         </div>
       </div>
+
+      {/* Featured Car Parts */}
+      {featuredParts.length > 0 && (
+        <div className="space-y-3">
+          <h3 className="text-lg font-semibold text-gray-900">Featured Car Parts</h3>
+          <p className="text-sm text-gray-600 mb-4">Top picks from trusted sellers. Paid listings appear here.</p>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {featuredParts.map((part) => (
+              <CarPartCard
+                key={part.id}
+                part={part}
+              />
+            ))}
+          </div>
+          
+          {featuredParts.length === 4 && (
+            <div className="text-center">
+              <Link to="/search-parts">
+                <Button variant="outline" className="text-sm">
+                  View All Featured Parts
+                </Button>
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Quick Actions */}
       <div className="space-y-3">
