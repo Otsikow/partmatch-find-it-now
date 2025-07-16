@@ -147,16 +147,21 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border font-inter;
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter;
   }
 
-  /* Apply Inter font to all headings */
+  /* Apply Inter font to all headings with appropriate weights */
   h1, h2, h3, h4, h5, h6 {
     @apply font-inter font-semibold;
+  }
+
+  /* Ensure all text elements use Inter */
+  p, span, div, a, button, input, textarea, select, label {
+    @apply font-inter;
   }
 }
 
