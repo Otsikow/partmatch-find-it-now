@@ -16,7 +16,7 @@ const MobileHomeContent = () => {
     activeParts,
     sellers,
     totalUsers,
-    regions,
+    countries,
     categories,
     loading
   } = useRealTimeStats();
@@ -174,9 +174,9 @@ const MobileHomeContent = () => {
           </div>
           <div className="text-center">
             <div className="text-xl font-bold text-orange-600">
-              {loading ? '...' : `${regions}`}
+              {loading ? '...' : `${countries}`}
             </div>
-            <div className="text-xs text-gray-500">{t('regions')}</div>
+            <div className="text-xs text-gray-500">Countries</div>
           </div>
         </div>
       </div>
