@@ -153,6 +153,11 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Apply Inter font to all headings */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-inter font-semibold;
+  }
 }
 
 @layer utilities {
@@ -174,16 +179,16 @@
   
   /* Page Headers */
   .page-header {
-    @apply font-playfair font-bold text-foreground text-2xl sm:text-3xl md:text-4xl;
+    @apply font-inter font-bold text-foreground text-2xl sm:text-3xl md:text-4xl;
   }
   
   .page-subheader {
-    @apply font-playfair font-semibold text-foreground text-xl sm:text-2xl;
+    @apply font-inter font-semibold text-foreground text-xl sm:text-2xl;
   }
   
   /* Section Headers */
   .section-title {
-    @apply font-playfair font-bold text-foreground text-lg sm:text-xl md:text-2xl;
+    @apply font-inter font-bold text-foreground text-lg sm:text-xl md:text-2xl;
   }
   
   .section-subtitle {
@@ -214,7 +219,7 @@
   
   /* Card Content */
   .card-title {
-    @apply font-playfair font-semibold text-foreground text-lg;
+    @apply font-inter font-semibold text-foreground text-lg;
   }
   
   .card-description {
