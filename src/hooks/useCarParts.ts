@@ -188,12 +188,9 @@ export const useCarParts = (params?: UseCarPartsParams) => {
       if (params?.filters?.country && params.filters.country !== 'all') {
         console.log('Applying country filter post-fetch:', params.filters.country);
         filteredParts = transformedParts.filter(part => {
-          // For Ghana (GH), include parts with null country (legacy data) or explicit GH
-          if (params.filters.country === 'GH') {
-            return part.country === 'GH' || part.country === null;
-          }
-          // For other countries, only include exact matches
-          return part.country === params.filters.country;
+          // For legacy data compatibility, include parts with null country for any specific country selection
+          // This handles cases where parts were created before country field was implemented
+          return part.country === params.filters.country || part.country === null;
         });
         console.log('Filtered parts count after country filter:', filteredParts.length);
       }
