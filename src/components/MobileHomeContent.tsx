@@ -46,7 +46,7 @@ const MobileHomeContent = () => {
         <h3 className="text-lg font-semibold text-gray-900">{t('quickActions')}</h3>
         
         <div className="grid grid-cols-2 gap-3">
-          <Link to="/search-parts">
+          <Link to="/search-parts-with-map">
             <Card className="h-full">
               <CardContent className="p-4 text-center space-y-3">
                 <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mx-auto">
@@ -133,7 +133,7 @@ const MobileHomeContent = () => {
               image: categoryImages.body
             }
           ].map((category) => (
-            <Link key={category.name} to="/search-parts" className="block">
+            <Link key={category.name} to="/search-parts-with-map" className="block">
               <Card className="hover:shadow-md transition-shadow">
                 <CardContent className="p-4 flex items-center justify-between">
                   <div className="flex items-center space-x-3">

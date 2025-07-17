@@ -17,7 +17,7 @@ const MobileBottomTabs = () => {
     {
       icon: Search,
       label: "Browse",
-      path: "/search-parts",
+      path: "/search-parts-with-map",
     },
     {
       icon: Plus,
