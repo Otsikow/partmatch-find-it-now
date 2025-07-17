@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { CarPart } from "@/types/CarPart";
 import { getCountryConfig, getCurrencyByCountry } from "@/lib/countryConfig";
-import { convertFromGHS, convertFromNGN } from "@/utils/exchangeRates";
+import { convertCurrency } from "@/utils/exchangeRates";
 
 interface UseCarPartsParams {
   searchTerm?: string;
@@ -122,32 +122,26 @@ export const useCarParts = (params?: UseCarPartsParams) => {
       const targetCurrency = getCurrencyByCountry(targetCountry);
       console.log('Target country:', targetCountry, 'Target currency:', targetCurrency);
 
-      // Transform the data and apply country filtering after fetching
+      // Transform the data with proper currency conversion
       const transformedParts: CarPart[] = (data || []).map(part => {
         console.log('Processing part:', part.title, 'Country:', part.country, 'Original price:', part.price, part.currency);
         
-        // Keep original country value or set to null if not specified
-        const partCountry = part.country || null;
-        
-        // Convert price to target currency
+        // Convert price to target currency using the new conversion function
         let convertedPrice = part.price;
         let displayCurrency = targetCurrency;
         
         if (part.currency !== targetCurrency) {
           console.log(`Converting ${part.price} ${part.currency} to ${targetCurrency}`);
           
-          // Convert based on original currency
-          if (part.currency === 'GHS') {
-            convertedPrice = convertFromGHS(part.price, targetCurrency);
-          } else if (part.currency === 'NGN') {
-            convertedPrice = convertFromNGN(part.price, targetCurrency);
-          } else {
-            // For other currencies, keep original for now
+          try {
+            convertedPrice = convertCurrency(part.price, part.currency, targetCurrency);
+            console.log(`Converted price: ${convertedPrice} ${displayCurrency}`);
+          } catch (err) {
+            console.warn(`Failed to convert currency from ${part.currency} to ${targetCurrency}:`, err);
+            // Keep original price and currency if conversion fails
             convertedPrice = part.price;
             displayCurrency = part.currency;
           }
-          
-          console.log(`Converted price: ${convertedPrice} ${displayCurrency}`);
         }
         
         // Ensure images are properly formatted as URLs
@@ -173,7 +167,6 @@ export const useCarParts = (params?: UseCarPartsParams) => {
         
         return {
           ...part,
-          country: partCountry,
           price: Math.round(convertedPrice), // Round to nearest whole number
           currency: displayCurrency,
           condition: part.condition as 'New' | 'Used' | 'Refurbished',
@@ -188,9 +181,9 @@ export const useCarParts = (params?: UseCarPartsParams) => {
       if (params?.filters?.country && params.filters.country !== 'all') {
         console.log('Applying country filter post-fetch:', params.filters.country);
         filteredParts = transformedParts.filter(part => {
-          // For legacy data compatibility, include parts with null country for any specific country selection
-          // This handles cases where parts were created before country field was implemented
-          return part.country === params.filters.country || part.country === null;
+          // Only show parts that exactly match the selected country
+          // Don't include null country values anymore to avoid confusion
+          return part.country === params.filters.country;
         });
         console.log('Filtered parts count after country filter:', filteredParts.length);
       }
