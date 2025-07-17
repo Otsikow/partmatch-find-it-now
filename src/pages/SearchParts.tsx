@@ -153,7 +153,7 @@ const SearchParts = () => {
   const handleCountryChange = (country: string) => {
     setFilters(prev => ({ ...prev, country }));
     // Update URL parameter for sharing/bookmarking
-    const url = new URL(window.location);
+    const url = new URL(window.location.href);
     if (country === "all") {
       url.searchParams.delete('country');
     } else {

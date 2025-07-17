@@ -1,12 +1,14 @@
 
 import { useState } from "react";
 import { useCarParts } from "@/hooks/useCarParts";
+import { useCountryDetection } from "@/hooks/useCountryDetection";
 import SearchControls from "@/components/SearchControls";
 import CarPartsList from "@/components/CarPartsList";
 import PageHeader from "@/components/PageHeader";
 import PendingRatingNotification from "@/components/PendingRatingNotification";
 
 const SearchPartsWithMap = () => {
+  const { country: userCountry } = useCountryDetection();
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
     make: "",
@@ -14,6 +16,7 @@ const SearchPartsWithMap = () => {
     year: "",
     category: "",
     location: "",
+    country: userCountry?.code || "all",
     priceRange: [0, 10000] as [number, number],
   });
 
