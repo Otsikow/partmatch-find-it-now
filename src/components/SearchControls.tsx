@@ -1,11 +1,13 @@
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import React from 'react';
 import { Input } from "@/components/ui/input";
-import { mockParts } from "@/data/mockParts";
-import { getUniqueMakes, getUniqueModels, getUniqueYears } from "@/utils/partFilters";
-import { useIsMobile } from "@/hooks/use-mobile";
-import CountryFilterDropdown from "./CountryFilterDropdown";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import CountryFilterDropdown from './CountryFilterDropdown';
+import { Search, Filter, X } from 'lucide-react';
 
 interface SearchControlsProps {
   searchTerm: string;
@@ -19,181 +21,173 @@ interface SearchControlsProps {
     country: string;
     priceRange: [number, number];
   };
-  onFiltersChange: (filters: {
-    make: string;
-    model: string;
-    year: string;
-    category: string;
-    location: string;
-    country: string;
-    priceRange: [number, number];
-  }) => void;
+  onFiltersChange: (filters: any) => void;
 }
 
-const SearchControls = ({ 
-  searchTerm, 
-  onSearchChange, 
-  filters,
-  onFiltersChange
-}: SearchControlsProps) => {
-  const isMobile = useIsMobile();
-  
-  // Popular car brands in Ghana
-  const popularMakesInGhana = [
-    'Acura', 'Alfa Romeo', 'Audi', 'Bentley', 'BMW', 'Buick', 'BYD', 
-    'Cadillac', 'Chevrolet', 'Chery', 'Chrysler', 'Citroen', 'Dacia', 
-    'Dodge', 'DS', 'Ferrari', 'Fiat', 'Ford', 'Geely', 'GMC', 
-    'Great Wall', 'Honda', 'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 
-    'Kia', 'Lada', 'Lamborghini', 'Lancia', 'Land Rover', 'Lexus', 
-    'Lincoln', 'Mahindra', 'Maruti', 'Maserati', 'Mazda', 'Mercedes-Benz', 
-    'MG', 'Mitsubishi', 'Nissan', 'Opel', 'Perodua', 'Peugeot', 
-    'Porsche', 'Proton', 'Ram', 'Renault', 'Rolls-Royce', 'Seat', 
-    'Skoda', 'Subaru', 'Suzuki', 'Tata', 'Toyota', 'Vauxhall', 
-    'Volkswagen', 'Volvo'
-  ];
+const SearchControls = ({ searchTerm, onSearchChange, filters, onFiltersChange }: SearchControlsProps) => {
+  const handleFilterChange = (key: string, value: any) => {
+    onFiltersChange({ ...filters, [key]: value });
+  };
 
-  const uniqueMakes = getUniqueMakes(mockParts);
-  const uniqueModels = getUniqueModels(mockParts, filters.make);
-  const uniqueYears = getUniqueYears(mockParts, filters.make, filters.model);
-
-  // Combine database makes with popular makes, removing duplicates and sorting alphabetically
-  const allMakes = Array.from(new Set([...uniqueMakes, ...popularMakesInGhana])).sort();
-
-  const handleMakeChange = (make: string) => {
+  const clearFilters = () => {
     onFiltersChange({
-      ...filters,
-      make,
-      model: '', // Reset model when make changes
-      year: '' // Reset year when make changes
+      make: "",
+      model: "",
+      year: "",
+      category: "",
+      location: "",
+      country: "all",
+      priceRange: [0, 10000] as [number, number],
     });
   };
 
-  const handleModelChange = (model: string) => {
-    onFiltersChange({
-      ...filters,
-      model,
-      year: '' // Reset year when model changes
-    });
-  };
+  const activeFiltersCount = Object.entries(filters).filter(([key, value]) => {
+    if (key === 'priceRange') return value[0] !== 0 || value[1] !== 10000;
+    if (key === 'country') return value !== 'all';
+    return value !== '';
+  }).length;
 
-  const handleYearChange = (year: string) => {
-    onFiltersChange({
-      ...filters,
-      year
-    });
-  };
-
-  const handleCountryChange = (country: string) => {
-    onFiltersChange({
-      ...filters,
-      country
-    });
-  };
-
-  const buttonSize = isMobile ? "sm" : "sm";
-  
-  return (  
-    <Card className="p-2 sm:p-4 md:p-6 mb-4 sm:mb-6 bg-gradient-to-br from-card/90 to-muted/50 backdrop-blur-sm shadow-lg border-0 hover:shadow-xl transition-all duration-300">
-      <div className="space-y-3 sm:space-y-4">
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-          <div className="flex-1">
+  return (
+    <Card className="w-full shadow-lg border-2 border-border">
+      <CardContent className="p-4 sm:p-6">
+        <div className="space-y-4">
+          {/* Search Input */}
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
             <Input
-              placeholder="Search parts (e.g. alternator, brake pads)"
+              placeholder="Search by part name, description, or type..."
               value={searchTerm}
               onChange={(e) => onSearchChange(e.target.value)}
-              className={`w-full border-border focus:border-primary focus:ring-primary/20 ${isMobile ? 'h-11 text-sm px-3' : 'h-10 text-sm'}`}
+              className="pl-10 h-12 text-base border-2 border-input focus:border-primary"
             />
           </div>
-          <div className="flex-shrink-0">
-            <CountryFilterDropdown
-              selectedCountry={filters.country}
-              onCountryChange={handleCountryChange}
+
+          {/* Filter Controls */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-muted-foreground">Make</label>
+              <Select value={filters.make} onValueChange={(value) => handleFilterChange('make', value)}>
+                <SelectTrigger className="h-10 border-2 border-input">
+                  <SelectValue placeholder="Select make" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">All Makes</SelectItem>
+                  <SelectItem value="Toyota">Toyota</SelectItem>
+                  <SelectItem value="Honda">Honda</SelectItem>
+                  <SelectItem value="Ford">Ford</SelectItem>
+                  <SelectItem value="BMW">BMW</SelectItem>
+                  <SelectItem value="Mercedes">Mercedes</SelectItem>
+                  <SelectItem value="Audi">Audi</SelectItem>
+                  <SelectItem value="Volkswagen">Volkswagen</SelectItem>
+                  <SelectItem value="Nissan">Nissan</SelectItem>
+                  <SelectItem value="Hyundai">Hyundai</SelectItem>
+                  <SelectItem value="Kia">Kia</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-muted-foreground">Model</label>
+              <Input
+                placeholder="Enter model"
+                value={filters.model}
+                onChange={(e) => handleFilterChange('model', e.target.value)}
+                className="h-10 border-2 border-input"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-muted-foreground">Year</label>
+              <Select value={filters.year} onValueChange={(value) => handleFilterChange('year', value)}>
+                <SelectTrigger className="h-10 border-2 border-input">
+                  <SelectValue placeholder="Select year" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">All Years</SelectItem>
+                  {Array.from({ length: 25 }, (_, i) => 2024 - i).map(year => (
+                    <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-muted-foreground">Category</label>
+              <Select value={filters.category} onValueChange={(value) => handleFilterChange('category', value)}>
+                <SelectTrigger className="h-10 border-2 border-input">
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">All Categories</SelectItem>
+                  <SelectItem value="Engine">Engine Parts</SelectItem>
+                  <SelectItem value="Brake">Brake System</SelectItem>
+                  <SelectItem value="Suspension">Suspension</SelectItem>
+                  <SelectItem value="Electrical">Electrical</SelectItem>
+                  <SelectItem value="Body">Body Parts</SelectItem>
+                  <SelectItem value="Interior">Interior</SelectItem>
+                  <SelectItem value="Transmission">Transmission</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-muted-foreground">Location</label>
+              <Input
+                placeholder="Enter location"
+                value={filters.location}
+                onChange={(e) => handleFilterChange('location', e.target.value)}
+                className="h-10 border-2 border-input"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-muted-foreground">Country</label>
+              <CountryFilterDropdown
+                selectedCountry={filters.country}
+                onCountryChange={(country) => handleFilterChange('country', country)}
+              />
+            </div>
+          </div>
+
+          {/* Price Range */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium text-muted-foreground">Price Range</label>
+              <span className="text-sm font-medium text-primary">
+                ${filters.priceRange[0]} - ${filters.priceRange[1]}
+              </span>
+            </div>
+            <Slider
+              value={filters.priceRange}
+              onValueChange={(value) => handleFilterChange('priceRange', value as [number, number])}
+              max={10000}
+              step={100}
+              className="w-full"
             />
           </div>
-        </div>
-        
-        {/* Make Filter */}
-        <div>
-          <p className="text-xs sm:text-sm font-semibold text-foreground mb-2 sm:mb-3">Make</p>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-1.5 sm:gap-2 max-h-32 sm:max-h-40 overflow-y-auto">
-            <Button
-              variant={filters.make === '' ? 'default' : 'outline'}
-              size={buttonSize}
-              onClick={() => handleMakeChange('')}
-              className={`text-xs sm:text-sm ${filters.make === '' ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
-            >
-              All Makes
-            </Button>
-            {allMakes.map(make => (
+
+          {/* Filter Actions */}
+          <div className="flex items-center justify-between pt-2">
+            <div className="flex items-center gap-2">
+              <Filter className="w-4 h-4 text-muted-foreground" />
+              <span className="text-sm text-muted-foreground">
+                {activeFiltersCount > 0 ? `${activeFiltersCount} filter${activeFiltersCount > 1 ? 's' : ''} active` : 'No filters applied'}
+              </span>
+            </div>
+            {activeFiltersCount > 0 && (
               <Button
-                key={make}
-                variant={filters.make === make ? 'default' : 'outline'}
-                size={buttonSize}
-                onClick={() => handleMakeChange(make)}
-                className={`text-xs sm:text-sm ${filters.make === make ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
+                variant="ghost"
+                size="sm"
+                onClick={clearFilters}
+                className="text-muted-foreground hover:text-destructive"
               >
-                {make}
+                <X className="w-4 h-4 mr-1" />
+                Clear Filters
               </Button>
-            ))}
+            )}
           </div>
         </div>
-
-        {/* Model Filter */}
-        {filters.make && (
-          <div>
-            <p className="text-xs sm:text-sm font-semibold text-foreground mb-2 sm:mb-3">Model</p>
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-1.5 sm:gap-2">
-              <Button
-                variant={filters.model === '' ? 'default' : 'outline'}
-                size={buttonSize}
-                onClick={() => handleModelChange('')}
-                className={`text-xs sm:text-sm ${filters.model === '' ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
-              >
-                All Models
-              </Button>
-              {uniqueModels.map(model => (
-                <Button
-                  key={model}
-                  variant={filters.model === model ? 'default' : 'outline'}
-                  size={buttonSize}
-                  onClick={() => handleModelChange(model)}
-                  className={`text-xs sm:text-sm ${filters.model === model ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
-                >
-                  {model}
-                </Button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Year Filter */}
-        {filters.make && filters.model && (
-          <div>
-            <p className="text-xs sm:text-sm font-semibold text-foreground mb-2 sm:mb-3">Year</p>
-            <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-1.5 sm:gap-2">
-              <Button
-                variant={filters.year === '' ? 'default' : 'outline'}
-                size={buttonSize}
-                onClick={() => handleYearChange('')}
-                className={`text-xs sm:text-sm ${filters.year === '' ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
-              >
-                All Years
-              </Button>
-              {uniqueYears.map(year => (
-                <Button
-                  key={year}
-                  variant={filters.year === year ? 'default' : 'outline'}
-                  size={buttonSize}
-                  onClick={() => handleYearChange(year)}
-                  className={`text-xs sm:text-sm ${filters.year === year ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
-                >
-                  {year}
-                </Button>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
+      </CardContent>
     </Card>
   );
 };

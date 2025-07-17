@@ -81,10 +81,11 @@ export const useCarParts = (params?: UseCarPartsParams) => {
           console.log('Applied year filter:', params.filters.year);
         }
         
-        // Apply country filter
+        // Apply country filter - handle null values for existing parts
         if (params.filters.country && params.filters.country !== 'all') {
           console.log('Applying country filter:', params.filters.country);
-          query = query.eq('country', params.filters.country);
+          // For now, treat null country as Ghana (GH) for existing parts
+          query = query.or(`country.eq.${params.filters.country},country.is.null`);
         } else {
           console.log('No country filter applied - showing all countries');
         }
@@ -114,6 +115,9 @@ export const useCarParts = (params?: UseCarPartsParams) => {
       const transformedParts: CarPart[] = (data || []).map(part => {
         console.log('Processing part:', part.title, 'Country:', part.country);
         
+        // For existing parts without country, default to Ghana (GH)
+        const partCountry = part.country || 'GH';
+        
         // Ensure images are properly formatted as URLs
         let processedImages: string[] = [];
         if (part.images && Array.isArray(part.images)) {
@@ -137,6 +141,7 @@ export const useCarParts = (params?: UseCarPartsParams) => {
         
         return {
           ...part,
+          country: partCountry,
           condition: part.condition as 'New' | 'Used' | 'Refurbished',
           status: part.status as 'available' | 'sold' | 'hidden' | 'pending',
           profiles: part.profiles,

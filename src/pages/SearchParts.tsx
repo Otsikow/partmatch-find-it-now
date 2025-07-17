@@ -173,7 +173,7 @@ const SearchParts = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-background">
       <PageHeader
-        title="Browse Parts for Sale & Requeted Parts"
+        title="Browse Parts for Sale & Requested Parts"
         subtitle="Find parts for sale and buyer requests"
         showBackButton={true}
         backTo="/"
@@ -210,25 +210,41 @@ const SearchParts = () => {
               />
             </div>
 
-            {/* Country Filter Status */}
-            <Card className="bg-blue-50 border-blue-200">
+            {/* Enhanced Country Filter Status */}
+            <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 shadow-sm">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Globe className="w-5 h-5 text-blue-600" />
-                    <span className="text-sm font-medium text-blue-700">
-                      Showing parts in <strong>{getCountryDisplay()}</strong>
-                    </span>
-                    <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-                      {parts.length} {parts.length === 1 ? 'part' : 'parts'} found
-                    </Badge>
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-blue-100 rounded-lg">
+                      <Globe className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-blue-700">
+                          Showing parts in
+                        </span>
+                        <span className="text-sm font-bold text-blue-800">
+                          {getCountryDisplay()}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 mt-1">
+                        <Badge variant="secondary" className="bg-blue-100 text-blue-800 text-xs">
+                          {parts.length} {parts.length === 1 ? 'part' : 'parts'} found
+                        </Badge>
+                        {filters.country !== "all" && (
+                          <Badge variant="outline" className="text-xs border-blue-200 text-blue-600">
+                            Filtered
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
                   </div>
                   {filters.country !== "all" && (
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => handleCountryChange("all")}
-                      className="text-blue-600 hover:text-blue-800 hover:bg-blue-100"
+                      className="text-blue-600 hover:text-blue-800 hover:bg-blue-100 transition-colors"
                     >
                       View All Countries
                     </Button>
