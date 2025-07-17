@@ -1,24 +1,32 @@
+
 import { Search, Plus, Package, Zap, ClipboardList } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRealTimeStats } from "@/hooks/useRealTimeStats";
 import { useTranslation } from 'react-i18next';
+
 const MobileHomeContent = () => {
   const { t } = useTranslation();
   const {
     activeParts,
     sellers,
     totalUsers,
-    regions,
+    countries,
     categories,
     loading
   } = useRealTimeStats();
-  return <div className="px-4 py-6 space-y-6">
+
+  return (
+    <div className="px-4 py-6 space-y-6">
       {/* Hero Section */}
       <div className="text-center space-y-2">
         <div className="mx-auto">
-          <img src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" alt="PartMatch Logo" className="h-44 w-auto mx-auto" />
+          <img 
+            src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
+            alt="PartMatch Logo" 
+            className="h-44 w-auto mx-auto" 
+          />
         </div>
         <div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('heroTitle')}</h2>
@@ -96,19 +104,25 @@ const MobileHomeContent = () => {
         <h3 className="text-lg font-semibold text-gray-900">{t('popularCategories')}</h3>
         
         <div className="space-y-2">
-          {[{
-          name: t('engineParts'),
-          count: loading ? "..." : `${categories.engineParts}+ ${t('parts')}`
-        }, {
-          name: t('brakeSystem'),
-          count: loading ? "..." : `${categories.brakeParts}+ ${t('parts')}`
-        }, {
-          name: t('suspension'),
-          count: loading ? "..." : `${categories.suspensionParts}+ ${t('parts')}`
-        }, {
-          name: t('bodyParts'),
-          count: loading ? "..." : `${categories.bodyParts}+ ${t('parts')}`
-        }].map(category => <Link key={category.name} to="/search-parts" className="block">
+          {[
+            {
+              name: t('engineParts'),
+              count: loading ? "..." : `${categories.engineParts}+ ${t('parts')}`
+            },
+            {
+              name: t('brakeSystem'),
+              count: loading ? "..." : `${categories.brakeParts}+ ${t('parts')}`
+            },
+            {
+              name: t('suspension'),
+              count: loading ? "..." : `${categories.suspensionParts}+ ${t('parts')}`
+            },
+            {
+              name: t('bodyParts'),
+              count: loading ? "..." : `${categories.bodyParts}+ ${t('parts')}`
+            }
+          ].map((category) => (
+            <Link key={category.name} to="/search-parts" className="block">
               <Card className="hover:shadow-md transition-shadow">
                 <CardContent className="p-4 flex items-center justify-between">
                   <div className="flex items-center space-x-3">
@@ -125,7 +139,8 @@ const MobileHomeContent = () => {
                   </div>
                 </CardContent>
               </Card>
-            </Link>)}
+            </Link>
+          ))}
         </div>
       </div>
 
@@ -160,12 +175,14 @@ const MobileHomeContent = () => {
           </div>
           <div className="text-center">
             <div className="text-xl font-bold text-orange-600">
-              {loading ? '...' : `${regions}`}
+              {loading ? '...' : `${countries}+`}
             </div>
-            <div className="text-xs text-gray-500">{t('regions')}</div>
+            <div className="text-xs text-gray-500">{t('countries')}</div>
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default MobileHomeContent;

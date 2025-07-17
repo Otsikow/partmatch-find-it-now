@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -17,7 +18,7 @@ interface RealTimeStats {
   activeParts: number;
   sellers: number;
   totalUsers: number;
-  regions: number;
+  countries: number;
   categories: CategoryStats;
   buyers: RealTimeBuyerStats;
   loading: boolean;
@@ -28,7 +29,7 @@ export const useRealTimeStats = () => {
     activeParts: 0,
     sellers: 0,
     totalUsers: 0,
-    regions: 16,
+    countries: 0,
     categories: {
       engineParts: 0,
       brakeParts: 0,
@@ -61,6 +62,15 @@ export const useRealTimeStats = () => {
         .from('profiles')
         .select('*', { count: 'exact', head: true });
 
+      // Get unique countries count from profiles
+      const { data: countriesData } = await supabase
+        .from('profiles')
+        .select('country')
+        .not('country', 'is', null);
+
+      const uniqueCountries = new Set(countriesData?.map(item => item.country).filter(Boolean));
+      const countriesCount = uniqueCountries.size;
+
       // Get category counts
       const [engineResult, brakeResult, suspensionResult, bodyResult] = await Promise.all([
         supabase.from('car_parts').select('*', { count: 'exact', head: true }).ilike('part_type', '%engine%').eq('status', 'available'),
@@ -82,7 +92,7 @@ export const useRealTimeStats = () => {
         activeParts: partsCount || 0,
         sellers: sellersCount || 0,
         totalUsers: usersCount || 0,
-        regions: 16,
+        countries: countriesCount || 0,
         categories: {
           engineParts: engineResult.count || 0,
           brakeParts: brakeResult.count || 0,
@@ -135,9 +145,25 @@ export const useRealTimeStats = () => {
       )
       .subscribe();
 
+    const reviewsChannel = supabase
+      .channel('reviews-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'reviews'
+        },
+        () => {
+          fetchStats();
+        }
+      )
+      .subscribe();
+
     return () => {
       supabase.removeChannel(partsChannel);
       supabase.removeChannel(profilesChannel);
+      supabase.removeChannel(reviewsChannel);
     };
   }, []);
 
