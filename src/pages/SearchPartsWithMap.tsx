@@ -1,14 +1,12 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useCarParts } from "@/hooks/useCarParts";
-import { useCountryDetection } from "@/hooks/useCountryDetection";
 import SearchControls from "@/components/SearchControls";
 import CarPartsList from "@/components/CarPartsList";
 import PageHeader from "@/components/PageHeader";
 import PendingRatingNotification from "@/components/PendingRatingNotification";
 
 const SearchPartsWithMap = () => {
-  const { country: userCountry } = useCountryDetection();
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
     make: "",
@@ -16,49 +14,34 @@ const SearchPartsWithMap = () => {
     year: "",
     category: "",
     location: "",
-    country: "all", // Start with "all" by default
     priceRange: [0, 10000] as [number, number],
   });
 
-  // Update country filter when user's country is detected
-  useEffect(() => {
-    if (userCountry && filters.country === "all") {
-      setFilters(prev => ({ ...prev, country: userCountry.code }));
-    }
-  }, [userCountry, filters.country]);
-
-  const {
-    parts,
-    loading: partsLoading,
-    error: partsError,
-  } = useCarParts({ searchTerm, filters });
+  const { parts, loading, error } = useCarParts({ searchTerm, filters });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-background">
-      <PageHeader
-        title="Search Parts with Map"
-        subtitle="Find car parts near you"
-        showBackButton={true}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100">
+      <PageHeader 
+        title="Browse Parts with Map"
+        subtitle="Find parts near you with location directions"
         backTo="/"
       />
-
-      <main className="container mx-auto px-2 sm:px-4 lg:px-6 py-4 sm:py-6">
+      
+      <main className="container mx-auto px-4 py-8">
         <PendingRatingNotification />
-
-        <div className="space-y-4 sm:space-y-6">
-          <div className="mx-auto max-w-sm sm:max-w-none">
-            <SearchControls
-              searchTerm={searchTerm}
-              onSearchChange={setSearchTerm}
-              filters={filters}
-              onFiltersChange={setFilters}
-            />
-          </div>
-
-          <CarPartsList
-            parts={parts}
-            loading={partsLoading}
-            error={partsError}
+        
+        <SearchControls
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          filters={filters}
+          onFiltersChange={setFilters}
+        />
+        
+        <div className="mt-6">
+          <CarPartsList 
+            parts={parts} 
+            loading={loading} 
+            error={error} 
           />
         </div>
       </main>

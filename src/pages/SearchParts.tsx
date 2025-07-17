@@ -3,8 +3,6 @@ import { useTranslation } from "react-i18next";
 import { useCarParts } from "@/hooks/useCarParts";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { useCountryDetection } from "@/hooks/useCountryDetection";
-import { getCurrencyByCountry } from "@/lib/countryConfig";
 import SearchControls from "@/components/SearchControls";
 import CarPartsList from "@/components/CarPartsList";
 import PageHeader from "@/components/PageHeader";
@@ -21,7 +19,6 @@ import {
   MessageCircle,
   Package,
   ClipboardList,
-  Globe,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
@@ -46,33 +43,17 @@ const SearchParts = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { country: userCountry, supportedCountries } = useCountryDetection();
-  
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
-    make: "all",
+    make: "",
     model: "",
-    year: "all",
-    category: "all",
+    year: "",
+    category: "",
     location: "",
-    country: "all",
     priceRange: [0, 10000] as [number, number],
   });
 
-  // Initialize country from URL parameter or user's country
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const countryParam = urlParams.get('country');
-    
-    if (countryParam && (countryParam === 'all' || supportedCountries.find(c => c.code === countryParam))) {
-      setFilters(prev => ({ ...prev, country: countryParam }));
-    } else if (userCountry && filters.country === 'all') {
-      // Only set user country if no URL param and current filter is 'all'
-      setFilters(prev => ({ ...prev, country: userCountry.code }));
-    }
-  }, [userCountry, supportedCountries]);
-
-  // For car parts with country filtering
+  // For car parts
   const {
     parts,
     loading: partsLoading,
@@ -151,30 +132,10 @@ const SearchParts = () => {
     return new Date(dateString).toLocaleDateString();
   };
 
-  const getCountryDisplay = () => {
-    if (filters.country === "all") return "All Countries";
-    const country = supportedCountries.find(c => c.code === filters.country);
-    return country ? `${country.flag} ${country.name}` : "Unknown Country";
-  };
-
-  const handleCountryChange = (country: string) => {
-    console.log('Country changed to:', country);
-    setFilters(prev => ({ ...prev, country }));
-    
-    // Update URL parameter for sharing/bookmarking
-    const url = new URL(window.location.href);
-    if (country === "all") {
-      url.searchParams.delete('country');
-    } else {
-      url.searchParams.set('country', country);
-    }
-    window.history.replaceState({}, '', url);
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-background">
       <PageHeader
-        title="Browse Parts for Sale & Requested Parts"
+        title="Browse Parts for Sale & Requeted Parts"
         subtitle="Find parts for sale and buyer requests"
         showBackButton={true}
         backTo="/"
@@ -210,54 +171,6 @@ const SearchParts = () => {
                 onFiltersChange={setFilters}
               />
             </div>
-
-            {/* Enhanced Country Filter Status */}
-            <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 shadow-sm">
-              <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-blue-100 rounded-lg">
-                      <Globe className="w-5 h-5 text-blue-600" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-medium text-blue-700">
-                          Showing parts in
-                        </span>
-                        <span className="text-sm font-bold text-blue-800">
-                          {getCountryDisplay()}
-                        </span>
-                        {filters.country !== "all" && (
-                          <span className="text-xs text-blue-600">
-                            (Prices in {getCurrencyByCountry(filters.country)})
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2 mt-1">
-                        <Badge variant="secondary" className="bg-blue-100 text-blue-800 text-xs">
-                          {parts.length} {parts.length === 1 ? 'part' : 'parts'} found
-                        </Badge>
-                        {filters.country !== "all" && (
-                          <Badge variant="outline" className="text-xs border-blue-200 text-blue-600">
-                            Filtered
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  {filters.country !== "all" && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleCountryChange("all")}
-                      className="text-blue-600 hover:text-blue-800 hover:bg-blue-100 transition-colors"
-                    >
-                      View All Countries
-                    </Button>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
 
             <CarPartsList
               parts={parts}

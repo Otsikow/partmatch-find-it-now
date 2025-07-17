@@ -1,8 +1,7 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { CarPart } from "@/types/CarPart";
-import { getCountryConfig, getCurrencyByCountry } from "@/lib/countryConfig";
-import { convertCurrency } from "@/utils/exchangeRates";
 
 interface UseCarPartsParams {
   searchTerm?: string;
@@ -12,7 +11,6 @@ interface UseCarPartsParams {
     year: string;
     category: string;
     location: string;
-    country: string;
     priceRange: [number, number];
   };
 }
@@ -47,7 +45,6 @@ export const useCarParts = (params?: UseCarPartsParams) => {
           latitude,
           longitude,
           address,
-          country,
           created_at,
           updated_at,
           status,
@@ -69,7 +66,7 @@ export const useCarParts = (params?: UseCarPartsParams) => {
 
       // Apply filters if provided
       if (params?.filters) {
-        if (params.filters.make && params.filters.make !== 'all') {
+        if (params.filters.make) {
           query = query.ilike('make', `%${params.filters.make}%`);
           console.log('Applied make filter:', params.filters.make);
         }
@@ -77,23 +74,9 @@ export const useCarParts = (params?: UseCarPartsParams) => {
           query = query.ilike('model', `%${params.filters.model}%`);
           console.log('Applied model filter:', params.filters.model);
         }
-        if (params.filters.year && params.filters.year !== 'all') {
+        if (params.filters.year) {
           query = query.eq('year', parseInt(params.filters.year));
           console.log('Applied year filter:', params.filters.year);
-        }
-        if (params.filters.category && params.filters.category !== 'all') {
-          query = query.ilike('part_type', `%${params.filters.category}%`);
-          console.log('Applied category filter:', params.filters.category);
-        }
-        
-        if (params.filters.location) {
-          query = query.ilike('address', `%${params.filters.location}%`);
-          console.log('Applied location filter:', params.filters.location);
-        }
-        
-        if (params.filters.priceRange && (params.filters.priceRange[0] > 0 || params.filters.priceRange[1] < 10000)) {
-          query = query.gte('price', params.filters.priceRange[0]).lte('price', params.filters.priceRange[1]);
-          console.log('Applied price range filter:', params.filters.priceRange);
         }
       }
 
@@ -110,6 +93,7 @@ export const useCarParts = (params?: UseCarPartsParams) => {
 
       console.log('Query result - Data count:', data?.length || 0);
       console.log('Query result - Error:', error);
+      console.log('Raw query data:', data);
 
       if (error) {
         console.error('Error fetching parts:', error);
@@ -117,32 +101,11 @@ export const useCarParts = (params?: UseCarPartsParams) => {
         return;
       }
 
-      // Get target currency based on selected country
-      const targetCountry = params?.filters?.country && params.filters.country !== 'all' ? params.filters.country : 'GH';
-      const targetCurrency = getCurrencyByCountry(targetCountry);
-      console.log('Target country:', targetCountry, 'Target currency:', targetCurrency);
-
-      // Transform the data with proper currency conversion
+      // Transform the data to match our CarPart interface and ensure images are properly formatted
       const transformedParts: CarPart[] = (data || []).map(part => {
-        console.log('Processing part:', part.title, 'Country:', part.country, 'Original price:', part.price, part.currency);
-        
-        // Convert price to target currency using the new conversion function
-        let convertedPrice = part.price;
-        let displayCurrency = targetCurrency;
-        
-        if (part.currency !== targetCurrency) {
-          console.log(`Converting ${part.price} ${part.currency} to ${targetCurrency}`);
-          
-          try {
-            convertedPrice = convertCurrency(part.price, part.currency, targetCurrency);
-            console.log(`Converted price: ${convertedPrice} ${displayCurrency}`);
-          } catch (err) {
-            console.warn(`Failed to convert currency from ${part.currency} to ${targetCurrency}:`, err);
-            // Keep original price and currency if conversion fails
-            convertedPrice = part.price;
-            displayCurrency = part.currency;
-          }
-        }
+        console.log('Processing part:', part.title, 'Status:', part.status);
+        console.log('Part supplier_id:', part.supplier_id);
+        console.log('Part profiles data:', part.profiles);
         
         // Ensure images are properly formatted as URLs
         let processedImages: string[] = [];
@@ -165,10 +128,10 @@ export const useCarParts = (params?: UseCarPartsParams) => {
             });
         }
         
+        console.log('Processed images for', part.title, ':', processedImages);
+        
         return {
           ...part,
-          price: Math.round(convertedPrice), // Round to nearest whole number
-          currency: displayCurrency,
           condition: part.condition as 'New' | 'Used' | 'Refurbished',
           status: part.status as 'available' | 'sold' | 'hidden' | 'pending',
           profiles: part.profiles,
@@ -176,21 +139,9 @@ export const useCarParts = (params?: UseCarPartsParams) => {
         };
       });
 
-      // Apply country filtering after transformation
-      let filteredParts = transformedParts;
-      if (params?.filters?.country && params.filters.country !== 'all') {
-        console.log('Applying country filter post-fetch:', params.filters.country);
-        filteredParts = transformedParts.filter(part => {
-          // Only show parts that exactly match the selected country
-          // Don't include null country values anymore to avoid confusion
-          return part.country === params.filters.country;
-        });
-        console.log('Filtered parts count after country filter:', filteredParts.length);
-      }
-
-      console.log('Final filtered parts count:', filteredParts.length);
-      console.log('Sample countries in results:', filteredParts.slice(0, 5).map(p => ({ title: p.title, country: p.country, price: p.price, currency: p.currency })));
-      setParts(filteredParts);
+      console.log('Final transformed parts count:', transformedParts.length);
+      console.log('Final transformed parts:', transformedParts);
+      setParts(transformedParts);
     } catch (err) {
       console.error('Unexpected error:', err);
       setError('An unexpected error occurred');
