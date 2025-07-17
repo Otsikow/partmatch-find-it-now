@@ -16,6 +16,7 @@ interface SearchControlsProps {
     category: string;
     location: string;
     priceRange: [number, number];
+    maxDistance?: number;
   };
   onFiltersChange: (filters: {
     make: string;
@@ -24,7 +25,9 @@ interface SearchControlsProps {
     category: string;
     location: string;
     priceRange: [number, number];
+    maxDistance?: number;
   }) => void;
+  showLocationFilters?: boolean;
 }
 
 const SearchControls = ({ 

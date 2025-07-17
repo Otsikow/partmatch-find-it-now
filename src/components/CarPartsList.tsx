@@ -31,6 +31,14 @@ interface CarPartsListProps {
   parts: CarPart[];
   loading?: boolean;
   error?: string | null;
+  userLocation?: {
+    latitude: number;
+    longitude: number;
+    address?: string;
+    city?: string;
+    region?: string;
+    country?: string;
+  } | null;
 }
 
 const CarPartsList = ({ parts, loading, error }: CarPartsListProps) => {

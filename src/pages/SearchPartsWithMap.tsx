@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useCarParts } from "@/hooks/useCarParts";
 import { useLocationDetection } from "@/hooks/useLocationDetection";
@@ -9,9 +8,20 @@ import PendingRatingNotification from "@/components/PendingRatingNotification";
 import { Button } from "@/components/ui/button";
 import { MapPin } from "lucide-react";
 
+// Define the filters interface to match what SearchControls expects
+interface FilterState {
+  make: string;
+  model: string;
+  year: string;
+  category: string;
+  location: string;
+  priceRange: [number, number];
+  maxDistance?: number;
+}
+
 const SearchPartsWithMap = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<FilterState>({
     make: "",
     model: "",
     year: "",
@@ -39,6 +49,14 @@ const SearchPartsWithMap = () => {
 
   const handleLocationRequest = async () => {
     await requestLocation();
+  };
+  
+  // Custom handler to ensure type compatibility
+  const handleFiltersChange = (newFilters: FilterState) => {
+    setFilters({
+      ...newFilters,
+      maxDistance: filters.maxDistance // Preserve the maxDistance value
+    });
   };
 
   return (
@@ -76,7 +94,7 @@ const SearchPartsWithMap = () => {
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
           filters={filters}
-          onFiltersChange={setFilters}
+          onFiltersChange={handleFiltersChange}
           showLocationFilters={true}
         />
         
