@@ -7,7 +7,9 @@ export const BuyerDashboardContent = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <BuyerDashboardStats />
-      <BuyerDashboardTabs />
+      <div className="bg-white border-t border-gray-200">
+        <BuyerDashboardTabs />
+      </div>
     </div>
   );
 };

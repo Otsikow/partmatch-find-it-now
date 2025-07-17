@@ -6,28 +6,28 @@ import { ShoppingCart, Clock, CheckCircle, Star } from 'lucide-react';
 export const BuyerDashboardStats = () => {
   const stats = [
     {
-      title: 'Active Requests',
+      title: 'Active requests',
       value: '3',
       icon: Clock,
       color: 'text-blue-600',
       bgColor: 'bg-blue-50'
     },
     {
-      title: 'Total Orders',
+      title: 'Total orders',
       value: '12',
       icon: ShoppingCart,
       color: 'text-green-600',
       bgColor: 'bg-green-50'
     },
     {
-      title: 'Completed',
+      title: 'Completed orders',
       value: '8',
       icon: CheckCircle,
       color: 'text-purple-600',
       bgColor: 'bg-purple-50'
     },
     {
-      title: 'Average Rating',
+      title: 'Average rating',
       value: '4.8',
       icon: Star,
       color: 'text-orange-600',
@@ -36,9 +36,9 @@ export const BuyerDashboardStats = () => {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
       {stats.map((stat, index) => (
-        <Card key={index} className="hover:shadow-md transition-shadow">
+        <Card key={index} className="hover:shadow-md transition-shadow duration-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-gray-600">
               {stat.title}

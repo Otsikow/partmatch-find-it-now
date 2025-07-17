@@ -1,175 +1,113 @@
 
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { 
-  Search, 
-  Filter, 
-  Heart, 
-  MessageSquare, 
-  Eye, 
-  MapPin,
-  Star,
-  Trash2
-} from "lucide-react";
-import { useTranslation } from "react-i18next";
-import { useSavedParts } from "@/hooks/useSavedParts";
-import { useIsMobile } from "@/hooks/use-mobile";
+import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Heart, MapPin, DollarSign, Calendar, Trash2 } from 'lucide-react';
 
 const SavedParts = () => {
-  const { t } = useTranslation();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filterOpen, setFilterOpen] = useState(false);
-  const { savedParts, loading, removeSavedPart } = useSavedParts();
-  const isMobile = useIsMobile();
+  const savedParts = [
+    {
+      id: '1',
+      title: 'Brake pads - Front set',
+      make: 'Toyota',
+      model: 'Camry',
+      year: '2020',
+      price: '$45.99',
+      condition: 'New',
+      location: 'Accra, Ghana',
+      savedDate: '2024-01-15',
+      seller: 'AutoParts Plus'
+    },
+    {
+      id: '2',
+      title: 'Oil filter - Premium',
+      make: 'Honda',
+      model: 'Civic',
+      year: '2019',
+      price: '$12.50',
+      condition: 'New',
+      location: 'Kumasi, Ghana',
+      savedDate: '2024-01-18',
+      seller: 'Quick Parts'
+    }
+  ];
 
-  const filteredParts = savedParts.filter(part =>
-    part.car_parts.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    part.car_parts.make.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    part.car_parts.model.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  if (loading) {
-    return (
-      <div className="space-y-4">
-        {[...Array(3)].map((_, i) => (
-          <Card key={i} className="animate-pulse">
-            <CardContent className="p-4 lg:p-6">
-              <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-              <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    );
-  }
+  const getConditionColor = (condition: string) => {
+    switch (condition.toLowerCase()) {
+      case 'new':
+        return 'bg-green-100 text-green-800';
+      case 'used':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'refurbished':
+        return 'bg-blue-100 text-blue-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
 
   return (
-    <div className="space-y-4 lg:space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
-        <div>
-          <h2 className="text-xl lg:text-2xl font-bold text-gray-900">{t('savedParts')}</h2>
-          <p className="text-sm text-gray-600 mt-1">
-            {filteredParts.length} {t('savedItems')}
-          </p>
-        </div>
-        
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
-          <div className="relative flex-1 sm:flex-none">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <Input
-              placeholder={t('searchSavedParts')}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 w-full sm:w-64"
-            />
-          </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setFilterOpen(!filterOpen)}
-            className="flex items-center gap-2"
-          >
-            <Filter className="w-4 h-4" />
-            {t('filter')}
-          </Button>
-        </div>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-semibold text-gray-900">Saved parts</h2>
+        <p className="text-sm text-gray-600">{savedParts.length} saved items</p>
       </div>
 
-      {/* Parts Grid */}
-      {filteredParts.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
-          {filteredParts.map((savedPart) => (
-            <Card key={savedPart.id} className="hover:shadow-md transition-shadow">
+      {savedParts.length === 0 ? (
+        <Card className="text-center py-12">
+          <CardContent>
+            <Heart className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No saved parts</h3>
+            <p className="text-gray-600 mb-4">Save parts you're interested in to view them later.</p>
+            <Button>Browse parts</Button>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="grid gap-4">
+          {savedParts.map((part) => (
+            <Card key={part.id} className="hover:shadow-md transition-shadow">
               <CardHeader className="pb-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <CardTitle className="text-lg line-clamp-2">
-                      {savedPart.car_parts.title}
-                    </CardTitle>
-                    <div className="flex items-center gap-2 mt-2">
-                      <Badge variant="secondary" className="text-xs">
-                        {savedPart.car_parts.make} {savedPart.car_parts.model}
-                      </Badge>
-                      <Badge variant="outline" className="text-xs">
-                        {savedPart.car_parts.year}
-                      </Badge>
-                    </div>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => removeSavedPart(savedPart.id)}
-                    className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lg font-medium text-gray-900">
+                    {part.title}
+                  </CardTitle>
+                  <Badge className={getConditionColor(part.condition)}>
+                    {part.condition}
+                  </Badge>
                 </div>
+                <p className="text-sm text-gray-600">
+                  {part.make} {part.model} {part.year}
+                </p>
               </CardHeader>
-              
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-primary">
-                      {savedPart.car_parts.currency} {savedPart.car_parts.price?.toLocaleString()}
-                    </span>
-                    <Badge 
-                      variant={savedPart.car_parts.condition === 'new' ? 'default' : 'secondary'}
-                      className="text-xs"
-                    >
-                      {savedPart.car_parts.condition}
-                    </Badge>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                  <div className="flex items-center space-x-2">
+                    <DollarSign className="h-4 w-4 text-gray-400" />
+                    <span className="text-sm font-medium">{part.price}</span>
                   </div>
-                  
-                  {savedPart.car_parts.city && (
-                    <div className="flex items-center gap-1 text-sm text-gray-600">
-                      <MapPin className="w-3 h-3" />
-                      <span>{savedPart.car_parts.city}</span>
-                    </div>
-                  )}
-
-                  {savedPart.notes && (
-                    <div className="text-sm text-gray-600 bg-gray-50 p-2 rounded">
-                      <strong>{t('notes')}:</strong> {savedPart.notes}
-                    </div>
-                  )}
+                  <div className="flex items-center space-x-2">
+                    <MapPin className="h-4 w-4 text-gray-400" />
+                    <span className="text-sm text-gray-600">{part.location}</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Calendar className="h-4 w-4 text-gray-400" />
+                    <span className="text-sm text-gray-600">Saved: {part.savedDate}</span>
+                  </div>
                 </div>
-
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <Button size="sm" className="flex-1 flex items-center gap-2">
-                    <Eye className="w-4 h-4" />
-                    {t('viewDetails')}
-                  </Button>
-                  <Button variant="outline" size="sm" className="flex-1 flex items-center gap-2">
-                    <MessageSquare className="w-4 h-4" />
-                    {t('contact')}
-                  </Button>
+                <div className="flex items-center justify-between">
+                  <p className="text-sm text-gray-600">Seller: {part.seller}</p>
+                  <div className="flex space-x-2">
+                    <Button variant="outline" size="sm">
+                      <Trash2 className="h-4 w-4 mr-1" />
+                      Remove
+                    </Button>
+                    <Button size="sm">Contact seller</Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>
           ))}
         </div>
-      ) : (
-        <Card className="text-center py-12">
-          <CardContent>
-            <Heart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              {searchQuery ? t('noSavedPartsFound') : t('noSavedParts')}
-            </h3>
-            <p className="text-gray-600 mb-6">
-              {searchQuery 
-                ? t('tryDifferentSearch') 
-                : t('startSavingParts')
-              }
-            </p>
-            <Button asChild>
-              <a href="/search-parts">{t('browseParts')}</a>
-            </Button>
-          </CardContent>
-        </Card>
       )}
     </div>
   );
