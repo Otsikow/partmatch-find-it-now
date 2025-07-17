@@ -68,7 +68,7 @@ export const useCarParts = (params?: UseCarPartsParams) => {
 
       // Apply filters if provided
       if (params?.filters) {
-        if (params.filters.make) {
+        if (params.filters.make && params.filters.make !== 'all') {
           query = query.ilike('make', `%${params.filters.make}%`);
           console.log('Applied make filter:', params.filters.make);
         }
@@ -76,18 +76,36 @@ export const useCarParts = (params?: UseCarPartsParams) => {
           query = query.ilike('model', `%${params.filters.model}%`);
           console.log('Applied model filter:', params.filters.model);
         }
-        if (params.filters.year) {
+        if (params.filters.year && params.filters.year !== 'all') {
           query = query.eq('year', parseInt(params.filters.year));
           console.log('Applied year filter:', params.filters.year);
+        }
+        if (params.filters.category && params.filters.category !== 'all') {
+          query = query.ilike('part_type', `%${params.filters.category}%`);
+          console.log('Applied category filter:', params.filters.category);
         }
         
         // Apply country filter - handle null values for existing parts
         if (params.filters.country && params.filters.country !== 'all') {
           console.log('Applying country filter:', params.filters.country);
-          // For now, treat null country as Ghana (GH) for existing parts
-          query = query.or(`country.eq.${params.filters.country},country.is.null`);
+          // For existing parts without country, treat null as Ghana (GH)
+          if (params.filters.country === 'GH') {
+            query = query.or(`country.eq.${params.filters.country},country.is.null`);
+          } else {
+            query = query.eq('country', params.filters.country);
+          }
         } else {
           console.log('No country filter applied - showing all countries');
+        }
+        
+        if (params.filters.location) {
+          query = query.ilike('address', `%${params.filters.location}%`);
+          console.log('Applied location filter:', params.filters.location);
+        }
+        
+        if (params.filters.priceRange && (params.filters.priceRange[0] > 0 || params.filters.priceRange[1] < 10000)) {
+          query = query.gte('price', params.filters.priceRange[0]).lte('price', params.filters.priceRange[1]);
+          console.log('Applied price range filter:', params.filters.priceRange);
         }
       }
 

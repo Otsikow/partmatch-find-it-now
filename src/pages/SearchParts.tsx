@@ -49,10 +49,10 @@ const SearchParts = () => {
   
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
-    make: "",
+    make: "all",
     model: "",
-    year: "",
-    category: "",
+    year: "all",
+    category: "all",
     location: "",
     country: "all",
     priceRange: [0, 10000] as [number, number],

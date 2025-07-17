@@ -31,10 +31,10 @@ const SearchControls = ({ searchTerm, onSearchChange, filters, onFiltersChange }
 
   const clearFilters = () => {
     onFiltersChange({
-      make: "",
+      make: "all",
       model: "",
-      year: "",
-      category: "",
+      year: "all",
+      category: "all",
       location: "",
       country: "all",
       priceRange: [0, 10000] as [number, number],
@@ -44,6 +44,9 @@ const SearchControls = ({ searchTerm, onSearchChange, filters, onFiltersChange }
   const activeFiltersCount = Object.entries(filters).filter(([key, value]) => {
     if (key === 'priceRange') return value[0] !== 0 || value[1] !== 10000;
     if (key === 'country') return value !== 'all';
+    if (key === 'make') return value !== 'all';
+    if (key === 'year') return value !== 'all';
+    if (key === 'category') return value !== 'all';
     return value !== '';
   }).length;
 
@@ -71,7 +74,7 @@ const SearchControls = ({ searchTerm, onSearchChange, filters, onFiltersChange }
                   <SelectValue placeholder="Select make" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Makes</SelectItem>
+                  <SelectItem value="all">All Makes</SelectItem>
                   <SelectItem value="Toyota">Toyota</SelectItem>
                   <SelectItem value="Honda">Honda</SelectItem>
                   <SelectItem value="Ford">Ford</SelectItem>
@@ -103,7 +106,7 @@ const SearchControls = ({ searchTerm, onSearchChange, filters, onFiltersChange }
                   <SelectValue placeholder="Select year" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Years</SelectItem>
+                  <SelectItem value="all">All Years</SelectItem>
                   {Array.from({ length: 25 }, (_, i) => 2024 - i).map(year => (
                     <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
                   ))}
@@ -118,7 +121,7 @@ const SearchControls = ({ searchTerm, onSearchChange, filters, onFiltersChange }
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Categories</SelectItem>
+                  <SelectItem value="all">All Categories</SelectItem>
                   <SelectItem value="Engine">Engine Parts</SelectItem>
                   <SelectItem value="Brake">Brake System</SelectItem>
                   <SelectItem value="Suspension">Suspension</SelectItem>
