@@ -2,14 +2,9 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Slider } from "@/components/ui/slider";
-import * as RadixSlider from '@radix-ui/react-slider';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import { mockParts } from "@/data/mockParts";
 import { getUniqueMakes, getUniqueModels, getUniqueYears } from "@/utils/partFilters";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { MapPin, DollarSign, Settings, Filter } from "lucide-react";
 
 interface SearchControlsProps {
   searchTerm: string;
@@ -21,8 +16,6 @@ interface SearchControlsProps {
     category: string;
     location: string;
     priceRange: [number, number];
-    condition: string;
-    locationRadius: number;
   };
   onFiltersChange: (filters: {
     make: string;
@@ -31,152 +24,8 @@ interface SearchControlsProps {
     category: string;
     location: string;
     priceRange: [number, number];
-    condition: string;
-    locationRadius: number;
   }) => void;
 }
-
-// Custom Price Range Slider Component
-const PriceRangeSlider = ({ priceRange, onPriceChange }: { priceRange: [number, number]; onPriceChange: (value: [number, number]) => void }) => {
-  const MIN_PRICE = 0;
-  const MAX_PRICE = 50000;
-
-  // Handle slider value changes
-  const handleSliderChange = (value: number[]) => {
-    onPriceChange(value as [number, number]);
-  };
-
-  // Handle input changes
-  const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Math.max(MIN_PRICE, Math.min(parseInt(e.target.value) || 0, priceRange[1]));
-    const newRange: [number, number] = [value, priceRange[1]];
-    onPriceChange(newRange);
-  };
-
-  const handleMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Math.min(MAX_PRICE, Math.max(parseInt(e.target.value) || 0, priceRange[0]));
-    const newRange: [number, number] = [priceRange[0], value];
-    onPriceChange(newRange);
-  };
-
-  return (
-    <div className="space-y-4">
-      {/* Price Range Display */}
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-medium">Price Range: GHS {priceRange[0].toLocaleString()} - GHS {priceRange[1].toLocaleString()}</span>
-      </div>
-
-      {/* Slider Component */}
-      <RadixSlider.Root
-        className="relative flex items-center select-none touch-none w-full h-5"
-        value={priceRange}
-        onValueChange={handleSliderChange}
-        max={MAX_PRICE}
-        min={MIN_PRICE}
-        step={1000}
-      >
-        <RadixSlider.Track className="slider-track bg-muted relative grow rounded-full h-2">
-          <RadixSlider.Range className="slider-range absolute bg-primary rounded-full h-full" />
-        </RadixSlider.Track>
-        <RadixSlider.Thumb className="slider-thumb block w-5 h-5 bg-primary shadow-lg rounded-full hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer" />
-        <RadixSlider.Thumb className="slider-thumb block w-5 h-5 bg-primary shadow-lg rounded-full hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer" />
-      </RadixSlider.Root>
-
-      {/* Input Fields */}
-      <div className="flex space-x-4">
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-muted-foreground mb-1">Min Price</label>
-          <Input
-            type="number"
-            value={priceRange[0]}
-            onChange={handleMinChange}
-            className="w-full"
-            placeholder="0"
-          />
-        </div>
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-muted-foreground mb-1">Max Price</label>
-          <Input
-            type="number"
-            value={priceRange[1]}
-            onChange={handleMaxChange}
-            className="w-full"
-            placeholder="50000"
-          />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Custom Location Radius Slider Component
-const LocationRadiusSlider = ({ 
-  location, 
-  radius, 
-  onLocationChange, 
-  onRadiusChange 
-}: { 
-  location: string; 
-  radius: number; 
-  onLocationChange: (location: string) => void; 
-  onRadiusChange: (radius: number) => void; 
-}) => {
-  const MIN_RADIUS = 5;
-  const MAX_RADIUS = 500;
-
-  const handleRadiusChange = (value: number[]) => {
-    onRadiusChange(value[0]);
-  };
-
-  const getRadiusLabel = (radius: number) => {
-    if (radius < 25) return 'Local';
-    if (radius < 100) return 'Regional';
-    return 'Nationwide';
-  };
-
-  return (
-    <div className="space-y-4">
-      {/* Location Input */}
-      <div>
-        <Input
-          placeholder="Enter location (e.g., Accra, Kumasi)"
-          value={location}
-          onChange={(e) => onLocationChange(e.target.value)}
-          className="w-full text-sm sm:text-base"
-        />
-      </div>
-
-      {/* Radius Display and Badge */}
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-medium">Search radius: {radius} km</span>
-        <Badge variant="outline" className="text-xs font-medium">
-          {getRadiusLabel(radius)}
-        </Badge>
-      </div>
-
-      {/* Slider Component */}
-      <RadixSlider.Root
-        className="relative flex items-center select-none touch-none w-full h-5"
-        value={[radius]}
-        onValueChange={handleRadiusChange}
-        max={MAX_RADIUS}
-        min={MIN_RADIUS}
-        step={5}
-      >
-        <RadixSlider.Track className="slider-track bg-muted relative grow rounded-full h-2">
-          <RadixSlider.Range className="slider-range absolute bg-primary rounded-full h-full" />
-        </RadixSlider.Track>
-        <RadixSlider.Thumb className="slider-thumb block w-5 h-5 bg-primary shadow-lg rounded-full hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer" />
-      </RadixSlider.Root>
-
-      {/* Range Labels */}
-      <div className="flex justify-between text-xs text-muted-foreground">
-        <span>{MIN_RADIUS} km</span>
-        <span>{MAX_RADIUS} km</span>
-      </div>
-    </div>
-  );
-};
 
 const SearchControls = ({ 
   searchTerm, 
@@ -326,105 +175,6 @@ const SearchControls = ({
             </div>
           </div>
         )}
-
-        {/* Price Range Filter */}
-        <div>
-          <div className="flex items-center gap-2 mb-2 sm:mb-3">
-            <DollarSign className="w-4 h-4 text-primary" />
-            <p className="text-xs sm:text-sm font-semibold text-foreground">Price Range</p>
-          </div>
-          <div className="px-2">
-            <PriceRangeSlider
-              priceRange={filters.priceRange}
-              onPriceChange={(value) => onFiltersChange({ ...filters, priceRange: value })}
-            />
-          </div>
-        </div>
-
-        {/* Part Condition Filter */}
-        <div>
-          <div className="flex items-center gap-2 mb-2 sm:mb-3">
-            <Settings className="w-4 h-4 text-primary" />
-            <p className="text-xs sm:text-sm font-semibold text-foreground">Condition</p>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2">
-            {['', 'New', 'Used', 'Refurbished'].map((cond) => (
-              <Button
-                key={cond || 'all'}
-                variant={filters.condition === cond ? 'default' : 'outline'}
-                size={buttonSize}
-                onClick={() => onFiltersChange({ ...filters, condition: cond })}
-                className={`text-xs sm:text-sm ${filters.condition === cond ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
-              >
-                {cond || 'All Conditions'}
-              </Button>
-            ))}
-          </div>
-        </div>
-
-        {/* Category/Part Type Filter */}
-        <div>
-          <div className="flex items-center gap-2 mb-2 sm:mb-3">
-            <Filter className="w-4 h-4 text-primary" />
-            <p className="text-xs sm:text-sm font-semibold text-foreground">Category</p>
-          </div>
-          <Select value={filters.category || "all"} onValueChange={(value) => onFiltersChange({ ...filters, category: value === "all" ? "" : value })}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="All Categories" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
-              <SelectItem value="Engine">Engine Parts</SelectItem>
-              <SelectItem value="Brake">Brake System</SelectItem>
-              <SelectItem value="Suspension">Suspension</SelectItem>
-              <SelectItem value="Electrical">Electrical</SelectItem>
-              <SelectItem value="Body">Body Parts</SelectItem>
-              <SelectItem value="Interior">Interior</SelectItem>
-              <SelectItem value="Transmission">Transmission</SelectItem>
-              <SelectItem value="Exhaust">Exhaust System</SelectItem>
-              <SelectItem value="Cooling">Cooling System</SelectItem>
-              <SelectItem value="Fuel">Fuel System</SelectItem>
-              <SelectItem value="Lighting">Lighting</SelectItem>
-              <SelectItem value="Tires">Tires & Wheels</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Location Filter */}
-        <div>
-          <div className="flex items-center gap-2 mb-2 sm:mb-3">
-            <MapPin className="w-4 h-4 text-primary" />
-            <p className="text-xs sm:text-sm font-semibold text-foreground">Location & Radius</p>
-          </div>
-          <div className="px-2">
-            <LocationRadiusSlider
-              location={filters.location}
-              radius={filters.locationRadius}
-              onLocationChange={(location) => onFiltersChange({ ...filters, location })}
-              onRadiusChange={(radius) => onFiltersChange({ ...filters, locationRadius: radius })}
-            />
-          </div>
-        </div>
-
-        {/* Clear Filters Button */}
-        <div className="pt-2 border-t border-border">
-          <Button
-            variant="outline"
-            onClick={() => onFiltersChange({
-              make: "",
-              model: "",
-              year: "",
-              category: "",
-              location: "",
-              priceRange: [0, 10000],
-              condition: "",
-              locationRadius: 50,
-            })}
-            className="w-full text-sm"
-          >
-            Clear All Filters
-          </Button>
-        </div>
       </div>
     </Card>
   );

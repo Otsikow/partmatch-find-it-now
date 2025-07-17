@@ -38,9 +38,6 @@ const AuthTypeSelector = () => {
         <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto">
           <Link to="/buyer-auth" className="block group">
             <Card className="p-6 sm:p-8 text-center bg-gradient-to-br from-card to-accent/10 hover:from-card hover:to-accent/20 transition-all duration-300 group-hover:shadow-xl group-hover:scale-105 border-2 border-primary/20 group-hover:border-primary/40">
-              <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight mb-6">
-                Sign In / Register as Buyer
-              </Button>
               <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full p-4 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
                 <ShoppingCart className="h-10 w-10 sm:h-12 sm:w-12 text-white" />
               </div>
@@ -50,20 +47,20 @@ const AuthTypeSelector = () => {
               <p className="card-description text-sm sm:text-base mb-6">
                 Find and purchase car parts from verified sellers
               </p>
-              <div className="bg-primary/10 rounded-lg p-4 text-sm text-primary font-medium">
+              <div className="bg-primary/10 rounded-lg p-4 text-sm text-primary font-medium mb-6">
                 ✓ Browse available parts<br/>
                 ✓ Request specific parts<br/>
                 ✓ Connect with sellers<br/>
                 ✓ Secure payments
               </div>
+              <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight">
+                Sign In / Register as Buyer
+              </Button>
             </Card>
           </Link>
 
           <Link to="/seller-auth" className="block group">
             <Card className="p-6 sm:p-8 text-center bg-gradient-to-br from-card to-destructive/10 hover:from-card hover:to-destructive/20 transition-all duration-300 group-hover:shadow-xl group-hover:scale-105 border-2 border-destructive/20 group-hover:border-destructive/40">
-              <Button className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight mb-6">
-                Sign In / Register as Seller
-              </Button>
               <div className="bg-gradient-to-br from-orange-500 to-red-600 rounded-full p-4 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
                 <Store className="h-10 w-10 sm:h-12 sm:w-12 text-white" />
               </div>
@@ -73,12 +70,15 @@ const AuthTypeSelector = () => {
               <p className="card-description text-sm sm:text-base mb-6">
                 Sell and supply car parts to buyers
               </p>
-              <div className="bg-destructive/10 rounded-lg p-4 text-sm text-destructive font-medium">
+              <div className="bg-destructive/10 rounded-lg p-4 text-sm text-destructive font-medium mb-6">
                 ✓ List your inventory<br/>
                 ✓ Respond to requests<br/>
                 ✓ Manage offers<br/>
                 ✓ Grow your business
               </div>
+              <Button className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight">
+                Sign In / Register as Seller
+              </Button>
             </Card>
           </Link>
         </div>
