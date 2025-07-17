@@ -149,8 +149,14 @@ export const useLocationDetection = (options: UseLocationDetectionOptions = {}) 
             
             switch (error.code) {
               case error.PERMISSION_DENIED:
-                errorMessage = 'Location access denied by user';
-                setState(prev => ({ ...prev, permission: 'denied' }));
+                errorMessage = 'Location access denied by user. You can enter your location manually.';
+                setState(prev => ({ 
+                  ...prev, 
+                  permission: 'denied',
+                  error: errorMessage,
+                  loading: false
+                }));
+                console.warn('Location access denied', error);
                 break;
               case error.POSITION_UNAVAILABLE:
                 errorMessage = 'Location information unavailable';

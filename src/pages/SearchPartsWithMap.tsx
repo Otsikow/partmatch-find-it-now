@@ -6,6 +6,7 @@ import CarPartsList from "@/components/CarPartsList";
 import PageHeader from "@/components/PageHeader";
 import PendingRatingNotification from "@/components/PendingRatingNotification";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { MapPin } from "lucide-react";
 
 // Define the filters interface to match what SearchControls expects
@@ -35,7 +36,8 @@ const SearchPartsWithMap = () => {
     requestLocation,
     location,
     loading: locationLoading,
-    error: locationError
+    error: locationError,
+    permission
   } = useLocationDetection({
     enableHighAccuracy: true,
     includeAddress: true
@@ -80,9 +82,29 @@ const SearchPartsWithMap = () => {
             <MapPin className="h-4 w-4" />
             {locationLoading ? "Getting location..." : "📍 Use My Location"}
           </Button>
+          
           {locationError && (
-            <p className="mt-2 text-sm text-destructive">{locationError}</p>
+            <div className="mt-2">
+              <p className="text-sm text-destructive mb-2">{locationError}</p>
+              {/* Manual location input form appears when location is denied */}
+              {permission === 'denied' && (
+                <div className="flex flex-col sm:flex-row gap-2 mt-2">
+                  <Input
+                    placeholder="Enter your city or location"
+                    onChange={(e) => {
+                      const location = e.target.value;
+                      setFilters(prev => ({
+                        ...prev,
+                        location
+                      }));
+                    }}
+                    className="flex-1"
+                  />
+                </div>
+              )}
+            </div>
           )}
+          
           {location && (
             <p className="mt-2 text-sm text-muted-foreground">
               Showing results near {location.city || location.address}

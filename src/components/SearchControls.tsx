@@ -34,7 +34,8 @@ const SearchControls = ({
   searchTerm, 
   onSearchChange, 
   filters,
-  onFiltersChange
+  onFiltersChange,
+  showLocationFilters = false
 }: SearchControlsProps) => {
   const isMobile = useIsMobile();
   
@@ -96,6 +97,29 @@ const SearchControls = ({
             className={`w-full border-border focus:border-primary focus:ring-primary/20 ${isMobile ? 'h-11 text-sm px-3' : 'h-10 text-sm'}`}
           />
         </div>
+        
+        {/* Distance Filter - Only show if showLocationFilters is true */}
+        {showLocationFilters && (
+          <div>
+            <p className="text-xs sm:text-sm font-semibold text-foreground mb-2 sm:mb-3">Maximum Distance</p>
+            <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+              {[50, 100, 200, 300].map(distance => (
+                <Button
+                  key={distance}
+                  variant={filters.maxDistance === distance ? 'default' : 'outline'}
+                  size={buttonSize}
+                  onClick={() => onFiltersChange({
+                    ...filters,
+                    maxDistance: distance
+                  })}
+                  className={`text-xs sm:text-sm ${filters.maxDistance === distance ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
+                >
+                  {distance} miles
+                </Button>
+              ))}
+            </div>
+          </div>
+        )}
         
         {/* Make Filter */}
         <div>
