@@ -55,10 +55,8 @@ const SearchPartsWithMap = () => {
   
   // Custom handler to ensure type compatibility
   const handleFiltersChange = (newFilters: FilterState) => {
-    setFilters({
-      ...newFilters,
-      maxDistance: filters.maxDistance // Preserve the maxDistance value
-    });
+    console.log('New filters:', newFilters);
+    setFilters(newFilters);
   };
 
   return (

@@ -106,13 +106,16 @@ const SearchControls = ({
               {[50, 100, 200, 300].map(distance => (
                 <Button
                   key={distance}
-                  variant={filters.maxDistance === distance ? 'default' : 'outline'}
+                  variant={(filters.maxDistance === distance) ? 'default' : 'outline'}
                   size={buttonSize}
-                  onClick={() => onFiltersChange({
-                    ...filters,
-                    maxDistance: distance
-                  })}
-                  className={`text-xs sm:text-sm ${filters.maxDistance === distance ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
+                  onClick={() => {
+                    console.log(`Setting distance to ${distance}`);
+                    onFiltersChange({
+                      ...filters,
+                      maxDistance: distance
+                    });
+                  }}
+                  className={`text-xs sm:text-sm ${(filters.maxDistance === distance) ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
                 >
                   {distance} miles
                 </Button>
