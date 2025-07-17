@@ -1,7 +1,5 @@
-
 import React from 'react';
 import CarPartCardWithChat from './CarPartCardWithChat';
-import { formatDistance } from '@/utils/distanceUtils';
 
 interface CarPart {
   id: string;
@@ -16,9 +14,6 @@ interface CarPart {
   description?: string;
   images?: string[];
   address?: string;
-  latitude?: number;
-  longitude?: number;
-  distance?: number;
   created_at: string;
   supplier_id: string;
   profiles?: {
@@ -36,14 +31,9 @@ interface CarPartsListProps {
   parts: CarPart[];
   loading?: boolean;
   error?: string | null;
-  showDistance?: boolean;
-  userLocation?: {
-    latitude: number;
-    longitude: number;
-  };
 }
 
-const CarPartsList = ({ parts, loading, error, showDistance, userLocation }: CarPartsListProps) => {
+const CarPartsList = ({ parts, loading, error }: CarPartsListProps) => {
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
@@ -91,12 +81,7 @@ const CarPartsList = ({ parts, loading, error, showDistance, userLocation }: Car
       {/* Mobile: Single column, Tablet: 2 columns, Desktop: 3-4 columns */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
         {parts.map((part) => (
-          <CarPartCardWithChat 
-            key={part.id} 
-            part={part} 
-            showDistance={showDistance && !!part.latitude && !!part.longitude}
-            distanceText={part.distance !== undefined ? formatDistance(part.distance) : undefined}
-          />
+          <CarPartCardWithChat key={part.id} part={part} />
         ))}
       </div>
     </div>

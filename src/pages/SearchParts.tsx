@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { useCarParts } from "@/hooks/useCarParts";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { useLocationDetection } from "@/hooks/useLocationDetection";
 import SearchControls from "@/components/SearchControls";
 import CarPartsList from "@/components/CarPartsList";
 import PageHeader from "@/components/PageHeader";
@@ -13,7 +12,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Slider } from "@/components/ui/slider";
 import {
   Search,
   MapPin,
@@ -21,12 +19,9 @@ import {
   MessageCircle,
   Package,
   ClipboardList,
-  MapIcon,
-  Locate,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
-import { formatDistance } from "@/utils/distanceUtils";
 
 interface PartRequest {
   id: string;
@@ -58,31 +53,12 @@ const SearchParts = () => {
     priceRange: [0, 10000] as [number, number],
   });
 
-  // Location states
-  const [useLocationFilter, setUseLocationFilter] = useState(false);
-  const [maxDistance, setMaxDistance] = useState<number>(25);
-  const { 
-    location, 
-    loading: locationLoading, 
-    error: locationError, 
-    requestLocation,
-    permission
-  } = useLocationDetection({ requestOnMount: false });
-
   // For car parts
   const {
     parts,
     loading: partsLoading,
     error: partsError,
-  } = useCarParts({ 
-    searchTerm, 
-    filters,
-    userLocation: useLocationFilter && location ? {
-      latitude: location.latitude,
-      longitude: location.longitude,
-      maxDistance: maxDistance
-    } : undefined
-  });
+  } = useCarParts({ searchTerm, filters });
 
   // For part requests
   const [requests, setRequests] = useState<PartRequest[]>([]);
@@ -156,32 +132,6 @@ const SearchParts = () => {
     return new Date(dateString).toLocaleDateString();
   };
 
-  const handleLocationSearch = async () => {
-    try {
-      await requestLocation();
-      setUseLocationFilter(true);
-      toast({
-        title: "Location detected",
-        description: "Showing car parts near you",
-      });
-    } catch (error) {
-      console.error("Location error:", error);
-      toast({
-        title: "Location error",
-        description: "Unable to get your location. Please check your browser settings.",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const clearLocationFilter = () => {
-    setUseLocationFilter(false);
-    toast({
-      title: "Location filter cleared",
-      description: "Showing all car parts",
-    });
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-background">
       <PageHeader
@@ -220,89 +170,12 @@ const SearchParts = () => {
                 filters={filters}
                 onFiltersChange={setFilters}
               />
-              
-              {/* Location-based search */}
-              <Card className="mt-4 p-4 border border-border">
-                <CardHeader className="p-0 pb-3">
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <MapIcon className="w-5 h-5 text-primary" />
-                    Location-Based Search
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="p-0 space-y-4">
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <Button 
-                      onClick={handleLocationSearch}
-                      className="flex items-center gap-2"
-                      disabled={useLocationFilter && !!location}
-                    >
-                      <Locate className="w-4 h-4" />
-                      Use My Location
-                    </Button>
-                    
-                    {useLocationFilter && location && (
-                      <Button 
-                        variant="outline" 
-                        onClick={clearLocationFilter}
-                        className="flex items-center gap-2"
-                      >
-                        Clear Location Filter
-                      </Button>
-                    )}
-                  </div>
-                  
-                  {locationLoading && (
-                    <div className="text-sm text-muted-foreground">
-                      Detecting your location...
-                    </div>
-                  )}
-                  
-                  {locationError && (
-                    <div className="text-sm text-destructive">
-                      {locationError}
-                    </div>
-                  )}
-                  
-                  {useLocationFilter && location && (
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-2 text-sm">
-                        <MapPin className="w-4 h-4 text-primary" />
-                        <span>
-                          {location.address || `${location.latitude.toFixed(4)}, ${location.longitude.toFixed(4)}`}
-                        </span>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span>Maximum distance: {maxDistance} km</span>
-                          <span>{formatDistance(maxDistance)}</span>
-                        </div>
-                        <Slider
-                          value={[maxDistance]}
-                          min={5}
-                          max={100}
-                          step={5}
-                          onValueChange={(value) => setMaxDistance(value[0])}
-                        />
-                      </div>
-                      
-                      {parts.length > 0 && (
-                        <div className="text-sm text-muted-foreground">
-                          Showing {parts.length} parts within {maxDistance} km
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
             </div>
 
             <CarPartsList
               parts={parts}
               loading={partsLoading}
               error={partsError}
-              showDistance={useLocationFilter && !!location}
-              userLocation={location ? { latitude: location.latitude, longitude: location.longitude } : undefined}
             />
           </TabsContent>
 

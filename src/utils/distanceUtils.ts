@@ -1,4 +1,3 @@
-
 // Utility function to calculate distance between two coordinates using Haversine formula
 export const calculateDistance = (
   lat1: number,
