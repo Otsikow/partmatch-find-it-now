@@ -2,8 +2,8 @@
 import { Separator } from "@/components/ui/separator";
 import FooterCompanyInfo from "./FooterCompanyInfo";
 import FooterQuickLinks from "./FooterQuickLinks";
-import FooterBrowseShop from "./FooterBrowseShop";
-import FooterNewsletter from "./FooterNewsletter";
+import FooterUsefulInfo from "./FooterUsefulInfo";
+import FooterSocialContact from "./FooterSocialContact";
 import FooterBottom from "./FooterBottom";
 
 const Footer = () => {
@@ -14,8 +14,8 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           <FooterCompanyInfo />
           <FooterQuickLinks />
-          <FooterBrowseShop />
-          <FooterNewsletter />
+          <FooterUsefulInfo />
+          <FooterSocialContact />
         </div>
       </div>
 

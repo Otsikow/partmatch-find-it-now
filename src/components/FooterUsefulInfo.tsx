@@ -1,64 +1,73 @@
 
-import { Home, Search, MessageSquare, Store, UserPlus, Users } from "lucide-react";
+import { HelpCircle, Info, FileText, Handshake, Mail, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const FooterQuickLinks = () => {
+const FooterUsefulInfo = () => {
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-playfair font-semibold text-white">Quick Links</h3>
+      <h3 className="text-lg font-playfair font-semibold text-white">Useful Info</h3>
       <ul className="space-y-3">
         <li>
           <Link 
-            to="/" 
+            to="/about" 
             className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
           >
-            <Home className="h-3 w-3" />
-            <span>Home</span>
+            <Info className="h-3 w-3" />
+            <span>About PartMatch</span>
           </Link>
         </li>
         <li>
           <Link 
-            to="/search-parts" 
+            to="/services" 
             className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
           >
-            <Search className="h-3 w-3" />
-            <span>Browse Parts</span>
+            <HelpCircle className="h-3 w-3" />
+            <span>How It Works</span>
           </Link>
         </li>
         <li>
-          <Link 
-            to="/request-part" 
+          <a 
+            href="#faq" 
             className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
           >
-            <MessageSquare className="h-3 w-3" />
-            <span>Request a Part</span>
-          </Link>
+            <HelpCircle className="h-3 w-3" />
+            <span>FAQs</span>
+          </a>
         </li>
         <li>
           <Link 
             to="/seller-auth" 
             className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
           >
-            <Store className="h-3 w-3" />
-            <span>Sell a Part</span>
+            <Handshake className="h-3 w-3" />
+            <span>Partner with Us</span>
           </Link>
         </li>
         <li>
           <Link 
-            to="/auth" 
+            to="/contact" 
             className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
           >
-            <UserPlus className="h-3 w-3" />
-            <span>Sign In / Sign Up</span>
+            <Mail className="h-3 w-3" />
+            <span>Contact Us</span>
           </Link>
         </li>
         <li>
           <Link 
-            to="/about" 
+            to="/terms-of-service" 
             className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
           >
-            <Users className="h-3 w-3" />
-            <span>About Us</span>
+            <FileText className="h-3 w-3" />
+            <span>Terms & Conditions</span>
+          </Link>
+        </li>
+        <li>
+          <Link 
+            to="/privacy-policy" 
+            className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
+          >
+            <Shield className="h-3 w-3" />
+            <span>Privacy Policy</span>
           </Link>
         </li>
       </ul>
@@ -66,4 +75,4 @@ const FooterQuickLinks = () => {
   );
 };
 
-export default FooterQuickLinks;
+export default FooterUsefulInfo;
