@@ -20,6 +20,7 @@ interface SavedPart {
     currency: string;
     condition: string;
     address?: string;
+    city?: string;
     images?: string[];
     supplier_id: string;
     profiles?: {
@@ -59,6 +60,7 @@ export const useSavedParts = () => {
             currency,
             condition,
             address,
+            city,
             images,
             supplier_id,
             profiles(
