@@ -1,7 +1,8 @@
+
 {
-  "name": "PartMatch Ghana",
+  "name": "PartMatch",
   "short_name": "PartMatch",
-  "description": "Buy and sell car parts easily in Ghana.",
+  "description": "Buy and sell car parts easily worldwide.",
   "start_url": "/",
   "display": "standalone",
   "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],

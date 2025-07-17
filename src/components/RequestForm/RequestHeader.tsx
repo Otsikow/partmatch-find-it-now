@@ -20,7 +20,6 @@ const RequestHeader = () => {
           />
         </Link>
         <h1 className="text-base sm:text-lg md:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent truncate">Request a Part</h1>
-        <span className="text-base sm:text-lg font-bold text-gray-700 ml-2">Ghana</span>
       </div>
     </header>
   );
