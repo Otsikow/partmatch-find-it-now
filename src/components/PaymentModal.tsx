@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { loadStripe } from "@stripe/stripe-js";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ import { Badge } from "@/components/ui/badge";
 import { CreditCard, Smartphone, Phone } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { convertFromGHS, convertFromNGN } from "@/utils/exchangeRates";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -43,6 +44,23 @@ const PaymentModal = ({
   const [paymentMethod, setPaymentMethod] = useState<string>("stripe");
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
+
+  // Always show GHS as the main currency if NGN is selected
+  const displayCurrency = currency === "NGN" ? "GHS" : currency;
+  const displayAmount = useMemo(() => {
+    if (currency == "NGN") {
+      // Convert NGN to GHS for display
+      try {
+        console.log("Converting NGN to GHS for display");
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+
+        return convertFromNGN(amount, "GHS");
+      } catch {
+        return amount.toLocaleString(undefined, { maximumFractionDigits: 2 });
+      }
+    }
+    return amount.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  }, [amount, currency]);
 
   const handlePayment = async () => {
     localStorage.setItem(
@@ -98,9 +116,8 @@ const PaymentModal = ({
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              offerId,
-              amount,
-              currency,
+              amount: amount,
+              currency: currency,
               receiptEmail: tempUser.email || "Testmail@gmail.com",
             }),
           }
@@ -136,19 +153,58 @@ const PaymentModal = ({
 
         if (result.error) throw result.error;
         return;
-      }
+      } else if (paymentMethod === "paystack") {
+        try {
+          const response = await fetch(
+            "https://partmatchbackend-production.up.railway.app/api/v1/paystack/initialize",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                amount: 100,
+                currency: currency || "NGN", // fallback to NGN
+                email: tempUser?.email || "testmail@gmail.com",
+              }),
+            }
+          );
+          console.log(amount, currency, tempUser?.email);
 
-      toast({
-        title: t(
-          "payment.paystack_not_available_title",
-          "Paystack Not Available"
-        ),
-        description: t(
-          "payment.paystack_not_available_desc",
-          "Paystack integration is not implemented yet."
-        ),
-        variant: "destructive",
-      });
+          const contentType = response.headers.get("content-type");
+          if (!response.ok) {
+            const text = await response.text();
+            throw new Error(text || "Failed to initialize Paystack payment");
+          }
+
+          if (!contentType || !contentType.includes("application/json")) {
+            throw new Error("Invalid response format from Paystack server");
+          }
+
+          const data = await response.json();
+
+          // Correct structure: data.data.authorization_url
+          const authUrl = data?.data?.authorization_url;
+
+          if (!authUrl) {
+            console.error("Paystack init response:", data);
+            throw new Error(data.message || "Paystack initialization failed");
+          }
+
+          // Redirect to Paystack
+          window.location.href = authUrl;
+        } catch (error) {
+          console.error("Paystack payment error:", error);
+          if (error instanceof Error) {
+            toast({
+              title: t("Please try again later."),
+              description: t(
+                "payment.paystack_error_desc",
+                "This payment method is currently unavailable your currency."
+              ),
+              variant: "destructive",
+            });
+          }
+        }
+      }
     } catch (error: any) {
       console.error("Payment error:", error);
       toast({
@@ -175,7 +231,7 @@ const PaymentModal = ({
         <div className="space-y-4 sm:space-y-6">
           <div className="text-center">
             <p className="text-xl sm:text-2xl font-bold text-green-600">
-              {currency} {amount.toFixed(2)}
+              {displayCurrency} {displayAmount}
             </p>
             <p className="text-xs sm:text-sm text-gray-600">
               {t(
