@@ -5,10 +5,7 @@ import {
   Star, 
   Bell, 
   User, 
-  ShoppingCart,
-  Search,
-  FileText,
-  MessageSquare
+  Search
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -18,29 +15,29 @@ const BuyerDashboardStats = () => {
   const stats = [
     {
       icon: Star,
-      title: t('rateSellers'),
-      description: t('rateCompletedOrders'),
+      title: "Rate Sellers",
+      description: "Rate completed orders",
       value: null,
       color: "blue"
     },
     {
       icon: Bell,
-      title: t('notifications'),
-      description: t('latestAlerts'),
+      title: "Notifications",
+      description: "Latest alerts",
       value: 0,
       color: "green"
     },
     {
       icon: User,
-      title: t('profileSettings'),
-      description: t('editYourProfile'),
+      title: "Profile Settings",
+      description: "Edit your profile",
       value: null,
       color: "purple"
     },
     {
       icon: Search,
-      title: t('searchParts'),
-      description: t('findWhatYouNeed'),
+      title: "Search Parts",
+      description: "Find what you need",
       value: null,
       color: "orange"
     }

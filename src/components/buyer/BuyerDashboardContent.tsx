@@ -16,9 +16,9 @@ const BuyerDashboardContent = () => {
   const { t } = useTranslation();
 
   const quickActions = [
-    { icon: Search, label: t('searchParts'), href: "/search-parts" },
-    { icon: FileText, label: t('requestPart'), href: "/request-part" },
-    { icon: MessageSquare, label: t('viewMessages'), href: "/chat" }
+    { icon: Search, label: "Search Parts", href: "/search-parts" },
+    { icon: FileText, label: "Request Part", href: "/request-part" },
+    { icon: MessageSquare, label: "View Messages", href: "/chat" }
   ];
 
   const recentActivities = [
@@ -34,7 +34,7 @@ const BuyerDashboardContent = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-primary" />
-              {t('recentActivity')}
+              Recent Activity
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -53,7 +53,7 @@ const BuyerDashboardContent = () => {
               {recentActivities.length === 0 && (
                 <div className="text-center py-8 text-muted-foreground">
                   <FileText className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                  <p>{t('noRecentActivity')}</p>
+                  <p>No recent activity</p>
                 </div>
               )}
             </div>
