@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { CarPart } from "@/types/CarPart";
@@ -85,19 +84,6 @@ export const useCarParts = (params?: UseCarPartsParams) => {
           console.log('Applied category filter:', params.filters.category);
         }
         
-        // Apply country filter - handle null values for existing parts
-        if (params.filters.country && params.filters.country !== 'all') {
-          console.log('Applying country filter:', params.filters.country);
-          // For existing parts without country, treat null as Ghana (GH)
-          if (params.filters.country === 'GH') {
-            query = query.or(`country.eq.${params.filters.country},country.is.null`);
-          } else {
-            query = query.eq('country', params.filters.country);
-          }
-        } else {
-          console.log('No country filter applied - showing all countries');
-        }
-        
         if (params.filters.location) {
           query = query.ilike('address', `%${params.filters.location}%`);
           console.log('Applied location filter:', params.filters.location);
@@ -129,12 +115,12 @@ export const useCarParts = (params?: UseCarPartsParams) => {
         return;
       }
 
-      // Transform the data to match our CarPart interface and ensure images are properly formatted
+      // Transform the data and apply country filtering after fetching
       const transformedParts: CarPart[] = (data || []).map(part => {
         console.log('Processing part:', part.title, 'Country:', part.country);
         
-        // For existing parts without country, default to Ghana (GH)
-        const partCountry = part.country || 'GH';
+        // Keep original country value or set to null if not specified
+        const partCountry = part.country || null;
         
         // Ensure images are properly formatted as URLs
         let processedImages: string[] = [];
@@ -167,9 +153,24 @@ export const useCarParts = (params?: UseCarPartsParams) => {
         };
       });
 
-      console.log('Final transformed parts count:', transformedParts.length);
-      console.log('Sample countries in results:', transformedParts.slice(0, 5).map(p => ({ title: p.title, country: p.country })));
-      setParts(transformedParts);
+      // Apply country filtering after transformation
+      let filteredParts = transformedParts;
+      if (params?.filters?.country && params.filters.country !== 'all') {
+        console.log('Applying country filter post-fetch:', params.filters.country);
+        filteredParts = transformedParts.filter(part => {
+          // For Ghana (GH), include parts with null country (legacy data) or explicit GH
+          if (params.filters.country === 'GH') {
+            return part.country === 'GH' || part.country === null;
+          }
+          // For other countries, only include exact matches
+          return part.country === params.filters.country;
+        });
+        console.log('Filtered parts count after country filter:', filteredParts.length);
+      }
+
+      console.log('Final filtered parts count:', filteredParts.length);
+      console.log('Sample countries in results:', filteredParts.slice(0, 5).map(p => ({ title: p.title, country: p.country })));
+      setParts(filteredParts);
     } catch (err) {
       console.error('Unexpected error:', err);
       setError('An unexpected error occurred');
