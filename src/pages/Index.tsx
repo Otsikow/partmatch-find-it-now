@@ -2,6 +2,7 @@
 import MobileHeader from "@/components/MobileHeader";
 import MobileBottomTabs from "@/components/MobileBottomTabs";
 import MobileHomeContent from "@/components/MobileHomeContent";
+import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
@@ -18,7 +19,6 @@ const Index = () => {
     );
   }
 
-
   // Show mobile app layout
   return (
     <div className="min-h-screen bg-gray-50 body-text">
@@ -26,6 +26,7 @@ const Index = () => {
       <div className="pt-16 pb-20">
         <MobileHomeContent />
       </div>
+      <Footer />
       <MobileBottomTabs />
     </div>
   );
