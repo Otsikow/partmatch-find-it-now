@@ -79,12 +79,7 @@ const SellerRatingDisplay = ({
           {rating.toFixed(1)}
         </span>
         <span className={`${sizeClasses[size]} text-gray-500`}>
-          {t("ratings.reviewCount", {
-            count: totalRatings,
-            defaultValue: `(${totalRatings} review${
-              totalRatings !== 1 ? "s" : ""
-            })`,
-          })}
+          ({totalRatings} {totalRatings === 1 ? 'review' : 'reviews'})
         </span>
       </div>
       {showBadge && isTopRated && (
