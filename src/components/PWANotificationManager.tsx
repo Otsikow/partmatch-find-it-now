@@ -17,8 +17,17 @@ const PWANotificationManager = () => {
     if ('Notification' in window) {
       setNotificationsEnabled(Notification.permission === 'granted');
       
-      // Show prompt if user is logged in and notifications not granted
-      if (user && Notification.permission === 'default') {
+      // Check if user has seen notification prompt recently
+      const notificationPromptHistory = localStorage.getItem('notification-prompt-history');
+      const history = notificationPromptHistory ? JSON.parse(notificationPromptHistory) : [];
+      const now = Date.now();
+      const oneWeek = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+      
+      // Filter out old entries (older than 1 week)
+      const recentPrompts = history.filter((timestamp: number) => now - timestamp < oneWeek);
+      
+      // Show prompt if user is logged in, notifications not granted, and hasn't seen it more than twice in the past week
+      if (user && Notification.permission === 'default' && recentPrompts.length < 2) {
         setTimeout(() => setShowNotificationPrompt(true), 3000);
       }
     }
@@ -65,12 +74,29 @@ const PWANotificationManager = () => {
     setNotificationsEnabled(granted);
     setShowNotificationPrompt(false);
     
+    // Record that the prompt was shown
+    recordNotificationPromptShown();
+    
     if (granted) {
       showNotification('Notifications Enabled!', {
         body: 'You\'ll now receive updates about new car parts and offers.',
         icon: '/app-icon-192.png'
       });
     }
+  };
+
+  const recordNotificationPromptShown = () => {
+    const notificationPromptHistory = localStorage.getItem('notification-prompt-history');
+    const history = notificationPromptHistory ? JSON.parse(notificationPromptHistory) : [];
+    const now = Date.now();
+    
+    // Add current timestamp
+    history.push(now);
+    
+    // Keep only the last 10 entries to prevent localStorage bloat
+    const recentHistory = history.slice(-10);
+    
+    localStorage.setItem('notification-prompt-history', JSON.stringify(recentHistory));
   };
 
   const testNotification = () => {
@@ -146,7 +172,10 @@ const PWANotificationManager = () => {
               </Button>
               <Button 
                 variant="outline" 
-                onClick={() => setShowNotificationPrompt(false)}
+                onClick={() => {
+                  setShowNotificationPrompt(false);
+                  recordNotificationPromptShown();
+                }}
                 size="sm"
               >
                 Later
