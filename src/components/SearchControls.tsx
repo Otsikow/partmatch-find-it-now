@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { mockParts } from "@/data/mockParts";
 import { getUniqueMakes, getUniqueModels, getUniqueYears } from "@/utils/partFilters";
 import { useIsMobile } from "@/hooks/use-mobile";
+import CountryFilterDropdown from "./CountryFilterDropdown";
 
 interface SearchControlsProps {
   searchTerm: string;
@@ -15,6 +16,7 @@ interface SearchControlsProps {
     year: string;
     category: string;
     location: string;
+    country: string;
     priceRange: [number, number];
   };
   onFiltersChange: (filters: {
@@ -23,6 +25,7 @@ interface SearchControlsProps {
     year: string;
     category: string;
     location: string;
+    country: string;
     priceRange: [number, number];
   }) => void;
 }
@@ -80,18 +83,33 @@ const SearchControls = ({
     });
   };
 
+  const handleCountryChange = (country: string) => {
+    onFiltersChange({
+      ...filters,
+      country
+    });
+  };
+
   const buttonSize = isMobile ? "sm" : "sm";
   
   return (  
     <Card className="p-2 sm:p-4 md:p-6 mb-4 sm:mb-6 bg-gradient-to-br from-card/90 to-muted/50 backdrop-blur-sm shadow-lg border-0 hover:shadow-xl transition-all duration-300">
       <div className="space-y-3 sm:space-y-4">
-        <div>
-          <Input
-            placeholder="Search parts (e.g. alternator, brake pads)"
-            value={searchTerm}
-            onChange={(e) => onSearchChange(e.target.value)}
-            className={`w-full border-border focus:border-primary focus:ring-primary/20 ${isMobile ? 'h-11 text-sm px-3' : 'h-10 text-sm'}`}
-          />
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+          <div className="flex-1">
+            <Input
+              placeholder="Search parts (e.g. alternator, brake pads)"
+              value={searchTerm}
+              onChange={(e) => onSearchChange(e.target.value)}
+              className={`w-full border-border focus:border-primary focus:ring-primary/20 ${isMobile ? 'h-11 text-sm px-3' : 'h-10 text-sm'}`}
+            />
+          </div>
+          <div className="flex-shrink-0">
+            <CountryFilterDropdown
+              selectedCountry={filters.country}
+              onCountryChange={handleCountryChange}
+            />
+          </div>
         </div>
         
         {/* Make Filter */}

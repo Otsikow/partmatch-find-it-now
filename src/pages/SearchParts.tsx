@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useCarParts } from "@/hooks/useCarParts";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useCountryDetection } from "@/hooks/useCountryDetection";
 import SearchControls from "@/components/SearchControls";
 import CarPartsList from "@/components/CarPartsList";
 import PageHeader from "@/components/PageHeader";
@@ -19,6 +20,7 @@ import {
   MessageCircle,
   Package,
   ClipboardList,
+  Globe,
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
@@ -43,6 +45,8 @@ const SearchParts = () => {
   const { t } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { country: userCountry, supportedCountries } = useCountryDetection();
+  
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
     make: "",
@@ -50,10 +54,18 @@ const SearchParts = () => {
     year: "",
     category: "",
     location: "",
+    country: userCountry?.code || "all",
     priceRange: [0, 10000] as [number, number],
   });
 
-  // For car parts
+  // Update country filter when user's country is detected
+  useEffect(() => {
+    if (userCountry && filters.country === "all") {
+      setFilters(prev => ({ ...prev, country: userCountry.code }));
+    }
+  }, [userCountry, filters.country]);
+
+  // For car parts with country filtering
   const {
     parts,
     loading: partsLoading,
@@ -132,6 +144,33 @@ const SearchParts = () => {
     return new Date(dateString).toLocaleDateString();
   };
 
+  const getCountryDisplay = () => {
+    if (filters.country === "all") return "All Countries";
+    const country = supportedCountries.find(c => c.code === filters.country);
+    return country ? `${country.flag} ${country.name}` : "Unknown Country";
+  };
+
+  const handleCountryChange = (country: string) => {
+    setFilters(prev => ({ ...prev, country }));
+    // Update URL parameter for sharing/bookmarking
+    const url = new URL(window.location);
+    if (country === "all") {
+      url.searchParams.delete('country');
+    } else {
+      url.searchParams.set('country', country);
+    }
+    window.history.replaceState({}, '', url);
+  };
+
+  // Initialize country from URL parameter
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const countryParam = urlParams.get('country');
+    if (countryParam && supportedCountries.find(c => c.code === countryParam)) {
+      setFilters(prev => ({ ...prev, country: countryParam }));
+    }
+  }, [supportedCountries]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-background">
       <PageHeader
@@ -170,6 +209,24 @@ const SearchParts = () => {
                 filters={filters}
                 onFiltersChange={setFilters}
               />
+            </div>
+
+            {/* Country Filter Status */}
+            <div className="flex items-center justify-between bg-blue-50 rounded-lg p-3 mb-4">
+              <div className="flex items-center gap-2">
+                <Globe className="w-4 h-4 text-blue-600" />
+                <span className="text-sm text-blue-700">
+                  Showing parts in <strong>{getCountryDisplay()}</strong>
+                </span>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleCountryChange("all")}
+                className="text-blue-600 hover:text-blue-800"
+              >
+                View All Countries
+              </Button>
             </div>
 
             <CarPartsList

@@ -11,6 +11,7 @@ interface UseCarPartsParams {
     year: string;
     category: string;
     location: string;
+    country: string;
     priceRange: [number, number];
   };
 }
@@ -45,6 +46,7 @@ export const useCarParts = (params?: UseCarPartsParams) => {
           latitude,
           longitude,
           address,
+          country,
           created_at,
           updated_at,
           status,
@@ -77,6 +79,10 @@ export const useCarParts = (params?: UseCarPartsParams) => {
         if (params.filters.year) {
           query = query.eq('year', parseInt(params.filters.year));
           console.log('Applied year filter:', params.filters.year);
+        }
+        if (params.filters.country && params.filters.country !== 'all') {
+          query = query.eq('country', params.filters.country);
+          console.log('Applied country filter:', params.filters.country);
         }
       }
 
