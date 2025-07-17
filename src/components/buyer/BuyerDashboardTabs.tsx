@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import RequestsTab from '@/components/RequestsTab';
+import BuyerRequestsTab from '@/components/buyer/BuyerRequestsTab';
 import MyOrders from '@/components/buyer/MyOrders';
 import SavedParts from '@/components/buyer/SavedParts';
 
@@ -11,18 +11,18 @@ export const BuyerDashboardTabs = () => {
       <Tabs defaultValue="requests" className="w-full">
         <TabsList className="grid w-full grid-cols-3 mb-8">
           <TabsTrigger value="requests" className="text-sm font-medium">
-            My requests
+            My Requests
           </TabsTrigger>
           <TabsTrigger value="orders" className="text-sm font-medium">
-            My orders
+            My Orders
           </TabsTrigger>
           <TabsTrigger value="saved" className="text-sm font-medium">
-            Saved parts
+            Saved Parts
           </TabsTrigger>
         </TabsList>
         
         <TabsContent value="requests" className="mt-6">
-          <RequestsTab />
+          <BuyerRequestsTab />
         </TabsContent>
         
         <TabsContent value="orders" className="mt-6">
