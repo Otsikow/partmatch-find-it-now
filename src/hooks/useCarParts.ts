@@ -81,7 +81,7 @@ export const useCarParts = (params?: UseCarPartsParams) => {
           console.log('Applied year filter:', params.filters.year);
         }
         
-        // Fix country filtering logic
+        // Apply country filter
         if (params.filters.country && params.filters.country !== 'all') {
           console.log('Applying country filter:', params.filters.country);
           query = query.eq('country', params.filters.country);
@@ -145,7 +145,7 @@ export const useCarParts = (params?: UseCarPartsParams) => {
       });
 
       console.log('Final transformed parts count:', transformedParts.length);
-      console.log('Countries in results:', transformedParts.map(p => p.country));
+      console.log('Sample countries in results:', transformedParts.slice(0, 5).map(p => ({ title: p.title, country: p.country })));
       setParts(transformedParts);
     } catch (err) {
       console.error('Unexpected error:', err);
