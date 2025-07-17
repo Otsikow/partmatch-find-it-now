@@ -1,33 +1,32 @@
 
-import { useAuth } from "@/contexts/AuthContext";
-import { Button } from "@/components/ui/button";
-import { MessageSquare, Eye } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import React from 'react';
+import { ArrowLeft, Settings } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
-const BuyerDashboardHeader = () => {
-  const { user } = useAuth();
-  const { t } = useTranslation();
+export const BuyerDashboardHeader = () => {
+  const navigate = useNavigate();
 
   return (
-    <div className="mb-8">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+    <div className="flex items-center justify-between p-4 bg-white border-b">
+      <div className="flex items-center space-x-4">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => navigate(-1)}
+          className="p-2"
+        >
+          <ArrowLeft className="h-4 w-4" />
+        </Button>
         <div>
-          <h1 className="text-3xl font-bold text-primary mb-2">Buyer Dashboard</h1>
-          <p className="text-muted-foreground">Welcome back, {user?.email}</p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <Button variant="outline" size="sm" className="flex items-center gap-2">
-            <MessageSquare className="w-4 h-4" />
-            Chat with Seller
-          </Button>
-          <Button variant="outline" size="sm" className="flex items-center gap-2">
-            <Eye className="w-4 h-4" />
-            View Part
-          </Button>
+          <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
+          <p className="text-sm text-gray-600">Manage your car part requests and orders</p>
         </div>
       </div>
+      <Button variant="outline" size="sm">
+        <Settings className="h-4 w-4 mr-2" />
+        Settings
+      </Button>
     </div>
   );
 };
-
-export default BuyerDashboardHeader;
