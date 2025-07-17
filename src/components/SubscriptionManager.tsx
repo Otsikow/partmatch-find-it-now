@@ -205,33 +205,6 @@ const SubscriptionManager = ({ sellerId }: SubscriptionManagerProps) => {
       </Card>
 
       {/* Transaction Fees Card */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <AlertCircle className="h-5 w-5 text-blue-600" />
-            Transaction Fees
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            <div className="flex justify-between items-center">
-              <span className="text-sm">Online transaction fee</span>
-              <span className="font-semibold">3% per sale</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm">Business subscribers</span>
-              <span className="font-semibold text-green-600">
-                {subscription?.is_active
-                  ? "First 50 sales free"
-                  : "3% per sale"}
-              </span>
-            </div>
-            <p className="text-xs text-gray-600">
-              Transaction fees are automatically deducted from successful sales
-            </p>
-          </div>
-        </CardContent>
-      </Card>
 
       {showPaymentModal && (
         <PaymentModal
