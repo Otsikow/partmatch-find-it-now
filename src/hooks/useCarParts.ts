@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { CarPart } from "@/types/CarPart";
+import { getCountryConfig, getCurrencyByCountry } from "@/lib/countryConfig";
+import { convertFromGHS, convertFromNGN } from "@/utils/exchangeRates";
 
 interface UseCarPartsParams {
   searchTerm?: string;
@@ -115,12 +117,38 @@ export const useCarParts = (params?: UseCarPartsParams) => {
         return;
       }
 
+      // Get target currency based on selected country
+      const targetCountry = params?.filters?.country && params.filters.country !== 'all' ? params.filters.country : 'GH';
+      const targetCurrency = getCurrencyByCountry(targetCountry);
+      console.log('Target country:', targetCountry, 'Target currency:', targetCurrency);
+
       // Transform the data and apply country filtering after fetching
       const transformedParts: CarPart[] = (data || []).map(part => {
-        console.log('Processing part:', part.title, 'Country:', part.country);
+        console.log('Processing part:', part.title, 'Country:', part.country, 'Original price:', part.price, part.currency);
         
         // Keep original country value or set to null if not specified
         const partCountry = part.country || null;
+        
+        // Convert price to target currency
+        let convertedPrice = part.price;
+        let displayCurrency = targetCurrency;
+        
+        if (part.currency !== targetCurrency) {
+          console.log(`Converting ${part.price} ${part.currency} to ${targetCurrency}`);
+          
+          // Convert based on original currency
+          if (part.currency === 'GHS') {
+            convertedPrice = convertFromGHS(part.price, targetCurrency);
+          } else if (part.currency === 'NGN') {
+            convertedPrice = convertFromNGN(part.price, targetCurrency);
+          } else {
+            // For other currencies, keep original for now
+            convertedPrice = part.price;
+            displayCurrency = part.currency;
+          }
+          
+          console.log(`Converted price: ${convertedPrice} ${displayCurrency}`);
+        }
         
         // Ensure images are properly formatted as URLs
         let processedImages: string[] = [];
@@ -146,6 +174,8 @@ export const useCarParts = (params?: UseCarPartsParams) => {
         return {
           ...part,
           country: partCountry,
+          price: Math.round(convertedPrice), // Round to nearest whole number
+          currency: displayCurrency,
           condition: part.condition as 'New' | 'Used' | 'Refurbished',
           status: part.status as 'available' | 'sold' | 'hidden' | 'pending',
           profiles: part.profiles,
@@ -169,7 +199,7 @@ export const useCarParts = (params?: UseCarPartsParams) => {
       }
 
       console.log('Final filtered parts count:', filteredParts.length);
-      console.log('Sample countries in results:', filteredParts.slice(0, 5).map(p => ({ title: p.title, country: p.country })));
+      console.log('Sample countries in results:', filteredParts.slice(0, 5).map(p => ({ title: p.title, country: p.country, price: p.price, currency: p.currency })));
       setParts(filteredParts);
     } catch (err) {
       console.error('Unexpected error:', err);
