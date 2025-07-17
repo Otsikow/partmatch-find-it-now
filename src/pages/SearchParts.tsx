@@ -4,6 +4,7 @@ import { useCarParts } from "@/hooks/useCarParts";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCountryDetection } from "@/hooks/useCountryDetection";
+import { getCurrencyByCountry } from "@/lib/countryConfig";
 import SearchControls from "@/components/SearchControls";
 import CarPartsList from "@/components/CarPartsList";
 import PageHeader from "@/components/PageHeader";
@@ -226,6 +227,11 @@ const SearchParts = () => {
                         <span className="text-sm font-bold text-blue-800">
                           {getCountryDisplay()}
                         </span>
+                        {filters.country !== "all" && (
+                          <span className="text-xs text-blue-600">
+                            (Prices in {getCurrencyByCountry(filters.country)})
+                          </span>
+                        )}
                       </div>
                       <div className="flex items-center gap-2 mt-1">
                         <Badge variant="secondary" className="bg-blue-100 text-blue-800 text-xs">
