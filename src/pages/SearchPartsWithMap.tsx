@@ -1,10 +1,13 @@
 
 import { useState } from "react";
 import { useCarParts } from "@/hooks/useCarParts";
+import { useLocationDetection } from "@/hooks/useLocationDetection";
 import SearchControls from "@/components/SearchControls";
 import CarPartsList from "@/components/CarPartsList";
 import PageHeader from "@/components/PageHeader";
 import PendingRatingNotification from "@/components/PendingRatingNotification";
+import { Button } from "@/components/ui/button";
+import { MapPin } from "lucide-react";
 
 const SearchPartsWithMap = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,9 +18,28 @@ const SearchPartsWithMap = () => {
     category: "",
     location: "",
     priceRange: [0, 10000] as [number, number],
+    maxDistance: 300 // Default to 300 miles
   });
 
-  const { parts, loading, error } = useCarParts({ searchTerm, filters });
+  const {
+    requestLocation,
+    location,
+    loading: locationLoading,
+    error: locationError
+  } = useLocationDetection({
+    enableHighAccuracy: true,
+    includeAddress: true
+  });
+
+  const { parts, loading, error } = useCarParts({ 
+    searchTerm, 
+    filters,
+    userLocation: location
+  });
+
+  const handleLocationRequest = async () => {
+    await requestLocation();
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100">
@@ -30,18 +52,40 @@ const SearchPartsWithMap = () => {
       <main className="container mx-auto px-4 py-8">
         <PendingRatingNotification />
         
+        <div className="mb-6">
+          <Button 
+            onClick={handleLocationRequest}
+            disabled={locationLoading}
+            variant="outline"
+            className="w-full sm:w-auto flex items-center justify-center gap-2"
+          >
+            <MapPin className="h-4 w-4" />
+            {locationLoading ? "Getting location..." : "📍 Use My Location"}
+          </Button>
+          {locationError && (
+            <p className="mt-2 text-sm text-destructive">{locationError}</p>
+          )}
+          {location && (
+            <p className="mt-2 text-sm text-muted-foreground">
+              Showing results near {location.city || location.address}
+            </p>
+          )}
+        </div>
+        
         <SearchControls
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
           filters={filters}
           onFiltersChange={setFilters}
+          showLocationFilters={true}
         />
         
         <div className="mt-6">
           <CarPartsList 
             parts={parts} 
             loading={loading} 
-            error={error} 
+            error={error}
+            userLocation={location}
           />
         </div>
       </main>

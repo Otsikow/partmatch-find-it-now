@@ -1,7 +1,7 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { CarPart } from "@/types/CarPart";
+import { calculateDistance, isWithinDistance } from "@/utils/distanceUtils";
 
 interface UseCarPartsParams {
   searchTerm?: string;
@@ -11,8 +11,13 @@ interface UseCarPartsParams {
     year: string;
     category: string;
     location: string;
+    maxDistance?: number;
     priceRange: [number, number];
   };
+  userLocation?: {
+    latitude: number;
+    longitude: number;
+  } | null;
 }
 
 export const useCarParts = (params?: UseCarPartsParams) => {
@@ -24,8 +29,6 @@ export const useCarParts = (params?: UseCarPartsParams) => {
     try {
       setLoading(true);
       setError(null);
-      
-      console.log('Fetching car parts with params:', params);
       
       let query = supabase
         .from('car_parts')
@@ -62,38 +65,27 @@ export const useCarParts = (params?: UseCarPartsParams) => {
         .eq('status', 'available')
         .order('created_at', { ascending: false });
 
-      console.log('Base query built, applying filters...');
-
-      // Apply filters if provided
-      if (params?.filters) {
-        if (params.filters.make) {
-          query = query.ilike('make', `%${params.filters.make}%`);
-          console.log('Applied make filter:', params.filters.make);
-        }
-        if (params.filters.model) {
-          query = query.ilike('model', `%${params.filters.model}%`);
-          console.log('Applied model filter:', params.filters.model);
-        }
-        if (params.filters.year) {
-          query = query.eq('year', parseInt(params.filters.year));
-          console.log('Applied year filter:', params.filters.year);
-        }
-      }
-
       // Apply search term if provided
       if (params?.searchTerm) {
         query = query.or(
           `title.ilike.%${params.searchTerm}%,description.ilike.%${params.searchTerm}%,part_type.ilike.%${params.searchTerm}%`
         );
-        console.log('Applied search term:', params.searchTerm);
       }
 
-      console.log('Executing query...');
-      const { data, error } = await query;
+      // Apply filters if provided
+      if (params?.filters) {
+        if (params.filters.make) {
+          query = query.ilike('make', `%${params.filters.make}%`);
+        }
+        if (params.filters.model) {
+          query = query.ilike('model', `%${params.filters.model}%`);
+        }
+        if (params.filters.year) {
+          query = query.eq('year', parseInt(params.filters.year));
+        }
+      }
 
-      console.log('Query result - Data count:', data?.length || 0);
-      console.log('Query result - Error:', error);
-      console.log('Raw query data:', data);
+      const { data, error } = await query;
 
       if (error) {
         console.error('Error fetching parts:', error);
@@ -101,12 +93,41 @@ export const useCarParts = (params?: UseCarPartsParams) => {
         return;
       }
 
+      // Filter by distance if user location is provided
+      let filteredParts = data || [];
+      if (params?.userLocation && params.filters?.maxDistance) {
+        filteredParts = filteredParts.filter(part => {
+          if (!part.latitude || !part.longitude) return false;
+          return isWithinDistance(
+            params.userLocation!.latitude,
+            params.userLocation!.longitude,
+            part.latitude,
+            part.longitude,
+            params.filters.maxDistance!
+          );
+        });
+
+        // Sort by distance
+        filteredParts.sort((a, b) => {
+          if (!a.latitude || !b.latitude) return 0;
+          const distanceA = calculateDistance(
+            params.userLocation!.latitude,
+            params.userLocation!.longitude,
+            a.latitude,
+            a.longitude
+          );
+          const distanceB = calculateDistance(
+            params.userLocation!.latitude,
+            params.userLocation!.longitude,
+            b.latitude,
+            b.longitude
+          );
+          return distanceA - distanceB;
+        });
+      }
+
       // Transform the data to match our CarPart interface and ensure images are properly formatted
-      const transformedParts: CarPart[] = (data || []).map(part => {
-        console.log('Processing part:', part.title, 'Status:', part.status);
-        console.log('Part supplier_id:', part.supplier_id);
-        console.log('Part profiles data:', part.profiles);
-        
+      const transformedParts: CarPart[] = (filteredParts || []).map(part => {
         // Ensure images are properly formatted as URLs
         let processedImages: string[] = [];
         if (part.images && Array.isArray(part.images)) {
@@ -128,8 +149,6 @@ export const useCarParts = (params?: UseCarPartsParams) => {
             });
         }
         
-        console.log('Processed images for', part.title, ':', processedImages);
-        
         return {
           ...part,
           condition: part.condition as 'New' | 'Used' | 'Refurbished',
@@ -139,8 +158,6 @@ export const useCarParts = (params?: UseCarPartsParams) => {
         };
       });
 
-      console.log('Final transformed parts count:', transformedParts.length);
-      console.log('Final transformed parts:', transformedParts);
       setParts(transformedParts);
     } catch (err) {
       console.error('Unexpected error:', err);
@@ -152,7 +169,7 @@ export const useCarParts = (params?: UseCarPartsParams) => {
 
   useEffect(() => {
     fetchParts();
-  }, [params?.searchTerm, params?.filters]);
+  }, [params?.searchTerm, params?.filters, params?.userLocation]);
 
   return { parts, loading, error, refetch: fetchParts };
 };

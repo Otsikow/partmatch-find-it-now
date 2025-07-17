@@ -37,7 +37,6 @@ export const isInSameCity = (distanceKm: number): boolean => {
   return distanceKm <= 20;
 };
 
-// Get location display text
 export const getLocationDisplayText = (
   userLat?: number,
   userLng?: number,
@@ -50,11 +49,24 @@ export const getLocationDisplayText = (
     return partAddress || 'Location not specified';
   }
 
-  const distance = calculateDistance(userLat, userLng, partLat, partLng);
+  const distanceInKm = calculateDistance(userLat, userLng, partLat, partLng);
+  const distanceInMiles = distanceInKm * 0.621371;
   
-  if (isInSameCity(distance)) {
-    return 'In your city';
+  if (distanceInMiles < 1) {
+    return 'Less than a mile away';
+  } else {
+    return `${Math.round(distanceInMiles)} miles away`;
   }
-  
-  return formatDistance(distance);
+};
+
+export const isWithinDistance = (
+  userLat: number,
+  userLng: number,
+  partLat: number,
+  partLng: number,
+  maxDistanceMiles: number
+): boolean => {
+  const distanceInKm = calculateDistance(userLat, userLng, partLat, partLng);
+  const distanceInMiles = distanceInKm * 0.621371;
+  return distanceInMiles <= maxDistanceMiles;
 };
