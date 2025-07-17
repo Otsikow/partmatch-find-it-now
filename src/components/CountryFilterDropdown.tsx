@@ -12,15 +12,30 @@ interface CountryFilterDropdownProps {
 const CountryFilterDropdown = ({ selectedCountry, onCountryChange }: CountryFilterDropdownProps) => {
   const { supportedCountries } = useCountryDetection();
 
+  const getDisplayValue = () => {
+    if (selectedCountry === 'all') {
+      return 'All Countries';
+    }
+    const country = supportedCountries.find(c => c.code === selectedCountry);
+    return country ? `${country.flag} ${country.name}` : 'Select Country';
+  };
+
   return (
     <div className="flex items-center gap-2">
-      <Globe className="h-4 w-4 text-gray-500" />
+      <Globe className="h-4 w-4 text-muted-foreground" />
       <Select value={selectedCountry} onValueChange={onCountryChange}>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Select country" />
+        <SelectTrigger className="w-[180px] border-input bg-background">
+          <SelectValue placeholder="Select country">
+            {getDisplayValue()}
+          </SelectValue>
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="all">All Countries</SelectItem>
+          <SelectItem value="all">
+            <div className="flex items-center gap-2">
+              <Globe className="h-4 w-4" />
+              <span>All Countries</span>
+            </div>
+          </SelectItem>
           {supportedCountries.map((country) => (
             <SelectItem key={country.code} value={country.code}>
               <div className="flex items-center gap-2">

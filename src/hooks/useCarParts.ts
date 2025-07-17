@@ -80,9 +80,13 @@ export const useCarParts = (params?: UseCarPartsParams) => {
           query = query.eq('year', parseInt(params.filters.year));
           console.log('Applied year filter:', params.filters.year);
         }
+        
+        // Fix country filtering logic
         if (params.filters.country && params.filters.country !== 'all') {
+          console.log('Applying country filter:', params.filters.country);
           query = query.eq('country', params.filters.country);
-          console.log('Applied country filter:', params.filters.country);
+        } else {
+          console.log('No country filter applied - showing all countries');
         }
       }
 
@@ -99,7 +103,6 @@ export const useCarParts = (params?: UseCarPartsParams) => {
 
       console.log('Query result - Data count:', data?.length || 0);
       console.log('Query result - Error:', error);
-      console.log('Raw query data:', data);
 
       if (error) {
         console.error('Error fetching parts:', error);
@@ -109,9 +112,7 @@ export const useCarParts = (params?: UseCarPartsParams) => {
 
       // Transform the data to match our CarPart interface and ensure images are properly formatted
       const transformedParts: CarPart[] = (data || []).map(part => {
-        console.log('Processing part:', part.title, 'Status:', part.status);
-        console.log('Part supplier_id:', part.supplier_id);
-        console.log('Part profiles data:', part.profiles);
+        console.log('Processing part:', part.title, 'Country:', part.country);
         
         // Ensure images are properly formatted as URLs
         let processedImages: string[] = [];
@@ -134,8 +135,6 @@ export const useCarParts = (params?: UseCarPartsParams) => {
             });
         }
         
-        console.log('Processed images for', part.title, ':', processedImages);
-        
         return {
           ...part,
           condition: part.condition as 'New' | 'Used' | 'Refurbished',
@@ -146,7 +145,7 @@ export const useCarParts = (params?: UseCarPartsParams) => {
       });
 
       console.log('Final transformed parts count:', transformedParts.length);
-      console.log('Final transformed parts:', transformedParts);
+      console.log('Countries in results:', transformedParts.map(p => p.country));
       setParts(transformedParts);
     } catch (err) {
       console.error('Unexpected error:', err);

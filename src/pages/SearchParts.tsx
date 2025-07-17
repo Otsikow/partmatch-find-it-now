@@ -54,16 +54,22 @@ const SearchParts = () => {
     year: "",
     category: "",
     location: "",
-    country: userCountry?.code || "all",
+    country: "all",
     priceRange: [0, 10000] as [number, number],
   });
 
-  // Update country filter when user's country is detected
+  // Initialize country from URL parameter or user's country
   useEffect(() => {
-    if (userCountry && filters.country === "all") {
+    const urlParams = new URLSearchParams(window.location.search);
+    const countryParam = urlParams.get('country');
+    
+    if (countryParam && (countryParam === 'all' || supportedCountries.find(c => c.code === countryParam))) {
+      setFilters(prev => ({ ...prev, country: countryParam }));
+    } else if (userCountry && filters.country === 'all') {
+      // Only set user country if no URL param and current filter is 'all'
       setFilters(prev => ({ ...prev, country: userCountry.code }));
     }
-  }, [userCountry, filters.country]);
+  }, [userCountry, supportedCountries]);
 
   // For car parts with country filtering
   const {
@@ -151,7 +157,9 @@ const SearchParts = () => {
   };
 
   const handleCountryChange = (country: string) => {
+    console.log('Country changed to:', country);
     setFilters(prev => ({ ...prev, country }));
+    
     // Update URL parameter for sharing/bookmarking
     const url = new URL(window.location.href);
     if (country === "all") {
@@ -161,15 +169,6 @@ const SearchParts = () => {
     }
     window.history.replaceState({}, '', url);
   };
-
-  // Initialize country from URL parameter
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const countryParam = urlParams.get('country');
-    if (countryParam && supportedCountries.find(c => c.code === countryParam)) {
-      setFilters(prev => ({ ...prev, country: countryParam }));
-    }
-  }, [supportedCountries]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-background">
@@ -212,22 +211,31 @@ const SearchParts = () => {
             </div>
 
             {/* Country Filter Status */}
-            <div className="flex items-center justify-between bg-blue-50 rounded-lg p-3 mb-4">
-              <div className="flex items-center gap-2">
-                <Globe className="w-4 h-4 text-blue-600" />
-                <span className="text-sm text-blue-700">
-                  Showing parts in <strong>{getCountryDisplay()}</strong>
-                </span>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleCountryChange("all")}
-                className="text-blue-600 hover:text-blue-800"
-              >
-                View All Countries
-              </Button>
-            </div>
+            <Card className="bg-blue-50 border-blue-200">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Globe className="w-5 h-5 text-blue-600" />
+                    <span className="text-sm font-medium text-blue-700">
+                      Showing parts in <strong>{getCountryDisplay()}</strong>
+                    </span>
+                    <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                      {parts.length} {parts.length === 1 ? 'part' : 'parts'} found
+                    </Badge>
+                  </div>
+                  {filters.country !== "all" && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleCountryChange("all")}
+                      className="text-blue-600 hover:text-blue-800 hover:bg-blue-100"
+                    >
+                      View All Countries
+                    </Button>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
 
             <CarPartsList
               parts={parts}
