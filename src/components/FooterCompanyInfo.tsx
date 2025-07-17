@@ -1,9 +1,6 @@
-
 import { Package, MapPin, Phone, Mail } from "lucide-react";
-
 const FooterCompanyInfo = () => {
-  return (
-    <div className="space-y-4">
+  return <div className="space-y-4">
       <div className="flex items-center space-x-2">
         <Package className="h-8 w-8 text-orange-500" />
         <span className="text-xl font-playfair font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
@@ -24,11 +21,9 @@ const FooterCompanyInfo = () => {
         </div>
         <div className="flex items-center space-x-2 text-sm text-gray-300">
           <Mail className="h-4 w-4 text-orange-500 flex-shrink-0" />
-          <span>support@partmatch.com</span>
+          <span>support@partmatch.app</span>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default FooterCompanyInfo;
