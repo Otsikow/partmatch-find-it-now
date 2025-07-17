@@ -104,9 +104,14 @@ const SearchPartsWithMap = () => {
           )}
           
           {location && (
-            <p className="mt-2 text-sm text-muted-foreground">
-              Showing results near {location.city || location.address}
-            </p>
+            <div className="mt-2">
+              <p className="text-sm text-muted-foreground">
+                Showing results near {location.city || location.address}
+              </p>
+              <p className="text-sm font-medium text-primary mt-1">
+                Current distance filter: {filters.maxDistance} miles
+              </p>
+            </div>
           )}
         </div>
         

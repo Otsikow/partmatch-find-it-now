@@ -95,17 +95,38 @@ export const useCarParts = (params?: UseCarPartsParams) => {
 
       // Filter by distance if user location is provided
       let filteredParts = data || [];
+      console.log('Filtering parts by distance:', {
+        hasUserLocation: !!params?.userLocation,
+        maxDistance: params?.filters?.maxDistance,
+        totalPartsBeforeFilter: filteredParts.length
+      });
+      
       if (params?.userLocation && params.filters?.maxDistance) {
+        console.log('User location:', params.userLocation);
+        console.log('Max distance filter:', params.filters.maxDistance);
+        
         filteredParts = filteredParts.filter(part => {
-          if (!part.latitude || !part.longitude) return false;
-          return isWithinDistance(
+          if (!part.latitude || !part.longitude) {
+            console.log(`Part ${part.id} has no coordinates, skipping`);
+            return false;
+          }
+          
+          const withinDistance = isWithinDistance(
             params.userLocation!.latitude,
             params.userLocation!.longitude,
             part.latitude,
             part.longitude,
             params.filters.maxDistance!
           );
+          
+          if (!withinDistance) {
+            console.log(`Part ${part.id} is outside the distance range of ${params.filters.maxDistance} miles`);
+          }
+          
+          return withinDistance;
         });
+        
+        console.log(`Filtered to ${filteredParts.length} parts within ${params.filters.maxDistance} miles`);
 
         // Sort by distance
         filteredParts.sort((a, b) => {
@@ -168,8 +189,23 @@ export const useCarParts = (params?: UseCarPartsParams) => {
   };
 
   useEffect(() => {
+    console.log('useCarParts dependencies changed:', {
+      searchTerm: params?.searchTerm,
+      filters: params?.filters,
+      userLocation: params?.userLocation,
+      maxDistance: params?.filters?.maxDistance
+    });
     fetchParts();
-  }, [params?.searchTerm, params?.filters, params?.userLocation]);
+  }, [
+    params?.searchTerm, 
+    params?.filters?.make, 
+    params?.filters?.model, 
+    params?.filters?.year, 
+    params?.filters?.category,
+    params?.filters?.maxDistance, 
+    params?.userLocation?.latitude,
+    params?.userLocation?.longitude
+  ]);
 
   return { parts, loading, error, refetch: fetchParts };
 };
