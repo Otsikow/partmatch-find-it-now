@@ -80,7 +80,8 @@ const AdminPartSeeder = () => {
           part_type: part.partType,
           condition: part.condition,
           price: parseFloat(part.price),
-          currency: 'GHS',
+          currency: part.currency || 'GHS',
+          country: part.country || 'GH',
           address: part.address,
           images: [part.imageUrl],
           status: 'available'
