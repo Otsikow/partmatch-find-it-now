@@ -3,7 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Edit, Trash2, Eye, EyeOff, Star, TrendingUp, Crown } from "lucide-react";
 import { CarPart } from "@/types/CarPart";
+import { useState } from "react";
 import MonetizationFeatures from "../MonetizationFeatures";
+import PartExpandedDialog from "./PartExpandedDialog";
 
 interface PartCardProps {
   part: CarPart;
@@ -26,6 +28,8 @@ const PartCard = ({
   onToggleBoost,
   onFeatureUpdate
 }: PartCardProps) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   const isPartFeatured = (part: CarPart) => {
     return part.featured_until && new Date(part.featured_until) > new Date();
   };
@@ -40,9 +44,14 @@ const PartCard = ({
     }
   };
 
+  const handleCardClick = () => {
+    setIsExpanded(true);
+  };
+
   return (
-    <Card className="p-4 sm:p-6">
-      <div className="flex justify-between items-start mb-4">
+    <>
+      <Card className="p-4 sm:p-6 cursor-pointer hover:shadow-lg transition-shadow duration-200" onClick={handleCardClick}>
+        <div className="flex justify-between items-start mb-4">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-2">
             <h3 className="font-semibold text-lg">{part.title}</h3>
@@ -125,7 +134,10 @@ const PartCard = ({
         <Button
           variant="outline"
           size="sm"
-          onClick={() => onUpdateStatus(part.id, part.status === 'hidden' ? 'available' : 'hidden')}
+          onClick={(e) => {
+            e.stopPropagation();
+            onUpdateStatus(part.id, part.status === 'hidden' ? 'available' : 'hidden');
+          }}
           className="flex items-center justify-center gap-1 text-xs sm:text-sm"
         >
           {part.status === 'hidden' ? <Eye className="h-3 w-3 sm:h-4 sm:w-4" /> : <EyeOff className="h-3 w-3 sm:h-4 sm:w-4" />}
@@ -134,7 +146,10 @@ const PartCard = ({
         <Button
           variant="outline"
           size="sm"
-          onClick={() => onToggleBoost(selectedPartForBoost === part.id ? null : part.id)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleBoost(selectedPartForBoost === part.id ? null : part.id);
+          }}
           className="flex items-center justify-center gap-1 text-xs sm:text-sm"
         >
           <Crown className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -143,7 +158,10 @@ const PartCard = ({
         <Button
           variant="outline"
           size="sm"
-          onClick={() => onEdit(part)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit(part);
+          }}
           className="flex items-center justify-center gap-1 text-xs sm:text-sm"
         >
           <Edit className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -152,14 +170,31 @@ const PartCard = ({
         <Button
           variant="destructive"
           size="sm"
-          onClick={handleDelete}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDelete();
+          }}
           className="flex items-center justify-center gap-1 text-xs sm:text-sm"
         >
           <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
           <span className="hidden xs:inline">Delete</span>
         </Button>
       </div>
-    </Card>
+      </Card>
+
+      <PartExpandedDialog
+        part={part}
+        isOpen={isExpanded}
+        onOpenChange={setIsExpanded}
+        selectedPartForBoost={selectedPartForBoost}
+        hasBusinessSubscription={hasBusinessSubscription}
+        onEdit={onEdit}
+        onDelete={onDelete}
+        onUpdateStatus={onUpdateStatus}
+        onToggleBoost={onToggleBoost}
+        onFeatureUpdate={onFeatureUpdate}
+      />
+    </>
   );
 };
 
