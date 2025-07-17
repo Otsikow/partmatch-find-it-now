@@ -1,7 +1,7 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { CarPart } from "@/types/CarPart";
+import { calculateDistance } from "@/utils/distanceUtils";
 
 interface UseCarPartsParams {
   searchTerm?: string;
@@ -12,6 +12,11 @@ interface UseCarPartsParams {
     category: string;
     location: string;
     priceRange: [number, number];
+  };
+  userLocation?: {
+    latitude: number;
+    longitude: number;
+    maxDistance?: number; // in kilometers
   };
 }
 
@@ -26,6 +31,7 @@ export const useCarParts = (params?: UseCarPartsParams) => {
       setError(null);
       
       console.log('Fetching car parts with params:', params);
+      console.log('User location:', params?.userLocation);
       
       let query = supabase
         .from('car_parts')
@@ -102,7 +108,7 @@ export const useCarParts = (params?: UseCarPartsParams) => {
       }
 
       // Transform the data to match our CarPart interface and ensure images are properly formatted
-      const transformedParts: CarPart[] = (data || []).map(part => {
+      let transformedParts: CarPart[] = (data || []).map(part => {
         console.log('Processing part:', part.title, 'Status:', part.status);
         console.log('Part supplier_id:', part.supplier_id);
         console.log('Part profiles data:', part.profiles);
@@ -139,6 +145,41 @@ export const useCarParts = (params?: UseCarPartsParams) => {
         };
       });
 
+      // Apply location-based filtering and sorting if user location is provided
+      if (params?.userLocation && params.userLocation.latitude && params.userLocation.longitude) {
+        const { latitude: userLat, longitude: userLng, maxDistance } = params.userLocation;
+        
+        // Calculate distance for each part and add it to the part object
+        transformedParts = transformedParts.map(part => {
+          if (part.latitude && part.longitude) {
+            const distance = calculateDistance(
+              userLat,
+              userLng,
+              part.latitude,
+              part.longitude
+            );
+            return { ...part, distance };
+          }
+          return { ...part, distance: undefined };
+        });
+
+        // Filter by max distance if specified
+        if (maxDistance) {
+          transformedParts = transformedParts.filter(part => {
+            // Keep parts without coordinates or within maxDistance
+            return !part.distance || part.distance <= maxDistance;
+          });
+        }
+
+        // Sort by distance (parts without distance will be at the end)
+        transformedParts.sort((a, b) => {
+          if (a.distance === undefined && b.distance === undefined) return 0;
+          if (a.distance === undefined) return 1;
+          if (b.distance === undefined) return -1;
+          return a.distance - b.distance;
+        });
+      }
+
       console.log('Final transformed parts count:', transformedParts.length);
       console.log('Final transformed parts:', transformedParts);
       setParts(transformedParts);
@@ -152,7 +193,7 @@ export const useCarParts = (params?: UseCarPartsParams) => {
 
   useEffect(() => {
     fetchParts();
-  }, [params?.searchTerm, params?.filters]);
+  }, [params?.searchTerm, params?.filters, params?.userLocation]);
 
   return { parts, loading, error, refetch: fetchParts };
 };
