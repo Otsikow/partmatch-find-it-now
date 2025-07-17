@@ -17,6 +17,13 @@ const MobileHomeContent = () => {
     loading
   } = useRealTimeStats();
 
+  const categoryImages = {
+    engine: "/src/assets/engine-parts.jpg",
+    brake: "/src/assets/brake-system.jpg",
+    suspension: "/src/assets/suspension.jpg",
+    body: "/src/assets/body-parts.jpg"
+  };
+
   return (
     <div className="px-4 py-6 space-y-6">
       {/* Hero Section */}
@@ -107,27 +114,45 @@ const MobileHomeContent = () => {
           {[
             {
               name: t('engineParts'),
-              count: loading ? "..." : `${categories.engineParts}+ ${t('parts')}`
+              count: loading ? "..." : `${categories.engineParts}+ ${t('parts')}`,
+              image: categoryImages.engine
             },
             {
               name: t('brakeSystem'),
-              count: loading ? "..." : `${categories.brakeParts}+ ${t('parts')}`
+              count: loading ? "..." : `${categories.brakeParts}+ ${t('parts')}`,
+              image: categoryImages.brake
             },
             {
               name: t('suspension'),
-              count: loading ? "..." : `${categories.suspensionParts}+ ${t('parts')}`
+              count: loading ? "..." : `${categories.suspensionParts}+ ${t('parts')}`,
+              image: categoryImages.suspension
             },
             {
               name: t('bodyParts'),
-              count: loading ? "..." : `${categories.bodyParts}+ ${t('parts')}`
+              count: loading ? "..." : `${categories.bodyParts}+ ${t('parts')}`,
+              image: categoryImages.body
             }
           ].map((category) => (
             <Link key={category.name} to="/search-parts" className="block">
               <Card className="hover:shadow-md transition-shadow">
                 <CardContent className="p-4 flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <Package className="w-5 h-5 text-blue-600" />
+                    <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
+                      <img 
+                        src={category.image} 
+                        alt={category.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          // Fallback to icon if image fails to load
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          const parent = target.parentElement;
+                          if (parent) {
+                            parent.classList.add('bg-blue-100', 'flex', 'items-center', 'justify-center');
+                            parent.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue-600"><path d="M20 7h-9"></path><path d="M14 17H5"></path><circle cx="17" cy="17" r="3"></circle><circle cx="7" cy="7" r="3"></circle></svg>';
+                          }
+                        }}
+                      />
                     </div>
                     <div>
                       <h4 className="font-medium text-gray-900">{category.name}</h4>
