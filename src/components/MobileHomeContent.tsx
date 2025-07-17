@@ -3,26 +3,17 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRealTimeStats } from "@/hooks/useRealTimeStats";
-import { useFeaturedParts } from "@/hooks/useFeaturedParts";
 import { useTranslation } from 'react-i18next';
-import CarPartCard from "./CarPartCard";
-
-// Import category images
-import enginePartsImg from "@/assets/engine-parts.jpg";
-import brakeSystemImg from "@/assets/brake-system.jpg";
-import suspensionImg from "@/assets/suspension.jpg";
-import bodyPartsImg from "@/assets/body-parts.jpg";
 const MobileHomeContent = () => {
   const { t } = useTranslation();
   const {
     activeParts,
     sellers,
     totalUsers,
-    countries,
+    regions,
     categories,
     loading
   } = useRealTimeStats();
-  const { featuredParts, loading: featuredLoading } = useFeaturedParts();
   return <div className="px-4 py-6 space-y-6">
       {/* Hero Section */}
       <div className="text-center space-y-2">
@@ -34,33 +25,6 @@ const MobileHomeContent = () => {
           <p className="text-gray-600 text-sm leading-relaxed">{t('heroSubtitle')}</p>
         </div>
       </div>
-
-      {/* Featured Car Parts */}
-      {featuredParts.length > 0 && (
-        <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-gray-900">Featured Car Parts</h3>
-          <p className="text-sm text-gray-600 mb-4">Top picks from trusted sellers. Paid listings appear here.</p>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {featuredParts.map((part) => (
-              <CarPartCard
-                key={part.id}
-                part={part}
-              />
-            ))}
-          </div>
-          
-          {featuredParts.length === 4 && (
-            <div className="text-center">
-              <Link to="/search-parts">
-                <Button variant="outline" className="text-sm">
-                  View All Featured Parts
-                </Button>
-              </Link>
-            </div>
-          )}
-        </div>
-      )}
 
       {/* Quick Actions */}
       <div className="space-y-3">
@@ -134,30 +98,22 @@ const MobileHomeContent = () => {
         <div className="space-y-2">
           {[{
           name: t('engineParts'),
-          count: loading ? "..." : `${categories.engineParts}+ ${t('parts')}`,
-          image: enginePartsImg
+          count: loading ? "..." : `${categories.engineParts}+ ${t('parts')}`
         }, {
           name: t('brakeSystem'),
-          count: loading ? "..." : `${categories.brakeParts}+ ${t('parts')}`,
-          image: brakeSystemImg
+          count: loading ? "..." : `${categories.brakeParts}+ ${t('parts')}`
         }, {
           name: t('suspension'),
-          count: loading ? "..." : `${categories.suspensionParts}+ ${t('parts')}`,
-          image: suspensionImg
+          count: loading ? "..." : `${categories.suspensionParts}+ ${t('parts')}`
         }, {
           name: t('bodyParts'),
-          count: loading ? "..." : `${categories.bodyParts}+ ${t('parts')}`,
-          image: bodyPartsImg
+          count: loading ? "..." : `${categories.bodyParts}+ ${t('parts')}`
         }].map(category => <Link key={category.name} to="/search-parts" className="block">
               <Card className="hover:shadow-md transition-shadow">
                 <CardContent className="p-4 flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-lg overflow-hidden bg-gray-50 flex items-center justify-center">
-                      <img 
-                        src={category.image} 
-                        alt={category.name}
-                        className="w-full h-full object-cover"
-                      />
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <Package className="w-5 h-5 text-blue-600" />
                     </div>
                     <div>
                       <h4 className="font-medium text-gray-900">{category.name}</h4>
@@ -204,9 +160,9 @@ const MobileHomeContent = () => {
           </div>
           <div className="text-center">
             <div className="text-xl font-bold text-orange-600">
-              {loading ? '...' : `${countries}`}
+              {loading ? '...' : `${regions}`}
             </div>
-            <div className="text-xs text-gray-500">Countries</div>
+            <div className="text-xs text-gray-500">{t('regions')}</div>
           </div>
         </div>
       </div>

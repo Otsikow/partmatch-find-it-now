@@ -34,7 +34,6 @@ const CarPartCard = ({ part, onContact }: CarPartCardProps) => {
         <CarPartCardFooter
           partId={part.id}
           supplierId={part.supplier_id}
-          partTitle={part.title}
           onContact={onContact}
         />
       </Card>

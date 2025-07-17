@@ -2,7 +2,7 @@
 import { useRealTimeStats } from "@/hooks/useRealTimeStats";
 
 const StatsSection = () => {
-  const { activeParts, sellers, totalUsers, countries, loading } = useRealTimeStats();
+  const { activeParts, sellers, totalUsers, regions, loading } = useRealTimeStats();
   
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
@@ -27,9 +27,9 @@ const StatsSection = () => {
         </div>
         <div className="p-4">
           <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-red-600 mb-1 sm:mb-2">
-            {loading ? '...' : countries}
+            {regions}
           </div>
-          <div className="text-sm sm:text-base text-gray-600">Countries</div>
+          <div className="text-sm sm:text-base text-gray-600">Regions Covered</div>
         </div>
       </div>
     </div>

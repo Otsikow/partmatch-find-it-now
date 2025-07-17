@@ -17,7 +17,7 @@ interface RealTimeStats {
   activeParts: number;
   sellers: number;
   totalUsers: number;
-  countries: number;
+  regions: number;
   categories: CategoryStats;
   buyers: RealTimeBuyerStats;
   loading: boolean;
@@ -28,7 +28,7 @@ export const useRealTimeStats = () => {
     activeParts: 0,
     sellers: 0,
     totalUsers: 0,
-    countries: 0,
+    regions: 16,
     categories: {
       engineParts: 0,
       brakeParts: 0,
@@ -61,17 +61,6 @@ export const useRealTimeStats = () => {
         .from('profiles')
         .select('*', { count: 'exact', head: true });
 
-      // Get countries count from both profiles and car_parts tables
-      const [profilesCountries, partsCountries] = await Promise.all([
-        supabase.from('profiles').select('country').not('country', 'is', null),
-        supabase.from('car_parts').select('country').not('country', 'is', null)
-      ]);
-
-      const allCountries = new Set([
-        ...(profilesCountries.data || []).map(p => p.country),
-        ...(partsCountries.data || []).map(p => p.country)
-      ]);
-
       // Get category counts
       const [engineResult, brakeResult, suspensionResult, bodyResult] = await Promise.all([
         supabase.from('car_parts').select('*', { count: 'exact', head: true }).ilike('part_type', '%engine%').eq('status', 'available'),
@@ -93,7 +82,7 @@ export const useRealTimeStats = () => {
         activeParts: partsCount || 0,
         sellers: sellersCount || 0,
         totalUsers: usersCount || 0,
-        countries: allCountries.size,
+        regions: 16,
         categories: {
           engineParts: engineResult.count || 0,
           brakeParts: brakeResult.count || 0,

@@ -62,13 +62,6 @@
 
     --radius: 0.5rem;
 
-    /* Chart colors - vibrant and distinct */
-    --chart-1: 262 83% 58%;        /* Purple - for signups */
-    --chart-2: 142 76% 46%;        /* Green - for listings */
-    --chart-3: 217 91% 60%;        /* Blue - for transactions */
-    --chart-4: 45 93% 47%;         /* Orange - for revenue */
-    --chart-5: 320 65% 52%;        /* Pink - for additional data */
-
     --sidebar-background: 0 0% 98%;
 
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -141,13 +134,6 @@
     --warning: 43 89% 48%;
     --warning-foreground: 0 0% 98%;
 
-    /* Chart colors - vibrant and distinct (dark mode) */
-    --chart-1: 262 83% 68%;        /* Lighter purple - for signups */
-    --chart-2: 142 76% 56%;        /* Lighter green - for listings */
-    --chart-3: 217 91% 70%;        /* Lighter blue - for transactions */
-    --chart-4: 45 93% 57%;         /* Lighter orange - for revenue */
-    --chart-5: 320 65% 62%;        /* Lighter pink - for additional data */
-
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -161,21 +147,11 @@
 
 @layer base {
   * {
-    @apply border-border font-inter;
+    @apply border-border;
   }
 
   body {
-    @apply bg-background text-foreground font-inter;
-  }
-
-  /* Apply Inter font to all headings with appropriate weights */
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-inter font-semibold;
-  }
-
-  /* Ensure all text elements use Inter */
-  p, span, div, a, button, input, textarea, select, label {
-    @apply font-inter;
+    @apply bg-background text-foreground;
   }
 }
 
@@ -198,16 +174,16 @@
   
   /* Page Headers */
   .page-header {
-    @apply font-inter font-bold text-foreground text-2xl sm:text-3xl md:text-4xl;
+    @apply font-playfair font-bold text-foreground text-2xl sm:text-3xl md:text-4xl;
   }
   
   .page-subheader {
-    @apply font-inter font-semibold text-foreground text-xl sm:text-2xl;
+    @apply font-playfair font-semibold text-foreground text-xl sm:text-2xl;
   }
   
   /* Section Headers */
   .section-title {
-    @apply font-inter font-bold text-foreground text-lg sm:text-xl md:text-2xl;
+    @apply font-playfair font-bold text-foreground text-lg sm:text-xl md:text-2xl;
   }
   
   .section-subtitle {
@@ -238,27 +214,10 @@
   
   /* Card Content */
   .card-title {
-    @apply font-inter font-semibold text-foreground text-lg;
+    @apply font-playfair font-semibold text-foreground text-lg;
   }
   
   .card-description {
     @apply font-crimson text-muted-foreground text-sm;
   }
-}
-
-/* Slider Animation Styles */
-.slider-thumb {
-  transition: all 0.2s ease-in-out;
-}
-
-.slider-thumb:hover {
-  transform: scale(1.1);
-}
-
-.slider-track {
-  transition: background-color 0.2s ease-in-out;
-}
-
-.slider-range {
-  transition: width 0.2s ease-in-out;
 }

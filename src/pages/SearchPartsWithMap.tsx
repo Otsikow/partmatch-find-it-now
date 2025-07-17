@@ -15,8 +15,6 @@ const SearchPartsWithMap = () => {
     category: "",
     location: "",
     priceRange: [0, 10000] as [number, number],
-    condition: "",
-    locationRadius: 50,
   });
 
   const { parts, loading, error } = useCarParts({ searchTerm, filters });

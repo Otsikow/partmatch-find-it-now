@@ -570,7 +570,6 @@ export type Database = {
           country: string | null
           created_at: string | null
           currency: string | null
-          email: string | null
           first_name: string | null
           id: string
           is_blocked: boolean | null
@@ -597,7 +596,6 @@ export type Database = {
           country?: string | null
           created_at?: string | null
           currency?: string | null
-          email?: string | null
           first_name?: string | null
           id: string
           is_blocked?: boolean | null
@@ -624,7 +622,6 @@ export type Database = {
           country?: string | null
           created_at?: string | null
           currency?: string | null
-          email?: string | null
           first_name?: string | null
           id?: string
           is_blocked?: boolean | null
