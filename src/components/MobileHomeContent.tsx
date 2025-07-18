@@ -3,11 +3,13 @@ import { Search, Plus, Package, Zap, ClipboardList } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useFeaturedParts } from "@/hooks/useFeaturedParts";
 import { useRealTimeStats } from "@/hooks/useRealTimeStats";
 import { useTranslation } from 'react-i18next';
 
 const MobileHomeContent = () => {
   const { t } = useTranslation();
+  const { featuredParts, loading: featuredLoading } = useFeaturedParts();
   const {
     activeParts,
     activeRequests,
@@ -106,6 +108,82 @@ const MobileHomeContent = () => {
             </Card>
           </Link>
         </div>
+      </div>
+
+      {/* Featured Parts */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-gray-900">Featured Parts</h3>
+          <Link to="/search-parts-with-map" className="text-sm text-blue-600 hover:text-blue-700">
+            View All
+          </Link>
+        </div>
+        
+        {featuredLoading ? (
+          <div className="grid grid-cols-2 gap-3">
+            {[1, 2].map((i) => (
+              <Card key={i} className="animate-pulse">
+                <CardContent className="p-4">
+                  <div className="bg-gray-200 h-32 rounded-lg mb-3"></div>
+                  <div className="bg-gray-200 h-4 rounded mb-2"></div>
+                  <div className="bg-gray-200 h-3 rounded mb-1"></div>
+                  <div className="bg-gray-200 h-3 rounded w-2/3"></div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : featuredParts.length > 0 ? (
+          <div className="grid grid-cols-2 gap-3">
+            {featuredParts.slice(0, 4).map((part) => (
+              <Link key={part.id} to={`/search-parts-with-map`}>
+                <Card className="hover:shadow-lg transition-shadow">
+                  <CardContent className="p-3">
+                    <div className="aspect-square bg-gray-100 rounded-lg mb-3 overflow-hidden">
+                      {part.images && part.images.length > 0 ? (
+                        <img
+                          src={part.images[0]}
+                          alt={part.title}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = "/placeholder.svg";
+                          }}
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
+                          <Package className="w-8 h-8 text-blue-600" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="space-y-1">
+                      <h4 className="font-medium text-gray-900 text-sm line-clamp-2">
+                        {part.title}
+                      </h4>
+                      <p className="text-xs text-gray-500">
+                        {part.make} {part.model} ({part.year})
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <p className="font-semibold text-blue-600 text-sm">
+                          {part.currency} {part.price}
+                        </p>
+                        <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">
+                          Featured
+                        </span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <Card>
+            <CardContent className="p-6 text-center">
+              <Package className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+              <p className="text-gray-500">No featured parts available</p>
+            </CardContent>
+          </Card>
+        )}
       </div>
 
       {/* Popular Categories */}
