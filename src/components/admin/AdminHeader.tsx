@@ -1,10 +1,11 @@
 
-import { LogOut, Home } from "lucide-react";
+import { LogOut, Home, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { useUserDisplayName } from "@/hooks/useUserDisplayName";
 import AdminNotificationBell from "./AdminNotificationBell";
+import ThemeToggle from "@/components/ThemeToggle";
 
 interface AdminHeaderProps {
   onNavigateToVerifications?: () => void;
@@ -30,45 +31,59 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
   };
 
   return (
-    <header className="p-3 sm:p-4 md:p-6 flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-primary/5 via-primary/10 to-accent/5 backdrop-blur-lg shadow-lg border-b border-border/50">
-      <div className="flex items-center gap-1 sm:gap-2 md:gap-3 min-w-0 flex-1">
-        <div className="bg-white/20 backdrop-blur-md rounded-xl px-3 py-1.5 border border-white/30 shadow-lg flex items-center gap-2">
-          <img 
-            src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
-            alt="PartMatch Logo" 
-            className="h-5 w-5 sm:h-6 sm:w-6"
-          />
-          <div className="text-lg sm:text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            PartMatch
+    <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border shadow-sm">
+      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+        {/* Left: Back Arrow */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handleGoBack}
+          className="h-10 w-10 hover:bg-accent/20 transition-colors"
+          aria-label="Go back to home"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </Button>
+
+        {/* Center: Logo and Title */}
+        <div className="flex items-center gap-3 flex-1 justify-center">
+          <div className="flex items-center gap-2 bg-primary/10 backdrop-blur-sm rounded-xl px-3 py-1.5 border border-primary/20 shadow-sm">
+            <img 
+              src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
+              alt="PartMatch Logo" 
+              className="h-8 w-8 sm:h-10 sm:w-10 object-contain"
+            />
+            <div className="text-lg sm:text-xl font-bold text-primary">
+              PartMatch
+            </div>
           </div>
-        </div>
-        <div className="flex flex-col min-w-0 flex-1">
-          <h1 className="text-base sm:text-lg md:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent truncate">
-            {displayName}
-          </h1>
-          <p className="text-xs sm:text-sm text-muted-foreground truncate">
-            Admin Dashboard
-          </p>
+          <div className="flex flex-col min-w-0">
+            <h1 className="text-lg sm:text-xl md:text-2xl font-playfair font-bold text-foreground truncate">
+              {displayName}
+            </h1>
+            <p className="text-xs sm:text-sm text-muted-foreground truncate">
+              Admin Dashboard
+            </p>
+          </div>
         </div>
 
-        <div className="flex items-center gap-2 ml-2">
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-1">
-            <AdminNotificationBell onNavigateToVerifications={onNavigateToVerifications} />
-          </div>
+        {/* Right: Actions */}
+        <div className="flex items-center gap-2">
+          <AdminNotificationBell onNavigateToVerifications={onNavigateToVerifications} />
+          <ThemeToggle />
           <Button
             variant="outline"
             size="sm"
             onClick={handleGoBack}
-            className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all duration-300"
+            className="hidden sm:flex hover:bg-accent/20 transition-colors"
           >
             <Home className="h-4 w-4 mr-1" />
-            <span className="hidden sm:inline">Home</span>
+            Home
           </Button>
           <Button
             variant="outline"
             size="sm"
             onClick={handleSignOut}
-            className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-all duration-300"
+            className="hover:bg-destructive/10 hover:text-destructive transition-colors"
           >
             <LogOut className="h-4 w-4 mr-1" />
             <span className="hidden sm:inline">Sign Out</span>
