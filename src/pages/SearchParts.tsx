@@ -182,7 +182,7 @@ const SearchParts = () => {
           <TabsContent value="requests" className="space-y-4 sm:space-y-6">
             {/* Search for requests */}
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
               <Input
                 placeholder={t("searchRequests")}
                 value={requestSearchTerm}
@@ -192,11 +192,11 @@ const SearchParts = () => {
             </div>
 
             {/* Stats */}
-            <div className="bg-blue-50 rounded-lg p-4 text-center">
-              <div className="text-xl font-bold text-blue-600">
+            <div className="bg-primary/10 rounded-lg p-4 text-center">
+              <div className="text-xl font-bold text-primary">
                 {filteredRequests.length}
               </div>
-              <div className="text-sm text-blue-700">{t("activeRequests")}</div>
+              <div className="text-sm text-primary">{t("activeRequests")}</div>
             </div>
 
             {/* Requests List */}
@@ -204,12 +204,12 @@ const SearchParts = () => {
               {requestsLoading ? (
                 <div className="text-center py-8">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                  <p className="text-gray-600">{t("loading")}...</p>
+                  <p className="text-muted-foreground">{t("loading")}...</p>
                 </div>
               ) : filteredRequests.length === 0 ? (
                 <Card>
                   <CardContent className="p-6 text-center">
-                    <p className="text-gray-500">{t("noRequestsFound")}</p>
+                    <p className="text-muted-foreground">{t("noRequestsFound")}</p>
                   </CardContent>
                 </Card>
               ) : (
@@ -222,7 +222,7 @@ const SearchParts = () => {
                       <div className="flex justify-between items-start gap-3">
                         <div className="flex gap-3 flex-1">
                           {request.photo_url && (
-                            <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                            <div className="w-16 h-16 rounded-lg overflow-hidden bg-muted flex-shrink-0">
                               <img
                                 src={request.photo_url}
                                 alt={request.part_needed}
@@ -234,10 +234,10 @@ const SearchParts = () => {
                             </div>
                           )}
                           <div className="flex-1">
-                            <CardTitle className="text-lg font-semibold text-gray-900">
+                            <CardTitle className="text-lg font-semibold text-foreground">
                               {request.part_needed}
                             </CardTitle>
-                            <p className="text-sm text-gray-600 mt-1">
+                            <p className="text-sm text-muted-foreground mt-1">
                               {request.car_make} {request.car_model} (
                               {request.car_year})
                             </p>
@@ -245,7 +245,7 @@ const SearchParts = () => {
                         </div>
                         <Badge
                           variant="secondary"
-                          className="bg-green-100 text-green-800 flex-shrink-0"
+                          className="bg-primary/10 text-primary flex-shrink-0"
                         >
                           {t("active")}
                         </Badge>
@@ -253,12 +253,12 @@ const SearchParts = () => {
                     </CardHeader>
                     <CardContent className="space-y-3">
                       {request.description && (
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-muted-foreground">
                           {request.description}
                         </p>
                       )}
 
-                      <div className="flex items-center gap-4 text-sm text-gray-500">
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         <div className="flex items-center gap-1">
                           <MapPin className="w-4 h-4" />
                           {request.location}
@@ -270,17 +270,17 @@ const SearchParts = () => {
                       </div>
 
                       <div className="flex gap-2 pt-2">
-                        <Button
-                          onClick={() => handleMakeOffer(request.id)}
-                          className="flex-1 bg-blue-600 hover:bg-blue-700"
-                        >
+                         <Button
+                           onClick={() => handleMakeOffer(request.id)}
+                           className="flex-1 bg-primary hover:bg-primary/90"
+                         >
                           {t("makeOffer")}
                         </Button>
                         <Button
                           variant="outline"
-                          onClick={() => handleContact(request.phone, request)}
-                          className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white border-green-600"
-                        >
+                           onClick={() => handleContact(request.phone, request)}
+                           className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground border-primary"
+                         >
                           <MessageCircle className="w-4 h-4" />
                           WhatsApp
                         </Button>

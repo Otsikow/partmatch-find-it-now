@@ -93,12 +93,12 @@ const RequestedCarParts = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gradient-to-br from-background via-gradient-accent to-gradient-secondary">
         <MobileHeader />
         <div className="pt-16 pb-20 px-4 py-6">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">{t('loading')}...</p>
+            <p className="text-muted-foreground">{t('loading')}...</p>
           </div>
         </div>
       </div>
@@ -106,7 +106,7 @@ const RequestedCarParts = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-background via-gradient-accent to-gradient-secondary">
       <MobileHeader />
       <div className="pt-16 pb-20 px-4 py-6 space-y-6">
         {/* Header */}
@@ -119,15 +119,15 @@ const RequestedCarParts = () => {
               <ArrowLeft className="w-5 h-5 text-gray-600" />
             </button>
             <div className="text-center flex-1">
-              <h1 className="text-2xl font-bold text-gray-900">{t('requestedCarParts')}</h1>
-              <p className="text-gray-600">{t('browseAndRespondRequests')}</p>
+              <h1 className="text-2xl font-bold text-foreground">{t('requestedCarParts')}</h1>
+              <p className="text-muted-foreground">{t('browseAndRespondRequests')}</p>
             </div>
           </div>
         </div>
 
         {/* Search */}
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
           <Input
             placeholder={t('searchRequests')}
             value={searchTerm}
@@ -137,9 +137,9 @@ const RequestedCarParts = () => {
         </div>
 
         {/* Stats */}
-        <div className="bg-blue-50 rounded-lg p-4 text-center">
-          <div className="text-xl font-bold text-blue-600">{filteredRequests.length}</div>
-          <div className="text-sm text-blue-700">{t('activeRequests')}</div>
+        <div className="bg-primary/10 rounded-lg p-4 text-center">
+          <div className="text-xl font-bold text-primary">{filteredRequests.length}</div>
+          <div className="text-sm text-primary">{t('activeRequests')}</div>
         </div>
 
         {/* Requests List */}
@@ -147,7 +147,7 @@ const RequestedCarParts = () => {
           {filteredRequests.length === 0 ? (
             <Card>
               <CardContent className="p-6 text-center">
-                <p className="text-gray-500">{t('noRequestsFound')}</p>
+                <p className="text-muted-foreground">{t('noRequestsFound')}</p>
               </CardContent>
             </Card>
           ) : (
@@ -157,7 +157,7 @@ const RequestedCarParts = () => {
                   <div className="flex justify-between items-start gap-3">
                     <div className="flex gap-3 flex-1">
                       {request.photo_url && (
-                        <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                        <div className="w-16 h-16 rounded-lg overflow-hidden bg-muted flex-shrink-0">
                           <img 
                             src={request.photo_url} 
                             alt={request.part_needed}
@@ -169,25 +169,25 @@ const RequestedCarParts = () => {
                         </div>
                       )}
                       <div className="flex-1">
-                        <CardTitle className="text-lg font-semibold text-gray-900">
+                        <CardTitle className="text-lg font-semibold text-foreground">
                           {request.part_needed}
                         </CardTitle>
-                        <p className="text-sm text-gray-600 mt-1">
+                        <p className="text-sm text-muted-foreground mt-1">
                           {request.car_make} {request.car_model} ({request.car_year})
                         </p>
                       </div>
                     </div>
-                    <Badge variant="secondary" className="bg-green-100 text-green-800 flex-shrink-0">
+                    <Badge variant="secondary" className="bg-primary/10 text-primary flex-shrink-0">
                       {t('active')}
                     </Badge>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {request.description && (
-                    <p className="text-sm text-gray-600">{request.description}</p>
+                    <p className="text-sm text-muted-foreground">{request.description}</p>
                   )}
                   
-                  <div className="flex items-center gap-4 text-sm text-gray-500">
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
                     <div className="flex items-center gap-1">
                       <MapPin className="w-4 h-4" />
                       {request.location}
@@ -201,7 +201,7 @@ const RequestedCarParts = () => {
                   <div className="flex gap-2 pt-2">
                     <Button 
                       onClick={() => handleMakeOffer(request.id)}
-                      className="flex-1 bg-blue-600 hover:bg-blue-700"
+                      className="flex-1 bg-primary hover:bg-primary/90"
                     >
                       {t('makeOffer')}
                     </Button>

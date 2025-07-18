@@ -183,7 +183,7 @@ const SearchPartsWithMap = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100">
+    <div className="min-h-screen bg-gradient-to-br from-background via-gradient-accent to-gradient-secondary">
       {/* Header consistent with other pages */}
       <div className="bg-gradient-to-r from-primary via-primary/90 to-primary-foreground text-white shadow-lg">
         <div className="px-4 py-6 sm:px-6">
@@ -225,10 +225,10 @@ const SearchPartsWithMap = () => {
         <PendingRatingNotification />
         
         {/* Location Section - Mobile Optimized */}
-        <div className="bg-white rounded-2xl p-4 mb-6 shadow-sm border">
+        <div className="bg-card dark:bg-card rounded-2xl p-4 mb-6 shadow-sm border">
           <div className="flex items-center gap-3 mb-3">
             <MapPin className="h-5 w-5 text-primary flex-shrink-0" />
-            <h3 className="font-semibold text-gray-900 text-lg">Your Location</h3>
+            <h3 className="font-semibold text-foreground text-lg">Your Location</h3>
           </div>
           
           <Button 
@@ -264,17 +264,17 @@ const SearchPartsWithMap = () => {
           )}
           
           {location && (
-            <div className="mt-3 p-3 bg-green-50 rounded-xl border border-green-200">
+            <div className="mt-3 p-3 bg-primary/10 rounded-xl border border-primary/20">
               <div className="flex items-center gap-2 mb-1">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <p className="text-sm font-medium text-green-800">
+                <div className="w-2 h-2 bg-primary rounded-full"></div>
+                <p className="text-sm font-medium text-primary">
                   Location Found
                 </p>
               </div>
-              <p className="text-sm text-green-700">
+              <p className="text-sm text-foreground">
                 {location.city || location.address}
               </p>
-              <p className="text-xs text-green-600 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Searching within {filters.maxDistance} miles
               </p>
             </div>
@@ -282,7 +282,7 @@ const SearchPartsWithMap = () => {
         </div>
 
         <Tabs defaultValue="parts" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6 bg-white border border-border p-1 h-auto rounded-2xl shadow-sm">
+          <TabsList className="grid w-full grid-cols-2 mb-6 bg-card dark:bg-card border border-border p-1 h-auto rounded-2xl shadow-sm">
             <TabsTrigger
               value="parts"
               className="flex items-center gap-2 h-14 text-base font-semibold rounded-xl data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-md transition-all duration-300"
@@ -333,11 +333,11 @@ const SearchPartsWithMap = () => {
             </div>
 
             {/* Stats */}
-            <div className="bg-blue-50 rounded-lg p-4 text-center">
-              <div className="text-xl font-bold text-blue-600">
+            <div className="bg-primary/10 rounded-lg p-4 text-center">
+              <div className="text-xl font-bold text-primary">
                 {filteredRequests.length}
               </div>
-              <div className="text-sm text-blue-700">{t("activeRequests")}</div>
+              <div className="text-sm text-primary">{t("activeRequests")}</div>
             </div>
 
             {/* Requests List */}
@@ -345,12 +345,12 @@ const SearchPartsWithMap = () => {
               {requestsLoading ? (
                 <div className="text-center py-8">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                  <p className="text-gray-600">{t("loading")}...</p>
+                  <p className="text-muted-foreground">{t("loading")}...</p>
                 </div>
               ) : filteredRequests.length === 0 ? (
                 <Card>
                   <CardContent className="p-6 text-center">
-                    <p className="text-gray-500">{t("noRequestsFound")}</p>
+                    <p className="text-muted-foreground">{t("noRequestsFound")}</p>
                   </CardContent>
                 </Card>
               ) : (
@@ -364,7 +364,7 @@ const SearchPartsWithMap = () => {
                       <div className="flex justify-between items-start gap-3">
                         <div className="flex gap-3 flex-1">
                           {request.photo_url && (
-                            <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                            <div className="w-16 h-16 rounded-lg overflow-hidden bg-muted flex-shrink-0">
                               <img
                                 src={request.photo_url}
                                 alt={request.part_needed}
@@ -376,10 +376,10 @@ const SearchPartsWithMap = () => {
                             </div>
                           )}
                           <div className="flex-1">
-                            <CardTitle className="text-lg font-semibold text-gray-900">
+                            <CardTitle className="text-lg font-semibold text-foreground">
                               {request.part_needed}
                             </CardTitle>
-                            <p className="text-sm text-gray-600 mt-1">
+                            <p className="text-sm text-muted-foreground mt-1">
                               {request.car_make} {request.car_model} (
                               {request.car_year})
                             </p>
@@ -387,7 +387,7 @@ const SearchPartsWithMap = () => {
                         </div>
                         <Badge
                           variant="secondary"
-                          className="bg-green-100 text-green-800 flex-shrink-0"
+                          className="bg-primary/10 text-primary flex-shrink-0"
                         >
                           {t("active")}
                         </Badge>
@@ -395,12 +395,12 @@ const SearchPartsWithMap = () => {
                     </CardHeader>
                     <CardContent className="space-y-3">
                       {request.description && (
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-muted-foreground">
                           {request.description}
                         </p>
                       )}
 
-                      <div className="flex items-center gap-4 text-sm text-gray-500">
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         <div className="flex items-center gap-1">
                           <MapPin className="w-4 h-4" />
                           {request.location}
@@ -417,7 +417,7 @@ const SearchPartsWithMap = () => {
                             e.stopPropagation();
                             handleMakeOffer(request.id);
                           }}
-                          className="flex-1 bg-blue-600 hover:bg-blue-700"
+                          className="flex-1 bg-primary hover:bg-primary/90"
                         >
                           {t("makeOffer")}
                         </Button>
@@ -427,7 +427,7 @@ const SearchPartsWithMap = () => {
                             e.stopPropagation();
                             handleContact(request.phone, request);
                           }}
-                          className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white border-green-600"
+                          className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground border-primary"
                         >
                           <MessageCircle className="w-4 h-4" />
                           WhatsApp
