@@ -4,11 +4,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MapPin, Phone, Calendar, Navigation, Expand, X } from "lucide-react";
+import { MapPin, Phone, Calendar, Navigation, Expand, X, Star } from "lucide-react";
 import ChatButton from "@/components/chat/ChatButton";
 import SellerRatingDisplay from "@/components/SellerRatingDisplay";
 import SaveButton from "@/components/SaveButton";
 import RatingModal from "@/components/RatingModal";
+import SellerReviewsModal from "@/components/SellerReviewsModal";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { format } from 'date-fns';
 import { useLocationDetection } from "@/hooks/useLocationDetection";
@@ -54,6 +55,7 @@ interface CarPartCardWithChatProps {
 const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
+  const [showReviewsModal, setShowReviewsModal] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
@@ -219,12 +221,20 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
                   )}
                 </div>
                 
-                <SellerRatingDisplay
-                  rating={part.profiles.rating || 0}
-                  totalRatings={part.profiles.total_ratings || 0}
-                  size="sm"
-                  showBadge={true}
-                />
+                <div 
+                  className="cursor-pointer hover:bg-muted/50 rounded p-1 -m-1 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowReviewsModal(true);
+                  }}
+                >
+                  <SellerRatingDisplay
+                    rating={part.profiles.rating || 0}
+                    totalRatings={part.profiles.total_ratings || 0}
+                    size="sm"
+                    showBadge={true}
+                  />
+                </div>
               </div>
             )}
 
@@ -443,6 +453,18 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
             setShowRatingModal(false);
             // Could refresh seller rating here
           }}
+        />
+      )}
+
+      {/* Seller Reviews Modal */}
+      {part.profiles && (
+        <SellerReviewsModal
+          isOpen={showReviewsModal}
+          onClose={() => setShowReviewsModal(false)}
+          sellerId={part.supplier_id}
+          sellerName={supplierName}
+          sellerRating={part.profiles.rating || 0}
+          totalReviews={part.profiles.total_ratings || 0}
         />
       )}
     </>
