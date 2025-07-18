@@ -12,6 +12,7 @@ interface CategoryStats {
   brakeParts: number;
   suspensionParts: number;
   bodyParts: number;
+  accessories: number;
 }
 
 interface RealTimeStats {
@@ -38,7 +39,8 @@ export const useRealTimeStats = () => {
       engineParts: 0,
       brakeParts: 0,
       suspensionParts: 0,
-      bodyParts: 0
+      bodyParts: 0,
+      accessories: 0
     },
     buyers: {
       averageRating: 0,
@@ -88,11 +90,12 @@ export const useRealTimeStats = () => {
       const countriesCount = uniqueCountries.size;
 
       // Get category counts
-      const [engineResult, brakeResult, suspensionResult, bodyResult] = await Promise.all([
+      const [engineResult, brakeResult, suspensionResult, bodyResult, accessoriesResult] = await Promise.all([
         supabase.from('car_parts').select('*', { count: 'exact', head: true }).ilike('part_type', '%engine%').eq('status', 'available'),
         supabase.from('car_parts').select('*', { count: 'exact', head: true }).ilike('part_type', '%brake%').eq('status', 'available'),
         supabase.from('car_parts').select('*', { count: 'exact', head: true }).ilike('part_type', '%suspension%').eq('status', 'available'),
-        supabase.from('car_parts').select('*', { count: 'exact', head: true }).ilike('part_type', '%body%').eq('status', 'available')
+        supabase.from('car_parts').select('*', { count: 'exact', head: true }).ilike('part_type', '%body%').eq('status', 'available'),
+        supabase.from('car_parts').select('*', { count: 'exact', head: true }).eq('part_type', 'Car Accessories').eq('status', 'available')
       ]);
 
       // Get buyer rating stats
@@ -115,7 +118,8 @@ export const useRealTimeStats = () => {
           engineParts: engineResult.count || 0,
           brakeParts: brakeResult.count || 0,
           suspensionParts: suspensionResult.count || 0,
-          bodyParts: bodyResult.count || 0
+          bodyParts: bodyResult.count || 0,
+          accessories: accessoriesResult.count || 0
         },
         buyers: {
           averageRating: Number(averageRating.toFixed(1)),

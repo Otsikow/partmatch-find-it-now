@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import LocationPicker from "@/components/LocationPicker";
 import { X, Camera, Upload } from "lucide-react";
+import { CAR_PART_CATEGORIES } from "@/constants/carPartCategories";
 
 interface PostPartModalProps {
   isOpen: boolean;
@@ -361,13 +362,21 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
 
             <div>
               <Label htmlFor="part_type">Part Type *</Label>
-              <Input
-                id="part_type"
-                value={formData.part_type}
-                onChange={(e) => setFormData(prev => ({ ...prev, part_type: e.target.value }))}
-                placeholder="e.g., Headlight, Bumper, Engine"
-                required
-              />
+              <Select 
+                value={formData.part_type} 
+                onValueChange={(value) => setFormData(prev => ({ ...prev, part_type: value }))}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select part category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {CAR_PART_CATEGORIES.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div>

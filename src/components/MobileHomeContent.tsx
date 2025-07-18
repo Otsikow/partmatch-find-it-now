@@ -215,6 +215,11 @@ const MobileHomeContent = () => {
               name: t('bodyParts'),
               count: loading ? "..." : `${categories.bodyParts}+ ${t('parts')}`,
               image: categoryImages.body
+            },
+            {
+              name: "Car Accessories",
+              count: loading ? "..." : `${categories.accessories || 0}+ ${t('parts')}`,
+              image: categoryImages.engine // Using engine image as placeholder for accessories
             }
           ].map((category) => (
             <Link key={category.name} to="/search-parts-with-map" className="block">

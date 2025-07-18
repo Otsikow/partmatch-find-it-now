@@ -16,6 +16,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Package, Upload } from "lucide-react";
 import PhotoUpload from "./PhotoUpload";
+import { CAR_PART_CATEGORIES } from "@/constants/carPartCategories";
 
 interface CarPartFormData {
   title: string;
@@ -320,15 +321,11 @@ const PostCarPartForm = ({ onPartPosted }: { onPartPosted: () => void }) => {
                   <SelectValue placeholder="Select part type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Engine">Engine</SelectItem>
-                  <SelectItem value="Transmission">Transmission</SelectItem>
-                  <SelectItem value="Brakes">Brakes</SelectItem>
-                  <SelectItem value="Suspension">Suspension</SelectItem>
-                  <SelectItem value="Electrical">Electrical</SelectItem>
-                  <SelectItem value="Body">Body</SelectItem>
-                  <SelectItem value="Interior">Interior</SelectItem>
-                  <SelectItem value="Tires & Wheels">Tires & Wheels</SelectItem>
-                  <SelectItem value="Other">Other</SelectItem>
+                  {CAR_PART_CATEGORIES.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {category}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

@@ -93,6 +93,7 @@ const resources = {
       brakeSystem: "Brake System",
       suspension: "Suspension",
       bodyParts: "Body Parts",
+      carAccessories: "Car Accessories",
       parts: "parts",
 
       // Stats
