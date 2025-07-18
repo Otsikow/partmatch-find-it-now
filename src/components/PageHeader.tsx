@@ -93,7 +93,7 @@ const PageHeader = ({
         
         <div className="flex flex-col min-w-0 flex-1 overflow-hidden">
           <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-white leading-tight break-words">
-            {t('welcomeToPartMatch')}
+            {title}
           </h1>
           {subtitle && (
             <p className="text-sm sm:text-base text-white/90 leading-tight break-words mt-1">
