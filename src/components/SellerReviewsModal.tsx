@@ -54,7 +54,11 @@ const SellerReviewsModal: React.FC<SellerReviewsModalProps> = ({
   const fetchReviews = async () => {
     setLoading(true);
     try {
-      console.log('Fetching reviews for seller:', sellerId);
+      console.log('=== DEBUG: Fetching reviews for seller ===');
+      console.log('sellerId:', sellerId);
+      console.log('sellerName:', sellerName);
+      console.log('sellerRating:', sellerRating);
+      console.log('totalReviews:', totalReviews);
       
       // Fetch reviews first
       const { data: reviewsData, error } = await supabase
@@ -63,6 +67,10 @@ const SellerReviewsModal: React.FC<SellerReviewsModalProps> = ({
         .eq('seller_id', sellerId)
         .order('created_at', { ascending: false })
         .limit(20);
+
+      console.log('=== DEBUG: Supabase query result ===');
+      console.log('Error:', error);
+      console.log('Data:', reviewsData);
 
       if (error) {
         console.error('Error fetching reviews:', error);
