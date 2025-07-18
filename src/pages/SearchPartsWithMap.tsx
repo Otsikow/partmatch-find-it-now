@@ -8,6 +8,7 @@ import SearchControls from "@/components/SearchControls";
 import CarPartsList from "@/components/CarPartsList";
 import PageHeader from "@/components/PageHeader";
 import PendingRatingNotification from "@/components/PendingRatingNotification";
+import RequestExpandedDialog from "@/components/RequestExpandedDialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -71,6 +72,8 @@ const SearchPartsWithMap = () => {
   const [requestsLoading, setRequestsLoading] = useState(true);
   const [requestSearchTerm, setRequestSearchTerm] = useState("");
   const [filteredRequests, setFilteredRequests] = useState<PartRequest[]>([]);
+  const [selectedRequest, setSelectedRequest] = useState<PartRequest | null>(null);
+  const [isRequestDialogOpen, setIsRequestDialogOpen] = useState(false);
 
   const {
     requestLocation,
@@ -153,6 +156,20 @@ const SearchPartsWithMap = () => {
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString();
+  };
+
+  const handleRequestClick = (request: PartRequest) => {
+    setSelectedRequest(request);
+    setIsRequestDialogOpen(true);
+  };
+
+  const handleRequestDialogClose = () => {
+    setIsRequestDialogOpen(false);
+    setSelectedRequest(null);
+  };
+
+  const handleRequestUpdated = () => {
+    fetchRequests(); // Refresh the requests list
   };
 
   const handleLocationRequest = async () => {
@@ -295,7 +312,8 @@ const SearchPartsWithMap = () => {
                 filteredRequests.map((request) => (
                   <Card
                     key={request.id}
-                    className="hover:shadow-md transition-shadow"
+                    className="hover:shadow-md transition-shadow cursor-pointer"
+                    onClick={() => handleRequestClick(request)}
                   >
                     <CardHeader className="pb-3">
                       <div className="flex justify-between items-start gap-3">
@@ -350,14 +368,20 @@ const SearchPartsWithMap = () => {
 
                       <div className="flex gap-2 pt-2">
                         <Button
-                          onClick={() => handleMakeOffer(request.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleMakeOffer(request.id);
+                          }}
                           className="flex-1 bg-blue-600 hover:bg-blue-700"
                         >
                           {t("makeOffer")}
                         </Button>
                         <Button
                           variant="outline"
-                          onClick={() => handleContact(request.phone, request)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleContact(request.phone, request);
+                          }}
                           className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white border-green-600"
                         >
                           <MessageCircle className="w-4 h-4" />
@@ -371,6 +395,13 @@ const SearchPartsWithMap = () => {
             </div>
           </TabsContent>
         </Tabs>
+
+        <RequestExpandedDialog
+          request={selectedRequest}
+          isOpen={isRequestDialogOpen}
+          onClose={handleRequestDialogClose}
+          onRequestUpdated={handleRequestUpdated}
+        />
       </main>
     </div>
   );
