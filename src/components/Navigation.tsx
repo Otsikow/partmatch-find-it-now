@@ -7,6 +7,7 @@ import NavigationAuth from "./NavigationAuth";
 import NavigationLogo from "./NavigationLogo";
 import NavigationMobile from "./NavigationMobile";
 import ChatNotificationBadge from "./chat/ChatNotificationBadge";
+import ThemeToggle from "./ThemeToggle";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Navigation = () => {
@@ -60,8 +61,9 @@ const Navigation = () => {
             </div>
           )}
 
-          {/* Desktop Auth */}
-          <div className="hidden md:block">
+          {/* Desktop Auth and Theme Toggle */}
+          <div className="hidden md:flex items-center space-x-2">
+            <ThemeToggle />
             <NavigationAuth />
           </div>
 

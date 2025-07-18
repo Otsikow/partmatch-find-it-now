@@ -1,11 +1,22 @@
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="transition-colors duration-300">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" href="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" type="image/png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PartMatch - Buy & Sell Car Parts</title>
+    
+    <!-- Theme initialization script (prevents flash) -->
+    <script>
+      (function() {
+        const theme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (theme === 'dark' || (!theme && systemPrefersDark)) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
     
     <!-- PWA Meta Tags -->
     <meta name="description" content="Buy and sell car parts easily worldwide. Find the perfect part for your vehicle or sell your spare parts." />

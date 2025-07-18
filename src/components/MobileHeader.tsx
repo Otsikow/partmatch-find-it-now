@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 import NotificationBell from "./NotificationBell";
 import LanguageSelector from "./LanguageSelector";
 import CountryCurrencySelector from "./CountryCurrencySelector";
+import ThemeToggle from "./ThemeToggle";
 const MobileHeader = () => {
   const { user, signOut } = useAuth();
   const { t } = useTranslation();
@@ -51,7 +52,8 @@ const MobileHeader = () => {
         </div>
         
         {user && (
-          <div className="flex items-center space-x-3 flex-shrink-0">
+          <div className="flex items-center space-x-2 flex-shrink-0">
+            <ThemeToggle />
             <div className="flex items-center justify-center bg-white/10 rounded-full p-1">
               <NotificationBell />
             </div>
@@ -99,6 +101,7 @@ const MobileHeader = () => {
         
         {!user && (
           <div className="flex items-center space-x-2 flex-shrink-0">
+            <ThemeToggle />
             <LanguageSelector showLabel={false} variant="button" />
           </div>
         )}
