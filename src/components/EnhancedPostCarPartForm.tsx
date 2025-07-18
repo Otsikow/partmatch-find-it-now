@@ -17,6 +17,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Package, Upload, Star, Camera, AlertCircle } from "lucide-react";
 import PaymentModal from "./PaymentModal";
+import PromotionSuggestionsModal from "./PromotionSuggestionsModal";
+import { useListingAnalytics } from "@/hooks/useListingAnalytics";
 import { CAR_PART_CATEGORIES } from "@/constants/carPartCategories";
 
 interface EnhancedPostCarPartFormProps {
@@ -29,9 +31,14 @@ const EnhancedPostCarPartForm = ({
   hasBusinessSubscription = false,
 }: EnhancedPostCarPartFormProps) => {
   const { user } = useAuth();
+  const { checkForPromotionSuggestions } = useListingAnalytics();
   const [loading, setLoading] = useState(false);
   const [currentPhotos, setCurrentPhotos] = useState<File[]>([]);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showPromotionSuggestions, setShowPromotionSuggestions] = useState(false);
+  const [promotionSuggestions, setPromotionSuggestions] = useState([]);
+  const [newListingId, setNewListingId] = useState<string | null>(null);
+  const [newListingTitle, setNewListingTitle] = useState<string>("");
   const [pendingPhoto, setPendingPhoto] = useState<File | null>(null);
   const [currency, setCurrency] = useState("GHS");
   const [formData, setFormData] = useState({
@@ -325,6 +332,21 @@ const EnhancedPostCarPartForm = ({
           title: "Part Posted Successfully!",
           description: "Your car part has been posted. Quality check will be processed shortly.",
         });
+      }
+
+      // Check for promotion suggestions after successful listing creation
+      if (insertedPart.id) {
+        setNewListingId(insertedPart.id);
+        setNewListingTitle(formData.title);
+        
+        // Wait a moment for the quality check to complete, then check for suggestions
+        setTimeout(async () => {
+          const suggestionData = await checkForPromotionSuggestions(insertedPart.id);
+          if (suggestionData?.suggestions && suggestionData.suggestions.length > 0) {
+            setPromotionSuggestions(suggestionData.suggestions);
+            setShowPromotionSuggestions(true);
+          }
+        }, 2000);
       }
 
       setFormData({
@@ -621,6 +643,15 @@ const EnhancedPostCarPartForm = ({
           onPaymentSuccess={handleExtraPhotoPayment}
         />
       )}
+
+      {/* Promotion Suggestions Modal */}
+      <PromotionSuggestionsModal
+        isOpen={showPromotionSuggestions}
+        onClose={() => setShowPromotionSuggestions(false)}
+        suggestions={promotionSuggestions}
+        listingId={newListingId || ""}
+        listingTitle={newListingTitle}
+      />
     </Card>
   );
 };

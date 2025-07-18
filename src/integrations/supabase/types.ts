@@ -1351,6 +1351,14 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      increment_click_count: {
+        Args: { listing_id: string }
+        Returns: undefined
+      }
+      increment_view_count: {
+        Args: { listing_id: string }
+        Returns: undefined
+      }
       is_authorized_admin_email: {
         Args: { email_to_check: string }
         Returns: boolean

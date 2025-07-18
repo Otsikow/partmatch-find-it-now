@@ -20,8 +20,19 @@ export const useListingAnalytics = () => {
           }
         });
 
-      // Update view count on the listing
-      await supabase.rpc('increment_view_count', { listing_id: listingId });
+      // Get current view count and increment
+      const { data: currentListing } = await supabase
+        .from('car_parts')
+        .select('view_count')
+        .eq('id', listingId)
+        .single();
+
+      const newViewCount = (currentListing?.view_count || 0) + 1;
+      
+      await supabase
+        .from('car_parts')
+        .update({ view_count: newViewCount })
+        .eq('id', listingId);
     } catch (error) {
       console.error('Error tracking listing view:', error);
     }
@@ -42,8 +53,19 @@ export const useListingAnalytics = () => {
           }
         });
 
-      // Update click count on the listing
-      await supabase.rpc('increment_click_count', { listing_id: listingId });
+      // Get current click count and increment
+      const { data: currentListing } = await supabase
+        .from('car_parts')
+        .select('click_count')
+        .eq('id', listingId)
+        .single();
+
+      const newClickCount = (currentListing?.click_count || 0) + 1;
+      
+      await supabase
+        .from('car_parts')
+        .update({ click_count: newClickCount })
+        .eq('id', listingId);
     } catch (error) {
       console.error('Error tracking listing click:', error);
     }
