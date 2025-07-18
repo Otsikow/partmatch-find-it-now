@@ -9,17 +9,23 @@ const TermsOfService = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-green-50 to-emerald-100 font-inter">
       <PageHeader 
         title="Terms of Service" 
-        subtitle="Please read these terms carefully before using PartMatch. By using our platform, you agree to these terms and conditions."
         showBackButton={true}
         backTo="/"
       />
       
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
+        {/* Introduction Section */}
         <div className="text-center mb-12 sm:mb-16">
           <div className="flex items-center justify-center space-x-2 sm:space-x-3 mb-4 sm:mb-6">
             <Scale className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-primary" />
           </div>
-          <p className="text-sm text-gray-500 mt-4">Last updated: December 27, 2024</p>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            Terms and Conditions
+          </h1>
+          <p className="text-lg text-gray-700 mb-4 max-w-3xl mx-auto leading-relaxed">
+            Please read these terms carefully before using PartMatch. By using our platform, you agree to these terms and conditions.
+          </p>
+          <p className="text-sm text-gray-500">Last updated: December 27, 2024</p>
         </div>
 
         <div className="max-w-4xl mx-auto space-y-8">
