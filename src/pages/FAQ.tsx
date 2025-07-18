@@ -195,7 +195,7 @@ const FAQ = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-gradient-accent to-gradient-secondary font-inter">
       <PageHeader
-        title="Frequently Asked Questions"
+        title="FAQ"
         subtitle="Find answers to common questions about PartMatch"
         showBackButton={true}
         backTo="/"
