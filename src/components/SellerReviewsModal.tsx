@@ -54,6 +54,8 @@ const SellerReviewsModal: React.FC<SellerReviewsModalProps> = ({
   const fetchReviews = async () => {
     setLoading(true);
     try {
+      console.log('Fetching reviews for seller:', sellerId);
+      
       // Fetch reviews first
       const { data: reviewsData, error } = await supabase
         .from('reviews')
@@ -62,24 +64,34 @@ const SellerReviewsModal: React.FC<SellerReviewsModalProps> = ({
         .order('created_at', { ascending: false })
         .limit(20);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching reviews:', error);
+        throw error;
+      }
 
-      // Fetch reviewer profiles separately
-      const reviewerIds = reviewsData?.map(review => review.reviewer_id) || [];
-      const { data: profilesData } = await supabase
-        .from('profiles')
-        .select('id, first_name, last_name')
-        .in('id', reviewerIds);
+      console.log('Fetched reviews:', reviewsData);
 
-      // Combine data
-      const formattedReviews = (reviewsData || []).map(review => ({
-        ...review,
-        reviewer_profile: profilesData?.find(profile => profile.id === review.reviewer_id) || null
-      }));
-      
-      setReviews(formattedReviews);
+      if (reviewsData && reviewsData.length > 0) {
+        // Fetch reviewer profiles separately
+        const reviewerIds = reviewsData.map(review => review.reviewer_id);
+        const { data: profilesData } = await supabase
+          .from('profiles')
+          .select('id, first_name, last_name')
+          .in('id', reviewerIds);
+
+        // Combine data
+        const formattedReviews = reviewsData.map(review => ({
+          ...review,
+          reviewer_profile: profilesData?.find(profile => profile.id === review.reviewer_id) || null
+        }));
+        
+        setReviews(formattedReviews);
+      } else {
+        setReviews([]);
+      }
     } catch (error) {
       console.error('Error fetching reviews:', error);
+      setReviews([]);
     } finally {
       setLoading(false);
     }
