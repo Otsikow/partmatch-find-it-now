@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
 
-const SupplierHeader = () => {
+const SellerHeader = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -73,7 +73,7 @@ const SupplierHeader = () => {
   };
 
   const handleHome = () => {
-    console.log("SupplierHeader: Home button clicked, navigating to /");
+    console.log("SellerHeader: Home button clicked, navigating to /");
     window.location.href = "/";
   };
 
@@ -124,4 +124,4 @@ const SupplierHeader = () => {
   );
 };
 
-export default SupplierHeader;
+export default SellerHeader;
