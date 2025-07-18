@@ -61,8 +61,18 @@ const ChatHeader = ({ otherUser, onBack }: ChatHeaderProps) => {
       
       <div className="flex items-center gap-2">
         {otherUser?.phone && (
-          <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-gray-100">
-            <Phone className="h-4 w-4 text-gray-600" />
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="h-8 w-8 p-0 hover:bg-green-100"
+            onClick={() => {
+              const cleanPhone = otherUser.phone?.replace(/[^0-9]/g, '');
+              const message = `Hi ${otherUser.first_name}! I'd like to discuss about the part on PartMatch.`;
+              const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
+              window.open(whatsappUrl, '_blank');
+            }}
+          >
+            <Phone className="h-4 w-4 text-green-600" />
           </Button>
         )}
         <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-gray-100">
