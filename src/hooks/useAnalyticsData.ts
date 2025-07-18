@@ -273,6 +273,9 @@ export const useAnalyticsData = (dateRange?: DateRange) => {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'reviews' }, () => {
         fetchAnalyticsData();
       })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'part_requests' }, () => {
+        fetchAnalyticsData();
+      })
       .subscribe();
 
     return () => {
