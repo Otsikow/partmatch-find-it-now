@@ -114,10 +114,10 @@ const RequestPart = () => {
               </Link>
               
               <div className="min-w-0 flex-1">
-                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white truncate leading-tight">
+                <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-white leading-tight break-words">
                   {t("requestPart.welcomeTitle", "Welcome to PartMatch")}
                 </h1>
-                <p className="text-sm sm:text-base text-white/90 truncate leading-tight">
+                <p className="text-sm sm:text-base text-white/90 leading-tight break-words mt-1">
                   {t("requestPart.subtitle", "Tell us what you need and we'll connect you with sellers")}
                 </p>
               </div>
