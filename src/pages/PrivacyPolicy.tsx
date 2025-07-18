@@ -1,26 +1,24 @@
 
 import Footer from "@/components/Footer";
-import Navigation from "@/components/Navigation";
+import PageHeader from "@/components/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
 import { Shield, Eye, Lock, FileText, UserCheck, Cookie, Phone, Clock } from "lucide-react";
 
 const PrivacyPolicy = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 font-inter">
-      <Navigation />
+      <PageHeader 
+        title="Privacy Policy" 
+        subtitle="Your privacy is important to us. This policy explains how we collect, use, and protect your personal information."
+        showBackButton={true}
+        backTo="/"
+      />
       
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <div className="flex items-center justify-center space-x-3 mb-6">
-            <Shield className="h-12 w-12 text-blue-500" />
-            <h1 className="text-4xl md:text-5xl font-playfair font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              Privacy Policy
-            </h1>
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
+        <div className="text-center mb-12 sm:mb-16">
+          <div className="flex items-center justify-center space-x-2 sm:space-x-3 mb-4 sm:mb-6">
+            <Shield className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-primary" />
           </div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto font-crimson leading-relaxed">
-            Your privacy is important to us. This policy explains how we collect, use, and protect your personal information.
-          </p>
           <p className="text-sm text-gray-500 mt-4">Last updated: December 27, 2024</p>
         </div>
 

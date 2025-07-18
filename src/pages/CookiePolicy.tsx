@@ -1,6 +1,6 @@
 
 import Footer from "@/components/Footer";
-import Navigation from "@/components/Navigation";
+import PageHeader from "@/components/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Cookie, Settings, Info, Shield } from "lucide-react";
@@ -30,20 +30,18 @@ const CookiePolicy = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-orange-50 to-yellow-100 font-inter">
-      <Navigation />
+      <PageHeader 
+        title="Cookie Policy" 
+        subtitle="Learn about how we use cookies and similar technologies to enhance your experience on PartMatch."
+        showBackButton={true}
+        backTo="/"
+      />
       
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <div className="flex items-center justify-center space-x-3 mb-6">
-            <Cookie className="h-12 w-12 text-orange-500" />
-            <h1 className="text-4xl md:text-5xl font-playfair font-bold bg-gradient-to-r from-orange-600 to-yellow-600 bg-clip-text text-transparent">
-              Cookie Policy
-            </h1>
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
+        <div className="text-center mb-12 sm:mb-16">
+          <div className="flex items-center justify-center space-x-2 sm:space-x-3 mb-4 sm:mb-6">
+            <Cookie className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-primary" />
           </div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto font-crimson leading-relaxed">
-            Learn about how we use cookies and similar technologies to enhance your experience on PartMatch.
-          </p>
           <p className="text-sm text-gray-500 mt-4">Last updated: December 27, 2024</p>
         </div>
 
