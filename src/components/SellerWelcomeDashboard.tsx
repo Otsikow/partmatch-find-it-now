@@ -19,7 +19,7 @@ const SupplierWelcomeDashboard = ({ onGoToSellerTools }: SupplierWelcomeDashboar
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-playfair font-bold mb-4 bg-gradient-to-r from-orange-700 to-red-700 bg-clip-text text-transparent">
           Seller Dashboard
         </h2>
-        <p className="text-gray-600 text-lg font-crimson">
+        <p className="text-muted-foreground text-lg font-crimson">
           What would you like to do?
         </p>
       </div>
@@ -35,7 +35,7 @@ const SupplierWelcomeDashboard = ({ onGoToSellerTools }: SupplierWelcomeDashboar
             <h3 className="text-xl sm:text-2xl font-playfair font-semibold mb-4 text-orange-700">
               Sell Car Parts
             </h3>
-            <p className="text-gray-600 mb-6 font-crimson">
+            <p className="text-muted-foreground mb-6 font-crimson">
               Manage your inventory, offers, and customer requests
             </p>
             <Button 
@@ -56,7 +56,7 @@ const SupplierWelcomeDashboard = ({ onGoToSellerTools }: SupplierWelcomeDashboar
             <h3 className="text-xl sm:text-2xl font-playfair font-semibold mb-4 text-emerald-700">
               Browse Car Parts
             </h3>
-            <p className="text-gray-600 mb-6 font-crimson">
+            <p className="text-muted-foreground mb-6 font-crimson">
               Search through available car parts from other sellers
             </p>
             <Link to="/search-parts">
@@ -76,7 +76,7 @@ const SupplierWelcomeDashboard = ({ onGoToSellerTools }: SupplierWelcomeDashboar
             <h3 className="text-xl sm:text-2xl font-playfair font-semibold mb-4 text-blue-700">
               Request Car Parts
             </h3>
-            <p className="text-gray-600 mb-6 font-crimson">
+            <p className="text-muted-foreground mb-6 font-crimson">
               Can't find what you need? Request it and other sellers will reach out
             </p>
             <Link to="/request-part">

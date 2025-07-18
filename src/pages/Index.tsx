@@ -21,7 +21,7 @@ const Index = () => {
 
   // Show mobile app layout
   return (
-    <div className="min-h-screen bg-gray-50 body-text">
+    <div className="min-h-screen bg-background body-text">
       <MobileHeader />
       <div className="pb-20">
         <MobileHomeContent />
