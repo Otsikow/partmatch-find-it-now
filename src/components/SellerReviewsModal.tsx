@@ -56,10 +56,17 @@ const SellerReviewsModal: React.FC<SellerReviewsModalProps> = ({
     try {
       console.log('Fetching reviews for seller:', sellerId);
       
-      // Fetch reviews first
+      // Fetch reviews with reviewer profiles in a single query
       const { data: reviewsData, error } = await supabase
         .from('reviews')
-        .select('*')
+        .select(`
+          *,
+          reviewer_profile:profiles!reviewer_id(
+            id,
+            first_name,
+            last_name
+          )
+        `)
         .eq('seller_id', sellerId)
         .order('created_at', { ascending: false })
         .limit(20);
@@ -71,24 +78,15 @@ const SellerReviewsModal: React.FC<SellerReviewsModalProps> = ({
 
       console.log('Fetched reviews:', reviewsData);
 
-      if (reviewsData && reviewsData.length > 0) {
-        // Fetch reviewer profiles separately
-        const reviewerIds = reviewsData.map(review => review.reviewer_id);
-        const { data: profilesData } = await supabase
-          .from('profiles')
-          .select('id, first_name, last_name')
-          .in('id', reviewerIds);
-
-        // Combine data
-        const formattedReviews = reviewsData.map(review => ({
-          ...review,
-          reviewer_profile: profilesData?.find(profile => profile.id === review.reviewer_id) || null
-        }));
-        
-        setReviews(formattedReviews);
-      } else {
-        setReviews([]);
-      }
+      // Format the reviews data
+      const formattedReviews = (reviewsData || []).map(review => ({
+        ...review,
+        reviewer_profile: Array.isArray(review.reviewer_profile) 
+          ? review.reviewer_profile[0] 
+          : review.reviewer_profile
+      }));
+      
+      setReviews(formattedReviews);
     } catch (error) {
       console.error('Error fetching reviews:', error);
       setReviews([]);
