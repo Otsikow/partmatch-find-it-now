@@ -1,42 +1,38 @@
 import { Home, Search, Plus, User, Package } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
-import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 
 const MobileBottomTabs = () => {
   const location = useLocation();
-  const { user } = useAuth();
-  const { t } = useTranslation();
 
   const isActive = (path: string) => location.pathname === path;
 
   const tabs = [
     {
       icon: Home,
-      label: t("home"),
+      label: "Home",
       path: "/",
     },
     {
       icon: Search,
-      label: t("browse"),
+      label: "Browse",
       path: "/search-parts",
     },
     {
       icon: Plus,
-      label: t("request"),
+      label: "Request",
       path: "/request-part",
       isSpecial: true, // Mark as special for different styling
     },
     {
       icon: Package,
-      label: t("sellCarParts"),
+      label: "Sell",
       path: "/seller-dashboard",
     },
     {
       icon: User,
-      label: user ? t("profile") : t("signIn"),
-      path: user ? "/buyer-dashboard" : "/auth",
+      label: "Profile",
+      path: "/auth",
     },
   ];
 
