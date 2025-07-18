@@ -19,18 +19,18 @@ const MobileBottomTabs = () => {
     },
     {
       icon: Search,
-      label: "Browse",
+      label: t("browse"),
       path: "/search-parts",
     },
     {
       icon: Plus,
-      label: "Request",
+      label: t("request"),
       path: "/request-part",
       isSpecial: true, // Mark as special for different styling
     },
     {
       icon: Package,
-      label: "Sell",
+      label: t("sellCarParts"),
       path: "/seller-dashboard",
     },
     {
