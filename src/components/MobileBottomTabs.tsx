@@ -28,7 +28,7 @@ const MobileBottomTabs = () => {
     },
     {
       icon: Package,
-      label: t("dashboard"),
+      label: t("sellCarParts"),
       path: "/seller-dashboard",
     },
     {
