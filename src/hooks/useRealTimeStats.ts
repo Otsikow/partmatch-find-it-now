@@ -16,6 +16,8 @@ interface CategoryStats {
 
 interface RealTimeStats {
   activeParts: number;
+  activeRequests: number;
+  partsMatched: number;
   sellers: number;
   totalUsers: number;
   countries: number;
@@ -27,6 +29,8 @@ interface RealTimeStats {
 export const useRealTimeStats = () => {
   const [stats, setStats] = useState<RealTimeStats>({
     activeParts: 0,
+    activeRequests: 0,
+    partsMatched: 0,
     sellers: 0,
     totalUsers: 0,
     countries: 0,
@@ -50,6 +54,18 @@ export const useRealTimeStats = () => {
         .from('car_parts')
         .select('*', { count: 'exact', head: true })
         .eq('status', 'available');
+
+      // Get active requests count (pending status)
+      const { count: activeRequestsCount } = await supabase
+        .from('part_requests')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'pending');
+
+      // Get parts matched count (offers with accepted status)
+      const { count: partsMatchedCount } = await supabase
+        .from('offers')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'accepted');
 
       // Get sellers count (users with type supplier)
       const { count: sellersCount } = await supabase
@@ -90,6 +106,8 @@ export const useRealTimeStats = () => {
 
       setStats({
         activeParts: partsCount || 0,
+        activeRequests: activeRequestsCount || 0,
+        partsMatched: partsMatchedCount || 0,
         sellers: sellersCount || 0,
         totalUsers: usersCount || 0,
         countries: countriesCount || 0,
@@ -130,6 +148,36 @@ export const useRealTimeStats = () => {
       )
       .subscribe();
 
+    const requestsChannel = supabase
+      .channel('requests-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'part_requests'
+        },
+        () => {
+          fetchStats();
+        }
+      )
+      .subscribe();
+
+    const offersChannel = supabase
+      .channel('offers-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'offers'
+        },
+        () => {
+          fetchStats();
+        }
+      )
+      .subscribe();
+
     const profilesChannel = supabase
       .channel('profiles-changes')
       .on(
@@ -162,6 +210,8 @@ export const useRealTimeStats = () => {
 
     return () => {
       supabase.removeChannel(partsChannel);
+      supabase.removeChannel(requestsChannel);
+      supabase.removeChannel(offersChannel);
       supabase.removeChannel(profilesChannel);
       supabase.removeChannel(reviewsChannel);
     };
