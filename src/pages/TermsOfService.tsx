@@ -6,7 +6,7 @@ import { FileText, Scale, AlertTriangle, CheckCircle } from "lucide-react";
 
 const TermsOfService = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-green-50 to-emerald-100 font-inter">
+    <div className="min-h-screen bg-gradient-to-br from-background via-gradient-accent to-gradient-secondary font-inter">
       <PageHeader 
         title="Terms of Service" 
         showBackButton={true}
@@ -19,24 +19,24 @@ const TermsOfService = () => {
           <div className="flex items-center justify-center space-x-2 sm:space-x-3 mb-4 sm:mb-6">
             <Scale className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-primary" />
           </div>
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-4">
             Terms and Conditions
           </h1>
-          <p className="text-lg text-gray-700 mb-4 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg text-muted-foreground mb-4 max-w-3xl mx-auto leading-relaxed">
             Please read these terms carefully before using PartMatch. By using our platform, you agree to these terms and conditions.
           </p>
-          <p className="text-sm text-gray-500">Last updated: December 27, 2024</p>
+          <p className="text-sm text-muted-foreground">Last updated: December 27, 2024</p>
         </div>
 
         <div className="max-w-4xl mx-auto space-y-8">
           {/* Acceptance of Terms */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-green-50/50">
+          <Card className="shadow-lg border-0 bg-card dark:bg-card">
             <CardContent className="p-8">
               <div className="flex items-center space-x-3 mb-6">
-                <CheckCircle className="h-8 w-8 text-green-500" />
-                <h2 className="text-2xl font-playfair font-bold text-gray-800">Acceptance of Terms</h2>
+                <CheckCircle className="h-8 w-8 text-primary" />
+                <h2 className="text-2xl font-playfair font-bold text-foreground">Acceptance of Terms</h2>
               </div>
-              <div className="space-y-4 text-gray-600 font-crimson">
+              <div className="space-y-4 text-muted-foreground font-crimson">
                 <p>
                   By accessing or using PartMatch ("the Platform"), you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any part of these terms, you may not use our services.
                 </p>
@@ -48,14 +48,14 @@ const TermsOfService = () => {
           </Card>
 
           {/* User Accounts */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-blue-50/50">
+          <Card className="shadow-lg border-0 bg-card dark:bg-card">
             <CardContent className="p-8">
               <div className="flex items-center space-x-3 mb-6">
-                <FileText className="h-8 w-8 text-blue-500" />
-                <h2 className="text-2xl font-playfair font-bold text-gray-800">User Accounts</h2>
+                <FileText className="h-8 w-8 text-primary" />
+                <h2 className="text-2xl font-playfair font-bold text-foreground">User Accounts</h2>
               </div>
-              <div className="space-y-4 text-gray-600 font-crimson">
-                <h3 className="text-lg font-semibold text-gray-800">Account Registration</h3>
+              <div className="space-y-4 text-muted-foreground font-crimson">
+                <h3 className="text-lg font-semibold text-foreground">Account Registration</h3>
                 <ul className="list-disc list-inside space-y-2">
                   <li>You must provide accurate and complete information when creating an account</li>
                   <li>You are responsible for maintaining the security of your account credentials</li>
@@ -63,7 +63,7 @@ const TermsOfService = () => {
                   <li>One person may not maintain multiple accounts</li>
                 </ul>
                 
-                <h3 className="text-lg font-semibold text-gray-800 mt-6">Account Responsibilities</h3>
+                <h3 className="text-lg font-semibold text-foreground mt-6">Account Responsibilities</h3>
                 <ul className="list-disc list-inside space-y-2">
                   <li>Keep your account information up to date</li>
                   <li>Notify us immediately of any unauthorized use</li>
@@ -75,18 +75,18 @@ const TermsOfService = () => {
           </Card>
 
           {/* Seller Terms */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-orange-50/50">
+          <Card className="shadow-lg border-0 bg-card dark:bg-card">
             <CardContent className="p-8">
-              <h2 className="text-2xl font-playfair font-bold text-gray-800 mb-6">Seller Terms</h2>
-              <div className="space-y-4 text-gray-600 font-crimson">
-                <h3 className="text-lg font-semibold text-gray-800">Seller Verification</h3>
+              <h2 className="text-2xl font-playfair font-bold text-foreground mb-6">Seller Terms</h2>
+              <div className="space-y-4 text-muted-foreground font-crimson">
+                <h3 className="text-lg font-semibold text-foreground">Seller Verification</h3>
                 <ul className="list-disc list-inside space-y-2">
                   <li>All sellers must complete our verification process</li>
                   <li>Provide valid business documentation where applicable</li>
                   <li>Maintain accurate contact and location information</li>
                 </ul>
                 
-                <h3 className="text-lg font-semibold text-gray-800 mt-6">Product Listings</h3>
+                <h3 className="text-lg font-semibold text-foreground mt-6">Product Listings</h3>
                 <ul className="list-disc list-inside space-y-2">
                   <li>Provide accurate descriptions and images of parts</li>
                   <li>Ensure parts are genuine and in described condition</li>
@@ -98,11 +98,11 @@ const TermsOfService = () => {
           </Card>
 
           {/* Buyer Terms */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-purple-50/50">
+          <Card className="shadow-lg border-0 bg-card dark:bg-card">
             <CardContent className="p-8">
-              <h2 className="text-2xl font-playfair font-bold text-gray-800 mb-6">Buyer Terms</h2>
-              <div className="space-y-4 text-gray-600 font-crimson">
-                <h3 className="text-lg font-semibold text-gray-800">Purchase Responsibilities</h3>
+              <h2 className="text-2xl font-playfair font-bold text-foreground mb-6">Buyer Terms</h2>
+              <div className="space-y-4 text-muted-foreground font-crimson">
+                <h3 className="text-lg font-semibold text-foreground">Purchase Responsibilities</h3>
                 <ul className="list-disc list-inside space-y-2">
                   <li>Verify part compatibility before purchase</li>
                   <li>Make payments promptly upon order confirmation</li>
@@ -110,7 +110,7 @@ const TermsOfService = () => {
                   <li>Communicate professionally with sellers</li>
                 </ul>
                 
-                <h3 className="text-lg font-semibold text-gray-800 mt-6">Returns and Refunds</h3>
+                <h3 className="text-lg font-semibold text-foreground mt-6">Returns and Refunds</h3>
                 <ul className="list-disc list-inside space-y-2">
                   <li>Return policies are set by individual sellers</li>
                   <li>Parts must be returned in original condition</li>
@@ -122,13 +122,13 @@ const TermsOfService = () => {
           </Card>
 
           {/* Prohibited Activities */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-red-50/50">
+          <Card className="shadow-lg border-0 bg-card dark:bg-card">
             <CardContent className="p-8">
               <div className="flex items-center space-x-3 mb-6">
-                <AlertTriangle className="h-8 w-8 text-red-500" />
-                <h2 className="text-2xl font-playfair font-bold text-gray-800">Prohibited Activities</h2>
+                <AlertTriangle className="h-8 w-8 text-destructive" />
+                <h2 className="text-2xl font-playfair font-bold text-foreground">Prohibited Activities</h2>
               </div>
-              <div className="space-y-4 text-gray-600 font-crimson">
+              <div className="space-y-4 text-muted-foreground font-crimson">
                 <p>The following activities are strictly prohibited on our Platform:</p>
                 <ul className="list-disc list-inside space-y-2">
                   <li>Selling counterfeit, stolen, or illegal parts</li>
@@ -144,10 +144,10 @@ const TermsOfService = () => {
           </Card>
 
           {/* Platform Fees */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-indigo-50/50">
+          <Card className="shadow-lg border-0 bg-card dark:bg-card">
             <CardContent className="p-8">
-              <h2 className="text-2xl font-playfair font-bold text-gray-800 mb-6">Platform Fees</h2>
-              <div className="space-y-4 text-gray-600 font-crimson">
+              <h2 className="text-2xl font-playfair font-bold text-foreground mb-6">Platform Fees</h2>
+              <div className="space-y-4 text-muted-foreground font-crimson">
                 <ul className="list-disc list-inside space-y-2">
                   <li>Buyers can browse and search for free</li>
                   <li>Sellers pay a commission on successful sales</li>
@@ -162,10 +162,10 @@ const TermsOfService = () => {
           </Card>
 
           {/* Limitation of Liability */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-yellow-50/50">
+          <Card className="shadow-lg border-0 bg-card dark:bg-card">
             <CardContent className="p-8">
-              <h2 className="text-2xl font-playfair font-bold text-gray-800 mb-6">Limitation of Liability</h2>
-              <div className="space-y-4 text-gray-600 font-crimson">
+              <h2 className="text-2xl font-playfair font-bold text-foreground mb-6">Limitation of Liability</h2>
+              <div className="space-y-4 text-muted-foreground font-crimson">
                 <p>
                   PartMatch serves as a marketplace platform connecting buyers and sellers. We do not manufacture, sell, or warranty any parts listed on the Platform.
                 </p>
@@ -180,10 +180,10 @@ const TermsOfService = () => {
           </Card>
 
           {/* Termination */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-teal-50/50">
+          <Card className="shadow-lg border-0 bg-card dark:bg-card">
             <CardContent className="p-8">
-              <h2 className="text-2xl font-playfair font-bold text-gray-800 mb-6">Termination</h2>
-              <div className="space-y-4 text-gray-600 font-crimson">
+              <h2 className="text-2xl font-playfair font-bold text-foreground mb-6">Termination</h2>
+              <div className="space-y-4 text-muted-foreground font-crimson">
                 <p>
                   We reserve the right to suspend or terminate accounts for violations of these terms or for any reason with reasonable notice.
                 </p>
@@ -197,10 +197,10 @@ const TermsOfService = () => {
           </Card>
 
           {/* Contact Information */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-gray-50/50">
+          <Card className="shadow-lg border-0 bg-card dark:bg-card">
             <CardContent className="p-8">
-              <h2 className="text-2xl font-playfair font-bold text-gray-800 mb-6">Contact Us</h2>
-              <div className="space-y-4 text-gray-600 font-crimson">
+              <h2 className="text-2xl font-playfair font-bold text-foreground mb-6">Contact Us</h2>
+              <div className="space-y-4 text-muted-foreground font-crimson">
                 <p>If you have questions about these Terms of Service, please contact us:</p>
                 <ul className="space-y-2">
                   <li><strong>Email:</strong> legal@partmatchgh.com</li>

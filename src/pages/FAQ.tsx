@@ -215,11 +215,11 @@ const FAQ = () => {
         {/* FAQ Sections */}
         <div className="space-y-8">
           {faqSections.map((section, sectionIndex) => (
-            <Card key={sectionIndex} className="shadow-lg border-0 bg-white/95">
+            <Card key={sectionIndex} className="shadow-lg border-0 bg-card dark:bg-card">
               <CardHeader className="pb-4">
                 <CardTitle className="flex items-center space-x-3 text-2xl font-playfair">
                   <span className="text-2xl">{section.emoji}</span>
-                  <span className="text-gray-800">{section.title}</span>
+                  <span className="text-foreground">{section.title}</span>
                   <Badge variant="secondary" className="ml-auto">
                     {section.questions.length} questions
                   </Badge>
@@ -230,10 +230,10 @@ const FAQ = () => {
                   {section.questions.map((faq, faqIndex) => (
                     <AccordionItem key={faqIndex} value={`item-${sectionIndex}-${faqIndex}`}>
                       <AccordionTrigger className="text-left hover:no-underline">
-                        <span className="font-medium text-gray-700">{faq.question}</span>
+                        <span className="font-medium text-foreground">{faq.question}</span>
                       </AccordionTrigger>
                       <AccordionContent>
-                        <div className="text-gray-600 font-crimson leading-relaxed pt-2">
+                        <div className="text-muted-foreground font-crimson leading-relaxed pt-2">
                           {faq.answer}
                         </div>
                       </AccordionContent>
@@ -246,28 +246,28 @@ const FAQ = () => {
         </div>
 
         {/* Still Have Questions Section */}
-        <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-blue-50/50 mt-12">
+        <Card className="shadow-lg border-0 bg-card dark:bg-card mt-12">
           <CardContent className="p-8 text-center">
             <div className="flex items-center justify-center space-x-3 mb-6">
-              <Mail className="h-8 w-8 text-blue-500" />
-              <h2 className="text-3xl font-playfair font-bold text-gray-800">
+              <Mail className="h-8 w-8 text-primary" />
+              <h2 className="text-3xl font-playfair font-bold text-foreground">
                 Still Have Questions?
               </h2>
             </div>
-            <p className="text-lg text-gray-600 font-crimson mb-6">
+            <p className="text-lg text-muted-foreground font-crimson mb-6">
               Visit our Help Center or contact us directly
             </p>
             <Separator className="my-6" />
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Mail className="h-6 w-6 text-blue-500 mx-auto" />
-                <p className="font-medium text-gray-800">Email Support</p>
-                <p className="text-blue-600 font-crimson">support@partmatch.app</p>
+                <Mail className="h-6 w-6 text-primary mx-auto" />
+                <p className="font-medium text-foreground">Email Support</p>
+                <p className="text-primary font-crimson">support@partmatch.app</p>
               </div>
               <div className="space-y-2">
-                <Globe className="h-6 w-6 text-green-500 mx-auto" />
-                <p className="font-medium text-gray-800">Visit Our Website</p>
-                <p className="text-green-600 font-crimson">www.partmatch.app</p>
+                <Globe className="h-6 w-6 text-primary mx-auto" />
+                <p className="font-medium text-foreground">Visit Our Website</p>
+                <p className="text-primary font-crimson">www.partmatch.app</p>
               </div>
             </div>
           </CardContent>

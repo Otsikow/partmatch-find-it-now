@@ -46,15 +46,15 @@ const About = () => {
 
         {/* Mission & Vision */}
         <div className="grid md:grid-cols-2 gap-8 mb-16">
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-orange-50/50">
+          <Card className="shadow-lg border-0 bg-card dark:bg-card">
             <CardContent className="p-8">
               <div className="flex items-center space-x-3 mb-4">
-                <Target className="h-8 w-8 text-orange-500" />
-                <h2 className="text-2xl font-playfair font-bold text-gray-800">
+                <Target className="h-8 w-8 text-primary" />
+                <h2 className="text-2xl font-playfair font-bold text-foreground">
                   {t("about.missionTitle", "Our Mission")}
                 </h2>
               </div>
-              <p className="text-gray-600 font-crimson leading-relaxed">
+              <p className="text-muted-foreground font-crimson leading-relaxed">
                 {t(
                   "about.mission",
                   "To revolutionize the automotive parts market in Ghana by creating a trusted platform that connects car buyers with verified sellers, ensuring quality parts and transparent transactions."
@@ -63,15 +63,15 @@ const About = () => {
             </CardContent>
           </Card>
 
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-green-50/50">
+          <Card className="shadow-lg border-0 bg-card dark:bg-card">
             <CardContent className="p-8">
               <div className="flex items-center space-x-3 mb-4">
-                <Eye className="h-8 w-8 text-green-500" />
-                <h2 className="text-2xl font-playfair font-bold text-gray-800">
+                <Eye className="h-8 w-8 text-primary" />
+                <h2 className="text-2xl font-playfair font-bold text-foreground">
                   {t("about.visionTitle", "Our Vision")}
                 </h2>
               </div>
-              <p className="text-gray-600 font-crimson leading-relaxed">
+              <p className="text-muted-foreground font-crimson leading-relaxed">
                 {t(
                   "about.vision",
                   "To become Ghana's leading automotive parts marketplace, making it easy for everyone to find, buy, and sell quality car parts with confidence and convenience."
@@ -82,15 +82,15 @@ const About = () => {
         </div>
 
         {/* Our Story */}
-        <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-slate-50/50 mb-16">
+        <Card className="shadow-lg border-0 bg-card dark:bg-card mb-16">
           <CardContent className="p-8">
             <div className="flex items-center justify-center space-x-3 mb-6">
-              <Star className="h-8 w-8 text-blue-500" />
-              <h2 className="text-3xl font-playfair font-bold text-gray-800">
+              <Star className="h-8 w-8 text-primary" />
+              <h2 className="text-3xl font-playfair font-bold text-foreground">
                 {t("about.storyTitle", "Our Story")}
               </h2>
             </div>
-            <div className="max-w-4xl mx-auto space-y-6 text-gray-600 font-crimson leading-relaxed">
+            <div className="max-w-4xl mx-auto space-y-6 text-muted-foreground font-crimson leading-relaxed">
               <p>
                 {t(
                   "about.story1",
@@ -116,19 +116,19 @@ const About = () => {
         {/* Why Choose Us */}
         <div className="mb-16">
           <div className="flex items-center justify-center space-x-3 mb-8">
-            <CheckCircle className="h-8 w-8 text-green-500" />
-            <h2 className="text-3xl font-playfair font-bold text-gray-800">
+            <CheckCircle className="h-8 w-8 text-primary" />
+            <h2 className="text-3xl font-playfair font-bold text-foreground">
               {t("about.whyChooseUs", "Why Choose Us?")}
             </h2>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-blue-50/50">
+            <Card className="shadow-lg border-0 bg-card dark:bg-card">
               <CardContent className="p-6 text-center">
-                <Shield className="h-12 w-12 text-blue-500 mx-auto mb-4" />
-                <h3 className="text-xl font-playfair font-bold text-gray-800 mb-3">
+                <Shield className="h-12 w-12 text-primary mx-auto mb-4" />
+                <h3 className="text-xl font-playfair font-bold text-foreground mb-3">
                   {t("about.verifiedSellers", "Verified Sellers")}
                 </h3>
-                <p className="text-gray-600 font-crimson">
+                <p className="text-muted-foreground font-crimson">
                   {t(
                     "about.verifiedSellersDesc",
                     "All our sellers are thoroughly vetted to ensure quality and reliability."
@@ -137,13 +137,13 @@ const About = () => {
               </CardContent>
             </Card>
 
-            <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-purple-50/50">
+            <Card className="shadow-lg border-0 bg-card dark:bg-card">
               <CardContent className="p-6 text-center">
-                <Package className="h-12 w-12 text-purple-500 mx-auto mb-4" />
-                <h3 className="text-xl font-playfair font-bold text-gray-800 mb-3">
+                <Package className="h-12 w-12 text-primary mx-auto mb-4" />
+                <h3 className="text-xl font-playfair font-bold text-foreground mb-3">
                   {t("about.qualityAssurance", "Quality Assurance")}
                 </h3>
-                <p className="text-gray-600 font-crimson">
+                <p className="text-muted-foreground font-crimson">
                   {t(
                     "about.qualityAssuranceDesc",
                     "We maintain strict quality standards for all parts listed on our platform."
@@ -152,13 +152,13 @@ const About = () => {
               </CardContent>
             </Card>
 
-            <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-green-50/50">
+            <Card className="shadow-lg border-0 bg-card dark:bg-card">
               <CardContent className="p-6 text-center">
-                <Users className="h-12 w-12 text-green-500 mx-auto mb-4" />
-                <h3 className="text-xl font-playfair font-bold text-gray-800 mb-3">
+                <Users className="h-12 w-12 text-primary mx-auto mb-4" />
+                <h3 className="text-xl font-playfair font-bold text-foreground mb-3">
                   {t("about.customerSupport", "Customer Support")}
                 </h3>
-                <p className="text-gray-600 font-crimson">
+                <p className="text-muted-foreground font-crimson">
                   {t(
                     "about.customerSupportDesc",
                     "Our dedicated team is here to help you every step of the way."
@@ -170,32 +170,32 @@ const About = () => {
         </div>
 
         {/* Contact Information */}
-        <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-slate-50/50">
+        <Card className="shadow-lg border-0 bg-card dark:bg-card">
           <CardContent className="p-8">
             <div className="flex items-center justify-center space-x-3 mb-8">
-              <Mail className="h-8 w-8 text-blue-500" />
-              <h2 className="text-3xl font-playfair font-bold text-gray-800">
+              <Mail className="h-8 w-8 text-primary" />
+              <h2 className="text-3xl font-playfair font-bold text-foreground">
                 {t("about.getInTouch", "Get In Touch")}
               </h2>
             </div>
             <div className="grid md:grid-cols-3 gap-8 text-center">
               <div className="space-y-3">
-                <MapPin className="h-8 w-8 text-orange-500 mx-auto" />
-                <h3 className="text-lg font-playfair font-bold text-gray-800">
+                <MapPin className="h-8 w-8 text-primary mx-auto" />
+                <h3 className="text-lg font-playfair font-bold text-foreground">
                   {t("about.visitUs", "Visit Us")}
                 </h3>
-                <p className="text-gray-600 font-crimson">
+                <p className="text-muted-foreground font-crimson">
                   AK-798-9707, Apayo, Atwima Kwawoma, Kumasi, Ghana
                   <br />
                   Seaview Business Centre, Redcar, UK TS10 1AZ
                 </p>
               </div>
               <div className="space-y-3">
-                <Phone className="h-8 w-8 text-green-500 mx-auto" />
-                <h3 className="text-lg font-playfair font-bold text-gray-800">
+                <Phone className="h-8 w-8 text-primary mx-auto" />
+                <h3 className="text-lg font-playfair font-bold text-foreground">
                   {t("about.callUs", "Call Us")}
                 </h3>
-                <p className="text-gray-600 font-crimson">
+                <p className="text-muted-foreground font-crimson">
                   +233 55 123-PART
                   <br />
                   {t("about.hours", "Monday - Saturday")}
@@ -204,11 +204,11 @@ const About = () => {
                 </p>
               </div>
               <div className="space-y-3">
-                <Mail className="h-8 w-8 text-blue-500 mx-auto" />
-                <h3 className="text-lg font-playfair font-bold text-gray-800">
+                <Mail className="h-8 w-8 text-primary mx-auto" />
+                <h3 className="text-lg font-playfair font-bold text-foreground">
                   {t("about.emailUs", "Email Us")}
                 </h3>
-                <p className="text-gray-600 font-crimson">
+                <p className="text-muted-foreground font-crimson">
                   support@partmatch.app
                   <br />
                   {t("about.replyTime", "We reply within 24 hours")}

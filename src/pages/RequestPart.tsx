@@ -72,7 +72,7 @@ const RequestPart = () => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100">
+    <div className="min-h-screen bg-gradient-to-br from-background via-gradient-accent to-gradient-secondary">
       {/* Custom Responsive Header */}
       <div className="bg-gradient-to-r from-primary via-primary/90 to-primary-foreground text-white shadow-lg">
         <div className="px-4 py-6 sm:px-6">

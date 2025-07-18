@@ -76,16 +76,16 @@ const Contact = () => {
 
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Contact Form */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-blue-50/50">
+          <Card className="shadow-lg border-0 bg-card dark:bg-card">
             <CardContent className="p-8">
               <div className="flex items-center space-x-3 mb-6">
-                <Send className="h-6 w-6 text-blue-500" />
-                <h2 className="text-2xl font-playfair font-bold text-gray-800">Send us a Message</h2>
+                <Send className="h-6 w-6 text-primary" />
+                <h2 className="text-2xl font-playfair font-bold text-foreground">Send us a Message</h2>
               </div>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
                       Full Name *
                     </label>
                     <Input
@@ -99,7 +99,7 @@ const Contact = () => {
                     />
                   </div>
                   <div>
-                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2">
                       Phone Number
                     </label>
                     <Input
@@ -114,7 +114,7 @@ const Contact = () => {
                 </div>
                 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
                     Email Address *
                   </label>
                   <Input
@@ -129,7 +129,7 @@ const Contact = () => {
                 </div>
                 
                 <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="subject" className="block text-sm font-medium text-foreground mb-2">
                     Subject *
                   </label>
                   <Input
@@ -144,7 +144,7 @@ const Contact = () => {
                 </div>
                 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
                     Message *
                   </label>
                   <Textarea
@@ -162,7 +162,7 @@ const Contact = () => {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-3 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Send className="mr-2 h-4 w-4" />
                   {isSubmitting ? "Sending..." : "Send Message"}
@@ -173,13 +173,13 @@ const Contact = () => {
 
           {/* Contact Information */}
           <div className="space-y-8">
-            <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-green-50/50">
+            <Card className="shadow-lg border-0 bg-card dark:bg-card">
               <CardContent className="p-6">
                 <div className="flex items-center space-x-4 mb-4">
-                  <MapPin className="h-8 w-8 text-green-500" />
-                  <h3 className="text-xl font-playfair font-bold text-gray-800">Our Office</h3>
+                  <MapPin className="h-8 w-8 text-primary" />
+                  <h3 className="text-xl font-playfair font-bold text-foreground">Our Office</h3>
                 </div>
-                <p className="text-gray-600 font-crimson leading-relaxed">
+                <p className="text-muted-foreground font-crimson leading-relaxed">
                   123 Auto Parts Street<br/>
                   Motor City, MC 12345<br/>
                   Ghana
@@ -187,39 +187,39 @@ const Contact = () => {
               </CardContent>
             </Card>
 
-            <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-orange-50/50">
+            <Card className="shadow-lg border-0 bg-card dark:bg-card">
               <CardContent className="p-6">
                 <div className="flex items-center space-x-4 mb-4">
-                  <Phone className="h-8 w-8 text-orange-500" />
-                  <h3 className="text-xl font-playfair font-bold text-gray-800">Phone</h3>
+                  <Phone className="h-8 w-8 text-primary" />
+                  <h3 className="text-xl font-playfair font-bold text-foreground">Phone</h3>
                 </div>
-                <p className="text-gray-600 font-crimson leading-relaxed">
+                <p className="text-muted-foreground font-crimson leading-relaxed">
                   +233 55 123-PART<br/>
                   +233 24 456-AUTO
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-blue-50/50">
+            <Card className="shadow-lg border-0 bg-card dark:bg-card">
               <CardContent className="p-6">
                 <div className="flex items-center space-x-4 mb-4">
-                  <Mail className="h-8 w-8 text-blue-500" />
-                  <h3 className="text-xl font-playfair font-bold text-gray-800">Email</h3>
+                  <Mail className="h-8 w-8 text-primary" />
+                  <h3 className="text-xl font-playfair font-bold text-foreground">Email</h3>
                 </div>
-                <p className="text-gray-600 font-crimson leading-relaxed">
+                <p className="text-muted-foreground font-crimson leading-relaxed">
                   support@partmatchgh.com<br/>
                   info@partmatchgh.com
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-purple-50/50">
+            <Card className="shadow-lg border-0 bg-card dark:bg-card">
               <CardContent className="p-6">
                 <div className="flex items-center space-x-4 mb-4">
-                  <Clock className="h-8 w-8 text-purple-500" />
-                  <h3 className="text-xl font-playfair font-bold text-gray-800">Business Hours</h3>
+                  <Clock className="h-8 w-8 text-primary" />
+                  <h3 className="text-xl font-playfair font-bold text-foreground">Business Hours</h3>
                 </div>
-                <div className="space-y-2 text-gray-600 font-crimson">
+                <div className="space-y-2 text-muted-foreground font-crimson">
                   <p>Monday - Friday: 8:00 AM - 6:00 PM</p>
                   <p>Saturday: 9:00 AM - 4:00 PM</p>
                   <p>Sunday: Closed</p>
