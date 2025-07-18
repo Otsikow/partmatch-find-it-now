@@ -83,7 +83,7 @@ const SellerAuth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-red-100 font-inter">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-red-100 dark:from-orange-900/20 dark:via-yellow-900/20 dark:to-red-900/20 font-inter">
       <header className="relative bg-gradient-to-r from-primary via-primary/95 to-primary-foreground text-white shadow-lg border-b border-white/20">
         <div className="absolute inset-0 bg-gradient-to-br from-orange-600/10 via-red-600/5 to-indigo-600/10"></div>
         <div className="relative p-4 sm:p-6 flex items-center gap-3">
@@ -128,7 +128,7 @@ const SellerAuth = () => {
       </header>
 
       <main className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-md">
-        <Card className="p-6 sm:p-8 bg-gradient-to-br from-white/90 to-orange-50/50 backdrop-blur-sm shadow-2xl border-0">
+        <Card className="p-6 sm:p-8 bg-gradient-to-br from-white/90 to-orange-50/50 dark:from-gray-800/90 dark:to-orange-900/20 backdrop-blur-sm shadow-2xl border-0">
           {isPasswordReset ? (
             <SetNewPassword
               onSuccess={handlePasswordResetSuccess}
@@ -154,7 +154,7 @@ const SellerAuth = () => {
                 <h2 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-semibold mb-2 sm:mb-3 bg-gradient-to-r from-orange-700 to-red-700 bg-clip-text text-transparent">
                   {isLogin ? "Welcome Back Seller" : "Join as a Seller"}
                 </h2>
-                <p className="text-gray-600 text-sm sm:text-base font-crimson">
+                <p className="text-muted-foreground text-sm sm:text-base font-crimson">
                   {isLogin
                     ? "Sign in to manage your inventory"
                     : "Register to sell and supply car parts"}
@@ -180,7 +180,7 @@ const SellerAuth = () => {
                             handleInputChange("firstName", e.target.value)
                           }
                           required
-                          className="mt-1 text-base border-orange-200 focus:border-orange-400"
+                          className="mt-1 text-base border-orange-200 focus:border-orange-400 dark:border-orange-800 dark:focus:border-orange-600"
                         />
                       </div>
                       <div>
@@ -198,7 +198,7 @@ const SellerAuth = () => {
                             handleInputChange("lastName", e.target.value)
                           }
                           required
-                          className="mt-1 text-base border-orange-200 focus:border-orange-400"
+                          className="mt-1 text-base border-orange-200 focus:border-orange-400 dark:border-orange-800 dark:focus:border-orange-600"
                         />
                       </div>
                     </div>
@@ -211,7 +211,7 @@ const SellerAuth = () => {
                         Phone/WhatsApp *
                       </Label>
                       <div className="relative">
-                        <Phone className="h-4 w-4 absolute left-3 top-3 text-gray-400" />
+                        <Phone className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
                         <Input
                           id="phone"
                           type="tel"
@@ -221,7 +221,7 @@ const SellerAuth = () => {
                             handleInputChange("phone", e.target.value)
                           }
                           required
-                          className="mt-1 pl-10 text-base border-orange-200 focus:border-orange-400"
+                          className="mt-1 pl-10 text-base border-orange-200 focus:border-orange-400 dark:border-orange-800 dark:focus:border-orange-600"
                         />
                       </div>
                     </div>
@@ -234,7 +234,7 @@ const SellerAuth = () => {
                         Location *
                       </Label>
                       <div className="relative">
-                        <MapPin className="h-4 w-4 absolute left-3 top-3 text-gray-400" />
+                        <MapPin className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
                         <Input
                           id="location"
                           placeholder="e.g. Accra, Kumasi"
@@ -243,7 +243,7 @@ const SellerAuth = () => {
                             handleInputChange("location", e.target.value)
                           }
                           required
-                          className="mt-1 pl-10 text-base border-orange-200 focus:border-orange-400"
+                          className="mt-1 pl-10 text-base border-orange-200 focus:border-orange-400 dark:border-orange-800 dark:focus:border-orange-600"
                         />
                       </div>
                     </div>
@@ -258,7 +258,7 @@ const SellerAuth = () => {
                     Email *
                   </Label>
                   <div className="relative">
-                    <Mail className="h-4 w-4 absolute left-3 top-3 text-gray-400" />
+                    <Mail className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
                     <Input
                       id="email"
                       type="email"
@@ -268,7 +268,7 @@ const SellerAuth = () => {
                         handleInputChange("email", e.target.value)
                       }
                       required
-                      className="mt-1 pl-10 text-base border-orange-200 focus:border-orange-400"
+                      className="mt-1 pl-10 text-base border-orange-200 focus:border-orange-400 dark:border-orange-800 dark:focus:border-orange-600"
                     />
                   </div>
                 </div>
@@ -281,7 +281,7 @@ const SellerAuth = () => {
                     Password *
                   </Label>
                   <div className="relative">
-                    <Lock className="h-4 w-4 absolute left-3 top-3 text-gray-400" />
+                    <Lock className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
                     <Input
                       id="password"
                       type={showPassword ? "text" : "password"}
@@ -291,13 +291,13 @@ const SellerAuth = () => {
                         handleInputChange("password", e.target.value)
                       }
                       required
-                      className="mt-1 pl-10 pr-10 text-base border-orange-200 focus:border-orange-400"
+                      className="mt-1 pl-10 pr-10 text-base border-orange-200 focus:border-orange-400 dark:border-orange-800 dark:focus:border-orange-600"
                     />
                     <Button
                       type="button"
                       variant="ghost"
                       size="icon"
-                      className="absolute right-1 top-1 h-8 w-8 text-gray-400 hover:text-gray-600"
+                      className="absolute right-1 top-1 h-8 w-8 text-muted-foreground hover:text-foreground"
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
