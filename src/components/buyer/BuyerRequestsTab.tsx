@@ -1,11 +1,12 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent } from "@/components/ui/card";
 import { Package } from "lucide-react";
 import { useOfferHandling } from '@/hooks/useOfferHandling';
+import RequestExpandedDialog from '@/components/RequestExpandedDialog';
 
 interface Request {
   id: string;
@@ -19,13 +20,17 @@ interface Request {
   status: string;
   created_at: string;
   owner_id: string;
+  photo_url?: string;
+  currency?: string;
 }
 
 const BuyerRequestsTab = () => {
   const { user } = useAuth();
   const { handleMakeOffer, handleWhatsAppContact, isSubmittingOffer } = useOfferHandling();
+  const [selectedRequest, setSelectedRequest] = useState<Request | null>(null);
+  const [isRequestDialogOpen, setIsRequestDialogOpen] = useState(false);
 
-  const { data: requests = [], isLoading } = useQuery({
+  const { data: requests = [], isLoading, refetch } = useQuery({
     queryKey: ['buyer-requests', user?.id],
     queryFn: async () => {
       if (!user?.id) return [];
@@ -46,6 +51,20 @@ const BuyerRequestsTab = () => {
     enabled: !!user?.id,
   });
 
+  const handleRequestClick = (request: Request) => {
+    setSelectedRequest(request);
+    setIsRequestDialogOpen(true);
+  };
+
+  const handleRequestDialogClose = () => {
+    setIsRequestDialogOpen(false);
+    setSelectedRequest(null);
+  };
+
+  const handleRequestUpdated = () => {
+    refetch(); // Refresh the requests list
+  };
+
   const handleChatContact = (requestId: string, ownerId: string) => {
     // For buyer's own requests, they can't chat with themselves
     console.log('Cannot chat with yourself for your own request');
@@ -65,7 +84,11 @@ const BuyerRequestsTab = () => {
   return (
     <div className="space-y-6">
       {requests.map((request: Request) => (
-        <Card key={request.id} className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+        <Card 
+          key={request.id} 
+          className="overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+          onClick={() => handleRequestClick(request)}
+        >
           <CardContent className="p-6">
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
               <div className="flex-1 min-w-0">
@@ -120,6 +143,13 @@ const BuyerRequestsTab = () => {
           </CardContent>
         </Card>
       ))}
+
+      <RequestExpandedDialog
+        request={selectedRequest}
+        isOpen={isRequestDialogOpen}
+        onClose={handleRequestDialogClose}
+        onRequestUpdated={handleRequestUpdated}
+      />
 
       {requests.length === 0 && (
         <Card className="p-12 text-center bg-gradient-to-br from-white/90 to-orange-50/50 backdrop-blur-sm border-0 shadow-lg">
