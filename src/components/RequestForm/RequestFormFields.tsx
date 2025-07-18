@@ -13,6 +13,8 @@ interface RequestFormFieldsProps {
     description: string;
     location: string;
     phone: string;
+    name: string;
+    email: string;
   };
   photo: File | null;
   onInputChange: (field: string, value: string) => void;
@@ -105,17 +107,29 @@ const RequestFormFields = ({
       </div>
 
       <div className="bg-white rounded-xl shadow-lg p-6 space-y-4">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Contact Information</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Information</h3>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="location">Location *</Label>
+            <Label htmlFor="name">Full Name *</Label>
             <Input
-              id="location"
+              id="name"
               type="text"
-              placeholder="e.g., Accra, Kumasi"
-              value={formData.location}
-              onChange={(e) => onInputChange('location', e.target.value)}
+              placeholder="e.g., John Doe"
+              value={formData.name}
+              onChange={(e) => onInputChange('name', e.target.value)}
+              required
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="email">Email Address *</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="e.g., john@example.com"
+              value={formData.email}
+              onChange={(e) => onInputChange('email', e.target.value)}
               required
             />
           </div>
@@ -128,6 +142,18 @@ const RequestFormFields = ({
               placeholder="e.g., +233 XX XXX XXXX"
               value={formData.phone}
               onChange={(e) => onInputChange('phone', e.target.value)}
+              required
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="location">Location *</Label>
+            <Input
+              id="location"
+              type="text"
+              placeholder="e.g., Accra, Kumasi"
+              value={formData.location}
+              onChange={(e) => onInputChange('location', e.target.value)}
               required
             />
           </div>

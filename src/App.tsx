@@ -38,6 +38,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import SellerProtectedRoute from "./components/SellerProtectedRoute";
 import AdminProtectedRoute from "./components/AdminProtectedRoute";
 import Success from "./pages/Success";
+import RequestSuccess from "./pages/RequestSuccess";
 
 const queryClient = new QueryClient();
 
@@ -148,8 +149,9 @@ function App() {
                   />
                   <Route path="/simple-auth" element={<SimpleAuth />} />
                   <Route path="/button-test" element={<ButtonTestPage />} />
-                  <Route path="*" element={<NotFound />} />
                   <Route path="/success" element={<Success />} />
+                  <Route path="/request-success" element={<RequestSuccess />} />
+                  <Route path="*" element={<NotFound />} />
                 </Routes>
 
                 <PWANotificationManager />

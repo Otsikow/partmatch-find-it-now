@@ -1,47 +1,23 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, Link } from "react-router-dom";
 import RequestFormFields from "@/components/RequestForm/RequestFormFields";
 import { useRequestSubmission } from "@/hooks/useRequestSubmission";
-import { RequestFormData } from "@/components/RequestForm/RequestFormData";
+import { RequestFormData, initialFormData } from "@/components/RequestForm/RequestFormData";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import { ArrowLeft, Home, X } from "lucide-react";
 
 const RequestPart = () => {
   const { t } = useTranslation();
-  const { user, loading } = useAuth();
   const navigate = useNavigate();
   const {
     loading: submissionLoading,
     aiReviewing,
     submitRequest,
   } = useRequestSubmission();
-  const [formData, setFormData] = useState<RequestFormData>({
-    make: "",
-    model: "",
-    year: "",
-    part: "",
-    description: "",
-    location: "",
-    phone: "",
-  });
+  const [formData, setFormData] = useState<RequestFormData>(initialFormData);
   const [photo, setPhoto] = useState<File | null>(null);
-
-  useEffect(() => {
-    if (!loading && !user) {
-      toast({
-        title: t("requestPart.signInRequired", "Sign In Required"),
-        description: t(
-          "requestPart.pleaseSignIn",
-          "Please sign in to request car parts."
-        ),
-        variant: "destructive",
-      });
-      navigate("/buyer-auth");
-    }
-  }, [user, loading, navigate]);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -54,38 +30,12 @@ const RequestPart = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!user) {
-      toast({
-        title: t("requestPart.authRequired", "Authentication Required"),
-        description: t(
-          "requestPart.pleaseSignIn",
-          "Please sign in to request car parts."
-        ),
-        variant: "destructive",
-      });
-      navigate("/buyer-auth");
-      return;
+    const result = await submitRequest(formData, photo);
+    if (result.success) {
+      navigate("/request-success");
     }
-
-    await submitRequest(formData, photo);
   };
 
-  // Show loading while checking authentication
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">{t("loading", "Loading...")}</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Don't render the form if user is not authenticated
-  if (!user) {
-    return null;
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100">
@@ -115,10 +65,10 @@ const RequestPart = () => {
               
               <div className="min-w-0 flex-1">
                 <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-white leading-tight break-words">
-                  {t("requestPart.welcomeTitle", "Welcome to PartMatch")}
+                  {t("requestPart.welcomeTitle", "Find Your Car Part")}
                 </h1>
                 <p className="text-sm sm:text-base text-white/90 leading-tight break-words mt-1">
-                  {t("requestPart.subtitle", "Tell us what you need and we'll connect you with sellers")}
+                  {t("requestPart.subtitle", "Tell us what you need and we'll connect you with verified sellers")}
                 </p>
               </div>
             </div>

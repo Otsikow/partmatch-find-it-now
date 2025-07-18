@@ -7,6 +7,8 @@ export interface RequestFormData {
   description: string;
   phone: string;
   location: string;
+  name: string;
+  email: string;
 }
 
 export const initialFormData: RequestFormData = {
@@ -16,5 +18,7 @@ export const initialFormData: RequestFormData = {
   part: '',
   description: '',
   phone: '',
-  location: ''
+  location: '',
+  name: '',
+  email: ''
 };
