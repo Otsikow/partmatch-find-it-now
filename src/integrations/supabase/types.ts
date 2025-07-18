@@ -156,6 +156,7 @@ export type Database = {
           address: string | null
           boosted_until: string | null
           city: string | null
+          click_count: number | null
           condition: string
           country: string | null
           created_at: string | null
@@ -170,12 +171,14 @@ export type Database = {
           is_featured: boolean | null
           is_highlighted: boolean | null
           is_urgent: boolean | null
+          last_suggested_promotion: string | null
           latitude: number | null
           longitude: number | null
           make: string
           model: string
           part_type: string
           price: number
+          promotion_suggestions_count: number | null
           quality_checked_at: string | null
           quality_feedback: string | null
           quality_score: number | null
@@ -185,12 +188,14 @@ export type Database = {
           updated_at: string | null
           urgent_until: string | null
           verified_badge_until: string | null
+          view_count: number | null
           year: number
         }
         Insert: {
           address?: string | null
           boosted_until?: string | null
           city?: string | null
+          click_count?: number | null
           condition: string
           country?: string | null
           created_at?: string | null
@@ -205,12 +210,14 @@ export type Database = {
           is_featured?: boolean | null
           is_highlighted?: boolean | null
           is_urgent?: boolean | null
+          last_suggested_promotion?: string | null
           latitude?: number | null
           longitude?: number | null
           make: string
           model: string
           part_type: string
           price: number
+          promotion_suggestions_count?: number | null
           quality_checked_at?: string | null
           quality_feedback?: string | null
           quality_score?: number | null
@@ -220,12 +227,14 @@ export type Database = {
           updated_at?: string | null
           urgent_until?: string | null
           verified_badge_until?: string | null
+          view_count?: number | null
           year: number
         }
         Update: {
           address?: string | null
           boosted_until?: string | null
           city?: string | null
+          click_count?: number | null
           condition?: string
           country?: string | null
           created_at?: string | null
@@ -240,12 +249,14 @@ export type Database = {
           is_featured?: boolean | null
           is_highlighted?: boolean | null
           is_urgent?: boolean | null
+          last_suggested_promotion?: string | null
           latitude?: number | null
           longitude?: number | null
           make?: string
           model?: string
           part_type?: string
           price?: number
+          promotion_suggestions_count?: number | null
           quality_checked_at?: string | null
           quality_feedback?: string | null
           quality_score?: number | null
@@ -255,6 +266,7 @@ export type Database = {
           updated_at?: string | null
           urgent_until?: string | null
           verified_badge_until?: string | null
+          view_count?: number | null
           year?: number
         }
         Relationships: [
@@ -348,6 +360,48 @@ export type Database = {
           name?: string
         }
         Relationships: []
+      }
+      listing_analytics: {
+        Row: {
+          created_at: string
+          event_data: Json | null
+          event_type: string
+          id: string
+          listing_id: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_data?: Json | null
+          event_type: string
+          id?: string
+          listing_id: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_data?: Json | null
+          event_type?: string
+          id?: string
+          listing_id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_analytics_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "car_parts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "listing_analytics_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       listing_quality_checks: {
         Row: {
@@ -848,6 +902,63 @@ export type Database = {
           verified_at?: string | null
         }
         Relationships: []
+      }
+      promotion_suggestions: {
+        Row: {
+          converted: boolean | null
+          converted_at: string | null
+          created_at: string
+          currency: string | null
+          id: string
+          listing_id: string
+          price_suggested: number | null
+          seller_id: string
+          suggested_at: string
+          suggestion_criteria: Json | null
+          suggestion_type: string
+        }
+        Insert: {
+          converted?: boolean | null
+          converted_at?: string | null
+          created_at?: string
+          currency?: string | null
+          id?: string
+          listing_id: string
+          price_suggested?: number | null
+          seller_id: string
+          suggested_at?: string
+          suggestion_criteria?: Json | null
+          suggestion_type: string
+        }
+        Update: {
+          converted?: boolean | null
+          converted_at?: string | null
+          created_at?: string
+          currency?: string | null
+          id?: string
+          listing_id?: string
+          price_suggested?: number | null
+          seller_id?: string
+          suggested_at?: string
+          suggestion_criteria?: Json | null
+          suggestion_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "promotion_suggestions_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "car_parts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "promotion_suggestions_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       rating_reminders: {
         Row: {
