@@ -149,7 +149,12 @@ const AdminDashboard = () => {
               </h2>
               
               <div className="mx-2 sm:mx-0">
-                <AnalyticsDashboard />
+                <AnalyticsDashboard 
+                  onNavigateToUsers={() => setActiveTab("users")}
+                  onNavigateToOffers={() => setActiveTab("offers")}
+                  onNavigateToVerifications={() => setActiveTab("verifications")}
+                  onNavigateToRequests={() => setActiveTab("requests")}
+                />
               </div>
             </div>
           </TabsContent>

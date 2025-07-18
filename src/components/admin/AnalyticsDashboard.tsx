@@ -4,12 +4,24 @@ import DateRangeFilter from "./DateRangeFilter";
 import AnalyticsCharts from "./AnalyticsCharts";
 import { useAnalyticsData } from "@/hooks/useAnalyticsData";
 
+interface AnalyticsDashboardProps {
+  onNavigateToUsers?: () => void;
+  onNavigateToOffers?: () => void;
+  onNavigateToVerifications?: () => void;
+  onNavigateToRequests?: () => void;
+}
+
 interface DateRange {
   startDate: Date;
   endDate: Date;
 }
 
-const AnalyticsDashboard = () => {
+const AnalyticsDashboard = ({
+  onNavigateToUsers,
+  onNavigateToOffers,
+  onNavigateToVerifications,
+  onNavigateToRequests
+}: AnalyticsDashboardProps) => {
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
     endDate: new Date(),
@@ -44,6 +56,10 @@ const AnalyticsDashboard = () => {
         productMetrics={data.productMetrics}
         transactionMetrics={data.transactionMetrics}
         otherMetrics={data.otherMetrics}
+        onNavigateToUsers={onNavigateToUsers}
+        onNavigateToOffers={onNavigateToOffers}
+        onNavigateToVerifications={onNavigateToVerifications}
+        onNavigateToRequests={onNavigateToRequests}
       />
 
       <AnalyticsCharts

@@ -257,6 +257,27 @@ export const useAnalyticsData = (dateRange?: DateRange) => {
 
   useEffect(() => {
     fetchAnalyticsData();
+    
+    // Set up real-time subscriptions
+    const channel = supabase
+      .channel('analytics-updates')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, () => {
+        fetchAnalyticsData();
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'car_parts' }, () => {
+        fetchAnalyticsData();
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'offers' }, () => {
+        fetchAnalyticsData();
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'reviews' }, () => {
+        fetchAnalyticsData();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [dateRange]);
 
   return {
