@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LocaleProvider } from "@/contexts/LocaleContext";
 import PWANotificationManager from "@/components/PWANotificationManager";
+import PartMatchHelpBot from "@/components/PartMatchHelpBot";
 import { LocationProvider } from "@/contexts/LocationContext";
 import { useGeolocation } from "./hooks/useGeolocation";
 import { useIsMobile } from "./hooks/use-mobile";
@@ -161,6 +162,7 @@ function App() {
 
                 {isMobile && <MobileBottomTabs />}
                 <PWANotificationManager />
+                <PartMatchHelpBot />
               </BrowserRouter>
             </TooltipProvider>
           </LocationProvider>
