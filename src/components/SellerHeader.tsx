@@ -80,15 +80,12 @@ const SellerHeader = () => {
   return (
     <header className="p-3 sm:p-4 md:p-6 flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-blue-50 via-blue-100 to-green-50 backdrop-blur-lg shadow-lg border-b border-border/20">
       <div className="flex items-center gap-1 sm:gap-2 md:gap-3 min-w-0 flex-1">
-        <div className="bg-white/70 backdrop-blur-md rounded-xl px-3 py-1.5 border border-white/40 shadow-lg flex items-center gap-2">
+        <div className="bg-white/80 backdrop-blur-md rounded-xl p-2 border border-white/50 shadow-lg">
           <img 
             src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
             alt="PartMatch Logo" 
-            className="h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0"
+            className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 flex-shrink-0"
           />
-          <div className="text-lg sm:text-xl font-bold text-blue-800">
-            PartMatch
-          </div>
         </div>
         <div className="flex flex-col min-w-0 flex-1">
           <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-blue-800 truncate">
