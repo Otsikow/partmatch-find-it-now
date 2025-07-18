@@ -153,7 +153,7 @@ const SellerReviewsModal: React.FC<SellerReviewsModalProps> = ({
             </div>
           </div>
           <div className="text-sm text-gray-600">
-            <p>{totalReviews} {totalReviews === 1 ? 'review' : 'reviews'}</p>
+            <p>{reviews.length} {reviews.length === 1 ? 'review' : 'reviews'}</p>
             {userHasRated && (
               <Badge variant="secondary" className="mt-1">
                 You've already rated this seller
