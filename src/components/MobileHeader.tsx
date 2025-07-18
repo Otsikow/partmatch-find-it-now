@@ -37,19 +37,22 @@ const MobileHeader = () => {
   };
 
   return (
-    <div className="fixed top-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-40">
-      <div className="flex items-center justify-between px-4 py-3 min-h-[64px] safe-area-pt">
+    <div className="fixed top-0 left-0 right-0 bg-gradient-to-r from-primary via-primary/95 to-primary-foreground backdrop-blur-sm shadow-lg border-b border-white/20 z-40">
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/5 to-indigo-600/10"></div>
+      <div className="relative flex items-center justify-between px-4 py-3 min-h-[64px] safe-area-pt">
         <div className="flex items-center min-w-0 flex-1">
-          <img 
-            src="/lovable-uploads/0bb9488b-2f77-4f4c-b8b3-8aa9343b1d18.png" 
-            alt="PartMatch - Car Parts Marketplace" 
-            className="h-10 w-auto flex-shrink-0 object-contain" 
-          />
+          <div className="bg-white/20 backdrop-blur-sm rounded-xl p-2 shadow-lg">
+            <img 
+              src="/lovable-uploads/0bb9488b-2f77-4f4c-b8b3-8aa9343b1d18.png" 
+              alt="PartMatch - Car Parts Marketplace" 
+              className="h-8 w-auto flex-shrink-0 object-contain" 
+            />
+          </div>
         </div>
         
         {user && (
           <div className="flex items-center space-x-3 flex-shrink-0">
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center bg-white/10 rounded-full p-1">
               <NotificationBell />
             </div>
             
@@ -58,9 +61,9 @@ const MobileHeader = () => {
                 <Button 
                   variant="ghost" 
                   size="icon"
-                  className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center touch-manipulation active:scale-95 transition-all duration-200 hover:bg-primary/20 hover:scale-105"
+                  className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center touch-manipulation active:scale-95 transition-all duration-200 hover:bg-white/30 hover:scale-105 shadow-lg border border-white/30"
                 >
-                  <span className="text-primary font-semibold text-sm">
+                  <span className="text-white font-semibold text-sm">
                     {user.email?.charAt(0).toUpperCase()}
                   </span>
                 </Button>
