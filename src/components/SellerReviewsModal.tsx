@@ -56,17 +56,10 @@ const SellerReviewsModal: React.FC<SellerReviewsModalProps> = ({
     try {
       console.log('Fetching reviews for seller:', sellerId);
       
-      // Fetch reviews with reviewer profiles in a single query
+      // Fetch reviews first
       const { data: reviewsData, error } = await supabase
         .from('reviews')
-        .select(`
-          *,
-          reviewer_profile:profiles!reviewer_id(
-            id,
-            first_name,
-            last_name
-          )
-        `)
+        .select('*')
         .eq('seller_id', sellerId)
         .order('created_at', { ascending: false })
         .limit(20);
@@ -76,17 +69,36 @@ const SellerReviewsModal: React.FC<SellerReviewsModalProps> = ({
         throw error;
       }
 
-      console.log('Fetched reviews:', reviewsData);
+      console.log('Fetched reviews data:', reviewsData);
 
-      // Format the reviews data
-      const formattedReviews = (reviewsData || []).map(review => ({
-        ...review,
-        reviewer_profile: Array.isArray(review.reviewer_profile) 
-          ? review.reviewer_profile[0] 
-          : review.reviewer_profile
-      }));
-      
-      setReviews(formattedReviews);
+      if (reviewsData && reviewsData.length > 0) {
+        // Fetch reviewer profiles separately
+        const reviewerIds = reviewsData.map(review => review.reviewer_id);
+        console.log('Fetching profiles for reviewer IDs:', reviewerIds);
+        
+        const { data: profilesData, error: profilesError } = await supabase
+          .from('profiles')
+          .select('id, first_name, last_name')
+          .in('id', reviewerIds);
+
+        if (profilesError) {
+          console.error('Error fetching profiles:', profilesError);
+        } else {
+          console.log('Fetched profiles data:', profilesData);
+        }
+
+        // Combine data
+        const formattedReviews = reviewsData.map(review => ({
+          ...review,
+          reviewer_profile: profilesData?.find(profile => profile.id === review.reviewer_id) || null
+        }));
+        
+        console.log('Formatted reviews:', formattedReviews);
+        setReviews(formattedReviews);
+      } else {
+        console.log('No reviews found for seller');
+        setReviews([]);
+      }
     } catch (error) {
       console.error('Error fetching reviews:', error);
       setReviews([]);
