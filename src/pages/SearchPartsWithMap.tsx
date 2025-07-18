@@ -184,25 +184,34 @@ const SearchPartsWithMap = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100">
-      <PageHeader 
-        title="Browse Parts with Map"
-        subtitle="Find parts near you with location directions"
-        showBackButton={true}
-        backTo="/"
-      />
+      {/* Mobile-optimized welcome section */}
+      <div className="bg-gradient-to-r from-primary to-primary-foreground text-white">
+        <div className="container mx-auto px-4 py-6 pt-20">
+          <div className="text-center space-y-2">
+            <h1 className="text-2xl sm:text-3xl font-bold">Welcome to PartMatch</h1>
+            <p className="text-white/90 text-sm sm:text-base">Find parts near you with location directions</p>
+          </div>
+        </div>
+      </div>
       
-      <main className="container mx-auto px-2 sm:px-4 lg:px-6 py-4 sm:py-6">
+      <main className="container mx-auto px-4 py-4 sm:py-6 -mt-4">
         <PendingRatingNotification />
         
-        <div className="mb-6">
+        {/* Location Section - Mobile Optimized */}
+        <div className="bg-white rounded-2xl p-4 mb-6 shadow-sm border">
+          <div className="flex items-center gap-3 mb-3">
+            <MapPin className="h-5 w-5 text-primary flex-shrink-0" />
+            <h3 className="font-semibold text-gray-900 text-lg">Your Location</h3>
+          </div>
+          
           <Button 
             onClick={handleLocationRequest}
             disabled={locationLoading}
-            variant="outline"
-            className="w-full sm:w-auto flex items-center justify-center gap-2"
+            variant={location ? "outline" : "default"}
+            className="w-full flex items-center justify-center gap-2 h-12 text-base font-medium rounded-xl"
           >
-            <MapPin className="h-4 w-4" />
-            {locationLoading ? "Getting location..." : "📍 Use My Location"}
+            <MapPin className="h-5 w-5" />
+            {locationLoading ? "Getting location..." : location ? "Update Location" : "📍 Use My Location"}
           </Button>
           
           {locationError && (
@@ -228,32 +237,40 @@ const SearchPartsWithMap = () => {
           )}
           
           {location && (
-            <div className="mt-2">
-              <p className="text-sm text-muted-foreground">
-                Showing results near {location.city || location.address}
+            <div className="mt-3 p-3 bg-green-50 rounded-xl border border-green-200">
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <p className="text-sm font-medium text-green-800">
+                  Location Found
+                </p>
+              </div>
+              <p className="text-sm text-green-700">
+                {location.city || location.address}
               </p>
-              <p className="text-sm font-medium text-primary mt-1">
-                Current distance filter: {filters.maxDistance} miles
+              <p className="text-xs text-green-600 mt-1">
+                Searching within {filters.maxDistance} miles
               </p>
             </div>
           )}
         </div>
 
         <Tabs defaultValue="parts" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6 bg-background border-2 border-border p-2 h-auto">
+          <TabsList className="grid w-full grid-cols-2 mb-6 bg-white border border-border p-1 h-auto rounded-2xl shadow-sm">
             <TabsTrigger
               value="parts"
-              className="flex items-center gap-2 h-12 text-base font-semibold bg-secondary text-secondary-foreground hover:bg-secondary/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200"
+              className="flex items-center gap-2 h-14 text-base font-semibold rounded-xl data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-md transition-all duration-300"
             >
               <Package className="w-5 h-5" />
-              {t("partsForSale")}
+              <span className="hidden sm:inline">{t("partsForSale")}</span>
+              <span className="sm:hidden">Parts</span>
             </TabsTrigger>
             <TabsTrigger
               value="requests"
-              className="flex items-center gap-2 h-12 text-base font-semibold bg-secondary text-secondary-foreground hover:bg-secondary/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200"
+              className="flex items-center gap-2 h-14 text-base font-semibold rounded-xl data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-md transition-all duration-300"
             >
               <ClipboardList className="w-5 h-5" />
-              {t("requestedParts")}
+              <span className="hidden sm:inline">{t("requestedParts")}</span>
+              <span className="sm:hidden">Requests</span>
             </TabsTrigger>
           </TabsList>
 

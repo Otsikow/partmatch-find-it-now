@@ -37,19 +37,19 @@ const MobileHeader = () => {
   };
 
   return (
-    <div className="fixed top-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-40 safe-area-pt">
-      <div className="flex items-center justify-between px-3 py-2.5 min-h-[56px]">
-        <div className="flex items-center space-x-1.5 min-w-0 flex-1">
+    <div className="fixed top-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-40">
+      <div className="flex items-center justify-between px-4 py-3 min-h-[64px] safe-area-pt">
+        <div className="flex items-center min-w-0 flex-1">
           <img 
             src="/lovable-uploads/0bb9488b-2f77-4f4c-b8b3-8aa9343b1d18.png" 
             alt="PartMatch - Car Parts Marketplace" 
-            className="h-12 w-auto flex-shrink-0 object-contain" 
+            className="h-10 w-auto flex-shrink-0 object-contain" 
           />
         </div>
         
         {user && (
-          <div className="flex items-center space-x-2 flex-shrink-0">
-            <div className="flex items-center justify-center min-w-[44px] min-h-[44px]">
+          <div className="flex items-center space-x-3 flex-shrink-0">
+            <div className="flex items-center justify-center">
               <NotificationBell />
             </div>
             
@@ -58,7 +58,7 @@ const MobileHeader = () => {
                 <Button 
                   variant="ghost" 
                   size="icon"
-                  className="w-9 h-9 bg-primary/10 rounded-full flex items-center justify-center min-w-[44px] min-h-[44px] touch-manipulation active:scale-95 transition-transform hover:bg-primary/20"
+                  className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center touch-manipulation active:scale-95 transition-all duration-200 hover:bg-primary/20 hover:scale-105"
                 >
                   <span className="text-primary font-semibold text-sm">
                     {user.email?.charAt(0).toUpperCase()}
