@@ -187,6 +187,7 @@ const SearchPartsWithMap = () => {
       <PageHeader 
         title="Browse Parts with Map"
         subtitle="Find parts near you with location directions"
+        showBackButton={true}
         backTo="/"
       />
       

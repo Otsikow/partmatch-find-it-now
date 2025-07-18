@@ -95,6 +95,7 @@ const RequestPart = () => {
           "requestPart.subtitle",
           "Tell us what you need and we'll connect you with sellers"
         )}
+        showBackButton={true}
         backTo="/"
         showHomeButton={true}
         showSignOut={true}
