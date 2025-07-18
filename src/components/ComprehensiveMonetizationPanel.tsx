@@ -87,11 +87,11 @@ const ComprehensiveMonetizationPanel: React.FC<ComprehensiveMonetizationPanelPro
       }
     });
 
-    // Add extra photos cost
+    // Add extra photos cost (flat fee for 4-10 photos)
     if (selectedFeatures.extra_photos > 0) {
       const photoPrice = getPricing('extra_photo');
       if (photoPrice) {
-        total += photoPrice.amount * selectedFeatures.extra_photos;
+        total += photoPrice.amount; // Flat fee, not per photo
       }
     }
 

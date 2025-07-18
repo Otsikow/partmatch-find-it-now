@@ -200,7 +200,7 @@ const PostPartModal = ({ isOpen, onClose, onPartPosted }: PostPartModalProps) =>
   const handleUpgradeRequest = () => {
     toast({
       title: "Premium Photos Available",
-      description: "Pay GHS 10 to upload up to 10 photos for this listing!",
+      description: "Pay GHS 10 to upload 4-10 photos for this listing!",
     });
     // TODO: Implement payment flow
     // For now, we'll simulate the upgrade

@@ -327,10 +327,10 @@ const PhotoUpload = ({
             
             <div className="bg-gray-50 p-4 rounded-lg">
               <div className="flex justify-between items-center">
-                <span className="font-medium">Premium Photos (7 extra)</span>
+                <span className="font-medium">Premium Photos (4-10 photos)</span>
                 <span className="text-xl font-bold text-emerald-600">GHS 10</span>
               </div>
-              <p className="text-sm text-gray-600 mt-1">One-time payment per listing</p>
+              <p className="text-sm text-gray-600 mt-1">One-time payment for 4-10 photos</p>
             </div>
 
             <div className="flex gap-2">
