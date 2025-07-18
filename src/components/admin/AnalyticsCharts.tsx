@@ -79,8 +79,8 @@ const AnalyticsCharts = ({
     <div className="space-y-4 sm:space-y-6">
       {/* First Row - Signups and Listings */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
-        <Card className="p-3 sm:p-4 lg:p-6 bg-gradient-to-br from-white/90 to-blue-50/30">
-          <h3 className="text-sm sm:text-base lg:text-lg font-semibold mb-2 sm:mb-3 lg:mb-4 bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">
+        <Card className="p-3 sm:p-4 lg:p-6 bg-card border border-border">
+          <h3 className="text-sm sm:text-base lg:text-lg font-semibold mb-2 sm:mb-3 lg:mb-4 text-primary">
             Daily New Signups
           </h3>
           <ChartContainer config={chartConfig} className="h-[180px] sm:h-[220px] lg:h-[280px]">
@@ -114,8 +114,8 @@ const AnalyticsCharts = ({
           </ChartContainer>
         </Card>
 
-        <Card className="p-3 sm:p-4 lg:p-6 bg-gradient-to-br from-white/90 to-purple-50/30">
-          <h3 className="text-sm sm:text-base lg:text-lg font-semibold mb-2 sm:mb-3 lg:mb-4 bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">
+        <Card className="p-3 sm:p-4 lg:p-6 bg-card border border-border">
+          <h3 className="text-sm sm:text-base lg:text-lg font-semibold mb-2 sm:mb-3 lg:mb-4 text-primary">
             Daily New Listings
           </h3>
           <ChartContainer config={chartConfig} className="h-[180px] sm:h-[220px] lg:h-[280px]">
@@ -149,8 +149,8 @@ const AnalyticsCharts = ({
 
       {/* Second Row - Transactions and Recent Parts */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
-        <Card className="p-3 sm:p-4 lg:p-6 bg-gradient-to-br from-white/90 to-green-50/30">
-          <h3 className="text-sm sm:text-base lg:text-lg font-semibold mb-2 sm:mb-3 lg:mb-4 bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">
+        <Card className="p-3 sm:p-4 lg:p-6 bg-card border border-border">
+          <h3 className="text-sm sm:text-base lg:text-lg font-semibold mb-2 sm:mb-3 lg:mb-4 text-primary">
             Transaction Trends
           </h3>
           <ChartContainer config={chartConfig} className="h-[180px] sm:h-[220px] lg:h-[280px]">
@@ -181,26 +181,26 @@ const AnalyticsCharts = ({
           </ChartContainer>
         </Card>
 
-        <Card className="p-3 sm:p-4 lg:p-6 bg-gradient-to-br from-white/90 to-yellow-50/30">
-          <h3 className="text-sm sm:text-base lg:text-lg font-semibold mb-2 sm:mb-3 lg:mb-4 bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent">
+        <Card className="p-3 sm:p-4 lg:p-6 bg-card border border-border">
+          <h3 className="text-sm sm:text-base lg:text-lg font-semibold mb-2 sm:mb-3 lg:mb-4 text-primary">
             Top 5 Recent Parts
           </h3>
           <div className="space-y-2 max-h-[180px] sm:max-h-[220px] lg:max-h-[280px] overflow-y-auto">
             {productMetrics.topRecentParts.length > 0 ? (
               productMetrics.topRecentParts.map((part, index) => (
-                <div key={index} className="flex items-center justify-between p-2 sm:p-3 bg-white/50 rounded-lg border border-white/20">
+                <div key={index} className="flex items-center justify-between p-2 sm:p-3 bg-accent/50 rounded-lg border border-border">
                   <div className="min-w-0 flex-1">
-                    <p className="font-medium text-xs sm:text-sm truncate text-gray-800">{part.title}</p>
-                    <p className="text-xs text-gray-600 truncate">by {part.supplier}</p>
+                    <p className="font-medium text-xs sm:text-sm truncate text-foreground">{part.title}</p>
+                    <p className="text-xs text-muted-foreground truncate">by {part.supplier}</p>
                   </div>
-                  <div className="text-xs text-gray-500 ml-2 flex-shrink-0">
+                  <div className="text-xs text-muted-foreground ml-2 flex-shrink-0">
                     {new Date(part.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                   </div>
                 </div>
               ))
             ) : (
               <div className="flex items-center justify-center h-[140px] sm:h-[180px] lg:h-[240px]">
-                <p className="text-gray-500 text-xs sm:text-sm">No parts listed yet</p>
+                <p className="text-muted-foreground text-xs sm:text-sm">No parts listed yet</p>
               </div>
             )}
           </div>

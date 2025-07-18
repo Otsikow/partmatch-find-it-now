@@ -39,7 +39,7 @@ const DateRangeFilter = ({ onDateRangeChange, currentRange }: DateRangeFilterPro
   };
 
   return (
-    <Card className="p-4 mb-6 bg-gradient-to-br from-white/90 to-purple-50/30">
+    <Card className="p-4 mb-6 bg-card border border-border">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
         <div className="flex flex-wrap gap-2">
           <Button
@@ -99,7 +99,7 @@ const DateRangeFilter = ({ onDateRangeChange, currentRange }: DateRangeFilterPro
               </PopoverContent>
             </Popover>
 
-            <span className="text-sm text-gray-500">to</span>
+            <span className="text-sm text-muted-foreground">to</span>
 
             <Popover open={endOpen} onOpenChange={setEndOpen}>
               <PopoverTrigger asChild>
