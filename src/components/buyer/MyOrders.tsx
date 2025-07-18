@@ -76,7 +76,7 @@ const MyOrders = () => {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="flex items-center space-x-2">
-                    <DollarSign className="h-4 w-4 text-gray-400" />
+                    {/* <DollarSign className="h-4 w-4 text-gray-400" /> */}
                     <span className="text-sm font-medium">{order.price}</span>
                   </div>
                   <div className="flex items-center space-x-2">
