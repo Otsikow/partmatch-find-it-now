@@ -18,6 +18,7 @@ export const BuyerDashboardHeader = () => {
   };
 
   const handleSettings = () => {
+    console.log('Settings button clicked - navigating to profile tab');
     navigate('/buyer-dashboard?tab=profile');
   };
 
