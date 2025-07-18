@@ -131,7 +131,7 @@ self.addEventListener('push', (event) => {
   };
 
   event.waitUntil(
-    self.registration.showNotification('PartMatch Ghana', options)
+    self.registration.showNotification('PartMatch', options)
   );
 });
 
