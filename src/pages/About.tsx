@@ -185,11 +185,9 @@ const About = () => {
                   {t("about.visitUs", "Visit Us")}
                 </h3>
                 <p className="text-gray-600 font-crimson">
-                  {t("about.address", "123 Auto Parts Street")}
+                  AK-798-9707, Apayo, Atwima Kwawoma, Kumasi, Ghana
                   <br />
-                  {t("about.city", "Motor City, MC 12345")}
-                  <br />
-                  {t("ghana", "Ghana")}
+                  Seaview Business Centre, Redcar, UK TS10 1AZ
                 </p>
               </div>
               <div className="space-y-3">
