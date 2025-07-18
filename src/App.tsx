@@ -8,6 +8,8 @@ import { LocaleProvider } from "@/contexts/LocaleContext";
 import PWANotificationManager from "@/components/PWANotificationManager";
 import { LocationProvider } from "@/contexts/LocationContext";
 import { useGeolocation } from "./hooks/useGeolocation";
+import { useIsMobile } from "./hooks/use-mobile";
+import MobileBottomTabs from "./components/MobileBottomTabs";
 
 import Index from "./pages/Index";
 import AuthTypeSelector from "./components/AuthTypeSelector";
@@ -46,6 +48,7 @@ const queryClient = new QueryClient();
 function App() {
   // Enable geolocation detection globally
   useGeolocation();
+  const isMobile = useIsMobile();
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
@@ -156,6 +159,7 @@ function App() {
                   <Route path="*" element={<NotFound />} />
                 </Routes>
 
+                {isMobile && <MobileBottomTabs />}
                 <PWANotificationManager />
               </BrowserRouter>
             </TooltipProvider>
