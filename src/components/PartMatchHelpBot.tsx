@@ -132,8 +132,8 @@ const PartMatchHelpBot = () => {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
-      <Card className="w-96 h-[500px] shadow-xl border-2 border-primary/20">
+    <div className="fixed bottom-4 right-4 z-50 max-h-[calc(100vh-2rem)] max-w-[calc(100vw-2rem)]">
+      <Card className="w-96 max-w-full h-[min(500px,calc(100vh-4rem))] shadow-xl border-2 border-primary/20 flex flex-col">
         <CardHeader className="bg-primary text-white p-4 rounded-t-lg">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
