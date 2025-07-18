@@ -15,7 +15,7 @@ const NotificationBell = () => {
   const { notifications, loading } = useNotifications();
   const [isOpen, setIsOpen] = useState(false);
 
-  const unreadCount = notifications.filter(n => !n.sent).length;
+  const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -46,7 +46,7 @@ const NotificationBell = () => {
               <div
                 key={notification.id}
                 className={`p-3 border-b hover:bg-gray-50 ${
-                  !notification.sent ? 'bg-blue-50' : ''
+                  !notification.read ? 'bg-blue-50' : ''
                 }`}
               >
                 <p className="text-sm text-gray-900 mb-1">

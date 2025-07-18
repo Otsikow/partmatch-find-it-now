@@ -7,8 +7,10 @@ export interface Notification {
   id: string;
   type: string;
   message: string;
-  sent: boolean;
+  read: boolean;
   created_at: string;
+  title?: string;
+  metadata?: any;
 }
 
 export const useNotifications = () => {
@@ -23,13 +25,13 @@ export const useNotifications = () => {
 
     // Set up real-time subscription for new notifications
     const channel = supabase
-      .channel('notifications')
+      .channel('user_notifications')
       .on(
         'postgres_changes',
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'notifications',
+          table: 'user_notifications',
           filter: `user_id=eq.${user.id}`
         },
         (payload) => {
@@ -47,7 +49,7 @@ export const useNotifications = () => {
     if (!user) return;
 
     const { data, error } = await supabase
-      .from('notifications')
+      .from('user_notifications')
       .select('*')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })

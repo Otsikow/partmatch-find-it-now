@@ -66,12 +66,12 @@ const MessageInput = ({ chatId, userId, onTyping }: MessageInputProps) => {
             : 'Someone';
 
           await supabase
-            .from('notifications')
+            .from('user_notifications')
             .insert({
               user_id: recipientId,
               type: 'new_message',
               message: `${senderName} sent you a message: "${newMessage.trim().substring(0, 50)}${newMessage.trim().length > 50 ? '...' : ''}"`,
-              sent: false
+              read: false
             });
 
           console.log('✅ Notification created for recipient:', recipientId);
