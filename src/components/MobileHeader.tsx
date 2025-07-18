@@ -42,13 +42,6 @@ const MobileHeader = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/5 to-indigo-600/10"></div>
       <div className="relative flex items-center justify-between px-4 py-3 min-h-[64px] safe-area-pt">
         <div className="flex items-center min-w-0 flex-1">
-          <div className="bg-white/20 backdrop-blur-sm rounded-xl p-2 shadow-lg">
-            <img 
-              src="/lovable-uploads/0bb9488b-2f77-4f4c-b8b3-8aa9343b1d18.png" 
-              alt="PartMatch - Car Parts Marketplace" 
-              className="h-8 w-auto flex-shrink-0 object-contain" 
-            />
-          </div>
         </div>
         
         {user && (
