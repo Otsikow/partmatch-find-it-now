@@ -15,6 +15,7 @@ import {
   Calendar, 
   MessageCircle, 
   EyeOff, 
+  Eye,
   Trash2, 
   Phone,
   Car,
@@ -147,6 +148,49 @@ const RequestExpandedDialog = ({
     }
   };
 
+  const handleUnhideRequest = async () => {
+    if (!canModifyRequest) {
+      toast({
+        title: "Permission Denied",
+        description: "You don't have permission to unhide this request.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setIsLoading(true);
+    try {
+      console.log('Unhiding request:', request.id, 'User:', user?.id, 'IsAdmin:', isAdmin, 'IsOwner:', isOwner);
+      
+      const { error } = await supabase
+        .from("part_requests")
+        .update({ status: "pending" })
+        .eq("id", request.id);
+
+      if (error) {
+        console.error('Error unhiding request:', error);
+        throw error;
+      }
+
+      toast({
+        title: "Request Restored",
+        description: isAdmin ? "The part request has been restored to public view." : "Your request has been restored to public view.",
+      });
+
+      onRequestUpdated?.();
+      onClose();
+    } catch (error) {
+      console.error("Error unhiding request:", error);
+      toast({
+        title: "Error",
+        description: `Failed to restore the request: ${error.message}. Please try again.`,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleDeleteRequest = async () => {
     if (!canModifyRequest) {
       toast({
@@ -248,16 +292,29 @@ const RequestExpandedDialog = ({
             </Badge>
             {canModifyRequest && (
               <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleHideRequest}
-                  disabled={isLoading}
-                  className="text-orange-600 hover:text-orange-700"
-                >
-                  <EyeOff className="w-4 h-4 mr-1" />
-                  Hide
-                </Button>
+                {request.status === 'cancelled' ? (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleUnhideRequest}
+                    disabled={isLoading}
+                    className="text-green-600 hover:text-green-700"
+                  >
+                    <Eye className="w-4 h-4 mr-1" />
+                    Unhide
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleHideRequest}
+                    disabled={isLoading}
+                    className="text-orange-600 hover:text-orange-700"
+                  >
+                    <EyeOff className="w-4 h-4 mr-1" />
+                    Hide
+                  </Button>
+                )}
                 <Button
                   variant="outline"
                   size="sm"

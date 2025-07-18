@@ -132,10 +132,13 @@ const BuyerRequestsTab = () => {
                     ? 'bg-yellow-100 text-yellow-800' 
                     : request.status === 'offer_received'
                     ? 'bg-blue-100 text-blue-800'
+                    : request.status === 'cancelled'
+                    ? 'bg-gray-100 text-gray-800'
                     : 'bg-green-100 text-green-800'
                 }`}>
                   {request.status === 'pending' ? 'Active' : 
                    request.status === 'offer_received' ? 'Has Offers' : 
+                   request.status === 'cancelled' ? 'Hidden' :
                    'Completed'}
                 </span>
               </div>

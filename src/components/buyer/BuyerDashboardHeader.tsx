@@ -23,7 +23,7 @@ export const BuyerDashboardHeader = () => {
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/')}
           className="p-2 hover:bg-gray-100 rounded-md"
         >
           <ArrowLeft className="h-4 w-4" />
