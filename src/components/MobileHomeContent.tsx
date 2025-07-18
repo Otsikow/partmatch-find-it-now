@@ -210,7 +210,7 @@ const MobileHomeContent = () => {
 
         {/* Additional Real-time Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 text-center">
+          <div className="bg-gradient-to-r from-gray-50 to-slate-50 rounded-xl p-4 text-center border border-gray-100">
             <div className="text-2xl font-bold text-blue-600">
               {loading ? '...' : `${activeRequests}+`}
             </div>
