@@ -18,6 +18,7 @@ import UserDashboard from "./pages/UserDashboard";
 import BuyerDashboard from "./pages/BuyerDashboard";
 import SellerDashboard from "./pages/SellerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import DashboardRouter from "./components/DashboardRouter";
 import RequestPart from "./pages/RequestPart";
 import RequestedCarParts from "./pages/RequestedCarParts";
 import SearchParts from "./pages/SearchParts";
@@ -93,7 +94,7 @@ function App() {
                     path="/dashboard"
                     element={
                       <ProtectedRoute>
-                        <UserDashboard />
+                        <DashboardRouter />
                       </ProtectedRoute>
                     }
                   />
