@@ -133,8 +133,8 @@ const PartMatchHelpBot = () => {
 
   return (
     <div className="fixed bottom-4 right-4 z-50 max-h-[calc(100vh-2rem)] max-w-[calc(100vw-2rem)]">
-      <Card className="w-96 max-w-full h-[min(500px,calc(100vh-4rem))] shadow-xl border-2 border-primary/20 flex flex-col">
-        <CardHeader className="bg-primary text-white p-4 rounded-t-lg">
+      <Card className="w-96 max-w-full h-[min(600px,calc(100vh-4rem))] shadow-xl border-2 border-primary/20 flex flex-col">
+        <CardHeader className="bg-primary text-white p-4 rounded-t-lg flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Bot className="h-5 w-5" />
@@ -216,7 +216,7 @@ const PartMatchHelpBot = () => {
             </div>
           </ScrollArea>
 
-          <div className="p-4 border-t">
+          <div className="p-4 border-t flex-shrink-0 bg-background">
             <div className="flex gap-2">
               <Input
                 value={inputValue}
