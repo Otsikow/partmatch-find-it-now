@@ -246,7 +246,7 @@ const PriceComparisonSection = ({ currentPart }: PriceComparisonSectionProps) =>
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <span className={`font-bold ${isLowestPrice ? 'text-green-600 text-lg' : 'text-gray-900'}`}>
-                          {formatPrice(part.price, part.currency)}
+                          {formatPrice(part.price, part.currency, (part as any).country)}
                         </span>
                         {isLowestPrice && (
                           <Badge className="bg-green-100 text-green-800 text-xs">
@@ -322,7 +322,7 @@ const PriceComparisonSection = ({ currentPart }: PriceComparisonSectionProps) =>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <span className={`font-bold text-lg ${isLowestPrice ? 'text-green-600' : 'text-gray-900'}`}>
-                        {formatPrice(part.price, part.currency)}
+                        {formatPrice(part.price, part.currency, (part as any).country)}
                       </span>
                       {isLowestPrice && (
                         <Badge className="bg-green-100 text-green-800 text-xs">

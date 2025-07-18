@@ -34,6 +34,26 @@ export const getImageUrl = (images?: string[]) => {
   return null;
 };
 
-export const formatPrice = (price: number, currency: string) => {
-  return `${currency} ${price.toLocaleString()}`;
+export const formatPrice = (price: number, currency: string, country?: string) => {
+  // If it's Ghana, force GHS currency regardless of what's stored
+  if (country?.toLowerCase().includes('ghana')) {
+    return `GHS ${price.toLocaleString()}`;
+  }
+  
+  // Use proper currency symbols based on currency code
+  switch (currency?.toUpperCase()) {
+    case 'GHS':
+      return `GHS ${price.toLocaleString()}`;
+    case 'USD':
+      return `$${price.toLocaleString()}`;
+    case 'EUR':
+      return `€${price.toLocaleString()}`;
+    case 'GBP':
+      return `£${price.toLocaleString()}`;
+    case 'NGN':
+      return `₦${price.toLocaleString()}`;
+    default:
+      // Default to GHS for any unknown currency in Ghana context
+      return `${currency || 'GHS'} ${price.toLocaleString()}`;
+  }
 };

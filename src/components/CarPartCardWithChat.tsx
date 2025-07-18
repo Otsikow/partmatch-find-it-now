@@ -73,8 +73,27 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
     }
   };
 
-  const formatPrice = (price: number, currency: string) => {
-    return `${currency} ${price.toLocaleString()}`;
+  const formatPrice = (price: number, currency: string, country?: string) => {
+    // If it's Ghana, force GHS currency regardless of what's stored
+    if (country?.toLowerCase().includes('ghana')) {
+      return `GHS ${price.toLocaleString()}`;
+    }
+    
+    // Use proper currency symbols based on currency code
+    switch (currency?.toUpperCase()) {
+      case 'GHS':
+        return `GHS ${price.toLocaleString()}`;
+      case 'USD':
+        return `$${price.toLocaleString()}`;
+      case 'EUR':
+        return `€${price.toLocaleString()}`;
+      case 'GBP':
+        return `£${price.toLocaleString()}`;
+      case 'NGN':
+        return `₦${price.toLocaleString()}`;
+      default:
+        return `${currency || 'GHS'} ${price.toLocaleString()}`;
+    }
   };
 
   const supplierName = part.profiles 
@@ -168,7 +187,7 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
                 {part.title}
               </h3>
               <p className="text-success font-bold text-base sm:text-lg lg:text-xl">
-                {formatPrice(part.price, part.currency)}
+                {formatPrice(part.price, part.currency, (part as any).country)}
               </p>
             </div>
 
@@ -325,7 +344,7 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
                 <div>
                   <h4 className="font-semibold text-gray-900 mb-2">Price & Condition</h4>
                   <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-green-600 mb-2">
-                    {formatPrice(part.price, part.currency)}
+                    {formatPrice(part.price, part.currency, (part as any).country)}
                   </p>
                   <Badge className={`${getConditionColor(part.condition)} text-sm`}>
                     {part.condition}

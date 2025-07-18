@@ -12,7 +12,7 @@ const MyOrders = () => {
       partName: 'Brake pads',
       carModel: 'Toyota Camry 2020',
       seller: 'AutoParts Plus',
-      price: '$45.99',
+      price: 'GHS 45.99',
       status: 'Delivered',
       orderDate: '2024-01-15',
       deliveryDate: '2024-01-18'
@@ -22,7 +22,7 @@ const MyOrders = () => {
       partName: 'Oil filter',
       carModel: 'Honda Civic 2019',
       seller: 'Quick Parts',
-      price: '$12.50',
+      price: 'GHS 12.50',
       status: 'In transit',
       orderDate: '2024-01-20',
       deliveryDate: '2024-01-22'

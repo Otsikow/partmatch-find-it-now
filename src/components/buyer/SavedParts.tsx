@@ -1,40 +1,111 @@
 
 import React from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Heart, MapPin, DollarSign, Calendar, Trash2 } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
 
 const SavedParts = () => {
-  const savedParts = [
-    {
-      id: '1',
-      title: 'Brake pads - Front set',
-      make: 'Toyota',
-      model: 'Camry',
-      year: '2020',
-      price: '$45.99',
-      condition: 'New',
-      location: 'Accra, Ghana',
-      savedDate: '2024-01-15',
-      seller: 'AutoParts Plus'
+  const { user } = useAuth();
+
+  const { data: savedParts = [], isLoading, refetch } = useQuery({
+    queryKey: ['saved-parts', user?.id],
+    queryFn: async () => {
+      if (!user?.id) return [];
+
+      const { data, error } = await supabase
+        .from('saved_parts')
+        .select(`
+          id,
+          created_at,
+          list_name,
+          notes,
+          part_id,
+          car_parts (
+            id,
+            title,
+            make,
+            model,
+            year,
+            price,
+            currency,
+            condition,
+            city,
+            country,
+            address,
+            images,
+            supplier_id,
+            profiles (
+              first_name,
+              last_name
+            )
+          )
+        `)
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching saved parts:', error);
+        return [];
+      }
+
+      return data?.filter(item => item.car_parts) || [];
     },
-    {
-      id: '2',
-      title: 'Oil filter - Premium',
-      make: 'Honda',
-      model: 'Civic',
-      year: '2019',
-      price: '$12.50',
-      condition: 'New',
-      location: 'Kumasi, Ghana',
-      savedDate: '2024-01-18',
-      seller: 'Quick Parts'
+    enabled: !!user?.id,
+  });
+
+  const removeSavedPart = async (savedPartId: string) => {
+    try {
+      const { error } = await supabase
+        .from('saved_parts')
+        .delete()
+        .eq('id', savedPartId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Part Removed",
+        description: "The part has been removed from your saved list.",
+      });
+
+      refetch();
+    } catch (error) {
+      console.error('Error removing saved part:', error);
+      toast({
+        title: "Error",
+        description: "Failed to remove the part. Please try again.",
+        variant: "destructive",
+      });
     }
-  ];
+  };
+
+  const formatPrice = (price: number, currency: string, country: string) => {
+    // If it's Ghana, force GHS currency
+    if (country?.toLowerCase().includes('ghana')) {
+      return `GHS ${price.toFixed(2)}`;
+    }
+    
+    // Use the stored currency
+    switch (currency?.toUpperCase()) {
+      case 'GHS':
+        return `GHS ${price.toFixed(2)}`;
+      case 'USD':
+        return `$${price.toFixed(2)}`;
+      case 'EUR':
+        return `€${price.toFixed(2)}`;
+      case 'GBP':
+        return `£${price.toFixed(2)}`;
+      default:
+        return `${currency || 'GHS'} ${price.toFixed(2)}`;
+    }
+  };
 
   const getConditionColor = (condition: string) => {
-    switch (condition.toLowerCase()) {
+    switch (condition?.toLowerCase()) {
       case 'new':
         return 'bg-green-100 text-green-800';
       case 'used':
@@ -45,6 +116,34 @@ const SavedParts = () => {
         return 'bg-gray-100 text-gray-800';
     }
   };
+
+  const formatLocation = (city: string, country: string, address: string) => {
+    if (city && country) {
+      return `${city}, ${country}`;
+    }
+    if (address) {
+      return address;
+    }
+    return 'Location not specified';
+  };
+
+  const getSellerName = (profiles: any) => {
+    if (profiles?.first_name || profiles?.last_name) {
+      return `${profiles.first_name || ''} ${profiles.last_name || ''}`.trim();
+    }
+    return 'Seller';
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading saved parts...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -59,13 +158,17 @@ const SavedParts = () => {
             <Heart className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">No saved parts</h3>
             <p className="text-gray-600 mb-4">Save parts you're interested in to view them later.</p>
-            <Button>Browse parts</Button>
+            <Button onClick={() => window.location.href = '/search-parts'}>Browse parts</Button>
           </CardContent>
         </Card>
       ) : (
         <div className="grid gap-4">
-          {savedParts.map((part) => (
-            <Card key={part.id} className="hover:shadow-md transition-shadow">
+          {savedParts.map((savedItem: any) => {
+            const part = savedItem.car_parts;
+            if (!part) return null;
+            
+            return (
+              <Card key={savedItem.id} className="hover:shadow-md transition-shadow">
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg font-medium text-gray-900">
@@ -83,21 +186,33 @@ const SavedParts = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                   <div className="flex items-center space-x-2">
                     <DollarSign className="h-4 w-4 text-gray-400" />
-                    <span className="text-sm font-medium">{part.price}</span>
+                    <span className="text-sm font-medium">
+                      {formatPrice(part.price, part.currency, part.country)}
+                    </span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <MapPin className="h-4 w-4 text-gray-400" />
-                    <span className="text-sm text-gray-600">{part.location}</span>
+                    <span className="text-sm text-gray-600">
+                      {formatLocation(part.city, part.country, part.address)}
+                    </span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Calendar className="h-4 w-4 text-gray-400" />
-                    <span className="text-sm text-gray-600">Saved: {part.savedDate}</span>
+                    <span className="text-sm text-gray-600">
+                      Saved: {new Date(savedItem.created_at).toLocaleDateString()}
+                    </span>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <p className="text-sm text-gray-600">Seller: {part.seller}</p>
+                  <p className="text-sm text-gray-600">
+                    Seller: {getSellerName(part.profiles)}
+                  </p>
                   <div className="flex space-x-2">
-                    <Button variant="outline" size="sm">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => removeSavedPart(savedItem.id)}
+                    >
                       <Trash2 className="h-4 w-4 mr-1" />
                       Remove
                     </Button>
@@ -106,7 +221,8 @@ const SavedParts = () => {
                 </div>
               </CardContent>
             </Card>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
