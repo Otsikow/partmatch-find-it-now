@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Package, LogOut, Home } from "lucide-react";
+import { Package, LogOut, Home, ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import VerifiedBadge from "@/components/VerifiedBadge";
 import { useState, useEffect } from "react";
@@ -80,6 +80,14 @@ const SellerHeader = () => {
   return (
     <header className="p-3 sm:p-4 md:p-6 flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-blue-50 via-blue-100 to-green-50 dark:from-blue-900/20 dark:via-blue-800/20 dark:to-green-900/20 backdrop-blur-lg shadow-lg border-b border-border/20">
       <div className="flex items-center gap-1 sm:gap-2 md:gap-3 min-w-0 flex-1">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleBackClick}
+          className="bg-white/10 dark:bg-gray-800/10 backdrop-blur-sm border-white/20 dark:border-gray-700/20 hover:bg-white/20 dark:hover:bg-gray-700/20 transition-all duration-300"
+        >
+          <ArrowLeft className="h-4 w-4" />
+        </Button>
         <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-xl p-2 border border-white/50 dark:border-gray-700/50 shadow-lg">
           <img 
             src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
