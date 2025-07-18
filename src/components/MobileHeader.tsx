@@ -41,15 +41,10 @@ const MobileHeader = () => {
       <div className="flex items-center justify-between px-3 py-2.5 min-h-[56px]">
         <div className="flex items-center space-x-1.5 min-w-0 flex-1">
           <img 
-            src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
-            alt="Logo" 
-            className="h-12 w-auto bg-card dark:bg-white rounded-sm p-1.5 border flex-shrink-0 object-contain" 
+            src="/lovable-uploads/0bb9488b-2f77-4f4c-b8b3-8aa9343b1d18.png" 
+            alt="PartMatch - Car Parts Marketplace" 
+            className="h-12 w-auto flex-shrink-0 object-contain" 
           />
-          <div className="min-w-0 flex-1">
-            <h1 className="brand-title truncate text-lg sm:text-xl">
-              {t('partMatch')}
-            </h1>
-          </div>
         </div>
         
         {user && (

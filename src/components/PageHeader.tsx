@@ -64,11 +64,13 @@ const PageHeader = ({
           <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
         </Button>}
       
-      {/* Logo and Ghana */}
+      {/* Professional PartMatch Logo */}
       <Link to="/" className="flex items-center gap-2 sm:gap-3 flex-shrink-0 hover:opacity-80 transition-opacity">
-        <img src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" alt="PartMatch Logo" className="h-10 w-auto sm:h-12 bg-white rounded-sm p-1 object-fill" />
-        <span className="text-lg sm:text-xl font-bold text-gray-700">
-      </span>
+        <img 
+          src="/lovable-uploads/0bb9488b-2f77-4f4c-b8b3-8aa9343b1d18.png" 
+          alt="PartMatch - Car Parts Marketplace" 
+          className="h-10 w-auto sm:h-12 object-contain" 
+        />
       </Link>
       
       <div className="flex flex-col min-w-0 flex-1">

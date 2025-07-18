@@ -1,17 +1,17 @@
 const HeroLogo = () => {
   return (
     <div className="flex items-center justify-center mb-2 sm:mb-3">
-      {/* Light mode logo - visible in light mode, hidden in dark mode */}
+      {/* Professional PartMatch logo for light mode */}
       <img
-        src="/lovable-uploads/29637275-f42b-4415-b255-b8ae5e5837e1.png"
-        alt="PartMatch Logo"
+        src="/lovable-uploads/0bb9488b-2f77-4f4c-b8b3-8aa9343b1d18.png"
+        alt="PartMatch - Car Parts Marketplace"
         className="h-48 sm:h-56 md:h-64 lg:h-72 w-auto object-contain dark:hidden"
       />
-      {/* Dark mode logo - hidden in light mode, visible in dark mode with brightness filter */}
+      {/* Professional PartMatch logo for dark mode with brightness adjustment */}
       <img
-        src="/lovable-uploads/29637275-f42b-4415-b255-b8ae5e5837e1.png"
-        alt="PartMatch Logo"
-        className="hidden dark:block h-48 sm:h-56 md:h-64 lg:h-72 w-auto object-contain brightness-[3] contrast-125 saturate-0"
+        src="/lovable-uploads/0bb9488b-2f77-4f4c-b8b3-8aa9343b1d18.png"
+        alt="PartMatch - Car Parts Marketplace"
+        className="hidden dark:block h-48 sm:h-56 md:h-64 lg:h-72 w-auto object-contain"
       />
     </div>
   );
