@@ -184,9 +184,27 @@ const SearchPartsWithMap = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100">
-      {/* Mobile-optimized welcome section */}
+      {/* Mobile-optimized welcome section with back arrow and logo */}
       <div className="bg-gradient-to-r from-primary to-primary-foreground text-white">
         <div className="container mx-auto px-4 py-6 pt-20">
+          <div className="flex items-center justify-between mb-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate("/")}
+              className="text-white hover:bg-white/20 rounded-full"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </Button>
+            <img 
+              src="/lovable-uploads/0bb9488b-2f77-4f4c-b8b3-8aa9343b1d18.png" 
+              alt="PartMatch Logo" 
+              className="h-8 w-auto" 
+            />
+            <div className="w-10"></div> {/* Spacer for alignment */}
+          </div>
           <div className="text-center space-y-2">
             <h1 className="text-2xl sm:text-3xl font-bold">Welcome to PartMatch</h1>
             <p className="text-white/90 text-sm sm:text-base">Find parts near you with location directions</p>
