@@ -184,35 +184,44 @@ const SearchPartsWithMap = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100">
-      {/* Mobile-optimized welcome section with back arrow and logo */}
-      <div className="bg-gradient-to-r from-primary to-primary-foreground text-white">
-        <div className="container mx-auto px-4 py-6 pt-20">
-          <div className="flex items-center justify-between mb-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate("/")}
-              className="text-white hover:bg-white/20 rounded-full"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </Button>
-            <img 
-              src="/lovable-uploads/0bb9488b-2f77-4f4c-b8b3-8aa9343b1d18.png" 
-              alt="PartMatch Logo" 
-              className="h-8 w-auto" 
-            />
-            <div className="w-10"></div> {/* Spacer for alignment */}
-          </div>
-          <div className="text-center space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-bold">Welcome to PartMatch</h1>
-            <p className="text-white/90 text-sm sm:text-base">Find parts near you with location directions</p>
+      {/* Header consistent with other pages */}
+      <div className="bg-gradient-to-r from-primary via-primary/90 to-primary-foreground text-white shadow-lg">
+        <div className="px-4 py-6 sm:px-6">
+          <div className="flex items-center justify-between">
+            {/* Left section with back button, logo and title */}
+            <div className="flex items-center space-x-3 sm:space-x-4 min-w-0 flex-1">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate('/')}
+                className="p-2 hover:bg-white/20 rounded-full text-white hover:text-white flex-shrink-0"
+              >
+                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </Button>
+              
+              {/* Logo */}
+              <img 
+                src="/lovable-uploads/0bb9488b-2f77-4f4c-b8b3-8aa9343b1d18.png" 
+                alt="PartMatch - Car Parts Marketplace" 
+                className="h-8 w-auto sm:h-10 object-contain" 
+              />
+              
+              <div className="min-w-0 flex-1">
+                <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-white leading-tight break-words">
+                  Browse Car Parts
+                </h1>
+                <p className="text-sm sm:text-base text-white/90 leading-tight break-words mt-1">
+                  Find parts near you with location and search
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
       
-      <main className="container mx-auto px-4 py-4 sm:py-6 -mt-4">
+      <main className="container mx-auto px-4 py-4 sm:py-6">
         <PendingRatingNotification />
         
         {/* Location Section - Mobile Optimized */}
