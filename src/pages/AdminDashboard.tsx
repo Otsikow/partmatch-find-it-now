@@ -12,6 +12,7 @@ import AdminHeader from "@/components/admin/AdminHeader";
 import UserCategoryTabs from "@/components/admin/UserCategoryTabs";
 import UserManagementStats from "@/components/admin/UserManagementStats";
 import AnalyticsDashboard from "@/components/admin/AnalyticsDashboard";
+import ListingQualityManager from "@/components/admin/ListingQualityManager";
 import { useAdminData } from "@/hooks/useAdminData";
 import { useAdminActions } from "@/hooks/useAdminActions";
 import { useState, useEffect, useRef, useMemo } from "react";
@@ -117,7 +118,7 @@ const AdminDashboard = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className={`grid w-full ${isMobile ? 'grid-cols-3' : 'grid-cols-5'} bg-card backdrop-blur-sm border ${isMobile ? 'mb-2' : 'mb-4'}`}>
+          <TabsList className={`grid w-full ${isMobile ? 'grid-cols-3' : 'grid-cols-6'} bg-card backdrop-blur-sm border ${isMobile ? 'mb-2' : 'mb-4'}`}>
             <TabsTrigger value="analytics" className={`${isMobile ? 'text-xs px-1' : 'text-base'} font-inter`}>
               {isMobile ? 'Analytics' : 'Analytics Dashboard'}
             </TabsTrigger>
@@ -129,6 +130,7 @@ const AdminDashboard = () => {
             </TabsTrigger>
             {!isMobile && (
               <>
+                <TabsTrigger value="quality" className="text-base font-inter">Quality Checker</TabsTrigger>
                 <TabsTrigger value="verifications" className="text-base font-inter">Seller Verifications ({verifications.length})</TabsTrigger>
                 <TabsTrigger value="users" className="text-base font-inter">User Management</TabsTrigger>
               </>
@@ -136,7 +138,8 @@ const AdminDashboard = () => {
           </TabsList>
 
           {isMobile && (
-            <TabsList className="grid w-full grid-cols-2 bg-card backdrop-blur-sm border mb-4">
+            <TabsList className="grid w-full grid-cols-3 bg-card backdrop-blur-sm border mb-4">
+              <TabsTrigger value="quality" className="text-xs px-2 font-inter">Quality</TabsTrigger>
               <TabsTrigger value="verifications" className="text-xs px-2 font-inter">Verifications ({verifications.length})</TabsTrigger>
               <TabsTrigger value="users" className="text-xs px-2 font-inter">Users</TabsTrigger>
             </TabsList>
@@ -211,6 +214,18 @@ const AdminDashboard = () => {
                   </div>
                 ))
               )}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="quality" className="mt-4 sm:mt-6">
+            <div className="space-y-3 sm:space-y-4 lg:space-y-6">
+              <h2 className="text-lg sm:text-xl lg:text-2xl font-playfair font-semibold text-primary px-2 sm:px-0">
+                Listing Quality Management
+              </h2>
+              
+              <div className="mx-2 sm:mx-0">
+                <ListingQualityManager />
+              </div>
             </div>
           </TabsContent>
 

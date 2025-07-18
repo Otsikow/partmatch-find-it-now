@@ -176,6 +176,9 @@ export type Database = {
           model: string
           part_type: string
           price: number
+          quality_checked_at: string | null
+          quality_feedback: string | null
+          quality_score: number | null
           status: string
           supplier_id: string
           title: string
@@ -208,6 +211,9 @@ export type Database = {
           model: string
           part_type: string
           price: number
+          quality_checked_at?: string | null
+          quality_feedback?: string | null
+          quality_score?: number | null
           status?: string
           supplier_id: string
           title: string
@@ -240,6 +246,9 @@ export type Database = {
           model?: string
           part_type?: string
           price?: number
+          quality_checked_at?: string | null
+          quality_feedback?: string | null
+          quality_score?: number | null
           status?: string
           supplier_id?: string
           title?: string
@@ -339,6 +348,47 @@ export type Database = {
           name?: string
         }
         Relationships: []
+      }
+      listing_quality_checks: {
+        Row: {
+          auto_approved: boolean | null
+          checked_at: string | null
+          created_at: string | null
+          feedback_message: string | null
+          flagged_issues: Json | null
+          id: string
+          listing_id: string
+          quality_score: number
+        }
+        Insert: {
+          auto_approved?: boolean | null
+          checked_at?: string | null
+          created_at?: string | null
+          feedback_message?: string | null
+          flagged_issues?: Json | null
+          id?: string
+          listing_id: string
+          quality_score: number
+        }
+        Update: {
+          auto_approved?: boolean | null
+          checked_at?: string | null
+          created_at?: string | null
+          feedback_message?: string | null
+          flagged_issues?: Json | null
+          id?: string
+          listing_id?: string
+          quality_score?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_quality_checks_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "car_parts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       messages: {
         Row: {

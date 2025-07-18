@@ -276,7 +276,7 @@ const EnhancedPostCarPartForm = ({
           : null,
       };
 
-      const { error } = await supabase
+      const { data: insertedPart, error } = await supabase
         .from("car_parts")
         .insert([partData])
         .select()
@@ -286,12 +286,46 @@ const EnhancedPostCarPartForm = ({
         throw error;
       }
 
-      toast({
-        title: "Part Posted Successfully!",
-        description: hasBusinessSubscription
-          ? "Your car part has been posted and featured automatically!"
-          : "Your car part has been posted and is now available for buyers.",
-      });
+      // Trigger automatic quality check
+      try {
+        const qualityCheckResponse = await supabase.functions.invoke('listing-quality-checker', {
+          body: {
+            listingId: insertedPart.id,
+            title: formData.title.trim(),
+            description: formData.description.trim(),
+            images: imageUrls,
+            price: price
+          }
+        });
+
+        if (qualityCheckResponse.error) {
+          console.error('Quality check failed:', qualityCheckResponse.error);
+        } else {
+          const { result, status } = qualityCheckResponse.data;
+          
+          if (status === 'pending_fix') {
+            toast({
+              title: "Listing Needs Improvement",
+              description: "Your listing has been submitted but needs some improvements. Check your notifications for details.",
+              variant: "destructive",
+            });
+          } else {
+            toast({
+              title: "Part Posted Successfully!",
+              description: hasBusinessSubscription
+                ? "Your car part has been posted, quality checked, and featured automatically!"
+                : "Your car part has been posted, quality checked, and is now available for buyers.",
+            });
+          }
+        }
+      } catch (qualityError) {
+        console.error('Quality check error:', qualityError);
+        // Still show success message for the posting itself
+        toast({
+          title: "Part Posted Successfully!",
+          description: "Your car part has been posted. Quality check will be processed shortly.",
+        });
+      }
 
       setFormData({
         title: "",
