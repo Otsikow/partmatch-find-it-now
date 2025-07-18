@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -55,10 +55,34 @@ const RequestExpandedDialog = ({
   const { user } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [userProfile, setUserProfile] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (!user) return;
+      
+      try {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('user_type')
+          .eq('id', user.id)
+          .single();
+        
+        setUserProfile(profile);
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      }
+    };
+
+    fetchUserProfile();
+  }, [user]);
 
   if (!request) return null;
 
-  const isAdmin = user?.user_metadata?.user_type === 'admin';
+  // Check if user is admin or request owner
+  const isAdmin = userProfile?.user_type === 'admin' || user?.user_metadata?.user_type === 'admin';
+  const isOwner = user?.id === request.owner_id;
+  const canModifyRequest = isAdmin || isOwner;
 
   const handleMakeOffer = () => {
     if (!user) {
@@ -81,20 +105,32 @@ const RequestExpandedDialog = ({
   };
 
   const handleHideRequest = async () => {
-    if (!isAdmin) return;
+    if (!canModifyRequest) {
+      toast({
+        title: "Permission Denied",
+        description: "You don't have permission to hide this request.",
+        variant: "destructive",
+      });
+      return;
+    }
     
     setIsLoading(true);
     try {
+      console.log('Hiding request:', request.id, 'User:', user?.id, 'IsAdmin:', isAdmin, 'IsOwner:', isOwner);
+      
       const { error } = await supabase
         .from("part_requests")
         .update({ status: "cancelled" })
         .eq("id", request.id);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error hiding request:', error);
+        throw error;
+      }
 
       toast({
         title: "Request Hidden",
-        description: "The part request has been hidden from public view.",
+        description: isAdmin ? "The part request has been hidden from public view." : "Your request has been hidden from public view.",
       });
 
       onRequestUpdated?.();
@@ -103,7 +139,7 @@ const RequestExpandedDialog = ({
       console.error("Error hiding request:", error);
       toast({
         title: "Error",
-        description: "Failed to hide the request. Please try again.",
+        description: `Failed to hide the request: ${error.message}. Please try again.`,
         variant: "destructive",
       });
     } finally {
@@ -112,19 +148,37 @@ const RequestExpandedDialog = ({
   };
 
   const handleDeleteRequest = async () => {
-    if (!isAdmin) return;
+    if (!canModifyRequest) {
+      toast({
+        title: "Permission Denied",
+        description: "You don't have permission to delete this request.",
+        variant: "destructive",
+      });
+      return;
+    }
     
-    if (!confirm("Are you sure you want to permanently delete this request? This action cannot be undone.")) {
+    if (!confirm(isAdmin ? 
+      "Are you sure you want to permanently delete this request? This action cannot be undone." :
+      "Are you sure you want to permanently delete your request? This action cannot be undone."
+    )) {
       return;
     }
 
     setIsLoading(true);
     try {
+      console.log('Deleting request:', request.id, 'User:', user?.id, 'IsAdmin:', isAdmin, 'IsOwner:', isOwner);
+      
       // First delete any related offers
-      await supabase
+      const { error: offersError } = await supabase
         .from("offers")
         .delete()
         .eq("request_id", request.id);
+
+      
+      if (offersError) {
+        console.error('Error deleting related offers:', offersError);
+        // Continue with request deletion even if offers deletion fails
+      }
 
       // Then delete the request
       const { error } = await supabase
@@ -132,11 +186,14 @@ const RequestExpandedDialog = ({
         .delete()
         .eq("id", request.id);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error deleting request:', error);
+        throw error;
+      }
 
       toast({
         title: "Request Deleted",
-        description: "The part request has been permanently deleted.",
+        description: isAdmin ? "The part request has been permanently deleted." : "Your request has been permanently deleted.",
       });
 
       onRequestUpdated?.();
@@ -145,7 +202,7 @@ const RequestExpandedDialog = ({
       console.error("Error deleting request:", error);
       toast({
         title: "Error",
-        description: "Failed to delete the request. Please try again.",
+        description: `Failed to delete the request: ${error.message}. Please try again.`,
         variant: "destructive",
       });
     } finally {
@@ -189,7 +246,7 @@ const RequestExpandedDialog = ({
             >
               {request.status === 'pending' ? 'Active' : request.status}
             </Badge>
-            {isAdmin && (
+            {canModifyRequest && (
               <div className="flex gap-2">
                 <Button
                   variant="outline"
