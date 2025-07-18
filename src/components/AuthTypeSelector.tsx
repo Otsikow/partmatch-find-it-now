@@ -7,21 +7,31 @@ import { Link } from "react-router-dom";
 const AuthTypeSelector = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/20 font-inter">
-      <header className="p-4 sm:p-6 flex items-center gap-3 bg-background/95 backdrop-blur-lg shadow-lg border-b border-border">
-        <Link to="/">
-          <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 hover:bg-accent/50">
-            <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
-          </Button>
-        </Link>
-        <div className="flex items-center gap-2 sm:gap-3">
-          <img 
-            src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
-            alt="PartMatch Logo" 
-            className="h-6 w-auto sm:h-8 bg-card dark:bg-white rounded-sm p-1 border"
-          />
-          <h1 className="page-subheader text-xl sm:text-2xl lg:text-3xl text-foreground">
-            Choose Your Account Type
-          </h1>
+      <header className="relative bg-gradient-to-r from-primary via-primary/95 to-primary-foreground text-white shadow-lg border-b border-white/20">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/5 to-indigo-600/10"></div>
+        <div className="relative p-4 sm:p-6 flex items-center gap-3">
+          <Link to="/">
+            <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 hover:bg-white/20 text-white hover:text-white">
+              <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
+            </Button>
+          </Link>
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+            <div className="bg-white/20 backdrop-blur-sm rounded-xl p-2 shadow-lg">
+              <img 
+                src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
+                alt="PartMatch Logo" 
+                className="h-6 w-auto sm:h-8 object-contain"
+              />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-white leading-tight break-words">
+                Choose Your Account Type
+              </h1>
+              <p className="text-sm sm:text-base text-white/90 leading-tight break-words mt-1">
+                Select how you want to join our marketplace
+              </p>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -30,8 +40,11 @@ const AuthTypeSelector = () => {
           <h2 className="page-header text-2xl sm:text-3xl lg:text-4xl mb-4 text-foreground">
             How would you like to join?
           </h2>
-          <p className="section-subtitle text-lg sm:text-xl max-w-2xl mx-auto">
+          <p className="section-subtitle text-lg sm:text-xl max-w-2xl mx-auto mb-4">
             Select the type of account that best describes your role in our car parts marketplace
+          </p>
+          <p className="text-sm text-muted-foreground max-w-xl mx-auto">
+            Whether you're looking to buy car parts or sell them, we have the perfect account type for your needs. Choose below to get started with your personalized experience.
           </p>
         </div>
 
