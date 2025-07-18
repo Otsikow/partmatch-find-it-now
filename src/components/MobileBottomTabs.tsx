@@ -1,37 +1,39 @@
 import { Home, Search, Plus, User, Package } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 
 const MobileBottomTabs = () => {
   const location = useLocation();
   const { user } = useAuth();
+  const { t } = useTranslation(); // i18n translation hook
 
   const isActive = (path: string) => location.pathname === path;
 
   const tabs = [
     {
       icon: Home,
-      label: "Home",
+      label: t("home"),
       path: "/",
     },
     {
       icon: Search,
-      label: "Browse",
-      path: "/search-parts-with-map",
+      label: t("browse"),
+      path: "/search-parts",
     },
     {
       icon: Plus,
-      label: "Request",
+      label: t("request"),
       path: "/request-part",
     },
     {
       icon: Package,
-      label: "Sell Parts",
+      label: t("dashboard"),
       path: "/seller-dashboard",
     },
     {
       icon: User,
-      label: user ? "Profile" : "Sign In",
+      label: user ? t("profile") : t("signIn"),
       path: user ? "/buyer-dashboard" : "/auth",
     },
   ];
@@ -42,7 +44,7 @@ const MobileBottomTabs = () => {
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const active = isActive(tab.path);
-          
+
           return (
             <Link
               key={tab.path}
@@ -54,11 +56,17 @@ const MobileBottomTabs = () => {
               }`}
             >
               <div className="relative">
-                <Icon className={`w-6 h-6 mb-1 ${active ? "text-primary" : "text-muted-foreground"}`} />
+                <Icon
+                  className={`w-6 h-6 mb-1 ${
+                    active ? "text-primary" : "text-muted-foreground"
+                  }`}
+                />
               </div>
-              <span className={`text-xs font-medium truncate ${
-                active ? "text-primary" : "text-muted-foreground"
-              }`}>
+              <span
+                className={`text-xs font-medium truncate ${
+                  active ? "text-primary" : "text-muted-foreground"
+                }`}
+              >
                 {tab.label}
               </span>
             </Link>
