@@ -5,6 +5,23 @@ import { toast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { checkAntiSpam, triggerNotification, triggerAiReview } from "@/utils/antiSpam";
+
+// Function to trigger smart match notifications
+const triggerSmartMatchNotification = async (requestId: string) => {
+  try {
+    const response = await supabase.functions.invoke('smart-match-notification', {
+      body: { requestId }
+    });
+    
+    if (response.error) {
+      console.error('Smart match notification error:', response.error);
+    } else {
+      console.log('Smart match notifications sent:', response.data);
+    }
+  } catch (error) {
+    console.error('Failed to trigger smart match notification:', error);
+  }
+};
 import { RequestFormData } from "@/components/RequestForm/RequestFormData";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -183,6 +200,7 @@ export const useRequestSubmission = () => {
                 description: "Your request has been approved and sellers are being notified.",
               });
               await triggerNotification('new_request', { requestId: requestData.id });
+              await triggerSmartMatchNotification(requestData.id);
               return { success: true };
             } else {
               toast({
@@ -207,6 +225,7 @@ export const useRequestSubmission = () => {
       const requestData = await createRequest(formData, photo, currentUser.id, 'pending');
       if (requestData) {
         await triggerNotification('new_request', { requestId: requestData.id });
+        await triggerSmartMatchNotification(requestData.id);
         toast({
           title: "Request Submitted Successfully!",
           description: "We're notifying sellers in your area. You'll hear from them soon.",

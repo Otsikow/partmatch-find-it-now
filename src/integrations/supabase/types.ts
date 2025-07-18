@@ -779,6 +779,7 @@ export type Database = {
           latitude: number | null
           location: string | null
           longitude: number | null
+          notification_preferences: Json | null
           phone: string | null
           profile_photo_url: string | null
           rating: number | null
@@ -806,6 +807,7 @@ export type Database = {
           latitude?: number | null
           location?: string | null
           longitude?: number | null
+          notification_preferences?: Json | null
           phone?: string | null
           profile_photo_url?: string | null
           rating?: number | null
@@ -833,6 +835,7 @@ export type Database = {
           latitude?: number | null
           location?: string | null
           longitude?: number | null
+          notification_preferences?: Json | null
           phone?: string | null
           profile_photo_url?: string | null
           rating?: number | null
@@ -1098,6 +1101,57 @@ export type Database = {
           verified_by?: string | null
         }
         Relationships: []
+      }
+      smart_match_notifications: {
+        Row: {
+          created_at: string
+          email_sent: boolean | null
+          id: string
+          in_app_sent: boolean | null
+          match_criteria: Json | null
+          notification_type: string
+          request_id: string
+          seller_id: string
+          sent_at: string
+        }
+        Insert: {
+          created_at?: string
+          email_sent?: boolean | null
+          id?: string
+          in_app_sent?: boolean | null
+          match_criteria?: Json | null
+          notification_type?: string
+          request_id: string
+          seller_id: string
+          sent_at?: string
+        }
+        Update: {
+          created_at?: string
+          email_sent?: boolean | null
+          id?: string
+          in_app_sent?: boolean | null
+          match_criteria?: Json | null
+          notification_type?: string
+          request_id?: string
+          seller_id?: string
+          sent_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "smart_match_notifications_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "part_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "smart_match_notifications_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_chat_status: {
         Row: {

@@ -61,5 +61,24 @@ export const useNotifications = () => {
     setLoading(false);
   };
 
-  return { notifications, loading, refetch: fetchNotifications };
+  const markAsRead = async (notificationId: string) => {
+    if (!user) return;
+
+    const { error } = await supabase
+      .from('user_notifications')
+      .update({ read: true })
+      .eq('id', notificationId);
+
+    if (!error) {
+      setNotifications(prev => 
+        prev.map(notification => 
+          notification.id === notificationId 
+            ? { ...notification, read: true }
+            : notification
+        )
+      );
+    }
+  };
+
+  return { notifications, loading, refetch: fetchNotifications, markAsRead };
 };
