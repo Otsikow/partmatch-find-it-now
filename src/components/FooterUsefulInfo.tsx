@@ -26,13 +26,13 @@ const FooterUsefulInfo = () => {
           </Link>
         </li>
         <li>
-          <a 
-            href="#faq" 
+          <Link 
+            to="/faq" 
             className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
           >
             <HelpCircle className="h-3 w-3" />
             <span>FAQs</span>
-          </a>
+          </Link>
         </li>
         <li>
           <Link 
