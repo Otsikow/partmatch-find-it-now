@@ -1351,6 +1351,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      generate_weekly_insights_now: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       increment_click_count: {
         Args: { listing_id: string }
         Returns: undefined
