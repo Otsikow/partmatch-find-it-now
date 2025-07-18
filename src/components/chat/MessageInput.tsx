@@ -43,6 +43,44 @@ const MessageInput = ({ chatId, userId, onTyping }: MessageInputProps) => {
       }
 
       console.log('✅ Message sent successfully:', data);
+
+      // Create notification for the recipient
+      try {
+        const { data: chatData } = await supabase
+          .from('chats')
+          .select('buyer_id, seller_id')
+          .eq('id', chatId)
+          .single();
+
+        if (chatData) {
+          const recipientId = chatData.buyer_id === userId ? chatData.seller_id : chatData.buyer_id;
+          
+          const { data: senderProfile } = await supabase
+            .from('profiles')
+            .select('first_name, last_name')
+            .eq('id', userId)
+            .single();
+
+          const senderName = senderProfile 
+            ? `${senderProfile.first_name || ''} ${senderProfile.last_name || ''}`.trim()
+            : 'Someone';
+
+          await supabase
+            .from('notifications')
+            .insert({
+              user_id: recipientId,
+              type: 'new_message',
+              message: `${senderName} sent you a message: "${newMessage.trim().substring(0, 50)}${newMessage.trim().length > 50 ? '...' : ''}"`,
+              sent: false
+            });
+
+          console.log('✅ Notification created for recipient:', recipientId);
+        }
+      } catch (notificationError) {
+        console.error('❌ Error creating notification:', notificationError);
+        // Don't throw here - message was sent successfully
+      }
+
       setNewMessage('');
     } catch (error) {
       console.error('Error sending message:', error);
