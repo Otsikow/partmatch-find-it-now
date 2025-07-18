@@ -185,7 +185,7 @@ const SavedParts = () => {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                   <div className="flex items-center space-x-2">
-                    <DollarSign className="h-4 w-4 text-gray-400" />
+                    {/* <DollarSign className="h-4 w-4 text-gray-400" /> */}
                     <span className="text-sm font-medium">
                       {formatPrice(part.price, part.currency, part.country)}
                     </span>
