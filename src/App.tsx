@@ -25,6 +25,7 @@ import SearchParts from "./pages/SearchParts";
 import SearchPartsWithMap from "./pages/SearchPartsWithMap";
 import Chat from "./pages/Chat";
 import About from "./pages/About";
+import FAQ from "./pages/FAQ";
 import Contact from "./pages/Contact";
 import Services from "./pages/Services";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -73,6 +74,7 @@ function App() {
                   />
                   <Route path="/search-map" element={<SearchPartsWithMap />} />
                   <Route path="/about" element={<About />} />
+                  <Route path="/faq" element={<FAQ />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/services" element={<Services />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
