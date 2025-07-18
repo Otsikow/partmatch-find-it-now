@@ -209,9 +209,7 @@ const About = () => {
                   {t("about.emailUs", "Email Us")}
                 </h3>
                 <p className="text-gray-600 font-crimson">
-                  support@partmatchgh.com
-                  <br />
-                  info@partmatchgh.com
+                  support@partmatch.app
                   <br />
                   {t("about.replyTime", "We reply within 24 hours")}
                 </p>
