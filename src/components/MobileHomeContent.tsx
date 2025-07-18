@@ -10,6 +10,8 @@ const MobileHomeContent = () => {
   const { t } = useTranslation();
   const {
     activeParts,
+    activeRequests,
+    partsMatched,
     sellers,
     totalUsers,
     countries,
@@ -203,6 +205,25 @@ const MobileHomeContent = () => {
               {loading ? '...' : `${countries}+`}
             </div>
             <div className="text-xs text-gray-500">{t('countries')}</div>
+          </div>
+        </div>
+
+        {/* Additional Real-time Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 text-center">
+            <div className="text-2xl font-bold text-blue-600">
+              {loading ? '...' : `${activeRequests}+`}
+            </div>
+            <div className="text-xs text-gray-700 font-medium">Active Requests</div>
+            <p className="text-xs text-gray-600 mt-1">Live requests waiting for offers</p>
+          </div>
+          
+          <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 text-center">
+            <div className="text-2xl font-bold text-green-600">
+              {loading ? '...' : `${partsMatched}+`}
+            </div>
+            <div className="text-xs text-gray-700 font-medium">Parts Matched</div>
+            <p className="text-xs text-gray-600 mt-1">Successful connections made</p>
           </div>
         </div>
       </div>
