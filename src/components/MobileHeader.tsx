@@ -37,7 +37,7 @@ const MobileHeader = () => {
   };
 
   return (
-    <div className="fixed top-0 left-0 right-0 bg-gradient-to-r from-primary via-primary/95 to-primary-foreground backdrop-blur-sm shadow-lg border-b border-white/20 z-40">
+    <div className="relative top-0 left-0 right-0 bg-gradient-to-r from-primary via-primary/95 to-primary-foreground backdrop-blur-sm shadow-lg border-b border-white/20 z-40">
       <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/5 to-indigo-600/10"></div>
       <div className="relative flex items-center justify-between px-4 py-3 min-h-[64px] safe-area-pt">
         <div className="flex items-center min-w-0 flex-1">

@@ -23,7 +23,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50 body-text">
       <MobileHeader />
-      <div className="pt-16 pb-20">
+      <div className="pb-20">
         <MobileHomeContent />
       </div>
       <Footer />
