@@ -31,25 +31,25 @@ export const BuyerDashboardTabs = () => {
         <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 mb-6 sm:mb-8 bg-transparent p-0 gap-2 sm:gap-3 h-auto">
           <TabsTrigger 
             value="requests" 
-            className="flex-1 min-w-[120px] sm:min-w-[140px] text-xs sm:text-sm font-semibold px-4 sm:px-6 py-3 sm:py-4 rounded-xl bg-white border-2 border-primary/20 text-primary hover:border-primary/40 hover:bg-primary/5 data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary-foreground data-[state=active]:text-white data-[state=active]:border-primary data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25 transition-all duration-300 hover:scale-105 data-[state=active]:scale-105"
+            className="flex-1 min-w-[120px] sm:min-w-[140px] text-xs sm:text-sm font-semibold px-4 sm:px-6 py-3 sm:py-4 rounded-xl bg-background border-2 border-primary/20 text-primary hover:border-primary/40 hover:bg-primary/5 data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary-foreground data-[state=active]:text-white data-[state=active]:border-primary data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25 transition-all duration-300 hover:scale-105 data-[state=active]:scale-105"
           >
             My Requests
           </TabsTrigger>
           <TabsTrigger 
             value="orders" 
-            className="flex-1 min-w-[120px] sm:min-w-[140px] text-xs sm:text-sm font-semibold px-4 sm:px-6 py-3 sm:py-4 rounded-xl bg-white border-2 border-primary/20 text-primary hover:border-primary/40 hover:bg-primary/5 data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary-foreground data-[state=active]:text-white data-[state=active]:border-primary data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25 transition-all duration-300 hover:scale-105 data-[state=active]:scale-105"
+            className="flex-1 min-w-[120px] sm:min-w-[140px] text-xs sm:text-sm font-semibold px-4 sm:px-6 py-3 sm:py-4 rounded-xl bg-background border-2 border-primary/20 text-primary hover:border-primary/40 hover:bg-primary/5 data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary-foreground data-[state=active]:text-white data-[state=active]:border-primary data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25 transition-all duration-300 hover:scale-105 data-[state=active]:scale-105"
           >
             My Orders
           </TabsTrigger>
           <TabsTrigger 
             value="saved" 
-            className="flex-1 min-w-[120px] sm:min-w-[140px] text-xs sm:text-sm font-semibold px-4 sm:px-6 py-3 sm:py-4 rounded-xl bg-white border-2 border-primary/20 text-primary hover:border-primary/40 hover:bg-primary/5 data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary-foreground data-[state=active]:text-white data-[state=active]:border-primary data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25 transition-all duration-300 hover:scale-105 data-[state=active]:scale-105"
+            className="flex-1 min-w-[120px] sm:min-w-[140px] text-xs sm:text-sm font-semibold px-4 sm:px-6 py-3 sm:py-4 rounded-xl bg-background border-2 border-primary/20 text-primary hover:border-primary/40 hover:bg-primary/5 data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary-foreground data-[state=active]:text-white data-[state=active]:border-primary data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25 transition-all duration-300 hover:scale-105 data-[state=active]:scale-105"
           >
             Saved Parts
           </TabsTrigger>
           <TabsTrigger 
             value="profile" 
-            className="flex-1 min-w-[120px] sm:min-w-[140px] text-xs sm:text-sm font-semibold px-4 sm:px-6 py-3 sm:py-4 rounded-xl bg-white border-2 border-primary/20 text-primary hover:border-primary/40 hover:bg-primary/5 data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary-foreground data-[state=active]:text-white data-[state=active]:border-primary data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25 transition-all duration-300 hover:scale-105 data-[state=active]:scale-105"
+            className="flex-1 min-w-[120px] sm:min-w-[140px] text-xs sm:text-sm font-semibold px-4 sm:px-6 py-3 sm:py-4 rounded-xl bg-background border-2 border-primary/20 text-primary hover:border-primary/40 hover:bg-primary/5 data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary-foreground data-[state=active]:text-white data-[state=active]:border-primary data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25 transition-all duration-300 hover:scale-105 data-[state=active]:scale-105"
           >
             Profile
           </TabsTrigger>

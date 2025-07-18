@@ -89,20 +89,20 @@ const AuthFormFields = ({ isLogin, formData, onInputChange }: AuthFormFieldsProp
               Select Your Account Type *
             </Label>
             <Select value={formData.userType} onValueChange={(value) => onInputChange('userType', value)}>
-              <SelectTrigger className="mt-2 text-base border-blue-200 focus:border-blue-400 bg-white">
+              <SelectTrigger className="mt-2 text-base border-blue-200 focus:border-blue-400 bg-background">
                 <SelectValue placeholder="Choose your account type" />
               </SelectTrigger>
-              <SelectContent className="bg-white border border-blue-200 shadow-lg">
+              <SelectContent className="bg-background border border-blue-200 shadow-lg">
                 <SelectItem value="owner" className="hover:bg-blue-50">
                   <div className="flex flex-col">
                     <span className="font-medium text-blue-700">🛒 Buyer</span>
-                    <span className="text-sm text-gray-600">Find and purchase car parts</span>
+                    <span className="text-sm text-muted-foreground">Find and purchase car parts</span>
                   </div>
                 </SelectItem>
                 <SelectItem value="supplier" className="hover:bg-orange-50">
                   <div className="flex flex-col">
                     <span className="font-medium text-orange-700">🏪 Seller</span>
-                    <span className="text-sm text-gray-600">Sell and supply car parts</span>
+                    <span className="text-sm text-muted-foreground">Sell and supply car parts</span>
                   </div>
                 </SelectItem>
               </SelectContent>
@@ -112,7 +112,7 @@ const AuthFormFields = ({ isLogin, formData, onInputChange }: AuthFormFieldsProp
           <div>
             <Label htmlFor="phone" className="text-sm sm:text-base font-inter">Phone/WhatsApp *</Label>
             <div className="relative">
-              <Phone className="h-4 w-4 absolute left-3 top-3 text-gray-400" />
+              <Phone className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
               <Input
                 id="phone"
                 type="tel"
@@ -128,7 +128,7 @@ const AuthFormFields = ({ isLogin, formData, onInputChange }: AuthFormFieldsProp
            <div>
              <Label htmlFor="location" className="text-sm sm:text-base font-inter">Location *</Label>
              <div className="relative">
-               <MapPin className="h-4 w-4 absolute left-3 top-3 text-gray-400" />
+               <MapPin className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
                <Input
                  id="location"
                  placeholder="e.g. Accra, Kumasi"
@@ -215,7 +215,7 @@ const AuthFormFields = ({ isLogin, formData, onInputChange }: AuthFormFieldsProp
                      id="currency"
                      value={formData.currency}
                      readOnly
-                     className="mt-1 text-base border-blue-200 bg-gray-50"
+                     className="mt-1 text-base border-blue-200 bg-background"
                      placeholder="Auto-detected"
                    />
                  </div>
@@ -228,7 +228,7 @@ const AuthFormFields = ({ isLogin, formData, onInputChange }: AuthFormFieldsProp
       <div>
         <Label htmlFor="email" className="text-sm sm:text-base font-inter">Email *</Label>
         <div className="relative">
-          <Mail className="h-4 w-4 absolute left-3 top-3 text-gray-400" />
+          <Mail className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
           <Input
             id="email"
             type="email"
@@ -244,7 +244,7 @@ const AuthFormFields = ({ isLogin, formData, onInputChange }: AuthFormFieldsProp
       <div>
         <Label htmlFor="password" className="text-sm sm:text-base font-inter">Password *</Label>
         <div className="relative">
-          <Lock className="h-4 w-4 absolute left-3 top-3 text-gray-400" />
+          <Lock className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
           <Input
             id="password"
             type={showPassword ? "text" : "password"}
@@ -258,7 +258,7 @@ const AuthFormFields = ({ isLogin, formData, onInputChange }: AuthFormFieldsProp
             type="button"
             variant="ghost"
             size="icon"
-            className="absolute right-1 top-1 h-8 w-8 text-gray-400 hover:text-gray-600"
+            className="absolute right-1 top-1 h-8 w-8 text-muted-foreground hover:text-foreground"
             onClick={() => setShowPassword(!showPassword)}
           >
             {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}

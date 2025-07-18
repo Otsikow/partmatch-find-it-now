@@ -8,11 +8,11 @@ import { Plus, Search } from 'lucide-react';
 
 export const BuyerDashboardContent = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <BuyerDashboardStats />
       
       {/* Prominent Action Buttons */}
-      <div className="bg-white border-t border-gray-200 px-4 py-6 sm:px-6">
+      <div className="bg-background border-t border-border px-4 py-6 sm:px-6">
         <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
           <Link to="/request-part" className="flex-1">
             <Button 
@@ -37,7 +37,7 @@ export const BuyerDashboardContent = () => {
         </div>
       </div>
       
-      <div className="bg-white border-t border-gray-200">
+      <div className="bg-background border-t border-border">
         <BuyerDashboardTabs />
       </div>
     </div>

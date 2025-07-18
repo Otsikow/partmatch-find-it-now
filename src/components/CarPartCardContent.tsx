@@ -56,11 +56,11 @@ const CarPartCardContent = ({ part, onExpand }: CarPartCardContentProps) => {
     <div onClick={onExpand}>
       <CardHeader className="pb-3 sm:pb-4">
         <div className="space-y-2 sm:space-y-3">
-          <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 line-clamp-2 leading-tight">
+          <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground line-clamp-2 leading-tight">
             {part.title}
           </h3>
           <div className="flex items-center justify-between">
-            <p className="text-sm sm:text-base text-gray-600">
+            <p className="text-sm sm:text-base text-muted-foreground">
               {part.make} {part.model} ({part.year})
             </p>
             <div className="text-right">
@@ -75,13 +75,13 @@ const CarPartCardContent = ({ part, onExpand }: CarPartCardContentProps) => {
       <CardContent className="py-3 sm:py-4">
         <div className="space-y-3 sm:space-y-4">
           {part.description && (
-            <p className="text-sm sm:text-base text-gray-600 line-clamp-2">
+            <p className="text-sm sm:text-base text-muted-foreground line-clamp-2">
               {part.description}
             </p>
           )}
           
           <div className="space-y-2 sm:space-y-3">
-            <div className="flex items-center gap-2 text-sm sm:text-base text-gray-700">
+            <div className="flex items-center gap-2 text-sm sm:text-base text-foreground">
               <Avatar className="h-7 w-7 sm:h-8 sm:w-8">
                 <AvatarImage src={part.profiles?.profile_photo_url} alt={sellerName} />
                 <AvatarFallback className="text-xs sm:text-sm font-medium">
@@ -100,14 +100,14 @@ const CarPartCardContent = ({ part, onExpand }: CarPartCardContentProps) => {
             />
           </div>
 
-          <div className="flex items-center gap-2 text-sm sm:text-base text-gray-500">
+          <div className="flex items-center gap-2 text-sm sm:text-base text-muted-foreground">
             <MapPin className="h-4 w-4" />
             <span className={`truncate ${inSameCity ? 'text-green-600 font-medium' : ''}`}>
               {locationDisplayText}
             </span>
           </div>
           
-          <div className="flex items-center gap-2 text-sm sm:text-base text-gray-500">
+          <div className="flex items-center gap-2 text-sm sm:text-base text-muted-foreground">
             <Calendar className="h-4 w-4" />
             <span>Listed {formatDate(part.created_at)}</span>
           </div>
