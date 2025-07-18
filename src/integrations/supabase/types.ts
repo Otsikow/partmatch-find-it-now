@@ -115,6 +115,42 @@ export type Database = {
           },
         ]
       }
+      business_subscriptions: {
+        Row: {
+          active: boolean | null
+          auto_renew: boolean | null
+          created_at: string | null
+          end_date: string | null
+          id: string
+          payment_reference: string | null
+          start_date: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          active?: boolean | null
+          auto_renew?: boolean | null
+          created_at?: string | null
+          end_date?: string | null
+          id?: string
+          payment_reference?: string | null
+          start_date?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          active?: boolean | null
+          auto_renew?: boolean | null
+          created_at?: string | null
+          end_date?: string | null
+          id?: string
+          payment_reference?: string | null
+          start_date?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       car_parts: {
         Row: {
           address: string | null
@@ -125,10 +161,15 @@ export type Database = {
           created_at: string | null
           currency: string
           description: string | null
+          extra_photos_count: number | null
           featured_until: string | null
+          has_verified_badge: boolean | null
+          highlighted_until: string | null
           id: string
           images: string[] | null
           is_featured: boolean | null
+          is_highlighted: boolean | null
+          is_urgent: boolean | null
           latitude: number | null
           longitude: number | null
           make: string
@@ -139,6 +180,8 @@ export type Database = {
           supplier_id: string
           title: string
           updated_at: string | null
+          urgent_until: string | null
+          verified_badge_until: string | null
           year: number
         }
         Insert: {
@@ -150,10 +193,15 @@ export type Database = {
           created_at?: string | null
           currency?: string
           description?: string | null
+          extra_photos_count?: number | null
           featured_until?: string | null
+          has_verified_badge?: boolean | null
+          highlighted_until?: string | null
           id?: string
           images?: string[] | null
           is_featured?: boolean | null
+          is_highlighted?: boolean | null
+          is_urgent?: boolean | null
           latitude?: number | null
           longitude?: number | null
           make: string
@@ -164,6 +212,8 @@ export type Database = {
           supplier_id: string
           title: string
           updated_at?: string | null
+          urgent_until?: string | null
+          verified_badge_until?: string | null
           year: number
         }
         Update: {
@@ -175,10 +225,15 @@ export type Database = {
           created_at?: string | null
           currency?: string
           description?: string | null
+          extra_photos_count?: number | null
           featured_until?: string | null
+          has_verified_badge?: boolean | null
+          highlighted_until?: string | null
           id?: string
           images?: string[] | null
           is_featured?: boolean | null
+          is_highlighted?: boolean | null
+          is_urgent?: boolean | null
           latitude?: number | null
           longitude?: number | null
           make?: string
@@ -189,6 +244,8 @@ export type Database = {
           supplier_id?: string
           title?: string
           updated_at?: string | null
+          urgent_until?: string | null
+          verified_badge_until?: string | null
           year?: number
         }
         Relationships: [
@@ -330,6 +387,98 @@ export type Database = {
             columns: ["sender_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      monetization_pricing: {
+        Row: {
+          active: boolean | null
+          amount: number
+          created_at: string | null
+          currency: string | null
+          description: string | null
+          duration_days: number | null
+          feature_type: string
+          id: string
+          updated_at: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          amount: number
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          duration_days?: number | null
+          feature_type: string
+          id?: string
+          updated_at?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          amount?: number
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          duration_days?: number | null
+          feature_type?: string
+          id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      monetization_purchases: {
+        Row: {
+          amount: number
+          created_at: string | null
+          currency: string | null
+          duration_days: number | null
+          expires_at: string | null
+          id: string
+          listing_id: string | null
+          metadata: Json | null
+          payment_reference: string | null
+          payment_status: string | null
+          purchase_type: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          currency?: string | null
+          duration_days?: number | null
+          expires_at?: string | null
+          id?: string
+          listing_id?: string | null
+          metadata?: Json | null
+          payment_reference?: string | null
+          payment_status?: string | null
+          purchase_type: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          currency?: string | null
+          duration_days?: number | null
+          expires_at?: string | null
+          id?: string
+          listing_id?: string | null
+          metadata?: Json | null
+          payment_reference?: string | null
+          payment_status?: string | null
+          purchase_type?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "monetization_purchases_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "car_parts"
             referencedColumns: ["id"]
           },
         ]
@@ -950,6 +1099,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      expire_monetization_features: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       is_authorized_admin_email: {
         Args: { email_to_check: string }
         Returns: boolean

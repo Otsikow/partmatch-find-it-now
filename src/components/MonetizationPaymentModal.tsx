@@ -7,30 +7,194 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { CreditCard, Smartphone, Crown } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+
+interface SelectedFeatures {
+  feature: boolean;
+  boost: boolean;
+  combo: boolean;
+  urgent: boolean;
+  highlight: boolean;
+  verified_badge: boolean;
+  extra_photos: number;
+  business_subscription: boolean;
+  banner_ad: boolean;
+}
+
+interface MonetizationPricing {
+  id: string;
+  feature_type: string;
+  amount: number;
+  currency: string;
+  duration_days: number | null;
+  description: string;
+  active: boolean;
+}
 
 interface MonetizationPaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
   partId: string;
-  featureType: string;
-  amount: number;
-  description: string;
+  features?: SelectedFeatures;
+  totalAmount?: number;
+  pricing?: MonetizationPricing[];
   onPaymentSuccess: () => void;
+  // Legacy props for backward compatibility
+  featureType?: string;
+  amount?: number;
+  description?: string;
 }
 
 const MonetizationPaymentModal = ({ 
   isOpen, 
   onClose, 
   partId, 
+  features,
+  totalAmount,
+  pricing = [],
+  onPaymentSuccess,
+  // Legacy props
   featureType, 
   amount, 
-  description, 
-  onPaymentSuccess 
+  description
 }: MonetizationPaymentModalProps) => {
+  const { user } = useAuth();
   const [paymentMethod, setPaymentMethod] = useState<string>("");
   const [mobileProvider, setMobileProvider] = useState<string>("");
   const [mobileNumber, setMobileNumber] = useState<string>("");
   const [loading, setLoading] = useState(false);
+
+  // Use legacy props if new props are not provided (backward compatibility)
+  const finalAmount = totalAmount ?? amount ?? 0;
+  const finalDescription = description || "promotion features";
+
+  const processComprehensiveFeatures = async (
+    features: SelectedFeatures, 
+    pricing: MonetizationPricing[], 
+    userId: string, 
+    partId: string, 
+    paymentReference: string
+  ) => {
+    const currentDate = new Date();
+    const updateData: Record<string, any> = {};
+    const purchases: any[] = [];
+
+    // Process each selected feature
+    for (const [featureKey, value] of Object.entries(features)) {
+      if (!value || (typeof value === 'number' && value === 0)) continue;
+
+      const priceConfig = pricing.find(p => p.feature_type === featureKey);
+      if (!priceConfig) continue;
+
+      // Create purchase record
+      const purchase: any = {
+        user_id: userId,
+        listing_id: partId,
+        purchase_type: featureKey,
+        amount: typeof value === 'number' ? priceConfig.amount * value : priceConfig.amount,
+        currency: priceConfig.currency,
+        duration_days: priceConfig.duration_days,
+        payment_reference: paymentReference,
+        payment_status: 'paid',
+        metadata: { quantity: typeof value === 'number' ? value : 1 }
+      };
+
+      if (priceConfig.duration_days) {
+        purchase.expires_at = new Date(currentDate.getTime() + priceConfig.duration_days * 24 * 60 * 60 * 1000).toISOString();
+      }
+
+      purchases.push(purchase);
+
+      // Update car_parts table
+      switch (featureKey) {
+        case 'feature':
+        case 'combo':
+          updateData.is_featured = true;
+          updateData.featured_until = new Date(currentDate.getTime() + (priceConfig.duration_days || 7) * 24 * 60 * 60 * 1000).toISOString();
+          break;
+        case 'boost':
+          updateData.boosted_until = new Date(currentDate.getTime() + (priceConfig.duration_days || 3) * 24 * 60 * 60 * 1000).toISOString();
+          break;
+        case 'urgent':
+          updateData.is_urgent = true;
+          updateData.urgent_until = new Date(currentDate.getTime() + (priceConfig.duration_days || 7) * 24 * 60 * 60 * 1000).toISOString();
+          break;
+        case 'highlight':
+          updateData.is_highlighted = true;
+          updateData.highlighted_until = new Date(currentDate.getTime() + (priceConfig.duration_days || 7) * 24 * 60 * 60 * 1000).toISOString();
+          break;
+        case 'verified_badge':
+          updateData.has_verified_badge = true;
+          updateData.verified_badge_until = new Date(currentDate.getTime() + (priceConfig.duration_days || 30) * 24 * 60 * 60 * 1000).toISOString();
+          break;
+        case 'extra_photos':
+          updateData.extra_photos_count = (updateData.extra_photos_count || 0) + (value as number);
+          break;
+        case 'business_subscription':
+          // Handle business subscription
+          await supabase
+            .from('business_subscriptions')
+            .upsert({
+              user_id: userId,
+              active: true,
+              start_date: currentDate.toISOString(),
+              end_date: new Date(currentDate.getTime() + (priceConfig.duration_days || 30) * 24 * 60 * 60 * 1000).toISOString(),
+              payment_reference: paymentReference
+            }, { onConflict: 'user_id' });
+          break;
+      }
+    }
+
+    // Handle combo feature (feature + boost)
+    if (features.combo) {
+      updateData.boosted_until = updateData.featured_until;
+    }
+
+    // Update car_parts table
+    if (Object.keys(updateData).length > 0) {
+      const { error } = await supabase
+        .from('car_parts')
+        .update(updateData)
+        .eq('id', partId);
+
+      if (error) throw error;
+    }
+
+    // Insert purchase records
+    if (purchases.length > 0) {
+      const { error } = await supabase
+        .from('monetization_purchases')
+        .insert(purchases);
+
+      if (error) throw error;
+    }
+  };
+
+  const processLegacyFeature = async (featureType: string | undefined, partId: string) => {
+    if (!featureType) return;
+
+    const updateData: Record<string, string> = {};
+    const currentDate = new Date();
+
+    switch (featureType) {
+      case 'featured':
+        updateData.is_featured = 'true';
+        updateData.featured_until = new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString();
+        break;
+      case 'boost':
+        updateData.boosted_until = new Date(currentDate.getTime() + 3 * 24 * 60 * 60 * 1000).toISOString();
+        break;
+    }
+
+    if (Object.keys(updateData).length > 0) {
+      const { error } = await supabase
+        .from('car_parts')
+        .update(updateData)
+        .eq('id', partId);
+
+      if (error) throw error;
+    }
+  };
 
   const handlePayment = async () => {
     if (!paymentMethod) {
@@ -63,44 +227,31 @@ const MonetizationPaymentModal = ({
 
       setTimeout(async () => {
         try {
-          const updateData: Record<string, string> = {};
-          const currentDate = new Date();
-
-          switch (featureType) {
-            case 'featured':
-              updateData.featured_until = new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString();
-              break;
-            case 'boost':
-              updateData.boosted_until = new Date(currentDate.getTime() + 3 * 24 * 60 * 60 * 1000).toISOString();
-              break;
-            case 'subscription':
-              break;
-            case 'banner_ad':
-              break;
-            case 'extra_photos':
-              break;
+          if (!user?.id) {
+            throw new Error("User not authenticated");
           }
 
-          if (Object.keys(updateData).length > 0) {
-            const { error } = await supabase
-              .from('car_parts')
-              .update(updateData)
-              .eq('id', partId);
-
-            if (error) throw error;
+          // Process comprehensive features if provided
+          if (features && Object.keys(features).length > 0) {
+            await processComprehensiveFeatures(features, pricing, user.id, partId, paymentReference);
+          } else {
+            // Legacy single feature processing
+            await processLegacyFeature(featureType, partId);
           }
 
+          // Log the purchase
           console.log('Payment processed:', {
             part_id: partId,
-            feature_type: featureType,
-            amount: amount,
+            user_id: user.id,
+            features: features || { [featureType || 'unknown']: true },
+            amount: finalAmount,
             payment_method: paymentMethod,
             payment_reference: paymentReference
           });
 
           toast({
             title: "Payment Successful!",
-            description: `Your listing has been upgraded with ${description}.`,
+            description: `Your listing has been upgraded with ${finalDescription}.`,
           });
           
           onPaymentSuccess();
@@ -140,10 +291,10 @@ const MonetizationPaymentModal = ({
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4 sm:space-y-6">
+         <div className="space-y-4 sm:space-y-6">
           <div className="text-center">
-            <p className="text-xl sm:text-2xl font-bold text-green-600">GHS {amount.toFixed(2)}</p>
-            <p className="text-xs sm:text-sm text-gray-600">One-time fee for {description}</p>
+            <p className="text-xl sm:text-2xl font-bold text-green-600">GHS {finalAmount.toFixed(2)}</p>
+            <p className="text-xs sm:text-sm text-gray-600">One-time fee for {finalDescription}</p>
           </div>
 
           <div className="space-y-3 sm:space-y-4">
