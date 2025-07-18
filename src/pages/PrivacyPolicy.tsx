@@ -6,7 +6,7 @@ import { Shield, Eye, Lock, FileText, UserCheck, Cookie, Phone, Clock } from "lu
 
 const PrivacyPolicy = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 font-inter">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-background/90 font-inter">
       <PageHeader 
         title="Privacy Policy" 
         subtitle="Your privacy is important to us. This policy explains how we collect, use, and protect your personal information."
@@ -19,19 +19,19 @@ const PrivacyPolicy = () => {
           <div className="flex items-center justify-center space-x-2 sm:space-x-3 mb-4 sm:mb-6">
             <Shield className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-primary" />
           </div>
-          <p className="text-sm text-gray-500 mt-4">Last updated: December 27, 2024</p>
+          <p className="text-sm text-muted-foreground mt-4">Last updated: December 27, 2024</p>
         </div>
 
         <div className="max-w-4xl mx-auto space-y-8">
           {/* Information We Collect */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-blue-50/50">
+          <Card className="shadow-lg border-0 bg-card">
             <CardContent className="p-8">
               <div className="flex items-center space-x-3 mb-6">
-                <Eye className="h-8 w-8 text-blue-500" />
-                <h2 className="text-2xl font-playfair font-bold text-gray-800">Information We Collect</h2>
+                <Eye className="h-8 w-8 text-primary" />
+                <h2 className="text-2xl font-playfair font-bold text-foreground">Information We Collect</h2>
               </div>
-              <div className="space-y-4 text-gray-600 font-crimson">
-                <h3 className="text-lg font-semibold text-gray-800">Personal Information</h3>
+              <div className="space-y-4 text-muted-foreground font-crimson">
+                <h3 className="text-lg font-semibold text-foreground">Personal Information</h3>
                 <ul className="list-disc list-inside space-y-2">
                   <li>Name, email address, and phone number when you register</li>
                   <li>Billing and shipping addresses for transactions</li>
@@ -39,7 +39,7 @@ const PrivacyPolicy = () => {
                   <li>Profile information and preferences</li>
                 </ul>
                 
-                <h3 className="text-lg font-semibold text-gray-800 mt-6">Usage Information</h3>
+                <h3 className="text-lg font-semibold text-foreground mt-6">Usage Information</h3>
                 <ul className="list-disc list-inside space-y-2">
                   <li>Pages you visit and features you use</li>
                   <li>Search queries and preferences</li>
@@ -51,13 +51,13 @@ const PrivacyPolicy = () => {
           </Card>
 
           {/* How We Use Information */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-green-50/50">
+          <Card className="shadow-lg border-0 bg-card">
             <CardContent className="p-8">
               <div className="flex items-center space-x-3 mb-6">
-                <FileText className="h-8 w-8 text-green-500" />
-                <h2 className="text-2xl font-playfair font-bold text-gray-800">How We Use Your Information</h2>
+                <FileText className="h-8 w-8 text-primary" />
+                <h2 className="text-2xl font-playfair font-bold text-foreground">How We Use Your Information</h2>
               </div>
-              <div className="space-y-4 text-gray-600 font-crimson">
+              <div className="space-y-4 text-muted-foreground font-crimson">
                 <ul className="list-disc list-inside space-y-2">
                   <li>Provide and improve our services</li>
                   <li>Process transactions and send confirmations</li>
@@ -72,13 +72,13 @@ const PrivacyPolicy = () => {
           </Card>
 
           {/* Information Sharing */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-orange-50/50">
+          <Card className="shadow-lg border-0 bg-card">
             <CardContent className="p-8">
               <div className="flex items-center space-x-3 mb-6">
-                <Lock className="h-8 w-8 text-orange-500" />
-                <h2 className="text-2xl font-playfair font-bold text-gray-800">Information Sharing</h2>
+                <Lock className="h-8 w-8 text-primary" />
+                <h2 className="text-2xl font-playfair font-bold text-foreground">Information Sharing</h2>
               </div>
-              <div className="space-y-4 text-gray-600 font-crimson">
+              <div className="space-y-4 text-muted-foreground font-crimson">
                 <p>We do not sell, trade, or rent your personal information to third parties. We may share information only in these circumstances:</p>
                 <ul className="list-disc list-inside space-y-2">
                   <li><strong>With Sellers:</strong> Contact information necessary to complete transactions</li>
@@ -91,13 +91,13 @@ const PrivacyPolicy = () => {
           </Card>
 
           {/* Data Security */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-purple-50/50">
+          <Card className="shadow-lg border-0 bg-card">
             <CardContent className="p-8">
               <div className="flex items-center space-x-3 mb-6">
-                <Shield className="h-8 w-8 text-purple-500" />
-                <h2 className="text-2xl font-playfair font-bold text-gray-800">Data Security</h2>
+                <Shield className="h-8 w-8 text-primary" />
+                <h2 className="text-2xl font-playfair font-bold text-foreground">Data Security</h2>
               </div>
-              <div className="space-y-4 text-gray-600 font-crimson">
+              <div className="space-y-4 text-muted-foreground font-crimson">
                 <p>We implement industry-standard security measures to protect your personal information:</p>
                 <ul className="list-disc list-inside space-y-2">
                   <li>SSL encryption for all data transmission</li>
@@ -111,13 +111,13 @@ const PrivacyPolicy = () => {
           </Card>
 
           {/* Your Rights */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-red-50/50">
+          <Card className="shadow-lg border-0 bg-card">
             <CardContent className="p-8">
               <div className="flex items-center space-x-3 mb-6">
-                <UserCheck className="h-8 w-8 text-red-500" />
-                <h2 className="text-2xl font-playfair font-bold text-gray-800">Your Rights</h2>
+                <UserCheck className="h-8 w-8 text-primary" />
+                <h2 className="text-2xl font-playfair font-bold text-foreground">Your Rights</h2>
               </div>
-              <div className="space-y-4 text-gray-600 font-crimson">
+              <div className="space-y-4 text-muted-foreground font-crimson">
                 <p>You have the right to:</p>
                 <ul className="list-disc list-inside space-y-2">
                   <li>Access and review your personal information</li>
@@ -132,13 +132,13 @@ const PrivacyPolicy = () => {
           </Card>
 
           {/* Cookies and Tracking */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-teal-50/50">
+          <Card className="shadow-lg border-0 bg-card">
             <CardContent className="p-8">
               <div className="flex items-center space-x-3 mb-6">
-                <Cookie className="h-8 w-8 text-teal-500" />
-                <h2 className="text-2xl font-playfair font-bold text-gray-800">Cookies and Tracking</h2>
+                <Cookie className="h-8 w-8 text-primary" />
+                <h2 className="text-2xl font-playfair font-bold text-foreground">Cookies and Tracking</h2>
               </div>
-              <div className="space-y-4 text-gray-600 font-crimson">
+              <div className="space-y-4 text-muted-foreground font-crimson">
                 <p>We use cookies and similar technologies to:</p>
                 <ul className="list-disc list-inside space-y-2">
                   <li>Remember your preferences and settings</li>
@@ -152,13 +152,13 @@ const PrivacyPolicy = () => {
           </Card>
 
           {/* Contact Information */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-gray-50/50">
+          <Card className="shadow-lg border-0 bg-card">
             <CardContent className="p-8">
               <div className="flex items-center space-x-3 mb-6">
-                <Phone className="h-8 w-8 text-gray-500" />
-                <h2 className="text-2xl font-playfair font-bold text-gray-800">Contact Us</h2>
+                <Phone className="h-8 w-8 text-primary" />
+                <h2 className="text-2xl font-playfair font-bold text-foreground">Contact Us</h2>
               </div>
-              <div className="space-y-4 text-gray-600 font-crimson">
+              <div className="space-y-4 text-muted-foreground font-crimson">
                 <p>If you have questions about this Privacy Policy or our data practices, please contact us:</p>
                 <ul className="space-y-2">
                   <li><strong>Email:</strong> privacy@partmatchgh.com</li>
@@ -170,13 +170,13 @@ const PrivacyPolicy = () => {
           </Card>
 
           {/* Updates */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-yellow-50/50">
+          <Card className="shadow-lg border-0 bg-card">
             <CardContent className="p-8">
               <div className="flex items-center space-x-3 mb-6">
-                <Clock className="h-8 w-8 text-yellow-500" />
-                <h2 className="text-2xl font-playfair font-bold text-gray-800">Policy Updates</h2>
+                <Clock className="h-8 w-8 text-primary" />
+                <h2 className="text-2xl font-playfair font-bold text-foreground">Policy Updates</h2>
               </div>
-              <div className="space-y-4 text-gray-600 font-crimson">
+              <div className="space-y-4 text-muted-foreground font-crimson">
                 <p>
                   We may update this Privacy Policy from time to time. We will notify you of any material changes by posting the new policy on this page and updating the "Last updated" date. We encourage you to review this policy periodically to stay informed about how we protect your information.
                 </p>
