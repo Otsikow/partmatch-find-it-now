@@ -22,10 +22,10 @@ const MobileHomeContent = () => {
   } = useRealTimeStats();
 
   const categoryImages = {
-    engine: "/lovable-uploads/dc772d00-e2d0-489a-9845-0f0016d93c7b.png",
-    brake: "/lovable-uploads/846aa041-c3b2-42f1-8842-2348e4ced1a4.png", 
-    suspension: "/lovable-uploads/23312658-5ff6-4d89-a7cb-c0fbf631cd1c.png",
-    body: "/lovable-uploads/51b54b15-6e34-4aaf-a27e-c96742783d07.png"
+    engine: "/lovable-uploads/abc7bc58-f2e2-45a1-a524-3f34a3356819.png",
+    brake: "/lovable-uploads/29637275-f42b-4415-b255-b8ae5e5837e1.png", 
+    suspension: "/lovable-uploads/1ff049b2-7c70-416c-9a87-0b8e66907a58.png",
+    body: "/lovable-uploads/82ecb905-adea-450b-b104-83fa38679cfb.png"
   };
 
   return (
