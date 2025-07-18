@@ -60,6 +60,12 @@ const SellerReviewsModal: React.FC<SellerReviewsModalProps> = ({
       console.log('sellerRating:', sellerRating);
       console.log('totalReviews:', totalReviews);
       
+      if (!sellerId) {
+        console.error('No sellerId provided!');
+        setReviews([]);
+        return;
+      }
+      
       // Fetch reviews first
       const { data: reviewsData, error } = await supabase
         .from('reviews')
@@ -71,6 +77,7 @@ const SellerReviewsModal: React.FC<SellerReviewsModalProps> = ({
       console.log('=== DEBUG: Supabase query result ===');
       console.log('Error:', error);
       console.log('Data:', reviewsData);
+      console.log('Data length:', reviewsData?.length);
 
       if (error) {
         console.error('Error fetching reviews:', error);
