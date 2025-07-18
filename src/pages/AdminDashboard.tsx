@@ -89,17 +89,17 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading dashboard...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading dashboard...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-100 font-inter">
+    <div className="min-h-screen bg-background font-inter">
       {/* Single Modern Header */}
       <AdminHeader onNavigateToVerifications={handleNavigateToVerifications} />
 
@@ -112,12 +112,12 @@ const AdminDashboard = () => {
             totalRequests={requests.length}
             pendingVerifications={pendingVerificationsCount}
             onNavigateToVerifications={handleNavigateToVerifications}
-            onNavigateToRequests={(tab) => setActiveTab(tab)}
+            onNavigateToRequests={() => setActiveTab("requests")}
           />
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className={`grid w-full ${isMobile ? 'grid-cols-3' : 'grid-cols-5'} bg-gradient-to-r from-white/90 to-purple-50/50 backdrop-blur-sm ${isMobile ? 'mb-2' : 'mb-4'}`}>
+          <TabsList className={`grid w-full ${isMobile ? 'grid-cols-3' : 'grid-cols-5'} bg-card backdrop-blur-sm border ${isMobile ? 'mb-2' : 'mb-4'}`}>
             <TabsTrigger value="analytics" className={`${isMobile ? 'text-xs px-1' : 'text-base'} font-inter`}>
               {isMobile ? 'Analytics' : 'Analytics Dashboard'}
             </TabsTrigger>
@@ -136,7 +136,7 @@ const AdminDashboard = () => {
           </TabsList>
 
           {isMobile && (
-            <TabsList className="grid w-full grid-cols-2 bg-gradient-to-r from-white/90 to-purple-50/50 backdrop-blur-sm mb-4">
+            <TabsList className="grid w-full grid-cols-2 bg-card backdrop-blur-sm border mb-4">
               <TabsTrigger value="verifications" className="text-xs px-2 font-inter">Verifications ({verifications.length})</TabsTrigger>
               <TabsTrigger value="users" className="text-xs px-2 font-inter">Users</TabsTrigger>
             </TabsList>
@@ -144,7 +144,7 @@ const AdminDashboard = () => {
 
           <TabsContent value="analytics" className="mt-4 sm:mt-6">
             <div className="space-y-3 sm:space-y-4 lg:space-y-6">
-              <h2 className="text-lg sm:text-xl lg:text-2xl font-playfair font-semibold bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent px-2 sm:px-0">
+              <h2 className="text-lg sm:text-xl lg:text-2xl font-playfair font-semibold text-primary px-2 sm:px-0">
                 Analytics Dashboard
               </h2>
               
@@ -161,13 +161,13 @@ const AdminDashboard = () => {
 
           <TabsContent value="requests" className="mt-4 sm:mt-6">
             <div className="space-y-3 sm:space-y-4 lg:space-y-6">
-              <h2 className="text-lg sm:text-xl lg:text-2xl font-playfair font-semibold bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent px-2 sm:px-0">
+              <h2 className="text-lg sm:text-xl lg:text-2xl font-playfair font-semibold text-primary px-2 sm:px-0">
                 Customer Requests
               </h2>
               
               {requests.length === 0 ? (
-                <Card className="p-6 sm:p-8 text-center bg-gradient-to-br from-white/90 to-purple-50/30 mx-2 sm:mx-0">
-                  <div className="text-gray-500">
+                <Card className="p-6 sm:p-8 text-center bg-card border mx-2 sm:mx-0">
+                  <div className="text-muted-foreground">
                     <h3 className="text-base sm:text-lg font-semibold mb-2">No Requests</h3>
                     <p className="text-xs sm:text-sm">There are currently no customer requests.</p>
                   </div>
@@ -189,13 +189,13 @@ const AdminDashboard = () => {
 
           <TabsContent value="offers" className="mt-4 sm:mt-6">
             <div className="space-y-3 sm:space-y-4 lg:space-y-6">
-              <h2 className="text-lg sm:text-xl lg:text-2xl font-playfair font-semibold bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent px-2 sm:px-0">
+              <h2 className="text-lg sm:text-xl lg:text-2xl font-playfair font-semibold text-primary px-2 sm:px-0">
                 Seller Offers
               </h2>
               
               {offers.length === 0 ? (
-                <Card className="p-6 sm:p-8 text-center bg-gradient-to-br from-white/90 to-purple-50/30 mx-2 sm:mx-0">
-                  <div className="text-gray-500">
+                <Card className="p-6 sm:p-8 text-center bg-card border mx-2 sm:mx-0">
+                  <div className="text-muted-foreground">
                     <h3 className="text-base sm:text-lg font-semibold mb-2">No Offers</h3>
                     <p className="text-xs sm:text-sm">There are currently no seller offers.</p>
                   </div>
@@ -216,13 +216,13 @@ const AdminDashboard = () => {
 
           <TabsContent value="verifications" className="mt-4 sm:mt-6">
             <div className="space-y-3 sm:space-y-4 lg:space-y-6">
-              <h2 className="text-lg sm:text-xl lg:text-2xl font-playfair font-semibold bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent px-2 sm:px-0">
+              <h2 className="text-lg sm:text-xl lg:text-2xl font-playfair font-semibold text-primary px-2 sm:px-0">
                 Seller Verifications
               </h2>
               
               {verifications.length === 0 ? (
-                <Card className="p-6 sm:p-8 text-center bg-gradient-to-br from-white/90 to-purple-50/30 mx-2 sm:mx-0">
-                  <div className="text-gray-500">
+                <Card className="p-6 sm:p-8 text-center bg-card border mx-2 sm:mx-0">
+                  <div className="text-muted-foreground">
                     <Building2 className="h-8 sm:h-12 w-8 sm:w-12 mx-auto mb-4 opacity-50" />
                     <h3 className="text-base sm:text-lg font-semibold mb-2">No Verification Requests</h3>
                     <p className="text-xs sm:text-sm">There are currently no seller verification requests to review.</p>
@@ -245,7 +245,7 @@ const AdminDashboard = () => {
 
           <TabsContent value="users" className="mt-4 sm:mt-6">
             <div className="space-y-3 sm:space-y-4 lg:space-y-6">
-              <h2 className="text-lg sm:text-xl lg:text-2xl font-playfair font-semibold bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent px-2 sm:px-0">
+              <h2 className="text-lg sm:text-xl lg:text-2xl font-playfair font-semibold text-primary px-2 sm:px-0">
                 User Management
               </h2>
               
@@ -257,8 +257,8 @@ const AdminDashboard = () => {
               </div>
               
               {users.length === 0 ? (
-                <Card className="p-6 sm:p-8 text-center bg-gradient-to-br from-white/90 to-purple-50/30 mx-2 sm:mx-0">
-                  <div className="text-gray-500">
+                <Card className="p-6 sm:p-8 text-center bg-card border mx-2 sm:mx-0">
+                  <div className="text-muted-foreground">
                     <Users className="h-8 sm:h-12 w-8 sm:w-12 mx-auto mb-4 opacity-50" />
                     <h3 className="text-base sm:text-lg font-semibold mb-2">No Users Found</h3>
                     <p className="text-xs sm:text-sm">There are currently no users to manage.</p>
