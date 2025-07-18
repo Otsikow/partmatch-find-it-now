@@ -47,15 +47,15 @@ const AuthTypeSelector = () => {
               <p className="card-description text-sm sm:text-base mb-6">
                 Find and purchase car parts from verified sellers
               </p>
-              <div className="bg-primary/10 rounded-lg p-4 text-sm text-primary font-medium mb-6">
+              <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight mb-6">
+                Sign In / Register as Buyer
+              </Button>
+              <div className="bg-primary/10 rounded-lg p-4 text-sm text-primary font-medium">
                 ✓ Browse available parts<br/>
                 ✓ Request specific parts<br/>
                 ✓ Connect with sellers<br/>
                 ✓ Secure payments
               </div>
-              <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight">
-                Sign In / Register as Buyer
-              </Button>
             </Card>
           </Link>
 
@@ -70,15 +70,15 @@ const AuthTypeSelector = () => {
               <p className="card-description text-sm sm:text-base mb-6">
                 Sell and supply car parts to buyers
               </p>
-              <div className="bg-destructive/10 rounded-lg p-4 text-sm text-destructive font-medium mb-6">
+              <Button className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight mb-6">
+                Sign In / Register as Seller
+              </Button>
+              <div className="bg-destructive/10 rounded-lg p-4 text-sm text-destructive font-medium">
                 ✓ List your inventory<br/>
                 ✓ Respond to requests<br/>
                 ✓ Manage offers<br/>
                 ✓ Grow your business
               </div>
-              <Button className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight">
-                Sign In / Register as Seller
-              </Button>
             </Card>
           </Link>
         </div>
