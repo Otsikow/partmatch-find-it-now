@@ -16,7 +16,7 @@ const PARTMATCH_KNOWLEDGE_BASE = `
 # PartMatch Platform Knowledge Base
 
 ## Platform Overview
-PartMatch is a car parts marketplace connecting car owners with trusted suppliers across Ghana and Nigeria. We make finding and selling car parts simple, fast, and secure.
+PartMatch is an AI-powered online marketplace where car owners, mechanics, and auto parts dealers can buy, sell, or request car parts across multiple countries. It supports location-based filtering, trusted seller ratings, and real-time messaging. PartMatch is a global app, currently optimized for Ghana, Nigeria, Kenya, and other African and international markets.
 
 ## Core Features
 
@@ -128,7 +128,7 @@ PartMatch is a car parts marketplace connecting car owners with trusted supplier
 
 ## Contact & Support
 - In-app chat support
-- Email: support@partmatch.com
+- Email: support@partmatch.app
 - WhatsApp support available
 - Response time: Within 24 hours
 
@@ -138,6 +138,90 @@ PartMatch is a car parts marketplace connecting car owners with trusted supplier
 - Respond quickly to inquiries
 - Build your reputation with good ratings
 - Keep listings updated and accurate
+
+## Frequently Asked Questions
+
+### General Questions
+Q: How does PartMatch work?
+A: Buyers can search or request specific car parts. Sellers can list parts for sale and respond to buyer requests. The system matches buyers and sellers based on car make, model, year, location, and condition.
+
+Q: Which countries does PartMatch support?
+A: PartMatch is a global app, currently optimized for Ghana, Nigeria, Kenya, and other African and international markets. Language, currency, and listings adjust based on your location.
+
+### Account & Profile
+Q: Do I need an account to use PartMatch?
+A: You can browse parts without registering, but to post, request, chat, or buy, you'll need to create an account.
+
+Q: How do I register?
+A: Register by entering your name, email, and phone number. You'll receive a confirmation link to activate your account.
+
+Q: Can I register without email confirmation?
+A: No. Email confirmation is required to activate your account and access all features.
+
+### Buying & Requesting Parts
+Q: How do I search for car parts?
+A: Use the search bar, enter the car brand, model, year, or part name, and apply location or condition filters.
+
+Q: What if I can't find the part I need?
+A: Click 'Request a Part' from the home screen. Describe your part, car details, and location. Sellers will respond with offers.
+
+Q: How will sellers contact me?
+A: You will receive notifications in your dashboard and can chat directly using the built-in Chat with Seller feature.
+
+### Selling & Promotions
+Q: How do I list a car part for sale?
+A: Tap 'Sell a Part', upload clear photos, add part details, car compatibility, location, and your asking price.
+
+Q: Can I promote my listings?
+A: Yes! You can Feature a Listing (shown at the top), Boost a Listing (highlighted with priority), or Add Extra Photos for visibility. These are available during or after posting.
+
+Q: How long do promotions last?
+A: You can choose between 7 days or 30 days. Prices vary based on country and package.
+
+### Payments & Subscriptions
+Q: Is PartMatch free to use?
+A: Browsing and basic listing is free. Promotions and business subscriptions come with a fee.
+
+Q: How do I pay for featured or boosted listings?
+A: You can pay securely using Paystack, Stripe, or other local payment gateways depending on your country.
+
+Q: Do you support local currencies?
+A: Yes. PartMatch detects your location and automatically shows prices in your local currency.
+
+### Orders & Transactions
+Q: Can I buy directly through the app?
+A: Currently, PartMatch connects you with the seller. You agree on the payment method and delivery. An in-app escrow system is coming soon.
+
+Q: What if I get scammed?
+A: Only deal with verified sellers and use chat history for evidence. PartMatch is building a review and report system to protect buyers.
+
+### Reviews, Ratings & Trust
+Q: Can I rate sellers and parts?
+A: Yes. After a successful transaction, you can leave a review and rating for the seller.
+
+Q: What do seller badges mean?
+A: Seller badges show their trust level, responsiveness, and review scores, helping buyers choose reliable vendors.
+
+### Mobile App Features
+Q: Is there a mobile app?
+A: Yes. PartMatch is available on Android and iOS. You can download it from your app store or visit www.partmatch.app.
+
+### Security & Privacy
+Q: Is my data safe on PartMatch?
+A: Yes. We use industry-standard encryption, and your data is stored securely with GDPR-compliant practices.
+
+Q: Will my contact information be public?
+A: Only verified and necessary seller/buyer contact info is shared privately during transactions. You control your visibility.
+
+### Support & Troubleshooting
+Q: How do I contact support?
+A: Use the Help & Support section in your app, or email support@partmatch.app.
+
+Q: What if the app crashes or freezes?
+A: Ensure your app is updated. If the issue continues, clear your cache or reinstall the app.
+
+Q: I found a bug. How do I report it?
+A: Go to Settings > Report a Bug or email a screenshot and description to bugs@partmatch.app.
 `;
 
 serve(async (req) => {
@@ -172,7 +256,7 @@ serve(async (req) => {
       }
 
       return new Response(JSON.stringify({
-        response: "I understand you'd like to speak with a human. I'm connecting you to our support team. You can also reach us directly at support@partmatch.com or through WhatsApp. Our team will respond within 24 hours. Is there anything else I can help you with in the meantime?",
+        response: "I understand you'd like to speak with a human. I'm connecting you to our support team. You can also reach us directly at support@partmatch.app or through WhatsApp. Our team will respond within 24 hours. Is there anything else I can help you with in the meantime?",
         escalated: true
       }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -256,7 +340,7 @@ Remember: You're representing PartMatch, so maintain a positive, helpful tone th
   } catch (error) {
     console.error('Error in PartMatch HelpBot:', error);
     return new Response(JSON.stringify({
-      response: "I'm experiencing some technical difficulties right now. Please try again in a moment, or contact our support team at support@partmatch.com for immediate assistance.",
+      response: "I'm experiencing some technical difficulties right now. Please try again in a moment, or contact our support team at support@partmatch.app for immediate assistance.",
       error: true
     }), {
       status: 500,
