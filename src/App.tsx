@@ -161,8 +161,8 @@ function App() {
                 </Routes>
 
                 {isMobile && <MobileBottomTabs />}
-                <PWANotificationManager />
-                <PartMatchHelpBot />
+        <PWANotificationManager />
+        {/* <PartMatchHelpBot /> */}
               </BrowserRouter>
             </TooltipProvider>
           </LocationProvider>
