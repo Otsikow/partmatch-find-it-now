@@ -91,19 +91,19 @@ const AdminAuthForm = ({ onPasswordResetClick }: AdminAuthFormProps) => {
         <div className="bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full p-4 w-fit mx-auto mb-4 sm:mb-6 shadow-lg">
           <Shield className="h-10 w-10 sm:h-12 sm:w-12 text-white" />
         </div>
-        <h2 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-semibold mb-2 sm:mb-3 bg-gradient-to-r from-purple-700 to-indigo-700 bg-clip-text text-transparent">
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-semibold mb-2 sm:mb-3 text-primary">
           Admin Access
         </h2>
-        <p className="text-gray-600 text-sm sm:text-base font-crimson">
+        <p className="text-muted-foreground text-sm sm:text-base font-crimson">
           Secure admin portal access
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
         <div>
-          <Label htmlFor="email" className="text-sm sm:text-base font-inter">Admin Email *</Label>
+          <Label htmlFor="email" className="text-sm sm:text-base font-inter text-foreground">Admin Email *</Label>
           <div className="relative">
-            <Mail className="h-4 w-4 absolute left-3 top-3 text-gray-400" />
+            <Mail className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
             <Input
               id="email"
               type="email"
@@ -111,19 +111,19 @@ const AdminAuthForm = ({ onPasswordResetClick }: AdminAuthFormProps) => {
               value={formData.email}
               onChange={(e) => handleInputChange('email', e.target.value)}
               required
-              className="mt-1 pl-10 text-base border-purple-200 focus:border-purple-400"
+              className="mt-1 pl-10 text-base border-input focus:border-primary"
               disabled={loading}
             />
           </div>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             Only pre-authorized admin emails are allowed
           </p>
         </div>
 
         <div>
-          <Label htmlFor="password" className="text-sm sm:text-base font-inter">Password *</Label>
+          <Label htmlFor="password" className="text-sm sm:text-base font-inter text-foreground">Password *</Label>
           <div className="relative">
-            <Lock className="h-4 w-4 absolute left-3 top-3 text-gray-400" />
+            <Lock className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
             <Input
               id="password"
               type={showPassword ? "text" : "password"}
@@ -131,14 +131,14 @@ const AdminAuthForm = ({ onPasswordResetClick }: AdminAuthFormProps) => {
               value={formData.password}
               onChange={(e) => handleInputChange('password', e.target.value)}
               required
-              className="mt-1 pl-10 pr-10 text-base border-purple-200 focus:border-purple-400"
+              className="mt-1 pl-10 pr-10 text-base border-input focus:border-primary"
               disabled={loading}
             />
             <Button
               type="button"
               variant="ghost"
               size="icon"
-              className="absolute right-1 top-1 h-8 w-8 text-gray-400 hover:text-gray-600"
+              className="absolute right-1 top-1 h-8 w-8 text-muted-foreground hover:text-foreground"
               onClick={() => setShowPassword(!showPassword)}
               disabled={loading}
             >
@@ -149,7 +149,7 @@ const AdminAuthForm = ({ onPasswordResetClick }: AdminAuthFormProps) => {
 
         <Button 
           type="submit" 
-          className="w-full bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 py-3 sm:py-4 text-base sm:text-lg rounded-xl font-inter font-medium shadow-lg hover:shadow-xl transition-all duration-300"
+          className="w-full bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 py-3 sm:py-4 text-base sm:text-lg rounded-xl font-inter font-medium shadow-lg hover:shadow-xl transition-all duration-300 text-white"
           disabled={loading}
         >
           {loading ? (
@@ -167,7 +167,7 @@ const AdminAuthForm = ({ onPasswordResetClick }: AdminAuthFormProps) => {
         <button
           type="button"
           onClick={onPasswordResetClick}
-          className="text-purple-600 hover:text-purple-800 hover:underline text-sm font-crimson transition-colors duration-300"
+          className="text-primary hover:text-primary/80 hover:underline text-sm font-crimson transition-colors duration-300"
           disabled={loading}
         >
           Forgot your password?
