@@ -3,29 +3,37 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Package, Calendar, DollarSign, Truck } from 'lucide-react';
+import { Package, Calendar, DollarSign, Truck, ExternalLink, MessageCircle } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 const MyOrders = () => {
+  const navigate = useNavigate();
+  
   const orders = [
     {
       id: '1',
       partName: 'Brake pads',
       carModel: 'Toyota Camry 2020',
       seller: 'AutoParts Plus',
+      sellerId: 'seller_1',
       price: 'GHS 45.99',
       status: 'Delivered',
       orderDate: '2024-01-15',
-      deliveryDate: '2024-01-18'
+      deliveryDate: '2024-01-18',
+      trackingNumber: 'TRK123456789'
     },
     {
       id: '2',
       partName: 'Oil filter',
       carModel: 'Honda Civic 2019',
       seller: 'Quick Parts',
+      sellerId: 'seller_2',
       price: 'GHS 12.50',
       status: 'In transit',
       orderDate: '2024-01-20',
-      deliveryDate: '2024-01-22'
+      deliveryDate: '2024-01-22',
+      trackingNumber: 'TRK987654321'
     }
   ];
 
@@ -40,6 +48,27 @@ const MyOrders = () => {
       default:
         return 'bg-gray-100 text-gray-800';
     }
+  };
+
+  const handleTrackOrder = (order: any) => {
+    // For now, show tracking information in a toast
+    // In a real app, this could open a tracking modal or navigate to a tracking page
+    toast({
+      title: "Order Tracking",
+      description: `Tracking number: ${order.trackingNumber}\nStatus: ${order.status}\nExpected delivery: ${order.deliveryDate}`,
+    });
+  };
+
+  const handleContactSeller = (order: any) => {
+    // Navigate to chat with the seller
+    // In a real app, you'd want to create or find an existing chat with this seller
+    toast({
+      title: "Contact Seller",
+      description: `Opening chat with ${order.seller}...`,
+    });
+    
+    // For now, navigate to chat page - in real app, you'd want to create/find chat with this specific seller
+    navigate('/chat');
   };
 
   return (
@@ -91,8 +120,24 @@ const MyOrders = () => {
                 <div className="mt-4 flex items-center justify-between">
                   <p className="text-sm text-gray-600">Seller: {order.seller}</p>
                   <div className="flex space-x-2">
-                    <Button variant="outline" size="sm">Track order</Button>
-                    <Button variant="outline" size="sm">Contact seller</Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => handleTrackOrder(order)}
+                      className="flex items-center gap-1"
+                    >
+                      <ExternalLink className="h-3 w-3" />
+                      Track order
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => handleContactSeller(order)}
+                      className="flex items-center gap-1"
+                    >
+                      <MessageCircle className="h-3 w-3" />
+                      Contact seller
+                    </Button>
                   </div>
                 </div>
               </CardContent>
