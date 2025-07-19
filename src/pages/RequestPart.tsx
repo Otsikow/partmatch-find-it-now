@@ -74,7 +74,7 @@ const RequestPart = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-gradient-accent to-gradient-secondary">
       {/* Custom Responsive Header */}
-      <div className="bg-gradient-to-r from-primary via-primary/90 to-primary-foreground text-white shadow-lg">
+      <div className="bg-gradient-to-r from-primary via-primary to-primary/90 text-white shadow-lg">
         <div className="px-4 py-6 sm:px-6">
           <div className="flex items-center justify-between">
             {/* Left section with back button, logo and title */}
@@ -113,19 +113,20 @@ const RequestPart = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => navigate('/')}
-                className="flex items-center space-x-2 text-white hover:bg-white/20 hover:text-white"
+                className="flex items-center space-x-2 text-white hover:bg-white/30 hover:text-white shadow-lg backdrop-blur-sm border border-white/20"
+                style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}
               >
-                <Home className="h-4 w-4" />
-                <span className="hidden sm:inline">Home</span>
+                <Home className="h-4 w-4 drop-shadow-md" />
+                <span className="hidden sm:inline font-medium">Home</span>
               </Button>
               
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => navigate('/')}
-                className="p-2 text-white hover:bg-white/20 hover:text-white rounded-full"
+                className="p-2 text-white hover:bg-white/30 hover:text-white rounded-full shadow-lg backdrop-blur-sm border border-white/20"
               >
-                <X className="h-4 w-4" />
+                <X className="h-4 w-4 drop-shadow-md" />
               </Button>
             </div>
           </div>
