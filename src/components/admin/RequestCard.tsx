@@ -2,7 +2,9 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Phone, Clock, Users, CheckCircle, Package } from "lucide-react";
+import { MapPin, Phone, Clock, Users, CheckCircle, Package, MessageCircle } from "lucide-react";
+import ChatButton from "@/components/chat/ChatButton";
+import { toast } from "@/hooks/use-toast";
 
 interface Request {
   id: string;
@@ -15,6 +17,7 @@ interface Request {
   phone: string;
   status: 'pending' | 'matched' | 'completed';
   timestamp: string;
+  ownerId?: string; // User ID for chat functionality
 }
 
 interface RequestCardProps {
@@ -41,6 +44,26 @@ const RequestCard = ({ request, onMatchSupplier, onCompleteRequest, hasRelatedOf
       case 'completed': return <CheckCircle className="h-4 w-4" />;
       default: return <Package className="h-4 w-4" />;
     }
+  };
+
+  const handleWhatsAppContact = () => {
+    const message = `Hi ${request.customer}! 
+
+I'm reaching out from PartMatch regarding your request for a ${request.part} for your ${request.make} ${request.model} ${request.year}.
+
+I wanted to check on the status of your request and see if you need any assistance finding the right part or have any questions about potential offers.
+
+Best regards,
+PartMatch Admin Team`;
+    
+    const cleanPhone = request.phone.replace(/[^\d+]/g, '');
+    const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+    
+    toast({
+      title: "WhatsApp Opened",
+      description: "Continue the conversation with the customer on WhatsApp.",
+    });
   };
 
   return (
@@ -92,14 +115,30 @@ const RequestCard = ({ request, onMatchSupplier, onCompleteRequest, hasRelatedOf
             Mark Complete
           </Button>
         )}
+        
+        {/* WhatsApp Contact Button */}
         <Button 
           size="sm" 
           variant="outline"
-          onClick={() => window.open(`tel:${request.phone}`, '_self')}
-          className="text-base hover:bg-accent"
+          onClick={handleWhatsAppContact}
+          className="text-base hover:bg-green-50 hover:border-green-500 hover:text-green-700 transition-all duration-300"
         >
-          Call Customer
+          <Phone className="h-4 w-4 mr-1" />
+          WhatsApp
         </Button>
+
+        {/* Chat Button - Only show if we have the customer's user ID */}
+        {request.ownerId && (
+          <ChatButton
+            sellerId={request.ownerId}
+            size="sm"
+            variant="outline"
+            className="text-base hover:bg-blue-50 hover:border-blue-500 hover:text-blue-700 transition-all duration-300"
+          >
+            <MessageCircle className="h-4 w-4 mr-1" />
+            Chat
+          </ChatButton>
+        )}
       </div>
     </Card>
   );
