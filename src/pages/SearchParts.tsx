@@ -150,24 +150,26 @@ const SearchParts = () => {
         backTo="/"
       />
 
-      <main className="container mx-auto px-2 sm:px-4 lg:px-6 py-4 sm:py-6 pb-24 sm:pb-6">
+      <main className="container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 pb-24 sm:pb-6">
         <PendingRatingNotification />
 
         <Tabs defaultValue="parts" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-6 bg-background border-2 border-border p-2 h-auto">
+          <TabsList className="grid w-full grid-cols-2 mb-4 sm:mb-6 bg-background border-2 border-border p-1 sm:p-2 h-auto rounded-lg">
             <TabsTrigger
               value="parts"
-              className="flex items-center gap-2 h-12 text-base font-semibold bg-secondary text-secondary-foreground hover:bg-secondary/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200"
+              className="flex items-center gap-1 sm:gap-2 h-10 sm:h-12 text-sm sm:text-base font-semibold bg-secondary text-secondary-foreground hover:bg-secondary/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200 px-2 sm:px-3"
             >
-              <Package className="w-5 h-5" />
-              {t("partsForSale")}
+              <Package className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="hidden xs:inline">{t("partsForSale")}</span>
+              <span className="xs:hidden">Parts</span>
             </TabsTrigger>
             <TabsTrigger
               value="requests"
-              className="flex items-center gap-2 h-12 text-base font-semibold bg-secondary text-secondary-foreground hover:bg-secondary/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200"
+              className="flex items-center gap-1 sm:gap-2 h-10 sm:h-12 text-sm sm:text-base font-semibold bg-secondary text-secondary-foreground hover:bg-secondary/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200 px-2 sm:px-3"
             >
-              <ClipboardList className="w-5 h-5" />
-              {t("requestedParts")}
+              <ClipboardList className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="hidden xs:inline">{t("requestedParts")}</span>
+              <span className="xs:hidden">Requests</span>
             </TabsTrigger>
           </TabsList>
 
@@ -225,14 +227,14 @@ const SearchParts = () => {
                 filteredRequests.map((request) => (
                   <Card
                     key={request.id}
-                    className="hover:shadow-md transition-shadow cursor-pointer"
+                    className="hover:shadow-md transition-shadow cursor-pointer rounded-xl border border-border/50"
                     onClick={() => handleExpandRequest(request)}
                   >
-                    <CardHeader className="pb-3">
-                      <div className="flex justify-between items-start gap-3">
-                        <div className="flex gap-3 flex-1">
+                    <CardHeader className="pb-3 px-3 sm:px-6 pt-3 sm:pt-6">
+                      <div className="flex justify-between items-start gap-2 sm:gap-3">
+                        <div className="flex gap-2 sm:gap-3 flex-1 min-w-0">
                           {request.photo_url && (
-                            <div className="w-16 h-16 rounded-lg overflow-hidden bg-muted flex-shrink-0">
+                            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden bg-muted flex-shrink-0">
                               <img
                                 src={request.photo_url}
                                 alt={request.part_needed}
@@ -243,71 +245,72 @@ const SearchParts = () => {
                               />
                             </div>
                           )}
-                          <div className="flex-1">
-                            <CardTitle className="text-lg font-semibold text-foreground">
+                          <div className="flex-1 min-w-0">
+                            <CardTitle className="text-base sm:text-lg font-semibold text-foreground truncate">
                               {request.part_needed}
                             </CardTitle>
-                            <p className="text-sm text-muted-foreground mt-1">
-                              {request.car_make} {request.car_model} (
-                              {request.car_year})
+                            <p className="text-xs sm:text-sm text-muted-foreground mt-1 truncate">
+                              {request.car_make} {request.car_model} ({request.car_year})
                             </p>
                           </div>
                         </div>
                         <Badge
                           variant="secondary"
-                          className="bg-primary/10 text-primary flex-shrink-0"
+                          className="bg-primary/10 text-primary flex-shrink-0 text-xs px-2 py-1"
                         >
                           {t("active")}
                         </Badge>
                       </div>
                     </CardHeader>
-                    <CardContent className="space-y-3">
+                    <CardContent className="space-y-3 px-3 sm:px-6 pb-3 sm:pb-6">
                       {request.description && (
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
                           {request.description}
                         </p>
                       )}
 
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
                         <div className="flex items-center gap-1">
-                          <MapPin className="w-4 h-4" />
-                          {request.location}
+                          <MapPin className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+                          <span className="truncate">{request.location}</span>
                         </div>
                         <div className="flex items-center gap-1">
-                          <Calendar className="w-4 h-4" />
-                          {formatDate(request.created_at)}
+                          <Calendar className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+                          <span className="truncate">{formatDate(request.created_at)}</span>
                         </div>
                       </div>
 
-                      <div className="flex gap-3 pt-2 pb-2">
+                      <div className="flex flex-col sm:flex-row gap-2 pt-2">
                           <Button
                             onClick={(e) => {
                               e.stopPropagation();
                               handleMakeOffer(request.id);
                             }}
                             size="sm"
-                            className="flex-1 min-w-[90px] bg-primary hover:bg-primary/90 text-primary-foreground font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
+                            className="w-full sm:flex-1 min-w-0 bg-primary hover:bg-primary/90 text-primary-foreground font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-8 sm:h-9"
                           >
                            {t("makeOffer")}
                          </Button>
-                         <ChatButton
-                           sellerId={request.owner_id}
-                           className="flex-1 min-w-[70px] bg-blue-600 hover:bg-blue-700 text-white border-blue-600 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
-                           size="sm"
-                         >
-                           Chat
-                         </ChatButton>
-                         <Button
-                           variant="outline"
-                           size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleContact(request.phone, request);
-                            }}
-                            className="flex-1 min-w-[80px] bg-green-600 hover:bg-green-700 text-white border-green-600 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
-                          >
-                           WhatsApp
-                         </Button>
+                         <div className="flex gap-2 sm:contents">
+                           <ChatButton
+                             sellerId={request.owner_id}
+                             className="flex-1 sm:min-w-0 bg-blue-600 hover:bg-blue-700 text-white border-blue-600 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-8 sm:h-9"
+                             size="sm"
+                           >
+                             Chat
+                           </ChatButton>
+                           <Button
+                             variant="outline"
+                             size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleContact(request.phone, request);
+                              }}
+                              className="flex-1 sm:min-w-0 bg-green-600 hover:bg-green-700 text-white border-green-600 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-8 sm:h-9"
+                            >
+                             WhatsApp
+                           </Button>
+                         </div>
                        </div>
                     </CardContent>
                   </Card>
