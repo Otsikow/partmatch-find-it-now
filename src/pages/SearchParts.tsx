@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import SearchControls from "@/components/SearchControls";
 import CarPartsList from "@/components/CarPartsList";
 import PageHeader from "@/components/PageHeader";
+import RequestExpandedDialog from "@/components/RequestExpandedDialog";
 import PendingRatingNotification from "@/components/PendingRatingNotification";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -65,6 +66,8 @@ const SearchParts = () => {
   const [requestsLoading, setRequestsLoading] = useState(true);
   const [requestSearchTerm, setRequestSearchTerm] = useState("");
   const [filteredRequests, setFilteredRequests] = useState<PartRequest[]>([]);
+  const [selectedRequest, setSelectedRequest] = useState<PartRequest | null>(null);
+  const [isRequestDialogOpen, setIsRequestDialogOpen] = useState(false);
 
   useEffect(() => {
     fetchRequests();
@@ -107,6 +110,11 @@ const SearchParts = () => {
     } finally {
       setRequestsLoading(false);
     }
+  };
+
+  const handleExpandRequest = (request: PartRequest) => {
+    setSelectedRequest(request);
+    setIsRequestDialogOpen(true);
   };
 
   const handleMakeOffer = (requestId: string) => {
@@ -216,7 +224,8 @@ const SearchParts = () => {
                 filteredRequests.map((request) => (
                   <Card
                     key={request.id}
-                    className="hover:shadow-md transition-shadow"
+                    className="hover:shadow-md transition-shadow cursor-pointer"
+                    onClick={() => handleExpandRequest(request)}
                   >
                     <CardHeader className="pb-3">
                       <div className="flex justify-between items-start gap-3">
@@ -270,21 +279,27 @@ const SearchParts = () => {
                       </div>
 
                       <div className="flex gap-2 pt-2">
+                          <Button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleMakeOffer(request.id);
+                            }}
+                            className="flex-1 bg-primary hover:bg-primary/90"
+                          >
+                           {t("makeOffer")}
+                         </Button>
                          <Button
-                           onClick={() => handleMakeOffer(request.id)}
-                           className="flex-1 bg-primary hover:bg-primary/90"
-                         >
-                          {t("makeOffer")}
-                        </Button>
-                        <Button
-                          variant="outline"
-                           onClick={() => handleContact(request.phone, request)}
-                           className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground border-primary"
-                         >
-                          <MessageCircle className="w-4 h-4" />
-                          WhatsApp
-                        </Button>
-                      </div>
+                           variant="outline"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleContact(request.phone, request);
+                            }}
+                            className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white border-green-600"
+                          >
+                           <MessageCircle className="w-4 h-4" />
+                           WhatsApp
+                         </Button>
+                       </div>
                     </CardContent>
                   </Card>
                 ))
@@ -292,6 +307,13 @@ const SearchParts = () => {
             </div>
           </TabsContent>
         </Tabs>
+
+        <RequestExpandedDialog
+          request={selectedRequest}
+          isOpen={isRequestDialogOpen}
+          onClose={() => setIsRequestDialogOpen(false)}
+          onRequestUpdated={fetchRequests}
+        />
       </main>
     </div>
   );
