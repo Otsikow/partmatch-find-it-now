@@ -66,7 +66,7 @@ const PageHeader = ({
   };
 
   return (
-    <header className="relative px-3 py-3 sm:p-6 bg-gradient-to-r from-slate-900/95 via-slate-800/95 to-slate-900/95 backdrop-blur-lg shadow-lg border-b border-white/20">
+    <header className="relative px-3 py-3 sm:p-6 bg-gradient-to-r from-primary via-primary/95 to-primary-foreground backdrop-blur-lg shadow-lg border-b border-white/20">
       <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-purple-600/15 to-indigo-600/20"></div>
       <div className="relative flex items-center gap-2 sm:gap-3 w-full">
         {showBackButton && (
