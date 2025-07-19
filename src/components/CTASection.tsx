@@ -49,23 +49,12 @@ const CTASection = () => {
             </Button>
           </Link>
 
-          {user ? (
-            <Link to="/supplier-dashboard" className="w-full sm:w-auto">
-              <Button size="lg" className="w-full bg-white text-gray-900 hover:bg-gray-50 shadow-lg font-semibold border-2 border-white">
-                <Package className="mr-2 h-5 w-5" />
-                Sell Car Parts
-              </Button>
-            </Link>
-          ) : (
-            <Button 
-              size="lg" 
-              className="w-full sm:w-auto bg-white text-gray-900 hover:bg-gray-50 shadow-lg font-semibold border-2 border-white" 
-              onClick={handleSellPartsClick}
-            >
+          <Button asChild size="lg" className="w-full sm:w-auto bg-white text-gray-900 hover:bg-gray-50 shadow-lg font-semibold border-2 border-white">
+            <Link to="/post-part">
               <Package className="mr-2 h-5 w-5" />
               Sell Car Parts
-            </Button>
-          )}
+            </Link>
+          </Button>
 
           {!user && (
             <Link to="/auth" className="w-full sm:w-auto">

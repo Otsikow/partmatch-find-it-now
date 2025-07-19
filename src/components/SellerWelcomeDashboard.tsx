@@ -38,11 +38,10 @@ const SupplierWelcomeDashboard = ({ onGoToSellerTools }: SupplierWelcomeDashboar
             <p className="text-muted-foreground mb-6 font-crimson">
               Manage your inventory, offers, and customer requests
             </p>
-            <Button 
-              onClick={onGoToSellerTools}
-              className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              Go to Seller Tools
+            <Button asChild className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white shadow-lg hover:shadow-xl transition-all duration-300">
+              <Link to="/post-part">
+                Post New Part
+              </Link>
             </Button>
           </CardContent>
         </Card>

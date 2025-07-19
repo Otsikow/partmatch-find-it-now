@@ -156,23 +156,12 @@ const HeroSection = () => {
             </Button>
           </Link>
 
-          {user ? (
-            <Link to="/supplier-dashboard" className="w-full sm:w-auto">
-              <Button size="lg" className="w-full bg-gradient-to-r from-green-600 to-red-600 hover:from-green-700 hover:to-red-700 text-white shadow-lg ui-button-text">
-                <Package className="mr-2 h-5 w-5" />
-                Sell Car Parts
-              </Button>
-            </Link>
-          ) : (
-            <Button 
-              size="lg" 
-              className="w-full sm:w-auto bg-gradient-to-r from-green-600 to-red-600 hover:from-green-700 hover:to-red-700 text-white shadow-lg ui-button-text" 
-              onClick={handleSellPartsClick}
-            >
+          <Button asChild size="lg" className="w-full sm:w-auto bg-gradient-to-r from-green-600 to-red-600 hover:from-green-700 hover:to-red-700 text-white shadow-lg ui-button-text">
+            <Link to="/post-part">
               <Package className="mr-2 h-5 w-5" />
               Sell Car Parts
-            </Button>
-          )}
+            </Link>
+          </Button>
         </div>
       </div>
     </div>

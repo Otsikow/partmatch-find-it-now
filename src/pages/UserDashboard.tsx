@@ -116,11 +116,11 @@ const UserDashboard = () => {
                   <p className="text-gray-600 mb-6 font-crimson">
                     Manage your inventory and sell car parts to grow your business
                   </p>
-                  <Link to="/seller-dashboard">
-                    <Button className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white shadow-lg hover:shadow-xl transition-all duration-300">
-                      Go to Seller Dashboard
-                    </Button>
-                  </Link>
+                  <Button asChild className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white shadow-lg hover:shadow-xl transition-all duration-300">
+                    <Link to="/post-part">
+                      Start Selling
+                    </Link>
+                  </Button>
                 </> : <>
                   <h3 className="text-xl sm:text-2xl font-playfair font-semibold mb-4 text-orange-700">
                     Become a Seller

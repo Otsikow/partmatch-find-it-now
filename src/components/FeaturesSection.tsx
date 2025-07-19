@@ -61,27 +61,15 @@ const FeaturesSection = () => {
           </Link>
 
           {/* Sell Car Parts */}
-          {user ? (
-            <Link to="/supplier-dashboard" className="block bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
-              <div className="w-16 h-16 bg-gradient-to-r from-green-600 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Package className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">Sell Car Parts</h3>
-              <p className="text-gray-600 text-center leading-relaxed">
-                List your inventory and reach customers across Ghana. Simple, secure, and profitable.
-              </p>
-            </Link>
-          ) : (
-            <div className="block bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100 cursor-pointer" onClick={handleSellPartsClick}>
-              <div className="w-16 h-16 bg-gradient-to-r from-green-600 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Package className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">Sell Car Parts</h3>
-              <p className="text-gray-600 text-center leading-relaxed">
-                List your inventory and reach customers across Ghana. Simple, secure, and profitable.
-              </p>
+          <Link to="/post-part" className="block bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
+            <div className="w-16 h-16 bg-gradient-to-r from-green-600 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Package className="h-8 w-8 text-white" />
             </div>
-          )}
+            <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">Sell Car Parts</h3>
+            <p className="text-gray-600 text-center leading-relaxed">
+              List your inventory and reach customers across Ghana. Simple, secure, and profitable.
+            </p>
+          </Link>
         </div>
       </div>
     </div>

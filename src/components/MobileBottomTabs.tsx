@@ -27,7 +27,7 @@ const MobileBottomTabs = () => {
     {
       icon: Package,
       label: "Sell",
-      path: "/seller-dashboard",
+      path: "/post-part",
     },
     {
       icon: User,
