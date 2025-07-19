@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import ChatButton from "@/components/chat/ChatButton";
 
 interface PartRequest {
   id: string;
@@ -103,6 +104,11 @@ const RequestExpandedDialog = ({
       ""
     )}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
+  };
+
+  const handleChatContact = (requestId: string, ownerId: string) => {
+    // Chat functionality is handled by ChatButton component
+    console.log('Chat initiated for request:', requestId, 'with owner:', ownerId);
   };
 
   const handleHideRequest = async () => {
@@ -402,6 +408,15 @@ const RequestExpandedDialog = ({
               >
                 Make Offer
               </Button>
+              <ChatButton
+                sellerId={request.owner_id}
+                className="flex-1"
+                size="lg"
+                variant="outline"
+              >
+                <MessageCircle className="w-4 h-4 mr-2" />
+                Chat
+              </ChatButton>
               <Button
                 variant="outline"
                 onClick={handleContact}
