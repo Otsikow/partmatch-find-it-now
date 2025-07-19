@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import ChatButton from "@/components/chat/ChatButton";
 
 interface PartRequest {
   id: string;
@@ -288,6 +289,14 @@ const SearchParts = () => {
                           >
                            {t("makeOffer")}
                          </Button>
+                         <ChatButton
+                           sellerId={request.owner_id}
+                           className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                           size="default"
+                         >
+                           <MessageCircle className="w-4 h-4 mr-2" />
+                           Chat
+                         </ChatButton>
                          <Button
                            variant="outline"
                             onClick={(e) => {
