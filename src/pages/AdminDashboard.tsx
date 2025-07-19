@@ -119,35 +119,94 @@ const AdminDashboard = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className={`grid w-full ${isMobile ? 'grid-cols-3' : 'grid-cols-7'} bg-card backdrop-blur-sm border ${isMobile ? 'mb-2' : 'mb-4'}`}>
-            <TabsTrigger value="insights" className={`${isMobile ? 'text-xs px-1' : 'text-base'} font-inter`}>
-              {isMobile ? 'Insights' : 'Weekly Insights'}
+          {/* Desktop Tab Navigation */}
+          <TabsList className="hidden lg:grid lg:grid-cols-7 w-full bg-card backdrop-blur-sm border mb-4">
+            <TabsTrigger value="insights" className="text-sm xl:text-base font-inter truncate">
+              Weekly Insights
             </TabsTrigger>
-            <TabsTrigger value="analytics" className={`${isMobile ? 'text-xs px-1' : 'text-base'} font-inter`}>
-              {isMobile ? 'Analytics' : 'Analytics Dashboard'}
+            <TabsTrigger value="analytics" className="text-sm xl:text-base font-inter truncate">
+              Analytics Dashboard
             </TabsTrigger>
-            <TabsTrigger value="requests" className={`${isMobile ? 'text-xs px-1' : 'text-base'} font-inter`}>
-              {isMobile ? `Requests (${requests.length})` : `All Requests (${requests.length})`}
+            <TabsTrigger value="requests" className="text-sm xl:text-base font-inter truncate">
+              Requests ({requests.length})
             </TabsTrigger>
-            <TabsTrigger value="offers" className={`${isMobile ? 'text-xs px-1' : 'text-base'} font-inter`}>
-              {isMobile ? `Offers (${offers.length})` : `Seller Offers (${offers.length})`}
+            <TabsTrigger value="offers" className="text-sm xl:text-base font-inter truncate">
+              Offers ({offers.length})
             </TabsTrigger>
-            {!isMobile && (
-              <>
-                <TabsTrigger value="quality" className="text-base font-inter">Quality Checker</TabsTrigger>
-                <TabsTrigger value="verifications" className="text-base font-inter">Seller Verifications ({verifications.length})</TabsTrigger>
-                <TabsTrigger value="users" className="text-base font-inter">User Management</TabsTrigger>
-              </>
-            )}
+            <TabsTrigger value="quality" className="text-sm xl:text-base font-inter truncate">
+              Quality Checker
+            </TabsTrigger>
+            <TabsTrigger value="verifications" className="text-sm xl:text-base font-inter truncate">
+              Verifications ({verifications.length})
+            </TabsTrigger>
+            <TabsTrigger value="users" className="text-sm xl:text-base font-inter truncate">
+              User Management
+            </TabsTrigger>
           </TabsList>
 
-          {isMobile && (
-            <TabsList className="grid w-full grid-cols-3 bg-card backdrop-blur-sm border mb-4">
-              <TabsTrigger value="quality" className="text-xs px-2 font-inter">Quality</TabsTrigger>
-              <TabsTrigger value="verifications" className="text-xs px-2 font-inter">Verifications ({verifications.length})</TabsTrigger>
-              <TabsTrigger value="users" className="text-xs px-2 font-inter">Users</TabsTrigger>
+          {/* Tablet Tab Navigation */}
+          <TabsList className="hidden md:grid lg:hidden md:grid-cols-4 w-full bg-card backdrop-blur-sm border mb-4">
+            <TabsTrigger value="insights" className="text-xs sm:text-sm font-inter truncate px-1">
+              Insights
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className="text-xs sm:text-sm font-inter truncate px-1">
+              Analytics
+            </TabsTrigger>
+            <TabsTrigger value="requests" className="text-xs sm:text-sm font-inter truncate px-1">
+              Requests ({requests.length})
+            </TabsTrigger>
+            <TabsTrigger value="offers" className="text-xs sm:text-sm font-inter truncate px-1">
+              Offers ({offers.length})
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsList className="hidden md:grid lg:hidden md:grid-cols-3 w-full bg-card backdrop-blur-sm border mb-4">
+            <TabsTrigger value="quality" className="text-xs sm:text-sm font-inter truncate px-1">
+              Quality
+            </TabsTrigger>
+            <TabsTrigger value="verifications" className="text-xs sm:text-sm font-inter truncate px-1">
+              Verifications ({verifications.length})
+            </TabsTrigger>
+            <TabsTrigger value="users" className="text-xs sm:text-sm font-inter truncate px-1">
+              Users
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Mobile Tab Navigation */}
+          <div className="md:hidden space-y-2 mb-4">
+            {/* Primary tabs */}
+            <TabsList className="grid grid-cols-2 w-full bg-card backdrop-blur-sm border">
+              <TabsTrigger value="insights" className="text-xs font-inter truncate px-1">
+                Insights
+              </TabsTrigger>
+              <TabsTrigger value="analytics" className="text-xs font-inter truncate px-1">
+                Analytics
+              </TabsTrigger>
             </TabsList>
-          )}
+            
+            {/* Secondary tabs */}
+            <TabsList className="grid grid-cols-2 w-full bg-card backdrop-blur-sm border">
+              <TabsTrigger value="requests" className="text-xs font-inter truncate px-1">
+                Requests ({requests.length})
+              </TabsTrigger>
+              <TabsTrigger value="offers" className="text-xs font-inter truncate px-1">
+                Offers ({offers.length})
+              </TabsTrigger>
+            </TabsList>
+            
+            {/* Tertiary tabs */}
+            <TabsList className="grid grid-cols-3 w-full bg-card backdrop-blur-sm border">
+              <TabsTrigger value="quality" className="text-xs font-inter truncate px-1">
+                Quality
+              </TabsTrigger>
+              <TabsTrigger value="verifications" className="text-xs font-inter truncate px-1">
+                Verify ({verifications.length})
+              </TabsTrigger>
+              <TabsTrigger value="users" className="text-xs font-inter truncate px-1">
+                Users
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="insights" className="mt-4 sm:mt-6">
             <div className="space-y-3 sm:space-y-4 lg:space-y-6">
