@@ -198,20 +198,19 @@ const RequestedCarParts = () => {
                     </div>
                   </div>
 
-                  <div className="flex gap-2 pt-2">
+                  <div className="flex flex-col sm:flex-row gap-3">
                     <Button 
                       onClick={() => handleMakeOffer(request.id)}
-                      className="flex-1 bg-primary hover:bg-primary/90"
+                      className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white shadow-lg text-sm sm:text-base"
                     >
                       {t('makeOffer')}
                     </Button>
-                    <Button 
-                      variant="outline" 
+                    <Button
                       onClick={() => handleContact(request.phone, request)}
-                      className="flex items-center gap-2"
+                      className="bg-green-600 hover:bg-green-700 text-white border-green-600 shadow-lg text-sm sm:text-base"
                     >
-                      <MessageCircle className="w-4 h-4" />
-                      {t('contact')}
+                      <MessageCircle className="w-4 h-4 mr-2" />
+                      WhatsApp
                     </Button>
                   </div>
                 </CardContent>
