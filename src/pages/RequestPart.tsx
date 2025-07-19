@@ -133,7 +133,7 @@ const RequestPart = () => {
         </div>
       </div>
 
-      <main className="container mx-auto px-4 py-8 max-w-2xl">
+      <main className="container mx-auto px-4 py-8 pb-24 max-w-2xl">
         <form onSubmit={handleSubmit} className="space-y-6">
           <RequestFormFields
             formData={formData}
