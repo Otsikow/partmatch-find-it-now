@@ -286,7 +286,7 @@ const SearchParts = () => {
                               handleMakeOffer(request.id);
                             }}
                             size="sm"
-                            className="flex-1 min-w-[90px] bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
+                            className="flex-1 min-w-[90px] bg-primary hover:bg-primary/90 text-primary-foreground font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
                           >
                            {t("makeOffer")}
                          </Button>
@@ -304,7 +304,7 @@ const SearchParts = () => {
                               e.stopPropagation();
                               handleContact(request.phone, request);
                             }}
-                            className="flex-1 min-w-[80px] border-green-600 text-green-700 hover:bg-green-50 hover:border-green-700 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
+                            className="flex-1 min-w-[80px] bg-green-600 hover:bg-green-700 text-white border-green-600 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
                           >
                            WhatsApp
                          </Button>
