@@ -48,13 +48,10 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
         <div className="flex items-center gap-3 flex-1 justify-center">
           <div className="flex items-center gap-2 bg-primary/10 backdrop-blur-sm rounded-xl px-3 py-1.5 border border-primary/20 shadow-sm">
             <img 
-              src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
+              src="/lovable-uploads/015b9a61-a3c7-4c8f-b3b7-f9c10a5e00ea.png" 
               alt="PartMatch Logo" 
-              className="h-8 w-8 sm:h-10 sm:w-10 object-contain"
+              className="h-12 w-12 sm:h-14 sm:w-14 object-contain"
             />
-            <div className="text-lg sm:text-xl font-bold text-primary">
-              PartMatch
-            </div>
           </div>
           <div className="flex flex-col min-w-0">
             <h1 className="text-lg sm:text-xl md:text-2xl font-playfair font-bold text-foreground truncate">
