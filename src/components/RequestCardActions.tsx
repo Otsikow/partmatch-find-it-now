@@ -68,8 +68,8 @@ const RequestCardActions = ({
   };
 
   return (
-    <div className="flex flex-wrap gap-2 w-full mt-4 px-2">
-      <Button 
+    <div className="flex gap-3 w-full mt-4 -mx-2 px-2">
+      <Button
         onClick={handleOfferClick}
         size="sm"
         className="flex-1 min-w-[90px] bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
