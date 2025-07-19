@@ -68,21 +68,21 @@ const RequestCardActions = ({
   };
 
   return (
-    <div className="grid grid-cols-2 gap-0.5 w-full -mx-2">
+    <div className="flex gap-2 w-full mt-4">
       <Button 
         onClick={handleOfferClick}
-        className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white shadow-lg text-[9px] sm:text-xs font-medium px-0.5 sm:px-2 py-1 sm:py-2 h-7 sm:h-9 min-w-0 flex-1"
+        size="sm"
+        className="flex-1 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
       >
-        <span className="hidden xs:inline">Make Offer</span>
-        <span className="xs:hidden">Offer</span>
+        Make Offer
       </Button>
       <Button
         variant="outline"
+        size="sm"
         onClick={handleChatClick}
-        className="bg-blue-600 hover:bg-blue-700 text-white border-blue-600 text-[9px] sm:text-xs font-medium px-0.5 sm:px-2 py-1 sm:py-2 h-7 sm:h-9 min-w-0 flex-1"
+        className="flex-1 border-blue-600 text-blue-700 hover:bg-blue-50 hover:border-blue-700 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
       >
-        <span className="hidden xs:inline">Chat</span>
-        <span className="xs:hidden">Chat</span>
+        Chat
       </Button>
     </div>
   );
