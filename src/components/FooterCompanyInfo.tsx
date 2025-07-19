@@ -13,7 +13,8 @@ const FooterCompanyInfo = () => {
       <div className="space-y-2">
         <div className="flex items-center space-x-2 text-sm text-gray-300">
           <MapPin className="h-4 w-4 text-orange-500 flex-shrink-0" />
-          <span>AK-798-9707, Apayo, Atwima Kwawoma, Kumasi, Ghana Seaview Business Centre, Redcar, UK TS10 1AZ</span>
+          <span>AK-798-9707, Apayo, Kumasi, Ghana
+Seaview Business Centre, Redcar, UK TS10 1AZ</span>
         </div>
         <div className="flex items-center space-x-2 text-sm text-gray-300">
           <Phone className="h-4 w-4 text-orange-500 flex-shrink-0" />
