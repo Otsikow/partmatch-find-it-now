@@ -34,6 +34,7 @@ interface Request {
   phone: string;
   status: 'pending' | 'matched' | 'completed';
   timestamp: string;
+  ownerId?: string; // Add owner ID for chat functionality
 }
 
 interface Offer {
@@ -45,6 +46,7 @@ interface Offer {
   status: 'pending' | 'accepted' | 'rejected' | 'expired';
   transaction_completed?: boolean;
   buyer_id?: string;
+  supplierId?: string; // Add supplier ID for chat functionality
 }
 
 interface UserProfile {
@@ -173,7 +175,8 @@ export const useAdminData = () => {
         location: req.location,
         phone: req.phone,
         status: req.status === 'pending' ? 'pending' : req.status === 'offer_received' ? 'matched' : 'completed',
-        timestamp: new Date(req.created_at).toLocaleString()
+        timestamp: new Date(req.created_at).toLocaleString(),
+        ownerId: req.owner_id // Add owner ID for chat functionality
       }));
 
       // Transform offers data with new transaction completion fields
@@ -185,7 +188,8 @@ export const useAdminData = () => {
         phone: offer.profiles?.phone || '',
         status: offer.status,
         transaction_completed: offer.transaction_completed || false,
-        buyer_id: offer.buyer_id
+        buyer_id: offer.buyer_id,
+        supplierId: offer.supplier_id // Add supplier ID for chat functionality
       }));
 
       // Transform verifications data
