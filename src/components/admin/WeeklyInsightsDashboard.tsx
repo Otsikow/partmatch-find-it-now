@@ -91,8 +91,10 @@ const WeeklyInsightsDashboard = () => {
         description: "Weekly insights generated successfully",
       });
 
-      // Refresh the data
-      await fetchLatestInsights();
+      // Wait a moment for the database transaction to complete
+      setTimeout(async () => {
+        await fetchLatestInsights();
+      }, 2000);
     } catch (error) {
       console.error('Error generating insights:', error);
       toast({
