@@ -68,11 +68,11 @@ const RequestCardActions = ({
   };
 
   return (
-    <div className="flex gap-2 w-full mt-4">
+    <div className="flex flex-wrap gap-2 w-full mt-4 px-2">
       <Button 
         onClick={handleOfferClick}
         size="sm"
-        className="flex-1 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
+        className="flex-1 min-w-[90px] bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
       >
         Make Offer
       </Button>
@@ -80,9 +80,17 @@ const RequestCardActions = ({
         variant="outline"
         size="sm"
         onClick={handleChatClick}
-        className="flex-1 border-blue-600 text-blue-700 hover:bg-blue-50 hover:border-blue-700 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
+        className="flex-1 min-w-[70px] border-blue-600 text-blue-700 hover:bg-blue-50 hover:border-blue-700 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
       >
         Chat
+      </Button>
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={handleWhatsAppClick}
+        className="flex-1 min-w-[80px] border-green-600 text-green-700 hover:bg-green-50 hover:border-green-700 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
+      >
+        WhatsApp
       </Button>
     </div>
   );
