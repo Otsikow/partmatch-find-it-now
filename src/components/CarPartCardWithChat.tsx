@@ -212,57 +212,9 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
                 {part.description}
               </p>
             )}
-
-            {/* Seller Info with Avatar */}
-            {part.profiles && (
-              <div className="border-t border-border pt-2 sm:pt-3 space-y-1 sm:space-y-2">
-                <div className="flex items-center gap-2">
-                  <Avatar className="h-6 w-6 sm:h-7 sm:w-7">
-                    <AvatarImage src={part.profiles.profile_photo_url} alt={supplierName} />
-                    <AvatarFallback className="text-xs font-medium">
-                      {initials}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span className="text-xs sm:text-sm font-medium text-card-foreground line-clamp-1">{supplierName}</span>
-                  {part.profiles.is_verified && (
-                    <Badge variant="secondary" className="text-[10px] sm:text-xs px-1 py-0">Verified</Badge>
-                  )}
-                </div>
-                
-                <div 
-                  className="cursor-pointer hover:bg-muted/50 rounded p-1 -m-1 transition-colors"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowReviewsModal(true);
-                  }}
-                >
-                  <SellerRatingDisplay
-                    rating={part.profiles.rating || 0}
-                    totalRatings={part.profiles.total_ratings || 0}
-                    size="sm"
-                    showBadge={true}
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* Location and Date */}
-            <div className="flex flex-col gap-1 text-xs sm:text-sm text-muted-foreground">
-              <div className="flex items-center gap-1 sm:gap-2">
-                <MapPin className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
-                <span className={`truncate ${inSameCity ? 'text-success font-medium' : ''}`}>
-                  {locationDisplayText}
-                </span>
-              </div>
-              <div className="flex items-center gap-1 sm:gap-2">
-                <Calendar className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
-                <span>{format(new Date(part.created_at), 'MMM dd')}</span>
-              </div>
-            </div>
           </div>
         </CardContent>
 
-        
         <Collapsible open={isCollapsibleOpen} onOpenChange={setIsCollapsibleOpen}>
           {/* Collapsible trigger */}
           <div className="px-4 pb-2" onClick={(e) => e.stopPropagation()}>
@@ -288,8 +240,60 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
             </CollapsibleTrigger>
           </div>
 
-          {/* Collapsible action buttons */}
+          {/* Collapsible content - seller info, location, and action buttons */}
           <CollapsibleContent>
+            <CardContent className="pt-0 pb-3 sm:pb-4 lg:pb-5 bg-card" onClick={() => setIsExpanded(true)}>
+              <div className="space-y-2 sm:space-y-3">
+                {/* Seller Info with Avatar */}
+                {part.profiles && (
+                  <div className="border-t border-border pt-2 sm:pt-3 space-y-1 sm:space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Avatar className="h-6 w-6 sm:h-7 sm:w-7">
+                        <AvatarImage src={part.profiles.profile_photo_url} alt={supplierName} />
+                        <AvatarFallback className="text-xs font-medium">
+                          {initials}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="text-xs sm:text-sm font-medium text-card-foreground line-clamp-1">{supplierName}</span>
+                      {part.profiles.is_verified && (
+                        <Badge variant="secondary" className="text-[10px] sm:text-xs px-1 py-0">Verified</Badge>
+                      )}
+                    </div>
+                    
+                    <div 
+                      className="cursor-pointer hover:bg-muted/50 rounded p-1 -m-1 transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowReviewsModal(true);
+                      }}
+                    >
+                      <SellerRatingDisplay
+                        rating={part.profiles.rating || 0}
+                        totalRatings={part.profiles.total_ratings || 0}
+                        size="sm"
+                        showBadge={true}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Location and Date */}
+                <div className="flex flex-col gap-1 text-xs sm:text-sm text-muted-foreground">
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <MapPin className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                    <span className={`truncate ${inSameCity ? 'text-success font-medium' : ''}`}>
+                      {locationDisplayText}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <Calendar className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                    <span>{format(new Date(part.created_at), 'MMM dd')}</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+
+            {/* Action Buttons */}
             <div className="p-3 sm:p-4 lg:p-5 pt-0 border-t border-border bg-muted/30 rounded-b-lg" onClick={(e) => e.stopPropagation()}>
               <div className="flex flex-col gap-2 sm:gap-3">
                 <div className={`flex gap-2 ${isMobile ? 'flex-col' : 'flex-row'}`}>
@@ -328,7 +332,6 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
                       <span className={isMobile ? "hidden" : "sm:hidden"}>Directions</span>
                     </Button>
                   )}
-                  {/* Only show Rate Seller button for authenticated users */}
                   <Button 
                     size={isMobile ? "mobile-default" : "sm"}
                     variant="secondary" 
