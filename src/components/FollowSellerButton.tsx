@@ -46,7 +46,9 @@ const FollowSellerButton = ({
       size={size}
       onClick={handleClick}
       className={`flex items-center gap-2 transition-colors ${
-        following ? 'text-red-600 border-red-600 hover:bg-red-50' : 'hover:text-primary'
+        following 
+          ? 'bg-primary text-white border-primary hover:bg-primary/90 hover:text-white' 
+          : 'hover:text-primary border-primary/20 hover:border-primary/40'
       } ${className}`}
     >
       {following ? (

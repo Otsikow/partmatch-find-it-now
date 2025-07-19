@@ -168,7 +168,14 @@ const SellerProfile = () => {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => navigate(-1)}
+              onClick={() => {
+                // Try to go back, fallback to home if no history
+                if (window.history.length > 1) {
+                  navigate(-1);
+                } else {
+                  navigate('/');
+                }
+              }}
               className="p-2 hover:bg-white/20 rounded-full text-white hover:text-white"
             >
               <ArrowLeft className="w-5 h-5" />
