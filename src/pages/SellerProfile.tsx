@@ -168,12 +168,27 @@ const SellerProfile = () => {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => {
-                // Try to go back, fallback to home if no history
-                if (window.history.length > 1) {
-                  navigate(-1);
-                } else {
-                  navigate('/');
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Back button clicked');
+                console.log('History length:', window.history.length);
+                console.log('History state:', window.history.state);
+                
+                // More reliable back navigation
+                try {
+                  window.history.back();
+                  
+                  // Fallback after a short delay if back doesn't work
+                  setTimeout(() => {
+                    if (window.location.pathname === `/seller/${sellerId}`) {
+                      console.log('Back navigation failed, redirecting to search');
+                      navigate('/search-parts-with-map');
+                    }
+                  }, 100);
+                } catch (error) {
+                  console.error('Navigation error:', error);
+                  navigate('/search-parts-with-map');
                 }
               }}
               className="p-2 hover:bg-white/20 rounded-full text-white hover:text-white"
