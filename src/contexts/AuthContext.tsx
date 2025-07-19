@@ -142,7 +142,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.log("AuthProvider: Cleaning up auth subscription");
       subscription.unsubscribe();
     };
-  }, [isPasswordReset]);
+  }, []); // Remove isPasswordReset dependency to prevent infinite loop
 
   const signUp = async (email: string, password: string, userData: any) => {
     // Validate required fields
