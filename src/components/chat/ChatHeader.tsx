@@ -31,7 +31,7 @@ const ChatHeader = ({ otherUser, onBack }: ChatHeaderProps) => {
           variant="ghost"
           size="sm"
           onClick={onBack}
-          className="p-2 h-8 w-8 hover:bg-gray-100 lg:hidden"
+          className="p-2 h-8 w-8 hover:bg-gray-100"
         >
           <ArrowLeft className="h-4 w-4" />
         </Button>
