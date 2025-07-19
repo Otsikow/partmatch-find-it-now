@@ -11,6 +11,8 @@ import { LocationProvider } from "@/contexts/LocationContext";
 import { useGeolocation } from "./hooks/useGeolocation";
 import { useIsMobile } from "./hooks/use-mobile";
 import MobileBottomTabs from "./components/MobileBottomTabs";
+import { onMessageListener } from "./firebase";
+import React from "react";
 
 import Index from "./pages/Index";
 import AuthTypeSelector from "./components/AuthTypeSelector";
@@ -50,6 +52,24 @@ function App() {
   // Enable geolocation detection globally
   useGeolocation();
   const isMobile = useIsMobile();
+
+  // Handle foreground Firebase messages
+  React.useEffect(() => {
+    onMessageListener()
+      .then((payload: any) => {
+        console.log('Foreground message received:', payload);
+        // Show notification in foreground
+        if (payload.notification) {
+          new Notification(payload.notification.title || 'PartMatch', {
+            body: payload.notification.body,
+            icon: '/app-icon-192.png'
+          });
+        }
+      })
+      .catch((error: any) => {
+        console.error('Error in foreground message listener:', error);
+      });
+  }, []);
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>

@@ -16,4 +16,15 @@ setTimeout(() => {
   }).catch((error) => {
     console.warn('PWA module failed to load:', error);
   });
+
+  // Register Firebase messaging service worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/firebase-messaging-sw.js')
+      .then((registration) => {
+        console.log('Firebase SW registered:', registration);
+      })
+      .catch((error) => {
+        console.warn('Firebase SW registration failed:', error);
+      });
+  }
 }, 100);
