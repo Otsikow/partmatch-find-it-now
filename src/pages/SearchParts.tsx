@@ -150,7 +150,7 @@ const SearchParts = () => {
         backTo="/"
       />
 
-      <main className="container mx-auto px-2 sm:px-4 lg:px-6 py-4 sm:py-6">
+      <main className="container mx-auto px-2 sm:px-4 lg:px-6 py-4 sm:py-6 pb-24 sm:pb-6">
         <PendingRatingNotification />
 
         <Tabs defaultValue="parts" className="w-full">
@@ -279,33 +279,33 @@ const SearchParts = () => {
                         </div>
                       </div>
 
-                      <div className="flex gap-2 pt-2">
+                      <div className="flex gap-3 pt-2 pb-2">
                           <Button
                             onClick={(e) => {
                               e.stopPropagation();
                               handleMakeOffer(request.id);
                             }}
-                            className="flex-1 bg-primary hover:bg-primary/90"
+                            size="sm"
+                            className="flex-1 min-w-[90px] bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
                           >
                            {t("makeOffer")}
                          </Button>
                          <ChatButton
                            sellerId={request.owner_id}
-                           className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
-                           size="default"
+                           className="flex-1 min-w-[70px] border-blue-600 text-blue-700 hover:bg-blue-50 hover:border-blue-700 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
+                           size="sm"
                          >
-                           <MessageCircle className="w-4 h-4 mr-2" />
                            Chat
                          </ChatButton>
                          <Button
                            variant="outline"
+                           size="sm"
                             onClick={(e) => {
                               e.stopPropagation();
                               handleContact(request.phone, request);
                             }}
-                            className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white border-green-600"
+                            className="flex-1 min-w-[80px] border-green-600 text-green-700 hover:bg-green-50 hover:border-green-700 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
                           >
-                           <MessageCircle className="w-4 h-4" />
                            WhatsApp
                          </Button>
                        </div>
