@@ -17,7 +17,7 @@ const FooterCompanyInfo = () => {
 Seaview Business Centre, Redcar, UK TS10 1AZ</span>
         </div>
         <div className="flex items-center space-x-2 text-sm text-gray-300">
-          <Phone className="h-4 w-4 text-orange-500 flex-shrink-0" />
+          
           <span>+233 20 593 4505</span>
         </div>
         <div className="flex items-center space-x-2 text-sm text-gray-300">
