@@ -125,9 +125,14 @@ const PostPart = () => {
     if (autoSubmit === 'true' && user) {
       const savedDraft = localStorage.getItem('draftPart');
       if (savedDraft) {
+        console.log('Auto-submitting saved draft:', savedDraft);
         try {
           const parsedDraft = JSON.parse(savedDraft);
-          submitListing(parsedDraft);
+          setFormData(parsedDraft);
+          // Auto-submit after a short delay to ensure form is loaded
+          setTimeout(() => {
+            submitListing(parsedDraft);
+          }, 500);
         } catch (error) {
           console.error('Failed to auto-submit:', error);
           toast({
