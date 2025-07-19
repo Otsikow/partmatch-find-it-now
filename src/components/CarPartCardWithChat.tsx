@@ -296,51 +296,67 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
             {/* Action Buttons */}
             <div className="p-3 sm:p-4 lg:p-5 pt-0 border-t border-border bg-muted/30 rounded-b-lg" onClick={(e) => e.stopPropagation()}>
               <div className="flex flex-col gap-2 sm:gap-3">
-                <div className={`flex gap-2 ${isMobile ? 'flex-col' : 'flex-row'}`}>
+                {/* Primary action buttons row */}
+                <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
                   <ChatButton
                     sellerId={part.supplier_id}
                     partId={part.id}
-                    size={isMobile ? "mobile-default" : "sm"}
+                    size={isMobile ? "mobile-sm" : "sm"}
                     variant="outline"
-                    className="flex-1 justify-center font-medium"
+                    className="w-full justify-center font-medium text-xs sm:text-sm px-1 sm:px-2"
                   />
+                  <Button 
+                    size={isMobile ? "mobile-sm" : "sm"}
+                    variant="outline"
+                    className="w-full justify-center font-medium text-xs sm:text-sm px-1 sm:px-2 bg-green-50 border-green-200 text-green-700 hover:bg-green-100"
+                    onClick={() => {
+                      if (part.profiles?.phone) {
+                        window.open(`https://wa.me/${part.profiles.phone.replace(/\D/g, '')}`, '_blank');
+                      }
+                    }}
+                  >
+                    <span className="text-green-600">📱</span>
+                    <span className="ml-1 truncate">WhatsApp</span>
+                  </Button>
                   <SaveButton 
                     partId={part.id} 
-                    size={isMobile ? "mobile-default" : "sm"}
+                    size={isMobile ? "mobile-sm" : "sm"}
                     variant="outline"
-                    className="border-red-200 hover:bg-red-50"
-                  />
-                  <FollowSellerButton 
-                    sellerId={part.supplier_id}
-                    size="sm"
-                    variant="outline"
-                    showText={false}
-                    className="w-auto px-3"
+                    className="w-full border-red-200 hover:bg-red-50 text-xs sm:text-sm px-1 sm:px-2"
                   />
                 </div>
                 
-                <div className={`flex gap-2 ${isMobile ? 'flex-col' : 'flex-row'}`}>
+                {/* Secondary action buttons row */}
+                <div className="grid grid-cols-2 gap-2">
                   {part.address && (
                     <Button 
                       size={isMobile ? "mobile-default" : "sm"}
                       variant="default" 
                       onClick={openDirections} 
-                      className="flex-1 justify-center font-medium"
+                      className="w-full justify-center font-medium"
                     >
                       <Navigation className="h-3 w-3 sm:h-4 sm:w-4 mr-1 flex-shrink-0" />
-                      <span className={isMobile ? "" : "hidden sm:inline"}>Get Directions</span>
-                      <span className={isMobile ? "hidden" : "sm:hidden"}>Directions</span>
+                      <span className="truncate">Directions</span>
                     </Button>
                   )}
-                  <Button 
-                    size={isMobile ? "mobile-default" : "sm"}
-                    variant="secondary" 
-                    onClick={handleRateSellerClick}
-                    className="flex-1 justify-center font-medium"
-                  >
-                    {user ? 'Rate Seller' : 'Sign In to Rate'}
-                  </Button>
+                  <FollowSellerButton 
+                    sellerId={part.supplier_id}
+                    size={isMobile ? "default" : "sm"}
+                    variant="outline"
+                    showText={true}
+                    className="w-full"
+                  />
                 </div>
+                
+                {/* Rate seller button */}
+                <Button 
+                  size={isMobile ? "mobile-default" : "sm"}
+                  variant="secondary" 
+                  onClick={handleRateSellerClick}
+                  className="w-full justify-center font-medium"
+                >
+                  {user ? 'Rate Seller' : 'Sign In to Rate'}
+                </Button>
               </div>
             </div>
           </CollapsibleContent>
