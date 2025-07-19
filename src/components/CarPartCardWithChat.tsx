@@ -1,10 +1,11 @@
 
 import React, { useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MapPin, Phone, Calendar, Navigation, Expand, X, Star } from "lucide-react";
+import { MapPin, Phone, Calendar, Navigation, Expand, X, Star, ChevronDown, ChevronUp } from "lucide-react";
 import ChatButton from "@/components/chat/ChatButton";
 import SellerRatingDisplay from "@/components/SellerRatingDisplay";
 import SaveButton from "@/components/SaveButton";
@@ -57,6 +58,7 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [showReviewsModal, setShowReviewsModal] = useState(false);
+  const [isCollapsibleOpen, setIsCollapsibleOpen] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
@@ -139,6 +141,11 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
       return;
     }
     setShowRatingModal(true);
+  };
+
+  const handleToggleCollapsible = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsCollapsibleOpen(!isCollapsibleOpen);
   };
 
   return (
@@ -255,56 +262,86 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
           </div>
         </CardContent>
 
-        <div className="p-3 sm:p-4 lg:p-5 pt-0 border-t border-border bg-muted/30 rounded-b-lg" onClick={(e) => e.stopPropagation()}>
-          <div className="flex flex-col gap-2 sm:gap-3">
-            <div className={`flex gap-2 ${isMobile ? 'flex-col' : 'flex-row'}`}>
-              <ChatButton
-                sellerId={part.supplier_id}
-                partId={part.id}
-                size={isMobile ? "mobile-default" : "sm"}
-                variant="outline"
-                className="flex-1 justify-center font-medium"
-              />
-              <SaveButton 
-                partId={part.id} 
-                size={isMobile ? "mobile-default" : "sm"}
-                variant="outline"
-                className="border-red-200 hover:bg-red-50"
-              />
-              <FollowSellerButton 
-                sellerId={part.supplier_id}
+        
+        <Collapsible open={isCollapsibleOpen} onOpenChange={setIsCollapsibleOpen}>
+          {/* Collapsible trigger */}
+          <div className="px-4 pb-2" onClick={(e) => e.stopPropagation()}>
+            <CollapsibleTrigger asChild>
+              <Button
+                variant="ghost"
                 size="sm"
-                variant="outline"
-                showText={false}
-                className="w-auto px-3"
-              />
-            </div>
-            
-            <div className={`flex gap-2 ${isMobile ? 'flex-col' : 'flex-row'}`}>
-              {part.address && (
-                <Button 
-                  size={isMobile ? "mobile-default" : "sm"}
-                  variant="default" 
-                  onClick={openDirections} 
-                  className="flex-1 justify-center font-medium"
-                >
-                  <Navigation className="h-3 w-3 sm:h-4 sm:w-4 mr-1 flex-shrink-0" />
-                  <span className={isMobile ? "" : "hidden sm:inline"}>Get Directions</span>
-                  <span className={isMobile ? "hidden" : "sm:hidden"}>Directions</span>
-                </Button>
-              )}
-              {/* Only show Rate Seller button for authenticated users */}
-              <Button 
-                size={isMobile ? "mobile-default" : "sm"}
-                variant="secondary" 
-                onClick={handleRateSellerClick}
-                className="flex-1 justify-center font-medium"
+                className="w-full justify-center gap-2 text-muted-foreground hover:text-foreground"
+                onClick={handleToggleCollapsible}
               >
-                {user ? 'Rate Seller' : 'Sign In to Rate'}
+                {isCollapsibleOpen ? (
+                  <>
+                    <ChevronUp className="h-4 w-4" />
+                    Show Less
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown className="h-4 w-4" />
+                    Show More
+                  </>
+                )}
               </Button>
-            </div>
+            </CollapsibleTrigger>
           </div>
-        </div>
+
+          {/* Collapsible action buttons */}
+          <CollapsibleContent>
+            <div className="p-3 sm:p-4 lg:p-5 pt-0 border-t border-border bg-muted/30 rounded-b-lg" onClick={(e) => e.stopPropagation()}>
+              <div className="flex flex-col gap-2 sm:gap-3">
+                <div className={`flex gap-2 ${isMobile ? 'flex-col' : 'flex-row'}`}>
+                  <ChatButton
+                    sellerId={part.supplier_id}
+                    partId={part.id}
+                    size={isMobile ? "mobile-default" : "sm"}
+                    variant="outline"
+                    className="flex-1 justify-center font-medium"
+                  />
+                  <SaveButton 
+                    partId={part.id} 
+                    size={isMobile ? "mobile-default" : "sm"}
+                    variant="outline"
+                    className="border-red-200 hover:bg-red-50"
+                  />
+                  <FollowSellerButton 
+                    sellerId={part.supplier_id}
+                    size="sm"
+                    variant="outline"
+                    showText={false}
+                    className="w-auto px-3"
+                  />
+                </div>
+                
+                <div className={`flex gap-2 ${isMobile ? 'flex-col' : 'flex-row'}`}>
+                  {part.address && (
+                    <Button 
+                      size={isMobile ? "mobile-default" : "sm"}
+                      variant="default" 
+                      onClick={openDirections} 
+                      className="flex-1 justify-center font-medium"
+                    >
+                      <Navigation className="h-3 w-3 sm:h-4 sm:w-4 mr-1 flex-shrink-0" />
+                      <span className={isMobile ? "" : "hidden sm:inline"}>Get Directions</span>
+                      <span className={isMobile ? "hidden" : "sm:hidden"}>Directions</span>
+                    </Button>
+                  )}
+                  {/* Only show Rate Seller button for authenticated users */}
+                  <Button 
+                    size={isMobile ? "mobile-default" : "sm"}
+                    variant="secondary" 
+                    onClick={handleRateSellerClick}
+                    className="flex-1 justify-center font-medium"
+                  >
+                    {user ? 'Rate Seller' : 'Sign In to Rate'}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
       </Card>
 
       {/* Expanded View Dialog */}
