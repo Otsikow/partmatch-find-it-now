@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart } from 'lucide-react';
+import { UserPlus, UserCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useSellerFollows } from '@/hooks/useSellerFollows';
 import { useAuth } from '@/contexts/AuthContext';
@@ -49,9 +49,11 @@ const FollowSellerButton = ({
         following ? 'text-red-600 border-red-600 hover:bg-red-50' : 'hover:text-primary'
       } ${className}`}
     >
-      <Heart 
-        className={`h-4 w-4 ${following ? 'fill-current' : ''}`} 
-      />
+      {following ? (
+        <UserCheck className="h-4 w-4" />
+      ) : (
+        <UserPlus className="h-4 w-4" />
+      )}
       {showText && (
         <span>{following ? 'Following' : 'Follow'}</span>
       )}

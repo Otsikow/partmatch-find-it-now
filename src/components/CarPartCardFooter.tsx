@@ -31,8 +31,8 @@ const CarPartCardFooter = ({ partId, supplierId, onContact }: CarPartCardFooterP
           sellerId={supplierId}
           size="default"
           variant="outline"
-          showText={false}
-          className="h-10 sm:h-11 w-10 sm:w-11 p-0"
+          showText={true}
+          className="h-10 sm:h-11 px-3"
         />
       </div>
       
