@@ -70,9 +70,28 @@ const MessageList = ({ messages, currentUserId }: MessageListProps) => {
                           : 'bg-white text-gray-900 border border-gray-200 rounded-bl-md shadow-md'
                       }`}
                     >
-                      <p className={`${isMobile ? 'text-sm' : 'text-sm'} leading-relaxed whitespace-pre-wrap break-words`}>
-                        {message.content}
-                      </p>
+                      {message.message_type === 'image' && message.attachment_url ? (
+                        <div className="space-y-2">
+                          <div className="relative rounded-lg overflow-hidden max-w-xs">
+                            <img 
+                              src={message.attachment_url} 
+                              alt="Shared image"
+                              className="w-full h-auto max-h-64 object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                              onClick={() => window.open(message.attachment_url, '_blank')}
+                              loading="lazy"
+                            />
+                          </div>
+                          {message.content && message.content !== '📷 Image' && (
+                            <p className={`${isMobile ? 'text-sm' : 'text-sm'} leading-relaxed whitespace-pre-wrap break-words`}>
+                              {message.content}
+                            </p>
+                          )}
+                        </div>
+                      ) : (
+                        <p className={`${isMobile ? 'text-sm' : 'text-sm'} leading-relaxed whitespace-pre-wrap break-words`}>
+                          {message.content}
+                        </p>
+                      )}
                     </div>
                     {/* Message tail */}
                     <div className={`absolute bottom-0 ${
