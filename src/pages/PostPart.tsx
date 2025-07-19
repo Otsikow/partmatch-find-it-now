@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Package, Upload, AlertCircle, ArrowLeft } from "lucide-react";
+import { Package, Upload, AlertCircle, ArrowLeft, MapPin } from "lucide-react";
 import { CAR_PART_CATEGORIES } from "@/constants/carPartCategories";
 
 interface PostPartFormData {
@@ -28,6 +28,9 @@ interface PostPartFormData {
   condition: string;
   price: string;
   address: string;
+  city: string;
+  country: string;
+  currency: string;
   images: File[];
 }
 
@@ -41,6 +44,9 @@ const initialFormData: PostPartFormData = {
   condition: "",
   price: "",
   address: "",
+  city: "",
+  country: "",
+  currency: "GHS",
   images: [],
 };
 
@@ -49,8 +55,8 @@ const PostPart = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
-  const [currency, setCurrency] = useState("USD");
   const [formData, setFormData] = useState<PostPartFormData>(initialFormData);
+  const [locationDetected, setLocationDetected] = useState(false);
 
   // Auto-detect location and load saved draft
   useEffect(() => {
@@ -60,63 +66,136 @@ const PostPart = () => {
       try {
         const parsedDraft = JSON.parse(savedDraft);
         setFormData(parsedDraft);
+        if (parsedDraft.address && parsedDraft.currency) {
+          setLocationDetected(true);
+        }
       } catch (error) {
         console.error('Failed to parse saved draft:', error);
         localStorage.removeItem('draftPart');
       }
     }
 
-    // Auto-detect location
-    const detectLocation = async () => {
-      try {
-        if (!navigator.geolocation) return;
+    // Auto-detect location only if not already set
+    if (!locationDetected && !formData.address) {
+      const detectLocation = async () => {
+        try {
+          // Try geolocation first
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              async (position) => {
+                const { latitude, longitude } = position.coords;
+                
+                try {
+                  // Use a more reliable reverse geocoding service
+                  const response = await fetch(
+                    `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=9bc8410018154a2b98484fb633107c83`
+                  );
+                  
+                  const data = await response.json();
+                  const result = data?.results?.[0];
+                  
+                  if (result) {
+                    const components = result.components;
+                    const city = components.city || components.town || components.village || "Accra";
+                    const state = components.state || "";
+                    const country = components.country || "Ghana";
+                    const countryCode = components["ISO_3166-1_alpha-2"] || "GH";
+                    
+                    // Currency mapping based on country code
+                    const currencyMap: Record<string, string> = {
+                      GH: "GHS", NG: "NGN", KE: "KES", ZA: "ZAR",
+                      US: "USD", GB: "GBP", CA: "CAD", IN: "INR", PK: "PKR",
+                    };
+                    
+                    const detectedCurrency = currencyMap[countryCode] || "GHS";
+                    const detectedAddress = state ? `${city}, ${state}, ${country}` : `${city}, ${country}`;
+                    
+                    const updatedData = {
+                      ...formData,
+                      address: detectedAddress,
+                      city,
+                      country,
+                      currency: detectedCurrency
+                    };
+                    
+                    setFormData(updatedData);
+                    setLocationDetected(true);
+                    localStorage.setItem('draftPart', JSON.stringify(updatedData));
+                  }
+                } catch (geocodeError) {
+                  console.error("Reverse geocoding failed:", geocodeError);
+                  // Fallback to IP-based detection
+                  await fallbackToIPLocation();
+                }
+              },
+              async (error) => {
+                console.warn("Geolocation error:", error.message);
+                // Fallback to IP-based detection
+                await fallbackToIPLocation();
+              },
+              { enableHighAccuracy: true, timeout: 10000, maximumAge: 600000 }
+            );
+          } else {
+            // No geolocation support, use IP-based detection
+            await fallbackToIPLocation();
+          }
+        } catch (error) {
+          console.error("Location detection failed:", error);
+          // Final fallback to default Ghana
+          setDefaultLocation();
+        }
+      };
 
-        navigator.geolocation.getCurrentPosition(
-          async (position) => {
-            const { latitude, longitude } = position.coords;
+      const fallbackToIPLocation = async () => {
+        try {
+          const response = await fetch('https://ipapi.co/json/');
+          const data = await response.json();
+          
+          if (data && data.city && data.country_name) {
+            const currencyMap: Record<string, string> = {
+              GH: "GHS", NG: "NGN", KE: "KES", ZA: "ZAR",
+              US: "USD", GB: "GBP", CA: "CAD", IN: "INR", PK: "PKR",
+            };
+            
+            const detectedCurrency = currencyMap[data.country_code] || "GHS";
+            const detectedAddress = `${data.city}, ${data.country_name}`;
+            
+            const updatedData = {
+              ...formData,
+              address: detectedAddress,
+              city: data.city,
+              country: data.country_name,
+              currency: detectedCurrency
+            };
+            
+            setFormData(updatedData);
+            setLocationDetected(true);
+            localStorage.setItem('draftPart', JSON.stringify(updatedData));
+          } else {
+            setDefaultLocation();
+          }
+        } catch (error) {
+          console.error("IP location detection failed:", error);
+          setDefaultLocation();
+        }
+      };
 
-            try {
-              const response = await fetch(
-                `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=9bc8410018154a2b98484fb633107c83`
-              );
+      const setDefaultLocation = () => {
+        const updatedData = {
+          ...formData,
+          address: "Accra, Ghana",
+          city: "Accra",
+          country: "Ghana",
+          currency: "GHS"
+        };
+        
+        setFormData(updatedData);
+        setLocationDetected(true);
+        localStorage.setItem('draftPart', JSON.stringify(updatedData));
+      };
 
-              const data = await response.json();
-              const result = data?.results?.[0];
-
-              if (result) {
-                const components = result.components;
-                const city = components.city || components.town || components.village || "";
-                const state = components.state || "";
-                const country = components.country || "";
-                const countryCode = components["ISO_3166-1_alpha-2"] || "";
-
-                const currencyMap: Record<string, string> = {
-                  GH: "GHS", NG: "NGN", KE: "KES", ZA: "ZAR",
-                  US: "USD", GB: "GBP", CA: "CAD", IN: "INR", PK: "PKR",
-                };
-
-                const detectedCurrency = currencyMap[countryCode] || "USD";
-                const detectedAddress = `${city}, ${state}, ${country}`;
-
-                setFormData((prev) => ({
-                  ...prev,
-                  address: prev.address || detectedAddress,
-                }));
-                setCurrency(detectedCurrency);
-              }
-            } catch (err) {
-              console.error("Failed to reverse geocode:", err);
-            }
-          },
-          (error) => console.warn("Geolocation error:", error.message),
-          { enableHighAccuracy: true, timeout: 10000 }
-        );
-      } catch (error) {
-        console.error("Location detection failed:", error);
-      }
-    };
-
-    detectLocation();
+      detectLocation();
+    }
   }, []);
 
   // Handle auto-submission after login
@@ -257,8 +336,10 @@ const PostPart = () => {
         part_type: data.partType,
         condition: data.condition,
         price: price,
-        currency: currency,
+        currency: data.currency,
         address: data.address.trim(),
+        city: data.city.trim(),
+        country: data.country.trim(),
         images: imageUrls.length > 0 ? imageUrls : null,
         status: "available",
       };
@@ -446,30 +527,37 @@ const PostPart = () => {
                 </div>
               </div>
 
-              {/* Price and Address */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="price">Price ({currency}) *</Label>
-                  <Input
-                    id="price"
-                    type="number"
-                    value={formData.price}
-                    onChange={(e) => handleInputChange("price", e.target.value)}
-                    placeholder="0.00"
-                    min="0"
-                    step="0.01"
-                    required
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="address">Location *</Label>
-                  <Input
-                    id="address"
-                    value={formData.address}
-                    onChange={(e) => handleInputChange("address", e.target.value)}
-                    placeholder="City, State, Country"
-                    required
-                  />
+              {/* Price */}
+              <div className="space-y-2">
+                <Label htmlFor="price">Price ({formData.currency || 'GHS'}) *</Label>
+                <Input
+                  id="price"
+                  type="number"
+                  value={formData.price}
+                  onChange={(e) => handleInputChange("price", e.target.value)}
+                  placeholder="0.00"
+                  min="0"
+                  step="0.01"
+                  required
+                />
+              </div>
+
+              {/* Auto-detected Location Display */}
+              <div className="space-y-2">
+                <Label>Location *</Label>
+                <div className="p-3 bg-muted rounded-md border">
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-1">
+                      <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
+                      <span className="text-sm font-medium">
+                        {formData.address || 'Detecting location...'}
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Location and currency ({formData.currency || 'GHS'}) detected automatically. 
+                    {locationDetected && ' ✓ Detection complete'}
+                  </p>
                 </div>
               </div>
 
