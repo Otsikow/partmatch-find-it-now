@@ -8,6 +8,7 @@ import { MapPin, Phone, Calendar, Navigation, Expand, X, Star } from "lucide-rea
 import ChatButton from "@/components/chat/ChatButton";
 import SellerRatingDisplay from "@/components/SellerRatingDisplay";
 import SaveButton from "@/components/SaveButton";
+import FollowSellerButton from "@/components/FollowSellerButton";
 import RatingModal from "@/components/RatingModal";
 import SellerReviewsModal from "@/components/SellerReviewsModal";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -270,6 +271,13 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
                 variant="outline"
                 className="border-red-200 hover:bg-red-50"
               />
+              <FollowSellerButton 
+                sellerId={part.supplier_id}
+                size="sm"
+                variant="outline"
+                showText={false}
+                className="w-auto px-3"
+              />
             </div>
             
             <div className={`flex gap-2 ${isMobile ? 'flex-col' : 'flex-row'}`}>
@@ -412,6 +420,13 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
                 variant="outline"
                 className="border-red-200 hover:bg-red-50"
                 showText={true}
+              />
+              <FollowSellerButton 
+                sellerId={part.supplier_id}
+                size="default"
+                variant="outline"
+                showText={true}
+                className="flex-1"
               />
               {part.address && (
                 <Button 
