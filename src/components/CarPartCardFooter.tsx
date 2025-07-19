@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Phone } from "lucide-react";
 import ChatButton from "./chat/ChatButton";
 import SaveButton from "./SaveButton";
+import FollowSellerButton from "./FollowSellerButton";
 
 interface CarPartCardFooterProps {
   partId: string;
@@ -25,6 +26,13 @@ const CarPartCardFooter = ({ partId, supplierId, onContact }: CarPartCardFooterP
           size="default"
           variant="outline"
           className="border-red-200 hover:bg-red-50 h-10 sm:h-11"
+        />
+        <FollowSellerButton 
+          sellerId={supplierId}
+          size="default"
+          variant="outline"
+          showText={false}
+          className="h-10 sm:h-11 w-10 sm:w-11 p-0"
         />
       </div>
       

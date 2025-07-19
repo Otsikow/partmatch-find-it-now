@@ -1129,6 +1129,30 @@ export type Database = {
           },
         ]
       }
+      seller_follows: {
+        Row: {
+          buyer_id: string
+          created_at: string
+          id: string
+          seller_id: string
+          updated_at: string
+        }
+        Insert: {
+          buyer_id: string
+          created_at?: string
+          id?: string
+          seller_id: string
+          updated_at?: string
+        }
+        Update: {
+          buyer_id?: string
+          created_at?: string
+          id?: string
+          seller_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       seller_verifications: {
         Row: {
           admin_notes: string | null
