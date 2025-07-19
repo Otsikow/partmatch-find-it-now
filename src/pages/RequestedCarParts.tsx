@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Search, MapPin, Calendar, Phone, MessageCircle, ArrowLeft } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import ChatButton from "@/components/chat/ChatButton";
 
 interface PartRequest {
   id: string;
@@ -205,6 +206,14 @@ const RequestedCarParts = () => {
                     >
                       {t('makeOffer')}
                     </Button>
+                    <ChatButton
+                      sellerId={request.owner_id}
+                      className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg text-sm sm:text-base"
+                      size="default"
+                    >
+                      <MessageCircle className="w-4 h-4 mr-2" />
+                      Chat
+                    </ChatButton>
                     <Button
                       onClick={() => handleContact(request.phone, request)}
                       className="bg-green-600 hover:bg-green-700 text-white border-green-600 shadow-lg text-sm sm:text-base"
