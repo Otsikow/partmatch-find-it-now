@@ -40,70 +40,70 @@ const AnalyticsStats = ({
   onNavigateToRequests
 }: AnalyticsStatsProps) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+    <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
       <Card 
-        className="p-4 sm:p-6 text-center bg-card border border-border hover:shadow-lg transition-all duration-300 cursor-pointer hover:scale-105"
+        className="p-3 sm:p-4 text-center bg-card border border-border hover:shadow-lg transition-all duration-300 cursor-pointer hover:scale-105"
         onClick={onNavigateToUsers}
       >
-        <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full p-3 w-fit mx-auto mb-3 shadow-lg">
-          <Users className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
+        <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full p-2 w-fit mx-auto mb-2 shadow-lg">
+          <Users className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
         </div>
-        <p className="text-2xl sm:text-3xl font-bold text-primary">
+        <p className="text-xl sm:text-2xl font-bold text-primary">
           {userMetrics.totalUsers}
         </p>
-        <p className="text-sm sm:text-base text-muted-foreground font-crimson">Total Users</p>
-        <div className="mt-2 text-xs text-muted-foreground">
+        <p className="text-xs sm:text-sm text-muted-foreground font-crimson">Total Users</p>
+        <div className="mt-1 text-xs text-muted-foreground">
           <p>Active this week: {userMetrics.activeUsersThisWeek}</p>
           <p>Active this month: {userMetrics.activeUsersThisMonth}</p>
         </div>
       </Card>
 
       <Card 
-        className="p-4 sm:p-6 text-center bg-card border border-border hover:shadow-lg transition-all duration-300 cursor-pointer hover:scale-105"
+        className="p-3 sm:p-4 text-center bg-card border border-border hover:shadow-lg transition-all duration-300 cursor-pointer hover:scale-105"
         onClick={onNavigateToRequests}
       >
-        <div className="bg-gradient-to-br from-purple-500 to-pink-600 rounded-full p-3 w-fit mx-auto mb-3 shadow-lg">
-          <Package className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
+        <div className="bg-gradient-to-br from-purple-500 to-pink-600 rounded-full p-2 w-fit mx-auto mb-2 shadow-lg">
+          <Package className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
         </div>
-        <p className="text-2xl sm:text-3xl font-bold text-primary">
+        <p className="text-xl sm:text-2xl font-bold text-primary">
           {productMetrics.totalParts}
         </p>
-        <p className="text-sm sm:text-base text-muted-foreground font-crimson">Total Parts Listed</p>
-        <div className="mt-2 text-xs text-muted-foreground">
+        <p className="text-xs sm:text-sm text-muted-foreground font-crimson">Total Parts Listed</p>
+        <div className="mt-1 text-xs text-muted-foreground">
           <p>This week: {productMetrics.partsThisWeek}</p>
           <p>This month: {productMetrics.partsThisMonth}</p>
         </div>
       </Card>
 
       <Card 
-        className="p-4 sm:p-6 text-center bg-card border border-border hover:shadow-lg transition-all duration-300 cursor-pointer hover:scale-105"
+        className="p-3 sm:p-4 text-center bg-card border border-border hover:shadow-lg transition-all duration-300 cursor-pointer hover:scale-105"
         onClick={onNavigateToOffers}
       >
-        <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-full p-3 w-fit mx-auto mb-3 shadow-lg">
-          <TrendingUp className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
+        <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-full p-2 w-fit mx-auto mb-2 shadow-lg">
+          <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
         </div>
-        <p className="text-2xl sm:text-3xl font-bold text-primary">
+        <p className="text-xl sm:text-2xl font-bold text-primary">
           GHS {transactionMetrics.totalRevenue.toLocaleString()}
         </p>
-        <p className="text-sm sm:text-base text-muted-foreground font-crimson">Total Revenue</p>
-        <div className="mt-2 text-xs text-muted-foreground">
+        <p className="text-xs sm:text-sm text-muted-foreground font-crimson">Total Revenue</p>
+        <div className="mt-1 text-xs text-muted-foreground">
           <p>Total offers: {transactionMetrics.totalOffers}</p>
           <p>Successful: {transactionMetrics.successfulTransactions}</p>
         </div>
       </Card>
 
       <Card 
-        className="p-4 sm:p-6 text-center bg-card border border-border hover:shadow-lg transition-all duration-300 cursor-pointer hover:scale-105"
+        className="p-3 sm:p-4 text-center bg-card border border-border hover:shadow-lg transition-all duration-300 cursor-pointer hover:scale-105"
         onClick={onNavigateToVerifications}
       >
-        <div className="bg-gradient-to-br from-yellow-500 to-amber-600 rounded-full p-3 w-fit mx-auto mb-3 shadow-lg">
-          <Star className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
+        <div className="bg-gradient-to-br from-yellow-500 to-amber-600 rounded-full p-2 w-fit mx-auto mb-2 shadow-lg">
+          <Star className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
         </div>
-        <p className="text-2xl sm:text-3xl font-bold text-primary">
+        <p className="text-xl sm:text-2xl font-bold text-primary">
           {otherMetrics.averageSellerRating.toFixed(1)}
         </p>
-        <p className="text-sm sm:text-base text-muted-foreground font-crimson">Avg Seller Rating</p>
-        <div className="mt-2 text-xs text-muted-foreground">
+        <p className="text-xs sm:text-sm text-muted-foreground font-crimson">Avg Seller Rating</p>
+        <div className="mt-1 text-xs text-muted-foreground">
           <p>Verified sellers: {otherMetrics.verifiedSellers}</p>
           <p>Verified buyers: {otherMetrics.verifiedBuyers}</p>
         </div>
