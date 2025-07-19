@@ -50,7 +50,7 @@ const CookiePolicy = () => {
           <Card className="shadow-lg border bg-card">
             <CardContent className="p-8">
               <div className="flex items-center space-x-3 mb-6">
-                <Info className="h-8 w-8 text-orange-500" />
+                <Info className="h-8 w-8 text-primary" />
                 <h2 className="text-2xl font-playfair font-bold text-card-foreground">What Are Cookies?</h2>
               </div>
               <div className="space-y-4 text-muted-foreground font-crimson">
@@ -70,7 +70,7 @@ const CookiePolicy = () => {
               <h2 className="text-2xl font-playfair font-bold text-card-foreground mb-6">Types of Cookies We Use</h2>
               <div className="space-y-6">
                 {/* Essential Cookies */}
-                <div className="border-l-4 border-red-500 pl-4">
+                <div className="border-l-4 border-destructive pl-4">
                   <h3 className="text-lg font-semibold text-card-foreground mb-2">Essential Cookies (Required)</h3>
                   <p className="text-muted-foreground font-crimson mb-2">
                     These cookies are necessary for the website to function properly. They enable core functionality such as security, network management, and accessibility.
@@ -84,7 +84,7 @@ const CookiePolicy = () => {
                 </div>
 
                 {/* Functional Cookies */}
-                <div className="border-l-4 border-blue-500 pl-4">
+                <div className="border-l-4 border-primary pl-4">
                   <h3 className="text-lg font-semibold text-card-foreground mb-2">Functional Cookies</h3>
                   <p className="text-muted-foreground font-crimson mb-2">
                     These cookies enhance functionality and personalization, such as remembering your preferences and settings.
@@ -98,7 +98,7 @@ const CookiePolicy = () => {
                 </div>
 
                 {/* Analytics Cookies */}
-                <div className="border-l-4 border-green-500 pl-4">
+                <div className="border-l-4 border-success pl-4">
                   <h3 className="text-lg font-semibold text-card-foreground mb-2">Analytics Cookies</h3>
                   <p className="text-muted-foreground font-crimson mb-2">
                     These cookies help us understand how visitors use our website, so we can improve our services.
@@ -112,7 +112,7 @@ const CookiePolicy = () => {
                 </div>
 
                 {/* Marketing Cookies */}
-                <div className="border-l-4 border-purple-500 pl-4">
+                <div className="border-l-4 border-accent pl-4">
                   <h3 className="text-lg font-semibold text-card-foreground mb-2">Marketing Cookies</h3>
                   <p className="text-muted-foreground font-crimson mb-2">
                     These cookies are used to show you relevant advertisements and measure the effectiveness of our marketing campaigns.
@@ -132,7 +132,7 @@ const CookiePolicy = () => {
           <Card className="shadow-lg border bg-card">
             <CardContent className="p-8">
               <div className="flex items-center space-x-3 mb-6">
-                <Settings className="h-8 w-8 text-green-500" />
+                <Settings className="h-8 w-8 text-primary" />
                 <h2 className="text-2xl font-playfair font-bold text-card-foreground">Cookie Preferences</h2>
               </div>
               <div className="space-y-6">
@@ -142,7 +142,7 @@ const CookiePolicy = () => {
                 
                 <div className="space-y-4">
                   {/* Essential Cookies */}
-                  <div className="flex items-center justify-between p-4 border border-border rounded-lg bg-red-50 dark:bg-red-950/20">
+                  <div className="flex items-center justify-between p-4 border border-border rounded-lg bg-destructive/10">
                     <div>
                       <h4 className="font-semibold text-card-foreground">Essential Cookies</h4>
                       <p className="text-sm text-muted-foreground">Required for basic website functionality</p>
@@ -237,7 +237,7 @@ const CookiePolicy = () => {
           <Card className="shadow-lg border bg-card">
             <CardContent className="p-8">
               <div className="flex items-center space-x-3 mb-6">
-                <Shield className="h-8 w-8 text-indigo-500" />
+                <Shield className="h-8 w-8 text-primary" />
                 <h2 className="text-2xl font-playfair font-bold text-card-foreground">Managing Cookies</h2>
               </div>
               <div className="space-y-4 text-muted-foreground font-crimson">
