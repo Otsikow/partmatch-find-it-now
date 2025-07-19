@@ -150,7 +150,7 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
 
   return (
     <>
-      <Card className="w-full hover:shadow-xl transition-all duration-300 cursor-pointer group bg-card border-0 shadow-md">
+      <Card className="w-full hover:shadow-xl transition-all duration-300 cursor-pointer group bg-card border-0 shadow-md overflow-hidden">
         {/* Image Section */}
         <div 
           className="relative aspect-video w-full overflow-hidden bg-muted rounded-t-lg"
