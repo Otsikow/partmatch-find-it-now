@@ -150,10 +150,7 @@ const PWANotificationManager = () => {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => {
-                  setShowNotificationPrompt(false);
-                  recordNotificationPromptShown();
-                }}
+                onClick={() => setShowNotificationPrompt(false)}
                 className="h-6 w-6 p-0"
               >
                 <X className="h-4 w-4" />
