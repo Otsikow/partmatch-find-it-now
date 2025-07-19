@@ -20,8 +20,8 @@ const NotificationBell = () => {
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-5 w-5" />
+        <Button variant="ghost" size="icon" className="relative text-white hover:text-white hover:bg-white/30 transition-colors shadow-lg backdrop-blur-sm border border-white/20">
+          <Bell className="h-5 w-5 text-white drop-shadow-md" />
           {unreadCount > 0 && (
             <Badge 
               variant="destructive" 
