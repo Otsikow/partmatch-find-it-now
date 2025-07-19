@@ -29,7 +29,7 @@ const CookiePolicy = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-orange-50 to-yellow-100 font-inter">
+    <div className="min-h-screen bg-background font-inter">
       <PageHeader 
         title="Cookie Policy" 
         subtitle="Learn about how we use cookies and similar technologies to enhance your experience on PartMatch."
@@ -42,18 +42,18 @@ const CookiePolicy = () => {
           <div className="flex items-center justify-center space-x-2 sm:space-x-3 mb-4 sm:mb-6">
             <Cookie className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-primary" />
           </div>
-          <p className="text-sm text-gray-500 mt-4">Last updated: December 27, 2024</p>
+          <p className="text-sm text-muted-foreground mt-4">Last updated: December 27, 2024</p>
         </div>
 
         <div className="max-w-4xl mx-auto space-y-8">
           {/* What Are Cookies */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-orange-50/50">
+          <Card className="shadow-lg border bg-card">
             <CardContent className="p-8">
               <div className="flex items-center space-x-3 mb-6">
                 <Info className="h-8 w-8 text-orange-500" />
-                <h2 className="text-2xl font-playfair font-bold text-gray-800">What Are Cookies?</h2>
+                <h2 className="text-2xl font-playfair font-bold text-card-foreground">What Are Cookies?</h2>
               </div>
-              <div className="space-y-4 text-gray-600 font-crimson">
+              <div className="space-y-4 text-muted-foreground font-crimson">
                 <p>
                   Cookies are small text files that are placed on your device when you visit a website. They help websites remember information about your visit, such as your preferred language, login status, and other settings that can make your next visit easier and the site more useful to you.
                 </p>
@@ -65,17 +65,17 @@ const CookiePolicy = () => {
           </Card>
 
           {/* Types of Cookies */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-blue-50/50">
+          <Card className="shadow-lg border bg-card">
             <CardContent className="p-8">
-              <h2 className="text-2xl font-playfair font-bold text-gray-800 mb-6">Types of Cookies We Use</h2>
+              <h2 className="text-2xl font-playfair font-bold text-card-foreground mb-6">Types of Cookies We Use</h2>
               <div className="space-y-6">
                 {/* Essential Cookies */}
                 <div className="border-l-4 border-red-500 pl-4">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">Essential Cookies (Required)</h3>
-                  <p className="text-gray-600 font-crimson mb-2">
+                  <h3 className="text-lg font-semibold text-card-foreground mb-2">Essential Cookies (Required)</h3>
+                  <p className="text-muted-foreground font-crimson mb-2">
                     These cookies are necessary for the website to function properly. They enable core functionality such as security, network management, and accessibility.
                   </p>
-                  <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                  <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
                     <li>Authentication and login status</li>
                     <li>Shopping cart contents</li>
                     <li>Security and fraud prevention</li>
@@ -85,11 +85,11 @@ const CookiePolicy = () => {
 
                 {/* Functional Cookies */}
                 <div className="border-l-4 border-blue-500 pl-4">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">Functional Cookies</h3>
-                  <p className="text-gray-600 font-crimson mb-2">
+                  <h3 className="text-lg font-semibold text-card-foreground mb-2">Functional Cookies</h3>
+                  <p className="text-muted-foreground font-crimson mb-2">
                     These cookies enhance functionality and personalization, such as remembering your preferences and settings.
                   </p>
-                  <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                  <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
                     <li>Language preferences</li>
                     <li>Theme and display settings</li>
                     <li>Location preferences</li>
@@ -99,11 +99,11 @@ const CookiePolicy = () => {
 
                 {/* Analytics Cookies */}
                 <div className="border-l-4 border-green-500 pl-4">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">Analytics Cookies</h3>
-                  <p className="text-gray-600 font-crimson mb-2">
+                  <h3 className="text-lg font-semibold text-card-foreground mb-2">Analytics Cookies</h3>
+                  <p className="text-muted-foreground font-crimson mb-2">
                     These cookies help us understand how visitors use our website, so we can improve our services.
                   </p>
-                  <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                  <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
                     <li>Page views and user interactions</li>
                     <li>Time spent on pages</li>
                     <li>Error tracking and debugging</li>
@@ -113,11 +113,11 @@ const CookiePolicy = () => {
 
                 {/* Marketing Cookies */}
                 <div className="border-l-4 border-purple-500 pl-4">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">Marketing Cookies</h3>
-                  <p className="text-gray-600 font-crimson mb-2">
+                  <h3 className="text-lg font-semibold text-card-foreground mb-2">Marketing Cookies</h3>
+                  <p className="text-muted-foreground font-crimson mb-2">
                     These cookies are used to show you relevant advertisements and measure the effectiveness of our marketing campaigns.
                   </p>
-                  <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                  <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
                     <li>Personalized advertisements</li>
                     <li>Social media integration</li>
                     <li>Campaign effectiveness tracking</li>
@@ -129,82 +129,82 @@ const CookiePolicy = () => {
           </Card>
 
           {/* Cookie Preferences */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-green-50/50">
+          <Card className="shadow-lg border bg-card">
             <CardContent className="p-8">
               <div className="flex items-center space-x-3 mb-6">
                 <Settings className="h-8 w-8 text-green-500" />
-                <h2 className="text-2xl font-playfair font-bold text-gray-800">Cookie Preferences</h2>
+                <h2 className="text-2xl font-playfair font-bold text-card-foreground">Cookie Preferences</h2>
               </div>
               <div className="space-y-6">
-                <p className="text-gray-600 font-crimson">
+                <p className="text-muted-foreground font-crimson">
                   You can control which cookies we use by adjusting your preferences below. Note that disabling certain cookies may affect the functionality of our website.
                 </p>
                 
                 <div className="space-y-4">
                   {/* Essential Cookies */}
-                  <div className="flex items-center justify-between p-4 border rounded-lg bg-red-50 border-red-200">
+                  <div className="flex items-center justify-between p-4 border border-border rounded-lg bg-red-50 dark:bg-red-950/20">
                     <div>
-                      <h4 className="font-semibold text-gray-800">Essential Cookies</h4>
-                      <p className="text-sm text-gray-600">Required for basic website functionality</p>
+                      <h4 className="font-semibold text-card-foreground">Essential Cookies</h4>
+                      <p className="text-sm text-muted-foreground">Required for basic website functionality</p>
                     </div>
-                    <div className="text-sm text-gray-500">Always Active</div>
+                    <div className="text-sm text-muted-foreground">Always Active</div>
                   </div>
 
                   {/* Functional Cookies */}
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
+                  <div className="flex items-center justify-between p-4 border border-border rounded-lg bg-muted/20">
                     <div>
-                      <h4 className="font-semibold text-gray-800">Functional Cookies</h4>
-                      <p className="text-sm text-gray-600">Enhance website functionality and personalization</p>
+                      <h4 className="font-semibold text-card-foreground">Functional Cookies</h4>
+                      <p className="text-sm text-muted-foreground">Enhance website functionality and personalization</p>
                     </div>
                     <label className="flex items-center">
                       <input
                         type="checkbox"
                         checked={preferences.functional}
                         onChange={() => handlePreferenceChange('functional')}
-                        className="mr-2"
+                        className="mr-2 accent-primary"
                       />
-                      <span className="text-sm">Enable</span>
+                      <span className="text-sm text-card-foreground">Enable</span>
                     </label>
                   </div>
 
                   {/* Analytics Cookies */}
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
+                  <div className="flex items-center justify-between p-4 border border-border rounded-lg bg-muted/20">
                     <div>
-                      <h4 className="font-semibold text-gray-800">Analytics Cookies</h4>
-                      <p className="text-sm text-gray-600">Help us improve our website through usage analytics</p>
+                      <h4 className="font-semibold text-card-foreground">Analytics Cookies</h4>
+                      <p className="text-sm text-muted-foreground">Help us improve our website through usage analytics</p>
                     </div>
                     <label className="flex items-center">
                       <input
                         type="checkbox"
                         checked={preferences.analytics}
                         onChange={() => handlePreferenceChange('analytics')}
-                        className="mr-2"
+                        className="mr-2 accent-primary"
                       />
-                      <span className="text-sm">Enable</span>
+                      <span className="text-sm text-card-foreground">Enable</span>
                     </label>
                   </div>
 
                   {/* Marketing Cookies */}
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
+                  <div className="flex items-center justify-between p-4 border border-border rounded-lg bg-muted/20">
                     <div>
-                      <h4 className="font-semibold text-gray-800">Marketing Cookies</h4>
-                      <p className="text-sm text-gray-600">Used for personalized advertisements and marketing</p>
+                      <h4 className="font-semibold text-card-foreground">Marketing Cookies</h4>
+                      <p className="text-sm text-muted-foreground">Used for personalized advertisements and marketing</p>
                     </div>
                     <label className="flex items-center">
                       <input
                         type="checkbox"
                         checked={preferences.marketing}
                         onChange={() => handlePreferenceChange('marketing')}
-                        className="mr-2"
+                        className="mr-2 accent-primary"
                       />
-                      <span className="text-sm">Enable</span>
+                      <span className="text-sm text-card-foreground">Enable</span>
                     </label>
                   </div>
                 </div>
 
                 <Button 
                   onClick={savePreferences}
-                  className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground"
                 >
                   Save Preferences
                 </Button>
@@ -213,18 +213,18 @@ const CookiePolicy = () => {
           </Card>
 
           {/* Third-Party Cookies */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-purple-50/50">
+          <Card className="shadow-lg border bg-card">
             <CardContent className="p-8">
-              <h2 className="text-2xl font-playfair font-bold text-gray-800 mb-6">Third-Party Cookies</h2>
-              <div className="space-y-4 text-gray-600 font-crimson">
+              <h2 className="text-2xl font-playfair font-bold text-card-foreground mb-6">Third-Party Cookies</h2>
+              <div className="space-y-4 text-muted-foreground font-crimson">
                 <p>
                   Some cookies on our website are set by third-party services. These may include:
                 </p>
                 <ul className="list-disc list-inside space-y-2">
-                  <li><strong>Google Analytics:</strong> Website usage statistics and performance monitoring</li>
-                  <li><strong>Social Media Platforms:</strong> Social sharing and login functionality</li>
-                  <li><strong>Payment Processors:</strong> Secure payment processing and fraud prevention</li>
-                  <li><strong>Customer Support:</strong> Live chat and support ticket systems</li>
+                  <li><strong className="text-card-foreground">Google Analytics:</strong> Website usage statistics and performance monitoring</li>
+                  <li><strong className="text-card-foreground">Social Media Platforms:</strong> Social sharing and login functionality</li>
+                  <li><strong className="text-card-foreground">Payment Processors:</strong> Secure payment processing and fraud prevention</li>
+                  <li><strong className="text-card-foreground">Customer Support:</strong> Live chat and support ticket systems</li>
                 </ul>
                 <p>
                   These third parties have their own privacy policies and cookie practices, which we encourage you to review.
@@ -234,13 +234,13 @@ const CookiePolicy = () => {
           </Card>
 
           {/* Managing Cookies */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-indigo-50/50">
+          <Card className="shadow-lg border bg-card">
             <CardContent className="p-8">
               <div className="flex items-center space-x-3 mb-6">
                 <Shield className="h-8 w-8 text-indigo-500" />
-                <h2 className="text-2xl font-playfair font-bold text-gray-800">Managing Cookies</h2>
+                <h2 className="text-2xl font-playfair font-bold text-card-foreground">Managing Cookies</h2>
               </div>
-              <div className="space-y-4 text-gray-600 font-crimson">
+              <div className="space-y-4 text-muted-foreground font-crimson">
                 <p>
                   You can control cookies through your browser settings. Most browsers allow you to:
                 </p>
@@ -255,8 +255,8 @@ const CookiePolicy = () => {
                   Please note that disabling cookies may affect the functionality of PartMatch and other websites you visit.
                 </p>
                 
-                <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                  <p className="text-sm">
+                <div className="mt-6 p-4 bg-warning/10 border border-warning/20 rounded-lg">
+                  <p className="text-sm text-card-foreground">
                     <strong>Browser Help:</strong> For specific instructions on managing cookies, visit your browser's help section or search for "cookies" in your browser settings.
                   </p>
                 </div>
@@ -265,15 +265,15 @@ const CookiePolicy = () => {
           </Card>
 
           {/* Contact Information */}
-          <Card className="shadow-lg border-0 bg-gradient-to-br from-white/90 to-gray-50/50">
+          <Card className="shadow-lg border bg-card">
             <CardContent className="p-8">
-              <h2 className="text-2xl font-playfair font-bold text-gray-800 mb-6">Questions About Cookies?</h2>
-              <div className="space-y-4 text-gray-600 font-crimson">
+              <h2 className="text-2xl font-playfair font-bold text-card-foreground mb-6">Questions About Cookies?</h2>
+              <div className="space-y-4 text-muted-foreground font-crimson">
                 <p>If you have questions about our use of cookies, please contact us:</p>
                 <ul className="space-y-2">
-                  <li><strong>Email:</strong> privacy@partmatchgh.com</li>
-                  <li><strong>Phone:</strong> +233 55 123-PART</li>
-                  <li><strong>Address:</strong> 123 Auto Parts Street, Motor City, MC 12345, Ghana</li>
+                  <li><strong className="text-card-foreground">Email:</strong> privacy@partmatchgh.com</li>
+                  <li><strong className="text-card-foreground">Phone:</strong> +233 55 123-PART</li>
+                  <li><strong className="text-card-foreground">Address:</strong> 123 Auto Parts Street, Motor City, MC 12345, Ghana</li>
                 </ul>
               </div>
             </CardContent>
