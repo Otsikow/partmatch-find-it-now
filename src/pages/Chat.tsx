@@ -34,6 +34,7 @@ const Chat = () => {
       <PageHeader 
         title="Messages"
         subtitle="Chat with buyers and sellers"
+        showBackButton={true}
         backTo="/dashboard"
         showHomeButton={true}
       />
