@@ -78,18 +78,18 @@ const SellerHeader = () => {
   };
 
   return (
-    <header className="p-2 sm:p-4 md:p-6 flex items-center justify-between bg-gradient-to-r from-blue-50 via-blue-100 to-green-50 dark:from-blue-900/20 dark:via-blue-800/20 dark:to-green-900/20 backdrop-blur-lg shadow-lg border-b border-border/20">
+    <header className="p-2 sm:p-4 md:p-6 flex items-center justify-between bg-gradient-to-r from-slate-800/95 via-slate-700/95 to-slate-800/95 backdrop-blur-lg shadow-lg border-b border-white/20">
       {/* Left section - Back button and Logo */}
       <div className="flex items-center gap-2 min-w-0">
         <Button
           variant="outline"
           size="sm"
           onClick={handleBackClick}
-          className="bg-white/10 dark:bg-gray-800/10 backdrop-blur-sm border-white/20 dark:border-gray-700/20 hover:bg-white/20 dark:hover:bg-gray-700/20 transition-all duration-300 flex-shrink-0"
+          className="bg-white/20 backdrop-blur-sm border-white/30 hover:bg-white/30 text-white hover:text-white transition-all duration-300 flex-shrink-0 shadow-lg border"
         >
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="h-4 w-4 drop-shadow-lg" />
         </Button>
-        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-lg p-1.5 border border-white/50 dark:border-gray-700/50 shadow-lg flex-shrink-0">
+        <div className="bg-white/30 backdrop-blur-md rounded-lg p-1.5 border border-white/50 shadow-lg flex-shrink-0">
           <img 
             src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
             alt="PartMatch Logo" 
@@ -100,10 +100,10 @@ const SellerHeader = () => {
 
       {/* Center section - Title and welcome message */}
       <div className="flex flex-col min-w-0 flex-1 px-2 sm:px-3">
-        <h1 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-blue-800 dark:text-blue-200 truncate">
+        <h1 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-white drop-shadow-lg truncate">
           Seller Dashboard
         </h1>
-        <p className="text-xs sm:text-sm text-blue-600 dark:text-blue-400 truncate">
+        <p className="text-xs sm:text-sm text-white/90 drop-shadow-lg truncate">
           Welcome back, {sellerInfo.name}
         </p>
         <VerifiedBadge
@@ -122,19 +122,19 @@ const SellerHeader = () => {
           variant="outline"
           size="sm"
           onClick={handleHome}
-          className="bg-white/10 dark:bg-gray-800/10 backdrop-blur-sm border-white/20 dark:border-gray-700/20 hover:bg-white/20 dark:hover:bg-gray-700/20 transition-all duration-300 px-2 sm:px-3"
+          className="bg-white/20 backdrop-blur-sm border-white/30 hover:bg-white/30 text-white hover:text-white transition-all duration-300 px-2 sm:px-3 shadow-lg border"
         >
-          <Home className="h-4 w-4 sm:mr-1" />
-          <span className="hidden sm:inline">{t("home", "Home")}</span>
+          <Home className="h-4 w-4 sm:mr-1 drop-shadow-lg" />
+          <span className="hidden sm:inline drop-shadow-lg">{t("home", "Home")}</span>
         </Button>
         <Button
           variant="outline"
           size="sm"
           onClick={handleSignOut}
-          className="bg-white/10 dark:bg-gray-800/10 backdrop-blur-sm border-white/20 dark:border-gray-700/20 hover:bg-white/20 dark:hover:bg-gray-700/20 transition-all duration-300 px-2 sm:px-3"
+          className="bg-white/20 backdrop-blur-sm border-white/30 hover:bg-white/30 text-white hover:text-white transition-all duration-300 px-2 sm:px-3 shadow-lg border"
         >
-          <LogOut className="h-4 w-4 sm:mr-1" />
-          <span className="hidden sm:inline">{t("signOut", "Sign Out")}</span>
+          <LogOut className="h-4 w-4 sm:mr-1 drop-shadow-lg" />
+          <span className="hidden sm:inline drop-shadow-lg">{t("signOut", "Sign Out")}</span>
         </Button>
       </div>
     </header>
