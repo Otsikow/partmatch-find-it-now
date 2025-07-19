@@ -422,7 +422,7 @@ const PostPart = () => {
         </div>
       </div>
 
-      <main className="container mx-auto px-4 py-8 max-w-2xl">
+      <main className="container mx-auto px-4 py-8 pb-24 max-w-2xl">
         <Card>
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-primary flex items-center gap-2">
