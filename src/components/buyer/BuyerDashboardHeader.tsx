@@ -23,7 +23,7 @@ export const BuyerDashboardHeader = () => {
   };
 
   return (
-    <div className="bg-gradient-to-r from-primary via-primary/90 to-primary-foreground text-white shadow-lg">
+    <div className="bg-gradient-to-r from-primary via-primary to-primary/90 text-white shadow-lg">
       <div className="px-4 py-6 sm:px-6">
         <div className="flex items-center justify-between">
           {/* Left section with back button, logo and title */}
@@ -62,30 +62,33 @@ export const BuyerDashboardHeader = () => {
               variant="ghost"
               size="sm"
               onClick={handleChatWithSeller}
-              className="hidden sm:flex items-center space-x-2 text-white hover:bg-white/20 hover:text-white"
+              className="hidden sm:flex items-center space-x-2 text-white hover:bg-white/30 hover:text-white shadow-lg backdrop-blur-sm border border-white/20"
+              style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}
             >
-              <MessageCircle className="h-4 w-4" />
-              <span className="hidden md:inline">Chat with Seller</span>
+              <MessageCircle className="h-4 w-4 drop-shadow-md" />
+              <span className="hidden md:inline font-medium">Chat with Seller</span>
             </Button>
             
             <Button
               variant="ghost"
               size="sm"
               onClick={handleViewPart}
-              className="hidden sm:flex items-center space-x-2 text-white hover:bg-white/20 hover:text-white"
+              className="hidden sm:flex items-center space-x-2 text-white hover:bg-white/30 hover:text-white shadow-lg backdrop-blur-sm border border-white/20"
+              style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}
             >
-              <Eye className="h-4 w-4" />
-              <span className="hidden md:inline">View Part</span>
+              <Eye className="h-4 w-4 drop-shadow-md" />
+              <span className="hidden md:inline font-medium">View Part</span>
             </Button>
             
             <Button 
               variant="ghost" 
               size="sm" 
               onClick={handleSettings}
-              className="flex items-center space-x-2 text-white hover:bg-white/20 hover:text-white"
+              className="flex items-center space-x-2 text-white hover:bg-white/30 hover:text-white shadow-lg backdrop-blur-sm border border-white/20"
+              style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}
             >
-              <Settings className="h-4 w-4" />
-              <span className="hidden sm:inline">Settings</span>
+              <Settings className="h-4 w-4 drop-shadow-md" />
+              <span className="hidden sm:inline font-medium">Settings</span>
             </Button>
 
             {/* Mobile-only buttons */}
@@ -94,18 +97,18 @@ export const BuyerDashboardHeader = () => {
                 variant="ghost"
                 size="sm"
                 onClick={handleChatWithSeller}
-                className="p-2 text-white hover:bg-white/20 hover:text-white"
+                className="p-2 text-white hover:bg-white/30 hover:text-white shadow-lg backdrop-blur-sm border border-white/20 rounded-full"
               >
-                <MessageCircle className="h-4 w-4" />
+                <MessageCircle className="h-4 w-4 drop-shadow-md" />
               </Button>
               
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={handleViewPart}
-                className="p-2 text-white hover:bg-white/20 hover:text-white"
+                className="p-2 text-white hover:bg-white/30 hover:text-white shadow-lg backdrop-blur-sm border border-white/20 rounded-full"
               >
-                <Eye className="h-4 w-4" />
+                <Eye className="h-4 w-4 drop-shadow-md" />
               </Button>
             </div>
           </div>
