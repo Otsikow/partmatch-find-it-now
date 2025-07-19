@@ -266,17 +266,17 @@ const RequestExpandedDialog = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-bold text-left">
+      <DialogContent className="max-w-[95vw] sm:max-w-2xl max-h-[90vh] overflow-y-auto mx-2">
+        <DialogHeader className="pb-4">
+          <DialogTitle className="text-lg sm:text-xl font-bold text-left leading-tight">
             {request.part_needed}
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {/* Request Image */}
           {request.photo_url && (
-            <div className="relative w-full h-64 rounded-lg overflow-hidden bg-gray-100">
+            <div className="relative w-full h-48 sm:h-64 rounded-lg overflow-hidden bg-gray-100">
               <img
                 src={request.photo_url}
                 alt={request.part_needed}
@@ -289,24 +289,24 @@ const RequestExpandedDialog = ({
           )}
 
           {/* Status Badge */}
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
             <Badge
               variant="secondary"
-              className="bg-green-100 text-green-800"
+              className="bg-green-100 text-green-800 w-fit"
             >
               {request.status === 'pending' ? 'Active' : request.status}
             </Badge>
             {canModifyRequest && (
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-wrap">
                 {request.status === 'cancelled' ? (
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={handleUnhideRequest}
                     disabled={isLoading}
-                    className="text-green-600 hover:text-green-700"
+                    className="text-green-600 hover:text-green-700 text-xs"
                   >
-                    <Eye className="w-4 h-4 mr-1" />
+                    <Eye className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                     Unhide
                   </Button>
                 ) : (
@@ -315,9 +315,9 @@ const RequestExpandedDialog = ({
                     size="sm"
                     onClick={handleHideRequest}
                     disabled={isLoading}
-                    className="text-orange-600 hover:text-orange-700"
+                    className="text-orange-600 hover:text-orange-700 text-xs"
                   >
-                    <EyeOff className="w-4 h-4 mr-1" />
+                    <EyeOff className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                     Hide
                   </Button>
                 )}
@@ -326,9 +326,9 @@ const RequestExpandedDialog = ({
                   size="sm"
                   onClick={handleDeleteRequest}
                   disabled={isLoading}
-                  className="text-red-600 hover:text-red-700"
+                  className="text-red-600 hover:text-red-700 text-xs"
                 >
-                  <Trash2 className="w-4 h-4 mr-1" />
+                  <Trash2 className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                   Delete
                 </Button>
               </div>
@@ -337,23 +337,23 @@ const RequestExpandedDialog = ({
 
           {/* Vehicle Information */}
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-3 sm:p-4">
               <div className="flex items-center gap-2 mb-3">
-                <Car className="w-5 h-5 text-blue-600" />
-                <h3 className="font-semibold text-lg">Vehicle Details</h3>
+                <Car className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
+                <h3 className="font-semibold text-base sm:text-lg">Vehicle Details</h3>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                 <div>
-                  <p className="text-sm text-gray-600">Make</p>
-                  <p className="font-medium">{request.car_make}</p>
+                  <p className="text-xs sm:text-sm text-gray-600">Make</p>
+                  <p className="font-medium text-sm sm:text-base">{request.car_make}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Model</p>
-                  <p className="font-medium">{request.car_model}</p>
+                  <p className="text-xs sm:text-sm text-gray-600">Model</p>
+                  <p className="font-medium text-sm sm:text-base">{request.car_model}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Year</p>
-                  <p className="font-medium">{request.car_year}</p>
+                  <p className="text-xs sm:text-sm text-gray-600">Year</p>
+                  <p className="font-medium text-sm sm:text-base">{request.car_year}</p>
                 </div>
               </div>
             </CardContent>
@@ -361,16 +361,16 @@ const RequestExpandedDialog = ({
 
           {/* Part Information */}
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-3 sm:p-4">
               <div className="flex items-center gap-2 mb-3">
-                <Wrench className="w-5 h-5 text-green-600" />
-                <h3 className="font-semibold text-lg">Part Needed</h3>
+                <Wrench className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
+                <h3 className="font-semibold text-base sm:text-lg">Part Needed</h3>
               </div>
-              <p className="font-medium text-lg mb-2">{request.part_needed}</p>
+              <p className="font-medium text-base sm:text-lg mb-2">{request.part_needed}</p>
               {request.description && (
                 <div>
-                  <p className="text-sm text-gray-600 mb-1">Description</p>
-                  <p className="text-gray-800">{request.description}</p>
+                  <p className="text-xs sm:text-sm text-gray-600 mb-1">Description</p>
+                  <p className="text-gray-800 text-sm sm:text-base">{request.description}</p>
                 </div>
               )}
             </CardContent>
@@ -378,19 +378,19 @@ const RequestExpandedDialog = ({
 
           {/* Contact Information */}
           <Card>
-            <CardContent className="p-4">
+            <CardContent className="p-3 sm:p-4">
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-gray-500" />
-                  <span className="text-gray-700">{request.location}</span>
+                  <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500 flex-shrink-0" />
+                  <span className="text-gray-700 text-sm sm:text-base truncate">{request.location}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Phone className="w-4 h-4 text-gray-500" />
-                  <span className="text-gray-700">{request.phone}</span>
+                  <Phone className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500 flex-shrink-0" />
+                  <span className="text-gray-700 text-sm sm:text-base truncate">{request.phone}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-gray-500" />
-                  <span className="text-gray-700">
+                  <Calendar className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500 flex-shrink-0" />
+                  <span className="text-gray-700 text-sm sm:text-base">
                     Posted on {formatDate(request.created_at)}
                   </span>
                 </div>
@@ -400,32 +400,33 @@ const RequestExpandedDialog = ({
 
           {/* Action Buttons */}
           {request.status === 'pending' && (
-            <div className="flex gap-3 pt-4">
+            <div className="flex flex-col sm:flex-row gap-3 pt-2 sm:pt-4">
               <Button
                 onClick={handleMakeOffer}
-                className="flex-1 bg-blue-600 hover:bg-blue-700"
+                className="w-full sm:flex-1 bg-primary hover:bg-primary/90 text-primary-foreground h-12 sm:h-auto text-sm font-medium"
                 size="lg"
               >
                 Make Offer
               </Button>
-              <ChatButton
-                sellerId={request.owner_id}
-                className="flex-1"
-                size="lg"
-                variant="outline"
-              >
-                <MessageCircle className="w-4 h-4 mr-2" />
-                Chat
-              </ChatButton>
-              <Button
-                variant="outline"
-                onClick={handleContact}
-                className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white border-green-600"
-                size="lg"
-              >
-                <MessageCircle className="w-4 h-4" />
-                WhatsApp
-              </Button>
+              <div className="flex gap-3 sm:contents">
+                <ChatButton
+                  sellerId={request.owner_id}
+                  className="flex-1 sm:flex-1 bg-blue-600 hover:bg-blue-700 text-white border-blue-600 h-12 sm:h-auto text-sm font-medium"
+                  size="lg"
+                >
+                  <MessageCircle className="w-4 h-4 mr-1 sm:mr-2" />
+                  Chat
+                </ChatButton>
+                <Button
+                  variant="outline"
+                  onClick={handleContact}
+                  className="flex-1 sm:flex-1 bg-green-600 hover:bg-green-700 text-white border-green-600 h-12 sm:h-auto text-sm font-medium"
+                  size="lg"
+                >
+                  <MessageCircle className="w-4 h-4 mr-1 sm:mr-2" />
+                  WhatsApp
+                </Button>
+              </div>
             </div>
           )}
         </div>
