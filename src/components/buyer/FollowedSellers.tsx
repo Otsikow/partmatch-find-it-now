@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Star, MapPin, Heart } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -8,6 +9,7 @@ import { useSellerFollows } from '@/hooks/useSellerFollows';
 import VerifiedBadge from '@/components/VerifiedBadge';
 
 const FollowedSellers = () => {
+  const navigate = useNavigate();
   const { followedSellers, loading, unfollowSeller } = useSellerFollows();
 
   if (loading) {
@@ -67,9 +69,10 @@ const FollowedSellers = () => {
             return (
               <div
                 key={follow.id}
-                className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+                className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+                onClick={() => navigate(`/seller/${seller.id}`)}
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 flex-1">
                   <Avatar className="h-12 w-12">
                     <AvatarImage 
                       src={seller.profile_photo_url} 
@@ -118,7 +121,10 @@ const FollowedSellers = () => {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => unfollowSeller(seller.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      unfollowSeller(seller.id);
+                    }}
                     className="text-red-600 border-red-600 hover:bg-red-50"
                   >
                     <Heart className="h-4 w-4 fill-current mr-1" />

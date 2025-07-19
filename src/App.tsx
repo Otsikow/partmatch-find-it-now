@@ -39,6 +39,7 @@ import CookiePolicy from "./pages/CookiePolicy";
 import NotFound from "./pages/NotFound";
 import SimpleAuth from "./pages/SimpleAuth";
 import ButtonTestPage from "./pages/ButtonTestPage";
+import SellerProfile from "./pages/SellerProfile";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import SellerProtectedRoute from "./components/SellerProtectedRoute";
@@ -80,6 +81,7 @@ function App() {
                     element={<SearchPartsWithMap />}
                   />
                   <Route path="/search-map" element={<SearchPartsWithMap />} />
+                  <Route path="/seller/:sellerId" element={<SellerProfile />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/faq" element={<FAQ />} />
                   <Route path="/contact" element={<Contact />} />
