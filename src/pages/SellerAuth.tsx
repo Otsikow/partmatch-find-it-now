@@ -13,7 +13,7 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import PasswordReset from "@/components/PasswordReset";
@@ -36,6 +36,7 @@ const SellerAuth = () => {
 
   const { signUp, signIn, isPasswordReset } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,7 +46,16 @@ const SellerAuth = () => {
       if (isLogin) {
         const { error } = await signIn(formData.email, formData.password);
         if (!error) {
-          navigate("/supplier");
+          const redirect = searchParams.get('redirect');
+          const autoSubmit = searchParams.get('autoSubmit');
+          
+          if (redirect && autoSubmit) {
+            navigate(`${redirect}?autoSubmit=true`);
+          } else if (redirect) {
+            navigate(redirect);
+          } else {
+            navigate("/supplier");
+          }
         }
       } else {
         const { error } = await signUp(formData.email, formData.password, {
@@ -79,7 +89,16 @@ const SellerAuth = () => {
   };
 
   const handlePasswordResetSuccess = () => {
-    navigate("/supplier");
+    const redirect = searchParams.get('redirect');
+    const autoSubmit = searchParams.get('autoSubmit');
+    
+    if (redirect && autoSubmit) {
+      navigate(`${redirect}?autoSubmit=true`);
+    } else if (redirect) {
+      navigate(redirect);
+    } else {
+      navigate("/supplier");
+    }
   };
 
   return (

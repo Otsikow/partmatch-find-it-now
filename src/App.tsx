@@ -23,6 +23,8 @@ import SellerDashboard from "./pages/SellerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import DashboardRouter from "./components/DashboardRouter";
 import RequestPart from "./pages/RequestPart";
+import PostPart from "./pages/PostPart";
+import ListingSuccess from "./pages/ListingSuccess";
 import RequestedCarParts from "./pages/RequestedCarParts";
 import SearchParts from "./pages/SearchParts";
 import SearchPartsWithMap from "./pages/SearchPartsWithMap";
@@ -67,6 +69,7 @@ function App() {
                   <Route path="/admin-auth" element={<AdminAuth />} />
                   <Route path="/request-part" element={<RequestPart />} />
                   <Route path="/request" element={<RequestPart />} />
+                  <Route path="/post-part" element={<PostPart />} />
                   <Route
                     path="/requested-car-parts"
                     element={<RequestedCarParts />}
@@ -157,6 +160,7 @@ function App() {
                   <Route path="/button-test" element={<ButtonTestPage />} />
                   <Route path="/success" element={<Success />} />
                   <Route path="/request-success" element={<RequestSuccess />} />
+                  <Route path="/listing-success" element={<ListingSuccess />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
 

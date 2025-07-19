@@ -42,6 +42,14 @@ const NavigationMobile = ({ isOpen, onClose }: NavigationMobileProps) => {
           <Plus className="h-6 w-6" />
           <span className="text-sm">Request Part</span>
         </Link>
+        <Link
+          to="/post-part"
+          className="flex flex-col items-center gap-2 px-3 py-3 text-base font-medium text-nav-muted hover:text-nav-accent hover:bg-accent rounded-lg transition-colors"
+          onClick={onClose}
+        >
+          <Plus className="h-6 w-6" />
+          <span className="text-sm">Sell Part</span>
+        </Link>
         {user && (
           <Link
             to="/chat"

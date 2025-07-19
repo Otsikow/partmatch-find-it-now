@@ -48,6 +48,13 @@ const Navigation = () => {
                 <Plus className="h-5 w-5" />
                 <span className="text-xs">{t("request", "Request Part")}</span>
               </Link>
+              <Link
+                to="/post-part"
+                className="flex flex-col items-center gap-1 text-nav-muted hover:text-nav-accent font-medium transition-colors px-3 py-2 rounded-lg hover:bg-accent group"
+              >
+                <Plus className="h-5 w-5" />
+                <span className="text-xs">{t("sellPart", "Sell Part")}</span>
+              </Link>
               {user && (
                 <Link
                   to="/chat"
