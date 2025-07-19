@@ -37,9 +37,8 @@ const RequestCardActions = ({
         Chat
       </Button>
       <Button
-        variant="outline"
         onClick={() => onWhatsAppContact(request.phone, request)}
-        className="bg-green-600 hover:bg-green-700 text-white border-green-600 text-sm sm:text-base"
+        className="bg-green-600 hover:bg-green-700 text-white border-green-600 shadow-lg text-sm sm:text-base"
       >
         <MessageCircle className="h-4 w-4 mr-2" />
         WhatsApp
