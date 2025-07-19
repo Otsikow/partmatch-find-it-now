@@ -292,7 +292,7 @@ const SearchParts = () => {
                          </Button>
                          <ChatButton
                            sellerId={request.owner_id}
-                           className="flex-1 min-w-[70px] border-blue-600 text-blue-700 hover:bg-blue-50 hover:border-blue-700 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
+                           className="flex-1 min-w-[70px] bg-blue-600 hover:bg-blue-700 text-white border-blue-600 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
                            size="sm"
                          >
                            Chat
