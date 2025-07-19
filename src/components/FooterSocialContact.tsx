@@ -22,7 +22,7 @@ const FooterSocialContact = () => {
         </div>
         <div className="flex items-center space-x-2 text-sm text-gray-300">
           <MapPin className="h-4 w-4 text-orange-500 flex-shrink-0" />
-          <span>Based in UK, Ghana, Nigeria</span>
+          <span>Based in the UK, Ghana, Nigeria</span>
         </div>
       </div>
 
