@@ -98,7 +98,7 @@ const MobileHomeContent = () => {
             </Card>
           </Link>
 
-          <Link to="/seller-dashboard">
+          <Link to="/post-part">
             <Card className="h-full">
               <CardContent className="p-4 text-center space-y-3">
                 <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-xl flex items-center justify-center mx-auto">
