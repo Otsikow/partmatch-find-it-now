@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { Package, LogOut, Home, ArrowLeft } from "lucide-react";
+import { Package, LogOut, Home, ArrowLeft, MessageCircle } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import VerifiedBadge from "@/components/VerifiedBadge";
+import ChatNotificationBadge from "@/components/chat/ChatNotificationBadge";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -77,6 +78,10 @@ const SellerHeader = () => {
     window.location.href = "/";
   };
 
+  const handleChatClick = () => {
+    navigate("/chat");
+  };
+
   return (
     <header className="p-2 sm:p-4 md:p-6 flex items-center justify-between bg-gradient-to-r from-slate-800/95 via-slate-700/95 to-slate-800/95 backdrop-blur-lg shadow-lg border-b border-white/20">
       {/* Left section - Back button and Logo */}
@@ -118,6 +123,16 @@ const SellerHeader = () => {
           isVerified={sellerInfo.isVerified}
           className="hidden sm:flex"
         />
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleChatClick}
+          className="bg-white/20 backdrop-blur-sm border-white/30 hover:bg-white/30 text-white hover:text-white transition-all duration-300 px-2 sm:px-3 shadow-lg border relative"
+        >
+          <MessageCircle className="h-4 w-4 sm:mr-1 drop-shadow-lg" />
+          <span className="hidden sm:inline drop-shadow-lg">Chat</span>
+          <ChatNotificationBadge />
+        </Button>
         <Button
           variant="outline"
           size="sm"
