@@ -203,7 +203,7 @@ const MessageInput = ({ chatId, userId, onTyping }: MessageInputProps) => {
   };
 
   return (
-    <div className={`border-t bg-white flex-shrink-0 ${isMobile ? 'p-3 pb-6' : 'p-4'} safe-area-pb`}>
+    <div className={`border-t bg-white flex-shrink-0 ${isMobile ? 'p-3 pb-4' : 'p-4'}`}>
       {/* Image Preview */}
       {imagePreview && (
         <div className="mb-3 relative inline-block">

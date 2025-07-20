@@ -39,7 +39,7 @@ const Chat = () => {
         showHomeButton={true}
       />
       
-      <div className="flex-1 flex overflow-hidden">
+      <div className={`flex-1 flex overflow-hidden ${isMobile ? 'pb-20' : ''}`}>
         <div className="w-full max-w-7xl mx-auto flex h-full">
           {/* Chat List - Hidden on mobile when chat is selected */}
           <div className={`w-full lg:w-1/3 xl:w-1/4 border-r border-gray-200 bg-white ${selectedChatId && isMobile ? 'hidden' : 'block'}`}>
