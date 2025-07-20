@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import LocationSelector from "@/components/LocationSelector";
+import { useCountryDetection } from "@/hooks/useCountryDetection";
 
 interface RequestCardOfferFormProps {
   requestId: string;
@@ -30,6 +31,8 @@ const RequestCardOfferForm = ({
   onCancel,
   isSubmitting
 }: RequestCardOfferFormProps) => {
+  const { country } = useCountryDetection();
+  const isGhanaUser = country?.code === 'GH';
   const handleSubmit = async () => {
     if (!offerPrice || !offerLocation) {
       toast({
@@ -71,10 +74,19 @@ const RequestCardOfferForm = ({
         <div>
           <Label className="text-sm font-medium">Your Location *</Label>
           <div className="mt-1">
-            <LocationSelector
-              value={offerLocation}
-              onChange={setOfferLocation}
-            />
+            {isGhanaUser ? (
+              <LocationSelector
+                value={offerLocation}
+                onChange={setOfferLocation}
+              />
+            ) : (
+              <Input
+                type="text"
+                placeholder="Enter your city/location"
+                value={offerLocation}
+                onChange={(e) => setOfferLocation(e.target.value)}
+              />
+            )}
           </div>
         </div>
       </div>
