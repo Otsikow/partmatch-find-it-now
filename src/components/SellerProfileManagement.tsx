@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
+import ProfilePhotoSection from "@/components/buyer/ProfilePhotoSection";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -39,6 +40,7 @@ interface ProfileData {
   phone: string;
   location: string;
   address: string;
+  profile_photo_url: string;
 }
 
 interface VerificationData {
@@ -67,6 +69,7 @@ const SellerProfileManagement = () => {
     phone: "",
     location: "",
     address: "",
+    profile_photo_url: "",
   });
 
   useEffect(() => {
@@ -98,7 +101,7 @@ const SellerProfileManagement = () => {
     try {
       const { data, error } = await supabase
         .from("profiles")
-        .select("first_name, last_name, phone, location, address")
+        .select("first_name, last_name, phone, location, address, profile_photo_url")
         .eq("id", user?.id)
         .single();
 
@@ -111,6 +114,7 @@ const SellerProfileManagement = () => {
           phone: data.phone || "",
           location: data.location || "",
           address: data.address || "",
+          profile_photo_url: data.profile_photo_url || "",
         });
       }
     } catch (error) {
@@ -128,6 +132,16 @@ const SellerProfileManagement = () => {
 
   const handleInputChange = (field: keyof ProfileData, value: string) => {
     setProfileData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handlePhotoUpdate = (photoUrl: string) => {
+    setProfileData((prev) => ({ ...prev, profile_photo_url: photoUrl }));
+  };
+
+  const getInitials = () => {
+    const firstName = profileData.first_name || "";
+    const lastName = profileData.last_name || "";
+    return `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase() || user?.email?.charAt(0).toUpperCase() || "U";
   };
 
   const handleUpdateProfile = async () => {
@@ -342,6 +356,14 @@ const SellerProfileManagement = () => {
       </Card>
 
       <Separator />
+
+      {/* Profile Photo Section */}
+      <ProfilePhotoSection
+        profilePhotoUrl={profileData.profile_photo_url}
+        userInitials={getInitials()}
+        userId={user?.id || ""}
+        onPhotoUpdate={handlePhotoUpdate}
+      />
 
       {/* Profile Management Section */}
       <Card>
