@@ -10,12 +10,41 @@ import {
 } from '@/components/ui/popover';
 import { useNotifications } from '@/hooks/useNotifications';
 import { formatDistanceToNow } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
 const NotificationBell = () => {
-  const { notifications, loading } = useNotifications();
+  const { notifications, loading, markAsRead } = useNotifications();
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const unreadCount = notifications.filter(n => !n.read).length;
+
+  const handleNotificationClick = async (notification: any) => {
+    // Mark as read if not already read
+    if (!notification.read) {
+      await markAsRead(notification.id);
+    }
+
+    // Navigate based on notification type
+    if (notification.type === 'message' || notification.type === 'chat_message') {
+      // Extract chat_id from metadata if available
+      const chatId = notification.metadata?.chat_id;
+      if (chatId) {
+        navigate(`/chat?id=${chatId}`);
+      } else {
+        navigate('/chat');
+      }
+    } else if (notification.type === 'offer') {
+      navigate('/seller-dashboard?tab=offers');
+    } else if (notification.type === 'request') {
+      navigate('/seller-dashboard?tab=requests');
+    } else if (notification.type === 'verification') {
+      navigate('/seller-dashboard?tab=profile');
+    }
+
+    // Close the popover
+    setIsOpen(false);
+  };
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -45,7 +74,8 @@ const NotificationBell = () => {
             notifications.map((notification) => (
               <div
                 key={notification.id}
-                className={`p-3 border-b hover:bg-gray-50 ${
+                onClick={() => handleNotificationClick(notification)}
+                className={`p-3 border-b hover:bg-gray-50 cursor-pointer transition-colors ${
                   !notification.read ? 'bg-blue-50' : ''
                 }`}
               >
