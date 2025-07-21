@@ -2,8 +2,19 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { CreditCard, Smartphone, Crown } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -33,6 +44,7 @@ interface MonetizationPricing {
 
 interface MonetizationPaymentModalProps {
   isOpen: boolean;
+  currency: string;
   onClose: () => void;
   partId: string;
   features?: SelectedFeatures;
@@ -45,18 +57,18 @@ interface MonetizationPaymentModalProps {
   description?: string;
 }
 
-const MonetizationPaymentModal = ({ 
-  isOpen, 
-  onClose, 
-  partId, 
+const MonetizationPaymentModal = ({
+  isOpen,
+  onClose,
+  partId,
   features,
   totalAmount,
   pricing = [],
   onPaymentSuccess,
   // Legacy props
-  featureType, 
-  amount, 
-  description
+  featureType,
+  amount,
+  description,
 }: MonetizationPaymentModalProps) => {
   const { user } = useAuth();
   const [paymentMethod, setPaymentMethod] = useState<string>("");
@@ -69,10 +81,10 @@ const MonetizationPaymentModal = ({
   const finalDescription = description || "promotion features";
 
   const processComprehensiveFeatures = async (
-    features: SelectedFeatures, 
-    pricing: MonetizationPricing[], 
-    userId: string, 
-    partId: string, 
+    features: SelectedFeatures,
+    pricing: MonetizationPricing[],
+    userId: string,
+    partId: string,
     paymentReference: string
   ) => {
     const currentDate = new Date();
@@ -81,9 +93,9 @@ const MonetizationPaymentModal = ({
 
     // Process each selected feature
     for (const [featureKey, value] of Object.entries(features)) {
-      if (!value || (typeof value === 'number' && value === 0)) continue;
+      if (!value || (typeof value === "number" && value === 0)) continue;
 
-      const priceConfig = pricing.find(p => p.feature_type === featureKey);
+      const priceConfig = pricing.find((p) => p.feature_type === featureKey);
       if (!priceConfig) continue;
 
       // Create purchase record
@@ -91,56 +103,82 @@ const MonetizationPaymentModal = ({
         user_id: userId,
         listing_id: partId,
         purchase_type: featureKey,
-        amount: typeof value === 'number' ? priceConfig.amount * value : priceConfig.amount,
+        amount:
+          typeof value === "number"
+            ? priceConfig.amount * value
+            : priceConfig.amount,
         currency: priceConfig.currency,
         duration_days: priceConfig.duration_days,
         payment_reference: paymentReference,
-        payment_status: 'paid',
-        metadata: { quantity: typeof value === 'number' ? value : 1 }
+        payment_status: "paid",
+        metadata: { quantity: typeof value === "number" ? value : 1 },
       };
 
       if (priceConfig.duration_days) {
-        purchase.expires_at = new Date(currentDate.getTime() + priceConfig.duration_days * 24 * 60 * 60 * 1000).toISOString();
+        purchase.expires_at = new Date(
+          currentDate.getTime() +
+            priceConfig.duration_days * 24 * 60 * 60 * 1000
+        ).toISOString();
       }
 
       purchases.push(purchase);
 
       // Update car_parts table
       switch (featureKey) {
-        case 'feature':
-        case 'combo':
+        case "feature":
+        case "combo":
           updateData.is_featured = true;
-          updateData.featured_until = new Date(currentDate.getTime() + (priceConfig.duration_days || 7) * 24 * 60 * 60 * 1000).toISOString();
+          updateData.featured_until = new Date(
+            currentDate.getTime() +
+              (priceConfig.duration_days || 7) * 24 * 60 * 60 * 1000
+          ).toISOString();
           break;
-        case 'boost':
-          updateData.boosted_until = new Date(currentDate.getTime() + (priceConfig.duration_days || 3) * 24 * 60 * 60 * 1000).toISOString();
+        case "boost":
+          updateData.boosted_until = new Date(
+            currentDate.getTime() +
+              (priceConfig.duration_days || 3) * 24 * 60 * 60 * 1000
+          ).toISOString();
           break;
-        case 'urgent':
+        case "urgent":
           updateData.is_urgent = true;
-          updateData.urgent_until = new Date(currentDate.getTime() + (priceConfig.duration_days || 7) * 24 * 60 * 60 * 1000).toISOString();
+          updateData.urgent_until = new Date(
+            currentDate.getTime() +
+              (priceConfig.duration_days || 7) * 24 * 60 * 60 * 1000
+          ).toISOString();
           break;
-        case 'highlight':
+        case "highlight":
           updateData.is_highlighted = true;
-          updateData.highlighted_until = new Date(currentDate.getTime() + (priceConfig.duration_days || 7) * 24 * 60 * 60 * 1000).toISOString();
+          updateData.highlighted_until = new Date(
+            currentDate.getTime() +
+              (priceConfig.duration_days || 7) * 24 * 60 * 60 * 1000
+          ).toISOString();
           break;
-        case 'verified_badge':
+        case "verified_badge":
           updateData.has_verified_badge = true;
-          updateData.verified_badge_until = new Date(currentDate.getTime() + (priceConfig.duration_days || 30) * 24 * 60 * 60 * 1000).toISOString();
+          updateData.verified_badge_until = new Date(
+            currentDate.getTime() +
+              (priceConfig.duration_days || 30) * 24 * 60 * 60 * 1000
+          ).toISOString();
           break;
-        case 'extra_photos':
-          updateData.extra_photos_count = (updateData.extra_photos_count || 0) + (value as number);
+        case "extra_photos":
+          updateData.extra_photos_count =
+            (updateData.extra_photos_count || 0) + (value as number);
           break;
-        case 'business_subscription':
+        case "business_subscription":
           // Handle business subscription
-          await supabase
-            .from('business_subscriptions')
-            .upsert({
+          await supabase.from("business_subscriptions").upsert(
+            {
               user_id: userId,
               active: true,
               start_date: currentDate.toISOString(),
-              end_date: new Date(currentDate.getTime() + (priceConfig.duration_days || 30) * 24 * 60 * 60 * 1000).toISOString(),
-              payment_reference: paymentReference
-            }, { onConflict: 'user_id' });
+              end_date: new Date(
+                currentDate.getTime() +
+                  (priceConfig.duration_days || 30) * 24 * 60 * 60 * 1000
+              ).toISOString(),
+              payment_reference: paymentReference,
+            },
+            { onConflict: "user_id" }
+          );
           break;
       }
     }
@@ -153,9 +191,9 @@ const MonetizationPaymentModal = ({
     // Update car_parts table
     if (Object.keys(updateData).length > 0) {
       const { error } = await supabase
-        .from('car_parts')
+        .from("car_parts")
         .update(updateData)
-        .eq('id', partId);
+        .eq("id", partId);
 
       if (error) throw error;
     }
@@ -163,34 +201,41 @@ const MonetizationPaymentModal = ({
     // Insert purchase records
     if (purchases.length > 0) {
       const { error } = await supabase
-        .from('monetization_purchases')
+        .from("monetization_purchases")
         .insert(purchases);
 
       if (error) throw error;
     }
   };
 
-  const processLegacyFeature = async (featureType: string | undefined, partId: string) => {
+  const processLegacyFeature = async (
+    featureType: string | undefined,
+    partId: string
+  ) => {
     if (!featureType) return;
 
     const updateData: Record<string, string> = {};
     const currentDate = new Date();
 
     switch (featureType) {
-      case 'featured':
-        updateData.is_featured = 'true';
-        updateData.featured_until = new Date(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString();
+      case "featured":
+        updateData.is_featured = "true";
+        updateData.featured_until = new Date(
+          currentDate.getTime() + 7 * 24 * 60 * 60 * 1000
+        ).toISOString();
         break;
-      case 'boost':
-        updateData.boosted_until = new Date(currentDate.getTime() + 3 * 24 * 60 * 60 * 1000).toISOString();
+      case "boost":
+        updateData.boosted_until = new Date(
+          currentDate.getTime() + 3 * 24 * 60 * 60 * 1000
+        ).toISOString();
         break;
     }
 
     if (Object.keys(updateData).length > 0) {
       const { error } = await supabase
-        .from('car_parts')
+        .from("car_parts")
         .update(updateData)
-        .eq('id', partId);
+        .eq("id", partId);
 
       if (error) throw error;
     }
@@ -201,16 +246,19 @@ const MonetizationPaymentModal = ({
       toast({
         title: "Payment Method Required",
         description: "Please select a payment method.",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
 
-    if (paymentMethod === 'mobile_money' && (!mobileProvider || !mobileNumber)) {
+    if (
+      paymentMethod === "mobile_money" &&
+      (!mobileProvider || !mobileNumber)
+    ) {
       toast({
         title: "Mobile Money Details Required",
         description: "Please enter your mobile money provider and number.",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -219,7 +267,7 @@ const MonetizationPaymentModal = ({
 
     try {
       const paymentReference = `MON-${Date.now()}`;
-      
+
       toast({
         title: "Processing Payment",
         description: "Please wait while we process your payment...",
@@ -233,49 +281,56 @@ const MonetizationPaymentModal = ({
 
           // Process comprehensive features if provided
           if (features && Object.keys(features).length > 0) {
-            await processComprehensiveFeatures(features, pricing, user.id, partId, paymentReference);
+            await processComprehensiveFeatures(
+              features,
+              pricing,
+              user.id,
+              partId,
+              paymentReference
+            );
           } else {
             // Legacy single feature processing
             await processLegacyFeature(featureType, partId);
           }
 
           // Log the purchase
-          console.log('Payment processed:', {
+          console.log("Payment processed:", {
             part_id: partId,
             user_id: user.id,
-            features: features || { [featureType || 'unknown']: true },
+            features: features || { [featureType || "unknown"]: true },
             amount: finalAmount,
             payment_method: paymentMethod,
-            payment_reference: paymentReference
+            payment_reference: paymentReference,
           });
 
           toast({
             title: "Payment Successful!",
             description: `Your listing has been upgraded with ${finalDescription}.`,
           });
-          
+
           onPaymentSuccess();
           onClose();
         } catch (error: unknown) {
-          console.error('Payment processing error:', error);
-          const errorMessage = error instanceof Error ? error.message : "Please try again.";
+          console.error("Payment processing error:", error);
+          const errorMessage =
+            error instanceof Error ? error.message : "Please try again.";
           toast({
             title: "Payment Failed",
             description: errorMessage,
-            variant: "destructive"
+            variant: "destructive",
           });
         } finally {
           setLoading(false);
         }
       }, 2000);
-
     } catch (error: unknown) {
-      console.error('Payment error:', error);
-      const errorMessage = error instanceof Error ? error.message : "Please try again.";
+      console.error("Payment error:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Please try again.";
       toast({
         title: "Payment Failed",
         description: errorMessage,
-        variant: "destructive"
+        variant: "destructive",
       });
       setLoading(false);
     }
@@ -291,10 +346,14 @@ const MonetizationPaymentModal = ({
           </DialogTitle>
         </DialogHeader>
 
-         <div className="space-y-4 sm:space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           <div className="text-center">
-            <p className="text-xl sm:text-2xl font-bold text-green-600">GHS {finalAmount.toFixed(2)}</p>
-            <p className="text-xs sm:text-sm text-gray-600">One-time fee for {finalDescription}</p>
+            <p className="text-xl sm:text-2xl font-bold text-green-600">
+              GHS {finalAmount.toFixed(2)}
+            </p>
+            <p className="text-xs sm:text-sm text-gray-600">
+              One-time fee for {finalDescription}
+            </p>
           </div>
 
           <div className="space-y-3 sm:space-y-4">
@@ -321,18 +380,25 @@ const MonetizationPaymentModal = ({
               </Select>
             </div>
 
-            {paymentMethod === 'mobile_money' && (
+            {paymentMethod === "mobile_money" && (
               <>
                 <div>
-                  <Label className="text-xs sm:text-sm">Mobile Money Provider</Label>
-                  <Select value={mobileProvider} onValueChange={setMobileProvider}>
+                  <Label className="text-xs sm:text-sm">
+                    Mobile Money Provider
+                  </Label>
+                  <Select
+                    value={mobileProvider}
+                    onValueChange={setMobileProvider}
+                  >
                     <SelectTrigger className="text-sm">
                       <SelectValue placeholder="Select provider" />
                     </SelectTrigger>
                     <SelectContent className="bg-white z-50">
                       <SelectItem value="mtn">MTN Mobile Money</SelectItem>
                       <SelectItem value="vodafone">Vodafone Cash</SelectItem>
-                      <SelectItem value="airteltigo">AirtelTigo Money</SelectItem>
+                      <SelectItem value="airteltigo">
+                        AirtelTigo Money
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -352,11 +418,15 @@ const MonetizationPaymentModal = ({
           </div>
 
           <div className="flex gap-2 sm:gap-3">
-            <Button variant="outline" onClick={onClose} className="flex-1 text-xs sm:text-sm">
+            <Button
+              variant="outline"
+              onClick={onClose}
+              className="flex-1 text-xs sm:text-sm"
+            >
               Cancel
             </Button>
-            <Button 
-              onClick={handlePayment} 
+            <Button
+              onClick={handlePayment}
               disabled={loading}
               className="flex-1 bg-green-600 hover:bg-green-700 text-xs sm:text-sm"
             >
