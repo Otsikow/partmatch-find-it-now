@@ -1,11 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Settings, MessageCircle, Eye, Home } from 'lucide-react';
+import { ArrowLeft, LogOut, MessageCircle, Eye, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/hooks/use-toast';
 
 export const BuyerDashboardHeader = () => {
   const navigate = useNavigate();
@@ -50,9 +51,30 @@ export const BuyerDashboardHeader = () => {
     navigate('/search-parts-with-map');
   };
 
-  const handleSettings = () => {
-    console.log('Settings button clicked - navigating to profile tab');
-    navigate('/buyer-dashboard?tab=profile');
+  const handleSignOut = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        toast({
+          title: "Error",
+          description: "Failed to sign out. Please try again.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Success", 
+          description: "You have been signed out successfully.",
+        });
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('Sign out error:', error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -116,12 +138,12 @@ export const BuyerDashboardHeader = () => {
             <Button 
               variant="ghost" 
               size="sm" 
-              onClick={handleSettings}
+              onClick={handleSignOut}
               className="flex items-center space-x-2 text-white hover:bg-white/30 hover:text-white shadow-lg backdrop-blur-sm border border-white/20"
               style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}
             >
-              <Settings className="h-4 w-4 drop-shadow-md" />
-              <span className="hidden sm:inline font-medium">Settings</span>
+              <LogOut className="h-4 w-4 drop-shadow-md" />
+              <span className="hidden sm:inline font-medium">Sign Out</span>
             </Button>
 
             {/* Mobile-only buttons */}
