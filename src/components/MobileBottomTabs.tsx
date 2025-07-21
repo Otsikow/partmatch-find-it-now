@@ -28,7 +28,7 @@ const MobileBottomTabs = () => {
     },
     {
       icon: Package,
-      labelKey: "dashboard", // Or "sell" if you have that instead
+      labelKey: "sell",
       path: "/post-part",
     },
     {
