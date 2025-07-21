@@ -208,7 +208,7 @@ const BuyerOffersTab = () => {
                 </span>
               </div>
 
-              {/* Action buttons */}
+              {/* Status Display */}
               {offer.status === 'pending' && (
                 <div className="flex gap-3 pt-4 border-t">
                   <Button
@@ -228,6 +228,24 @@ const BuyerOffersTab = () => {
                     <X className="h-4 w-4 mr-2" />
                     Reject Offer
                   </Button>
+                </div>
+              )}
+
+              {offer.status === 'accepted' && (
+                <div className="pt-4 border-t">
+                  <div className="flex items-center justify-center p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <Check className="h-5 w-5 mr-2 text-green-600" />
+                    <span className="font-medium text-green-700">Offer Accepted</span>
+                  </div>
+                </div>
+              )}
+
+              {offer.status === 'rejected' && (
+                <div className="pt-4 border-t">
+                  <div className="flex items-center justify-center p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <X className="h-5 w-5 mr-2 text-red-600" />
+                    <span className="font-medium text-red-700">Offer Rejected</span>
+                  </div>
                 </div>
               )}
             </div>
