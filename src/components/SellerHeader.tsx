@@ -61,8 +61,8 @@ const SellerHeader = () => {
   }, [user]);
 
   const handleBackClick = () => {
-    console.log("Seller back button clicked - navigating to home");
-    navigate('/');
+    console.log("Seller back button clicked - going back in history");
+    navigate(-1);
   };
 
   const handleSignOut = async () => {
