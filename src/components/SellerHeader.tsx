@@ -61,7 +61,13 @@ const SellerHeader = () => {
   }, [user]);
 
   const handleBackClick = () => {
-    navigate(-1);
+    // Check if there's history to go back to
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      // If no history, go to home page
+      navigate('/');
+    }
   };
 
   const handleSignOut = async () => {
