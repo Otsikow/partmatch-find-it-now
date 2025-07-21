@@ -128,12 +128,12 @@ const InventorySearchControls = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {/* Make Filter */}
             <div>
-              <Select value={filters.make} onValueChange={(value) => onFiltersChange({ ...filters, make: value })}>
+              <Select value={filters.make || "all"} onValueChange={(value) => onFiltersChange({ ...filters, make: value === "all" ? "" : value })}>
                 <SelectTrigger className="bg-background border-border">
                   <SelectValue placeholder="All Makes" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Makes</SelectItem>
+                  <SelectItem value="all">All Makes</SelectItem>
                   {availableMakes.map((make) => (
                     <SelectItem key={make} value={make}>
                       {make}
@@ -146,15 +146,15 @@ const InventorySearchControls = ({
             {/* Model Filter */}
             <div>
               <Select 
-                value={filters.model} 
-                onValueChange={(value) => onFiltersChange({ ...filters, model: value })}
+                value={filters.model || "all"} 
+                onValueChange={(value) => onFiltersChange({ ...filters, model: value === "all" ? "" : value })}
                 disabled={!filters.make}
               >
                 <SelectTrigger className="bg-background border-border">
                   <SelectValue placeholder="All Models" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Models</SelectItem>
+                  <SelectItem value="all">All Models</SelectItem>
                   {availableModels.map((model) => (
                     <SelectItem key={model} value={model}>
                       {model}
@@ -166,12 +166,12 @@ const InventorySearchControls = ({
 
             {/* Category Filter */}
             <div>
-              <Select value={filters.category} onValueChange={(value) => onFiltersChange({ ...filters, category: value })}>
+              <Select value={filters.category || "all"} onValueChange={(value) => onFiltersChange({ ...filters, category: value === "all" ? "" : value })}>
                 <SelectTrigger className="bg-background border-border">
                   <SelectValue placeholder="All Categories" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Categories</SelectItem>
+                  <SelectItem value="all">All Categories</SelectItem>
                   {carPartCategories.map((category) => (
                     <SelectItem key={category} value={category}>
                       {category}
@@ -183,12 +183,12 @@ const InventorySearchControls = ({
 
             {/* Condition Filter */}
             <div>
-              <Select value={filters.condition} onValueChange={(value) => onFiltersChange({ ...filters, condition: value })}>
+              <Select value={filters.condition || "all"} onValueChange={(value) => onFiltersChange({ ...filters, condition: value === "all" ? "" : value })}>
                 <SelectTrigger className="bg-background border-border">
                   <SelectValue placeholder="All Conditions" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Conditions</SelectItem>
+                  <SelectItem value="all">All Conditions</SelectItem>
                   {conditionOptions.map((condition) => (
                     <SelectItem key={condition} value={condition}>
                       {condition}
@@ -200,12 +200,12 @@ const InventorySearchControls = ({
 
             {/* Status Filter */}
             <div>
-              <Select value={filters.status} onValueChange={(value) => onFiltersChange({ ...filters, status: value })}>
+              <Select value={filters.status || "all"} onValueChange={(value) => onFiltersChange({ ...filters, status: value === "all" ? "" : value })}>
                 <SelectTrigger className="bg-background border-border">
                   <SelectValue placeholder="All Status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Status</SelectItem>
+                  <SelectItem value="all">All Status</SelectItem>
                   {statusOptions.map((status) => (
                     <SelectItem key={status} value={status}>
                       {status.charAt(0).toUpperCase() + status.slice(1)}
