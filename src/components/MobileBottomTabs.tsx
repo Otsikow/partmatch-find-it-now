@@ -50,6 +50,7 @@ const MobileBottomTabs = () => {
             <Link
               key={tab.path}
               to={tab.path}
+              state={tab.path === "/" ? { explicitHomeNavigation: true } : undefined}
               className={cn(
                 "flex flex-col items-center justify-center min-w-0 flex-1 py-2 px-1 relative touch-manipulation transition-all duration-200 rounded-xl group",
                 "hover:bg-muted/50 active:scale-95",

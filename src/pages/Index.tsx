@@ -1,6 +1,6 @@
 
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import MobileHeader from "@/components/MobileHeader";
 import MobileBottomTabs from "@/components/MobileBottomTabs";
 import MobileHomeContent from "@/components/MobileHomeContent";
@@ -11,10 +11,16 @@ import { supabase } from "@/integrations/supabase/client";
 const Index = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [hasRedirected, setHasRedirected] = useState(false);
 
   useEffect(() => {
     const redirectAuthenticatedUser = async () => {
-      if (!user || loading) return;
+      // Don't redirect if user explicitly navigated to home page via tab
+      // Check if there's a state indicating explicit navigation
+      const isExplicitNavigation = location.state?.explicitHomeNavigation;
+      
+      if (!user || loading || hasRedirected || isExplicitNavigation) return;
 
       try {
         console.log('Index: Checking authenticated user type for:', user.id);
@@ -38,26 +44,34 @@ const Index = () => {
 
         console.log('Index: Final user type:', userType);
         
-        // Redirect based on user type
-        if (userType === 'supplier') {
-          console.log('Index: Redirecting supplier to seller dashboard');
-          navigate('/seller-dashboard');
-        } else if (userType === 'admin') {
-          console.log('Index: Redirecting admin to admin dashboard');
-          navigate('/admin');
-        } else if (userType === 'owner') {
-          // For owners (buyers), redirect to buyer dashboard
-          console.log('Index: Redirecting owner to buyer dashboard');
-          navigate('/buyer-dashboard');
+        // Only redirect if this is an initial page load (not explicit navigation)
+        // We can detect this by checking if the user just landed on the page
+        const isInitialLoad = !location.state;
+        
+        if (isInitialLoad) {
+          setHasRedirected(true);
+          
+          // Redirect based on user type
+          if (userType === 'supplier') {
+            console.log('Index: Redirecting supplier to seller dashboard');
+            navigate('/seller-dashboard');
+          } else if (userType === 'admin') {
+            console.log('Index: Redirecting admin to admin dashboard');
+            navigate('/admin');
+          } else if (userType === 'owner') {
+            // For owners (buyers), redirect to buyer dashboard
+            console.log('Index: Redirecting owner to buyer dashboard');
+            navigate('/buyer-dashboard');
+          }
         }
-        // If no specific user type, stay on homepage
+        // If no specific user type or explicit navigation, stay on homepage
       } catch (error) {
         console.error('Index: Error checking user type:', error);
       }
     };
 
     redirectAuthenticatedUser();
-  }, [user, loading, navigate]);
+  }, [user, loading, navigate, location.state, hasRedirected]);
 
   if (loading) {
     return (
@@ -70,7 +84,7 @@ const Index = () => {
     );
   }
 
-  // Show mobile app layout for unauthenticated users
+  // Show home page content for both authenticated and unauthenticated users
   return (
     <div className="min-h-screen bg-background body-text">
       <MobileHeader />
