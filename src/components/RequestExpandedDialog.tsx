@@ -398,8 +398,8 @@ const RequestExpandedDialog = ({
             </CardContent>
           </Card>
 
-          {/* Action Buttons */}
-          {request.status === 'pending' && (
+          {/* Action Buttons - Only show for non-owners */}
+          {request.status === 'pending' && !isOwner && (
             <div className="flex flex-col sm:flex-row gap-3 pt-2 sm:pt-4">
               <Button
                 onClick={handleMakeOffer}

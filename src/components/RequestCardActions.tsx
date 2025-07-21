@@ -24,6 +24,13 @@ const RequestCardActions = ({
 }: RequestCardActionsProps) => {
   const { user, userType } = useAuth();
 
+  // Don't show actions if user is the owner of the request
+  const isOwner = user?.id === request.owner_id;
+  
+  if (isOwner) {
+    return null; // Don't render actions for request owners
+  }
+
   const handleAuthenticatedAction = (action: () => void, actionName: string) => {
     if (!user) {
       toast({
