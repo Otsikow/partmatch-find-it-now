@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Package, LogOut, Home, ArrowLeft, MessageCircle } from "lucide-react";
+import { Package, LogOut, Search, ArrowLeft, MessageCircle } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import VerifiedBadge from "@/components/VerifiedBadge";
 import ChatNotificationBadge from "@/components/chat/ChatNotificationBadge";
@@ -61,7 +61,7 @@ const SellerHeader = () => {
   }, [user]);
 
   const handleBackClick = () => {
-    navigate("/");
+    navigate(-1);
   };
 
   const handleSignOut = async () => {
@@ -73,9 +73,8 @@ const SellerHeader = () => {
     }
   };
 
-  const handleHome = () => {
-    console.log("SellerHeader: Home button clicked, navigating to /");
-    window.location.href = "/";
+  const handleBrowseParts = () => {
+    navigate("/search-parts");
   };
 
   const handleChatClick = () => {
@@ -136,11 +135,11 @@ const SellerHeader = () => {
         <Button
           variant="outline"
           size="sm"
-          onClick={handleHome}
+          onClick={handleBrowseParts}
           className="bg-white/20 backdrop-blur-sm border-white/30 hover:bg-white/30 text-white hover:text-white transition-all duration-300 px-2 sm:px-3 shadow-lg border"
         >
-          <Home className="h-4 w-4 sm:mr-1 drop-shadow-lg" />
-          <span className="hidden sm:inline drop-shadow-lg">{t("home", "Home")}</span>
+          <Search className="h-4 w-4 sm:mr-1 drop-shadow-lg" />
+          <span className="hidden sm:inline drop-shadow-lg">Browse Parts</span>
         </Button>
         <Button
           variant="outline"
