@@ -17,22 +17,31 @@ const CarPartCardImage = ({ partId, title, condition, images, onExpand }: CarPar
   const imageUrl = getImageUrl(images);
   
   return (
-    <div onClick={onExpand}>
+    <div className="relative cursor-pointer" onClick={onExpand}>
       {imageUrl ? (
         <div className="relative h-48 bg-gray-100">
           <img
             src={imageUrl}
             alt={title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover rounded-t-lg"
             onError={(e) => {
               console.error('Image failed to load:', imageUrl);
-              e.currentTarget.style.display = 'none';
-              e.currentTarget.parentElement?.classList.add('hidden');
+              // Show placeholder on error instead of hiding
+              const target = e.currentTarget;
+              target.style.display = 'none';
+              const placeholder = target.nextElementSibling as HTMLElement;
+              if (placeholder) placeholder.style.display = 'flex';
             }}
             onLoad={() => {
               console.log('Image loaded successfully:', imageUrl);
             }}
           />
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 items-center justify-center hidden">
+            <div className="text-gray-400 text-center">
+              <div className="text-2xl mb-2">📦</div>
+              <p className="text-sm">Image failed to load</p>
+            </div>
+          </div>
           <div className="absolute top-2 right-2 flex gap-2">
             <SaveButton 
               partId={partId} 
