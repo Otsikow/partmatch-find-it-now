@@ -80,6 +80,7 @@ const SellerHeader = () => {
   };
 
   const handleBrowseParts = () => {
+    console.log("Browse Parts button clicked");
     navigate("/search-parts");
   };
 
