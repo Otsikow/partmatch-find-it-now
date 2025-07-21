@@ -61,7 +61,7 @@ const SellerHeader = () => {
   }, [user]);
 
   const handleBackClick = () => {
-    console.log("Back button clicked - navigating to home");
+    console.log("Seller back button clicked - navigating to home");
     navigate('/');
   };
 
