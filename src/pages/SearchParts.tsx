@@ -24,6 +24,8 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import ChatButton from "@/components/chat/ChatButton";
+import RequestCard from "@/components/RequestCard";
+import { useOfferHandling } from "@/hooks/useOfferHandling";
 
 interface PartRequest {
   id: string;
@@ -113,19 +115,17 @@ const SearchParts = () => {
     }
   };
 
+  // Add offer handling
+  const { handleMakeOffer: submitOffer, handleWhatsAppContact, isSubmittingOffer } = useOfferHandling(fetchRequests);
+
   const handleExpandRequest = (request: PartRequest) => {
     setSelectedRequest(request);
     setIsRequestDialogOpen(true);
   };
 
-  const handleMakeOffer = (requestId: string) => {
-    if (!user) {
-      navigate("/seller-auth");
-      return;
-    }
-    navigate("/seller-dashboard", {
-      state: { activeTab: "requests", highlightRequest: requestId },
-    });
+  const handleChatContact = (requestId: string, ownerId: string) => {
+    // Navigate to chat with the request owner
+    navigate(`/chat?sellerId=${ownerId}`);
   };
 
   const handleContact = (phone: string, request: PartRequest) => {
@@ -225,95 +225,14 @@ const SearchParts = () => {
                 </Card>
               ) : (
                 filteredRequests.map((request) => (
-                  <Card
+                  <RequestCard
                     key={request.id}
-                    className="hover:shadow-md transition-shadow cursor-pointer rounded-xl border border-border/50"
-                    onClick={() => handleExpandRequest(request)}
-                  >
-                    <CardHeader className="pb-3 px-3 sm:px-6 pt-3 sm:pt-6">
-                      <div className="flex justify-between items-start gap-2 sm:gap-3">
-                        <div className="flex gap-2 sm:gap-3 flex-1 min-w-0">
-                          {request.photo_url && (
-                            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden bg-muted flex-shrink-0">
-                              <img
-                                src={request.photo_url}
-                                alt={request.part_needed}
-                                className="w-full h-full object-cover"
-                                onError={(e) => {
-                                  e.currentTarget.style.display = "none";
-                                }}
-                              />
-                            </div>
-                          )}
-                          <div className="flex-1 min-w-0">
-                            <CardTitle className="text-base sm:text-lg font-semibold text-foreground truncate">
-                              {request.part_needed}
-                            </CardTitle>
-                            <p className="text-xs sm:text-sm text-muted-foreground mt-1 truncate">
-                              {request.car_make} {request.car_model} ({request.car_year})
-                            </p>
-                          </div>
-                        </div>
-                        <Badge
-                          variant="secondary"
-                          className="bg-primary/10 text-primary flex-shrink-0 text-xs px-2 py-1"
-                        >
-                          {t("active")}
-                        </Badge>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-3 px-3 sm:px-6 pb-3 sm:pb-6">
-                      {request.description && (
-                        <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
-                          {request.description}
-                        </p>
-                      )}
-
-                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
-                        <div className="flex items-center gap-1">
-                          <MapPin className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
-                          <span className="truncate">{request.location}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Calendar className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
-                          <span className="truncate">{formatDate(request.created_at)}</span>
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col sm:flex-row gap-2 pt-2">
-                          <Button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleMakeOffer(request.id);
-                            }}
-                            size="sm"
-                            className="w-full sm:flex-1 min-w-0 bg-primary hover:bg-primary/90 text-primary-foreground font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-8 sm:h-9"
-                          >
-                           {t("makeOffer")}
-                         </Button>
-                         <div className="flex gap-2 sm:contents">
-                           <ChatButton
-                             sellerId={request.owner_id}
-                             className="flex-1 sm:min-w-0 bg-blue-600 hover:bg-blue-700 text-white border-blue-600 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-8 sm:h-9"
-                             size="sm"
-                           >
-                             Chat
-                           </ChatButton>
-                           <Button
-                             variant="outline"
-                             size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleContact(request.phone, request);
-                              }}
-                              className="flex-1 sm:min-w-0 bg-green-600 hover:bg-green-700 text-white border-green-600 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-8 sm:h-9"
-                            >
-                             WhatsApp
-                           </Button>
-                         </div>
-                       </div>
-                    </CardContent>
-                  </Card>
+                    request={request}
+                    onOfferSubmit={submitOffer}
+                    onWhatsAppContact={handleWhatsAppContact}
+                    onChatContact={handleChatContact}
+                    isSubmittingOffer={isSubmittingOffer}
+                  />
                 ))
               )}
             </div>
