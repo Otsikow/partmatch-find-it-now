@@ -199,6 +199,7 @@ const MonetizationFeatures = ({
       {showPaymentModal && selectedFeature && (
         <MonetizationPaymentModal
           isOpen={showPaymentModal}
+          currency="GHS"
           onClose={() => setShowPaymentModal(false)}
           partId={partId}
           featureType={selectedFeature.type}
