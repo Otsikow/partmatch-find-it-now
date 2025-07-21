@@ -593,7 +593,7 @@ const EnhancedPostCarPartForm = ({
           </div>
 
           {/* Listing Duration Info */}
-          <div className="bg-blue-50 p-4 rounded-lg">
+          <div className="bg-blue-50 p-4 rounded-lg hidden">
             <div className="flex items-center gap-2 mb-2">
               <AlertCircle className="h-4 w-4 text-blue-600" />
               <span className="font-medium text-blue-800">
