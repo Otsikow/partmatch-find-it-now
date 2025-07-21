@@ -95,13 +95,17 @@ const SellerHeader = () => {
         >
           <ArrowLeft className="h-4 w-4 drop-shadow-lg" />
         </Button>
-        <div className="bg-white/30 backdrop-blur-md rounded-lg p-1.5 border border-white/50 shadow-lg">
+        <Link 
+          to="/" 
+          state={{ explicitHomeNavigation: true }}
+          className="bg-white/30 backdrop-blur-md rounded-lg p-1.5 border border-white/50 shadow-lg hover:bg-white/40 transition-all duration-300 cursor-pointer"
+        >
           <img 
             src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
             alt="PartMatch Logo" 
             className="h-6 w-6 sm:h-7 sm:w-7"
           />
-        </div>
+        </Link>
       </div>
 
       {/* Center section - Title and welcome message */}
