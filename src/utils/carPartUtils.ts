@@ -23,14 +23,22 @@ export const getConditionColor = (condition: string) => {
 export const getImageUrl = (images?: string[]) => {
   if (images && images.length > 0) {
     const firstImage = images[0];
-    console.log('Displaying image URL:', firstImage);
-    // Ensure we have a proper URL format
+    console.log('Processing image URL:', firstImage);
+    console.log('Images array:', images);
+    
+    // If it's already a full URL, return as-is
     if (firstImage.startsWith('http')) {
+      console.log('Using full URL:', firstImage);
       return firstImage;
     }
-    // Handle relative URLs by making them absolute
-    return firstImage;
+    
+    // If it's a relative path, construct full Supabase URL
+    const supabaseUrl = 'https://ytgmzhevgcmvevuwkocz.supabase.co';
+    const fullUrl = `${supabaseUrl}/storage/v1/object/public/car-part-images/${firstImage}`;
+    console.log('Constructed URL:', fullUrl);
+    return fullUrl;
   }
+  console.log('No images found:', images);
   return null;
 };
 
