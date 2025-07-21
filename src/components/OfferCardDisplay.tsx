@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Phone, MessageCircle, Clock, CheckCircle, XCircle, Eye } from "lucide-react";
+import ChatButton from "@/components/chat/ChatButton";
 
 interface Offer {
   id: string;
@@ -19,6 +20,7 @@ interface Offer {
     part_needed: string;
     phone: string;
     location: string;
+    owner_id: string;
   };
 }
 
@@ -102,15 +104,34 @@ const OfferCardDisplay = ({ offer, onWhatsAppContact }: OfferCardDisplayProps) =
           </div>
         )}
 
-        {(offer.status === 'accepted' || offer.contact_unlocked) && (
-          <Button
-            onClick={() => onWhatsAppContact(offer.request.phone, offer.request)}
-            className="bg-green-600 hover:bg-green-700 text-white text-sm sm:text-base"
+        <div className="flex flex-col sm:flex-row gap-3">
+          {(offer.status === 'accepted' || offer.contact_unlocked) && (
+            <Button
+              onClick={() => onWhatsAppContact(offer.request.phone, offer.request)}
+              className="bg-green-600 hover:bg-green-700 text-white text-sm sm:text-base"
+            >
+              <MessageCircle className="h-4 w-4 mr-2" />
+              Contact Customer
+            </Button>
+          )}
+          
+          <ChatButton
+            buyerId={offer.request.owner_id}
+            offerId={offer.id}
+            offerInfo={{
+              price: offer.price,
+              car_make: offer.request.car_make,
+              car_model: offer.request.car_model,
+              car_year: offer.request.car_year,
+              part_needed: offer.request.part_needed,
+              message: offer.message
+            }}
+            variant="outline"
+            size="sm"
           >
-            <MessageCircle className="h-4 w-4 mr-2" />
-            Contact Customer
-          </Button>
-        )}
+            Chat with Buyer
+          </ChatButton>
+        </div>
       </CardContent>
     </Card>
   );

@@ -32,6 +32,7 @@ interface Offer {
     part_needed: string;
     phone: string;
     location: string;
+    owner_id: string;
   };
 }
 
@@ -87,7 +88,7 @@ export const useSellerData = () => {
         .select(
           `
           *,
-          request:part_requests(id, car_make, car_model, car_year, part_needed, phone, location)
+          request:part_requests(id, car_make, car_model, car_year, part_needed, phone, location, owner_id)
         `
         )
         .eq("supplier_id", user?.id)
