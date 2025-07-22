@@ -20,7 +20,7 @@ export const useFeaturedParts = () => {
         .from('car_parts')
         .select(`
           *,
-          profiles!car_parts_supplier_id_fkey (
+          profiles (
             first_name,
             last_name,
             is_verified,

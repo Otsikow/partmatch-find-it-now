@@ -56,7 +56,6 @@ const SellerReviewsModal: React.FC<SellerReviewsModalProps> = ({
       console.log('sellerId:', sellerId);
       console.log('sellerName:', sellerName);
       console.log('sellerRating:', sellerRating);
-      console.log('totalReviews:', totalReviews);
       
       if (!sellerId) {
         console.error('No sellerId provided!');
