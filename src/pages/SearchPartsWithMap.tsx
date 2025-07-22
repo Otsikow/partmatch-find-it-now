@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useCarParts } from "@/hooks/useCarParts";
 import { useLocationDetection } from "@/hooks/useLocationDetection";
 import { supabase } from "@/integrations/supabase/client";
+import Logo from '@/components/Logo';
 import { useAuth } from "@/contexts/AuthContext";
 import SearchControls from "@/components/SearchControls";
 import CarPartsList from "@/components/CarPartsList";
@@ -200,13 +201,8 @@ const SearchPartsWithMap = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
               </Button>
-              
               {/* Logo */}
-              <img 
-                src="/lovable-uploads/0bb9488b-2f77-4f4c-b8b3-8aa9343b1d18.png" 
-                alt="PartMatch - Car Parts Marketplace" 
-                className="h-8 w-auto sm:h-10 object-contain" 
-              />
+              <Logo className="h-8 w-auto sm:h-10 object-contain" />
               
               <div className="min-w-0 flex-1">
                 <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-white leading-tight break-words">
