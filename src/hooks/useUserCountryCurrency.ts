@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-import { getCountryByName, getCurrencyByCountry } from '@/lib/countryConfig';
+import { getCountryByName, getCurrencyByCountry, getCountryConfig } from '@/lib/countryConfig';
+import { useCountryDetection } from './useCountryDetection';
 
 interface UserCountryCurrency {
   country: string | null;
@@ -13,6 +14,7 @@ interface UserCountryCurrency {
 
 export const useUserCountryCurrency = (): UserCountryCurrency => {
   const { user } = useAuth();
+  const { country: detectedCountry, loading: countryLoading } = useCountryDetection();
   const [country, setCountry] = useState<string | null>(null);
   const [currency, setCurrency] = useState<string | null>(null);
   const [countryCode, setCountryCode] = useState<string | null>(null);
@@ -21,10 +23,18 @@ export const useUserCountryCurrency = (): UserCountryCurrency => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       if (!user) {
-        setLoading(false);
+        if (!countryLoading) {
+          if (detectedCountry) {
+            setCountry(detectedCountry.name);
+            setCurrency(detectedCountry.currency);
+            setCountryCode(detectedCountry.code);
+          }
+          setLoading(false);
+        }
         return;
       }
 
+      setLoading(true);
       try {
         const { data: profile, error } = await supabase
           .from('profiles')
@@ -34,30 +44,45 @@ export const useUserCountryCurrency = (): UserCountryCurrency => {
 
         if (error) {
           console.error('Error fetching user profile:', error);
-          return;
         }
 
-        if (profile) {
+        if (profile && profile.country && profile.currency) {
           setCountry(profile.country);
-          setCurrency(profile.currency || 'GHS'); // Default to GHS if no currency set
-          
-          // Try to get country code from country name
-          if (profile.country) {
-            const countryConfig = getCountryByName(profile.country);
-            if (countryConfig) {
-              setCountryCode(countryConfig.code);
+          setCurrency(profile.currency);
+          const countryConfig = getCountryByName(profile.country);
+          if (countryConfig) {
+            setCountryCode(countryConfig.code);
+          }
+        } else if (detectedCountry) {
+          setCountry(detectedCountry.name);
+          setCurrency(detectedCountry.currency);
+          setCountryCode(detectedCountry.code);
+          // Also update the user's profile in the background
+          if (user) {
+            const { error: updateError } = await supabase
+              .from('profiles')
+              .update({
+                country: detectedCountry.name,
+                currency: detectedCountry.currency,
+                updated_at: new Date().toISOString(),
+              })
+              .eq('id', user.id);
+            if (updateError) {
+              console.error('Error updating profile with detected country:', updateError);
             }
           }
         }
       } catch (error) {
-        console.error('Error fetching user profile:', error);
+        console.error('Error in user profile logic:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchUserProfile();
-  }, [user]);
+    if (!countryLoading) {
+      fetchUserProfile();
+    }
+  }, [user, detectedCountry, countryLoading]);
 
   const updateCountryCurrency = async (newCountryCode: string, newCurrency: string) => {
     if (!user) return;
