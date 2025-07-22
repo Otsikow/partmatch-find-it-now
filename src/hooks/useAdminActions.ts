@@ -239,84 +239,34 @@ export const useAdminActions = (refetchData: () => void) => {
     }
   };
 
-  // Buyers are auto-approved now, so this function is simplified for suppliers only
   const handleApproveUser = async (userId: string) => {
     try {
-      console.log('Starting user approval process for:', userId);
-      
-      // Get current user data first
-      const { data: currentUser, error: fetchError } = await supabase
+      console.log('Approving user:', userId);
+
+      const { data: user, error: fetchError } = await supabase
         .from('profiles')
-        .select('*')
+        .select('user_type')
         .eq('id', userId)
         .single();
-      
-      if (fetchError) {
-        console.error('Error fetching current user:', fetchError);
-        throw fetchError;
-      }
-      
-      console.log('Current user status before approval:', {
-        id: currentUser.id,
-        is_verified: currentUser.is_verified,
-        user_type: currentUser.user_type
-      });
 
-      // Only allow manual approval for suppliers (buyers are auto-verified)
-      if (currentUser.user_type === 'owner') {
-        toast({
-          title: "Info",
-          description: "Buyers are automatically verified upon registration.",
-        });
-        return;
-      }
+      if (fetchError) throw fetchError;
 
-      // Check if this user has an approved seller verification
-      const { data: sellerVerification } = await supabase
-        .from('seller_verifications')
-        .select('*')
-        .eq('user_id', userId)
-        .eq('verification_status', 'approved')
-        .maybeSingle();
-
-      console.log('Seller verification found:', sellerVerification ? 'Yes' : 'No');
-
-      // Prepare update data
-      const updateData: any = {
-        is_verified: true,
-        verified_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      };
-
-      // If there's an approved seller verification, ensure user_type is supplier
-      if (sellerVerification) {
-        updateData.user_type = 'supplier';
-        console.log('Setting user_type to supplier due to approved seller verification');
-      }
-
-      console.log('Update data:', updateData);
-
-      // Update the user profile
       const { error: updateError } = await supabase
         .from('profiles')
-        .update(updateData)
+        .update({
+          is_verified: true,
+          verified_at: new Date().toISOString()
+        })
         .eq('id', userId);
 
-      if (updateError) {
-        console.error('Error updating user profile:', updateError);
-        throw updateError;
-      }
-
-      console.log('Successfully updated user profile');
+      if (updateError) throw updateError;
 
       toast({
-        title: "Success",
-        description: `Supplier has been approved and verified successfully.`,
+        title: "User Approved!",
+        description: `The ${user?.user_type ?? 'user'} has been successfully verified.`,
       });
 
-      // Comprehensive data refresh
       await refetchData();
-      
     } catch (error: any) {
       console.error('Error approving user:', error);
       toast({
