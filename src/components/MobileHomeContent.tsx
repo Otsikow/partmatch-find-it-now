@@ -140,40 +140,28 @@ const MobileHomeContent = () => {
           <div className="grid grid-cols-2 gap-3">
             {featuredParts.slice(0, 4).map((part) => (
               <Link key={part.id} to={`/search-parts-with-map`}>
-                <Card className="hover:shadow-lg transition-shadow">
-                  <CardContent className="p-3">
-                    <div className="aspect-square bg-gray-100 dark:bg-gray-800 rounded-lg mb-3 overflow-hidden">
+                <Card className="h-full hover:shadow-lg transition-shadow">
+                  <CardContent className="p-4 text-center space-y-3">
+                    <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-xl flex items-center justify-center mx-auto">
                       {part.images && part.images.length > 0 ? (
                         <img
                           src={part.images[0]}
                           alt={part.title}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover rounded-xl"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
                             target.src = "/placeholder.svg";
                           }}
                         />
                       ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800 flex items-center justify-center">
-                          <Package className="w-8 h-8 text-blue-600 dark:text-blue-400" />
-                        </div>
+                        <Package className="w-6 h-6 text-gray-600 dark:text-gray-400" />
                       )}
                     </div>
-                    <div className="space-y-1">
-                      <h4 className="font-medium text-foreground text-sm line-clamp-2">
-                        {part.title}
-                      </h4>
+                    <div>
+                      <h4 className="font-semibold text-foreground">{part.title}</h4>
                       <p className="text-xs text-muted-foreground">
-                        {part.make} {part.model} ({part.year})
+                        {part.currency} {part.price}
                       </p>
-                      <div className="flex items-center justify-between">
-                        <p className="font-semibold text-blue-600 dark:text-blue-400 text-sm">
-                          {part.currency} {part.price}
-                        </p>
-                        <span className="bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 text-xs px-2 py-1 rounded-full">
-                          Featured
-                        </span>
-                      </div>
                     </div>
                   </CardContent>
                 </Card>
