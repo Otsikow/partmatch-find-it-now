@@ -13,22 +13,15 @@ import {
   RefreshCw,
   Star,
   Clock,
-  FileText,
-  Sparkles
+  FileText
 } from 'lucide-react';
-
-interface AiReview {
-  score: number;
-  issues: string[];
-  feedback: string;
-}
 
 interface QualityCheck {
   id: string;
   listing_id: string;
   quality_score: number;
   feedback_message: string;
-  flagged_issues: any;
+  flagged_issues: any; // JSON type from Supabase
   auto_approved: boolean;
   checked_at: string;
   car_part: {
@@ -43,7 +36,6 @@ interface QualityCheck {
     year: number;
     images: string[];
     supplier_id: string;
-    ai_review: AiReview | null;
     profiles: {
       first_name: string;
       last_name: string;
@@ -69,7 +61,6 @@ const ListingQualityManager = () => {
   });
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('pending');
-  const [aiReviewing, setAiReviewing] = useState<string | null>(null);
 
   useEffect(() => {
     fetchQualityData();
@@ -79,6 +70,7 @@ const ListingQualityManager = () => {
     try {
       setLoading(true);
       
+      // Fetch quality checks with listing details
       const { data: checksData, error: checksError } = await supabase
         .from('listing_quality_checks')
         .select(`
@@ -95,7 +87,6 @@ const ListingQualityManager = () => {
             year,
             images,
             supplier_id,
-            ai_review,
             profiles!supplier_id (
               first_name,
               last_name,
@@ -107,11 +98,12 @@ const ListingQualityManager = () => {
 
       if (checksError) throw checksError;
 
-      setQualityChecks(checksData as QualityCheck[]);
+      setQualityChecks(checksData || []);
 
+      // Calculate stats
       const totalChecks = checksData?.length || 0;
       const autoApproved = checksData?.filter(check => check.auto_approved).length || 0;
-      const pendingFixes = totalChecks - autoApproved;
+      const pendingFixes = checksData?.filter(check => !check.auto_approved).length || 0;
       const avgScore = totalChecks > 0 
         ? Math.round(checksData.reduce((sum, check) => sum + check.quality_score, 0) / totalChecks)
         : 0;
@@ -163,20 +155,29 @@ const ListingQualityManager = () => {
     }
   };
 
-  const handleRerunQualityCheck = async (listing: QualityCheck['car_part']) => {
+  const handleRerunQualityCheck = async (listingId: string) => {
     try {
-      const { error } = await supabase.functions.invoke('listing-quality-checker', {
+      // Get listing details
+      const { data: listing, error: fetchError } = await supabase
+        .from('car_parts')
+        .select('*')
+        .eq('id', listingId)
+        .single();
+
+      if (fetchError) throw fetchError;
+
+      // Trigger quality check
+      const { error: checkError } = await supabase.functions.invoke('listing-quality-checker', {
         body: {
           listingId: listing.id,
           title: listing.title,
           description: listing.description,
           images: listing.images,
-          price: listing.price,
-          supplier_id: listing.supplier_id,
+          price: listing.price
         }
       });
 
-      if (error) throw error;
+      if (checkError) throw checkError;
 
       toast({
         title: 'Success',
@@ -194,35 +195,14 @@ const ListingQualityManager = () => {
     }
   };
 
-  const handleAiReview = async (listingId: string) => {
-    try {
-      setAiReviewing(listingId);
-      const { error } = await supabase.functions.invoke('ai-listing-review', {
-        body: { listingId }
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: 'AI Review Started',
-        description: 'The AI is analyzing the listing. Results will appear shortly.'
-      });
-
-      setTimeout(fetchQualityData, 3000); // Refresh data after a delay
-    } catch (error) {
-      console.error('Error triggering AI review:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to start AI review.',
-        variant: 'destructive'
-      });
-    } finally {
-      setAiReviewing(null);
-    }
+  const getScoreColor = (score: number) => {
+    if (score >= 85) return 'text-green-600';
+    if (score >= 60) return 'text-yellow-600';
+    return 'text-red-600';
   };
 
   const getScoreBadgeVariant = (score: number) => {
-    if (score >= 80) return 'default';
+    if (score >= 85) return 'default';
     if (score >= 60) return 'secondary';
     return 'destructive';
   };
@@ -245,7 +225,53 @@ const ListingQualityManager = () => {
     <div className="space-y-6">
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {/* Stat cards ... */}
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <FileText className="h-5 w-5 text-blue-500" />
+              <div>
+                <p className="text-sm font-medium">Total Checks</p>
+                <p className="text-2xl font-bold">{stats.total_checks}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <CheckCircle className="h-5 w-5 text-green-500" />
+              <div>
+                <p className="text-sm font-medium">Auto Approved</p>
+                <p className="text-2xl font-bold">{stats.auto_approved}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <AlertTriangle className="h-5 w-5 text-red-500" />
+              <div>
+                <p className="text-sm font-medium">Pending Fixes</p>
+                <p className="text-2xl font-bold">{stats.pending_fixes}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-2">
+              <Star className="h-5 w-5 text-yellow-500" />
+              <div>
+                <p className="text-sm font-medium">Avg Score</p>
+                <p className="text-2xl font-bold">{stats.avg_quality_score}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Quality Checks Table */}

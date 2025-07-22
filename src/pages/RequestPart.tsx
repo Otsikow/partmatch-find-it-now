@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, Link } from "react-router-dom";
 import RequestFormFields from "@/components/RequestForm/RequestFormFields";
-import Logo from '@/components/Logo';
 import { useRequestSubmission } from "@/hooks/useRequestSubmission";
 import { RequestFormData, initialFormData } from "@/components/RequestForm/RequestFormData";
 import { Button } from "@/components/ui/button";
@@ -88,9 +87,14 @@ const RequestPart = () => {
               >
                 <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
+              
               {/* Logo */}
               <Link to="/" className="flex items-center gap-2 flex-shrink-0 hover:opacity-80 transition-opacity">
-                <Logo className="h-8 w-auto sm:h-10 object-contain" />
+                <img 
+                  src="/lovable-uploads/0bb9488b-2f77-4f4c-b8b3-8aa9343b1d18.png" 
+                  alt="PartMatch - Car Parts Marketplace" 
+                  className="h-8 w-auto sm:h-10 object-contain" 
+                />
               </Link>
               
               <div className="min-w-0 flex-1">

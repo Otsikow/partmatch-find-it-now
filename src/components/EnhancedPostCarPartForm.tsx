@@ -301,8 +301,7 @@ const EnhancedPostCarPartForm = ({
             title: formData.title.trim(),
             description: formData.description.trim(),
             images: imageUrls,
-            price: price,
-            supplier_id: user.id
+            price: price
           }
         });
 

@@ -12,7 +12,6 @@ interface QualityCheckRequest {
   description?: string;
   images?: string[];
   price: number;
-  supplier_id: string;
 }
 
 interface QualityCheckResult {
@@ -27,57 +26,19 @@ const supabase = createClient(
   Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
 );
 
-// Rate limiting and duplicate checking functions (adapted from anti-spam)
-async function checkRateLimit(userId: string) {
-  const now = new Date();
-  const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
-
-  const { data: recentListings, error } = await supabase
-    .from('car_parts')
-    .select('id')
-    .eq('supplier_id', userId)
-    .gte('created_at', oneHourAgo.toISOString());
-
-  if (error) {
-    console.error("Error checking rate limit:", error);
-    return { exceeded: false, waitTime: 0 };
-  }
-
-  const limit = 10; // Max 10 listings per hour per user
-  if ((recentListings?.length || 0) >= limit) {
-    return { exceeded: true, waitTime: 60 };
-  }
-
-  return { exceeded: false, waitTime: 0 };
-}
-
-async function checkDuplicateListings(userId: string, title: string) {
-  const { data: existingListings, error } = await supabase
-    .from('car_parts')
-    .select('id')
-    .eq('supplier_id', userId)
-    .eq('title', title)
-    .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
-
-  if (error) {
-    console.error("Error checking duplicate listings:", error);
-    return { isDuplicate: false };
-  }
-
-  return { isDuplicate: (existingListings?.length || 0) > 0 };
-}
-
 function checkTitle(title: string): { valid: boolean; issues: string[] } {
   const issues: string[] = [];
+  
+  // Check title length (must be at least 4 words)
   const wordCount = title.trim().split(/\s+/).length;
-  if (wordCount < 3) {
-    issues.push('Title is too short (less than 3 words)');
+  if (wordCount < 4) {
+    issues.push('Title is too short (less than 4 words)');
   }
   
+  // Check for suspicious keywords
   const suspiciousKeywords = [
     'urgent payment', 'whatsapp only', 'no call', 'urgent sale',
-    'contact only whatsapp', 'cash only urgent', 'quick sale only',
-    'test', 'spam', 'fake', 'bot'
+    'contact only whatsapp', 'cash only urgent', 'quick sale only'
   ];
   
   const titleLower = title.toLowerCase();
@@ -98,11 +59,13 @@ function checkDescription(description?: string): { valid: boolean; issues: strin
     return { valid: false, issues };
   }
   
+  // Check word count (must be at least 20 words)
   const wordCount = description.trim().split(/\s+/).length;
-  if (wordCount < 15) {
-    issues.push('Description is too short (less than 15 words)');
+  if (wordCount < 20) {
+    issues.push('Description is too short (less than 20 words)');
   }
   
+  // Check for suspicious patterns
   const suspiciousPatterns = [
     'urgent payment', 'whatsapp only', 'no call', 'contact whatsapp',
     'payment first', 'send money', 'western union', 'moneygram'
@@ -126,6 +89,7 @@ function checkImages(images?: string[]): { valid: boolean; issues: string[] } {
     return { valid: false, issues };
   }
   
+  // Basic image validation (could be enhanced with actual image analysis)
   if (images.length < 1) {
     issues.push('At least one clear image is required');
   }
@@ -140,9 +104,10 @@ function checkPrice(price: number): { valid: boolean; issues: string[] } {
     issues.push('Price is set to 0 or invalid');
   }
   
+  // Check for unrealistic prices (too low or suspiciously high)
   if (price < 1) {
     issues.push('Price seems unrealistically low');
-  } else if (price > 150000) {
+  } else if (price > 100000) {
     issues.push('Price seems unrealistically high');
   }
   
@@ -156,10 +121,19 @@ function calculateQualityScore(
   priceValid: boolean
 ): number {
   let score = 0;
+  
+  // Title: 30 points
   if (titleValid) score += 30;
+  
+  // Description: 35 points
   if (descValid) score += 35;
+  
+  // Images: 25 points
   if (imagesValid) score += 25;
+  
+  // Price: 10 points
   if (priceValid) score += 10;
+  
   return score;
 }
 
@@ -170,7 +144,7 @@ function generateFeedback(issues: string[]): string {
   
   const baseFeedback = "Please improve your listing to meet our quality standards:\n\n";
   const issueList = issues.map(issue => `• ${issue}`).join('\n');
-  const guidelines = "\n\nGuidelines:\n• Add clear images with good lighting\n• Write detailed descriptions (minimum 15 words)\n• Use realistic pricing\n• Avoid suspicious words like 'urgent payment' or 'WhatsApp only'";
+  const guidelines = "\n\nGuidelines:\n• Add clear images with good lighting\n• Write detailed descriptions (minimum 20 words)\n• Use realistic pricing\n• Avoid suspicious words like 'urgent payment' or 'WhatsApp only'";
   
   return baseFeedback + issueList + guidelines;
 }
@@ -178,11 +152,13 @@ function generateFeedback(issues: string[]): string {
 async function performQualityCheck(request: QualityCheckRequest): Promise<QualityCheckResult> {
   console.log(`Starting quality check for listing: ${request.listingId}`);
   
+  // Perform individual checks
   const titleCheck = checkTitle(request.title);
   const descCheck = checkDescription(request.description);
   const imagesCheck = checkImages(request.images);
   const priceCheck = checkPrice(request.price);
   
+  // Combine all issues
   const allIssues = [
     ...titleCheck.issues,
     ...descCheck.issues,
@@ -190,6 +166,7 @@ async function performQualityCheck(request: QualityCheckRequest): Promise<Qualit
     ...priceCheck.issues
   ];
   
+  // Calculate quality score
   const score = calculateQualityScore(
     titleCheck.valid,
     descCheck.valid,
@@ -197,7 +174,10 @@ async function performQualityCheck(request: QualityCheckRequest): Promise<Qualit
     priceCheck.valid
   );
   
-  const approved = score >= 80 && allIssues.length === 0;
+  // Determine if listing should be auto-approved (score >= 85)
+  const approved = score >= 85 && allIssues.length === 0;
+  
+  // Generate feedback
   const feedback = generateFeedback(allIssues);
   
   console.log(`Quality check completed - Score: ${score}, Approved: ${approved}, Issues: ${allIssues.length}`);
@@ -211,25 +191,15 @@ async function performQualityCheck(request: QualityCheckRequest): Promise<Qualit
 }
 
 const handler = async (req: Request): Promise<Response> => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { listingId, title, description, images, price, supplier_id }: QualityCheckRequest = await req.json();
+    const { listingId, title, description, images, price }: QualityCheckRequest = await req.json();
     
     console.log(`Processing quality check request for listing: ${listingId}`);
-
-    // Anti-spam checks
-    const rateLimit = await checkRateLimit(supplier_id);
-    if (rateLimit.exceeded) {
-      return new Response(JSON.stringify({ success: false, error: `Rate limit exceeded. Try again in ${rateLimit.waitTime} minutes.` }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-    }
-
-    const duplicateCheck = await checkDuplicateListings(supplier_id, title);
-    if (duplicateCheck.isDuplicate) {
-      return new Response(JSON.stringify({ success: false, error: 'A similar listing has been posted recently.' }), { status: 409, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-    }
     
     // Perform quality check
     const qualityResult = await performQualityCheck({
@@ -237,12 +207,12 @@ const handler = async (req: Request): Promise<Response> => {
       title,
       description,
       images,
-      price,
-      supplier_id
+      price
     });
     
-    // Update car_parts table
+    // Update the car_parts table with quality results
     const newStatus = qualityResult.approved ? 'available' : 'pending_fix';
+    
     const { error: updateError } = await supabase
       .from('car_parts')
       .update({
@@ -274,28 +244,30 @@ const handler = async (req: Request): Promise<Response> => {
       throw insertError;
     }
     
-    // Trigger AI review if not auto-approved
+    // Send notification to the seller if listing needs fixes
     if (!qualityResult.approved) {
-      await supabase.functions.invoke('ai-listing-review', {
-        body: { listingId }
-      });
-    }
-
-    // Send notification to seller
-    if (!qualityResult.approved) {
-      await supabase
-        .from('user_notifications')
-        .insert({
-          user_id: supplier_id,
-          type: 'listing_quality_issue',
-          title: 'Listing Needs Improvement',
-          message: qualityResult.feedback,
-          metadata: {
-            listing_id: listingId,
-            quality_score: qualityResult.score,
-            issues: qualityResult.issues
-          }
-        });
+      // Get seller info
+      const { data: listing } = await supabase
+        .from('car_parts')
+        .select('supplier_id')
+        .eq('id', listingId)
+        .single();
+      
+      if (listing) {
+        await supabase
+          .from('user_notifications')
+          .insert({
+            user_id: listing.supplier_id,
+            type: 'listing_quality_issue',
+            title: 'Listing Needs Improvement',
+            message: qualityResult.feedback,
+            metadata: {
+              listing_id: listingId,
+              quality_score: qualityResult.score,
+              issues: qualityResult.issues
+            }
+          });
+      }
     }
     
     console.log(`Quality check completed successfully for listing: ${listingId}`);
