@@ -28,7 +28,6 @@ interface SellerReviewsModalProps {
   sellerId: string;
   sellerName: string;
   sellerRating: number;
-  totalReviews: number;
 }
 
 const SellerReviewsModal: React.FC<SellerReviewsModalProps> = ({
@@ -37,7 +36,6 @@ const SellerReviewsModal: React.FC<SellerReviewsModalProps> = ({
   sellerId,
   sellerName,
   sellerRating,
-  totalReviews
 }) => {
   const { user } = useAuth();
   const [reviews, setReviews] = useState<Review[]>([]);

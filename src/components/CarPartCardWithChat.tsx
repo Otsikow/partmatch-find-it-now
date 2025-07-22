@@ -519,7 +519,6 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
           sellerId={part.supplier_id}
           sellerName={supplierName}
           sellerRating={part.profiles.rating || 0}
-          totalReviews={part.profiles.total_ratings || 0}
         />
       )}
     </>
