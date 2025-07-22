@@ -61,8 +61,7 @@ const PageHeader = ({
   };
 
   const handleHome = () => {
-    console.log('PageHeader: Home button clicked, navigating to /');
-    window.location.href = '/';
+    navigate('/');
   };
 
   return (
