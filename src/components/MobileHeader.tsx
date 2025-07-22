@@ -96,6 +96,13 @@ const MobileHeader = () => {
           <div className="flex items-center space-x-2 flex-shrink-0">
             <ThemeToggle />
             <LanguageSelector showLabel={false} variant="button" />
+            <Button
+              variant="ghost"
+              className="text-white font-semibold"
+              onClick={() => window.location.href = '/buyer-auth'}
+            >
+              {t('dashboard')}
+            </Button>
           </div>
         )}
       </div>
