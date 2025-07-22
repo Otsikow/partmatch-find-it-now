@@ -80,5 +80,34 @@ export const useNotifications = () => {
     }
   };
 
-  return { notifications, loading, refetch: fetchNotifications, markAsRead };
+  const markAllAsRead = async () => {
+    if (!user) return;
+
+    const { error } = await supabase
+      .from('user_notifications')
+      .update({ read: true })
+      .eq('user_id', user.id)
+      .eq('read', false);
+
+    if (!error) {
+      setNotifications(prev =>
+        prev.map(notification => ({ ...notification, read: true }))
+      );
+    }
+  };
+
+  const clearAll = async () => {
+    if (!user) return;
+
+    const { error } = await supabase
+      .from('user_notifications')
+      .delete()
+      .eq('user_id', user.id);
+
+    if (!error) {
+      setNotifications([]);
+    }
+  };
+
+  return { notifications, loading, refetch: fetchNotifications, markAsRead, markAllAsRead, clearAll };
 };
