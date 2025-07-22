@@ -205,9 +205,9 @@ export const getSupportedCountries = (): CountryConfig[] => {
   return Object.values(COUNTRY_CONFIGS);
 };
 
-export const getCurrencyByCountry = (countryCode: string): string => {
+export const getCurrencyByCountry = (countryCode: string): string | null => {
   const config = getCountryConfig(countryCode);
-  return config?.currency || 'USD';
+  return config?.currency || null;
 };
 
 export const getLanguagesByCountry = (countryCode: string): string[] => {
