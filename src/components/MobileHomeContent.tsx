@@ -117,9 +117,9 @@ const MobileHomeContent = () => {
       {/* Featured Parts */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-foreground">Featured Parts</h3>
+          <h3 className="text-lg font-semibold text-foreground">{t('featuredParts')}</h3>
           <Link to="/search-parts-with-map" className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
-            View All
+            {t('viewAll')}
           </Link>
         </div>
         
