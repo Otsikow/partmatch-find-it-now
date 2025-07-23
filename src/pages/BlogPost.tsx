@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import ShareButtons from '@/components/ShareButtons';
 import { supabase } from '@/integrations/supabase/client';
+import { BlogPost as BlogPostType } from '@/types/BlogPost';
 
 const BlogPost: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [post, setPost] = useState<any>(null);
+  const [post, setPost] = useState<BlogPostType | null>(null);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -42,6 +43,7 @@ const BlogPost: React.FC = () => {
         <span className="mx-2">&bull;</span>
         <span>Tags: {post.tags.join(', ')}</span>
       </div>
+      {post.cover_image_url && <img src={post.cover_image_url} alt={post.title} className="w-full h-auto object-cover rounded-lg mb-8" />}
       <div dangerouslySetInnerHTML={{ __html: post.content }} />
       <div className="mt-8">
         <ShareButtons />

@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import BlogCard from '@/components/BlogCard';
 import { supabase } from '@/integrations/supabase/client';
+import { BlogPost } from '@/types/BlogPost';
 
 const Blog: React.FC = () => {
-  const [posts, setPosts] = useState<any[]>([]);
+  const [posts, setPosts] = useState<BlogPost[]>([]);
 
   useEffect(() => {
     const fetchPosts = async () => {
