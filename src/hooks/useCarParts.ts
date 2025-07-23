@@ -51,6 +51,7 @@ export const useCarParts = (params?: UseCarPartsParams) => {
           created_at,
           updated_at,
           status,
+          is_featured,
           profiles!inner(
             first_name,
             last_name,
