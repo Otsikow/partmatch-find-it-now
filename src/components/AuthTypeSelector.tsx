@@ -38,13 +38,10 @@ const AuthTypeSelector = () => {
       <main className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-4xl">
         <div className="text-center mb-8 sm:mb-12">
           <h2 className="page-header text-2xl sm:text-3xl lg:text-4xl mb-4 text-foreground">
-            How would you like to join?
+            Choose your role to get started
           </h2>
           <p className="section-subtitle text-lg sm:text-xl max-w-2xl mx-auto mb-4">
-            Select the type of account that best describes your role in our car parts marketplace
-          </p>
-          <p className="text-sm text-muted-foreground max-w-xl mx-auto">
-            Whether you're looking to buy car parts or sell them, we have the perfect account type for your needs. Choose below to get started with your personalized experience.
+            Buyer or seller? Select the account type that fits you best so we can tailor your PartMatch experience.
           </p>
         </div>
 
