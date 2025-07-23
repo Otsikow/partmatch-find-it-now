@@ -16,10 +16,12 @@ import LanguageSelector from "./LanguageSelector";
 import CountryCurrencySelector from "./CountryCurrencySelector";
 import ThemeToggle from "./ThemeToggle";
 const MobileHeader = () => {
-  const { user, signOut } = useAuth();
+  const { user, signOut, userType } = useAuth();
   const { t } = useTranslation();
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+
+  const dashboardUrl = userType === 'seller' ? '/seller-dashboard' : '/buyer-dashboard';
 
   const handleSignOut = async () => {
     try {
@@ -66,7 +68,7 @@ const MobileHeader = () => {
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuItem 
                   className="flex items-center gap-2 cursor-pointer"
-                  onClick={() => window.location.href = '/buyer-dashboard'}
+                  onClick={() => window.location.href = dashboardUrl}
                 >
                   <User className="h-4 w-4" />
                   <span>{t('dashboard')}</span>
