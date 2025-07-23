@@ -44,17 +44,18 @@ const BlogManager = () => {
         console.error('Error uploading image:', error);
         return;
       }
-      const { publicURL } = supabase.storage.from('blog-images').getPublicUrl(data.path);
-      imageUrl = publicURL;
+      const { data: urlData } = supabase.storage.from('blog-images').getPublicUrl(data.path);
+      imageUrl = urlData.publicUrl;
     }
 
     const { error } = await supabase.from('blog_posts').insert([
       {
         title,
         content,
-        author,
+        author_id: author, // This should be a user ID in production
         slug: title.toLowerCase().replace(/\s/g, '-'),
-        cover_image_url: imageUrl,
+        featured_image_url: imageUrl,
+        published: true,
       },
     ]);
 
