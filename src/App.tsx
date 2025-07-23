@@ -20,6 +20,7 @@ import SellerAuth from "./pages/SellerAuth";
 import AdminAuth from "./pages/AdminAuth";
 import UserDashboard from "./pages/UserDashboard";
 import BuyerDashboard from "./pages/BuyerDashboard";
+import GuestDashboard from "./pages/GuestDashboard";
 import SellerDashboard from "./pages/SellerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import DashboardRouter from "./components/DashboardRouter";
@@ -70,6 +71,7 @@ function App() {
                     <Route path="/buyer-auth" element={<BuyerAuth />} />
                     <Route path="/seller-auth" element={<SellerAuth />} />
                     <Route path="/admin-auth" element={<AdminAuth />} />
+                    <Route path="/guest-dashboard" element={<GuestDashboard />} />
                     <Route path="/request-part" element={<RequestPart />} />
                     <Route path="/request" element={<RequestPart />} />
                     <Route path="/post-part" element={<PostPart />} />
