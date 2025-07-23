@@ -19,6 +19,7 @@ import {
   Download
 } from "lucide-react";
 import { useState } from "react";
+import UserDetailsCard from "./UserDetailsCard";
 
 interface SellerVerification {
   id: string;
@@ -42,14 +43,17 @@ interface SellerVerification {
 
 interface VerificationCardProps {
   verification: SellerVerification;
-  onApprove: (id: string) => void;
+  onApprove: (id: string, notes?: string) => void;
   onReject: (id: string, notes: string) => void;
   onViewDocument: (url: string) => void;
+  onViewUserDetails: (user: SellerVerification) => void;
 }
 
-const VerificationCard = ({ verification, onApprove, onReject, onViewDocument }: VerificationCardProps) => {
+const VerificationCard = ({ verification, onApprove, onReject, onViewDocument, onViewUserDetails }: VerificationCardProps) => {
   const [rejectNotes, setRejectNotes] = useState('');
+  const [approveNotes, setApproveNotes] = useState('');
   const [showRejectDialog, setShowRejectDialog] = useState(false);
+  const [showApproveDialog, setShowApproveDialog] = useState(false);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -66,6 +70,12 @@ const VerificationCard = ({ verification, onApprove, onReject, onViewDocument }:
       month: 'long',
       day: 'numeric'
     });
+  };
+
+  const handleApprove = () => {
+    onApprove(verification.id, approveNotes);
+    setApproveNotes('');
+    setShowApproveDialog(false);
   };
 
   const handleReject = () => {
@@ -117,14 +127,6 @@ const VerificationCard = ({ verification, onApprove, onReject, onViewDocument }:
               <Mail className="h-4 w-4" />
               <span>{verification.email}</span>
             </div>
-            <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
-              <span>DOB: {formatDate(verification.date_of_birth)}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <MapPin className="h-4 w-4" />
-              <span>{verification.business_address}</span>
-            </div>
           </div>
         </div>
 
@@ -170,13 +172,43 @@ const VerificationCard = ({ verification, onApprove, onReject, onViewDocument }:
         <>
           <Separator className="my-4" />
           <div className="flex flex-col sm:flex-row gap-3">
-            <Button 
-              onClick={() => onApprove(verification.id)}
-              className="bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex-1"
-            >
-              <Check className="h-4 w-4 mr-2" />
-              Approve Verification
-            </Button>
+            <Dialog open={showApproveDialog} onOpenChange={setShowApproveDialog}>
+              <DialogTrigger asChild>
+                <Button className="bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex-1">
+                  <Check className="h-4 w-4 mr-2" />
+                  Approve
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Approve Verification</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="approve-notes">Optional Notes:</Label>
+                    <Textarea
+                      id="approve-notes"
+                      value={approveNotes}
+                      onChange={(e) => setApproveNotes(e.target.value)}
+                      placeholder="e.g., 'Welcome to PartMatch!'"
+                      rows={3}
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <Button onClick={handleApprove} className="bg-green-600 hover:bg-green-700 text-white flex-1">
+                      Confirm Approval
+                    </Button>
+                    <Button
+                      onClick={() => setShowApproveDialog(false)}
+                      variant="outline"
+                      className="flex-1"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
             
             <Dialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
               <DialogTrigger asChild>
@@ -218,6 +250,15 @@ const VerificationCard = ({ verification, onApprove, onReject, onViewDocument }:
                 </div>
               </DialogContent>
             </Dialog>
+
+            <Button
+              variant="outline"
+              onClick={() => onViewUserDetails(verification)}
+              className="flex-1"
+            >
+              <Eye className="h-4 w-4 mr-2" />
+              View Details
+            </Button>
           </div>
         </>
       )}

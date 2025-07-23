@@ -7,7 +7,8 @@ import AdminStats from "@/components/admin/AdminStats";
 import RequestCard from "@/components/admin/RequestCard";
 import OfferCard from "@/components/admin/OfferCard";
 import VerificationCard from "@/components/admin/VerificationCard";
-import UserDetailsModal from "@/components/admin/UserDetailsModal";
+import UserDetailsCard from "@/components/admin/UserDetailsCard";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import AdminHeader from "@/components/admin/AdminHeader";
 import UserCategoryTabs from "@/components/admin/UserCategoryTabs";
 import UserManagementStats from "@/components/admin/UserManagementStats";
@@ -19,19 +20,18 @@ import { useAdminActions } from "@/hooks/useAdminActions";
 import { useState, useEffect, useRef, useMemo } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-interface UserProfile {
+interface SellerVerification {
   id: string;
-  first_name?: string;
-  last_name?: string;
-  phone?: string;
-  location?: string;
-  user_type: 'owner' | 'supplier' | 'admin';
-  is_verified: boolean;
-  is_blocked: boolean;
+  user_id: string;
+  full_name: string;
+  seller_type: string;
+  business_name?: string;
+  business_address: string;
+  phone: string;
+  email: string;
+  date_of_birth: string;
+  verification_status: 'pending' | 'approved' | 'rejected';
   created_at: string;
-  rating?: number;
-  total_ratings?: number;
-  email?: string;
 }
 
 const AdminDashboard = () => {
@@ -45,11 +45,11 @@ const AdminDashboard = () => {
     handleApproveUser,
     handleSuspendUser,
     handleDeleteUser,
-    handleUnblockUser
+    handleUnblockUser,
   } = useAdminActions(refetchData);
 
-  const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
-  const [showUserDetails, setShowUserDetails] = useState(false);
+  const [selectedVerification, setSelectedVerification] = useState<SellerVerification | null>(null);
+  const [showVerificationDetails, setShowVerificationDetails] = useState(false);
   const [activeTab, setActiveTab] = useState("analytics");
   const [activeUserTab, setActiveUserTab] = useState("sellers");
   const isMobile = useIsMobile();
@@ -61,9 +61,9 @@ const AdminDashboard = () => {
   const completedRequestsCount = useMemo(() => requests.filter(r => r.status === 'completed').length, [requests]);
   const pendingVerificationsCount = useMemo(() => verifications.filter(v => v.verification_status === 'pending').length, [verifications]);
 
-  const handleViewUserDetails = (user: UserProfile) => {
-    setSelectedUser(user);
-    setShowUserDetails(true);
+  const handleViewVerificationDetails = (verification: SellerVerification) => {
+    setSelectedVerification(verification);
+    setShowVerificationDetails(true);
   };
 
   const handleNavigateToCategory = (category: string, filter?: string) => {
@@ -323,9 +323,10 @@ const AdminDashboard = () => {
                   <div key={verification.id} className="mx-2 sm:mx-0">
                     <VerificationCard
                       verification={verification}
-                      onApprove={(id) => handleVerificationAction(id, 'approve')}
-                      onReject={handleVerificationAction}
+                      onApprove={(id, notes) => handleVerificationAction(id, 'approve', notes)}
+                      onReject={(id, notes) => handleVerificationAction(id, 'reject', notes)}
                       onViewDocument={viewDocument}
+                      onViewUserDetails={handleViewVerificationDetails}
                     />
                   </div>
                 ))
@@ -362,7 +363,7 @@ const AdminDashboard = () => {
                     onSuspend={handleSuspendUser}
                     onDelete={handleDeleteUser}
                     onUnblock={handleUnblockUser}
-                    onViewDetails={handleViewUserDetails}
+                    onViewDetails={() => {}}
                     activeTab={activeUserTab}
                     onTabChange={setActiveUserTab}
                   />
@@ -372,16 +373,15 @@ const AdminDashboard = () => {
           </TabsContent>
         </Tabs>
 
-        {/* User Details Modal */}
-        <UserDetailsModal
-          user={selectedUser}
-          open={showUserDetails}
-          onOpenChange={setShowUserDetails}
-          onApprove={handleApproveUser}
-          onSuspend={handleSuspendUser}
-          onDelete={handleDeleteUser}
-          onUnblock={handleUnblockUser}
-        />
+        {/* Verification Details Modal */}
+        <Dialog open={showVerificationDetails} onOpenChange={setShowVerificationDetails}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Seller Verification Details</DialogTitle>
+            </DialogHeader>
+            {selectedVerification && <UserDetailsCard user={selectedVerification} />}
+          </DialogContent>
+        </Dialog>
       </main>
       <Footer />
     </div>

@@ -128,7 +128,7 @@ export const useAdminActions = (refetchData: () => void) => {
       // 1. First, get the verification details to get the user_id
       const { data: verification, error: fetchVerificationError } = await supabase
         .from('seller_verifications')
-        .select('user_id, full_name')
+        .select('user_id, full_name, seller_type')
         .eq('id', verificationId)
         .single();
 
@@ -162,15 +162,15 @@ export const useAdminActions = (refetchData: () => void) => {
 
       console.log('Successfully updated verification status to:', status);
 
-      // 3. If approved, update the user's profile (only suppliers need manual verification now)
+      // 3. If approved, update the user's profile
       if (action === 'approve') {
-        console.log('Updating user profile to verified supplier for user:', verification.user_id);
+        console.log('Updating user profile to verified for user:', verification.user_id);
 
         const { error: profileError } = await supabase
           .from('profiles')
           .update({
             is_verified: true,
-            user_type: 'supplier',
+            user_type: verification.seller_type === 'Individual' ? 'owner' : 'supplier',
             verified_at: new Date().toISOString(),
             updated_at: new Date().toISOString()
           })
@@ -181,7 +181,7 @@ export const useAdminActions = (refetchData: () => void) => {
           throw profileError;
         }
 
-        console.log('Successfully updated user profile to verified supplier');
+        console.log('Successfully updated user profile to verified');
       }
 
       toast({
@@ -382,6 +382,11 @@ export const useAdminActions = (refetchData: () => void) => {
     }
   };
 
+  const handleViewUserDetails = (user: any) => {
+    // This function will be handled by the AdminDashboard component
+    console.log("Viewing user details:", user);
+  };
+
   return {
     handleMatchSupplier,
     handleCompleteRequest,
@@ -390,6 +395,7 @@ export const useAdminActions = (refetchData: () => void) => {
     handleApproveUser,
     handleSuspendUser,
     handleDeleteUser,
-    handleUnblockUser
+    handleUnblockUser,
+    handleViewUserDetails
   };
 };
