@@ -1,5 +1,5 @@
 
-import { Home, Search, MessageSquare, Store, UserPlus } from "lucide-react";
+import { Home, Search, MessageSquare, Store, UserPlus, Newspaper } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const FooterQuickLinks = () => {
@@ -57,7 +57,7 @@ const FooterQuickLinks = () => {
             to="/blog"
             className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
           >
-            <span className="h-3 w-3" />
+            <Newspaper className="h-3 w-3" />
             <span>Blog</span>
           </Link>
         </li>
