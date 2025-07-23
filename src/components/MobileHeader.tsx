@@ -73,6 +73,13 @@ const MobileHeader = () => {
                   <User className="h-4 w-4" />
                   <span>{t('dashboard')}</span>
                 </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="flex items-center gap-2 cursor-pointer"
+                  onClick={() => window.location.href = '/blog'}
+                >
+                  <span className="h-4 w-4"></span>
+                  <span>{t('Blog')}</span>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <div className="p-2">
                   <LanguageSelector showLabel={false} variant="select" />
