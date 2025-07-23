@@ -40,6 +40,9 @@ const NotificationDropdown = () => {
       case 'new_review':
         navigate('/seller-dashboard?tab=reviews');
         break;
+      case 'new_part_request':
+        navigate('/requested-car-parts');
+        break;
       default:
         navigate('/dashboard');
         break;
