@@ -1,4 +1,4 @@
-import { Bell, LogOut, User } from "lucide-react";
+import { Bell, LogIn, LogOut, User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -100,10 +100,11 @@ const MobileHeader = () => {
             <LanguageSelector showLabel={false} variant="button" />
             <Button
               variant="ghost"
+              size="icon"
               className="text-white font-semibold"
               onClick={() => window.location.href = '/auth'}
             >
-              {t('dashboard')}
+              <LogIn className="h-6 w-6" />
             </Button>
           </div>
         )}
