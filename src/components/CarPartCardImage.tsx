@@ -5,15 +5,18 @@ import { Expand } from "lucide-react";
 import SaveButton from "./SaveButton";
 import { getConditionColor, getImageUrl } from "@/utils/carPartUtils";
 
+import { Star } from "lucide-react";
+
 interface CarPartCardImageProps {
   partId: string;
   title: string;
   condition: string;
   images?: string[];
+  isFeatured?: boolean;
   onExpand: () => void;
 }
 
-const CarPartCardImage = ({ partId, title, condition, images, onExpand }: CarPartCardImageProps) => {
+const CarPartCardImage = ({ partId, title, condition, images, isFeatured, onExpand }: CarPartCardImageProps) => {
   const imageUrl = getImageUrl(images);
   
   return (
@@ -56,6 +59,15 @@ const CarPartCardImage = ({ partId, title, condition, images, onExpand }: CarPar
               {condition}
             </Badge>
           </div>
+          {isFeatured && (
+            <Badge
+              variant="default"
+              className="absolute top-2 left-2 bg-yellow-400 text-yellow-900 font-bold"
+            >
+              <Star className="h-3 w-3 mr-1" />
+              Featured
+            </Badge>
+          )}
           <div className="absolute bottom-2 right-2">
             <Button size="sm" variant="secondary" className="bg-white/80 hover:bg-white">
               <Expand className="h-4 w-4" />
@@ -82,6 +94,15 @@ const CarPartCardImage = ({ partId, title, condition, images, onExpand }: CarPar
               {condition}
             </Badge>
           </div>
+          {isFeatured && (
+            <Badge
+              variant="default"
+              className="absolute top-2 left-2 bg-yellow-400 text-yellow-900 font-bold"
+            >
+              <Star className="h-3 w-3 mr-1" />
+              Featured
+            </Badge>
+          )}
           <div className="absolute bottom-2 right-2">
             <Button size="sm" variant="secondary" className="bg-white/80 hover:bg-white">
               <Expand className="h-4 w-4" />
