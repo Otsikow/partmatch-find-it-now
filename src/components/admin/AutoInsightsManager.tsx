@@ -4,22 +4,22 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-const BlogManager = () => {
+const AutoInsightsManager = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [author, setAuthor] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Logic to save the blog post will be added here
+    // Logic to save the auto insights post will be added here
     console.log({ title, content, author });
-    alert('Blog post submitted!');
+    alert('Auto Insights post submitted!');
   };
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Create a New Blog Post</CardTitle>
+        <CardTitle>Create a New Auto Insights Post</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -55,7 +55,7 @@ const BlogManager = () => {
               id="content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              placeholder="Write your blog post here..."
+              placeholder="Write your auto insights post here..."
               required
               rows={10}
             />
@@ -69,4 +69,4 @@ const BlogManager = () => {
   );
 };
 
-export default BlogManager;
+export default AutoInsightsManager;

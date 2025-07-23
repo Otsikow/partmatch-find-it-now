@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import ShareButtons from '@/components/ShareButtons';
 import { supabase } from '@/integrations/supabase/client';
 
-const BlogPost: React.FC = () => {
+const AutoInsightsPost: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<any>(null);
 
@@ -33,8 +33,8 @@ const BlogPost: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <Link to="/blog" className="text-blue-500 hover:underline mb-4 inline-block">
-        &larr; Back to Blog
+      <Link to="/auto-insights" className="text-blue-500 hover:underline mb-4 inline-block">
+        &larr; Back to Auto Insights
       </Link>
       <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
       <div className="text-gray-600 mb-4">
@@ -50,4 +50,4 @@ const BlogPost: React.FC = () => {
   );
 };
 
-export default BlogPost;
+export default AutoInsightsPost;

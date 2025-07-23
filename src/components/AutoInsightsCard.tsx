@@ -1,17 +1,17 @@
 import React from 'react';
 
-interface BlogPost {
+interface AutoInsightsPost {
   slug: string;
   title: string;
   excerpt: string;
   cover_image_url: string;
 }
 
-interface BlogCardProps {
-  post: BlogPost;
+interface AutoInsightsCardProps {
+  post: AutoInsightsPost;
 }
 
-const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
+const AutoInsightsCard: React.FC<AutoInsightsCardProps> = ({ post }) => {
   return (
     <div className="border rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
       <img src={post.cover_image_url} alt={post.title} className="w-full h-48 object-cover" />
@@ -24,4 +24,4 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => {
   );
 };
 
-export default BlogCard;
+export default AutoInsightsCard;

@@ -54,11 +54,11 @@ const FooterQuickLinks = () => {
         </li>
         <li>
           <Link
-            to="/blog"
+            to="/auto-insights"
             className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
           >
             <Newspaper className="h-3 w-3" />
-            <span>Blog</span>
+            <span>Auto Insights</span>
           </Link>
         </li>
       </ul>

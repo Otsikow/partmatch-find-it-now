@@ -42,8 +42,8 @@ import NotFound from "./pages/NotFound";
 import SimpleAuth from "./pages/SimpleAuth";
 import ButtonTestPage from "./pages/ButtonTestPage";
 import SellerProfile from "./pages/SellerProfile";
-import Blog from "./pages/Blog";
-import BlogPost from "./pages/BlogPost";
+import AutoInsights from "./pages/AutoInsights";
+import AutoInsightsPost from "./pages/AutoInsightsPost";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import SellerProtectedRoute from "./components/SellerProtectedRoute";
@@ -184,8 +184,8 @@ function App() {
                       path="/listing-success"
                       element={<ListingSuccess />}
                     />
-                    <Route path="/blog" element={<Blog />} />
-                    <Route path="/blog/:slug" element={<BlogPost />} />
+                    <Route path="/auto-insights" element={<AutoInsights />} />
+                    <Route path="/auto-insights/:slug" element={<AutoInsightsPost />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
 

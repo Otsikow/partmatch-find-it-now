@@ -6,7 +6,7 @@ const FooterBottom = () => {
   return (
     <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
       <div className="text-sm text-gray-400 font-crimson text-center lg:text-left">
-        © {new Date().getFullYear()} PartMatch. All rights reserved. Built with automotive excellence in mind.
+        © {new Date().getFullYear()} Auto Insights. All rights reserved. Built with automotive excellence in mind.
       </div>
       
       <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-6">

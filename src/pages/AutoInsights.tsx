@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import BlogCard from '@/components/BlogCard';
+import AutoInsightsCard from '@/components/AutoInsightsCard';
 import { supabase } from '@/integrations/supabase/client';
 
-const Blog: React.FC = () => {
+const AutoInsights: React.FC = () => {
   const [posts, setPosts] = useState<any[]>([]);
 
   useEffect(() => {
@@ -28,8 +28,8 @@ const Blog: React.FC = () => {
       <h1 className="text-3xl font-bold mb-8">Auto Insights</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {posts.map((post) => (
-          <Link key={post.slug} to={`/blog/${post.slug}`}>
-            <BlogCard post={post} />
+          <Link key={post.slug} to={`/auto-insights/${post.slug}`}>
+            <AutoInsightsCard post={post} />
           </Link>
         ))}
       </div>
@@ -37,4 +37,4 @@ const Blog: React.FC = () => {
   );
 };
 
-export default Blog;
+export default AutoInsights;

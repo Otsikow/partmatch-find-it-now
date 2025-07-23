@@ -15,7 +15,7 @@ import UserManagementStats from "@/components/admin/UserManagementStats";
 import AnalyticsDashboard from "@/components/admin/AnalyticsDashboard";
 import ListingQualityManager from "@/components/admin/ListingQualityManager";
 import WeeklyInsightsDashboard from "@/components/admin/WeeklyInsightsDashboard";
-import BlogManager from "@/components/admin/BlogManager";
+import AutoInsightsManager from "@/components/admin/AutoInsightsManager";
 import { useAdminData } from "@/hooks/useAdminData";
 import { useAdminActions } from "@/hooks/useAdminActions";
 import { useState, useEffect, useRef, useMemo } from "react";
@@ -155,8 +155,8 @@ const AdminDashboard = () => {
             <TabsTrigger value="users" className="text-sm xl:text-base font-inter truncate">
               User Management
             </TabsTrigger>
-            <TabsTrigger value="blog" className="text-sm xl:text-base font-inter truncate">
-              Blog
+            <TabsTrigger value="auto-insights" className="text-sm xl:text-base font-inter truncate">
+              Auto Insights
             </TabsTrigger>
           </TabsList>
 
@@ -186,8 +186,8 @@ const AdminDashboard = () => {
             <TabsTrigger value="users" className="text-xs sm:text-sm font-inter truncate px-1">
               Users
             </TabsTrigger>
-            <TabsTrigger value="blog" className="text-xs sm:text-sm font-inter truncate px-1">
-              Blog
+            <TabsTrigger value="auto-insights" className="text-xs sm:text-sm font-inter truncate px-1">
+              Auto Insights
             </TabsTrigger>
           </TabsList>
 
@@ -224,8 +224,8 @@ const AdminDashboard = () => {
               <TabsTrigger value="users" className="text-xs font-inter truncate px-1">
                 Users
               </TabsTrigger>
-              <TabsTrigger value="blog" className="text-xs font-inter truncate px-1">
-                Blog
+              <TabsTrigger value="auto-insights" className="text-xs font-inter truncate px-1">
+                Auto Insights
               </TabsTrigger>
             </TabsList>
           </div>
@@ -394,14 +394,14 @@ const AdminDashboard = () => {
             </div>
           </TabsContent>
 
-          <TabsContent value="blog" className="mt-4 sm:mt-6">
+          <TabsContent value="auto-insights" className="mt-4 sm:mt-6">
             <div className="space-y-3 sm:space-y-4 lg:space-y-6">
               <h2 className="text-lg sm:text-xl lg:text-2xl font-playfair font-semibold text-primary px-2 sm:px-0">
-                Blog Management
+                Auto Insights Management
               </h2>
 
               <div className="mx-2 sm:mx-0">
-                <BlogManager />
+                <AutoInsightsManager />
               </div>
             </div>
           </TabsContent>
