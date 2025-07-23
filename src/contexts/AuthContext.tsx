@@ -19,7 +19,11 @@ interface AuthContextType {
     password: string,
     userData: any
   ) => Promise<{ error: any }>;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signIn: (
+    email: string,
+    password: string,
+    userType?: "owner" | "supplier"
+  ) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: any }>;
   updatePassword: (password: string) => Promise<{ error: any }>;
@@ -304,8 +308,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const signIn = async (email: string, password: string) => {
-    console.log("AuthProvider: SignIn attempt:", { email });
+  const signIn = async (
+    email: string,
+    password: string,
+    userType?: "owner" | "supplier"
+  ) => {
+    console.log("AuthProvider: SignIn attempt:", { email, userType });
 
     // For admin login attempts, validate email authorization first
     const urlPath = window.location.pathname;
@@ -400,6 +408,58 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         });
 
         return { error: emailError };
+      }
+      if (userType && data?.user) {
+        console.log("AuthProvider: Verifying user type");
+
+        try {
+          const { data: profile, error: profileError } = await supabase
+            .from("profiles")
+            .select("user_type")
+            .eq("id", data.user.id)
+            .maybeSingle();
+
+          if (profileError) {
+            throw profileError;
+          }
+
+          if (profile?.user_type !== userType) {
+            console.log("AuthProvider: User type mismatch, signing out");
+
+            await supabase.auth.signOut();
+
+            const accessError = new Error(
+              "Access denied. You are not authorized to sign in from this page."
+            );
+
+            toast({
+              title: "Access Denied",
+              description:
+                "You are attempting to sign in from the wrong page.",
+              variant: "destructive",
+            });
+
+            return { error: accessError };
+          }
+
+          console.log("AuthProvider: User type verified");
+        } catch (verificationError) {
+          console.error(
+            "AuthProvider: Error verifying user type:",
+            verificationError
+          );
+
+          await supabase.auth.signOut();
+
+          const error = new Error("Unable to verify user type.");
+          toast({
+            title: "Verification Error",
+            description: "Unable to verify user type. Please try again.",
+            variant: "destructive",
+          });
+
+          return { error };
+        }
       }
 
       // Additional admin verification after successful login
