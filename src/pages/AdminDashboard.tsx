@@ -77,7 +77,11 @@ const AdminDashboard = () => {
   };
 
   const handleGoBack = () => {
-    navigate('/');
+    navigate(-1);
+  };
+
+  const handleGoHome = () => {
+    navigate('/admin-dashboard');
   };
 
   // Auto-refresh disabled to prevent UI instability - data will refresh on user actions
@@ -103,7 +107,11 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-background font-inter">
       {/* Single Modern Header */}
-      <AdminHeader onNavigateToVerifications={handleNavigateToVerifications} />
+      <AdminHeader
+        onNavigateToVerifications={handleNavigateToVerifications}
+        onGoBack={handleGoBack}
+        onGoHome={handleGoHome}
+      />
 
       <main className="container mx-auto px-2 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8 max-w-7xl">
         <div className="mb-4 sm:mb-6 lg:mb-8">
