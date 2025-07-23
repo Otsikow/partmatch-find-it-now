@@ -43,13 +43,13 @@ const AdminHeader = ({ onNavigateToVerifications, onGoBack, onGoHome }: AdminHea
 
         {/* Center: Logo and Title */}
         <div className="flex items-center gap-3 flex-1 justify-center">
-          <Link to="/" className="flex items-center gap-2 bg-primary-foreground/10 backdrop-blur-sm rounded-xl px-3 py-1.5 border border-primary-foreground/20 shadow-lg">
+          <button onClick={onGoHome} className="flex items-center gap-2 bg-primary-foreground/10 backdrop-blur-sm rounded-xl px-3 py-1.5 border border-primary-foreground/20 shadow-lg">
             <img 
               src="/lovable-uploads/015b9a61-a3c7-4c8f-b3b7-f9c10a5e00ea.png" 
               alt="PartMatch Logo" 
               className="h-12 w-12 sm:h-14 sm:w-14 object-contain"
             />
-          </Link>
+          </button>
           <div className="flex flex-col min-w-0">
             <h1 className="text-lg sm:text-xl md:text-2xl font-playfair font-bold truncate">
               {displayName}
