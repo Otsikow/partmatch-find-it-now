@@ -11,6 +11,7 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
+  profileLoading: boolean; // New state for profile loading
   isPasswordReset: boolean;
   userType: string | null;
   firstName: string | null;
@@ -43,11 +44,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [profileLoading, setProfileLoading] = useState(true);
   const [isPasswordReset, setIsPasswordReset] = useState(false);
   const [userType, setUserType] = useState<string | null>(null);
   const [firstName, setFirstName] = useState<string | null>(null);
 
   const fetchUserProfile = async (userId: string) => {
+    setProfileLoading(true);
     try {
       const { data: profile, error } = await supabase
         .from("profiles")
@@ -66,6 +69,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     } catch (error) {
       console.error("Error fetching user profile:", error);
+    } finally {
+      setProfileLoading(false);
     }
   };
 
@@ -711,6 +716,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     user,
     session,
     loading,
+    profileLoading,
     isPasswordReset,
     userType,
     firstName,
