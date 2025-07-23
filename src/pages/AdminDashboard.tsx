@@ -77,11 +77,15 @@ const AdminDashboard = () => {
   };
 
   const handleGoBack = () => {
-    navigate(-1);
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/admin');
+    }
   };
 
   const handleGoHome = () => {
-    navigate('/admin-dashboard');
+    navigate('/admin');
   };
 
   // Auto-refresh disabled to prevent UI instability - data will refresh on user actions
