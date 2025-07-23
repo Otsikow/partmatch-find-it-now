@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Package, MessageCircle, Search, Star, BarChart3, Users, ShoppingCart } from "lucide-react";
-import MyOrders from "@/components/buyer/MyOrders";
+
 import SavedParts from "@/components/buyer/SavedParts";
 import SellCarPartsTab from "@/components/SellCarPartsTab";
 import MyPartsTab from "@/components/MyPartsTab";
@@ -104,7 +104,7 @@ const HomeDashboard = () => {
       case 'overview':
         return <DashboardOverview userType={userType} displayName={displayName} />;
       case 'orders':
-        return <MyOrders />;
+        return <div className="text-center py-8"><p className="text-muted-foreground">Orders feature coming soon!</p></div>;
       case 'saved':
         return <SavedParts />;
       case 'sell':
