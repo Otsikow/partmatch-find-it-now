@@ -49,6 +49,7 @@ const CarPartCard = ({ part, onContact }: CarPartCardProps) => {
           title={part.title}
           condition={part.condition}
           images={part.images}
+          isFeatured={part.is_featured}
           onExpand={handleCardClick}
         />
 
