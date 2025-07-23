@@ -44,8 +44,8 @@ const BlogManager = () => {
         console.error('Error uploading image:', error);
         return;
       }
-      const { publicURL } = supabase.storage.from('blog-images').getPublicUrl(data.path);
-      imageUrl = publicURL;
+      const { data: publicUrlData } = supabase.storage.from('blog-images').getPublicUrl(data.path);
+      imageUrl = publicUrlData.publicUrl;
     }
 
     const { error } = await supabase.from('blog_posts').insert([
