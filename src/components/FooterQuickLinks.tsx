@@ -52,6 +52,15 @@ const FooterQuickLinks = () => {
             <span>Sign In / Sign Up</span>
           </Link>
         </li>
+        <li>
+          <Link
+            to="/blog"
+            className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
+          >
+            <span className="h-3 w-3" />
+            <span>Blog</span>
+          </Link>
+        </li>
       </ul>
     </div>
   );

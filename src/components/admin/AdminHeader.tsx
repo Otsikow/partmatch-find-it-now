@@ -68,7 +68,7 @@ const AdminHeader = ({ onNavigateToVerifications, onGoBack, onGoHome }: AdminHea
             variant="outline"
             size="sm"
             onClick={onGoHome}
-            className="hidden sm:flex bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground transition-colors backdrop-blur-sm border border-primary-foreground/20 shadow-lg"
+            className="flex bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground transition-colors backdrop-blur-sm border border-primary-foreground/20 shadow-lg"
           >
             <Home className="h-4 w-4 mr-1" />
             <span>Home</span>
