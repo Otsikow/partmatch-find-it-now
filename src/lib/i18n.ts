@@ -91,6 +91,7 @@ const resources = {
       // Categories
       popularCategories: "Popular Categories",
       featuredParts: "Featured Parts",
+      viewAll: "View All",
       engineParts: "Engine Parts",
       brakeSystem: "Brake System",
       suspension: "Suspension",
