@@ -101,7 +101,7 @@ const MobileHeader = () => {
             <Button
               variant="ghost"
               className="text-white font-semibold"
-              onClick={() => window.location.href = '/buyer-auth'}
+              onClick={() => window.location.href = '/auth'}
             >
               {t('dashboard')}
             </Button>
