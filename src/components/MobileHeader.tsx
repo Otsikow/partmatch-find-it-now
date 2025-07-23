@@ -78,7 +78,7 @@ const MobileHeader = () => {
                   onClick={() => window.location.href = '/blog'}
                 >
                   <span className="h-4 w-4"></span>
-                  <span>{t('Blog')}</span>
+                  <span>{t('Auto Insights')}</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <div className="p-2">
