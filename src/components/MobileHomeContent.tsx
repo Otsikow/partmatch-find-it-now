@@ -3,6 +3,7 @@ import { Search, Plus, Package, Zap, ClipboardList, Newspaper, ShoppingBasket } 
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import CarPartCard from "@/components/CarPartCard";
 import { useFeaturedParts } from "@/hooks/useFeaturedParts";
 import { useRealTimeStats } from "@/hooks/useRealTimeStats";
 import { useBlogPosts } from "@/hooks/useBlogPosts";
@@ -141,34 +142,8 @@ const MobileHomeContent = () => {
           </div>
         ) : featuredParts.length > 0 ? (
           <div className="grid grid-cols-2 gap-3">
-            {featuredParts.slice(0, 4).map((part) => (
-              <Link key={part.id} to={`/search-parts-with-map`}>
-                <Card className="h-full hover:shadow-lg transition-shadow">
-                  <CardContent className="p-4 text-center space-y-3">
-                    <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-xl flex items-center justify-center mx-auto">
-                      {part.images && part.images.length > 0 ? (
-                        <img
-                          src={part.images[0]}
-                          alt={part.title}
-                          className="w-full h-full object-cover rounded-xl"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = "/placeholder.svg";
-                          }}
-                        />
-                      ) : (
-                        <Package className="w-6 h-6 text-gray-600 dark:text-gray-400" />
-                      )}
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-foreground">{part.title}</h4>
-                      <p className="text-xs text-muted-foreground">
-                        {part.currency} {part.price}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
+            {featuredParts.slice(0, 2).map((part) => (
+              <CarPartCard key={part.id} part={part} />
             ))}
           </div>
         ) : (
