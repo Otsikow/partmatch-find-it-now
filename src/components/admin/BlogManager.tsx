@@ -52,7 +52,7 @@ const BlogManager = () => {
       {
         title,
         content,
-        author_id: author, // This should be a user ID in production
+        author,
         slug: title.toLowerCase().replace(/\s/g, '-'),
         featured_image_url: imageUrl,
         published: true,
