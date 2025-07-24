@@ -56,15 +56,22 @@ const AdminDashboard = () => {
   const isMobile = useIsMobile();
   const refreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
+devin/1751454751-fix-admin-empty-dashboard
   // Memoized calculations for AdminStats
+main
   const pendingRequestsCount = useMemo(() => requests.filter(r => r.status === 'pending').length, [requests]);
   const matchedRequestsCount = useMemo(() => requests.filter(r => r.status === 'matched').length, [requests]);
   const completedRequestsCount = useMemo(() => requests.filter(r => r.status === 'completed').length, [requests]);
   const pendingVerificationsCount = useMemo(() => verifications.filter(v => v.verification_status === 'pending').length, [verifications]);
 
+devin/1751454751-fix-admin-empty-dashboard
+  const handleViewUserDetails = (user: UserProfile) => {
+    setSelectedUser(user);
+    setShowUserDetails(true);
   const handleViewVerificationDetails = (verification: SellerVerification) => {
     setSelectedVerification(verification);
     setShowVerificationDetails(true);
+main
   };
 
   const handleNavigateToCategory = (category: string, filter?: string) => {

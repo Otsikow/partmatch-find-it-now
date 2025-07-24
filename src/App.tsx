@@ -18,6 +18,7 @@ import AuthTypeSelector from "./components/AuthTypeSelector";
 import BuyerAuth from "./pages/BuyerAuth";
 import SellerAuth from "./pages/SellerAuth";
 import AdminAuth from "./pages/AdminAuth";
+import AdminSetup from "./components/AdminSetup";
 import UserDashboard from "./pages/UserDashboard";
 import BuyerDashboard from "./pages/BuyerDashboard";
 import GuestDashboard from "./pages/GuestDashboard";
@@ -53,153 +54,87 @@ import RequestSuccess from "./pages/RequestSuccess";
 
 const queryClient = new QueryClient();
 
-function App() {
-  // Enable geolocation detection globally
-  useGeolocation();
-  const isMobile = useIsMobile();
-  return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <LocaleProvider>
-          <LocationProvider>
-            <ThemeProvider>
-              <TooltipProvider>
-                <Toaster />
-                <Sonner />
-                <BrowserRouter>
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/auth" element={<AuthTypeSelector />} />
-                    <Route path="/buyer-auth" element={<BuyerAuth />} />
-                    <Route path="/seller-auth" element={<SellerAuth />} />
-                    <Route path="/admin-auth" element={<AdminAuth />} />
-                    <Route path="/guest-dashboard" element={<GuestDashboard />} />
-                    <Route path="/request-part" element={<RequestPart />} />
-                    <Route path="/request" element={<RequestPart />} />
-                    <Route path="/post-part" element={<PostPart />} />
-                    <Route
-                      path="/requested-car-parts"
-                      element={<RequestedCarParts />}
-                    />
-                    <Route path="/search-parts" element={<SearchParts />} />
-                    <Route
-                      path="/search-parts-with-map"
-                      element={<SearchPartsWithMap />}
-                    />
-                    <Route
-                      path="/search-map"
-                      element={<SearchPartsWithMap />}
-                    />
-                    <Route
-                      path="/seller/:sellerId"
-                      element={<SellerProfile />}
-                    />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/faq" element={<FAQ />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/services" element={<Services />} />
-                    <Route
-                      path="/privacy-policy"
-                      element={<PrivacyPolicy />}
-                    />
-                    <Route
-                      path="/terms-of-service"
-                      element={<TermsOfService />}
-                    />
-                    <Route path="/cookie-policy" element={<CookiePolicy />} />
+devin/1751454751-fix-admin-empty-dashboard
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/auth" element={<AuthTypeSelector />} />
+            <Route path="/buyer-auth" element={<BuyerAuth />} />
+            <Route path="/seller-auth" element={<SellerAuth />} />
+            <Route path="/admin-auth" element={<AdminAuth />} />
+            <Route path="/admin-setup" element={<AdminSetup />} />
+            <Route path="/request-part" element={<RequestPart />} />
+            <Route path="/request" element={<RequestPart />} />
+            <Route path="/search-parts" element={<SearchParts />} />
+            <Route path="/search-parts-with-map" element={<SearchPartsWithMap />} />
+            <Route path="/search-map" element={<SearchPartsWithMap />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
+            <Route path="/cookie-policy" element={<CookiePolicy />} />
+            <Route 
+              path="/chat" 
+              element={
+                <ProtectedRoute>
+                  <Chat />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <UserDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/buyer-dashboard" 
+              element={
+                <ProtectedRoute>
+                  <BuyerDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/supplier-dashboard" 
+              element={
+                <SellerProtectedRoute>
+                  <SupplierDashboard />
+                </SellerProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/supplier" 
+              element={
+                <SellerProtectedRoute>
+                  <SupplierDashboard />
+                </SellerProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin" 
+              element={
+                <AdminProtectedRoute>
+                  <AdminDashboard />
+                </AdminProtectedRoute>
+              } 
+            />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
+  </QueryClientProvider>
+);
 
-                    <Route
-                      path="/chat"
-                      element={
-                        <ProtectedRoute>
-                          <Chat />
-                        </ProtectedRoute>
-                      }
-                    />
-
-                    <Route
-                      path="/dashboard"
-                      element={
-                        <ProtectedRoute>
-                          <DashboardRouter />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/buyer-dashboard"
-                      element={
-                        <ProtectedRoute>
-                          <BuyerDashboard />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/seller-dashboard"
-                      element={
-                        <SellerProtectedRoute>
-                          <SellerDashboard />
-                        </SellerProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/supplier-dashboard"
-                      element={
-                        <SellerProtectedRoute>
-                          <SellerDashboard />
-                        </SellerProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/seller"
-                      element={
-                        <SellerProtectedRoute>
-                          <SellerDashboard />
-                        </SellerProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/supplier"
-                      element={
-                        <SellerProtectedRoute>
-                          <SellerDashboard />
-                        </SellerProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/admin"
-                      element={
-                        <AdminProtectedRoute>
-                          <AdminDashboard />
-                        </AdminProtectedRoute>
-                      }
-                    />
-                    <Route path="/simple-auth" element={<SimpleAuth />} />
-                    <Route path="/button-test" element={<ButtonTestPage />} />
-                    <Route path="/success" element={<Success />} />
-                    <Route
-                      path="/request-success"
-                      element={<RequestSuccess />}
-                    />
-                    <Route
-                      path="/listing-success"
-                      element={<ListingSuccess />}
-                    />
-                    <Route path="/blog" element={<Blog />} />
-                    <Route path="/blog/:slug" element={<BlogPost />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-
-                  {isMobile && <MobileBottomTabs />}
-                  <PWANotificationManager />
-                  {/* <PartMatchHelpBot /> */}
-                </BrowserRouter>
-              </TooltipProvider>
-            </ThemeProvider>
-          </LocationProvider>
-        </LocaleProvider>
-      </AuthProvider>
-    </QueryClientProvider>
-  );
-}
 
 export default App;
