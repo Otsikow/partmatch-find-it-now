@@ -13,8 +13,7 @@ const ButtonTestPage = () => {
       
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
         <h2 className="text-lg font-semibold mb-4">Admin Header (Back Arrow Test)</h2>
-fix/admin-home-button
-        <AdminHeader
+        <AdminHeader 
           onGoBack={() => navigate(-1)}
           onGoHome={() => navigate('/')}
         />

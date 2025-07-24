@@ -35,11 +35,6 @@ export const ADMIN_SECURITY_CONFIG = {
 
 // Validate if an email is authorized for admin access
 export const isAuthorizedAdminEmail = (email: string): boolean => {
-  if (ADMIN_SECURITY_CONFIG.DEVELOPMENT_MODE) {
-    console.warn('🔧 DEVELOPMENT MODE: Allowing admin access for any email:', email);
-    return true;
-  }
-  
   // Strict email validation for production
   const normalizedEmail = email.toLowerCase().trim();
   const isAuthorized = ADMIN_SECURITY_CONFIG.AUTHORIZED_EMAILS.includes(normalizedEmail);

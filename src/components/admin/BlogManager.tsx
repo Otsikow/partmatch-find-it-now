@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-admin-blog-management
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,7 +14,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-main
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { supabase } from '@/integrations/supabase/client';
@@ -33,9 +31,7 @@ const BlogManager = () => {
   const [isScheduled, setIsScheduled] = useState(false);
   const [scheduledDate, setScheduledDate] = useState('');
   const [posts, setPosts] = useState<BlogPost[]>([]);
- admin-blog-management
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
-main
   const [isFormatting, setIsFormatting] = useState(false);
   const [excerpt, setExcerpt] = useState('');
 
@@ -84,21 +80,16 @@ main
       }
 
       const result = await response.json();
-admin-blog-management
- main
+
       if (result.formattedContent) {
         setContent(result.formattedContent);
         if (result.excerpt) {
           setExcerpt(result.excerpt);
         }
-admin-blog-management
-        main
         toast({
           title: 'Content Formatted!',
           description: 'Your blog post has been professionally formatted.',
         });
-admin-blog-management 
-        main
         if (result.suggestions && result.suggestions.length > 0) {
           console.log('AI Suggestions:', result.suggestions);
         }
@@ -137,7 +128,6 @@ admin-blog-management
       }
       const { data: urlData } = supabase.storage.from('blog-images').getPublicUrl(data.path);
       imageUrl = urlData.publicUrl;
-main
     }
 
     if (!user) {
@@ -157,16 +147,13 @@ main
       {
         title,
         content,
-
         author_id: user.id,
         slug: title.toLowerCase().replace(/\s/g, '-'),
         featured_image_url: imageUrl,
         excerpt: excerpt || content.substring(0, 160) + '...',
         published: shouldPublishNow,
         published_at: shouldPublishNow ? currentTime : null,
-        scheduled_publish_at: scheduledTime, 
-        
-       main
+        scheduled_publish_at: scheduledTime,
       },
     ]);
 
@@ -181,7 +168,6 @@ main
       const successMessage = isScheduled && scheduledTime && new Date(scheduledTime) > new Date()
         ? 'Blog post has been scheduled successfully.'
         : 'Blog post has been published successfully.';
-admin-blog-management
       toast({
         title: 'Success!',
         description: successMessage,
@@ -230,18 +216,6 @@ admin-blog-management
         description: 'Blog post has been updated successfully.',
       });
       resetForm();
-      
-      toast({
-        title: 'Success!',
-        description: successMessage,
-      });
-      setTitle('');
-      setContent('');
-      setExcerpt('');
-      setImage(null);
-      setIsScheduled(false);
-      setScheduledDate('');
-main
       fetchPosts();
     }
   };
@@ -333,8 +307,6 @@ main
                 rows={12}
               />
             </div>
-      admin-blog-management
-main
             {excerpt && (
               <div>
                 <Label htmlFor="excerpt" className="text-sm font-medium">
@@ -362,9 +334,6 @@ main
                 accept="image/*"
               />
             </div>
-    admin-blog-management
-            
-     main
             <div className="flex items-center space-x-2">
               <Switch
                 id="schedule-mode"
@@ -373,9 +342,6 @@ main
               />
               <Label htmlFor="schedule-mode">Schedule for later</Label>
             </div>
-admin-blog-management
-            
-main
             {isScheduled && (
               <div>
                 <Label htmlFor="scheduled-date" className="text-sm font-medium">
@@ -391,7 +357,6 @@ main
                 />
               </div>
             )}
-admin-blog-management
             <div className="flex space-x-2">
               <Button type="submit">
                 {editingPost ? (isScheduled ? 'Update & Schedule' : 'Update Post') : (isScheduled ? 'Schedule Post' : 'Publish Post')}
@@ -402,11 +367,6 @@ admin-blog-management
                 </Button>
               )}
             </div>
-            
-            <Button type="submit">
-              {isScheduled ? 'Schedule Post' : 'Publish Post'}
-            </Button> 
-            main
           </form>
         </CardContent>
       </Card>
@@ -415,25 +375,16 @@ admin-blog-management
           <CardTitle>Published Posts</CardTitle>
         </CardHeader>
         <CardContent>
-admin-blog-management
           <ul className="space-y-4">
             {posts.map((post) => (
               <li key={post.id} className="flex items-center justify-between">
-          <div className="space-y-3">
-            {posts.map((post) => (
-              <div key={post.id} className="flex items-center justify-between p-3 border rounded-lg">
-main
                 <div>
                   <a href={`/blog/${post.slug}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline font-medium">
                     {post.title}
                   </a>
                   <div className="text-sm text-gray-500 mt-1">
                     {post.published ? (
-admin-blog-management
                       <span className="text-green-600">Published {post.published_at && new Date(post.published_at).toLocaleDateString()}</span>
-
-                      <span className="text-green-600">Published {new Date(post.published_at!).toLocaleDateString()}</span>
-main
                     ) : post.scheduled_publish_at ? (
                       <span className="text-orange-600">Scheduled for {new Date(post.scheduled_publish_at).toLocaleString()}</span>
                     ) : (
@@ -441,7 +392,6 @@ main
                     )}
                   </div>
                 </div>
-admin-blog-management
                 <div className="flex items-center space-x-2">
                   <Button variant="outline" size="sm" onClick={() => handleEdit(post)}>
                     Edit
@@ -469,10 +419,8 @@ admin-blog-management
                   </AlertDialog>
                 </div>
               </li>
-              </div>
-main
             ))}
-          </div>
+          </ul>
         </CardContent>
       </Card>
     </div>
