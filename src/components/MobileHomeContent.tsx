@@ -128,8 +128,8 @@ const MobileHomeContent = () => {
         </div>
         
         {featuredLoading ? (
-          <div className="grid grid-cols-2 gap-3">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+            {[...Array(12)].map((_, i) => (
               <Card key={i} className="animate-pulse">
               <CardContent className="p-4">
                 <div className="bg-gray-200 dark:bg-gray-700 h-32 rounded-lg mb-3"></div>
@@ -141,8 +141,8 @@ const MobileHomeContent = () => {
             ))}
           </div>
         ) : featuredParts.length > 0 ? (
-          <div className="grid grid-cols-2 gap-3">
-            {featuredParts.slice(0, 6).map((part) => (
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+            {featuredParts.slice(0, 12).map((part) => (
               <CarPartCard key={part.id} part={part} />
             ))}
           </div>
