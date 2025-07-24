@@ -169,7 +169,7 @@ const ChatButton = ({
       className={`flex items-center gap-2 ${className}`}
     >
       <MessageCircle className="h-4 w-4" />
-      {children || (sellerId ? "Chat with Seller" : "Chat with Buyer")}
+      {children || (sellerId ? "Chat" : "Chat with Buyer")}
     </Button>
   );
 };
