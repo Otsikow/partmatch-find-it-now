@@ -12,7 +12,7 @@ const ShareButtons: React.FC = () => {
         href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`${text} ${url}`)}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-green-500 hover:text-green-600"
+        className="text-success hover:text-success/90"
       >
         <MessageCircle size={24} />
       </a>

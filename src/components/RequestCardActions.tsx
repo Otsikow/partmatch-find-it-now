@@ -95,7 +95,7 @@ const RequestCardActions = ({
         variant="outline"
         size="sm"
         onClick={handleWhatsAppClick}
-        className="flex-1 min-w-[80px] border-green-600 text-green-700 hover:bg-green-50 hover:border-green-700 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
+        className="flex-1 min-w-[80px] border-success text-success-foreground bg-success hover:bg-success/90 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
       >
         WhatsApp
       </Button>
