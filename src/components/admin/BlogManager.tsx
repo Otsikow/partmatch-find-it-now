@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import { supabase } from '@/integrations/supabase/client';
 import { v4 as uuidv4 } from 'uuid';
 import { BlogPost } from '@/types/BlogPost';
@@ -14,8 +16,9 @@ const BlogManager = () => {
   const { toast } = useToast();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  
   const [image, setImage] = useState<File | null>(null);
+  const [isScheduled, setIsScheduled] = useState(false);
+  const [scheduledDate, setScheduledDate] = useState('');
   const [posts, setPosts] = useState<BlogPost[]>([]);
 
   useEffect(() => {
@@ -61,6 +64,10 @@ const BlogManager = () => {
       return;
     }
 
+    const currentTime = new Date().toISOString();
+    const scheduledTime = isScheduled && scheduledDate ? new Date(scheduledDate).toISOString() : null;
+    const shouldPublishNow = !isScheduled || (scheduledTime && new Date(scheduledTime) <= new Date());
+
     const { error } = await supabase.from('blog_posts').insert([
       {
         title,
@@ -68,8 +75,9 @@ const BlogManager = () => {
         author_id: user.id,
         slug: title.toLowerCase().replace(/\s/g, '-'),
         featured_image_url: imageUrl,
-        published: true,
-        published_at: new Date().toISOString(),
+        published: shouldPublishNow,
+        published_at: shouldPublishNow ? currentTime : null,
+        scheduled_publish_at: scheduledTime,
       },
     ]);
 
@@ -81,14 +89,19 @@ const BlogManager = () => {
         variant: 'destructive',
       });
     } else {
+      const successMessage = isScheduled && scheduledTime && new Date(scheduledTime) > new Date()
+        ? 'Blog post has been scheduled successfully.'
+        : 'Blog post has been published successfully.';
+      
       toast({
         title: 'Success!',
-        description: 'Blog post has been published successfully.',
+        description: successMessage,
       });
       setTitle('');
       setContent('');
-      
       setImage(null);
+      setIsScheduled(false);
+      setScheduledDate('');
       fetchPosts();
     }
   };
@@ -133,9 +146,9 @@ const BlogManager = () => {
               />
             </div>
             <div>
-              <label htmlFor="image" className="block text-sm font-medium text-gray-700">
-                Image
-              </label>
+              <Label htmlFor="image" className="text-sm font-medium">
+                Featured Image
+              </Label>
               <Input
                 id="image"
                 type="file"
@@ -143,8 +156,34 @@ const BlogManager = () => {
                 accept="image/*"
               />
             </div>
+            
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="schedule-mode"
+                checked={isScheduled}
+                onCheckedChange={setIsScheduled}
+              />
+              <Label htmlFor="schedule-mode">Schedule for later</Label>
+            </div>
+            
+            {isScheduled && (
+              <div>
+                <Label htmlFor="scheduled-date" className="text-sm font-medium">
+                  Publish Date & Time
+                </Label>
+                <Input
+                  id="scheduled-date"
+                  type="datetime-local"
+                  value={scheduledDate}
+                  onChange={(e) => setScheduledDate(e.target.value)}
+                  min={new Date().toISOString().slice(0, 16)}
+                  required={isScheduled}
+                />
+              </div>
+            )}
+            
             <Button type="submit">
-              Publish Post
+              {isScheduled ? 'Schedule Post' : 'Publish Post'}
             </Button>
           </form>
         </CardContent>
@@ -154,15 +193,26 @@ const BlogManager = () => {
           <CardTitle>Published Posts</CardTitle>
         </CardHeader>
         <CardContent>
-          <ul>
+          <div className="space-y-3">
             {posts.map((post) => (
-              <li key={post.id} className="mb-2">
-                <a href={`/blog/${post.slug}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
-                  {post.title}
-                </a>
-              </li>
+              <div key={post.id} className="flex items-center justify-between p-3 border rounded-lg">
+                <div>
+                  <a href={`/blog/${post.slug}`} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline font-medium">
+                    {post.title}
+                  </a>
+                  <div className="text-sm text-gray-500 mt-1">
+                    {post.published ? (
+                      <span className="text-green-600">Published {new Date(post.published_at!).toLocaleDateString()}</span>
+                    ) : post.scheduled_publish_at ? (
+                      <span className="text-orange-600">Scheduled for {new Date(post.scheduled_publish_at).toLocaleString()}</span>
+                    ) : (
+                      <span className="text-gray-600">Draft</span>
+                    )}
+                  </div>
+                </div>
+              </div>
             ))}
-          </ul>
+          </div>
         </CardContent>
       </Card>
     </div>
