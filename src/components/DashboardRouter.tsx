@@ -23,7 +23,9 @@ const DashboardRouter = () => {
       return;
     }
 
+    // Determine final user type, falling back to metadata if necessary
     const finalUserType = userType || user.user_metadata?.user_type;
+    console.log("DashboardRouter: Final user type for redirection:", finalUserType);
 
     switch (finalUserType) {
       case "supplier":
@@ -34,10 +36,14 @@ const DashboardRouter = () => {
         break;
       case "buyer":
       case "owner":
+        console.log(
+          "DashboardRouter: Redirecting to buyer dashboard for user_type:",
+          finalUserType
+        );
         navigate("/buyer-dashboard");
         break;
       default:
-        // Fallback for any other user types or if it's undefined
+        console.log("DashboardRouter: No user type found, redirecting to guest dashboard");
         navigate("/guest-dashboard");
         break;
     }
