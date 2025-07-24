@@ -149,8 +149,6 @@ const WeeklyInsightsDashboard = () => {
   const insights = latestInsights.metadata.insights;
   const generatedDate = new Date(latestInsights.metadata.generated_at).toLocaleDateString();
 
-  const navigate = useNavigate();
-
   const handleGoBack = () => {
     if (window.history.length > 1) {
       navigate(-1);
