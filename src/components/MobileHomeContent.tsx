@@ -32,7 +32,7 @@ const MobileHomeContent = () => {
     brake: brakeSystemImage,
     suspension: suspensionImage,
     body: bodyPartsImage,
-    accessories: ShoppingBasket
+    accessories: "" // Use empty string for accessories, will show fallback icon
   };
 
   return (

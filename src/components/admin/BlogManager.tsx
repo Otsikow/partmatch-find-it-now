@@ -14,7 +14,7 @@ const BlogManager = () => {
   const { toast } = useToast();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [author, setAuthor] = useState('');
+  
   const [image, setImage] = useState<File | null>(null);
   const [posts, setPosts] = useState<BlogPost[]>([]);
 
@@ -65,11 +65,11 @@ const BlogManager = () => {
       {
         title,
         content,
-        author,
         author_id: user.id,
         slug: title.toLowerCase().replace(/\s/g, '-'),
         featured_image_url: imageUrl,
         published: true,
+        published_at: new Date().toISOString(),
       },
     ]);
 
@@ -87,7 +87,7 @@ const BlogManager = () => {
       });
       setTitle('');
       setContent('');
-      setAuthor('');
+      
       setImage(null);
       fetchPosts();
     }
@@ -116,18 +116,6 @@ const BlogManager = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Enter post title"
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="author" className="block text-sm font-medium text-gray-700">
-                Author
-              </label>
-              <Input
-                id="author"
-                value={author}
-                onChange={(e) => setAuthor(e.target.value)}
-                placeholder="Enter author's name"
                 required
               />
             </div>
