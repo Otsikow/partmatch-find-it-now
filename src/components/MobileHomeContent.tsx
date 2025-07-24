@@ -1,5 +1,5 @@
 
-import { Search, Plus, Package, Zap, ClipboardList, Newspaper } from "lucide-react";
+import { Search, Plus, Package, Zap, ClipboardList, Newspaper, ShoppingBasket } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -31,7 +31,8 @@ const MobileHomeContent = () => {
     engine: enginePartsImage,
     brake: brakeSystemImage,
     suspension: suspensionImage,
-    body: bodyPartsImage
+    body: bodyPartsImage,
+    accessories: ShoppingBasket
   };
 
   return (
@@ -209,7 +210,7 @@ const MobileHomeContent = () => {
             {
               name: "Car Accessories",
               count: loading ? "..." : `${categories.accessories || 0}+ ${t('parts')}`,
-              image: categoryImages.engine // Using engine image as placeholder for accessories
+              image: categoryImages.accessories
             }
           ].map((category) => (
             <Link key={category.name} to="/search-parts-with-map" className="block">
