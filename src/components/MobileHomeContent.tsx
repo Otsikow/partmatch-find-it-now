@@ -227,7 +227,10 @@ const MobileHomeContent = () => {
       {/* From the Blog */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-foreground">Auto Insights</h3>
+          <div className="flex items-center gap-2">
+            <Newspaper className="w-5 h-5 text-foreground" />
+            <h3 className="text-lg font-semibold text-foreground">Auto Insights</h3>
+          </div>
           <Link to="/blog" className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
             {t('viewAll')}
           </Link>
