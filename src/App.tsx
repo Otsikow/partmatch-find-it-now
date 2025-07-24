@@ -142,14 +142,6 @@ function App() {
                       }
                     />
                     <Route
-                      path="/supplier-dashboard"
-                      element={
-                        <SellerProtectedRoute>
-                          <SellerDashboard />
-                        </SellerProtectedRoute>
-                      }
-                    />
-                    <Route
                       path="/seller"
                       element={
                         <SellerProtectedRoute>

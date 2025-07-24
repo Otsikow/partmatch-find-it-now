@@ -8,6 +8,7 @@ export interface BlogPost {
   featured_image_url?: string;
   published: boolean;
   published_at?: string;
+  scheduled_publish_at?: string;
   tags: string[];
   category?: string;
   view_count?: number;

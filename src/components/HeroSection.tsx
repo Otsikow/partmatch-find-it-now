@@ -59,7 +59,7 @@ const HeroSection = () => {
     console.log('HeroSection: Getting dashboard route for user type:', userType);
     switch (userType) {
       case 'admin': return '/admin';
-      case 'supplier': return '/supplier-dashboard';
+      case 'supplier': return '/seller-dashboard';
       case 'owner':
       default: return '/buyer-dashboard';
     }
