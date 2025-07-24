@@ -8,12 +8,13 @@ import EditPartModal from "./parts/EditPartModal";
 import InventorySearchControls from "./InventorySearchControls";
 
 interface MyPartsTabProps {
+  parts: CarPart[];
   onRefresh: () => void;
 }
 
-const MyPartsTab = ({ onRefresh }: MyPartsTabProps) => {
+const MyPartsTab = ({ parts, onRefresh }: MyPartsTabProps) => {
   const { hasBusinessSubscription } = useSubscriptionStatus();
-  const { parts, loading, updatePartStatus, deletePart, updatePart, fetchMyParts } = usePartManagement();
+  const { loading, updatePartStatus, deletePart, updatePart, fetchMyParts } = usePartManagement();
   const [selectedPartForBoost, setSelectedPartForBoost] = useState<string | null>(null);
   const [editingPart, setEditingPart] = useState<CarPart | null>(null);
   
@@ -144,7 +145,7 @@ const MyPartsTab = ({ onRefresh }: MyPartsTabProps) => {
               onDelete={deletePart}
               onUpdateStatus={updatePartStatus}
               onToggleBoost={setSelectedPartForBoost}
-              onFeatureUpdate={fetchMyParts}
+              onFeatureUpdate={onRefresh}
             />
           ))}
         </div>
