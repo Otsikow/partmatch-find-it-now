@@ -93,7 +93,7 @@ export const BuyerDashboardHeader = () => {
               <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
             </Button>
             {/* Logo */}
-            <Link to="/" className="flex items-center gap-2 flex-shrink-0 hover:opacity-80 transition-opacity">
+            <Link to="/" state={{ explicitHomeNavigation: true }} className="flex items-center gap-2 flex-shrink-0 hover:opacity-80 transition-opacity">
               <Logo className="h-8 w-auto sm:h-10 object-contain" />
             </Link>
             
