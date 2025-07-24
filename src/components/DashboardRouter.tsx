@@ -1,59 +1,54 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
 
 const DashboardRouter = () => {
-  const {
-    user,
-    loading: authLoading,
-    profileLoading,
-    userType,
-  } = useAuth();
+  const { user, loading: authLoading, profileLoading, userType } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    // Wait until auth and profile loading are finished
     if (authLoading || profileLoading) {
-      console.log(
-        "DashboardRouter: Waiting for auth and profile to load...",
-        { authLoading, profileLoading }
-      );
       return;
     }
 
-    // If no user, redirect to auth page
+    // If the user explicitly navigates home, let them.
+    if (location.state?.explicitHomeNavigation) {
+      navigate("/");
+      return;
+    }
+
     if (!user) {
-      console.log("DashboardRouter: No user found, redirecting to auth");
       navigate("/auth");
       return;
     }
 
-    // Determine final user type, falling back to metadata if necessary
-    const finalUserType = userType || user.user_metadata?.user_type || "owner";
-    console.log("DashboardRouter: Final user type for redirection:", finalUserType);
+    const finalUserType = userType || user.user_metadata?.user_type;
 
-    // Redirect based on the final user type
     switch (finalUserType) {
       case "supplier":
-        console.log(
-          "DashboardRouter: Redirecting supplier to seller dashboard"
-        );
         navigate("/seller-dashboard");
         break;
       case "admin":
-        console.log("DashboardRouter: Redirecting admin to admin dashboard");
         navigate("/admin");
         break;
-      default:
-        console.log(
-          "DashboardRouter: Redirecting to buyer dashboard for user_type:",
-          finalUserType
-        );
+      case "buyer":
+      case "owner":
         navigate("/buyer-dashboard");
         break;
+      default:
+        // Fallback for any other user types or if it's undefined
+        navigate("/guest-dashboard");
+        break;
     }
-  }, [user, navigate, authLoading, profileLoading, userType]);
+  }, [
+    user,
+    navigate,
+    authLoading,
+    profileLoading,
+    userType,
+    location.state,
+  ]);
 
   if (authLoading || profileLoading) {
     return (
