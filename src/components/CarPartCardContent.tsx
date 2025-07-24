@@ -86,13 +86,13 @@ const CarPartCardContent = ({ part, onExpand }: CarPartCardContentProps) => {
               </AvatarFallback>
             </Avatar>
             <span className="font-medium truncate">{sellerName}</span>
-            <VerifiedSellerBadge isVerified={part.profiles?.is_verified || false} size="xs" />
+            <VerifiedSellerBadge isVerified={part.profiles?.is_verified || false} size="sm" />
           </div>
           
           <SellerRatingDisplay
             rating={part.profiles?.rating || 0}
             totalRatings={part.profiles?.total_ratings || 0}
-            size="xs"
+            size="sm"
             showBadge={true}
           />
         </div>

@@ -75,7 +75,7 @@ const RequestCardActions = ({
   };
 
   return (
-    <div className="flex gap-3 w-full mt-4 -mx-2 px-2">
+    <div className="flex gap-2 w-full mt-4 -mx-2 px-2">
       <Button
         onClick={handleOfferClick}
         size="sm"
@@ -87,7 +87,7 @@ const RequestCardActions = ({
         variant="outline"
         size="sm"
         onClick={handleChatClick}
-        className="flex-1 min-w-[70px] border-blue-600 text-blue-700 hover:bg-blue-50 hover:border-blue-700 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
+        className="flex-1 min-w-[60px] border-blue-600 text-blue-700 hover:bg-blue-50 hover:border-blue-700 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
       >
         Chat
       </Button>
@@ -95,7 +95,7 @@ const RequestCardActions = ({
         variant="outline"
         size="sm"
         onClick={handleWhatsAppClick}
-        className="flex-1 min-w-[80px] border-success text-success-foreground bg-success hover:bg-success/90 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
+        className="flex-1 min-w-[80px] border-green-600 text-white bg-green-600 hover:bg-green-700 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
       >
         WhatsApp
       </Button>
