@@ -20,6 +20,8 @@ const BlogManager = () => {
   const [isScheduled, setIsScheduled] = useState(false);
   const [scheduledDate, setScheduledDate] = useState('');
   const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [isFormatting, setIsFormatting] = useState(false);
+  const [excerpt, setExcerpt] = useState('');
 
   useEffect(() => {
     fetchPosts();
@@ -35,6 +37,62 @@ const BlogManager = () => {
       console.error('Error fetching blog posts:', error);
     } else {
       setPosts(data);
+    }
+  };
+
+  const handleFormatWithAI = async () => {
+    if (!title.trim() || !content.trim()) {
+      toast({
+        title: 'Missing Content',
+        description: 'Please enter both title and content before formatting.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setIsFormatting(true);
+    try {
+      const response = await fetch('https://ytgmzhevgcmvevuwkocz.supabase.co/functions/v1/blog-formatter', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title,
+          content,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to format content');
+      }
+
+      const result = await response.json();
+      
+      if (result.formattedContent) {
+        setContent(result.formattedContent);
+        if (result.excerpt) {
+          setExcerpt(result.excerpt);
+        }
+        
+        toast({
+          title: 'Content Formatted!',
+          description: 'Your blog post has been professionally formatted.',
+        });
+
+        if (result.suggestions && result.suggestions.length > 0) {
+          console.log('AI Suggestions:', result.suggestions);
+        }
+      }
+    } catch (error) {
+      console.error('Error formatting content:', error);
+      toast({
+        title: 'Formatting Failed',
+        description: 'Failed to format content. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsFormatting(false);
     }
   };
 
@@ -75,6 +133,7 @@ const BlogManager = () => {
         author_id: user.id,
         slug: title.toLowerCase().replace(/\s/g, '-'),
         featured_image_url: imageUrl,
+        excerpt: excerpt || content.substring(0, 160) + '...',
         published: shouldPublishNow,
         published_at: shouldPublishNow ? currentTime : null,
         scheduled_publish_at: scheduledTime,
@@ -99,6 +158,7 @@ const BlogManager = () => {
       });
       setTitle('');
       setContent('');
+      setExcerpt('');
       setImage(null);
       setIsScheduled(false);
       setScheduledDate('');
@@ -133,18 +193,46 @@ const BlogManager = () => {
               />
             </div>
             <div>
-              <label htmlFor="content" className="block text-sm font-medium text-gray-700">
-                Content
-              </label>
+              <div className="flex items-center justify-between mb-2">
+                <Label htmlFor="content" className="text-sm font-medium">
+                  Content
+                </Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleFormatWithAI}
+                  disabled={isFormatting || !title.trim() || !content.trim()}
+                >
+                  {isFormatting ? 'Formatting...' : '✨ Format with AI'}
+                </Button>
+              </div>
               <Textarea
                 id="content"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-                placeholder="Write your blog post here..."
+                placeholder="Write your blog post content here... The AI formatter will help organize and style it professionally."
                 required
-                rows={10}
+                rows={12}
               />
             </div>
+            
+            {excerpt && (
+              <div>
+                <Label htmlFor="excerpt" className="text-sm font-medium">
+                  Meta Excerpt (SEO)
+                </Label>
+                <Textarea
+                  id="excerpt"
+                  value={excerpt}
+                  onChange={(e) => setExcerpt(e.target.value)}
+                  placeholder="Brief description for search engines (max 160 characters)"
+                  maxLength={160}
+                  rows={3}
+                />
+                <p className="text-xs text-gray-500 mt-1">{excerpt.length}/160 characters</p>
+              </div>
+            )}
             <div>
               <Label htmlFor="image" className="text-sm font-medium">
                 Featured Image
