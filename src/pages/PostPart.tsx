@@ -198,28 +198,17 @@ const PostPart = () => {
     }
   }, []);
 
-  // Handle auto-submission after login
+  // Handle redirect from login
   useEffect(() => {
-    const autoSubmit = searchParams.get('autoSubmit');
-    if (autoSubmit === 'true' && user) {
+    const isRedirected = searchParams.get('redirect') === '/post-part';
+    if (isRedirected && user) {
       const savedDraft = localStorage.getItem('draftPart');
       if (savedDraft) {
-        console.log('Auto-submitting saved draft:', savedDraft);
-        try {
-          const parsedDraft = JSON.parse(savedDraft);
-          setFormData(parsedDraft);
-          // Auto-submit after a short delay to ensure form is loaded
-          setTimeout(() => {
-            submitListing(parsedDraft);
-          }, 500);
-        } catch (error) {
-          console.error('Failed to auto-submit:', error);
-          toast({
-            title: "Auto-submission Failed",
-            description: "Please review and submit your listing manually.",
-            variant: "destructive",
-          });
-        }
+        toast({
+          title: "Welcome Back!",
+          description: "We've loaded your saved draft. Please review and submit.",
+          duration: 5000,
+        });
       }
     }
   }, [user, searchParams]);
@@ -364,9 +353,21 @@ const PostPart = () => {
 
     } catch (error: any) {
       console.error("Error posting part:", error);
+
+      let errorMessage = "An unexpected error occurred. Please try again.";
+      if (error.message) {
+        if (error.message.includes("duplicate key value violates unique constraint")) {
+          errorMessage = "This part seems to be a duplicate of another listing. Please check your inventory.";
+        } else if (error.message.includes("network error")) {
+          errorMessage = "Network error. Please check your internet connection and try again.";
+        } else {
+          errorMessage = error.message;
+        }
+      }
+
       toast({
         title: "Posting Failed",
-        description: error.message || "An unexpected error occurred. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -380,7 +381,7 @@ const PostPart = () => {
     if (!user) {
       // Save form data and redirect to seller login
       localStorage.setItem('draftPart', JSON.stringify(formData));
-      navigate('/seller-auth?redirect=/post-part&autoSubmit=true');
+      navigate('/seller-auth?redirect=/post-part');
       return;
     }
 
