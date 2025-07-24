@@ -117,8 +117,17 @@ const PriceComparisonSection = ({ currentPart }: PriceComparisonSectionProps) =>
           <CardTitle className="text-lg font-semibold">Price Comparison</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-center py-4">
-            <p className="text-red-500 text-sm">Error loading similar products: {error}</p>
+          <div className="text-center py-8">
+            <div className="text-amber-600 text-lg mb-2">⚠️ Unable to load similar products</div>
+            <p className="text-gray-600 text-sm mb-4">{error}</p>
+            <Button 
+              onClick={() => window.location.reload()} 
+              variant="outline" 
+              size="sm"
+              className="text-blue-600 border-blue-600 hover:bg-blue-50"
+            >
+              Try Again
+            </Button>
           </div>
         </CardContent>
       </Card>
@@ -133,8 +142,14 @@ const PriceComparisonSection = ({ currentPart }: PriceComparisonSectionProps) =>
         </CardHeader>
         <CardContent>
           <div className="text-center py-8">
-            <div className="text-gray-500 text-base mb-2">No similar products found for comparison</div>
-            <div className="text-gray-400 text-sm">Try browsing other {currentPart.part_type} parts</div>
+            <div className="text-6xl mb-4">🔍</div>
+            <div className="text-gray-700 text-lg font-medium mb-2">No similar products found</div>
+            <div className="text-gray-500 text-sm mb-4">
+              We couldn't find other {currentPart.part_type} parts to compare prices with.
+            </div>
+            <div className="text-gray-400 text-xs">
+              Try browsing our catalog or check back later as more sellers list their parts.
+            </div>
           </div>
         </CardContent>
       </Card>
