@@ -20,13 +20,13 @@ const CarPartCardImage = ({ partId, title, condition, images, isFeatured, onExpa
   const imageUrl = getImageUrl(images);
   
   return (
-    <div className="relative cursor-pointer" onClick={onExpand}>
+    <div className="relative cursor-pointer group" onClick={onExpand}>
       {imageUrl ? (
-        <div className="relative h-24 sm:h-32 bg-gray-100">
+        <div className="relative h-32 sm:h-36 bg-gray-100 overflow-hidden rounded-t-lg">
           <img
             src={imageUrl}
             alt={title}
-            className="w-full h-full object-cover rounded-t-lg"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             onError={(e) => {
               console.error('Image failed to load:', imageUrl);
               // Show placeholder on error instead of hiding
@@ -45,67 +45,91 @@ const CarPartCardImage = ({ partId, title, condition, images, isFeatured, onExpa
               <p className="text-sm">Image failed to load</p>
             </div>
           </div>
-          <div className="absolute top-2 right-2 flex gap-2">
+          
+          {/* Top Left - Featured Badge */}
+          {isFeatured && (
+            <div className="absolute top-2 left-2">
+              <Badge
+                variant="default"
+                className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-yellow-900 font-bold text-xs px-2 py-1 shadow-md"
+              >
+                <Star className="h-3 w-3 mr-1 fill-current" />
+                Featured
+              </Badge>
+            </div>
+          )}
+          
+          {/* Top Right - Save Button and Condition */}
+          <div className="absolute top-2 right-2 flex flex-col gap-1.5 items-end">
             <SaveButton 
               partId={partId} 
               size="sm" 
               variant="ghost"
-              className="bg-white/90 hover:bg-white shadow-sm"
+              className="bg-white/95 hover:bg-white shadow-lg border border-white/20 backdrop-blur-sm h-8 w-8 p-0"
             />
             <Badge 
               variant="secondary" 
-              className={`${getConditionColor(condition)} font-semibold`}
+              className={`${getConditionColor(condition)} font-medium text-xs px-2 py-1 shadow-md backdrop-blur-sm bg-white/95`}
             >
               {condition}
             </Badge>
           </div>
-          {isFeatured && (
-            <Badge
-              variant="default"
-              className="absolute top-2 left-2 bg-yellow-400 text-yellow-900 font-bold"
+          
+          {/* Bottom Right - Expand Button */}
+          <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <Button 
+              size="sm" 
+              variant="secondary" 
+              className="bg-white/95 hover:bg-white shadow-lg border border-white/20 backdrop-blur-sm h-8 w-8 p-0"
             >
-              <Star className="h-3 w-3 mr-1" />
-              Featured
-            </Badge>
-          )}
-          <div className="absolute bottom-2 right-2">
-            <Button size="sm" variant="secondary" className="bg-white/80 hover:bg-white">
-              <Expand className="h-4 w-4" />
+              <Expand className="h-3.5 w-3.5" />
             </Button>
           </div>
         </div>
       ) : (
-        <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+        <div className="relative h-32 sm:h-36 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center rounded-t-lg overflow-hidden">
           <div className="text-gray-400 text-center">
-            <div className="text-2xl mb-2">📦</div>
-            <p className="text-sm">No Image Available</p>
+            <div className="text-3xl mb-2">📦</div>
+            <p className="text-sm font-medium">No Image Available</p>
           </div>
-          <div className="absolute top-2 right-2 flex gap-2">
+          
+          {/* Top Left - Featured Badge */}
+          {isFeatured && (
+            <div className="absolute top-2 left-2">
+              <Badge
+                variant="default"
+                className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-yellow-900 font-bold text-xs px-2 py-1 shadow-md"
+              >
+                <Star className="h-3 w-3 mr-1 fill-current" />
+                Featured
+              </Badge>
+            </div>
+          )}
+          
+          {/* Top Right - Save Button and Condition */}
+          <div className="absolute top-2 right-2 flex flex-col gap-1.5 items-end">
             <SaveButton 
               partId={partId} 
               size="sm" 
               variant="ghost"
-              className="bg-white/90 hover:bg-white shadow-sm"
+              className="bg-white/95 hover:bg-white shadow-lg border border-white/20 backdrop-blur-sm h-8 w-8 p-0"
             />
             <Badge 
               variant="secondary" 
-              className={`${getConditionColor(condition)} font-semibold`}
+              className={`${getConditionColor(condition)} font-medium text-xs px-2 py-1 shadow-md backdrop-blur-sm bg-white/95`}
             >
               {condition}
             </Badge>
           </div>
-          {isFeatured && (
-            <Badge
-              variant="default"
-              className="absolute top-2 left-2 bg-yellow-400 text-yellow-900 font-bold"
+          
+          {/* Bottom Right - Expand Button */}
+          <div className="absolute bottom-2 right-2 opacity-70 hover:opacity-100 transition-opacity duration-200">
+            <Button 
+              size="sm" 
+              variant="secondary" 
+              className="bg-white/95 hover:bg-white shadow-lg border border-white/20 backdrop-blur-sm h-8 w-8 p-0"
             >
-              <Star className="h-3 w-3 mr-1" />
-              Featured
-            </Badge>
-          )}
-          <div className="absolute bottom-2 right-2">
-            <Button size="sm" variant="secondary" className="bg-white/80 hover:bg-white">
-              <Expand className="h-4 w-4" />
+              <Expand className="h-3.5 w-3.5" />
             </Button>
           </div>
         </div>
