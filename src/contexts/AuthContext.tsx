@@ -353,7 +353,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         email,
         password,
       });
-      await localStorage.setItem("profiles", JSON.stringify(data?.user));
+
       console.log("AuthProvider: SignIn result:", {
         error,
         userData: data?.user?.id ? "User found" : "No user",
@@ -582,48 +582,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const { error } = await supabase.auth.signOut();
 
-      console.log("AuthProvider: SignOut result:", { error });
-
-      // Clear local state immediately regardless of error
-      setSession(null);
-      setUser(null);
-      setIsPasswordReset(false);
-      setUserType(null);
-      setFirstName(null);
-
       if (error) {
-        // Log the error but don't throw it - handle gracefully
-        console.error(
-          "AuthProvider: Sign out error (handled gracefully):",
-          error
-        );
-
-        // For session missing errors, don't show error toast
-        if (error.message && error.message.includes("session")) {
-          console.log(
-            "AuthProvider: Session already cleared, sign out completed"
-          );
-        } else {
-          // Only show toast for unexpected errors
-          toast({
-            title: "Sign Out Notice",
-            description: "You have been signed out.",
-          });
-        }
+        console.error("AuthProvider: Sign out error:", error);
+        // Still proceed to clear local state
       } else {
         console.log("AuthProvider: Sign out successful");
       }
     } catch (error) {
       console.error("AuthProvider: Sign out unexpected error:", error);
-
-      // Always clear local state even on unexpected errors
+    } finally {
+      // Always clear local state after sign-out attempt
       setSession(null);
       setUser(null);
       setIsPasswordReset(false);
       setUserType(null);
       setFirstName(null);
 
-      // Don't throw the error - handle gracefully
       toast({
         title: "Signed Out",
         description: "You have been signed out.",
