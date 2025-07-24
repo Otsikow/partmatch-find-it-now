@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Package } from "lucide-react";
-import DashboardHeader from "@/components/DashboardHeader";
+import SellerHeader from "@/components/SellerHeader";
 import SellerStats from "@/components/SellerStats";
 import SellerTabs from "@/components/SellerTabs";
 import SellerWelcomeDashboard from "@/components/SellerWelcomeDashboard";
@@ -79,7 +79,7 @@ const SellerDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white dark:from-orange-900/20 dark:to-gray-900">
-      <DashboardHeader />
+      <SellerHeader />
 
       <main className="container mx-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4 md:py-6 lg:py-8 max-w-full sm:max-w-2xl md:max-w-4xl lg:max-w-6xl xl:max-w-7xl">
         {showMainDashboard ? (

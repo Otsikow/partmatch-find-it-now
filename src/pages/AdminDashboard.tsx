@@ -9,7 +9,7 @@ import OfferCard from "@/components/admin/OfferCard";
 import VerificationCard from "@/components/admin/VerificationCard";
 import UserDetailsCard from "@/components/admin/UserDetailsCard";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import DashboardHeader from "@/components/DashboardHeader";
+import AdminHeader from "@/components/admin/AdminHeader";
 import UserCategoryTabs from "@/components/admin/UserCategoryTabs";
 import UserManagementStats from "@/components/admin/UserManagementStats";
 import AnalyticsDashboard from "@/components/admin/AnalyticsDashboard";
@@ -77,6 +77,17 @@ const AdminDashboard = () => {
     setActiveTab("verifications");
   };
 
+  const handleGoBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/admin');
+    }
+  };
+
+  const handleGoHome = () => {
+    navigate('/admin');
+  };
 
   // Auto-refresh disabled to prevent UI instability - data will refresh on user actions
   useEffect(() => {
@@ -101,7 +112,11 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-background font-inter">
       {/* Single Modern Header */}
-      <DashboardHeader />
+      <AdminHeader
+        onNavigateToVerifications={handleNavigateToVerifications}
+        onGoBack={handleGoBack}
+        onGoHome={handleGoHome}
+      />
 
       <main className="container mx-auto px-2 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8 max-w-7xl">
         <div className="mb-4 sm:mb-6 lg:mb-8">
