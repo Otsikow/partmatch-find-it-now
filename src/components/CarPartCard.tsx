@@ -53,48 +53,19 @@ const CarPartCard = ({ part, onContact }: CarPartCardProps) => {
           onExpand={handleCardClick}
         />
 
-        <Collapsible open={isCollapsibleOpen} onOpenChange={setIsCollapsibleOpen}>
-          {/* Always visible basic info */}
-          <div className="cursor-pointer" onClick={handleCardClick}>
-            <CarPartCardContent
-              part={part}
-              onExpand={handleCardClick}
-            />
-          </div>
-
-          {/* Collapsible trigger */}
-          <div className="px-4 pb-2">
-            <CollapsibleTrigger asChild>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="w-full justify-center gap-2 text-muted-foreground hover:text-foreground"
-                onClick={handleToggleCollapsible}
-              >
-                {isCollapsibleOpen ? (
-                  <>
-                    <ChevronUp className="h-4 w-4" />
-                    Show Less
-                  </>
-                ) : (
-                  <>
-                    <ChevronDown className="h-4 w-4" />
-                    Show More
-                  </>
-                )}
-              </Button>
-            </CollapsibleTrigger>
-          </div>
-
-          {/* Collapsible footer with action buttons */}
-          <CollapsibleContent>
-            <CarPartCardFooter
-              partId={part.id}
-              supplierId={part.supplier_id}
-              onContact={handleContactClick}
-            />
-          </CollapsibleContent>
-        </Collapsible>
+        <div onClick={handleCardClick} className="cursor-pointer">
+          <CarPartCardContent
+            part={part}
+            onExpand={handleCardClick}
+          />
+        </div>
+        <div className="px-3 pb-3">
+          <CarPartCardFooter
+            partId={part.id}
+            supplierId={part.supplier_id}
+            onContact={handleContactClick}
+          />
+        </div>
       </Card>
 
       <CarPartExpandedDialog

@@ -22,7 +22,7 @@ const CarPartCardImage = ({ partId, title, condition, images, isFeatured, onExpa
   return (
     <div className="relative cursor-pointer" onClick={onExpand}>
       {imageUrl ? (
-        <div className="relative h-48 bg-gray-100">
+        <div className="relative h-32 bg-gray-100">
           <img
             src={imageUrl}
             alt={title}
