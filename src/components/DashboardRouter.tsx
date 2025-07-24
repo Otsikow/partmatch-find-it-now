@@ -31,7 +31,10 @@ const DashboardRouter = () => {
 
     // Determine final user type, falling back to metadata if necessary
     const finalUserType = userType || user.user_metadata?.user_type;
-    console.log("DashboardRouter: Final user type for redirection:", finalUserType);
+    console.log(
+      "DashboardRouter: Determining user type for redirection:",
+      finalUserType
+    );
 
     // Redirect based on the final user type
     switch (finalUserType) {

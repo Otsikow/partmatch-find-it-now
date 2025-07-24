@@ -219,6 +219,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       return { error };
     }
 
+    // Ensure user_type is included in metadata
+    const finalUserData = {
+      ...userData,
+      user_type: userData.user_type || "owner", // Default to 'owner'
+    };
+
     const redirectUrl = `${window.location.origin}/`;
 
     try {
@@ -235,7 +241,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         password,
         options: {
           emailRedirectTo: redirectUrl,
-          data: userData,
+          data: finalUserData,
         },
       });
 
@@ -428,7 +434,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             throw profileError;
           }
 
-          if (profile?.user_type !== userType) {
+          const profileUserType =
+            profile?.user_type || data.user.user_metadata?.user_type;
+
+          if (profileUserType !== userType) {
             console.log("AuthProvider: User type mismatch, signing out");
 
             await supabase.auth.signOut();
