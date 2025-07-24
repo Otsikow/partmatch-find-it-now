@@ -141,7 +141,7 @@ const MobileHomeContent = () => {
             ))}
           </div>
         ) : featuredParts.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {featuredParts.slice(0, 12).map((part) => (
               <CarPartCard key={part.id} part={part} />
             ))}

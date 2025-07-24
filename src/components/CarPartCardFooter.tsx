@@ -1,5 +1,4 @@
 
-import { CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Phone } from "lucide-react";
 import ChatButton from "./chat/ChatButton";
@@ -14,37 +13,39 @@ interface CarPartCardFooterProps {
 
 const CarPartCardFooter = ({ partId, supplierId, onContact }: CarPartCardFooterProps) => {
   return (
-    <CardFooter className="pt-3 sm:pt-4 space-y-2 sm:space-y-3">
-      <div className="flex gap-2 sm:gap-3 w-full">
-        <ChatButton
-          sellerId={supplierId}
-          partId={partId}
-          className="flex-1 bg-gradient-to-r from-blue-600 to-purple-700 hover:from-blue-700 hover:to-purple-800 text-white font-semibold py-2 sm:py-3 px-4 sm:px-5 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 text-sm sm:text-base h-10 sm:h-11"
-        />
+    <div className="pt-2 space-y-2">
+      {/* Primary Chat Button - Full Width */}
+      <ChatButton
+        sellerId={supplierId}
+        partId={partId}
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-3 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 text-sm h-9"
+      />
+      
+      {/* Secondary Actions Row */}
+      <div className="flex gap-1.5 w-full">
         <SaveButton 
           partId={partId} 
-          size="default"
+          size="sm"
           variant="outline"
-          className="border-red-200 hover:bg-red-50 h-10 sm:h-11"
+          className="flex-1 border-gray-300 hover:bg-gray-50 text-gray-600 h-8 px-2"
         />
         <FollowSellerButton 
           sellerId={supplierId}
-          size="default"
+          size="sm"
           variant="outline"
-          showText={true}
-          className="h-10 sm:h-11 px-3"
+          showText={false}
+          className="flex-1 border-gray-300 hover:bg-gray-50 text-gray-600 h-8 px-2"
         />
+        <Button 
+          onClick={onContact}
+          size="sm"
+          variant="outline"
+          className="flex-1 border-green-600 text-green-600 hover:bg-green-50 font-medium transition-all duration-200 text-xs h-8 px-2"
+        >
+          <Phone className="h-3 w-3" />
+        </Button>
       </div>
-      
-      <Button 
-        onClick={onContact}
-        variant="outline"
-        className="w-full border-green-600 text-green-700 hover:bg-green-50 font-semibold py-2 sm:py-3 px-4 sm:px-5 rounded-lg transition-all duration-300 text-sm sm:text-base h-10 sm:h-11"
-      >
-        <Phone className="h-4 w-4 mr-2" />
-        Contact Seller
-      </Button>
-    </CardFooter>
+    </div>
   );
 };
 
