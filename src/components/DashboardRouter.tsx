@@ -30,7 +30,7 @@ const DashboardRouter = () => {
     }
 
     // Determine final user type, falling back to metadata if necessary
-    const finalUserType = userType || user.user_metadata?.user_type || "owner";
+    const finalUserType = userType || user.user_metadata?.user_type;
     console.log("DashboardRouter: Final user type for redirection:", finalUserType);
 
     // Redirect based on the final user type
@@ -45,12 +45,16 @@ const DashboardRouter = () => {
         console.log("DashboardRouter: Redirecting admin to admin dashboard");
         navigate("/admin");
         break;
-      default:
+      case "owner":
         console.log(
           "DashboardRouter: Redirecting to buyer dashboard for user_type:",
           finalUserType
         );
         navigate("/buyer-dashboard");
+        break;
+      default:
+        console.log("DashboardRouter: No user type found, redirecting to auth");
+        navigate("/auth");
         break;
     }
   }, [user, navigate, authLoading, profileLoading, userType]);
