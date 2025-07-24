@@ -9,7 +9,7 @@ export const useFeaturedParts = () => {
 
   useEffect(() => {
     fetchFeaturedParts();
-  }, [featuredParts]);
+  }, []);
 
   const fetchFeaturedParts = async () => {
     try {
