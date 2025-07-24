@@ -163,6 +163,10 @@
   .safe-area-pb {
     padding-bottom: env(safe-area-inset-bottom);
   }
+
+  .dark .dark\:invert {
+    filter: invert(1);
+  }
 }
 
 /* Consistent Typography System */

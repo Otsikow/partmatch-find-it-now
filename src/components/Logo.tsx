@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface LogoProps {
   className?: string;
@@ -7,10 +8,12 @@ interface LogoProps {
 }
 
 const Logo: React.FC<LogoProps> = ({ className, isHero }) => {
+  const { theme } = useTheme();
   const logoClasses = cn(
     'w-auto object-contain',
     {
       'h-48 sm:h-56 md:h-64 lg:h-72': isHero,
+      'dark:invert': theme === 'dark',
     },
     className
   );
