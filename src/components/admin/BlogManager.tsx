@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -6,8 +6,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { supabase } from '@/integrations/supabase/client';
 import { v4 as uuidv4 } from 'uuid';
 import { BlogPost } from '@/types/BlogPost';
+import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/hooks/use-toast';
 
 const BlogManager = () => {
+  const { user } = useAuth();
+  const { toast } = useToast();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [author, setAuthor] = useState('');
@@ -48,11 +52,21 @@ const BlogManager = () => {
       imageUrl = urlData.publicUrl;
     }
 
+    if (!user) {
+      toast({
+        title: 'Authentication Error',
+        description: 'You must be logged in to create a post.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     const { error } = await supabase.from('blog_posts').insert([
       {
         title,
         content,
         author,
+        author_id: user.id,
         slug: title.toLowerCase().replace(/\s/g, '-'),
         featured_image_url: imageUrl,
         published: true,
@@ -61,8 +75,16 @@ const BlogManager = () => {
 
     if (error) {
       console.error('Error saving blog post:', error);
+      toast({
+        title: 'Error Saving Post',
+        description: error.message,
+        variant: 'destructive',
+      });
     } else {
-      alert('Blog post submitted!');
+      toast({
+        title: 'Success!',
+        description: 'Blog post has been published successfully.',
+      });
       setTitle('');
       setContent('');
       setAuthor('');
