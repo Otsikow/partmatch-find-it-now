@@ -248,6 +248,49 @@ const MobileHomeContent = () => {
         </div>
       </div>
 
+      {/* From the Blog */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-foreground">Auto Insights</h3>
+          <Link to="/blog" className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
+            {t('viewAll')}
+          </Link>
+        </div>
+
+        {blogLoading ? (
+          <div className="grid grid-cols-1 gap-3">
+            {[1, 2, 3].map((i) => (
+              <Card key={i} className="animate-pulse">
+                <CardContent className="p-4">
+                  <div className="bg-gray-200 dark:bg-gray-700 h-4 rounded w-3/4 mb-2"></div>
+                  <div className="bg-gray-200 dark:bg-gray-700 h-3 rounded w-1/2"></div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : blogPosts.length > 0 ? (
+          <div className="grid grid-cols-1 gap-3">
+            {blogPosts.map((post) => (
+              <Link key={post.id} to={`/blog/${post.slug}`}>
+                <Card className="hover:shadow-lg transition-shadow">
+                  <CardContent className="p-4">
+                    <h4 className="font-semibold text-foreground mb-1">{post.title}</h4>
+                    <p className="text-xs text-muted-foreground line-clamp-2">{post.excerpt}</p>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <Card>
+            <CardContent className="p-6 text-center">
+              <Newspaper className="w-12 h-12 text-gray-400 dark:text-gray-600 mx-auto mb-3" />
+              <p className="text-muted-foreground">No blog posts available</p>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+
       {/* Stats */}
       <div className="bg-gradient-to-r from-blue-50 to-green-50 dark:from-blue-900/20 dark:to-green-900/20 rounded-2xl p-6">
         <div className="text-center space-y-2">
@@ -303,49 +346,6 @@ const MobileHomeContent = () => {
             <p className="text-xs text-muted-foreground mt-1">Successful connections made</p>
           </div>
         </div>
-      </div>
-
-      {/* From the Blog */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-foreground">Auto Insights</h3>
-          <Link to="/blog" className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
-            {t('viewAll')}
-          </Link>
-        </div>
-
-        {blogLoading ? (
-          <div className="grid grid-cols-1 gap-3">
-            {[1, 2, 3].map((i) => (
-              <Card key={i} className="animate-pulse">
-                <CardContent className="p-4">
-                  <div className="bg-gray-200 dark:bg-gray-700 h-4 rounded w-3/4 mb-2"></div>
-                  <div className="bg-gray-200 dark:bg-gray-700 h-3 rounded w-1/2"></div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        ) : blogPosts.length > 0 ? (
-          <div className="grid grid-cols-1 gap-3">
-            {blogPosts.map((post) => (
-              <Link key={post.id} to={`/blog/${post.slug}`}>
-                <Card className="hover:shadow-lg transition-shadow">
-                  <CardContent className="p-4">
-                    <h4 className="font-semibold text-foreground mb-1">{post.title}</h4>
-                    <p className="text-xs text-muted-foreground line-clamp-2">{post.excerpt}</p>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <Card>
-            <CardContent className="p-6 text-center">
-              <Newspaper className="w-12 h-12 text-gray-400 dark:text-gray-600 mx-auto mb-3" />
-              <p className="text-muted-foreground">No blog posts available</p>
-            </CardContent>
-          </Card>
-        )}
       </div>
     </div>
   );
