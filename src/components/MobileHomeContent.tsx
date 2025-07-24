@@ -1,11 +1,12 @@
 
-import { Search, Plus, Package, Zap, ClipboardList, Newspaper } from "lucide-react";
+import { Search, Plus, Package, Zap, ClipboardList, Newspaper, ShoppingBasket } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useFeaturedParts } from "@/hooks/useFeaturedParts";
 import { useRealTimeStats } from "@/hooks/useRealTimeStats";
 import { useBlogPosts } from "@/hooks/useBlogPosts";
+import BlogCard from '@/components/BlogCard';
 import { useTranslation } from 'react-i18next';
 import enginePartsImage from "@/assets/engine-parts.jpg";
 import brakeSystemImage from "@/assets/brake-system.jpg";
@@ -31,7 +32,8 @@ const MobileHomeContent = () => {
     engine: enginePartsImage,
     brake: brakeSystemImage,
     suspension: suspensionImage,
-    body: bodyPartsImage
+    body: bodyPartsImage,
+    accessories: "" // Use empty string for accessories, will show fallback icon
   };
 
   return (
@@ -209,7 +211,7 @@ const MobileHomeContent = () => {
             {
               name: "Car Accessories",
               count: loading ? "..." : `${categories.accessories || 0}+ ${t('parts')}`,
-              image: categoryImages.engine // Using engine image as placeholder for accessories
+              image: categoryImages.accessories
             }
           ].map((category) => (
             <Link key={category.name} to="/search-parts-with-map" className="block">
@@ -269,15 +271,10 @@ const MobileHomeContent = () => {
             ))}
           </div>
         ) : blogPosts.length > 0 ? (
-          <div className="grid grid-cols-1 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {blogPosts.map((post) => (
-              <Link key={post.id} to={`/blog/${post.slug}`}>
-                <Card className="hover:shadow-lg transition-shadow">
-                  <CardContent className="p-4">
-                    <h4 className="font-semibold text-foreground mb-1">{post.title}</h4>
-                    <p className="text-xs text-muted-foreground line-clamp-2">{post.excerpt}</p>
-                  </CardContent>
-                </Card>
+              <Link key={post.id} to={`/blog/${post.slug}`} className="block">
+                <BlogCard post={post} />
               </Link>
             ))}
           </div>

@@ -34,8 +34,10 @@ const DashboardRouter = () => {
       case "admin":
         navigate("/admin");
         break;
+fix/home-button-redirect
       case "buyer":
-      case "owner":
+ main
+      case "buyer":
         console.log(
           "DashboardRouter: Redirecting to buyer dashboard for user_type:",
           finalUserType
@@ -43,8 +45,10 @@ const DashboardRouter = () => {
         navigate("/buyer-dashboard");
         break;
       default:
+fix/home-button-redirect
         console.log("DashboardRouter: No user type found, redirecting to guest dashboard");
         navigate("/guest-dashboard");
+main
         break;
     }
   }, [

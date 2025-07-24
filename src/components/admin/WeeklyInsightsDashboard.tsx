@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useNavigate } from 'react-router-dom';
+import AutoInsightsHeader from '@/components/admin/AutoInsightsHeader';
 import { 
   TrendingUp, 
   Users, 
@@ -150,23 +151,7 @@ const WeeklyInsightsDashboard = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div className="flex items-center gap-4">
-          <Button variant="outline" size="icon" onClick={() => navigate(-1)}>
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <div>
-            <h1 className="text-3xl font-bold">Weekly Insights</h1>
-            <p className="text-muted-foreground">Generated on {generatedDate}</p>
-          </div>
-        </div>
-        <Button onClick={generateNewInsights} disabled={generating}>
-          {generating && <RefreshCw className="h-4 w-4 mr-2 animate-spin" />}
-          Regenerate Insights
-        </Button>
-      </div>
-
+      <AutoInsightsHeader />
       {/* AI Summary */}
       <Card>
         <CardHeader>
