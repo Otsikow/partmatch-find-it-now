@@ -38,7 +38,7 @@ const WhatsAppContactButton = ({
       onClick={handleWhatsAppContact}
       variant={variant}
       size={size}
-      className={`border-green-600 text-green-700 hover:bg-green-50 font-semibold transition-all duration-300 ${className}`}
+      className={`border-success text-success-foreground bg-success hover:bg-success/90 font-semibold transition-all duration-300 ${className}`}
     >
       <Phone className="h-4 w-4 mr-2" />
       WhatsApp Seller
