@@ -4,16 +4,15 @@ import { CarPart } from "@/types/CarPart";
 
 interface UseSimilarPartsParams {
   currentPart: CarPart;
-  enabled?: boolean;
 }
 
-export const useSimilarParts = ({ currentPart, enabled = true }: UseSimilarPartsParams) => {
+export const useSimilarParts = ({ currentPart }: UseSimilarPartsParams) => {
   const [parts, setParts] = useState<CarPart[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchSimilarParts = async () => {
-    if (!enabled || !currentPart) return;
+    if (!currentPart) return;
 
     try {
       setLoading(true);
@@ -134,7 +133,7 @@ export const useSimilarParts = ({ currentPart, enabled = true }: UseSimilarParts
     }, 300);
     
     return () => clearTimeout(timeoutId);
-  }, [currentPart.id, enabled]);
+  }, [currentPart.id]);
 
   return { parts, loading, error, refetch: fetchSimilarParts };
 };
