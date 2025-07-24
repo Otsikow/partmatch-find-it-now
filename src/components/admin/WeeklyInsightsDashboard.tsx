@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useNavigate } from 'react-router-dom';
-import AutoInsightsHeader from '@/components/admin/AutoInsightsHeader';
+import AdminHeader from '@/components/admin/AdminHeader';
 import { 
   TrendingUp, 
   Users, 
@@ -149,9 +149,23 @@ const WeeklyInsightsDashboard = () => {
   const insights = latestInsights.metadata.insights;
   const generatedDate = new Date(latestInsights.metadata.generated_at).toLocaleDateString();
 
+  const navigate = useNavigate();
+
+  const handleGoBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/admin-dashboard');
+    }
+  };
+
+  const handleGoHome = () => {
+    navigate('/admin-dashboard');
+  };
+
   return (
     <div className="space-y-6">
-      <AutoInsightsHeader />
+      <AdminHeader onGoBack={handleGoBack} onGoHome={handleGoHome} />
       {/* AI Summary */}
       <Card>
         <CardHeader>
