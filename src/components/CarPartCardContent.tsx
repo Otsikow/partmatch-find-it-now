@@ -49,37 +49,34 @@ const CarPartCardContent = ({ part, onExpand }: CarPartCardContentProps) => {
       part.longitude
     ));
 
-  console.log('CarPartCardContent - sellerName:', sellerName, 'for part:', part.title);
-  console.log('CarPartCardContent - profiles data:', part.profiles);
-
   return (
-    <div onClick={onExpand} className="p-2 sm:p-3">
-      <div className="space-y-1 sm:space-y-2">
-        <h3 className="text-sm sm:text-base font-bold text-foreground line-clamp-2 leading-tight">
+    <div onClick={onExpand} className="p-3">
+      <div className="space-y-2">
+        <h3 className="text-base font-bold text-foreground line-clamp-2 leading-tight">
           {part.title}
         </h3>
         <div className="flex items-center justify-between">
-          <p className="text-xs sm:text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             {part.make} {part.model} ({part.year})
           </p>
           <div className="text-right">
-            <p className="text-sm sm:text-base font-bold text-green-600">
+            <p className="text-base font-bold text-green-600">
               {part.currency} {part.price}
             </p>
           </div>
         </div>
       </div>
 
-      <div className="mt-2 space-y-1 sm:space-y-2">
+      <div className="mt-3 space-y-2">
         {part.description && (
-          <p className="text-xs text-muted-foreground line-clamp-2">
+          <p className="text-sm text-muted-foreground line-clamp-2">
             {part.description}
           </p>
         )}
 
-        <div className="space-y-1 sm:space-y-2">
-          <div className="flex items-center gap-1 sm:gap-2 text-xs text-foreground">
-            <Avatar className="h-5 w-5 sm:h-6 sm:w-6">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-sm text-foreground">
+            <Avatar className="h-6 w-6">
               <AvatarImage src={part.profiles?.profile_photo_url} alt={sellerName} />
               <AvatarFallback className="text-xs font-medium">
                 {initials}
@@ -97,15 +94,15 @@ const CarPartCardContent = ({ part, onExpand }: CarPartCardContentProps) => {
           />
         </div>
 
-        <div className="flex items-center gap-1 sm:gap-2 text-xs text-muted-foreground">
-          <MapPin className="h-3 w-3" />
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <MapPin className="h-4 w-4" />
           <span className={`truncate ${inSameCity ? 'text-green-600 font-medium' : ''}`}>
             {locationDisplayText}
           </span>
         </div>
 
-        <div className="flex items-center gap-1 sm:gap-2 text-xs text-muted-foreground">
-          <Calendar className="h-3 w-3" />
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Calendar className="h-4 w-4" />
           <span>Listed {formatDate(part.created_at)}</span>
         </div>
       </div>
