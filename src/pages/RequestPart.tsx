@@ -1,42 +1,61 @@
-
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useNavigate, Link } from "react-router-dom";
 import RequestFormFields from "@/components/RequestForm/RequestFormFields";
+import Logo from '@/components/Logo';
 import { useRequestSubmission } from "@/hooks/useRequestSubmission";
-import PageHeader from "@/components/PageHeader";
-import { RequestFormData } from "@/components/RequestForm/RequestFormData";
+import { RequestFormData, initialFormData } from "@/components/RequestForm/RequestFormData";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
+import { ArrowLeft, Home, X } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 const RequestPart = () => {
-  const { user, loading } = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
-  const { loading: submissionLoading, aiReviewing, submitRequest } = useRequestSubmission();
-  const [formData, setFormData] = useState<RequestFormData>({
-    make: "",
-    model: "",
-    year: "",
-    part: "",
-    description: "",
-    location: "",
-    phone: ""
-  });
+  const { user } = useAuth();
+  const {
+    loading: submissionLoading,
+    aiReviewing,
+    submitRequest,
+  } = useRequestSubmission();
+  const [formData, setFormData] = useState<RequestFormData>(initialFormData);
   const [photo, setPhoto] = useState<File | null>(null);
 
+  // Auto-populate user details for signed-in users
   useEffect(() => {
-    if (!loading && !user) {
-      toast({
-        title: "Sign In Required",
-        description: "Please sign in to request car parts.",
-        variant: "destructive"
-      });
-      navigate('/auth');
+    if (user) {
+      const fetchUserProfile = async () => {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('first_name, last_name, phone, location')
+          .eq('id', user.id)
+          .single();
+
+        if (profile) {
+          setFormData(prev => ({
+            ...prev,
+            name: `${profile.first_name || ''} ${profile.last_name || ''}`.trim(),
+            email: user.email || '',
+            phone: profile.phone || '',
+            location: profile.location || ''
+          }));
+        } else {
+          // Fallback to using just the email if no profile found
+          setFormData(prev => ({
+            ...prev,
+            email: user.email || ''
+          }));
+        }
+      };
+
+      fetchUserProfile();
     }
-  }, [user, loading, navigate]);
+  }, [user]);
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handlePhotoChange = (file: File | null) => {
@@ -45,60 +64,88 @@ const RequestPart = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!user) {
-      toast({
-        title: "Authentication Required",
-        description: "Please sign in to request car parts.",
-        variant: "destructive"
-      });
-      navigate('/auth');
-      return;
-    }
 
-    await submitRequest(formData, photo);
+    const result = await submitRequest(formData, photo);
+    if (result.success) {
+      navigate("/request-success");
+    }
   };
 
-  // Show loading while checking authentication
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Don't render the form if user is not authenticated
-  if (!user) {
-    return null;
-  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100">
-      <PageHeader 
-        title="Request Car Part"
-        subtitle="Tell us what you need and we'll connect you with suppliers"
-        backTo="/"
-      />
-      
-      <main className="container mx-auto px-4 py-8 max-w-2xl">
+    <div className="min-h-screen bg-gradient-to-br from-background via-gradient-accent to-gradient-secondary">
+      {/* Custom Responsive Header */}
+      <div className="bg-gradient-to-r from-primary via-primary to-primary/90 text-white shadow-lg">
+        <div className="px-4 py-6 sm:px-6">
+          <div className="flex items-center justify-between">
+            {/* Left section with back button, logo and title */}
+            <div className="flex items-center space-x-3 sm:space-x-4 min-w-0 flex-1">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate('/')}
+                className="p-2 hover:bg-white/20 rounded-full text-white hover:text-white flex-shrink-0"
+              >
+                <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
+              </Button>
+              {/* Logo */}
+              <Link to="/" className="flex items-center gap-2 flex-shrink-0 hover:opacity-80 transition-opacity">
+                <Logo className="h-8 w-auto sm:h-10 object-contain" />
+              </Link>
+              
+              <div className="min-w-0 flex-1">
+                <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-white leading-tight break-words">
+                  {t("requestPart.welcomeTitle", "Find Your Car Part")}
+                </h1>
+                <p className="text-sm sm:text-base text-white/90 leading-tight break-words mt-1">
+                  {t("requestPart.subtitle", "Tell us what you need and we'll connect you with verified sellers")}
+                </p>
+              </div>
+            </div>
+            
+            {/* Right section with action buttons */}
+            <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate('/')}
+                className="flex items-center space-x-2 text-white hover:bg-white/30 hover:text-white shadow-lg backdrop-blur-sm border border-white/20"
+                style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}
+              >
+                <Home className="h-4 w-4 drop-shadow-md" />
+                <span className="hidden sm:inline font-medium">Home</span>
+              </Button>
+              
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate('/')}
+                className="p-2 text-white hover:bg-white/30 hover:text-white rounded-full shadow-lg backdrop-blur-sm border border-white/20"
+              >
+                <X className="h-4 w-4 drop-shadow-md" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <main className="container mx-auto px-4 py-8 pb-24 max-w-2xl">
         <form onSubmit={handleSubmit} className="space-y-6">
-          <RequestFormFields 
+          <RequestFormFields
             formData={formData}
             photo={photo}
             onInputChange={handleInputChange}
             onPhotoChange={handlePhotoChange}
           />
-          
+
           <Button
             type="submit"
             disabled={submissionLoading || aiReviewing}
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
           >
-            {submissionLoading || aiReviewing ? "Submitting..." : "Submit Request"}
+            {submissionLoading || aiReviewing
+              ? t("requestPart.submitting", "Submitting...")
+              : t("requestPart.submitRequest", "Submit Request")}
           </Button>
         </form>
       </main>

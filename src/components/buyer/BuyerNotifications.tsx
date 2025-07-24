@@ -117,7 +117,7 @@ const BuyerNotifications = () => {
           id: notif.id,
           title: notif.type.charAt(0).toUpperCase() + notif.type.slice(1),
           message: notif.message,
-          type: notif.type,
+          type: 'system' as const, // Map to valid notification type
           read: notif.sent, // Use 'sent' field as 'read' status
           created_at: notif.created_at,
           metadata: {}
@@ -147,7 +147,7 @@ const BuyerNotifications = () => {
       case 'message': return 'text-green-600 bg-green-100';
       case 'rating': return 'text-yellow-600 bg-yellow-100';
       case 'promo': return 'text-purple-600 bg-purple-100';
-      default: return 'text-gray-600 bg-gray-100';
+      default: return 'text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800';
     }
   };
 
@@ -196,8 +196,8 @@ const BuyerNotifications = () => {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Notifications</h2>
-          <p className="text-gray-600 mt-1">Stay updated with your activities</p>
+          <h2 className="text-2xl font-bold text-foreground">Notifications</h2>
+          <p className="text-muted-foreground mt-1">Stay updated with your activities</p>
         </div>
         <div className="flex gap-2">
           <Button

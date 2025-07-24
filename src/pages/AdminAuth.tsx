@@ -28,14 +28,14 @@ const AdminAuth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-100 font-inter">
+    <div className="min-h-screen bg-background font-inter">
       <AdminAuthHeader 
         isPasswordReset={isPasswordReset}
         showPasswordReset={showPasswordReset}
       />
 
       <main className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-md">
-        <Card className="p-6 sm:p-8 bg-gradient-to-br from-white/90 to-purple-50/50 backdrop-blur-sm shadow-2xl border-0">
+        <Card className="p-6 sm:p-8 bg-card backdrop-blur-sm shadow-2xl border">
           {isPasswordReset ? (
             <SetNewPassword 
               onSuccess={handlePasswordResetSuccess}

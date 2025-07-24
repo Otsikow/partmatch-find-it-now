@@ -13,7 +13,7 @@ const SuccessPage = () => {
         </div>
         <h2 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-green-600 to-emerald-700 bg-clip-text text-transparent mb-3 sm:mb-4">Request Sent!</h2>
         <p className="text-gray-600 text-sm sm:text-base lg:text-lg mb-6 sm:mb-8 font-crimson leading-relaxed">
-          We've automatically notified suppliers in your area. You'll receive offers via WhatsApp soon.
+          We've automatically notified sellers in your area. You'll receive offers via WhatsApp soon.
         </p>
         <Link to="/">
           <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 py-3 sm:py-4 text-base sm:text-lg rounded-xl font-inter font-medium shadow-lg hover:shadow-xl transition-all duration-300">

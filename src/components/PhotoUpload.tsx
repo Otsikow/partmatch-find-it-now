@@ -236,27 +236,27 @@ const PhotoUpload = ({
             </p>
           </div>
           
-          <div className="flex gap-2 mt-4" onClick={(e) => e.stopPropagation()}>
+          <div className="flex flex-col sm:flex-row gap-3 mt-6" onClick={(e) => e.stopPropagation()}>
             <Button
               type="button"
               variant="outline"
-              size="sm"
-              className="flex-1"
+              size="default"
+              className="flex-1 h-12 text-sm font-medium shadow-sm hover:shadow-md transition-all duration-200"
               onClick={onFileUploadClick}
             >
-              <Upload className="h-4 w-4 mr-2" />
-              Choose File
+              <Upload className="h-4 w-4 mr-2 flex-shrink-0" />
+              <span className="truncate">Choose File</span>
             </Button>
             <Button
               type="button"
               variant="outline"
-              size="sm"
-              className="flex-1"
+              size="default"
+              className="flex-1 h-12 text-sm font-medium shadow-sm hover:shadow-md transition-all duration-200"
               onClick={onCameraClick}
               disabled={isCapturing}
             >
-              <Camera className="h-4 w-4 mr-2" />
-              {isCapturing ? 'Opening Camera...' : 'Take Photo'}
+              <Camera className="h-4 w-4 mr-2 flex-shrink-0" />
+              <span className="truncate">{isCapturing ? 'Opening...' : 'Take Photo'}</span>
             </Button>
           </div>
         </div>
@@ -327,10 +327,10 @@ const PhotoUpload = ({
             
             <div className="bg-gray-50 p-4 rounded-lg">
               <div className="flex justify-between items-center">
-                <span className="font-medium">Premium Photos (7 extra)</span>
+                <span className="font-medium">Premium Photos (4-10 photos)</span>
                 <span className="text-xl font-bold text-emerald-600">GHS 10</span>
               </div>
-              <p className="text-sm text-gray-600 mt-1">One-time payment per listing</p>
+              <p className="text-sm text-gray-600 mt-1">One-time payment for 4-10 photos</p>
             </div>
 
             <div className="flex gap-2">

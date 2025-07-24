@@ -53,6 +53,7 @@ CREATE OR REPLACE FUNCTION public.process_contact_unlock_payment(
 RETURNS JSON
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = ''
 AS $$
 DECLARE
   offer_record RECORD;
@@ -110,6 +111,7 @@ CREATE OR REPLACE FUNCTION public.update_supplier_verification(
 RETURNS BOOLEAN
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = ''
 AS $$
 BEGIN
   UPDATE public.profiles 

@@ -117,7 +117,7 @@ const MonetizationFeatures = ({
               </div>
               <div className="text-right">
                 <p className="font-bold text-green-600">GHS 10</p>
-                <p className="text-xs text-gray-500">per extra photo</p>
+                <p className="text-xs text-gray-500">for 4-10 photos</p>
                 <Button
                   size="sm"
                   onClick={() => handleFeatureClick('extra_photos', 10, 'Extra Photo')}
@@ -199,6 +199,7 @@ const MonetizationFeatures = ({
       {showPaymentModal && selectedFeature && (
         <MonetizationPaymentModal
           isOpen={showPaymentModal}
+          currency="GHS"
           onClose={() => setShowPaymentModal(false)}
           partId={partId}
           featureType={selectedFeature.type}

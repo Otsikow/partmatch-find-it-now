@@ -240,7 +240,7 @@ const SellerVerificationForm = ({ onVerificationSubmitted }: { onVerificationSub
           Seller Verification
         </CardTitle>
         <p className="text-gray-600">
-          Complete your seller verification to start selling car parts on PartMatch Ghana
+          Complete your seller verification to start selling car parts on PartMatch
         </p>
       </CardHeader>
       <CardContent>

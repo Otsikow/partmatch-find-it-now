@@ -61,6 +61,7 @@ CREATE OR REPLACE FUNCTION public.update_user_rating()
 RETURNS trigger
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = ''
 AS $function$
 BEGIN
   UPDATE public.profiles

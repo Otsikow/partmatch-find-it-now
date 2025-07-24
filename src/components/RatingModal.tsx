@@ -10,7 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 interface RatingModalProps {
   isOpen: boolean;
   onClose: () => void;
-  offerId: string;
+  offerId: string | null;
   sellerId: string;
   sellerName: string;
   onRatingSubmitted: () => void;
@@ -48,10 +48,10 @@ const RatingModal = ({
         .insert({
           reviewer_id: (await supabase.auth.getUser()).data.user?.id,
           seller_id: sellerId,
-          offer_id: offerId,
+          offer_id: offerId, // Can be null for direct seller ratings
           rating: rating,
           review_text: reviewText.trim() || null,
-          transaction_verified: true
+          transaction_verified: offerId !== null // Only verified if based on a transaction
         });
 
       if (error) {

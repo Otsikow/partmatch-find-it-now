@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { AdminNotification } from '@/types/AdminNotification';
 
@@ -8,7 +8,7 @@ export const useAdminNotificationsFetcher = () => {
   const [loading, setLoading] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
 
-  const fetchNotifications = async (userId?: string) => {
+  const fetchNotifications = useCallback(async (userId?: string) => {
     if (!userId) return;
 
     try {
@@ -47,7 +47,7 @@ export const useAdminNotificationsFetcher = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []); // Add useCallback dependency array
 
   const addNotification = (notification: AdminNotification) => {
     setNotifications(prev => [notification, ...prev]);

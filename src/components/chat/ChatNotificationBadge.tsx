@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -8,7 +8,7 @@ const ChatNotificationBadge = () => {
   const { user } = useAuth();
   const [unreadCount, setUnreadCount] = useState(0);
 
-  const fetchUnreadCount = async () => {
+  const fetchUnreadCount = useCallback(async () => {
     if (!user?.id) return;
 
     try {
@@ -27,18 +27,18 @@ const ChatNotificationBadge = () => {
     } catch (error) {
       console.error('Error fetching unread count:', error);
     }
-  };
+  }, [user?.id]);
 
   useEffect(() => {
     fetchUnreadCount();
-  }, [user?.id]);
+  }, [fetchUnreadCount]);
 
   // Set up real-time subscription for unread count updates
   useEffect(() => {
     if (!user?.id) return;
 
     const channel = supabase
-      .channel('unread-messages')
+      .channel('chat-notifications')
       .on(
         'postgres_changes',
         {
@@ -48,20 +48,8 @@ const ChatNotificationBadge = () => {
           filter: `or(buyer_id.eq.${user.id},seller_id.eq.${user.id})`
         },
         (payload) => {
-          console.log('Chat updated, recalculating unread count:', payload);
-          if (payload.new) {
-            const chat = payload.new as any;
-            const newUnreadCount = user.id === chat.buyer_id ? chat.buyer_unread_count : chat.seller_unread_count;
-            setUnreadCount(prev => {
-              if (payload.eventType === 'UPDATE') {
-                return Math.max(0, newUnreadCount);
-              }
-              fetchUnreadCount();
-              return prev;
-            });
-          } else {
-            fetchUnreadCount();
-          }
+          console.log('Chat notification: recalculating unread count');
+          fetchUnreadCount();
         }
       )
       .subscribe();

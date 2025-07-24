@@ -10,21 +10,31 @@ interface AdminAuthHeaderProps {
 
 const AdminAuthHeader = ({ isPasswordReset, showPasswordReset }: AdminAuthHeaderProps) => {
   return (
-    <header className="p-4 sm:p-6 flex items-center gap-3 bg-gradient-to-r from-white/90 via-purple-50/80 to-white/90 backdrop-blur-lg shadow-lg border-b">
-      <Link to="/">
-        <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 hover:bg-white/50">
-          <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
-        </Button>
-      </Link>
-      <div className="flex items-center gap-2 sm:gap-3">
-        <img 
-          src="/lovable-uploads/23312658-5ff6-4d89-a7cb-c0fbf631cd1c.png" 
-          alt="PartMatch Logo" 
-          className="h-6 w-auto sm:h-8"
-        />
-        <h1 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-purple-700 to-indigo-700 bg-clip-text text-transparent">
-          Admin {isPasswordReset ? 'Password Reset' : showPasswordReset ? 'Password Reset' : 'Sign In'}
-        </h1>
+    <header className="relative bg-gradient-to-r from-primary via-primary/95 to-primary-foreground text-white shadow-lg border-b border-white/20">
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 via-blue-600/5 to-indigo-600/10"></div>
+      <div className="relative p-4 sm:p-6 flex items-center gap-3">
+        <Link to="/">
+          <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 hover:bg-white/20 text-white hover:text-white">
+            <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
+          </Button>
+        </Link>
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+          <div className="bg-white/20 backdrop-blur-sm rounded-xl p-2 shadow-lg">
+            <img 
+              src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
+              alt="PartMatch Logo" 
+              className="h-6 w-auto sm:h-8 object-contain"
+            />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-white leading-tight break-words">
+              Admin {isPasswordReset ? 'Password Reset' : showPasswordReset ? 'Password Reset' : 'Sign In'}
+            </h1>
+            <p className="text-sm sm:text-base text-white/90 leading-tight break-words mt-1">
+              {isPasswordReset || showPasswordReset ? 'Reset your admin password securely' : 'Access your administrator dashboard'}
+            </p>
+          </div>
+        </div>
       </div>
     </header>
   );

@@ -6,9 +6,15 @@ import { supabase } from '@/integrations/supabase/client';
 import ProfilePhotoSection from './ProfilePhotoSection';
 import PersonalInfoSection from './PersonalInfoSection';
 import PasswordChangeSection from './PasswordChangeSection';
+import CountryCurrencySelector from '@/components/CountryCurrencySelector';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Globe } from 'lucide-react';
+import { getCurrencySymbol, getCountryConfig } from '@/lib/countryConfig';
+import { useUserCountryCurrency } from '@/hooks/useUserCountryCurrency';
 
 const BuyerProfile = () => {
   const { user } = useAuth();
+  const { country, currency, countryCode, loading: countryCurrencyLoading } = useUserCountryCurrency();
   const [profile, setProfile] = useState({
     first_name: '',
     last_name: '',
@@ -69,8 +75,8 @@ const BuyerProfile = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Profile Settings</h2>
-        <p className="text-gray-600 mt-1">Manage your account information</p>
+        <h2 className="text-2xl font-bold text-foreground">Profile Settings</h2>
+        <p className="text-muted-foreground mt-1">Manage your account information</p>
       </div>
 
       <ProfilePhotoSection
@@ -85,6 +91,59 @@ const BuyerProfile = () => {
         onProfileChange={handleProfileChange}
         userId={user.id}
       />
+
+      <Separator />
+
+      {/* Country & Currency Settings */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <Globe className="h-5 w-5 text-primary" />
+            <CardTitle>Location & Currency</CardTitle>
+          </div>
+          <CardDescription>
+            Set your country to automatically configure currency and regional settings
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {countryCurrencyLoading ? (
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+              Loading...
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="space-y-1">
+                  <p className="text-sm font-medium">Current Location</p>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    {countryCode && country ? (
+                      <>
+                        <span>{getCountryConfig(countryCode)?.flag}</span>
+                        <span>{country}</span>
+                        <span>•</span>
+                        <span>{getCurrencySymbol(currency || 'GHS')} {currency || 'GHS'}</span>
+                      </>
+                    ) : (
+                      <span>No country selected</span>
+                    )}
+                  </div>
+                </div>
+                <CountryCurrencySelector 
+                  trigger="button"
+                  showCurrencyInfo={true}
+                />
+              </div>
+              
+              {currency && (
+                <div className="text-xs text-muted-foreground bg-muted/50 p-3 rounded-lg">
+                  💡 All prices will be displayed in {currency} ({getCurrencySymbol(currency)}) based on your selected country.
+                </div>
+              )}
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       <Separator />
 

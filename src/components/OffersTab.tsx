@@ -19,6 +19,7 @@ interface Offer {
     part_needed: string;
     phone: string;
     location: string;
+    owner_id: string;
   };
 }
 

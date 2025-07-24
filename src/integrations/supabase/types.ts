@@ -7,6 +7,11 @@ export type Json =
   | Json[]
 
 export type Database = {
+  // Allows to automatically instanciate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "12.2.3 (519615d)"
+  }
   public: {
     Tables: {
       admin_audit_logs: {
@@ -110,65 +115,218 @@ export type Database = {
           },
         ]
       }
+      blog_posts: {
+        Row: {
+          author_id: string
+          category: string | null
+          content: string
+          created_at: string
+          excerpt: string | null
+          featured_image_url: string | null
+          id: string
+          published: boolean
+          published_at: string | null
+fix/admin-home-button
+          scheduled_publish_at: string | null
+main
+          slug: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+          view_count: number | null
+        }
+        Insert: {
+          author_id: string
+          category?: string | null
+          content: string
+          created_at?: string
+          excerpt?: string | null
+          featured_image_url?: string | null
+          id?: string
+          published?: boolean
+          published_at?: string | null
+fix/admin-home-button
+          scheduled_publish_at?: string | null
+main
+          slug: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Update: {
+          author_id?: string
+          category?: string | null
+          content?: string
+          created_at?: string
+          excerpt?: string | null
+          featured_image_url?: string | null
+          id?: string
+          published?: boolean
+          published_at?: string | null
+fix/admin-home-button
+          scheduled_publish_at?: string | null
+main
+          slug?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Relationships: []
+      }
+      business_subscriptions: {
+        Row: {
+          active: boolean | null
+          auto_renew: boolean | null
+          created_at: string | null
+          end_date: string | null
+          id: string
+          payment_reference: string | null
+          start_date: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          active?: boolean | null
+          auto_renew?: boolean | null
+          created_at?: string | null
+          end_date?: string | null
+          id?: string
+          payment_reference?: string | null
+          start_date?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          active?: boolean | null
+          auto_renew?: boolean | null
+          created_at?: string | null
+          end_date?: string | null
+          id?: string
+          payment_reference?: string | null
+          start_date?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       car_parts: {
         Row: {
           address: string | null
+          boosted_until: string | null
+          city: string | null
+          click_count: number | null
           condition: string
+          country: string | null
           created_at: string | null
           currency: string
           description: string | null
+          extra_photos_count: number | null
+          featured_until: string | null
+          has_verified_badge: boolean | null
+          highlighted_until: string | null
           id: string
           images: string[] | null
+          is_featured: boolean | null
+          is_highlighted: boolean | null
+          is_urgent: boolean | null
+          last_suggested_promotion: string | null
           latitude: number | null
           longitude: number | null
           make: string
           model: string
           part_type: string
           price: number
+          promotion_suggestions_count: number | null
+          quality_checked_at: string | null
+          quality_feedback: string | null
+          quality_score: number | null
           status: string
           supplier_id: string
           title: string
           updated_at: string | null
+          urgent_until: string | null
+          verified_badge_until: string | null
+          view_count: number | null
           year: number
         }
         Insert: {
           address?: string | null
+          boosted_until?: string | null
+          city?: string | null
+          click_count?: number | null
           condition: string
+          country?: string | null
           created_at?: string | null
           currency?: string
           description?: string | null
+          extra_photos_count?: number | null
+          featured_until?: string | null
+          has_verified_badge?: boolean | null
+          highlighted_until?: string | null
           id?: string
           images?: string[] | null
+          is_featured?: boolean | null
+          is_highlighted?: boolean | null
+          is_urgent?: boolean | null
+          last_suggested_promotion?: string | null
           latitude?: number | null
           longitude?: number | null
           make: string
           model: string
           part_type: string
           price: number
+          promotion_suggestions_count?: number | null
+          quality_checked_at?: string | null
+          quality_feedback?: string | null
+          quality_score?: number | null
           status?: string
           supplier_id: string
           title: string
           updated_at?: string | null
+          urgent_until?: string | null
+          verified_badge_until?: string | null
+          view_count?: number | null
           year: number
         }
         Update: {
           address?: string | null
+          boosted_until?: string | null
+          city?: string | null
+          click_count?: number | null
           condition?: string
+          country?: string | null
           created_at?: string | null
           currency?: string
           description?: string | null
+          extra_photos_count?: number | null
+          featured_until?: string | null
+          has_verified_badge?: boolean | null
+          highlighted_until?: string | null
           id?: string
           images?: string[] | null
+          is_featured?: boolean | null
+          is_highlighted?: boolean | null
+          is_urgent?: boolean | null
+          last_suggested_promotion?: string | null
           latitude?: number | null
           longitude?: number | null
           make?: string
           model?: string
           part_type?: string
           price?: number
+          promotion_suggestions_count?: number | null
+          quality_checked_at?: string | null
+          quality_feedback?: string | null
+          quality_score?: number | null
           status?: string
           supplier_id?: string
           title?: string
           updated_at?: string | null
+          urgent_until?: string | null
+          verified_badge_until?: string | null
+          view_count?: number | null
           year?: number
         }
         Relationships: [
@@ -263,6 +421,89 @@ export type Database = {
         }
         Relationships: []
       }
+      listing_analytics: {
+        Row: {
+          created_at: string
+          event_data: Json | null
+          event_type: string
+          id: string
+          listing_id: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_data?: Json | null
+          event_type: string
+          id?: string
+          listing_id: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_data?: Json | null
+          event_type?: string
+          id?: string
+          listing_id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_analytics_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "car_parts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "listing_analytics_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      listing_quality_checks: {
+        Row: {
+          auto_approved: boolean | null
+          checked_at: string | null
+          created_at: string | null
+          feedback_message: string | null
+          flagged_issues: Json | null
+          id: string
+          listing_id: string
+          quality_score: number
+        }
+        Insert: {
+          auto_approved?: boolean | null
+          checked_at?: string | null
+          created_at?: string | null
+          feedback_message?: string | null
+          flagged_issues?: Json | null
+          id?: string
+          listing_id: string
+          quality_score: number
+        }
+        Update: {
+          auto_approved?: boolean | null
+          checked_at?: string | null
+          created_at?: string | null
+          feedback_message?: string | null
+          flagged_issues?: Json | null
+          id?: string
+          listing_id?: string
+          quality_score?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_quality_checks_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "car_parts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           attachment_url: string | null
@@ -310,6 +551,98 @@ export type Database = {
             columns: ["sender_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      monetization_pricing: {
+        Row: {
+          active: boolean | null
+          amount: number
+          created_at: string | null
+          currency: string | null
+          description: string | null
+          duration_days: number | null
+          feature_type: string
+          id: string
+          updated_at: string | null
+        }
+        Insert: {
+          active?: boolean | null
+          amount: number
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          duration_days?: number | null
+          feature_type: string
+          id?: string
+          updated_at?: string | null
+        }
+        Update: {
+          active?: boolean | null
+          amount?: number
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          duration_days?: number | null
+          feature_type?: string
+          id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      monetization_purchases: {
+        Row: {
+          amount: number
+          created_at: string | null
+          currency: string | null
+          duration_days: number | null
+          expires_at: string | null
+          id: string
+          listing_id: string | null
+          metadata: Json | null
+          payment_reference: string | null
+          payment_status: string | null
+          purchase_type: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          currency?: string | null
+          duration_days?: number | null
+          expires_at?: string | null
+          id?: string
+          listing_id?: string | null
+          metadata?: Json | null
+          payment_reference?: string | null
+          payment_status?: string | null
+          purchase_type: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          currency?: string | null
+          duration_days?: number | null
+          expires_at?: string | null
+          id?: string
+          listing_id?: string | null
+          metadata?: Json | null
+          payment_reference?: string | null
+          payment_status?: string | null
+          purchase_type?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "monetization_purchases_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "car_parts"
             referencedColumns: ["id"]
           },
         ]
@@ -426,7 +759,9 @@ export type Database = {
           car_make: string
           car_model: string
           car_year: number
+          country: string | null
           created_at: string | null
+          currency: string | null
           description: string | null
           id: string
           location: string
@@ -441,7 +776,9 @@ export type Database = {
           car_make: string
           car_model: string
           car_year: number
+          country?: string | null
           created_at?: string | null
+          currency?: string | null
           description?: string | null
           id?: string
           location: string
@@ -456,7 +793,9 @@ export type Database = {
           car_make?: string
           car_model?: string
           car_year?: number
+          country?: string | null
           created_at?: string | null
+          currency?: string | null
           description?: string | null
           id?: string
           location?: string
@@ -540,15 +879,21 @@ export type Database = {
       profiles: {
         Row: {
           address: string | null
+          city: string | null
+          country: string | null
           created_at: string | null
+          currency: string | null
+          email: string | null
           first_name: string | null
           id: string
           is_blocked: boolean | null
           is_verified: boolean | null
+          language: string | null
           last_name: string | null
           latitude: number | null
           location: string | null
           longitude: number | null
+          notification_preferences: Json | null
           phone: string | null
           profile_photo_url: string | null
           rating: number | null
@@ -562,15 +907,21 @@ export type Database = {
         }
         Insert: {
           address?: string | null
+          city?: string | null
+          country?: string | null
           created_at?: string | null
+          currency?: string | null
+          email?: string | null
           first_name?: string | null
           id: string
           is_blocked?: boolean | null
           is_verified?: boolean | null
+          language?: string | null
           last_name?: string | null
           latitude?: number | null
           location?: string | null
           longitude?: number | null
+          notification_preferences?: Json | null
           phone?: string | null
           profile_photo_url?: string | null
           rating?: number | null
@@ -584,15 +935,21 @@ export type Database = {
         }
         Update: {
           address?: string | null
+          city?: string | null
+          country?: string | null
           created_at?: string | null
+          currency?: string | null
+          email?: string | null
           first_name?: string | null
           id?: string
           is_blocked?: boolean | null
           is_verified?: boolean | null
+          language?: string | null
           last_name?: string | null
           latitude?: number | null
           location?: string | null
           longitude?: number | null
+          notification_preferences?: Json | null
           phone?: string | null
           profile_photo_url?: string | null
           rating?: number | null
@@ -605,6 +962,63 @@ export type Database = {
           verified_at?: string | null
         }
         Relationships: []
+      }
+      promotion_suggestions: {
+        Row: {
+          converted: boolean | null
+          converted_at: string | null
+          created_at: string
+          currency: string | null
+          id: string
+          listing_id: string
+          price_suggested: number | null
+          seller_id: string
+          suggested_at: string
+          suggestion_criteria: Json | null
+          suggestion_type: string
+        }
+        Insert: {
+          converted?: boolean | null
+          converted_at?: string | null
+          created_at?: string
+          currency?: string | null
+          id?: string
+          listing_id: string
+          price_suggested?: number | null
+          seller_id: string
+          suggested_at?: string
+          suggestion_criteria?: Json | null
+          suggestion_type: string
+        }
+        Update: {
+          converted?: boolean | null
+          converted_at?: string | null
+          created_at?: string
+          currency?: string | null
+          id?: string
+          listing_id?: string
+          price_suggested?: number | null
+          seller_id?: string
+          suggested_at?: string
+          suggestion_criteria?: Json | null
+          suggestion_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "promotion_suggestions_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "car_parts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "promotion_suggestions_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       rating_reminders: {
         Row: {
@@ -775,6 +1189,30 @@ export type Database = {
           },
         ]
       }
+      seller_follows: {
+        Row: {
+          buyer_id: string
+          created_at: string
+          id: string
+          seller_id: string
+          updated_at: string
+        }
+        Insert: {
+          buyer_id: string
+          created_at?: string
+          id?: string
+          seller_id: string
+          updated_at?: string
+        }
+        Update: {
+          buyer_id?: string
+          created_at?: string
+          id?: string
+          seller_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       seller_verifications: {
         Row: {
           admin_notes: string | null
@@ -859,6 +1297,57 @@ export type Database = {
         }
         Relationships: []
       }
+      smart_match_notifications: {
+        Row: {
+          created_at: string
+          email_sent: boolean | null
+          id: string
+          in_app_sent: boolean | null
+          match_criteria: Json | null
+          notification_type: string
+          request_id: string
+          seller_id: string
+          sent_at: string
+        }
+        Insert: {
+          created_at?: string
+          email_sent?: boolean | null
+          id?: string
+          in_app_sent?: boolean | null
+          match_criteria?: Json | null
+          notification_type?: string
+          request_id: string
+          seller_id: string
+          sent_at?: string
+        }
+        Update: {
+          created_at?: string
+          email_sent?: boolean | null
+          id?: string
+          in_app_sent?: boolean | null
+          match_criteria?: Json | null
+          notification_type?: string
+          request_id?: string
+          seller_id?: string
+          sent_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "smart_match_notifications_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "part_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "smart_match_notifications_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_chat_status: {
         Row: {
           chat_id: string
@@ -904,11 +1393,64 @@ export type Database = {
           },
         ]
       }
+      user_notifications: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          metadata: Json | null
+          read: boolean
+          title: string | null
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: string
+          metadata?: Json | null
+          read?: boolean
+          title?: string | null
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          metadata?: Json | null
+          read?: boolean
+          title?: string | null
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      auto_publish_scheduled_posts: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      expire_monetization_features: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      generate_weekly_insights_now: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      increment_click_count: {
+        Args: { listing_id: string }
+        Returns: undefined
+      }
+      increment_view_count: {
+        Args: { listing_id: string }
+        Returns: undefined
+      }
       is_authorized_admin_email: {
         Args: { email_to_check: string }
         Returns: boolean
@@ -962,21 +1504,25 @@ export type Database = {
   }
 }
 
-type DefaultSchema = Database[Extract<keyof Database, "public">]
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-        Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-      Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
@@ -994,14 +1540,16 @@ export type Tables<
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
@@ -1017,14 +1565,16 @@ export type TablesInsert<
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
@@ -1040,14 +1590,16 @@ export type TablesUpdate<
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   EnumName extends DefaultSchemaEnumNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
-> = DefaultSchemaEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
     ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never
@@ -1055,14 +1607,16 @@ export type Enums<
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
     : never = never,
-> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
   : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
     ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never

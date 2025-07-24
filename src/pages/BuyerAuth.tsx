@@ -9,7 +9,7 @@ const BuyerAuth = () => {
   const [showPasswordReset, setShowPasswordReset] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 font-inter">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-background/90 font-inter">
       <BuyerAuthHeader isLogin={isLogin} showPasswordReset={showPasswordReset} />
       <BuyerAuthForm 
         isLogin={isLogin}

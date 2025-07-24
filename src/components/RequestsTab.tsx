@@ -14,16 +14,18 @@ interface Request {
   description?: string;
   status: string;
   created_at: string;
+  owner_id: string;
 }
 
 interface RequestsTabProps {
   requests: Request[];
   onOfferSubmit: (requestId: string, price: number, message: string, location: string) => Promise<void>;
   onWhatsAppContact: (phone: string, request: Request) => void;
+  onChatContact: (requestId: string, ownerId: string) => void;
   isSubmittingOffer: boolean;
 }
 
-const RequestsTab = ({ requests, onOfferSubmit, onWhatsAppContact, isSubmittingOffer }: RequestsTabProps) => {
+const RequestsTab = ({ requests, onOfferSubmit, onWhatsAppContact, onChatContact, isSubmittingOffer }: RequestsTabProps) => {
   return (
     <div className="space-y-4 sm:space-y-6">
       {requests.map(request => (
@@ -32,6 +34,7 @@ const RequestsTab = ({ requests, onOfferSubmit, onWhatsAppContact, isSubmittingO
           request={request}
           onOfferSubmit={onOfferSubmit}
           onWhatsAppContact={onWhatsAppContact}
+          onChatContact={onChatContact}
           isSubmittingOffer={isSubmittingOffer}
         />
       ))}

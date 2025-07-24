@@ -8,17 +8,30 @@ import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 
 interface ChatButtonProps {
-  sellerId: string;
+  sellerId?: string;
+  buyerId?: string;
   partId?: string;
+  offerId?: string;
+  offerInfo?: {
+    price: number;
+    car_make: string;
+    car_model: string;
+    car_year: number;
+    part_needed: string;
+    message?: string;
+  };
   className?: string;
-  size?: "sm" | "default" | "lg";
+  size?: "sm" | "default" | "lg" | "mobile-sm" | "mobile-default" | "mobile-lg";
   variant?: "default" | "outline" | "ghost";
   children?: React.ReactNode;
 }
 
 const ChatButton = ({ 
   sellerId, 
+  buyerId,
   partId, 
+  offerId,
+  offerInfo,
   className = "", 
   size = "default",
   variant = "default",
@@ -39,7 +52,19 @@ const ChatButton = ({
       return;
     }
 
-    if (user.id === sellerId) {
+    // Determine the other user ID based on who is initiating the chat
+    const otherUserId = sellerId || buyerId;
+    
+    if (!otherUserId) {
+      toast({
+        title: "Error",
+        description: "Unable to determine chat recipient",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (user.id === otherUserId) {
       toast({
         title: "Cannot Chat",
         description: "You cannot start a conversation with yourself",
@@ -49,14 +74,18 @@ const ChatButton = ({
     }
 
     try {
-      console.log('Starting chat with seller:', sellerId, 'for part:', partId);
+      console.log('Starting chat with user:', otherUserId, 'for part:', partId, 'offer:', offerId);
       
-      // Search for existing chat (properly handle null part_id)
+      // Determine buyer and seller based on who is initiating the chat
+      const chatBuyerId = buyerId ? user.id : (sellerId ? otherUserId : user.id);
+      const chatSellerId = sellerId ? (sellerId === user.id ? user.id : sellerId) : (buyerId ? buyerId : otherUserId);
+      
+      // Search for existing chat
       let chatQuery = supabase
         .from('chats')
         .select('id')
-        .eq('buyer_id', user.id)
-        .eq('seller_id', sellerId);
+        .eq('buyer_id', chatBuyerId)
+        .eq('seller_id', chatSellerId);
 
       if (partId) {
         chatQuery = chatQuery.eq('part_id', partId);
@@ -80,8 +109,8 @@ const ChatButton = ({
         const { data: newChat, error: createError } = await supabase
           .from('chats')
           .insert({
-            buyer_id: user.id,
-            seller_id: sellerId,
+            buyer_id: chatBuyerId,
+            seller_id: chatSellerId,
             part_id: partId || null
           })
           .select('id')
@@ -94,6 +123,19 @@ const ChatButton = ({
         
         console.log('New chat created:', newChat);
         chatId = newChat.id;
+        
+        // If there's offer info, send a prepopulated message
+        if (offerInfo && offerId) {
+          const prepopulatedMessage = `Hi! I'd like to discuss my offer for the ${offerInfo.part_needed} for your ${offerInfo.car_make} ${offerInfo.car_model} ${offerInfo.car_year}. I offered GHS ${offerInfo.price}.${offerInfo.message ? ` My message: "${offerInfo.message}"` : ''}`;
+          
+          await supabase
+            .from('messages')
+            .insert({
+              chat_id: chatId,
+              sender_id: user.id,
+              content: prepopulatedMessage
+            });
+        }
         
         toast({
           title: "Chat Started",
@@ -127,7 +169,7 @@ const ChatButton = ({
       className={`flex items-center gap-2 ${className}`}
     >
       <MessageCircle className="h-4 w-4" />
-      {children || "Chat with Seller"}
+      {children || (sellerId ? "Chat with Seller" : "Chat with Buyer")}
     </Button>
   );
 };

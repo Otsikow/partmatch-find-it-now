@@ -23,13 +23,45 @@ export const getConditionColor = (condition: string) => {
 export const getImageUrl = (images?: string[]) => {
   if (images && images.length > 0) {
     const firstImage = images[0];
-    console.log('Displaying image URL:', firstImage);
-    // Ensure we have a proper URL format
+    console.log('Processing image URL:', firstImage);
+    console.log('Images array:', images);
+    
+    // If it's already a full URL, return as-is
     if (firstImage.startsWith('http')) {
+      console.log('Using full URL:', firstImage);
       return firstImage;
     }
-    // Handle relative URLs by making them absolute
-    return firstImage;
+    
+    // If it's a relative path, construct full Supabase URL
+    const supabaseUrl = 'https://ytgmzhevgcmvevuwkocz.supabase.co';
+    const fullUrl = `${supabaseUrl}/storage/v1/object/public/car-part-images/${firstImage}`;
+    console.log('Constructed URL:', fullUrl);
+    return fullUrl;
   }
+  console.log('No images found:', images);
   return null;
+};
+
+export const formatPrice = (price: number, currency: string, country?: string) => {
+  // If it's Ghana, force GHS currency regardless of what's stored
+  if (country?.toLowerCase().includes('ghana')) {
+    return `GHS ${price.toLocaleString()}`;
+  }
+  
+  // Use proper currency symbols based on currency code
+  switch (currency?.toUpperCase()) {
+    case 'GHS':
+      return `GHS ${price.toLocaleString()}`;
+    case 'USD':
+      return `$${price.toLocaleString()}`;
+    case 'EUR':
+      return `€${price.toLocaleString()}`;
+    case 'GBP':
+      return `£${price.toLocaleString()}`;
+    case 'NGN':
+      return `₦${price.toLocaleString()}`;
+    default:
+      // Default to GHS for any unknown currency in Ghana context
+      return `${currency || 'GHS'} ${price.toLocaleString()}`;
+  }
 };

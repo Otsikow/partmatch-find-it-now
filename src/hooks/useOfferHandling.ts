@@ -28,7 +28,7 @@ interface OfferRequest {
 }
 
 export const useOfferHandling = (onOfferSubmitted?: () => void) => {
-  const { user } = useAuth();
+  const { user, userType } = useAuth();
   const [submittingOffer, setSubmittingOffer] = useState<string | null>(null);
 
   const handleMakeOffer = async (requestId: string, price: number, message: string, location: string) => {
@@ -70,6 +70,26 @@ export const useOfferHandling = (onOfferSubmitted?: () => void) => {
   };
 
   const handleWhatsAppContact = (phone: string, request: Request | OfferRequest) => {
+    // Check if user is authenticated
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to whatsapp the buyer.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Check if user has proper role (supplier or admin)
+    if (!userType || (userType !== 'supplier' && userType !== 'admin')) {
+      toast({
+        title: "Access restricted",
+        description: "Only sellers and admins can whatsapp buyers.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const message = `Hi! I have the ${request.part_needed} for your ${request.car_make} ${request.car_model} ${request.car_year}. Let's discuss!`;
     const cleanPhone = phone.replace(/[^0-9]/g, '');
     const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;

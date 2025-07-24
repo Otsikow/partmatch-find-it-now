@@ -19,6 +19,7 @@ import {
   Download
 } from "lucide-react";
 import { useState } from "react";
+import UserDetailsCard from "./UserDetailsCard";
 
 interface SellerVerification {
   id: string;
@@ -42,14 +43,17 @@ interface SellerVerification {
 
 interface VerificationCardProps {
   verification: SellerVerification;
-  onApprove: (id: string) => void;
+  onApprove: (id: string, notes?: string) => void;
   onReject: (id: string, notes: string) => void;
   onViewDocument: (url: string) => void;
+  onViewUserDetails: (user: SellerVerification) => void;
 }
 
-const VerificationCard = ({ verification, onApprove, onReject, onViewDocument }: VerificationCardProps) => {
+const VerificationCard = ({ verification, onApprove, onReject, onViewDocument, onViewUserDetails }: VerificationCardProps) => {
   const [rejectNotes, setRejectNotes] = useState('');
+  const [approveNotes, setApproveNotes] = useState('');
   const [showRejectDialog, setShowRejectDialog] = useState(false);
+  const [showApproveDialog, setShowApproveDialog] = useState(false);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -66,6 +70,12 @@ const VerificationCard = ({ verification, onApprove, onReject, onViewDocument }:
       month: 'long',
       day: 'numeric'
     });
+  };
+
+  const handleApprove = () => {
+    onApprove(verification.id, approveNotes);
+    setApproveNotes('');
+    setShowApproveDialog(false);
   };
 
   const handleReject = () => {
@@ -85,12 +95,12 @@ const VerificationCard = ({ verification, onApprove, onReject, onViewDocument }:
   ].filter(doc => doc.url);
 
   return (
-    <Card className="p-6 bg-gradient-to-br from-white/90 to-purple-50/30 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+    <Card className="p-6 bg-gradient-to-br from-white/90 to-purple-50/30 dark:from-gray-800/90 dark:to-purple-900/30 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300">
       <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4 mb-4">
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
-            <User className="h-5 w-5 text-purple-600" />
-            <h3 className="text-xl font-playfair font-semibold text-gray-900">
+            <User className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+            <h3 className="text-xl font-playfair font-semibold text-gray-900 dark:text-gray-100">
               {verification.full_name}
             </h3>
             <Badge className={`${getStatusColor(verification.verification_status)} text-sm`}>
@@ -98,7 +108,7 @@ const VerificationCard = ({ verification, onApprove, onReject, onViewDocument }:
             </Badge>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-3 text-sm text-gray-600 font-crimson">
+          <div className="grid md:grid-cols-2 gap-3 text-sm text-gray-600 dark:text-gray-400 font-crimson">
             <div className="flex items-center gap-2">
               <Building2 className="h-4 w-4" />
               <span>{verification.seller_type === 'individual' ? 'Individual Seller' : 'Business'}</span>
@@ -117,18 +127,10 @@ const VerificationCard = ({ verification, onApprove, onReject, onViewDocument }:
               <Mail className="h-4 w-4" />
               <span>{verification.email}</span>
             </div>
-            <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
-              <span>DOB: {formatDate(verification.date_of_birth)}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <MapPin className="h-4 w-4" />
-              <span>{verification.business_address}</span>
-            </div>
           </div>
         </div>
 
-        <div className="text-sm text-gray-500 font-crimson">
+        <div className="text-sm text-gray-500 dark:text-gray-400 font-crimson">
           Applied: {formatDate(verification.created_at)}
         </div>
       </div>
@@ -137,7 +139,7 @@ const VerificationCard = ({ verification, onApprove, onReject, onViewDocument }:
 
       {/* Documents Section */}
       <div className="mb-4">
-        <h4 className="text-lg font-playfair font-semibold mb-3 text-gray-900">
+        <h4 className="text-lg font-playfair font-semibold mb-3 text-gray-900 dark:text-gray-100">
           Submitted Documents
         </h4>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
@@ -147,7 +149,7 @@ const VerificationCard = ({ verification, onApprove, onReject, onViewDocument }:
               variant="outline"
               size="sm"
               onClick={() => onViewDocument(doc.url!)}
-              className="flex items-center gap-2 text-xs h-auto p-2 hover:bg-purple-50"
+              className="flex items-center gap-2 text-xs h-auto p-2 hover:bg-purple-50 dark:hover:bg-purple-900"
             >
               <Eye className="h-3 w-3" />
               <span className="truncate">{doc.label}</span>
@@ -159,9 +161,9 @@ const VerificationCard = ({ verification, onApprove, onReject, onViewDocument }:
       {verification.admin_notes && (
         <>
           <Separator className="my-4" />
-          <div className="bg-gray-50 p-3 rounded-lg">
-            <h4 className="text-sm font-semibold text-gray-700 mb-1">Admin Notes:</h4>
-            <p className="text-sm text-gray-600 font-crimson">{verification.admin_notes}</p>
+          <div className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">Admin Notes:</h4>
+            <p className="text-sm text-gray-600 dark:text-gray-300 font-crimson">{verification.admin_notes}</p>
           </div>
         </>
       )}
@@ -170,13 +172,43 @@ const VerificationCard = ({ verification, onApprove, onReject, onViewDocument }:
         <>
           <Separator className="my-4" />
           <div className="flex flex-col sm:flex-row gap-3">
-            <Button 
-              onClick={() => onApprove(verification.id)}
-              className="bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex-1"
-            >
-              <Check className="h-4 w-4 mr-2" />
-              Approve Verification
-            </Button>
+            <Dialog open={showApproveDialog} onOpenChange={setShowApproveDialog}>
+              <DialogTrigger asChild>
+                <Button className="bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex-1">
+                  <Check className="h-4 w-4 mr-2" />
+                  Approve
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Approve Verification</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="approve-notes">Optional Notes:</Label>
+                    <Textarea
+                      id="approve-notes"
+                      value={approveNotes}
+                      onChange={(e) => setApproveNotes(e.target.value)}
+                      placeholder="e.g., 'Welcome to PartMatch!'"
+                      rows={3}
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <Button onClick={handleApprove} className="bg-green-600 hover:bg-green-700 text-white flex-1">
+                      Confirm Approval
+                    </Button>
+                    <Button
+                      onClick={() => setShowApproveDialog(false)}
+                      variant="outline"
+                      className="flex-1"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
             
             <Dialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
               <DialogTrigger asChild>
@@ -218,6 +250,15 @@ const VerificationCard = ({ verification, onApprove, onReject, onViewDocument }:
                 </div>
               </DialogContent>
             </Dialog>
+
+            <Button
+              variant="outline"
+              onClick={() => onViewUserDetails(verification)}
+              className="flex-1"
+            >
+              <Eye className="h-4 w-4 mr-2" />
+              View Details
+            </Button>
           </div>
         </>
       )}

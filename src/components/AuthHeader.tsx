@@ -16,13 +16,15 @@ const AuthHeader = ({ isLogin }: AuthHeaderProps) => {
         </Button>
       </Link>
       <div className="flex items-center gap-2 sm:gap-3">
-        <img 
-          src="/lovable-uploads/23312658-5ff6-4d89-a7cb-c0fbf631cd1c.png" 
-          alt="PartMatch Logo" 
-          className="h-6 w-auto sm:h-8"
-        />
+        <Link to="/" className="hover:opacity-80 transition-opacity">
+          <img 
+            src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
+            alt="PartMatch Logo" 
+            className="h-6 w-auto sm:h-8"
+          />
+        </Link>
         <h1 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
-          {isLogin ? 'Sign In' : 'Join PartMatch Ghana'}
+          {isLogin ? 'Sign In' : 'Join Ghana'}
         </h1>
       </div>
     </header>

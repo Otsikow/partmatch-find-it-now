@@ -7,8 +7,10 @@ export interface Notification {
   id: string;
   type: string;
   message: string;
-  sent: boolean;
+  read: boolean;
   created_at: string;
+  title?: string;
+  metadata?: any;
 }
 
 export const useNotifications = () => {
@@ -23,13 +25,13 @@ export const useNotifications = () => {
 
     // Set up real-time subscription for new notifications
     const channel = supabase
-      .channel('notifications')
+      .channel('user_notifications')
       .on(
         'postgres_changes',
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'notifications',
+          table: 'user_notifications',
           filter: `user_id=eq.${user.id}`
         },
         (payload) => {
@@ -47,7 +49,7 @@ export const useNotifications = () => {
     if (!user) return;
 
     const { data, error } = await supabase
-      .from('notifications')
+      .from('user_notifications')
       .select('*')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
@@ -59,5 +61,53 @@ export const useNotifications = () => {
     setLoading(false);
   };
 
-  return { notifications, loading, refetch: fetchNotifications };
+  const markAsRead = async (notificationId: string) => {
+    if (!user) return;
+
+    const { error } = await supabase
+      .from('user_notifications')
+      .update({ read: true })
+      .eq('id', notificationId);
+
+    if (!error) {
+      setNotifications(prev => 
+        prev.map(notification => 
+          notification.id === notificationId 
+            ? { ...notification, read: true }
+            : notification
+        )
+      );
+    }
+  };
+
+  const markAllAsRead = async () => {
+    if (!user) return;
+
+    const { error } = await supabase
+      .from('user_notifications')
+      .update({ read: true })
+      .eq('user_id', user.id)
+      .eq('read', false);
+
+    if (!error) {
+      setNotifications(prev =>
+        prev.map(notification => ({ ...notification, read: true }))
+      );
+    }
+  };
+
+  const clearAll = async () => {
+    if (!user) return;
+
+    const { error } = await supabase
+      .from('user_notifications')
+      .delete()
+      .eq('user_id', user.id);
+
+    if (!error) {
+      setNotifications([]);
+    }
+  };
+
+  return { notifications, loading, refetch: fetchNotifications, markAsRead, markAllAsRead, clearAll };
 };

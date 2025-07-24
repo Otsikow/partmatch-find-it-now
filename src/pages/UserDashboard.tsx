@@ -6,25 +6,24 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import PageHeader from "@/components/PageHeader";
-
 const UserDashboard = () => {
-  const { user, signOut } = useAuth();
+  const {
+    user,
+    signOut
+  } = useAuth();
   const [displayName, setDisplayName] = useState<string>('User');
-
+  const [userType, setUserType] = useState<string>('owner');
   useEffect(() => {
     const fetchUserName = async () => {
       if (!user) return;
-
       try {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('first_name, last_name')
-          .eq('id', user.id)
-          .single();
-
+        const {
+          data: profile
+        } = await supabase.from('profiles').select('first_name, last_name, user_type').eq('id', user.id).single();
         if (profile) {
           const name = `${profile.first_name || ''} ${profile.last_name || ''}`.trim();
           setDisplayName(name || user.email?.split('@')[0] || 'User');
+          setUserType(profile.user_type || 'owner');
         } else {
           setDisplayName(user.email?.split('@')[0] || 'User');
         }
@@ -33,10 +32,8 @@ const UserDashboard = () => {
         setDisplayName(user.email?.split('@')[0] || 'User');
       }
     };
-
     fetchUserName();
   }, [user]);
-
   const handleSignOut = async () => {
     try {
       await signOut();
@@ -44,20 +41,9 @@ const UserDashboard = () => {
       console.log('Sign out completed with graceful error handling');
     }
   };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 font-inter">
-      <PageHeader 
-        title={`Welcome to PartMatch`}
-        subtitle={`Hello, ${displayName}`}
-        backTo="/"
-      >
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          onClick={handleSignOut}
-          className="text-gray-700 hover:text-red-700 hover:bg-red-50/50 font-medium"
-        >
+  return <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 font-inter">
+      <PageHeader title={`Welcome to Ghana`} subtitle={`Hello, ${displayName}`} backTo="/">
+        <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-gray-700 hover:text-red-700 hover:bg-red-50/50 font-medium">
           Sign Out
         </Button>
       </PageHeader>
@@ -87,7 +73,7 @@ const UserDashboard = () => {
                 Browse Car Parts
               </h3>
               <p className="text-gray-600 mb-6 font-crimson">
-                Search through available car parts from verified suppliers
+                Search through available car parts from verified sellers
               </p>
               <Link to="/search-parts">
                 <Button className="w-full bg-gradient-to-r from-emerald-600 to-green-700 hover:from-emerald-700 hover:to-green-800 text-white shadow-lg hover:shadow-xl transition-all duration-300">
@@ -107,7 +93,7 @@ const UserDashboard = () => {
                 Request Car Parts
               </h3>
               <p className="text-gray-600 mb-6 font-crimson">
-                Can't find what you need? Request it and suppliers will reach out
+                Can't find what you need? Request it and sellers will reach out
               </p>
               <Link to="/request-part">
                 <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white shadow-lg hover:shadow-xl transition-all duration-300">
@@ -117,29 +103,39 @@ const UserDashboard = () => {
             </CardContent>
           </Card>
 
-          {/* Post Car Parts */}
+          {/* Supplier Section - Conditional Content */}
           <Card className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 bg-gradient-to-br from-white/90 to-orange-50/50 backdrop-blur-sm border-0 shadow-lg">
             <CardContent className="p-6 sm:p-8 text-center">
               <div className="bg-gradient-to-br from-orange-500 to-red-600 rounded-full p-4 w-fit mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
                 <Plus className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-xl sm:text-2xl font-playfair font-semibold mb-4 text-orange-700">
-                Become a Supplier
-              </h3>
-              <p className="text-gray-600 mb-6 font-crimson">
-                Join as a supplier to sell car parts and grow your business
-              </p>
-              <Link to="/supplier-dashboard">
-                <Button className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white shadow-lg hover:shadow-xl transition-all duration-300">
-                  Go to Dashboard
-                </Button>
-              </Link>
+              {userType === 'supplier' ? <>
+                  <h3 className="text-xl sm:text-2xl font-playfair font-semibold mb-4 text-orange-700">
+                    Sell Car Parts
+                  </h3>
+                  <p className="text-gray-600 mb-6 font-crimson">
+                    Manage your inventory and sell car parts to grow your business
+                  </p>
+                  <Button asChild className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white shadow-lg hover:shadow-xl transition-all duration-300">
+                    <Link to="/post-part">
+                      Start Selling
+                    </Link>
+                  </Button>
+                </> : <>
+                  <h3 className="text-xl sm:text-2xl font-playfair font-semibold mb-4 text-orange-700">
+                    Become a Seller
+                  </h3>
+                  <p className="text-gray-600 mb-6 font-crimson">Join as a seller to sell car parts and grow your business</p>
+                  <Link to="/seller-auth">
+                    <Button className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white shadow-lg hover:shadow-xl transition-all duration-300">
+                      Get Started
+                    </Button>
+                  </Link>
+                </>}
             </CardContent>
           </Card>
         </div>
       </main>
-    </div>
-  );
+    </div>;
 };
-
 export default UserDashboard;

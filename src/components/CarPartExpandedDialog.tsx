@@ -1,15 +1,15 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { MapPin, Phone, User } from "lucide-react";
+import { MapPin, Phone } from "lucide-react";
 import { CarPart } from "@/types/CarPart";
 import SaveButton from "./SaveButton";
 import ChatButton from "./chat/ChatButton";
 import VerifiedSellerBadge from "./VerifiedSellerBadge";
 import SellerRatingDisplay from "./SellerRatingDisplay";
-import { getConditionColor } from "@/utils/carPartUtils";
+import PriceComparisonSection from "./PriceComparisonSection";
+import ImageGallery from "./ImageGallery";
 
 interface CarPartExpandedDialogProps {
   part: CarPart;
@@ -48,40 +48,17 @@ const CarPartExpandedDialog = ({ part, isOpen, onOpenChange, onContact }: CarPar
         <div className="space-y-4">
           {/* Image Gallery */}
           {part.images && part.images.length > 0 && (
-            <div className="space-y-2">
-              <img
-                src={part.images[0]}
-                alt={part.title}
-                className="w-full h-64 object-cover rounded-lg"
-              />
-              {part.images.length > 1 && (
-                <div className="grid grid-cols-4 gap-2">
-                  {part.images.slice(1, 5).map((image, index) => (
-                    <img
-                      key={index}
-                      src={image}
-                      alt={`${part.title} ${index + 2}`}
-                      className="w-full h-16 object-cover rounded"
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
+            <ImageGallery 
+              images={part.images} 
+              title={part.title}
+              className="mb-6"
+            />
           )}
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <h4 className="font-semibold text-gray-900">Vehicle Details</h4>
-              <p className="text-gray-600">{part.make} {part.model} ({part.year})</p>
-              <p className="text-gray-600">Part Type: {part.part_type}</p>
-            </div>
-            <div>
-              <h4 className="font-semibold text-gray-900">Price & Condition</h4>
-              <p className="text-2xl font-bold text-green-600">{part.currency} {part.price}</p>
-              <Badge className={getConditionColor(part.condition)}>
-                {part.condition}
-              </Badge>
-            </div>
+          <div>
+            <h4 className="font-semibold text-gray-900">Vehicle Details</h4>
+            <p className="text-gray-600">{part.make} {part.model} ({part.year})</p>
+            <p className="text-gray-600">Part Type: {part.part_type}</p>
           </div>
 
           {part.description && (
@@ -98,30 +75,8 @@ const CarPartExpandedDialog = ({ part, isOpen, onOpenChange, onContact }: CarPar
             </div>
           )}
 
-          {/* Seller Information Section */}
           <div className="border-t pt-4">
-            <h4 className="font-semibold text-gray-900 mb-3">Seller Information</h4>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src={part.profiles?.profile_photo_url} alt={sellerName} />
-                  <AvatarFallback className="text-sm font-medium">
-                    {initials}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex items-center gap-2">
-                  <span className="font-medium text-gray-700">{sellerName}</span>
-                  <VerifiedSellerBadge isVerified={part.profiles?.is_verified || false} size="sm" />
-                </div>
-              </div>
-              
-              <SellerRatingDisplay
-                rating={part.profiles?.rating || 0}
-                totalRatings={part.profiles?.total_ratings || 0}
-                size="md"
-                showBadge={true}
-              />
-            </div>
+            <PriceComparisonSection currentPart={part} />
           </div>
 
           <div className="flex gap-2 pt-4">

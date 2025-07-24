@@ -1,0 +1,49 @@
+
+{
+  "name": "PartMatch",
+  "short_name": "PartMatch",
+  "description": "Buy and sell car parts easily worldwide.",
+  "start_url": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "prefer_related_applications": false,
+  "background_color": "#ffffff",
+  "theme_color": "#1e40af",
+  "orientation": "portrait-primary",
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "categories": ["business", "automotive", "shopping"],
+  "lang": "en",
+  "shortcuts": [
+    {
+      "name": "Browse Parts",
+      "short_name": "Browse",
+      "description": "Browse available car parts",
+      "url": "/search-parts",
+      "icons": [{ "src": "/app-icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Request Part",
+      "short_name": "Request",
+      "description": "Request a specific car part",
+      "url": "/request-part",
+      "icons": [{ "src": "/app-icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

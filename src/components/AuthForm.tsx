@@ -10,6 +10,8 @@ import PasswordReset from "./PasswordReset";
 import SetNewPassword from "./SetNewPassword";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import LanguageSelector from "./LanguageSelector";
 
 interface AuthFormProps {
   isLogin: boolean;
@@ -17,6 +19,7 @@ interface AuthFormProps {
 }
 
 const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -24,7 +27,11 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
     lastName: '',
     phone: '',
     location: '',
-    userType: 'owner'
+    userType: 'owner',
+    country: '',
+    city: '',
+    language: 'en',
+    currency: 'GHS'
   });
   const [loading, setLoading] = useState(false);
   const [showPasswordReset, setShowPasswordReset] = useState(false);
@@ -49,12 +56,16 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
           last_name: formData.lastName,
           phone: formData.phone,
           location: formData.location,
-          user_type: formData.userType
+          user_type: formData.userType,
+          country: formData.country,
+          city: formData.city,
+          language: formData.language,
+          currency: formData.currency
         });
         
         if (!error) {
           toast({
-            title: "Registration Successful!",
+            title: t('registrationSuccessful'),
             description: "Please check your email and click the verification link before signing in.",
           });
           setIsLogin(true);
@@ -102,7 +113,7 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
                 <User className="h-10 w-10 sm:h-12 sm:w-12 text-white" />
               </div>
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-semibold mb-2 sm:mb-3 bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
-                {isLogin ? 'Welcome Back' : 'Join PartMatch Ghana'}
+                {isLogin ? 'Welcome Back' : 'Join Ghana'}
               </h2>
               <p className="text-gray-600 text-sm sm:text-base font-crimson">
                 {isLogin 

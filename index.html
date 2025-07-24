@@ -1,11 +1,41 @@
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="transition-colors duration-300">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="/lovable-uploads/dc772d00-e2d0-489a-9845-0f0016d93c7b.png" type="image/png" />
+    <link rel="icon" href="/lovable-uploads/65f2d9cf-33fc-4d64-bf81-d16cc66b9c14.png" type="image/png" />
+    <link rel="preload" href="/lovable-uploads/0bb9488b-2f77-4f4c-b8b3-8aa9343b1d18.png" as="image">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PartMatch - Find Car Parts Locally</title>
+    <title>PartMatch - Buy & Sell Car Parts</title>
+    
+    <!-- Theme initialization script (prevents flash) -->
+    <script>
+      (function() {
+        const theme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (theme === 'dark' || (!theme && systemPrefersDark)) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Buy and sell car parts easily worldwide. Find the perfect part for your vehicle or sell your spare parts." />
+    <meta name="theme-color" content="#1e40af" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="PartMatch" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-TileColor" content="#1e40af" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="/app-icon-192.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/app-icon-192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/app-icon-512.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">

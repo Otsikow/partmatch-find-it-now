@@ -17,7 +17,7 @@ const WelcomeSection = () => {
             <div className="w-24 h-24 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
               <User className="h-12 w-12 text-white" />
             </div>
-            <h1 className="text-4xl font-bold text-blue-600 mb-2">Welcome to PartMatch</h1>
+            <h1 className="text-4xl font-bold text-blue-600 mb-2">Welcome to Ghana</h1>
             <p className="text-xl text-gray-600">Hello, Guest</p>
           </div>
 
@@ -96,7 +96,7 @@ const WelcomeSection = () => {
           <div className="w-24 h-24 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
             <User className="h-12 w-12 text-white" />
           </div>
-          <h1 className="text-4xl font-bold text-blue-600 mb-2">Welcome to PartMatch</h1>
+          <h1 className="text-4xl font-bold text-blue-600 mb-2">Welcome to Ghana</h1>
           <p className="text-xl text-gray-600">Hello, {displayName}</p>
         </div>
 

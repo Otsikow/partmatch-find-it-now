@@ -34,6 +34,7 @@ interface Request {
   phone: string;
   status: 'pending' | 'matched' | 'completed';
   timestamp: string;
+  ownerId?: string; // Add owner ID for chat functionality
 }
 
 interface Offer {
@@ -45,6 +46,7 @@ interface Offer {
   status: 'pending' | 'accepted' | 'rejected' | 'expired';
   transaction_completed?: boolean;
   buyer_id?: string;
+  supplierId?: string; // Add supplier ID for chat functionality
 }
 
 interface UserProfile {
@@ -124,6 +126,12 @@ export const useAdminData = () => {
       }
 
       console.log('Raw users data:', usersData?.length || 0, 'users fetched');
+      console.log('Sample user data:', usersData?.slice(0, 3).map(u => ({ 
+        id: u.id.slice(0, 8), 
+        user_type: u.user_type, 
+        is_verified: u.is_verified, 
+        is_blocked: u.is_blocked 
+      })));
 
       // Transform users data - buyers are auto-verified, only suppliers need manual verification
       const transformedUsers: UserProfile[] = (usersData || []).map(user => ({
@@ -131,6 +139,13 @@ export const useAdminData = () => {
         email: `user-${user.id.slice(0, 8)}@system.local`,
         user_type: user.user_type as 'owner' | 'supplier' | 'admin'
       }));
+
+      console.log('Transformed users:', transformedUsers.length);
+      console.log('User types breakdown:', {
+        suppliers: transformedUsers.filter(u => u.user_type === 'supplier').length,
+        owners: transformedUsers.filter(u => u.user_type === 'owner').length,
+        admins: transformedUsers.filter(u => u.user_type === 'admin').length
+      });
 
       // Log detailed statistics - note buyers are now auto-verified
       const userStats = {
@@ -160,7 +175,8 @@ export const useAdminData = () => {
         location: req.location,
         phone: req.phone,
         status: req.status === 'pending' ? 'pending' : req.status === 'offer_received' ? 'matched' : 'completed',
-        timestamp: new Date(req.created_at).toLocaleString()
+        timestamp: new Date(req.created_at).toLocaleString(),
+        ownerId: req.owner_id // Add owner ID for chat functionality
       }));
 
       // Transform offers data with new transaction completion fields
@@ -172,7 +188,8 @@ export const useAdminData = () => {
         phone: offer.profiles?.phone || '',
         status: offer.status,
         transaction_completed: offer.transaction_completed || false,
-        buyer_id: offer.buyer_id
+        buyer_id: offer.buyer_id,
+        supplierId: offer.supplier_id // Add supplier ID for chat functionality
       }));
 
       // Transform verifications data

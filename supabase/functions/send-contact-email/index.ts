@@ -46,7 +46,7 @@ const handler = async (req: Request): Promise<Response> => {
 
 async function sendContactEmail(formData: ContactFormData) {
   const emailContent = `
-New Contact Form Submission from PartMatch Ghana Website
+New Contact Form Submission from PartMatch Website
 
 Name: ${formData.name}
 Email: ${formData.email}
@@ -57,18 +57,18 @@ Message:
 ${formData.message}
 
 ---
-This email was sent from the PartMatch Ghana contact form.
+This email was sent from the PartMatch contact form.
   `.trim();
 
   const emailData = {
-    from: 'noreply@partmatchgh.com',
+    from: 'onboarding@resend.dev',
     to: 'support@partmatchgh.com',
     subject: `Contact Form: ${formData.subject}`,
     text: emailContent,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h2 style="color: #2563eb;">New Contact Form Submission</h2>
-        <p style="color: #666;">From PartMatch Ghana Website</p>
+        <p style="color: #666;">From PartMatch Website</p>
         
         <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
           <p><strong>Name:</strong> ${formData.name}</p>
@@ -83,7 +83,7 @@ This email was sent from the PartMatch Ghana contact form.
         </div>
         
         <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
-        <p style="color: #9ca3af; font-size: 12px;">This email was sent from the PartMatch Ghana contact form.</p>
+        <p style="color: #9ca3af; font-size: 12px;">This email was sent from the PartMatch contact form.</p>
       </div>
     `
   };
