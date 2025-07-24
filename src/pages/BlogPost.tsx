@@ -43,7 +43,7 @@ const BlogPost: React.FC = () => {
         <span className="mx-2">&bull;</span>
         <span>Tags: {post.tags.join(', ')}</span>
       </div>
-      {post.cover_image_url && <img src={post.cover_image_url} alt={post.title} className="w-full h-auto object-cover rounded-lg mb-8" />}
+      {post.featured_image_url && <img src={post.featured_image_url} alt={post.title} className="w-full h-auto object-cover rounded-lg mb-8" />}
       <div dangerouslySetInnerHTML={{ __html: post.content }} />
       <div className="mt-8">
         <ShareButtons />
