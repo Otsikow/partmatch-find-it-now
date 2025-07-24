@@ -52,10 +52,10 @@ const UserCard = ({ user, onApprove, onSuspend, onDelete, onUnblock, onViewDetai
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const getStatusColor = (isBlocked: boolean, isVerified: boolean, userType: string) => {
-    if (isBlocked) return 'bg-red-100 text-red-800 border-red-200';
+    if (isBlocked) return 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900/50 dark:text-red-300 dark:border-red-700';
     // Buyers are auto-verified, so always show as verified
-    if (userType === 'owner' || isVerified) return 'bg-green-100 text-green-800 border-green-200';
-    return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+    if (userType === 'owner' || isVerified) return 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900/50 dark:text-green-300 dark:border-green-700';
+    return 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/50 dark:text-yellow-300 dark:border-yellow-700';
   };
 
   const getStatusText = (isBlocked: boolean, isVerified: boolean, userType: string) => {
@@ -68,10 +68,10 @@ const UserCard = ({ user, onApprove, onSuspend, onDelete, onUnblock, onViewDetai
 
   const getUserTypeColor = (userType: string) => {
     switch (userType) {
-      case 'supplier': return 'bg-blue-100 text-blue-800';
-      case 'admin': return 'bg-purple-100 text-purple-800';
-      case 'owner': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'supplier': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300';
+      case 'admin': return 'bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300';
+      case 'owner': return 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300';
+      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
     }
   };
 
@@ -113,12 +113,12 @@ const UserCard = ({ user, onApprove, onSuspend, onDelete, onUnblock, onViewDetai
   const needsApproval = !isBuyer && !user.is_verified && !user.is_blocked;
 
   return (
-    <Card className="p-6 bg-gradient-to-br from-white/90 to-purple-50/30 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+    <Card className="p-6 bg-card border-border shadow-lg hover:shadow-xl transition-all duration-300">
       <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4 mb-4">
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
-            <User className="h-5 w-5 text-purple-600" />
-            <h3 className="text-xl font-playfair font-semibold text-gray-900">
+            <User className="h-5 w-5 text-primary" />
+            <h3 className="text-xl font-playfair font-semibold text-foreground">
               {fullName}
             </h3>
             <Badge className={`${getStatusColor(user.is_blocked, user.is_verified, user.user_type)} text-sm`}>
@@ -129,7 +129,7 @@ const UserCard = ({ user, onApprove, onSuspend, onDelete, onUnblock, onViewDetai
             </Badge>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-3 text-sm text-gray-600 font-crimson">
+          <div className="grid md:grid-cols-2 gap-3 text-sm text-muted-foreground font-crimson">
             {user.email && (
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4" />
@@ -167,7 +167,7 @@ const UserCard = ({ user, onApprove, onSuspend, onDelete, onUnblock, onViewDetai
       <div className="flex flex-col sm:flex-row gap-3">
         <Button 
           onClick={() => onViewDetails(user)}
-          className="bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+          className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300"
           size="sm"
         >
           <Eye className="h-4 w-4 mr-2" />
@@ -178,7 +178,7 @@ const UserCard = ({ user, onApprove, onSuspend, onDelete, onUnblock, onViewDetai
         {needsApproval && (
           <Button 
             onClick={() => onApprove(user.id)}
-            className="bg-gradient-to-r from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+            className="bg-green-600 hover:bg-green-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
             size="sm"
           >
             <CheckCircle className="h-4 w-4 mr-2" />
@@ -189,7 +189,7 @@ const UserCard = ({ user, onApprove, onSuspend, onDelete, onUnblock, onViewDetai
         {user.is_blocked ? (
           <Button 
             onClick={() => onUnblock(user.id)}
-            className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+            className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
             size="sm"
           >
             <CheckCircle className="h-4 w-4 mr-2" />
@@ -200,7 +200,7 @@ const UserCard = ({ user, onApprove, onSuspend, onDelete, onUnblock, onViewDetai
             <DialogTrigger asChild>
               <Button 
                 variant="outline"
-                className="border-orange-200 text-orange-600 hover:bg-orange-50"
+                className="border-orange-200 text-orange-600 hover:bg-orange-100 dark:border-orange-800 dark:text-orange-400 dark:hover:bg-orange-900/50"
                 size="sm"
               >
                 <Ban className="h-4 w-4 mr-2" />
@@ -243,7 +243,7 @@ const UserCard = ({ user, onApprove, onSuspend, onDelete, onUnblock, onViewDetai
           <DialogTrigger asChild>
             <Button 
               variant="outline"
-              className="border-red-200 text-red-600 hover:bg-red-50"
+              className="border-red-200 text-red-600 hover:bg-red-100 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/50"
               size="sm"
             >
               <Trash2 className="h-4 w-4 mr-2" />
@@ -255,9 +255,9 @@ const UserCard = ({ user, onApprove, onSuspend, onDelete, onUnblock, onViewDetai
               <DialogTitle>Delete User</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
-              <div className="flex items-center gap-2 p-3 bg-red-50 rounded-lg">
-                <AlertTriangle className="h-5 w-5 text-red-600" />
-                <span className="text-sm text-red-800">This action cannot be undone. The user account will be permanently deleted.</span>
+              <div className="flex items-center gap-2 p-3 bg-red-100 dark:bg-red-900/30 rounded-lg">
+                <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
+                <span className="text-sm text-red-800 dark:text-red-300">This action cannot be undone. The user account will be permanently deleted.</span>
               </div>
               <div>
                 <Label htmlFor="delete-reason">Reason for deletion:</Label>

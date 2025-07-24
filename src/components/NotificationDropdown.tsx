@@ -23,13 +23,35 @@ const NotificationDropdown = () => {
       await markAsRead(notification.id);
     }
 
-    // Navigation logic based on notification type
-    if (notification.metadata?.chat_id) {
-      navigate(`/chat?id=${notification.metadata.chat_id}`);
-    } else if (notification.type === 'offer') {
-      navigate('/seller-dashboard?tab=offers');
-    } else {
-      navigate('/seller-dashboard');
+    // Enhanced navigation logic
+    switch (notification.type) {
+      case 'new_message':
+        navigate(`/chat?id=${notification.metadata?.chat_id}`);
+        break;
+      case 'new_offer':
+        navigate('/buyer-dashboard?tab=offers');
+        break;
+      case 'offer_accepted':
+        navigate('/seller-dashboard?tab=offers');
+        break;
+      case 'item_shipped':
+        navigate('/buyer-dashboard?tab=orders');
+        break;
+      case 'new_review':
+        navigate('/seller-dashboard?tab=reviews');
+        break;
+      case 'new_part_request':
+        navigate('/requested-car-parts');
+        break;
+      default:
+        if (notification.metadata?.user_role === 'seller') {
+          navigate('/seller-dashboard');
+        } else if (notification.metadata?.user_role === 'buyer') {
+          navigate('/buyer-dashboard');
+        } else {
+          navigate('/dashboard');
+        }
+        break;
     }
 
     setIsOpen(false);

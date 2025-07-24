@@ -75,13 +75,13 @@ PartMatch Admin Team`;
   };
 
   return (
-    <Card className="p-3 sm:p-4 lg:p-6 xl:p-8 bg-gradient-to-br from-white/90 to-purple-50/30 backdrop-blur-sm border-0 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+    <Card className="p-3 sm:p-4 lg:p-6 xl:p-8 bg-gradient-to-br from-white/90 to-purple-50/30 dark:from-gray-800/90 dark:to-purple-900/30 backdrop-blur-sm border-0 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-4 mb-3 sm:mb-4 lg:mb-6">
         <div className="flex-1 min-w-0">
-          <h3 className="font-playfair font-semibold text-base sm:text-lg lg:text-xl truncate">
+          <h3 className="font-playfair font-semibold text-base sm:text-lg lg:text-xl truncate text-gray-900 dark:text-gray-100">
             {relatedRequest?.make} {relatedRequest?.model} - {relatedRequest?.part}
           </h3>
-          <p className="text-gray-600 font-crimson text-sm sm:text-base lg:text-lg truncate">
+          <p className="text-gray-600 dark:text-gray-400 font-crimson text-sm sm:text-base lg:text-lg truncate">
             Seller: {offer.supplier}
           </p>
           <p className="text-base sm:text-lg lg:text-xl font-semibold bg-gradient-to-r from-green-600 to-emerald-700 bg-clip-text text-transparent">
@@ -93,7 +93,7 @@ PartMatch Admin Team`;
         </Badge>
       </div>
 
-      <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm lg:text-base text-gray-600 mb-3 sm:mb-4 lg:mb-6 font-crimson">
+      <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm lg:text-base text-gray-600 dark:text-gray-400 mb-3 sm:mb-4 lg:mb-6 font-crimson">
         <div className="flex items-center gap-1 min-w-0">
           <Phone className="h-3 w-3 sm:h-4 sm:w-4 shrink-0" />
           <span className="truncate">{offer.phone}</span>

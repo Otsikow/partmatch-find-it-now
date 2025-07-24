@@ -1,10 +1,12 @@
 
-import { Search, Plus, Package, Zap, ClipboardList } from "lucide-react";
+import { Search, Plus, Package, Zap, ClipboardList, Newspaper, ShoppingBasket } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import CarPartCard from "@/components/CarPartCard";
 import { useFeaturedParts } from "@/hooks/useFeaturedParts";
 import { useRealTimeStats } from "@/hooks/useRealTimeStats";
+import { useBlogPosts } from "@/hooks/useBlogPosts";
 import { useTranslation } from 'react-i18next';
 import enginePartsImage from "@/assets/engine-parts.jpg";
 import brakeSystemImage from "@/assets/brake-system.jpg";
@@ -24,12 +26,14 @@ const MobileHomeContent = () => {
     categories,
     loading
   } = useRealTimeStats();
+  const { posts: blogPosts, loading: blogLoading } = useBlogPosts(3);
 
   const categoryImages = {
     engine: enginePartsImage,
     brake: brakeSystemImage,
     suspension: suspensionImage,
-    body: bodyPartsImage
+    body: bodyPartsImage,
+    accessories: "" // Use empty string for accessories, will show fallback icon
   };
 
   return (
@@ -138,34 +142,8 @@ const MobileHomeContent = () => {
           </div>
         ) : featuredParts.length > 0 ? (
           <div className="grid grid-cols-2 gap-3">
-            {featuredParts.slice(0, 4).map((part) => (
-              <Link key={part.id} to={`/search-parts-with-map`}>
-                <Card className="h-full hover:shadow-lg transition-shadow">
-                  <CardContent className="p-4 text-center space-y-3">
-                    <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-xl flex items-center justify-center mx-auto">
-                      {part.images && part.images.length > 0 ? (
-                        <img
-                          src={part.images[0]}
-                          alt={part.title}
-                          className="w-full h-full object-cover rounded-xl"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = "/placeholder.svg";
-                          }}
-                        />
-                      ) : (
-                        <Package className="w-6 h-6 text-gray-600 dark:text-gray-400" />
-                      )}
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-foreground">{part.title}</h4>
-                      <p className="text-xs text-muted-foreground">
-                        {part.currency} {part.price}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
+            {featuredParts.slice(0, 2).map((part) => (
+              <CarPartCard key={part.id} part={part} />
             ))}
           </div>
         ) : (
@@ -207,7 +185,7 @@ const MobileHomeContent = () => {
             {
               name: "Car Accessories",
               count: loading ? "..." : `${categories.accessories || 0}+ ${t('parts')}`,
-              image: categoryImages.engine // Using engine image as placeholder for accessories
+              image: categoryImages.accessories
             }
           ].map((category) => (
             <Link key={category.name} to="/search-parts-with-map" className="block">
@@ -244,6 +222,49 @@ const MobileHomeContent = () => {
             </Link>
           ))}
         </div>
+      </div>
+
+      {/* From the Blog */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-foreground">Auto Insights</h3>
+          <Link to="/blog" className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
+            {t('viewAll')}
+          </Link>
+        </div>
+
+        {blogLoading ? (
+          <div className="grid grid-cols-1 gap-3">
+            {[1, 2, 3].map((i) => (
+              <Card key={i} className="animate-pulse">
+                <CardContent className="p-4">
+                  <div className="bg-gray-200 dark:bg-gray-700 h-4 rounded w-3/4 mb-2"></div>
+                  <div className="bg-gray-200 dark:bg-gray-700 h-3 rounded w-1/2"></div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : blogPosts.length > 0 ? (
+          <div className="grid grid-cols-1 gap-3">
+            {blogPosts.map((post) => (
+              <Link key={post.id} to={`/blog/${post.slug}`}>
+                <Card className="hover:shadow-lg transition-shadow">
+                  <CardContent className="p-4">
+                    <h4 className="font-semibold text-foreground mb-1">{post.title}</h4>
+                    <p className="text-xs text-muted-foreground line-clamp-2">{post.excerpt}</p>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <Card>
+            <CardContent className="p-6 text-center">
+              <Newspaper className="w-12 h-12 text-gray-400 dark:text-gray-600 mx-auto mb-3" />
+              <p className="text-muted-foreground">No blog posts available</p>
+            </CardContent>
+          </Card>
+        )}
       </div>
 
       {/* Stats */}

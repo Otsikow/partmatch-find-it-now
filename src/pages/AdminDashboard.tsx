@@ -7,31 +7,32 @@ import AdminStats from "@/components/admin/AdminStats";
 import RequestCard from "@/components/admin/RequestCard";
 import OfferCard from "@/components/admin/OfferCard";
 import VerificationCard from "@/components/admin/VerificationCard";
-import UserDetailsModal from "@/components/admin/UserDetailsModal";
+import UserDetailsCard from "@/components/admin/UserDetailsCard";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import AdminHeader from "@/components/admin/AdminHeader";
 import UserCategoryTabs from "@/components/admin/UserCategoryTabs";
 import UserManagementStats from "@/components/admin/UserManagementStats";
 import AnalyticsDashboard from "@/components/admin/AnalyticsDashboard";
 import ListingQualityManager from "@/components/admin/ListingQualityManager";
 import WeeklyInsightsDashboard from "@/components/admin/WeeklyInsightsDashboard";
+import BlogManager from "@/components/admin/BlogManager";
 import { useAdminData } from "@/hooks/useAdminData";
 import { useAdminActions } from "@/hooks/useAdminActions";
 import { useState, useEffect, useRef, useMemo } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-interface UserProfile {
+interface SellerVerification {
   id: string;
-  first_name?: string;
-  last_name?: string;
-  phone?: string;
-  location?: string;
-  user_type: 'owner' | 'supplier' | 'admin';
-  is_verified: boolean;
-  is_blocked: boolean;
+  user_id: string;
+  full_name: string;
+  seller_type: string;
+  business_name?: string;
+  business_address: string;
+  phone: string;
+  email: string;
+  date_of_birth: string;
+  verification_status: 'pending' | 'approved' | 'rejected';
   created_at: string;
-  rating?: number;
-  total_ratings?: number;
-  email?: string;
 }
 
 const AdminDashboard = () => {
@@ -45,11 +46,11 @@ const AdminDashboard = () => {
     handleApproveUser,
     handleSuspendUser,
     handleDeleteUser,
-    handleUnblockUser
+    handleUnblockUser,
   } = useAdminActions(refetchData);
 
-  const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null);
-  const [showUserDetails, setShowUserDetails] = useState(false);
+  const [selectedVerification, setSelectedVerification] = useState<SellerVerification | null>(null);
+  const [showVerificationDetails, setShowVerificationDetails] = useState(false);
   const [activeTab, setActiveTab] = useState("analytics");
   const [activeUserTab, setActiveUserTab] = useState("sellers");
   const isMobile = useIsMobile();
@@ -61,9 +62,9 @@ const AdminDashboard = () => {
   const completedRequestsCount = useMemo(() => requests.filter(r => r.status === 'completed').length, [requests]);
   const pendingVerificationsCount = useMemo(() => verifications.filter(v => v.verification_status === 'pending').length, [verifications]);
 
-  const handleViewUserDetails = (user: UserProfile) => {
-    setSelectedUser(user);
-    setShowUserDetails(true);
+  const handleViewVerificationDetails = (verification: SellerVerification) => {
+    setSelectedVerification(verification);
+    setShowVerificationDetails(true);
   };
 
   const handleNavigateToCategory = (category: string, filter?: string) => {
@@ -77,7 +78,15 @@ const AdminDashboard = () => {
   };
 
   const handleGoBack = () => {
-    navigate('/');
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/admin');
+    }
+  };
+
+  const handleGoHome = () => {
+    navigate('/admin');
   };
 
   // Auto-refresh disabled to prevent UI instability - data will refresh on user actions
@@ -103,7 +112,11 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-background font-inter">
       {/* Single Modern Header */}
-      <AdminHeader onNavigateToVerifications={handleNavigateToVerifications} />
+      <AdminHeader
+        onNavigateToVerifications={handleNavigateToVerifications}
+        onGoBack={handleGoBack}
+        onGoHome={handleGoHome}
+      />
 
       <main className="container mx-auto px-2 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8 max-w-7xl">
         <div className="mb-4 sm:mb-6 lg:mb-8">
@@ -120,7 +133,7 @@ const AdminDashboard = () => {
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           {/* Desktop Tab Navigation */}
-          <TabsList className="hidden lg:grid lg:grid-cols-7 w-full bg-card backdrop-blur-sm border mb-4">
+          <TabsList className="hidden lg:grid lg:grid-cols-8 w-full bg-card backdrop-blur-sm border mb-4">
             <TabsTrigger value="insights" className="text-sm xl:text-base font-inter truncate">
               Weekly Insights
             </TabsTrigger>
@@ -142,6 +155,9 @@ const AdminDashboard = () => {
             <TabsTrigger value="users" className="text-sm xl:text-base font-inter truncate">
               User Management
             </TabsTrigger>
+            <TabsTrigger value="blog" className="text-sm xl:text-base font-inter truncate">
+              Blog
+            </TabsTrigger>
           </TabsList>
 
           {/* Tablet Tab Navigation */}
@@ -160,7 +176,7 @@ const AdminDashboard = () => {
             </TabsTrigger>
           </TabsList>
 
-          <TabsList className="hidden md:grid lg:hidden md:grid-cols-3 w-full bg-card backdrop-blur-sm border mb-4">
+          <TabsList className="hidden md:grid lg:hidden md:grid-cols-4 w-full bg-card backdrop-blur-sm border mb-4">
             <TabsTrigger value="quality" className="text-xs sm:text-sm font-inter truncate px-1">
               Quality
             </TabsTrigger>
@@ -169,6 +185,9 @@ const AdminDashboard = () => {
             </TabsTrigger>
             <TabsTrigger value="users" className="text-xs sm:text-sm font-inter truncate px-1">
               Users
+            </TabsTrigger>
+            <TabsTrigger value="blog" className="text-xs sm:text-sm font-inter truncate px-1">
+              Blog
             </TabsTrigger>
           </TabsList>
 
@@ -195,7 +214,7 @@ const AdminDashboard = () => {
             </TabsList>
             
             {/* Tertiary tabs */}
-            <TabsList className="grid grid-cols-3 w-full bg-card backdrop-blur-sm border">
+            <TabsList className="grid grid-cols-4 w-full bg-card backdrop-blur-sm border">
               <TabsTrigger value="quality" className="text-xs font-inter truncate px-1">
                 Quality
               </TabsTrigger>
@@ -204,6 +223,9 @@ const AdminDashboard = () => {
               </TabsTrigger>
               <TabsTrigger value="users" className="text-xs font-inter truncate px-1">
                 Users
+              </TabsTrigger>
+              <TabsTrigger value="blog" className="text-xs font-inter truncate px-1">
+                Blog
               </TabsTrigger>
             </TabsList>
           </div>
@@ -323,9 +345,10 @@ const AdminDashboard = () => {
                   <div key={verification.id} className="mx-2 sm:mx-0">
                     <VerificationCard
                       verification={verification}
-                      onApprove={(id) => handleVerificationAction(id, 'approve')}
-                      onReject={handleVerificationAction}
+                      onApprove={(id, notes) => handleVerificationAction(id, 'approve', notes)}
+                      onReject={(id, notes) => handleVerificationAction(id, 'reject', notes)}
                       onViewDocument={viewDocument}
+                      onViewUserDetails={handleViewVerificationDetails}
                     />
                   </div>
                 ))
@@ -362,7 +385,7 @@ const AdminDashboard = () => {
                     onSuspend={handleSuspendUser}
                     onDelete={handleDeleteUser}
                     onUnblock={handleUnblockUser}
-                    onViewDetails={handleViewUserDetails}
+                    onViewDetails={() => {}}
                     activeTab={activeUserTab}
                     onTabChange={setActiveUserTab}
                   />
@@ -370,18 +393,29 @@ const AdminDashboard = () => {
               )}
             </div>
           </TabsContent>
+
+          <TabsContent value="blog" className="mt-4 sm:mt-6">
+            <div className="space-y-3 sm:space-y-4 lg:space-y-6">
+              <h2 className="text-lg sm:text-xl lg:text-2xl font-playfair font-semibold text-primary px-2 sm:px-0">
+                Blog Management
+              </h2>
+
+              <div className="mx-2 sm:mx-0">
+                <BlogManager />
+              </div>
+            </div>
+          </TabsContent>
         </Tabs>
 
-        {/* User Details Modal */}
-        <UserDetailsModal
-          user={selectedUser}
-          open={showUserDetails}
-          onOpenChange={setShowUserDetails}
-          onApprove={handleApproveUser}
-          onSuspend={handleSuspendUser}
-          onDelete={handleDeleteUser}
-          onUnblock={handleUnblockUser}
-        />
+        {/* Verification Details Modal */}
+        <Dialog open={showVerificationDetails} onOpenChange={setShowVerificationDetails}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Seller Verification Details</DialogTitle>
+            </DialogHeader>
+            {selectedVerification && <UserDetailsCard user={selectedVerification} />}
+          </DialogContent>
+        </Dialog>
       </main>
       <Footer />
     </div>

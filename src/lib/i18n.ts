@@ -90,6 +90,8 @@ const resources = {
 
       // Categories
       popularCategories: "Popular Categories",
+      featuredParts: "Featured Parts",
+      viewAll: "View All",
       engineParts: "Engine Parts",
       brakeSystem: "Brake System",
       suspension: "Suspension",
@@ -296,6 +298,7 @@ const resources = {
 
       // Categories
       popularCategories: "Catégories populaires",
+      featuredParts: "Pièces en vedette",
       engineParts: "Pièces moteur",
       brakeSystem: "Système de freinage",
       suspension: "Suspension",
@@ -431,6 +434,7 @@ const resources = {
 
       // Categories
       popularCategories: "Makundi Maarufu",
+      featuredParts: "Vipengee Vilivyoangaziwa",
       engineParts: "Vipengee vya Injini",
       brakeSystem: "Mfumo wa Breki",
       suspension: "Kusimamisha",
@@ -564,6 +568,7 @@ const resources = {
 
       // Categories
       popularCategories: "Nneɛma a Agye Din",
+      featuredParts: "Nneɛma a Wɔayi no Adi",
       engineParts: "Injin Nneɛma",
       brakeSystem: "Breki Nhyehyɛe",
       suspension: "Ntwentwɛn",
@@ -698,6 +703,7 @@ const resources = {
 
       // Categories
       popularCategories: "Awọn Ẹka Olokiki",
+      featuredParts: "Awọn ẹya Ifihan",
       engineParts: "Awọn Ẹya Enjini",
       brakeSystem: "Eto Breki",
       suspension: "Duduro",

@@ -39,7 +39,11 @@ const BuyerAuthForm = ({ isLogin, setIsLogin, showPasswordReset, setShowPassword
     
     try {
       if (isLogin) {
-        const { error } = await signIn(formData.email, formData.password);
+        const { error } = await signIn(
+          formData.email,
+          formData.password,
+          "owner"
+        );
         if (!error) {
           navigate('/buyer-dashboard');
         }
