@@ -84,8 +84,8 @@ const UserCategoryTabs = ({
       </div>
       
       {users.length === 0 ? (
-        <Card className="p-4 sm:p-6 text-center bg-gray-50 mx-2 sm:mx-0">
-          <p className={`text-gray-500 ${isMobile ? 'text-sm' : ''}`}>No users in this category</p>
+        <Card className="p-4 sm:p-6 text-center bg-card border-border mx-2 sm:mx-0">
+          <p className={`text-muted-foreground ${isMobile ? 'text-sm' : ''}`}>No users in this category</p>
         </Card>
       ) : (
         <div className="space-y-3 sm:space-y-4">
@@ -108,7 +108,7 @@ const UserCategoryTabs = ({
 
   return (
     <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
-      <TabsList className={`grid w-full grid-cols-3 bg-gradient-to-r from-white/90 to-purple-50/50 backdrop-blur-sm ${isMobile ? 'mb-3' : 'mb-4'}`}>
+      <TabsList className={`grid w-full grid-cols-3 bg-card backdrop-blur-sm border ${isMobile ? 'mb-3' : 'mb-4'}`}>
         <TabsTrigger value="sellers" className={`${isMobile ? 'text-xs px-1' : 'text-base'} font-inter`}>
           <ShoppingCart className={`${isMobile ? 'h-3 w-3 mr-1' : 'h-4 w-4 mr-2'}`} />
           {isMobile ? `Sellers (${sellerUsers.length})` : `Sellers (${sellerUsers.length})`}

@@ -152,7 +152,7 @@ const MessageInput = ({ chatId, userId, onTyping }: MessageInputProps) => {
           
           const { data: senderProfile } = await supabase
             .from('profiles')
-            .select('first_name, last_name')
+            .select('first_name, last_name, user_type')
             .eq('id', userId)
             .single();
 
@@ -170,7 +170,11 @@ const MessageInput = ({ chatId, userId, onTyping }: MessageInputProps) => {
               user_id: recipientId,
               type: 'new_message',
               message: notificationMessage,
-              read: false
+              read: false,
+              metadata: {
+                chat_id: chatId,
+                user_role: senderProfile?.user_type
+              }
             });
 
           console.log('✅ Notification created for recipient:', recipientId);

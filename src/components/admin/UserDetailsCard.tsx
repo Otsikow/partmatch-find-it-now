@@ -27,56 +27,56 @@ const UserDetailsCard: React.FC<UserDetailsCardProps> = ({ user }) => {
   };
 
   return (
-    <Card className="w-full max-w-lg mx-auto">
+    <Card className="w-full max-w-lg mx-auto bg-card">
       <CardHeader>
-        <CardTitle className="flex items-center gap-3 text-xl font-semibold text-gray-900">
-          <User className="h-6 w-6 text-purple-600" />
+        <CardTitle className="flex items-center gap-3 text-xl font-semibold text-foreground">
+          <User className="h-6 w-6 text-primary" />
           <span>{user.full_name || 'N/A'}</span>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-700">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
-            <Building2 className="h-5 w-5 text-gray-500" />
+            <Building2 className="h-5 w-5 text-muted-foreground" />
             <div>
-              <p className="font-medium">Seller Type</p>
+              <p className="font-medium text-foreground">Seller Type</p>
               <p>{user.seller_type || 'N/A'}</p>
             </div>
           </div>
           {user.business_name && (
             <div className="flex items-center gap-2">
-              <Building2 className="h-5 w-5 text-gray-500" />
+              <Building2 className="h-5 w-5 text-muted-foreground" />
               <div>
-                <p className="font-medium">Business Name</p>
+                <p className="font-medium text-foreground">Business Name</p>
                 <p>{user.business_name}</p>
               </div>
             </div>
           )}
           <div className="flex items-center gap-2">
-            <Phone className="h-5 w-5 text-gray-500" />
+            <Phone className="h-5 w-5 text-muted-foreground" />
             <div>
-              <p className="font-medium">Phone</p>
+              <p className="font-medium text-foreground">Phone</p>
               <p>{user.phone || 'N/A'}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Mail className="h-5 w-5 text-gray-500" />
+            <Mail className="h-5 w-5 text-muted-foreground" />
             <div>
-              <p className="font-medium">Email</p>
+              <p className="font-medium text-foreground">Email</p>
               <p>{user.email || 'N/A'}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Calendar className="h-5 w-5 text-gray-500" />
+            <Calendar className="h-5 w-5 text-muted-foreground" />
             <div>
-              <p className="font-medium">Date of Birth</p>
+              <p className="font-medium text-foreground">Date of Birth</p>
               <p>{formatDate(user.date_of_birth)}</p>
             </div>
           </div>
           <div className="flex items-center gap-2 sm:col-span-2">
-            <MapPin className="h-5 w-5 text-gray-500" />
+            <MapPin className="h-5 w-5 text-muted-foreground" />
             <div>
-              <p className="font-medium">Business Address</p>
+              <p className="font-medium text-foreground">Business Address</p>
               <p>{user.business_address || 'N/A'}</p>
             </div>
           </div>

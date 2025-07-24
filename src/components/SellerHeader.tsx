@@ -61,7 +61,7 @@ const SellerHeader = () => {
   }, [user]);
 
   const handleBackClick = () => {
-    navigate(-1);
+    navigate('/');
   };
 
   const handleSignOut = async () => {

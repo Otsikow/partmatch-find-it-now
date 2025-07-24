@@ -44,7 +44,13 @@ const NotificationDropdown = () => {
         navigate('/requested-car-parts');
         break;
       default:
-        navigate('/dashboard');
+        if (notification.metadata?.user_role === 'seller') {
+          navigate('/seller-dashboard');
+        } else if (notification.metadata?.user_role === 'buyer') {
+          navigate('/buyer-dashboard');
+        } else {
+          navigate('/dashboard');
+        }
         break;
     }
 
