@@ -198,6 +198,33 @@ const PostPart = () => {
     }
   }, []);
 
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      localStorage.setItem('draftPart', JSON.stringify(formData));
+    };
+
+    const handlePopState = () => {
+      const savedDraft = localStorage.getItem('draftPart');
+      if (savedDraft) {
+        try {
+          const parsedDraft = JSON.parse(savedDraft);
+          setFormData(parsedDraft);
+        } catch (error) {
+          console.error('Failed to parse saved draft:', error);
+          localStorage.removeItem('draftPart');
+        }
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [formData]);
+
   // Handle redirect from login
   useEffect(() => {
     const isRedirected = searchParams.get('redirect') === '/post-part';
