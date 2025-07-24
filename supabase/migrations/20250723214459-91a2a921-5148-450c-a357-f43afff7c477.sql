@@ -20,6 +20,7 @@ CREATE TABLE public.blog_posts (
 ALTER TABLE public.blog_posts ENABLE ROW LEVEL SECURITY;
 
 -- Create policies for blog posts
+feature/featured-badge
 CREATE POLICY "Anyone can view published blog posts"
 ON public.blog_posts
 FOR SELECT
@@ -46,6 +47,34 @@ WITH CHECK (auth.uid() = author_id);
 CREATE POLICY "Authors can update their own blog posts"
 ON public.blog_posts
 FOR UPDATE
+
+CREATE POLICY "Anyone can view published blog posts" 
+ON public.blog_posts 
+FOR SELECT 
+USING (published = true);
+
+CREATE POLICY "Admins can manage all blog posts" 
+ON public.blog_posts 
+FOR ALL 
+USING (EXISTS (
+  SELECT 1 FROM public.profiles 
+  WHERE id = auth.uid() AND user_type = 'admin'
+));
+
+CREATE POLICY "Authors can view their own blog posts" 
+ON public.blog_posts 
+FOR SELECT 
+USING (auth.uid() = author_id);
+
+CREATE POLICY "Authors can create blog posts" 
+ON public.blog_posts 
+FOR INSERT 
+WITH CHECK (auth.uid() = author_id);
+
+CREATE POLICY "Authors can update their own blog posts" 
+ON public.blog_posts 
+FOR UPDATE 
+main
 USING (auth.uid() = author_id);
 
 -- Create function to update timestamps

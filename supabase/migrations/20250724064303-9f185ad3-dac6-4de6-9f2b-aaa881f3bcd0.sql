@@ -1,4 +1,5 @@
--- Create blog-images storage bucket
+-- Create blog-images storage bucket 
+feature/featured-badge
 INSERT INTO storage.buckets (id, name, public)
 VALUES ('blog-images', 'blog-images', true);
 
@@ -21,4 +22,6 @@ USING (bucket_id = 'blog-images' AND auth.role() = 'authenticated');
 CREATE POLICY "Authors can delete their blog images"
 ON storage.objects
 FOR DELETE
-USING (bucket_id = 'blog-images' AND auth.role() = 'authenticated');
+
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('blog-images', 'blog-images', true);
