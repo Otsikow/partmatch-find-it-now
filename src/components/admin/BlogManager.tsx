@@ -137,6 +137,7 @@ admin-blog-management
       }
       const { data: urlData } = supabase.storage.from('blog-images').getPublicUrl(data.path);
       imageUrl = urlData.publicUrl;
+main
     }
 
     if (!user) {
@@ -156,13 +157,16 @@ admin-blog-management
       {
         title,
         content,
+
         author_id: user.id,
         slug: title.toLowerCase().replace(/\s/g, '-'),
         featured_image_url: imageUrl,
         excerpt: excerpt || content.substring(0, 160) + '...',
         published: shouldPublishNow,
         published_at: shouldPublishNow ? currentTime : null,
-        scheduled_publish_at: scheduledTime,
+        scheduled_publish_at: scheduledTime, 
+        
+       main
       },
     ]);
 
