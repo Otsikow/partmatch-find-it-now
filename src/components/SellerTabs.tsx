@@ -11,6 +11,7 @@ import SellerProfileManagement from "./SellerProfileManagement";
 import SubscriptionManager from "./SubscriptionManager";
 import { useSubscriptionStatus } from "@/hooks/useSubscriptionStatus";
 import { useMyPartsCount } from "@/hooks/useMyPartsCount";
+import { usePartManagement } from "@/hooks/usePartManagement";
 import TabCountBadge from "./TabCountBadge";
 interface Request {
   id: string;
@@ -67,9 +68,11 @@ const SupplierTabs = ({
   const {
     hasBusinessSubscription
   } = useSubscriptionStatus();
+  const { fetchMyParts } = usePartManagement();
   const partsCount = useMyPartsCount();
   const handlePartPosted = () => {
     setShowPostForm(false);
+    fetchMyParts();
     // You might want to call a refresh function here if available
   };
   const handleViewRequests = () => {
@@ -127,7 +130,7 @@ const SupplierTabs = ({
             <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-1 text-sm sm:text-base">My Parts</h3>
             <p className="text-xs sm:text-sm text-blue-700 dark:text-blue-300">All the car parts you have listed for sale as a supplier. Use this to manage, edit, or remove your own listings (your inventory).</p>
           </div>
-          <MyPartsTab onRefresh={() => {}} />
+          <MyPartsTab onRefresh={fetchMyParts} />
         </TabsContent>
 
         <TabsContent value="offers" className="space-y-3 sm:space-y-4">

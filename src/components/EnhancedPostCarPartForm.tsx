@@ -227,8 +227,8 @@ const EnhancedPostCarPartForm = ({
 
       let imageUrls: string[] = [];
       if (currentPhotos.length > 0) {
-        try {
-          const uploadPromises = currentPhotos.map(async (photo, index) => {
+        const uploadResults = await Promise.allSettled(
+          currentPhotos.map(async (photo, index) => {
             const timestamp = Date.now();
             const fileName = `${user.id}/${timestamp}-${index}.${photo.name
               .split(".")
@@ -238,24 +238,43 @@ const EnhancedPostCarPartForm = ({
               .from("car-part-images")
               .upload(fileName, photo);
 
-            if (error) throw error;
+            if (error) {
+              throw new Error(`Failed to upload ${photo.name}: ${error.message}`);
+            }
 
             const {
               data: { publicUrl },
             } = supabase.storage.from("car-part-images").getPublicUrl(fileName);
 
             return publicUrl;
+          })
+        );
+
+        const successfulUploads = uploadResults
+          .filter((result) => result.status === "fulfilled")
+          .map((result) => (result as PromiseFulfilledResult<string>).value);
+
+        const failedUploads = uploadResults.filter(
+          (result) => result.status === "rejected"
+        );
+
+        if (failedUploads.length > 0) {
+          const failedFileNames = failedUploads.map((result) => {
+            const reason = (result as PromiseRejectedResult).reason.message;
+            const match = reason.match(/Failed to upload (.*?):/);
+            return match ? match[1] : "an image";
           });
 
-          imageUrls = await Promise.all(uploadPromises);
-        } catch (uploadError) {
-          console.error("Image upload failed:", uploadError);
           toast({
-            title: "Image Upload Failed",
-            description: "Failed to upload images. Posting without images.",
+            title: "Some Images Failed to Upload",
+            description: `The following images could not be uploaded: ${failedFileNames.join(
+              ", "
+            )}. The listing will be posted with the successfully uploaded images.`,
             variant: "destructive",
           });
         }
+
+        imageUrls = successfulUploads;
       }
 
       const isFeatured = hasBusinessSubscription;
@@ -307,31 +326,31 @@ const EnhancedPostCarPartForm = ({
         });
 
         if (qualityCheckResponse.error) {
-          console.error('Quality check failed:', qualityCheckResponse.error);
-        } else {
-          const { result, status } = qualityCheckResponse.data;
-          
-          if (status === 'pending_fix') {
-            toast({
-              title: "Listing Needs Improvement",
-              description: "Your listing has been submitted but needs some improvements. Check your notifications for details.",
-              variant: "destructive",
-            });
-          } else {
-            toast({
-              title: "Part Posted Successfully!",
-              description: hasBusinessSubscription
-                ? "Your car part has been posted, quality checked, and featured automatically!"
-                : "Your car part has been posted, quality checked, and is now available for buyers.",
-            });
-          }
+          throw new Error(qualityCheckResponse.error.message);
         }
-      } catch (qualityError) {
+
+        const { status } = qualityCheckResponse.data;
+
+        if (status === 'pending_fix') {
+          toast({
+            title: "Listing Needs Improvement",
+            description: "Your listing has been submitted but needs some improvements. Check your notifications for details.",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Part Posted Successfully!",
+            description: hasBusinessSubscription
+              ? "Your car part has been posted, quality checked, and featured automatically!"
+              : "Your car part has been posted, quality checked, and is now available for buyers.",
+          });
+        }
+      } catch (qualityError: any) {
         console.error('Quality check error:', qualityError);
-        // Still show success message for the posting itself
         toast({
-          title: "Part Posted Successfully!",
-          description: "Your car part has been posted. Quality check will be processed shortly.",
+          title: "Part Posted, But Quality Check Failed",
+          description: `Your part was posted, but the automatic quality check failed: ${qualityError.message}. You can review and edit the listing in your dashboard.`,
+          variant: "destructive",
         });
       }
 
@@ -365,10 +384,21 @@ const EnhancedPostCarPartForm = ({
       onPartPosted();
     } catch (error: any) {
       console.error("Error posting part:", error);
+
+      let errorMessage = "An unexpected error occurred. Please try again.";
+      if (error.message) {
+        if (error.message.includes("duplicate key value violates unique constraint")) {
+          errorMessage = "This part seems to be a duplicate of another listing. Please check your inventory.";
+        } else if (error.message.includes("network error")) {
+          errorMessage = "Network error. Please check your internet connection and try again.";
+        } else {
+          errorMessage = error.message;
+        }
+      }
+
       toast({
         title: "Posting Failed",
-        description:
-          error.message || "An unexpected error occurred. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
