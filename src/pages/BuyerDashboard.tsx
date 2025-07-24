@@ -1,12 +1,12 @@
 
 import React from 'react';
-import { BuyerDashboardHeader } from '@/components/buyer/BuyerDashboardHeader';
+import DashboardHeader from "@/components/DashboardHeader";
 import { BuyerDashboardContent } from '@/components/buyer/BuyerDashboardContent';
 
 const BuyerDashboard = () => {
   return (
     <div className="min-h-screen bg-background">
-      <BuyerDashboardHeader />
+      <DashboardHeader />
       <BuyerDashboardContent />
     </div>
   );
