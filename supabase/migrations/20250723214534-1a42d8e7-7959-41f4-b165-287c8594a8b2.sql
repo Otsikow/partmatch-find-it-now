@@ -1,6 +1,8 @@
 -- Fix search path security issue for blog posts update function
 CREATE OR REPLACE FUNCTION public.update_blog_posts_updated_at()
-RETURNS TRIGGER 
+fix/admin-home-button
+RETURNS TRIGGER
+
 LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path TO ''

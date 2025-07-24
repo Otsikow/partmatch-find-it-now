@@ -67,9 +67,11 @@ const AdminHeader = ({ onNavigateToVerifications, onGoBack, onGoHome }: AdminHea
           <Button
             variant="outline"
             size="sm"
-            asChild
-            className="hidden sm:flex bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground transition-colors backdrop-blur-sm border border-primary-foreground/20 shadow-lg"
-          >
+fix/admin-home-button
+            onClick={onGoHome}
+            className="flex bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground transition-colors backdrop-blur-sm border border-primary-foreground/20 shadow-lg"
+      
+  
             <Link to="/admin">
               <Home className="h-4 w-4 mr-1" />
               <span>Home</span>
@@ -80,7 +82,7 @@ const AdminHeader = ({ onNavigateToVerifications, onGoBack, onGoHome }: AdminHea
             size="sm"
             onClick={handleSignOut}
             className="bg-red-500/10 hover:bg-red-500/20 text-red-300 hover:text-red-200 transition-colors backdrop-blur-sm border border-red-500/20 shadow-lg"
-          >
+         
             <LogOut className="h-4 w-4 mr-1" />
             <span className="hidden sm:inline">Sign Out</span>
           </Button>

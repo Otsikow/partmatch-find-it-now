@@ -126,7 +126,9 @@ export type Database = {
           id: string
           published: boolean
           published_at: string | null
+fix/admin-home-button
           scheduled_publish_at: string | null
+main
           slug: string
           tags: string[] | null
           title: string
@@ -143,7 +145,9 @@ export type Database = {
           id?: string
           published?: boolean
           published_at?: string | null
+fix/admin-home-button
           scheduled_publish_at?: string | null
+main
           slug: string
           tags?: string[] | null
           title: string
@@ -160,7 +164,9 @@ export type Database = {
           id?: string
           published?: boolean
           published_at?: string | null
+fix/admin-home-button
           scheduled_publish_at?: string | null
+main
           slug?: string
           tags?: string[] | null
           title?: string
