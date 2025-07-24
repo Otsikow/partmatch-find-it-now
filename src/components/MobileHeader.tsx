@@ -21,7 +21,12 @@ const MobileHeader = () => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
 
-  const dashboardUrl = userType === 'seller' ? '/seller-dashboard' : '/buyer-dashboard';
+  const dashboardUrl =
+    userType === 'admin'
+      ? '/admin-dashboard'
+      : userType === 'seller' || userType === 'supplier'
+      ? '/seller-dashboard'
+      : '/buyer-dashboard';
 
   const handleSignOut = async () => {
     try {
