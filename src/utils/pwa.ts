@@ -1,73 +1,43 @@
-// Enhanced PWA utility functions with improved Brave browser support
+// Simplified PWA utility functions for broad browser compatibility
 
-// Detect Brave browser specifically
-const isBrave = async (): Promise<boolean> => {
-  if ((navigator as any).brave && (navigator as any).brave.isBrave) {
-    return await (navigator as any).brave.isBrave();
-  }
-  return false;
-};
-
-// Register service worker with enhanced error handling and Brave compatibility
-export const registerServiceWorker = async (): Promise<void> => {
+// Register service worker with a streamlined approach
+export const registerServiceWorker = (): void => {
   // Skip in development to avoid caching issues
   if (import.meta.env.DEV) {
-    console.log('Service Worker skipped in development mode');
+    console.log('Service Worker registration skipped in development mode.');
     return;
   }
 
-  if (!('serviceWorker' in navigator)) {
-    console.log('Service Worker not supported');
-    return;
-  }
-
-  const brave = await isBrave();
-  if (brave) {
-    console.log('Brave browser detected - using enhanced compatibility mode');
-  }
-
-  try {
-    // Wait a moment to ensure the page is fully loaded
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    const registration = await navigator.serviceWorker.register('/service-worker.js', {
-      scope: '/',
-      updateViaCache: 'none' // Always check for updates - important for Brave
-    });
-    
-    console.log('SW registered successfully:', registration.scope);
-    
-    // Enhanced update handling for Brave compatibility
-    registration.addEventListener('updatefound', () => {
-      const newWorker = registration.installing;
-      if (newWorker) {
-        newWorker.addEventListener('statechange', () => {
-          if (newWorker.state === 'installed') {
-            if (navigator.serviceWorker.controller) {
-              console.log('New version available');
-              // For Brave, give more time before auto-update
-              const updateDelay = brave ? 5000 : 2000;
-              setTimeout(() => {
-                window.location.reload();
-              }, updateDelay);
-            } else {
-              console.log('App cached for offline use');
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(registration => {
+          console.log('Service Worker registered with scope:', registration.scope);
+          // Check for updates on page load
+          registration.onupdatefound = () => {
+            const installingWorker = registration.installing;
+            if (installingWorker) {
+              installingWorker.onstatechange = () => {
+                if (installingWorker.state === 'installed') {
+                  if (navigator.serviceWorker.controller) {
+                    // New content is available; a reload is needed.
+                    console.log('New content is available, please refresh.');
+                    // Optionally, prompt the user to reload.
+                  } else {
+                    // Content is cached for offline use.
+                    console.log('Content is cached for offline use.');
+                  }
+                }
+              };
             }
-          }
+          };
+        })
+        .catch(error => {
+          console.error('Service Worker registration failed:', error);
         });
-      }
     });
-
-    // Force update check for Brave
-    if (brave) {
-      setTimeout(() => {
-        registration.update();
-      }, 2000);
-    }
-
-  } catch (error) {
-    console.warn('SW registration failed (app will work normally):', error);
-    // Don't throw - app should continue working without PWA features
+  } else {
+    console.log('Service Worker not supported in this browser.');
   }
 };
 
