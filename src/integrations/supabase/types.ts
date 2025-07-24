@@ -126,6 +126,7 @@ export type Database = {
           id: string
           published: boolean
           published_at: string | null
+          scheduled_publish_at: string | null
           slug: string
           tags: string[] | null
           title: string
@@ -142,6 +143,7 @@ export type Database = {
           id?: string
           published?: boolean
           published_at?: string | null
+          scheduled_publish_at?: string | null
           slug: string
           tags?: string[] | null
           title: string
@@ -158,6 +160,7 @@ export type Database = {
           id?: string
           published?: boolean
           published_at?: string | null
+          scheduled_publish_at?: string | null
           slug?: string
           tags?: string[] | null
           title?: string
@@ -1422,6 +1425,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      auto_publish_scheduled_posts: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       expire_monetization_features: {
         Args: Record<PropertyKey, never>
         Returns: undefined
