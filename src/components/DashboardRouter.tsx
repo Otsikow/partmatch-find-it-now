@@ -25,7 +25,7 @@ const DashboardRouter = () => {
     // If no user, redirect to auth page
     if (!user) {
       console.log("DashboardRouter: No user found, redirecting to auth");
-      navigate("/auth");
+      navigate("/auth", { replace: true });
       return;
     }
 
@@ -42,22 +42,22 @@ const DashboardRouter = () => {
         console.log(
           "DashboardRouter: Redirecting supplier to seller dashboard"
         );
-        navigate("/seller-dashboard");
+        navigate("/seller-dashboard", { replace: true });
         break;
       case "admin":
         console.log("DashboardRouter: Redirecting admin to admin dashboard");
-        navigate("/admin");
+        navigate("/admin", { replace: true });
         break;
       case "owner":
         console.log(
           "DashboardRouter: Redirecting to buyer dashboard for user_type:",
           finalUserType
         );
-        navigate("/buyer-dashboard");
+        navigate("/buyer-dashboard", { replace: true });
         break;
       default:
         console.log("DashboardRouter: No user type found, redirecting to auth");
-        navigate("/auth");
+        navigate("/auth", { replace: true });
         break;
     }
   }, [user, navigate, authLoading, profileLoading, userType]);
