@@ -1,5 +1,6 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import showdown from 'showdown';
 
 const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
 
@@ -121,9 +122,12 @@ Content: ${content}`
       };
     }
 
+    const converter = new showdown.Converter();
+    const htmlContent = converter.makeHtml(parsedResult.formattedContent || result);
+
     return new Response(JSON.stringify({
       success: true,
-      formattedContent: parsedResult.formattedContent || result,
+      formattedContent: htmlContent,
       excerpt: parsedResult.excerpt || `${content.substring(0, 157)}...`,
       suggestedTags: parsedResult.suggestedTags || ['car parts', 'automotive', 'maintenance']
     }), {
