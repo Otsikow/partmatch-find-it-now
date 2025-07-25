@@ -136,11 +136,9 @@ Content: ${content}`
 
   } catch (error) {
     console.error('Error in blog-formatter function:', error);
-feat/dashboard-button
     return new Response(JSON.stringify({
       success: false,
       error: error.message
-
     }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },

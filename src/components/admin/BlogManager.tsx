@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import SimpleMdeEditor from "react-simplemde-editor";
+import "easymde/dist/easymde.min.css";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -34,6 +36,14 @@ const BlogManager = () => {
   const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
   const [isFormatting, setIsFormatting] = useState(false);
   const [excerpt, setExcerpt] = useState('');
+
+  const editorOptions = useMemo(() => {
+    return {
+      autofocus: true,
+      spellChecker: false,
+      placeholder: "Write your blog post content here... The AI formatter will help organize and style it professionally.",
+    };
+  }, []);
 
   useEffect(() => {
     fetchPosts();
@@ -298,13 +308,11 @@ const BlogManager = () => {
                   {isFormatting ? 'Formatting...' : '✨ Format with AI'}
                 </Button>
               </div>
-              <Textarea
+              <SimpleMdeEditor
                 id="content"
                 value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder="Write your blog post content here... The AI formatter will help organize and style it professionally."
-                required
-                rows={12}
+                onChange={setContent}
+                options={editorOptions}
               />
             </div>
             {excerpt && (
