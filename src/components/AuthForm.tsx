@@ -101,7 +101,7 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
 
   return (
     <main className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-md">
-      <Card className="p-6 sm:p-8 bg-gradient-to-br from-white/90 to-blue-50/50 backdrop-blur-sm shadow-2xl border-0">
+      <Card className="p-6 sm:p-8 bg-gradient-to-br from-white/90 to-blue-50/50 dark:from-gray-800/90 dark:to-gray-700/50 backdrop-blur-sm shadow-2xl border-0 dark:border-gray-700">
         {isPasswordReset ? (
           <SetNewPassword onSuccess={handlePasswordResetSuccess} />
         ) : showPasswordReset ? (
@@ -112,10 +112,10 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
               <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full p-4 w-fit mx-auto mb-4 sm:mb-6 shadow-lg">
                 <User className="h-10 w-10 sm:h-12 sm:w-12 text-white" />
               </div>
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-semibold mb-2 sm:mb-3 bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-semibold mb-2 sm:mb-3 bg-gradient-to-r from-blue-700 to-indigo-700 dark:from-blue-400 dark:to-indigo-500 bg-clip-text text-transparent">
                 {isLogin ? 'Welcome Back' : 'Join Ghana'}
               </h2>
-              <p className="text-gray-600 text-sm sm:text-base font-crimson">
+              <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base font-crimson">
                 {isLogin 
                   ? 'Sign in to access your dashboard' 
                   : `Create your ${getRoleDisplayName(formData.userType)} account`
@@ -123,11 +123,11 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
               </p>
               {!isLogin && (
                 <>
-                  <div className="mt-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium inline-block">
+                  <div className="mt-2 px-3 py-1 bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300 rounded-full text-xs font-medium inline-block">
                     Registering as: {getRoleDisplayName(formData.userType)}
                   </div>
-                  <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                    <p className="text-xs text-yellow-800">
+                  <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 dark:bg-yellow-900/30 dark:border-yellow-800/50 rounded-lg">
+                    <p className="text-xs text-yellow-800 dark:text-yellow-300">
                       📧 You'll need to verify your email before you can sign in
                     </p>
                   </div>
@@ -157,13 +157,13 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
                   <button
                     type="button"
                     onClick={() => setShowPasswordReset(true)}
-                    className="text-blue-600 hover:text-blue-800 hover:underline text-sm font-crimson transition-colors duration-300"
+                    className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 hover:underline text-sm font-crimson transition-colors duration-300"
                   >
                     Forgot your password?
                   </button>
                 </div>
-                <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <p className="text-xs text-blue-800 text-center">
+                <div className="mt-4 p-3 bg-blue-50 border border-blue-200 dark:bg-blue-900/30 dark:border-blue-800/50 rounded-lg">
+                  <p className="text-xs text-blue-800 dark:text-blue-300 text-center">
                     💡 If you just registered, check your email for a verification link before signing in
                   </p>
                 </div>
@@ -174,7 +174,7 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
               <button
                 type="button"
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-blue-600 hover:text-blue-800 hover:underline text-sm sm:text-base font-crimson transition-colors duration-300"
+                className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 hover:underline text-sm sm:text-base font-crimson transition-colors duration-300"
               >
                 {isLogin 
                   ? "Don't have an account? Join now" 
