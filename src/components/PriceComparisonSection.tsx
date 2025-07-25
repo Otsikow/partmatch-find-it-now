@@ -120,9 +120,10 @@ const PriceComparisonSection = ({ currentPart }: PriceComparisonSectionProps) =>
           <div className="text-center py-8">
             <div className="text-amber-600 text-lg mb-2">⚠️ Unable to load similar products</div>
             <p className="text-gray-600 text-sm mb-4">{error}</p>
-            <Button 
-              onClick={() => window.location.reload()} 
-              variant="outline" 
+feat/dashboard-button
+            <Button
+              onClick={() => window.location.reload()}
+              variant="outline"
               size="sm"
               className="text-blue-600 border-blue-600 hover:bg-blue-50"
             >

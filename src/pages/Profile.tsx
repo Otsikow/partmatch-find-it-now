@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Search, Package, Plus, User } from "lucide-react";
+feat/dashboard-button
+import { Search, Package, Plus, User, LayoutDashboard } from "lucide-react";
+
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
@@ -60,6 +62,28 @@ const Profile = () => {
         </div>
 
         <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
+      feat/dashboard-button
+          {/* Dashboard */}
+          <Card className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 bg-gradient-to-br from-white/90 to-purple-50/50 backdrop-blur-sm border-0 shadow-lg">
+            <CardContent className="p-6 sm:p-8 text-center">
+              <div className="bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full p-4 w-fit mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <LayoutDashboard className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl sm:text-2xl font-playfair font-semibold mb-4 text-purple-700">
+                Dashboard
+              </h3>
+              <p className="text-gray-600 mb-6 font-crimson">
+                View your activity and manage your account
+              </p>
+              <Link to={userType === 'supplier' ? "/seller-dashboard" : "/buyer-dashboard"}>
+                <Button className="w-full bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 text-white shadow-lg hover:shadow-xl transition-all duration-300">
+                  Go to Dashboard
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+
+main
           {/* Browse Car Parts */}
           <Card className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 bg-gradient-to-br from-white/90 to-emerald-50/50 backdrop-blur-sm border-0 shadow-lg">
             <CardContent className="p-6 sm:p-8 text-center">

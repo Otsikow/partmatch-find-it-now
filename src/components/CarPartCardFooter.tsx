@@ -22,7 +22,8 @@ const CarPartCardFooter = ({ partId, supplierId, onContact }: CarPartCardFooterP
       >
         Chat
       </ChatButton>
-      
+feat/dashboard-button
+ main
       {/* Secondary Actions Row */}
       <div className="flex gap-1.5 w-full">
         <SaveButton 
@@ -38,7 +39,9 @@ const CarPartCardFooter = ({ partId, supplierId, onContact }: CarPartCardFooterP
           showText={false}
           className="flex-1 border-gray-300 hover:bg-gray-50 text-gray-600 h-8 px-2"
         />
-        <Button 
+feat/dashboard-button
+        <Button
+main
           onClick={onContact}
           size="sm"
           variant="outline"

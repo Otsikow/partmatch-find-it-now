@@ -1,4 +1,6 @@
--- Create blog-images storage bucket 
+feat/dashboard-button
+-- Create blog-images storage bucket
+
 feature/featured-badge
 INSERT INTO storage.buckets (id, name, public)
 VALUES ('blog-images', 'blog-images', true);
@@ -23,5 +25,7 @@ CREATE POLICY "Authors can delete their blog images"
 ON storage.objects
 FOR DELETE
 
-INSERT INTO storage.buckets (id, name, public) 
+feat/dashboard-button
+INSERT INTO storage.buckets (id, name, public)
+
 VALUES ('blog-images', 'blog-images', true);

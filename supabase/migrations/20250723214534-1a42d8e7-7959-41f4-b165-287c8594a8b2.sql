@@ -3,7 +3,9 @@ CREATE OR REPLACE FUNCTION public.update_blog_posts_updated_at()
 feature/featured-badge
 RETURNS TRIGGER
 
-RETURNS TRIGGER 
+feat/dashboard-button
+RETURNS TRIGGER
+
 main
 LANGUAGE plpgsql
 SECURITY DEFINER
