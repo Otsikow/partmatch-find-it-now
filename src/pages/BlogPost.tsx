@@ -1,35 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import ShareButtons from '@/components/ShareButtons';
-import { supabase } from '@/integrations/supabase/client';
-import { BlogPost as BlogPostType } from '@/types/BlogPost';
+import { useBlogPost } from '@/hooks/useBlogPost';
 
 const BlogPost: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [post, setPost] = useState<BlogPostType | null>(null);
+  const { post, loading, error } = useBlogPost(slug);
 
-  useEffect(() => {
-    const fetchPost = async () => {
-      if (!slug) return;
-
-      const { data, error } = await supabase
-        .from('blog_posts')
-        .select('*')
-        .eq('slug', slug)
-        .single();
-
-      if (error) {
-        console.error('Error fetching blog post:', error);
-      } else {
-        setPost(data);
-      }
-    };
-
-    fetchPost();
-  }, [slug]);
-
-  if (!post) {
+  if (loading) {
     return <div>Loading...</div>;
+  }
+
+  if (error || !post) {
+    return <div>Error fetching post.</div>;
   }
 
   return (

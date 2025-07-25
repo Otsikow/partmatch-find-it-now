@@ -1,30 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import BlogCard from '@/components/BlogCard';
-import { supabase } from '@/integrations/supabase/client';
-import { BlogPost } from '@/types/BlogPost';
+import { useBlogPosts } from '@/hooks/useBlogPosts';
 import { ArrowLeft } from 'lucide-react';
 
 const Blog: React.FC = () => {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const { posts, loading, error } = useBlogPosts();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const { data, error } = await supabase
-        .from('blog_posts')
-        .select('*')
-        .order('published_at', { ascending: false });
-
-      if (error) {
-        console.error('Error fetching blog posts:', error);
-      } else {
-        setPosts(data);
-      }
-    };
-
-    fetchPosts();
-  }, []);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -34,13 +16,17 @@ const Blog: React.FC = () => {
         </button>
         <h1 className="text-3xl font-bold">Auto Insights</h1>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {posts.map((post) => (
-          <Link key={post.slug} to={`/blog/${post.slug}`}>
-            <BlogCard post={post} />
-          </Link>
-        ))}
-      </div>
+      {loading && <div>Loading...</div>}
+      {error && <div>Error fetching posts.</div>}
+      {!loading && !error && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {posts.map((post) => (
+            <Link key={post.slug} to={`/blog/${post.slug}`}>
+              <BlogCard post={post} />
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
