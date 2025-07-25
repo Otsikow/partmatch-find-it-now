@@ -17,9 +17,13 @@ const Logo: React.FC<LogoProps> = ({ className, isHero }) => {
     className
   );
 
-  const logoSrc = theme === 'dark'
-    ? "/lovable-uploads/partmatch-hero-logo.png"
-    : "/lovable-uploads/0bb9488b-2f77-4f4c-b8b3-8aa9343b1d18.png";
+  const logoSrc = isHero
+    ? (theme === 'dark'
+      ? "/lovable-uploads/partmatch-hero-logo.png"
+      : "/lovable-uploads/0bb9488b-2f77-4f4c-b8b3-8aa9343b1d18.png")
+    : (theme === 'dark'
+      ? "/lovable-uploads/0bb9488b-2f77-4f4c-b8b3-8aa9343b1d18.png"
+      : "/lovable-uploads/partmatch-hero-logo.png");
 
   return (
     <img
