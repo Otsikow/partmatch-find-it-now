@@ -20,6 +20,7 @@ import PaymentModal from "./PaymentModal";
 import PromotionSuggestionsModal from "./PromotionSuggestionsModal";
 import { useListingAnalytics } from "@/hooks/useListingAnalytics";
 import { CAR_PART_CATEGORIES } from "@/constants/carPartCategories";
+import { useNavigate } from "react-router-dom";
 
 interface EnhancedPostCarPartFormProps {
   onPartPosted: () => void;
@@ -31,6 +32,7 @@ const EnhancedPostCarPartForm = ({
   hasBusinessSubscription = false,
 }: EnhancedPostCarPartFormProps) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const { checkForPromotionSuggestions } = useListingAnalytics();
   const [loading, setLoading] = useState(false);
   const [currentPhotos, setCurrentPhotos] = useState<File[]>([]);
@@ -123,6 +125,12 @@ const EnhancedPostCarPartForm = ({
     };
 
     detectLocation();
+
+    const savedDraft = sessionStorage.getItem('temporary-listing-draft');
+    if (savedDraft) {
+      setFormData(JSON.parse(savedDraft));
+      sessionStorage.removeItem('temporary-listing-draft');
+    }
   }, []);
 
   const handleInputChange = (field: string, value: string) => {
@@ -171,6 +179,11 @@ const EnhancedPostCarPartForm = ({
   const freePhotosRemaining = Math.max(0, 3 - currentPhotos.length);
   const extraPhotosCost = Math.max(0, currentPhotos.length - 3) * 10;
 
+  const handleSignInRedirect = () => {
+    sessionStorage.setItem('temporary-listing-draft', JSON.stringify(formData));
+    navigate('/auth');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -180,6 +193,7 @@ const EnhancedPostCarPartForm = ({
         description: "Please sign in to post car parts.",
         variant: "destructive",
       });
+      handleSignInRedirect();
       return;
     }
 
