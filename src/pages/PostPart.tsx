@@ -13,7 +13,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { toast } from "@/hooks/use-toast";
+import useListingDraft from "@/hooks/useListingDraft";
 import { supabase } from "@/integrations/supabase/client";
 import { Package, Upload, AlertCircle, ArrowLeft, MapPin } from "lucide-react";
 import { CAR_PART_CATEGORIES } from "@/constants/carPartCategories";
@@ -55,28 +66,43 @@ const PostPart = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState<PostPartFormData>(initialFormData);
   const [locationDetected, setLocationDetected] = useState(false);
+  const [showDraftPrompt, setShowDraftPrompt] = useState(false);
 
-  // Auto-detect location and load saved draft
+  const { formData, setFormData, draftExists, loadDraft, clearDraft } =
+    useListingDraft<PostPartFormData>("post-part", initialFormData);
+
   useEffect(() => {
-    // Load saved draft from localStorage
-    const savedDraft = localStorage.getItem('draftPart');
-    if (savedDraft) {
-      try {
-        const parsedDraft = JSON.parse(savedDraft);
-        setFormData(parsedDraft);
-        if (parsedDraft.address && parsedDraft.currency) {
-          setLocationDetected(true);
-        }
-      } catch (error) {
-        console.error('Failed to parse saved draft:', error);
-        localStorage.removeItem('draftPart');
-      }
-    }
+    const guestDraftKey = "listing-draft-post-part-guest";
+    const guestDraft = localStorage.getItem(guestDraftKey);
+    console.log("PostPart: user", user);
+    console.log("PostPart: guestDraft", guestDraft);
+    console.log("PostPart: draftExists", draftExists);
 
-    // Auto-detect location only if not already set
-    if (!locationDetected && !formData.address) {
+    if (user && guestDraft) {
+      console.log("PostPart: loading guest draft");
+      loadDraft();
+      localStorage.removeItem(guestDraftKey);
+    } else if (draftExists) {
+      console.log("PostPart: showing draft prompt");
+      setShowDraftPrompt(true);
+    }
+  }, [draftExists, user, loadDraft]);
+
+  const handleContinueDraft = () => {
+    loadDraft();
+    setShowDraftPrompt(false);
+  };
+
+  const handleStartNew = () => {
+    clearDraft();
+    setFormData(initialFormData);
+    setShowDraftPrompt(false);
+  };
+
+  // Auto-detect location
+  useEffect(() => {
+    if (!formData.address) {
       const detectLocation = async () => {
         try {
           // Try geolocation first
@@ -110,17 +136,14 @@ const PostPart = () => {
                     const detectedCurrency = currencyMap[countryCode] || "GHS";
                     const detectedAddress = state ? `${city}, ${state}, ${country}` : `${city}, ${country}`;
                     
-                    const updatedData = {
-                      ...formData,
+                    setFormData((prev) => ({
+                      ...prev,
                       address: detectedAddress,
                       city,
                       country,
                       currency: detectedCurrency
-                    };
-                    
-                    setFormData(updatedData);
+                    }));
                     setLocationDetected(true);
-                    localStorage.setItem('draftPart', JSON.stringify(updatedData));
                   }
                 } catch (geocodeError) {
                   console.error("Reverse geocoding failed:", geocodeError);
@@ -160,17 +183,14 @@ const PostPart = () => {
             const detectedCurrency = currencyMap[data.country_code] || "GHS";
             const detectedAddress = `${data.city}, ${data.country_name}`;
             
-            const updatedData = {
-              ...formData,
+            setFormData((prev) => ({
+              ...prev,
               address: detectedAddress,
               city: data.city,
               country: data.country_name,
               currency: detectedCurrency
-            };
-            
-            setFormData(updatedData);
+            }));
             setLocationDetected(true);
-            localStorage.setItem('draftPart', JSON.stringify(updatedData));
           } else {
             setDefaultLocation();
           }
@@ -181,87 +201,36 @@ const PostPart = () => {
       };
 
       const setDefaultLocation = () => {
-        const updatedData = {
-          ...formData,
-          address: "Accra, Ghana",
-          city: "Accra",
-          country: "Ghana",
-          currency: "GHS"
-        };
-        
-        setFormData(updatedData);
+        setFormData((prev) => ({
+            ...prev,
+            address: "Accra, Ghana",
+            city: "Accra",
+            country: "Ghana",
+            currency: "GHS"
+        }));
         setLocationDetected(true);
-        localStorage.setItem('draftPart', JSON.stringify(updatedData));
       };
 
       detectLocation();
     }
-  }, []);
-
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      localStorage.setItem('draftPart', JSON.stringify(formData));
-    };
-
-    const handlePopState = () => {
-      const savedDraft = localStorage.getItem('draftPart');
-      if (savedDraft) {
-        try {
-          const parsedDraft = JSON.parse(savedDraft);
-          setFormData(parsedDraft);
-        } catch (error) {
-          console.error('Failed to parse saved draft:', error);
-          localStorage.removeItem('draftPart');
-        }
-      }
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    window.addEventListener('popstate', handlePopState);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      window.removeEventListener('popstate', handlePopState);
-    };
-  }, [formData]);
-
-  // Handle redirect from login
-  useEffect(() => {
-    const isRedirected = searchParams.get('redirect') === '/post-part';
-    if (isRedirected && user) {
-      const savedDraft = localStorage.getItem('draftPart');
-      if (savedDraft) {
-        toast({
-          title: "Welcome Back!",
-          description: "We've loaded your saved draft. Please review and submit.",
-          duration: 5000,
-        });
-      }
-    }
-  }, [user, searchParams]);
+  }, [formData.address, setFormData]);
 
   const handleInputChange = (field: keyof PostPartFormData, value: string) => {
-    const updatedData = { ...formData, [field]: value };
-    setFormData(updatedData);
-    
-    // Save to localStorage as user types
-    localStorage.setItem('draftPart', JSON.stringify(updatedData));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
-      const updatedData = { ...formData, images: [...formData.images, ...files] };
-      setFormData(updatedData);
-      localStorage.setItem('draftPart', JSON.stringify(updatedData));
+      setFormData((prev) => ({ ...prev, images: [...prev.images, ...files] }));
     }
   };
 
   const removeImage = (index: number) => {
-    const updatedImages = formData.images.filter((_, i) => i !== index);
-    const updatedData = { ...formData, images: updatedImages };
-    setFormData(updatedData);
-    localStorage.setItem('draftPart', JSON.stringify(updatedData));
+    setFormData((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
+    }));
   };
 
   const submitListing = async (data: PostPartFormData) => {
@@ -372,7 +341,7 @@ const PostPart = () => {
       });
 
       // Clear localStorage and form
-      localStorage.removeItem('draftPart');
+      clearDraft();
       setFormData(initialFormData);
       
       // Redirect to success page or dashboard
