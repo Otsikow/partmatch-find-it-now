@@ -110,7 +110,7 @@ const HomeDashboard = () => {
       case 'sell':
         return <SellCarPartsTab />;
       case 'my-parts':
-        return <MyPartsTab onRefresh={refetch} />;
+        return <MyPartsTab parts={[]} onRefresh={refetch} />;
       case 'offers':
         return <OffersTab 
           offers={myOffers} 

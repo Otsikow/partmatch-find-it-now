@@ -64,9 +64,6 @@ export const useSimilarParts = ({ currentPart }: UseSimilarPartsParams) => {
 
       if (error) {
         console.error('Error fetching similar parts:', error);
-feat/dashboard-button
-
-main
         // More specific error handling
         if (error.message?.includes('timeout') || error.message?.includes('connect')) {
           setError('Connection timeout - please try again later');
@@ -110,9 +107,6 @@ main
       setParts(transformedParts);
     } catch (err) {
       console.error('Unexpected error fetching similar parts:', err);
-feat/dashboard-button
-
- main
       // Handle different types of errors gracefully
       if (err instanceof Error) {
         if (err.message?.includes('timeout') || err.message?.includes('connect')) {
@@ -135,9 +129,6 @@ feat/dashboard-button
     const timeoutId = setTimeout(() => {
       fetchSimilarParts();
     }, 300);
-feat/dashboard-button
-
-main
     return () => clearTimeout(timeoutId);
   }, [currentPart.id]);
 

@@ -39,9 +39,7 @@ feat/dashboard-button
           showText={false}
           className="flex-1 border-gray-300 hover:bg-gray-50 text-gray-600 h-8 px-2"
         />
-feat/dashboard-button
         <Button
-main
           onClick={onContact}
           size="sm"
           variant="outline"

@@ -97,7 +97,7 @@ export const handleInstallPrompt = async (): Promise<void> => {
     return;
   }
 
-  const brave = await isBrave();
+  const brave = false; // Simplified for now
   let deferredPrompt: any;
   let promptShown = false;
 
