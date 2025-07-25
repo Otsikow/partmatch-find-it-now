@@ -45,6 +45,7 @@ import SellerProfile from "./pages/SellerProfile";
 import Profile from "./pages/Profile";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import CreateBlogPost from "./pages/CreateBlogPost";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import SellerProtectedRoute from "./components/SellerProtectedRoute";
@@ -182,6 +183,7 @@ function App() {
                       element={<ListingSuccess />}
                     />
                     <Route path="/blog" element={<Blog />} />
+                    <Route path="/blog/create" element={<CreateBlogPost />} />
                     <Route path="/blog/:slug" element={<BlogPost />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
