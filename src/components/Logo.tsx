@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -26,11 +27,13 @@ const Logo: React.FC<LogoProps> = ({ className, isHero }) => {
       : "/lovable-uploads/partmatch-hero-logo.png");
 
   return (
-    <img
-      src={logoSrc}
-      alt="PartMatch - Car Parts Marketplace"
-      className={logoClasses}
-    />
+    <Link to="/">
+      <img
+        src={logoSrc}
+        alt="PartMatch - Car Parts Marketplace"
+        className={logoClasses}
+      />
+    </Link>
   );
 };
 

@@ -40,13 +40,13 @@ const MobileHomeContent = () => {
     <div className="px-4 py-6 space-y-6">
       {/* Hero Section */}
       <div className="text-center space-y-2">
-        <div className="mx-auto">
+        <Link to="/" className="mx-auto">
           <img 
             src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
             alt="PartMatch Logo" 
             className="h-44 w-auto mx-auto" 
           />
-        </div>
+        </Link>
         <div>
           <h2 className="text-2xl font-bold text-foreground mb-2">{t('heroTitle')}</h2>
           <p className="text-muted-foreground text-sm leading-relaxed">{t('heroSubtitle')}</p>
