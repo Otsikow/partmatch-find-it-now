@@ -11,26 +11,11 @@ import {
   CheckCircle, 
   Eye, 
   RefreshCw,
-  Star,
-  Clock,
-  FileText,
-  Sparkles
+  Clock
 } from 'lucide-react';
+import { AdminNotification } from '@/types/AdminNotification';
 
-interface AiReview {
-  score: number;
-  issues: string[];
-  feedback: string;
-}
-
-interface QualityCheck {
-  id: string;
-  listing_id: string;
-  quality_score: number;
-  feedback_message: string;
-  flagged_issues: any;
-  auto_approved: boolean;
-  checked_at: string;
+interface QualityNotification extends AdminNotification {
   car_part: {
     id: string;
     title: string;
@@ -51,35 +36,21 @@ interface QualityCheck {
   };
 }
 
-interface QualityStats {
-  total_checks: number;
-  auto_approved: number;
-  pending_fixes: number;
-  avg_quality_score: number;
-}
-
 const ListingQualityManager = () => {
-  const [qualityChecks, setQualityChecks] = useState<QualityCheck[]>([]);
-  const [stats, setStats] = useState<QualityStats>({
-    total_checks: 0,
-    auto_approved: 0,
-    pending_fixes: 0,
-    avg_quality_score: 0
-  });
+  const [notifications, setNotifications] = useState<QualityNotification[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('pending');
-  const [aiReviewing, setAiReviewing] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchQualityData();
+    fetchQualityNotifications();
   }, []);
 
-  const fetchQualityData = async () => {
+  const fetchQualityNotifications = async () => {
     try {
       setLoading(true);
       
-      const { data: checksData, error: checksError } = await supabase
-        .from('listing_quality_checks')
+      const { data, error } = await supabase
+        .from('admin_notifications')
         .select(`
           *,
           car_part:car_parts!listing_id (
@@ -101,28 +72,15 @@ const ListingQualityManager = () => {
             )
           )
         `)
-        .order('checked_at', { ascending: false });
+        .eq('type', 'low_quality_listing')
+        .order('created_at', { ascending: false });
 
-      if (checksError) throw checksError;
+      if (error) throw error;
 
-      setQualityChecks(checksData as QualityCheck[]);
-
-      const totalChecks = checksData?.length || 0;
-      const autoApproved = checksData?.filter(check => check.auto_approved).length || 0;
-      const pendingFixes = totalChecks - autoApproved;
-      const avgScore = totalChecks > 0 
-        ? Math.round(checksData.reduce((sum, check) => sum + check.quality_score, 0) / totalChecks)
-        : 0;
-
-      setStats({
-        total_checks: totalChecks,
-        auto_approved: autoApproved,
-        pending_fixes: pendingFixes,
-        avg_quality_score: avgScore
-      });
+      setNotifications(data as QualityNotification[]);
 
     } catch (error) {
-      console.error('Error fetching quality data:', error);
+      console.error('Error fetching quality notifications:', error);
       toast({
         title: 'Error',
         description: 'Failed to load quality check data.',
@@ -150,7 +108,7 @@ const ListingQualityManager = () => {
         description: 'Listing approved and made available.'
       });
 
-      fetchQualityData();
+      fetchQualityNotifications();
     } catch (error) {
       console.error('Error approving listing:', error);
       toast({
@@ -161,73 +119,15 @@ const ListingQualityManager = () => {
     }
   };
 
-  const handleRerunQualityCheck = async (listing: QualityCheck['car_part']) => {
-    try {
-      const { error } = await supabase.functions.invoke('listing-quality-checker', {
-        body: {
-          listingId: listing.id,
-          title: listing.title,
-          description: listing.description,
-          images: listing.images,
-          price: listing.price,
-          supplier_id: listing.supplier_id,
-        }
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: 'Success',
-        description: 'Quality check re-run successfully.'
-      });
-
-      fetchQualityData();
-    } catch (error) {
-      console.error('Error re-running quality check:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to re-run quality check.',
-        variant: 'destructive'
-      });
-    }
-  };
-
-  const handleAiReview = async (listingId: string) => {
-    try {
-      setAiReviewing(listingId);
-      const { error } = await supabase.functions.invoke('ai-listing-review', {
-        body: { listingId }
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: 'AI Review Started',
-        description: 'The AI is analyzing the listing. Results will appear shortly.'
-      });
-
-      setTimeout(fetchQualityData, 3000); // Refresh data after a delay
-    } catch (error) {
-      console.error('Error triggering AI review:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to start AI review.',
-        variant: 'destructive'
-      });
-    } finally {
-      setAiReviewing(null);
-    }
-  };
-
   const getScoreBadgeVariant = (score: number) => {
     if (score >= 80) return 'default';
     if (score >= 60) return 'secondary';
     return 'destructive';
   };
 
-  const filteredChecks = qualityChecks.filter(check => {
-    if (activeTab === 'pending') return !check.auto_approved;
-    if (activeTab === 'approved') return check.auto_approved;
+  const filteredNotifications = notifications.filter(notification => {
+    if (activeTab === 'pending') return !notification.read;
+    if (activeTab === 'approved') return notification.read;
     return true;
   });
 
@@ -241,12 +141,6 @@ const ListingQualityManager = () => {
 
   return (
     <div className="space-y-6">
-      {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {/* Stat cards ... */}
-      </div>
-
-      {/* Quality Checks Table */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -258,48 +152,48 @@ const ListingQualityManager = () => {
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
             <TabsList>
               <TabsTrigger value="pending">
-                Pending Fixes ({stats.pending_fixes})
+                Pending Review ({notifications.filter(n => !n.read).length})
               </TabsTrigger>
               <TabsTrigger value="approved">
-                Auto Approved ({stats.auto_approved})
+                Reviewed ({notifications.filter(n => n.read).length})
               </TabsTrigger>
               <TabsTrigger value="all">
-                All ({stats.total_checks})
+                All ({notifications.length})
               </TabsTrigger>
             </TabsList>
 
             <TabsContent value={activeTab} className="space-y-4">
-              {filteredChecks.length === 0 ? (
+              {filteredNotifications.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
                   No quality checks found for this category.
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {filteredChecks.map((check) => (
-                    <Card key={check.id} className="border-l-4 border-l-orange-500">
+                  {filteredNotifications.map((notification) => (
+                    <Card key={notification.id} className="border-l-4 border-l-orange-500">
                       <CardContent className="p-4">
                         <div className="space-y-4">
                           {/* Header */}
                           <div className="flex items-start justify-between">
                             <div className="space-y-1">
                               <h3 className="font-semibold text-lg">
-                                {check.car_part?.title}
+                                {notification.car_part?.title}
                               </h3>
                               <p className="text-sm text-muted-foreground">
-                                {check.car_part?.make} {check.car_part?.model} {check.car_part?.year}
+                                {notification.car_part?.make} {notification.car_part?.model} {notification.car_part?.year}
                               </p>
                               <p className="text-sm text-muted-foreground">
-                                By: {check.car_part?.profiles?.first_name} {check.car_part?.profiles?.last_name}
+                                By: {notification.car_part?.profiles?.first_name} {notification.car_part?.profiles?.last_name}
                               </p>
                             </div>
                             <div className="flex items-center gap-2">
-                              <Badge variant={getScoreBadgeVariant(check.quality_score)}>
-                                Score: {check.quality_score}/100
+                              <Badge variant={getScoreBadgeVariant(notification.metadata?.quality_score || 0)}>
+                                Score: {notification.metadata?.quality_score}/100
                               </Badge>
-                              {check.auto_approved ? (
+                              {notification.read ? (
                                 <Badge variant="default">
                                   <CheckCircle className="h-3 w-3 mr-1" />
-                                  Auto Approved
+                                  Reviewed
                                 </Badge>
                               ) : (
                                 <Badge variant="destructive">
@@ -311,13 +205,13 @@ const ListingQualityManager = () => {
                           </div>
 
                           {/* Issues */}
-                          {Array.isArray(check.flagged_issues) && check.flagged_issues.length > 0 && (
+                          {Array.isArray(notification.metadata?.issues) && notification.metadata?.issues.length > 0 && (
                             <Alert>
                               <AlertTriangle className="h-4 w-4" />
                               <AlertDescription>
                                 <strong>Issues Found:</strong>
                                 <ul className="mt-2 list-disc list-inside space-y-1">
-                                  {check.flagged_issues.map((issue: string, index: number) => (
+                                  {notification.metadata?.issues.map((issue: string, index: number) => (
                                     <li key={index} className="text-sm">{issue}</li>
                                   ))}
                                 </ul>
@@ -325,48 +219,33 @@ const ListingQualityManager = () => {
                             </Alert>
                           )}
 
-                          {/* Feedback */}
-                          <div className="bg-muted p-3 rounded-lg">
-                            <p className="text-sm"><strong>Feedback:</strong></p>
-                            <p className="text-sm mt-1">{check.feedback_message}</p>
-                          </div>
-
                           {/* Actions */}
                           <div className="flex items-center gap-2 pt-2">
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => window.open(`/parts/${check.listing_id}`, '_blank')}
+                              onClick={() => window.open(`/parts/${notification.metadata?.listing_id}`, '_blank')}
                             >
                               <Eye className="h-4 w-4 mr-1" />
                               View Listing
                             </Button>
                             
-                            {!check.auto_approved && (
+                            {!notification.read && (
                               <>
                                 <Button
                                   size="sm"
                                   variant="default"
-                                  onClick={() => handleManualApprove(check.listing_id)}
+                                  onClick={() => handleManualApprove(notification.metadata?.listing_id || '')}
                                 >
                                   <CheckCircle className="h-4 w-4 mr-1" />
-                                  Manual Approve
-                                </Button>
-                                
-                                 <Button
-                                   size="sm"
-                                   variant="secondary"
-                                   onClick={() => handleRerunQualityCheck(check.car_part)}
-                                 >
-                                  <RefreshCw className="h-4 w-4 mr-1" />
-                                  Re-check
+                                  Mark as Reviewed
                                 </Button>
                               </>
                             )}
                             
                             <div className="ml-auto text-xs text-muted-foreground">
                               <Clock className="h-3 w-3 inline mr-1" />
-                              {new Date(check.checked_at).toLocaleDateString()}
+                              {new Date(notification.created_at).toLocaleDateString()}
                             </div>
                           </div>
                         </div>

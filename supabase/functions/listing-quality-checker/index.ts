@@ -210,6 +210,24 @@ async function performQualityCheck(request: QualityCheckRequest): Promise<Qualit
   };
 }
 
+async function createAdminNotification(listingId: string, qualityResult: QualityCheckResult) {
+    const { error: adminNotificationError } = await supabase
+        .from('admin_notifications')
+        .insert({
+            type: 'low_quality_listing',
+            message: `Listing ${listingId} flagged with score ${qualityResult.score}. Issues: ${qualityResult.issues.join(', ')}`,
+            metadata: {
+                listing_id: listingId,
+                quality_score: qualityResult.score,
+                issues: qualityResult.issues
+            }
+        });
+
+    if (adminNotificationError) {
+        console.error('Failed to create admin notification:', adminNotificationError);
+    }
+}
+
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -281,21 +299,24 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
-    // Send notification to seller
+    // Send notification to seller and admin
     if (!qualityResult.approved) {
-      await supabase
-        .from('user_notifications')
-        .insert({
-          user_id: supplier_id,
-          type: 'listing_quality_issue',
-          title: 'Listing Needs Improvement',
-          message: qualityResult.feedback,
-          metadata: {
-            listing_id: listingId,
-            quality_score: qualityResult.score,
-            issues: qualityResult.issues
-          }
-        });
+        await supabase
+            .from('user_notifications')
+            .insert({
+                user_id: supplier_id,
+                type: 'listing_quality_issue',
+                title: 'Listing Needs Improvement',
+                message: qualityResult.feedback,
+                metadata: {
+                    listing_id: listingId,
+                    quality_score: qualityResult.score,
+                    issues: qualityResult.issues
+                }
+            });
+
+        // Create a notification for the admin dashboard
+        await createAdminNotification(listingId, qualityResult);
     }
     
     console.log(`Quality check completed successfully for listing: ${listingId}`);
