@@ -5,3 +5,7 @@ verify_jwt = false
 
 [functions.blog-formatter]
 verify_jwt = false
+
+[functions.publish-scheduled-posts]
+verify_jwt = false
+schedule = "0 * * * *"
