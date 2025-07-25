@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import ShareButtons from '@/components/ShareButtons';
 import { useBlogPost } from '@/hooks/useBlogPost';
+import '@/styles/blog.css';
 
 const BlogPost: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -27,7 +28,7 @@ const BlogPost: React.FC = () => {
         <span>Tags: {post.tags.join(', ')}</span>
       </div>
       {post.featured_image_url && <img src={post.featured_image_url} alt={post.title} className="w-full h-auto object-cover rounded-lg mb-8" />}
-      <div dangerouslySetInnerHTML={{ __html: post.content }} />
+      <div className="blog-content" dangerouslySetInnerHTML={{ __html: post.content }} />
       <div className="mt-8">
         <ShareButtons />
       </div>
