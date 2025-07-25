@@ -17,8 +17,8 @@ const BlogPost: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <Link to="/blog" className="text-blue-500 hover:underline mb-4 inline-block">
-        &larr; Back to Blog
+      <Link to="/" className="text-blue-500 hover:underline mb-4 inline-block">
+        &larr; Back to Home
       </Link>
       <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
       <div className="text-gray-600 mb-4">
