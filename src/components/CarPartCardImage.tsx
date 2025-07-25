@@ -45,7 +45,9 @@ const CarPartCardImage = ({ partId, title, condition, images, isFeatured, onExpa
               <p className="text-sm">Image failed to load</p>
             </div>
           </div>
+feat/dashboard-button
 
+main
           {/* Top Left - Featured Badge */}
           {isFeatured && (
             <div className="absolute top-2 left-2">
@@ -58,7 +60,9 @@ const CarPartCardImage = ({ partId, title, condition, images, isFeatured, onExpa
               </Badge>
             </div>
           )}
+feat/dashboard-button
 
+main
           {/* Top Right - Save Button and Condition */}
           <div className="absolute top-2 right-2 flex flex-col gap-1.5 items-end">
             <SaveButton 
@@ -74,12 +78,20 @@ const CarPartCardImage = ({ partId, title, condition, images, isFeatured, onExpa
               {condition}
             </Badge>
           </div>
+feat/dashboard-button
 
           {/* Bottom Right - Expand Button */}
           <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
             <Button
               size="sm"
               variant="secondary"
+          
+          {/* Bottom Right - Expand Button */}
+          <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            <Button 
+              size="sm" 
+              variant="secondary" 
+main
               className="bg-white/95 hover:bg-white shadow-lg border border-white/20 backdrop-blur-sm h-8 w-8 p-0"
             >
               <Expand className="h-3.5 w-3.5" />
@@ -92,7 +104,9 @@ const CarPartCardImage = ({ partId, title, condition, images, isFeatured, onExpa
             <div className="text-3xl mb-2">📦</div>
             <p className="text-sm font-medium">No Image Available</p>
           </div>
+feat/dashboard-button
 
+main
           {/* Top Left - Featured Badge */}
           {isFeatured && (
             <div className="absolute top-2 left-2">
@@ -105,7 +119,9 @@ const CarPartCardImage = ({ partId, title, condition, images, isFeatured, onExpa
               </Badge>
             </div>
           )}
+feat/dashboard-button
 
+main
           {/* Top Right - Save Button and Condition */}
           <div className="absolute top-2 right-2 flex flex-col gap-1.5 items-end">
             <SaveButton 
@@ -121,12 +137,14 @@ const CarPartCardImage = ({ partId, title, condition, images, isFeatured, onExpa
               {condition}
             </Badge>
           </div>
+feat/dashboard-button
 
           {/* Bottom Right - Expand Button */}
           <div className="absolute bottom-2 right-2 opacity-70 hover:opacity-100 transition-opacity duration-200">
             <Button
               size="sm"
               variant="secondary"
+
               className="bg-white/95 hover:bg-white shadow-lg border border-white/20 backdrop-blur-sm h-8 w-8 p-0"
             >
               <Expand className="h-3.5 w-3.5" />

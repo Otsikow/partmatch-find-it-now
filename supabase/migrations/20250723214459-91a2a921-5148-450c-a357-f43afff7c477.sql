@@ -48,6 +48,7 @@ CREATE POLICY "Authors can update their own blog posts"
 ON public.blog_posts
 FOR UPDATE
 
+feat/dashboard-button
 CREATE POLICY "Anyone can view published blog posts"
 ON public.blog_posts
 FOR SELECT
@@ -74,6 +75,7 @@ WITH CHECK (auth.uid() = author_id);
 CREATE POLICY "Authors can update their own blog posts"
 ON public.blog_posts
 FOR UPDATE
+
 main
 USING (auth.uid() = author_id);
 

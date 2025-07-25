@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+feat/dashboard-button
 import { Search, Package, Plus, User, LayoutDashboard } from "lucide-react";
+
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
@@ -60,6 +62,7 @@ const Profile = () => {
         </div>
 
         <div className="grid md:grid-cols-3 gap-6 sm:gap-8">
+      feat/dashboard-button
           {/* Dashboard */}
           <Card className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 bg-gradient-to-br from-white/90 to-purple-50/50 backdrop-blur-sm border-0 shadow-lg">
             <CardContent className="p-6 sm:p-8 text-center">
@@ -80,6 +83,7 @@ const Profile = () => {
             </CardContent>
           </Card>
 
+main
           {/* Browse Car Parts */}
           <Card className="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 bg-gradient-to-br from-white/90 to-emerald-50/50 backdrop-blur-sm border-0 shadow-lg">
             <CardContent className="p-6 sm:p-8 text-center">
