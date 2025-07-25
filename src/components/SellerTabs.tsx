@@ -10,7 +10,7 @@ import RequestsTab from "./RequestsTab";
 import SellerProfileManagement from "./SellerProfileManagement";
 import SubscriptionManager from "./SubscriptionManager";
 import { useSubscriptionStatus } from "@/hooks/useSubscriptionStatus";
-import { useMyPartsCount } from "@/hooks/useMyPartsCount";
+import { CarPart } from "@/types/CarPart";
 import TabCountBadge from "./TabCountBadge";
 interface Request {
   id: string;
@@ -48,6 +48,7 @@ interface SupplierTabsProps {
   onTabChange: (tab: string) => void;
   requests: Request[];
   offers: Offer[];
+  myParts: CarPart[];
   onOfferSubmit: (requestId: string, price: number, message: string, location: string) => Promise<void>;
   onWhatsAppContact: (phone: string, request: Request | Offer['request']) => void;
   onChatContact: (requestId: string, ownerId: string) => void;
@@ -58,6 +59,7 @@ const SupplierTabs = ({
   onTabChange,
   requests,
   offers,
+  myParts,
   onOfferSubmit,
   onWhatsAppContact,
   onChatContact,
@@ -67,7 +69,7 @@ const SupplierTabs = ({
   const {
     hasBusinessSubscription
   } = useSubscriptionStatus();
-  const partsCount = useMyPartsCount();
+
   const handlePartPosted = () => {
     setShowPostForm(false);
     // You might want to call a refresh function here if available
@@ -100,7 +102,7 @@ const SupplierTabs = ({
           <TabsTrigger value="my-parts" className="flex flex-col items-center justify-center gap-1 text-xs px-1 py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground">
             <Package className="h-3 w-3 sm:h-4 sm:w-4" />
             <span className="text-[9px] sm:text-[10px] leading-tight">My Parts</span>
-            <TabCountBadge count={partsCount} />
+            <TabCountBadge count={myParts.length} />
           </TabsTrigger>
           <TabsTrigger value="offers" className="flex flex-col items-center justify-center gap-1 text-xs px-1 py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground">
             <Star className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -127,7 +129,7 @@ const SupplierTabs = ({
             <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-1 text-sm sm:text-base">My Parts</h3>
             <p className="text-xs sm:text-sm text-blue-700 dark:text-blue-300">All the car parts you have listed for sale as a supplier. Use this to manage, edit, or remove your own listings (your inventory).</p>
           </div>
-          <MyPartsTab onRefresh={() => {}} />
+          <MyPartsTab parts={myParts} onRefresh={() => {}} />
         </TabsContent>
 
         <TabsContent value="offers" className="space-y-3 sm:space-y-4">

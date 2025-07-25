@@ -9,9 +9,11 @@ import ThemeToggle from "@/components/ThemeToggle";
 
 interface AdminHeaderProps {
   onNavigateToVerifications?: () => void;
+  onGoBack: () => void;
+  onGoHome: () => void;
 }
 
-const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
+const AdminHeader = ({ onNavigateToVerifications, onGoBack, onGoHome }: AdminHeaderProps) => {
   const { signOut } = useAuth();
   const navigate = useNavigate();
   const displayName = useUserDisplayName('Admin');
@@ -25,14 +27,6 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
     }
   };
 
-  const handleGoBack = () => {
-    navigate(-1);
-  };
-
-  const handleGoHome = () => {
-    navigate('/');
-  };
-
   return (
     <header className="sticky top-0 z-50 bg-primary/90 text-primary-foreground backdrop-blur-lg border-b border-border/40 shadow-lg">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
@@ -40,7 +34,7 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
         <Button
           variant="ghost"
           size="icon"
-          onClick={handleGoBack}
+          onClick={onGoBack}
           className="h-10 w-10 bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground transition-colors backdrop-blur-sm border border-primary-foreground/20 shadow-lg"
           aria-label="Go back"
         >
@@ -49,13 +43,13 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
 
         {/* Center: Logo and Title */}
         <div className="flex items-center gap-3 flex-1 justify-center">
-          <Link to="/" className="flex items-center gap-2 bg-primary-foreground/10 backdrop-blur-sm rounded-xl px-3 py-1.5 border border-primary-foreground/20 shadow-lg">
+          <button onClick={onGoHome} className="flex items-center gap-2 bg-primary-foreground/10 backdrop-blur-sm rounded-xl px-3 py-1.5 border border-primary-foreground/20 shadow-lg">
             <img 
               src="/lovable-uploads/015b9a61-a3c7-4c8f-b3b7-f9c10a5e00ea.png" 
               alt="PartMatch Logo" 
               className="h-12 w-12 sm:h-14 sm:w-14 object-contain"
             />
-          </Link>
+          </button>
           <div className="flex flex-col min-w-0">
             <h1 className="text-lg sm:text-xl md:text-2xl font-playfair font-bold truncate">
               {displayName}
@@ -73,7 +67,7 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
           <Button
             variant="outline"
             size="sm"
-            onClick={handleGoHome}
+            onClick={onGoHome}
             className="hidden sm:flex bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground transition-colors backdrop-blur-sm border border-primary-foreground/20 shadow-lg"
           >
             <Home className="h-4 w-4 mr-1" />

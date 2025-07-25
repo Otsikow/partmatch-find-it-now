@@ -303,7 +303,9 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
                     size={isMobile ? "mobile-default" : "sm"}
                     variant="outline"
                     className="flex-1 justify-center font-medium"
-                  />
+                  >
+                    Chat <span className="hidden xs:inline">with Seller</span>
+                  </ChatButton>
                   <SaveButton 
                     partId={part.id} 
                     size={isMobile ? "mobile-default" : "sm"}
@@ -453,7 +455,9 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
                 partId={part.id}
                 size={isMobile ? "mobile-default" : "default"}
                 className="flex-1 bg-gradient-to-r from-blue-600 to-purple-700 hover:from-blue-700 hover:to-purple-800 justify-center"
-              />
+              >
+                Chat <span className="hidden xs:inline">with Seller</span>
+              </ChatButton>
               <SaveButton 
                 partId={part.id} 
                 size={isMobile ? "mobile-default" : "default"}
@@ -519,7 +523,6 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
           sellerId={part.supplier_id}
           sellerName={supplierName}
           sellerRating={part.profiles.rating || 0}
-          totalReviews={part.profiles.total_ratings || 0}
         />
       )}
     </>

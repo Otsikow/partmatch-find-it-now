@@ -9,6 +9,7 @@ import SellerStats from "@/components/SellerStats";
 import SellerTabs from "@/components/SellerTabs";
 import SellerWelcomeDashboard from "@/components/SellerWelcomeDashboard";
 import { useSellerData } from "@/hooks/useSellerData";
+import { useMyPartsData } from "@/hooks/useMyPartsData";
 import { useOfferHandling } from "@/hooks/useOfferHandling";
 
 const SellerDashboard = () => {
@@ -18,6 +19,7 @@ const SellerDashboard = () => {
   const [showMainDashboard, setShowMainDashboard] = useState(false);
 
   const { requests, myOffers, loading, error, refetch } = useSellerData();
+  const { myParts, loading: partsLoading, error: partsError, refetch: refetchParts } = useMyPartsData();
   const { handleMakeOffer, handleWhatsAppContact, isSubmittingOffer } =
     useOfferHandling(refetch);
 
@@ -42,9 +44,10 @@ const SellerDashboard = () => {
   const handleRetry = () => {
     console.log("SellerDashboard: Retrying data fetch");
     refetch();
+    refetchParts();
   };
 
-  if (loading) {
+  if (loading || partsLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white dark:from-orange-900/20 dark:to-gray-900 flex items-center justify-center">
         <div className="text-center">
@@ -65,7 +68,7 @@ const SellerDashboard = () => {
           <h2 className="text-xl font-semibold text-foreground mb-2">
             Dashboard Error
           </h2>
-          <p className="text-muted-foreground mb-6">{error}</p>
+          <p className="text-muted-foreground mb-6">{error || partsError}</p>
           <Button
             onClick={handleRetry}
             className="bg-orange-600 hover:bg-orange-700"
@@ -100,6 +103,7 @@ const SellerDashboard = () => {
               onTabChange={setActiveTab}
               requests={requests}
               offers={myOffers}
+              myParts={myParts}
               onOfferSubmit={handleMakeOffer}
               onWhatsAppContact={handleWhatsAppContact}
               onChatContact={handleChatContact}

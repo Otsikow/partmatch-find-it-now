@@ -1,4 +1,4 @@
-import { Bell, LogOut, User } from "lucide-react";
+import { Bell, LogIn, LogOut, User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -16,10 +16,17 @@ import LanguageSelector from "./LanguageSelector";
 import CountryCurrencySelector from "./CountryCurrencySelector";
 import ThemeToggle from "./ThemeToggle";
 const MobileHeader = () => {
-  const { user, signOut } = useAuth();
+  const { user, signOut, userType } = useAuth();
   const { t } = useTranslation();
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+
+  const dashboardUrl =
+    userType === 'admin'
+      ? '/admin-dashboard'
+      : userType === 'seller' || userType === 'supplier'
+      ? '/seller-dashboard'
+      : '/buyer-dashboard';
 
   const handleSignOut = async () => {
     try {
@@ -64,12 +71,12 @@ const MobileHeader = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem 
+                <DropdownMenuItem
                   className="flex items-center gap-2 cursor-pointer"
-                  onClick={() => window.location.href = '/buyer-dashboard'}
+                  onClick={() => window.location.href = '/blog'}
                 >
-                  <User className="h-4 w-4" />
-                  <span>{t('dashboard')}</span>
+                  <span className="h-4 w-4"></span>
+                  <span>{t('Auto Insights')}</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <div className="p-2">
@@ -98,10 +105,11 @@ const MobileHeader = () => {
             <LanguageSelector showLabel={false} variant="button" />
             <Button
               variant="ghost"
+              size="icon"
               className="text-white font-semibold"
-              onClick={() => window.location.href = '/buyer-auth'}
+              onClick={() => window.location.href = '/auth'}
             >
-              {t('dashboard')}
+              <LogIn className="h-6 w-6" />
             </Button>
           </div>
         )}

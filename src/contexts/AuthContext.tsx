@@ -11,6 +11,7 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
+  profileLoading: boolean; // New state for profile loading
   isPasswordReset: boolean;
   userType: string | null;
   firstName: string | null;
@@ -19,7 +20,11 @@ interface AuthContextType {
     password: string,
     userData: any
   ) => Promise<{ error: any }>;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signIn: (
+    email: string,
+    password: string,
+    userType?: "owner" | "supplier"
+  ) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: any }>;
   updatePassword: (password: string) => Promise<{ error: any }>;
@@ -39,11 +44,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [profileLoading, setProfileLoading] = useState(true);
   const [isPasswordReset, setIsPasswordReset] = useState(false);
   const [userType, setUserType] = useState<string | null>(null);
   const [firstName, setFirstName] = useState<string | null>(null);
 
   const fetchUserProfile = async (userId: string) => {
+    setProfileLoading(true);
     try {
       const { data: profile, error } = await supabase
         .from("profiles")
@@ -62,6 +69,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     } catch (error) {
       console.error("Error fetching user profile:", error);
+    } finally {
+      setProfileLoading(false);
     }
   };
 
@@ -210,6 +219,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       return { error };
     }
 
+    // Ensure user_type is included in metadata
+    const finalUserData = {
+      ...userData,
+      user_type: userData.user_type || "owner", // Default to 'owner'
+    };
+
     const redirectUrl = `${window.location.origin}/`;
 
     try {
@@ -226,7 +241,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         password,
         options: {
           emailRedirectTo: redirectUrl,
-          data: userData,
+          data: finalUserData,
         },
       });
 
@@ -304,8 +319,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const signIn = async (email: string, password: string) => {
-    console.log("AuthProvider: SignIn attempt:", { email });
+  const signIn = async (
+    email: string,
+    password: string,
+    userType?: "owner" | "supplier"
+  ) => {
+    console.log("AuthProvider: SignIn attempt:", { email, userType });
 
     // For admin login attempts, validate email authorization first
     const urlPath = window.location.pathname;
@@ -400,6 +419,61 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         });
 
         return { error: emailError };
+      }
+      if (userType && data?.user) {
+        console.log("AuthProvider: Verifying user type");
+
+        try {
+          const { data: profile, error: profileError } = await supabase
+            .from("profiles")
+            .select("user_type")
+            .eq("id", data.user.id)
+            .maybeSingle();
+
+          if (profileError) {
+            throw profileError;
+          }
+
+          const profileUserType =
+            profile?.user_type || data.user.user_metadata?.user_type;
+
+          if (profileUserType !== userType) {
+            console.log("AuthProvider: User type mismatch, signing out");
+
+            await supabase.auth.signOut();
+
+            const accessError = new Error(
+              "Access denied. You are not authorized to sign in from this page."
+            );
+
+            toast({
+              title: "Access Denied",
+              description:
+                "You are attempting to sign in from the wrong page.",
+              variant: "destructive",
+            });
+
+            return { error: accessError };
+          }
+
+          console.log("AuthProvider: User type verified");
+        } catch (verificationError) {
+          console.error(
+            "AuthProvider: Error verifying user type:",
+            verificationError
+          );
+
+          await supabase.auth.signOut();
+
+          const error = new Error("Unable to verify user type.");
+          toast({
+            title: "Verification Error",
+            description: "Unable to verify user type. Please try again.",
+            variant: "destructive",
+          });
+
+          return { error };
+        }
       }
 
       // Additional admin verification after successful login
@@ -651,6 +725,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     user,
     session,
     loading,
+    profileLoading,
     isPasswordReset,
     userType,
     firstName,

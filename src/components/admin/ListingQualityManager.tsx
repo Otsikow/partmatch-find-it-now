@@ -43,7 +43,6 @@ interface QualityCheck {
     year: number;
     images: string[];
     supplier_id: string;
-    ai_review: AiReview | null;
     profiles: {
       first_name: string;
       last_name: string;
@@ -95,7 +94,6 @@ const ListingQualityManager = () => {
             year,
             images,
             supplier_id,
-            ai_review,
             profiles!supplier_id (
               first_name,
               last_name,
@@ -355,11 +353,11 @@ const ListingQualityManager = () => {
                                   Manual Approve
                                 </Button>
                                 
-                                <Button
-                                  size="sm"
-                                  variant="secondary"
-                                  onClick={() => handleRerunQualityCheck(check.listing_id)}
-                                >
+                                 <Button
+                                   size="sm"
+                                   variant="secondary"
+                                   onClick={() => handleRerunQualityCheck(check.car_part)}
+                                 >
                                   <RefreshCw className="h-4 w-4 mr-1" />
                                   Re-check
                                 </Button>

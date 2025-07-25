@@ -51,6 +51,7 @@ export const useCarParts = (params?: UseCarPartsParams) => {
           created_at,
           updated_at,
           status,
+          is_featured,
           profiles!inner(
             first_name,
             last_name,
@@ -197,12 +198,8 @@ export const useCarParts = (params?: UseCarPartsParams) => {
     });
     fetchParts();
   }, [
-    params?.searchTerm, 
-    params?.filters?.make, 
-    params?.filters?.model, 
-    params?.filters?.year, 
-    params?.filters?.category,
-    params?.filters?.maxDistance, 
+    params?.searchTerm,
+    JSON.stringify(params?.filters),
     params?.userLocation?.latitude,
     params?.userLocation?.longitude
   ]);

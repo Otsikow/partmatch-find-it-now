@@ -49,70 +49,63 @@ const CarPartCardContent = ({ part, onExpand }: CarPartCardContentProps) => {
       part.longitude
     ));
 
-  console.log('CarPartCardContent - sellerName:', sellerName, 'for part:', part.title);
-  console.log('CarPartCardContent - profiles data:', part.profiles);
-
   return (
-    <div onClick={onExpand}>
-      <CardHeader className="pb-3 sm:pb-4">
-        <div className="space-y-2 sm:space-y-3">
-          <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground line-clamp-2 leading-tight">
-            {part.title}
-          </h3>
-          <div className="flex items-center justify-between">
-            <p className="text-sm sm:text-base text-muted-foreground">
-              {part.make} {part.model} ({part.year})
+    <div onClick={onExpand} className="p-3">
+      <div className="space-y-2">
+        <h3 className="text-base font-bold text-foreground line-clamp-2 leading-tight">
+          {part.title}
+        </h3>
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-muted-foreground">
+            {part.make} {part.model} ({part.year})
+          </p>
+          <div className="text-right">
+            <p className="text-base font-bold text-green-600">
+              {part.currency} {part.price}
             </p>
-            <div className="text-right">
-              <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-green-600">
-                {part.currency} {part.price}
-              </p>
-            </div>
           </div>
         </div>
-      </CardHeader>
+      </div>
 
-      <CardContent className="py-3 sm:py-4">
-        <div className="space-y-3 sm:space-y-4">
-          {part.description && (
-            <p className="text-sm sm:text-base text-muted-foreground line-clamp-2">
-              {part.description}
-            </p>
-          )}
-          
-          <div className="space-y-2 sm:space-y-3">
-            <div className="flex items-center gap-2 text-sm sm:text-base text-foreground">
-              <Avatar className="h-7 w-7 sm:h-8 sm:w-8">
-                <AvatarImage src={part.profiles?.profile_photo_url} alt={sellerName} />
-                <AvatarFallback className="text-xs sm:text-sm font-medium">
-                  {initials}
-                </AvatarFallback>
-              </Avatar>
-              <span className="font-medium">{sellerName}</span>
-              <VerifiedSellerBadge isVerified={part.profiles?.is_verified || false} size="sm" />
-            </div>
-            
-            <SellerRatingDisplay
-              rating={part.profiles?.rating || 0}
-              totalRatings={part.profiles?.total_ratings || 0}
-              size="sm"
-              showBadge={true}
-            />
-          </div>
+      <div className="mt-3 space-y-2">
+        {part.description && (
+          <p className="text-sm text-muted-foreground line-clamp-2">
+            {part.description}
+          </p>
+        )}
 
-          <div className="flex items-center gap-2 text-sm sm:text-base text-muted-foreground">
-            <MapPin className="h-4 w-4" />
-            <span className={`truncate ${inSameCity ? 'text-green-600 font-medium' : ''}`}>
-              {locationDisplayText}
-            </span>
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-sm text-foreground">
+            <Avatar className="h-6 w-6">
+              <AvatarImage src={part.profiles?.profile_photo_url} alt={sellerName} />
+              <AvatarFallback className="text-xs font-medium">
+                {initials}
+              </AvatarFallback>
+            </Avatar>
+            <span className="font-medium truncate">{sellerName}</span>
+            <VerifiedSellerBadge isVerified={part.profiles?.is_verified || false} size="sm" />
           </div>
           
-          <div className="flex items-center gap-2 text-sm sm:text-base text-muted-foreground">
-            <Calendar className="h-4 w-4" />
-            <span>Listed {formatDate(part.created_at)}</span>
-          </div>
+          <SellerRatingDisplay
+            rating={part.profiles?.rating || 0}
+            totalRatings={part.profiles?.total_ratings || 0}
+            size="sm"
+            showBadge={true}
+          />
         </div>
-      </CardContent>
+
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <MapPin className="h-4 w-4" />
+          <span className={`truncate ${inSameCity ? 'text-green-600 font-medium' : ''}`}>
+            {locationDisplayText}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Calendar className="h-4 w-4" />
+          <span>Listed {formatDate(part.created_at)}</span>
+        </div>
+      </div>
     </div>
   );
 };

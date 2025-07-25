@@ -4,7 +4,6 @@ import { useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import BuyerRequestsTab from '@/components/buyer/BuyerRequestsTab';
 import BuyerOffersTab from '@/components/buyer/BuyerOffersTab';
-import MyOrders from '@/components/buyer/MyOrders';
 import SavedParts from '@/components/buyer/SavedParts';
 import BuyerProfile from '@/components/buyer/BuyerProfile';
 import FollowedSellers from '@/components/buyer/FollowedSellers';
@@ -15,7 +14,7 @@ export const BuyerDashboardTabs = () => {
 
   useEffect(() => {
     const tab = searchParams.get('tab');
-    if (tab && ['requests', 'offers', 'orders', 'saved', 'following', 'profile'].includes(tab)) {
+    if (tab && ['requests', 'offers', 'saved', 'following', 'profile'].includes(tab)) {
       setActiveTab(tab);
     } else {
       setActiveTab('requests');
@@ -44,12 +43,6 @@ export const BuyerDashboardTabs = () => {
             Offers
           </TabsTrigger>
           <TabsTrigger 
-            value="orders" 
-            className="flex-1 min-w-[80px] sm:min-w-[100px] text-xs sm:text-sm font-semibold px-2 sm:px-4 py-3 sm:py-4 rounded-xl bg-background border-2 border-primary/20 text-primary hover:border-primary/40 hover:bg-primary/5 data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary-foreground data-[state=active]:text-white data-[state=active]:border-primary data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25 transition-all duration-300 hover:scale-105 data-[state=active]:scale-105"
-          >
-            Orders
-          </TabsTrigger>
-          <TabsTrigger 
             value="saved" 
             className="flex-1 min-w-[80px] sm:min-w-[100px] text-xs sm:text-sm font-semibold px-2 sm:px-4 py-3 sm:py-4 rounded-xl bg-background border-2 border-primary/20 text-primary hover:border-primary/40 hover:bg-primary/5 data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary-foreground data-[state=active]:text-white data-[state=active]:border-primary data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25 transition-all duration-300 hover:scale-105 data-[state=active]:scale-105"
           >
@@ -75,10 +68,6 @@ export const BuyerDashboardTabs = () => {
         
         <TabsContent value="offers" className="mt-6">
           <BuyerOffersTab />
-        </TabsContent>
-        
-        <TabsContent value="orders" className="mt-6">
-          <MyOrders />
         </TabsContent>
         
         <TabsContent value="saved" className="mt-6">

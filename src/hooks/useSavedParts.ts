@@ -50,7 +50,7 @@ export const useSavedParts = () => {
           created_at,
           notes,
           list_name,
-          car_parts!inner(
+          car_parts(
             id,
             title,
             make,

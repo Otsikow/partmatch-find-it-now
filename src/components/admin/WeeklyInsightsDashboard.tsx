@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useNavigate } from 'react-router-dom';
+import AdminHeader from '@/components/admin/AdminHeader';
 import { 
   TrendingUp, 
   Users, 
@@ -15,7 +17,8 @@ import {
   MapPin,
   Star,
   Eye,
-  RefreshCw
+  RefreshCw,
+  ArrowLeft
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/components/ui/use-toast';
@@ -43,6 +46,7 @@ interface InsightNotification {
 }
 
 const WeeklyInsightsDashboard = () => {
+  const navigate = useNavigate();
   const [latestInsights, setLatestInsights] = useState<InsightNotification | null>(null);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
@@ -145,20 +149,21 @@ const WeeklyInsightsDashboard = () => {
   const insights = latestInsights.metadata.insights;
   const generatedDate = new Date(latestInsights.metadata.generated_at).toLocaleDateString();
 
+  const handleGoBack = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/admin-dashboard');
+    }
+  };
+
+  const handleGoHome = () => {
+    navigate('/admin-dashboard');
+  };
+
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold">Weekly Insights</h1>
-          <p className="text-muted-foreground">Generated on {generatedDate}</p>
-        </div>
-        <Button onClick={generateNewInsights} disabled={generating}>
-          {generating && <RefreshCw className="h-4 w-4 mr-2 animate-spin" />}
-          Regenerate Insights
-        </Button>
-      </div>
-
+      <AdminHeader onGoBack={handleGoBack} onGoHome={handleGoHome} />
       {/* AI Summary */}
       <Card>
         <CardHeader>

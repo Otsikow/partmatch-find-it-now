@@ -4,16 +4,15 @@ import { CarPart } from "@/types/CarPart";
 
 interface UseSimilarPartsParams {
   currentPart: CarPart;
-  enabled?: boolean;
 }
 
-export const useSimilarParts = ({ currentPart, enabled = true }: UseSimilarPartsParams) => {
+export const useSimilarParts = ({ currentPart }: UseSimilarPartsParams) => {
   const [parts, setParts] = useState<CarPart[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchSimilarParts = async () => {
-    if (!enabled || !currentPart) return;
+    if (!currentPart) return;
 
     try {
       setLoading(true);
@@ -21,7 +20,8 @@ export const useSimilarParts = ({ currentPart, enabled = true }: UseSimilarParts
       
       console.log('Fetching similar parts for:', currentPart.title, 'part_type:', currentPart.part_type);
       
-      let query = supabase
+      // Build a more robust query with better error handling
+      const { data, error } = await supabase
         .from('car_parts')
         .select(`
           id,
@@ -55,21 +55,24 @@ export const useSimilarParts = ({ currentPart, enabled = true }: UseSimilarParts
         `)
         .eq('status', 'available')
         .neq('id', currentPart.id)
-        .order('price', { ascending: true });
-
-      query = query.or(
-        `part_type.ilike.%${currentPart.part_type}%,title.ilike.%${currentPart.title.split(' ')[0]}%`
-      );
-
-      console.log('Executing similar parts query...');
-      const { data, error } = await query.limit(10);
+        .or(`part_type.ilike.%${currentPart.part_type}%,make.ilike.%${currentPart.make}%`)
+        .order('price', { ascending: true })
+        .limit(10);
 
       console.log('Similar parts query result - Data count:', data?.length || 0);
       console.log('Similar parts query result - Error:', error);
 
       if (error) {
         console.error('Error fetching similar parts:', error);
-        setError(error.message);
+
+        // More specific error handling
+        if (error.message?.includes('timeout') || error.message?.includes('connect')) {
+          setError('Connection timeout - please try again later');
+        } else if (error.message?.includes('network') || error.message?.includes('fetch')) {
+          setError('Network error - check your connection');
+        } else {
+          setError('Unable to load similar products at this time');
+        }
         return;
       }
 
@@ -105,15 +108,32 @@ export const useSimilarParts = ({ currentPart, enabled = true }: UseSimilarParts
       setParts(transformedParts);
     } catch (err) {
       console.error('Unexpected error fetching similar parts:', err);
-      setError('An unexpected error occurred');
+
+      // Handle different types of errors gracefully
+      if (err instanceof Error) {
+        if (err.message?.includes('timeout') || err.message?.includes('connect')) {
+          setError('Connection timeout - please try again later');
+        } else if (err.message?.includes('network') || err.message?.includes('fetch')) {
+          setError('Network error - check your connection');
+        } else {
+          setError('Unable to load similar products at this time');
+        }
+      } else {
+        setError('An unexpected error occurred while loading similar products');
+      }
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchSimilarParts();
-  }, [currentPart.id, enabled]);
+    // Add a small delay to prevent rapid API calls
+    const timeoutId = setTimeout(() => {
+      fetchSimilarParts();
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [currentPart.id]);
 
   return { parts, loading, error, refetch: fetchSimilarParts };
 };

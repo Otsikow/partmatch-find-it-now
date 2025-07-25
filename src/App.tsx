@@ -20,6 +20,7 @@ import SellerAuth from "./pages/SellerAuth";
 import AdminAuth from "./pages/AdminAuth";
 import UserDashboard from "./pages/UserDashboard";
 import BuyerDashboard from "./pages/BuyerDashboard";
+import GuestDashboard from "./pages/GuestDashboard";
 import SellerDashboard from "./pages/SellerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import DashboardRouter from "./components/DashboardRouter";
@@ -41,6 +42,9 @@ import NotFound from "./pages/NotFound";
 import SimpleAuth from "./pages/SimpleAuth";
 import ButtonTestPage from "./pages/ButtonTestPage";
 import SellerProfile from "./pages/SellerProfile";
+import Profile from "./pages/Profile";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import SellerProtectedRoute from "./components/SellerProtectedRoute";
@@ -70,6 +74,7 @@ function App() {
                     <Route path="/buyer-auth" element={<BuyerAuth />} />
                     <Route path="/seller-auth" element={<SellerAuth />} />
                     <Route path="/admin-auth" element={<AdminAuth />} />
+                    <Route path="/guest-dashboard" element={<GuestDashboard />} />
                     <Route path="/request-part" element={<RequestPart />} />
                     <Route path="/request" element={<RequestPart />} />
                     <Route path="/post-part" element={<PostPart />} />
@@ -89,6 +94,10 @@ function App() {
                     <Route
                       path="/seller/:sellerId"
                       element={<SellerProfile />}
+                    />
+                    <Route
+                      path="/profile"
+                      element={<Profile />}
                     />
                     <Route path="/about" element={<About />} />
                     <Route path="/faq" element={<FAQ />} />
@@ -138,14 +147,6 @@ function App() {
                       }
                     />
                     <Route
-                      path="/supplier-dashboard"
-                      element={
-                        <SellerProtectedRoute>
-                          <SellerDashboard />
-                        </SellerProtectedRoute>
-                      }
-                    />
-                    <Route
                       path="/seller"
                       element={
                         <SellerProtectedRoute>
@@ -180,6 +181,8 @@ function App() {
                       path="/listing-success"
                       element={<ListingSuccess />}
                     />
+                    <Route path="/blog" element={<Blog />} />
+                    <Route path="/blog/:slug" element={<BlogPost />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
 

@@ -1,106 +1,81 @@
-// Enhanced service worker for better browser compatibility (especially Brave)
-const CACHE_NAME = 'partmatch-v4';
-const STATIC_ASSETS = [
+// Simplified service worker for improved browser compatibility
+const CACHE_NAME = 'partmatch-v5-cache';
+const urlsToCache = [
   '/',
   '/manifest.json',
   '/app-icon-192.png',
-  '/app-icon-512.png'
+  '/app-icon-512.png',
 ];
 
-// Brave browser specific compatibility fixes
-const isBrave = () => {
-  return (navigator.brave && navigator.brave.isBrave) || false;
-};
-
-// Install event - improved for Brave compatibility
+// Install event: cache static assets
 self.addEventListener('install', (event) => {
-  console.log('Service Worker installing...');
+  console.log('Service Worker: Installing...');
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log('Opened cache');
-      return cache.addAll(STATIC_ASSETS.map(url => new Request(url, {cache: 'reload'})));
-    }).catch((error) => {
-      console.warn('Cache installation failed:', error);
-    })
+    caches.open(CACHE_NAME)
+      .then((cache) => {
+        console.log('Service Worker: Caching app shell');
+        return cache.addAll(urlsToCache.map(url => new Request(url, { cache: 'reload' })));
+      })
+      .catch(err => console.error('Service Worker: Caching failed', err))
   );
-  self.skipWaiting(); // Activate immediately
+  self.skipWaiting();
 });
 
-// Activate event - clean up and take control
+// Activate event: clean up old caches
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker activating...');
+  console.log('Service Worker: Activating...');
   event.waitUntil(
-    Promise.all([
-      // Clean up old caches
-      caches.keys().then((cacheNames) => {
-        return Promise.all(
-          cacheNames.map((cacheName) => {
-            if (cacheName !== CACHE_NAME) {
-              console.log('Deleting old cache:', cacheName);
-              return caches.delete(cacheName);
-            }
-          })
-        );
-      }),
-      // Take control immediately
-      self.clients.claim()
-    ])
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_NAME) {
+            console.log('Service Worker: Deleting old cache', cacheName);
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
   );
 });
 
-// Enhanced fetch strategy with Brave browser compatibility
+// Fetch event: network-first strategy for navigation, cache-first for others
 self.addEventListener('fetch', (event) => {
-  // Skip non-GET requests and external requests
-  if (event.request.method !== 'GET' || 
-      !event.request.url.startsWith(self.location.origin)) {
+  const { request } = event;
+
+  // Only handle GET requests
+  if (request.method !== 'GET') {
     return;
   }
 
-  // Special handling for Brave browser
-  const request = event.request.clone();
-  
-  // For navigation requests, use network with fallback
-  if (event.request.mode === 'navigate') {
+  // For navigation requests, go network-first to ensure freshness
+  if (request.mode === 'navigate') {
     event.respondWith(
-      fetch(request, {
-        credentials: 'same-origin',
-        cache: 'no-cache'
-      }).catch(() => {
-        return caches.match('/').then(response => {
-          return response || new Response('App offline', { 
-            status: 503,
-            headers: {'Content-Type': 'text/html'}
-          });
-        });
-      })
+      fetch(request)
+        .then(response => {
+          // If response is good, cache it and return it
+          if (response.ok) {
+            const resClone = response.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(request, resClone));
+          }
+          return response;
+        })
+        .catch(() => {
+          // On network failure, serve from cache
+          return caches.match(request).then(res => res || caches.match('/'));
+        })
     );
     return;
   }
 
-  // For static assets, try cache first, then network
-  if (STATIC_ASSETS.includes(new URL(event.request.url).pathname)) {
-    event.respondWith(
-      caches.match(event.request).then(response => {
-        return response || fetch(request).then(fetchResponse => {
-          const responseClone = fetchResponse.clone();
-          caches.open(CACHE_NAME).then(cache => {
-            cache.put(event.request, responseClone);
-          });
-          return fetchResponse;
-        });
-      }).catch(() => {
-        return new Response('Resource unavailable', { status: 503 });
-      })
-    );
-    return;
-  }
-
-  // For other requests, just use network with better error handling
+  // For other requests (assets, etc.), go cache-first for speed
   event.respondWith(
-    fetch(request, {
-      credentials: 'same-origin'
-    }).catch(() => {
-      return new Response('Network error', { status: 503 });
+    caches.match(request).then((response) => {
+      return response || fetch(request).then((fetchResponse) => {
+        // Cache the new resource and return it
+        const resClone = fetchResponse.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(request, resClone));
+        return fetchResponse;
+      });
     })
   );
 });
