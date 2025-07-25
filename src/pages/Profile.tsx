@@ -5,9 +5,8 @@ import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import PageHeader from "@/components/PageHeader";
-import { LogOut } from 'lucide-react';
-const UserDashboard = () => {
+import ProfileHeader from "@/components/ProfileHeader";
+const Profile = () => {
   const {
     user,
     signOut
@@ -43,14 +42,8 @@ const UserDashboard = () => {
     }
   };
   return <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 font-inter">
-      <PageHeader title={`Welcome to Ghana`} subtitle={`Hello, ${displayName}`} backTo="/">
-        <Link to="/profile">
-          <Button variant="ghost" size="sm" className="text-gray-700 hover:text-red-700 hover:bg-red-50/50 font-medium">
-            <LogOut className="h-4 w-4 mr-2" />
-            Profile
-          </Button>
-        </Link>
-      </PageHeader>
+      <ProfileHeader title={`Welcome to Ghana`} subtitle={`Hello, ${displayName}`} backTo="/">
+      </ProfileHeader>
 
       {/* Main Content */}
       <main className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 pb-24 max-w-4xl">
@@ -142,4 +135,4 @@ const UserDashboard = () => {
       </main>
     </div>;
 };
-export default UserDashboard;
+export default Profile;

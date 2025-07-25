@@ -42,6 +42,7 @@ import NotFound from "./pages/NotFound";
 import SimpleAuth from "./pages/SimpleAuth";
 import ButtonTestPage from "./pages/ButtonTestPage";
 import SellerProfile from "./pages/SellerProfile";
+import Profile from "./pages/Profile";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 
@@ -93,6 +94,10 @@ function App() {
                     <Route
                       path="/seller/:sellerId"
                       element={<SellerProfile />}
+                    />
+                    <Route
+                      path="/profile"
+                      element={<Profile />}
                     />
                     <Route path="/about" element={<About />} />
                     <Route path="/faq" element={<FAQ />} />
