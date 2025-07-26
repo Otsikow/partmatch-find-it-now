@@ -1,19 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Search, Package, Plus, User, LayoutDashboard } from "lucide-react";
+import { Search, Package, Plus, User, LayoutDashboard, LogOut } from "lucide-react";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
 import ProfileHeader from "@/components/ProfileHeader";
 const Profile = () => {
-  const {
-    user,
-    signOut
-  } = useAuth();
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const [displayName, setDisplayName] = useState<string>('User');
   const [userType, setUserType] = useState<string>('owner');
+  const [isSigningOut, setIsSigningOut] = useState(false);
   useEffect(() => {
     const fetchUserName = async () => {
       if (!user) return;
@@ -36,11 +36,31 @@ const Profile = () => {
     fetchUserName();
   }, [user]);
   const handleSignOut = async () => {
+    if (isSigningOut) return;
+    
+    setIsSigningOut(true);
     try {
       await signOut();
+      toast({
+        title: "Signed Out",
+        description: "You have been successfully signed out.",
+      });
+      navigate('/');
     } catch (error) {
       console.log('Sign out completed with graceful error handling');
+      toast({
+        title: "Signed Out", 
+        description: "You have been signed out.",
+      });
+      navigate('/');
+    } finally {
+      setIsSigningOut(false);
     }
+  };
+
+  const handleDashboardClick = () => {
+    const dashboardPath = userType === 'supplier' ? '/seller-dashboard' : '/buyer-dashboard';
+    navigate(dashboardPath);
   };
   return <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 font-inter">
       <ProfileHeader />
@@ -154,17 +174,21 @@ const Profile = () => {
           </Card>
         </div>
 
-        <div className="mt-12 text-center">
-          <Link to={userType === 'supplier' ? "/seller-dashboard" : "/buyer-dashboard"}>
-            <Button className="bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 mr-4">
-              Dashboard
-            </Button>
-          </Link>
+        <div className="mt-12 text-center space-y-4 sm:space-y-0 sm:space-x-4 flex flex-col sm:flex-row justify-center items-center">
+          <Button 
+            onClick={handleDashboardClick}
+            className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2"
+          >
+            <LayoutDashboard className="h-4 w-4" />
+            Go to Dashboard
+          </Button>
           <Button
             onClick={handleSignOut}
-            className="bg-gradient-to-r from-red-600 to-orange-700 hover:from-red-700 hover:to-orange-800 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+            disabled={isSigningOut}
+            className="w-full sm:w-auto bg-gradient-to-r from-red-600 to-orange-700 hover:from-red-700 hover:to-orange-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 disabled:opacity-50"
           >
-            Sign Out
+            <LogOut className="h-4 w-4" />
+            {isSigningOut ? 'Signing Out...' : 'Sign Out'}
           </Button>
         </div>
       </main>
