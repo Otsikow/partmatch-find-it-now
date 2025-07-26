@@ -122,6 +122,56 @@ serve(async (req) => {
       console.error('Error deleting monetization purchases:', purchasesError);
     }
 
+    // Delete offers where user is buyer or supplier
+    const { error: offersError } = await supabaseAdmin
+      .from('offers')
+      .delete()
+      .or(`buyer_id.eq.${user.id},supplier_id.eq.${user.id}`);
+    
+    if (offersError) {
+      console.error('Error deleting offers:', offersError);
+    }
+
+    // Delete part requests where user is owner
+    const { error: requestsError } = await supabaseAdmin
+      .from('part_requests')
+      .delete()
+      .eq('owner_id', user.id);
+    
+    if (requestsError) {
+      console.error('Error deleting part requests:', requestsError);
+    }
+
+    // Delete car parts where user is supplier
+    const { error: partsError } = await supabaseAdmin
+      .from('car_parts')
+      .delete()
+      .eq('supplier_id', user.id);
+    
+    if (partsError) {
+      console.error('Error deleting car parts:', partsError);
+    }
+
+    // Delete reviews where user is reviewer or seller
+    const { error: reviewsError } = await supabaseAdmin
+      .from('reviews')
+      .delete()
+      .or(`reviewer_id.eq.${user.id},seller_id.eq.${user.id}`);
+    
+    if (reviewsError) {
+      console.error('Error deleting reviews:', reviewsError);
+    }
+
+    // Delete chats where user is buyer or seller
+    const { error: chatsError } = await supabaseAdmin
+      .from('chats')
+      .delete()
+      .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`);
+    
+    if (chatsError) {
+      console.error('Error deleting chats:', chatsError);
+    }
+
     console.log('Related records cleaned up successfully');
 
     // Delete the user from Auth using admin privileges
