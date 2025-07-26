@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useMyParts } from "./useMyParts";
@@ -8,9 +8,10 @@ export const usePartManagement = () => {
   const { parts: initialParts, loading, refetch: fetchMyParts } = useMyParts();
   const [parts, setParts] = useState<CarPart[]>(initialParts);
 
-  useState(() => {
+  // Update local state when initialParts change
+  useEffect(() => {
     setParts(initialParts);
-  });
+  }, [initialParts]);
 
   const updatePartStatus = async (partId: string, newStatus: string) => {
     try {
