@@ -7,7 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from "sonner";
 
 const AuthTypeSelector = () => {
-  const { user, signOut } = useAuth();
+  const { user, userType, signOut } = useAuth();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -22,7 +22,14 @@ const AuthTypeSelector = () => {
 
   const handleDashboard = () => {
     if (user) {
-      navigate('/buyer-dashboard');
+      // Route to the appropriate dashboard based on user type
+      if (userType === 'supplier') {
+        navigate('/seller-dashboard');
+      } else if (userType === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/buyer-dashboard');
+      }
     } else {
       navigate('/auth');
     }
