@@ -52,32 +52,18 @@ const ListingQualityManager = () => {
       const { data, error } = await supabase
         .from('admin_notifications')
         .select(`
-          *,
-          car_part:car_parts!listing_id (
-            id,
-            title,
-            description,
-            price,
-            currency,
-            status,
-            make,
-            model,
-            year,
-            images,
-            supplier_id,
-            profiles!supplier_id (
-              first_name,
-              last_name,
-              email
-            )
-          )
+          *
         `)
         .eq('type', 'low_quality_listing')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
 
-      setNotifications(data as QualityNotification[]);
+      // For now, just use the basic admin notifications without car_part join
+      setNotifications(data?.map(notification => ({
+        ...notification,
+        car_part: null
+      })) as any || []);
 
     } catch (error) {
       console.error('Error fetching quality notifications:', error);
