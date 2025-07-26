@@ -25,21 +25,20 @@ const Index = () => {
       try {
         console.log('Index: Checking authenticated user type for:', user.id);
         
-        // Get user profile to determine user type
-        const { data: profile, error } = await supabase
-          .from('profiles')
-          .select('user_type')
-          .eq('id', user.id)
-          .single();
-
-        console.log('Index: Profile query result:', { profile, error });
-
-        let userType = profile?.user_type;
+        // PRIORITY: Check user metadata first (most reliable)
+        let userType = user.user_metadata?.user_type;
+        console.log('Index: Metadata user_type:', userType);
         
-        // If profile doesn't exist, check user metadata
+        // Only fetch profile if metadata doesn't have user_type
         if (!userType) {
-          userType = user.user_metadata?.user_type || 'owner';
-          console.log('Index: Using metadata user_type:', userType);
+          const { data: profile, error } = await supabase
+            .from('profiles')
+            .select('user_type')
+            .eq('id', user.id)
+            .single();
+
+          console.log('Index: Profile query result:', { profile, error });
+          userType = profile?.user_type || 'owner';
         }
 
         console.log('Index: Final user type:', userType);
