@@ -29,12 +29,27 @@ const DashboardRouter = () => {
       return;
     }
 
-    // Determine final user type, falling back to metadata if necessary
-    const finalUserType = userType || user.user_metadata?.user_type;
+    // Determine final user type, with priority on metadata first, then userType from profile
+    const metadataUserType = user.user_metadata?.user_type;
+    const finalUserType = metadataUserType || userType;
+    
     console.log(
       "DashboardRouter: Determining user type for redirection:",
-      finalUserType
+      { 
+        metadataUserType,
+        profileUserType: userType,
+        finalUserType,
+        email: user.email
+      }
     );
+
+    // Special case: if user came from seller auth but profile is "owner", they should go to seller dashboard
+    const currentPath = window.location.pathname;
+    if (currentPath.includes('seller') && (metadataUserType === 'supplier' || finalUserType === 'supplier')) {
+      console.log("DashboardRouter: Keeping seller on seller dashboard based on URL context");
+      navigate("/seller-dashboard", { replace: true });
+      return;
+    }
 
     // Redirect based on the final user type
     switch (finalUserType) {

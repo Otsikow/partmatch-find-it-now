@@ -12,7 +12,7 @@ import { toast } from '@/hooks/use-toast';
 export const BuyerDashboardHeader = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const [userName, setUserName] = useState<string>('');
 
   useEffect(() => {
@@ -54,27 +54,10 @@ export const BuyerDashboardHeader = () => {
 
   const handleSignOut = async () => {
     try {
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        toast({
-          title: "Error",
-          description: "Failed to sign out. Please try again.",
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Success", 
-          description: "You have been signed out successfully.",
-        });
-        navigate('/');
-      }
+      await signOut();
+      navigate('/');
     } catch (error) {
       console.error('Sign out error:', error);
-      toast({
-        title: "Error",
-        description: "An unexpected error occurred. Please try again.",
-        variant: "destructive",
-      });
     }
   };
 
