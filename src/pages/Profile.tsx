@@ -66,7 +66,7 @@ const Profile = () => {
       <ProfileHeader />
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 pb-24 max-w-4xl">
+      <main className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 pb-32 max-w-4xl min-h-screen">
         <div className="text-center mb-8 sm:mb-12">
           <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full p-4 w-fit mx-auto mb-6 shadow-lg">
             <User className="h-12 w-12 text-white" />
