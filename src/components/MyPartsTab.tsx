@@ -44,7 +44,7 @@ const MyPartsTab = ({ parts, onRefresh }: MyPartsTabProps) => {
 
   // Filter parts based on search term and filters
   const filteredParts = useMemo(() => {
-    return parts.filter(part => {
+    const result = parts.filter(part => {
       // Search term filter
       if (searchTerm) {
         const searchLower = searchTerm.toLowerCase();
@@ -75,6 +75,14 @@ const MyPartsTab = ({ parts, onRefresh }: MyPartsTabProps) => {
 
       return true;
     });
+    
+    console.log("=== MyPartsTab Debug ===");
+    console.log("Total parts passed to component:", parts.length);
+    console.log("Filtered parts count:", result.length);
+    console.log("Search term:", searchTerm);
+    console.log("Filters:", filters);
+    
+    return result;
   }, [parts, searchTerm, filters]);
 
   const handleEditPart = (part: CarPart) => {
