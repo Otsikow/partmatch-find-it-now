@@ -29,24 +29,31 @@ const DashboardRouter = () => {
       return;
     }
 
-    // Determine final user type, with priority on metadata first, then userType from profile
+    // Get user type from multiple sources with priority order
     const metadataUserType = user.user_metadata?.user_type;
-    const finalUserType = metadataUserType || userType;
+    const contextUserType = userType;
+    const storedUserType = localStorage.getItem("userType");
+    
+    // Determine final user type with fallback chain
+    const finalUserType = metadataUserType || contextUserType || storedUserType;
     
     console.log(
       "DashboardRouter: Determining user type for redirection:",
       { 
         metadataUserType,
-        profileUserType: userType,
+        contextUserType,
+        storedUserType,
         finalUserType,
-        email: user.email
+        email: user.email,
+        currentPath: window.location.pathname
       }
     );
 
-    // Special case: if user came from seller auth but profile is "owner", they should go to seller dashboard
+    // Special case: if user came from seller auth, prioritize seller dashboard
     const currentPath = window.location.pathname;
-    if (currentPath.includes('seller') && (metadataUserType === 'supplier' || finalUserType === 'supplier')) {
-      console.log("DashboardRouter: Keeping seller on seller dashboard based on URL context");
+    if (currentPath.includes('seller-dashboard') || 
+        (finalUserType === 'supplier' || metadataUserType === 'supplier')) {
+      console.log("DashboardRouter: Directing to seller dashboard");
       navigate("/seller-dashboard", { replace: true });
       return;
     }
@@ -54,9 +61,7 @@ const DashboardRouter = () => {
     // Redirect based on the final user type
     switch (finalUserType) {
       case "supplier":
-        console.log(
-          "DashboardRouter: Redirecting supplier to seller dashboard"
-        );
+        console.log("DashboardRouter: Redirecting supplier to seller dashboard");
         navigate("/seller-dashboard", { replace: true });
         break;
       case "admin":
@@ -64,10 +69,7 @@ const DashboardRouter = () => {
         navigate("/admin", { replace: true });
         break;
       case "owner":
-        console.log(
-          "DashboardRouter: Redirecting to buyer dashboard for user_type:",
-          finalUserType
-        );
+        console.log("DashboardRouter: Redirecting to buyer dashboard");
         navigate("/buyer-dashboard", { replace: true });
         break;
       default:

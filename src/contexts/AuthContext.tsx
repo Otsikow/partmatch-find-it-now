@@ -46,7 +46,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const [profileLoading, setProfileLoading] = useState(true);
   const [isPasswordReset, setIsPasswordReset] = useState(false);
-  const [userType, setUserType] = useState<string | null>(null);
+  // Initialize userType from localStorage if available
+  const [userType, setUserType] = useState<string | null>(() => {
+    try {
+      return localStorage.getItem("userType");
+    } catch {
+      return null;
+    }
+  });
   const [firstName, setFirstName] = useState<string | null>(null);
 
   const fetchUserProfile = async (userId: string) => {
@@ -64,8 +71,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       if (profile) {
-        setUserType(profile.user_type);
+        const profileUserType = profile.user_type;
+        setUserType(profileUserType);
         setFirstName(profile.first_name);
+        
+        // Persist user type to localStorage for refresh persistence
+        if (profileUserType) {
+          localStorage.setItem("userType", profileUserType);
+          console.log("AuthProvider: Stored userType in localStorage:", profileUserType);
+        }
       }
     } catch (error) {
       console.error("Error fetching user profile:", error);
@@ -112,6 +126,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setIsPasswordReset(false);
         setUserType(null);
         setFirstName(null);
+        // Clear localStorage on sign out
+        localStorage.removeItem("userType");
       }
 
       // Update session and user state
@@ -640,6 +656,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setIsPasswordReset(false);
       setUserType(null);
       setFirstName(null);
+      // Clear localStorage on sign out
+      localStorage.removeItem("userType");
 
       if (error) {
         // Log the error but don't throw it - handle gracefully
@@ -672,6 +690,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setIsPasswordReset(false);
       setUserType(null);
       setFirstName(null);
+      // Clear localStorage on unexpected sign out
+      localStorage.removeItem("userType");
 
       // Don't throw the error - handle gracefully
       toast({
