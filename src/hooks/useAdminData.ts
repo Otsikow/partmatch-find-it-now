@@ -73,8 +73,17 @@ export const useAdminData = () => {
 
   const fetchData = async () => {
     try {
-      console.log('Fetching admin data with fresh queries...');
+      console.log('🔧 ADMIN DEBUG: Starting fetchData...');
       setLoading(true);
+      
+      // Check current user authentication
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      console.log('🔧 ADMIN DEBUG: Current user:', user?.email, 'ID:', user?.id);
+      
+      if (userError) {
+        console.error('🔧 ADMIN DEBUG: Auth error:', userError);
+        throw userError;
+      }
       
       // Fetch real requests from database
       const { data: requestsData, error: requestsError } = await supabase

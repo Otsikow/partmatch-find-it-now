@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { BlogPost } from '@/types/Blog';
+import { BlogPost } from '@/types/BlogPost';
 
 export const useBlogPosts = (limit?: number) => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -14,6 +14,7 @@ export const useBlogPosts = (limit?: number) => {
         let query = supabase
           .from('blog_posts')
           .select('*')
+          .eq('published', true)
           .order('published_at', { ascending: false });
 
         if (limit) {

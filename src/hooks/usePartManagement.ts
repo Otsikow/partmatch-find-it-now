@@ -1,19 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { useMyParts } from "./useMyParts";
 import { CarPart } from "@/types/CarPart";
 
-export const usePartManagement = () => {
-  const { parts: initialParts, loading, refetch: fetchMyParts } = useMyParts();
+export const usePartManagement = (initialParts: CarPart[] = [], onRefresh?: () => void) => {
   const [parts, setParts] = useState<CarPart[]>(initialParts);
+  const [loading, setLoading] = useState(false);
 
-  useState(() => {
+  // Update local state when initialParts change
+  useEffect(() => {
     setParts(initialParts);
-  });
+  }, [initialParts]);
 
   const updatePartStatus = async (partId: string, newStatus: string) => {
     try {
+      setLoading(true);
       const { error } = await supabase
         .from('car_parts')
         .update({ status: newStatus, updated_at: new Date().toISOString() })
@@ -29,6 +30,8 @@ export const usePartManagement = () => {
         title: "Success",
         description: `Part ${newStatus === 'hidden' ? 'hidden' : 'made visible'} successfully.`,
       });
+      
+      onRefresh?.();
     } catch (error) {
       console.error('Error updating part:', error);
       toast({
@@ -36,11 +39,14 @@ export const usePartManagement = () => {
         description: "Failed to update part status.",
         variant: "destructive"
       });
+    } finally {
+      setLoading(false);
     }
   };
 
   const deletePart = async (partId: string) => {
     try {
+      setLoading(true);
       const { error } = await supabase
         .from('car_parts')
         .delete()
@@ -53,6 +59,8 @@ export const usePartManagement = () => {
         title: "Success",
         description: "Part deleted successfully.",
       });
+      
+      onRefresh?.();
     } catch (error) {
       console.error('Error deleting part:', error);
       toast({
@@ -60,19 +68,50 @@ export const usePartManagement = () => {
         description: "Failed to delete part.",
         variant: "destructive"
       });
+    } finally {
+      setLoading(false);
     }
   };
 
-  const updatePart = (partId: string, updatedData: Partial<CarPart>) => {
-    setParts(prev => prev.map(part => 
-      part.id === partId ? { ...part, ...updatedData } : part
-    ));
+  const updatePart = async (partId: string, updatedData: Partial<CarPart>) => {
+    try {
+      setLoading(true);
+      console.log("usePartManagement: Updating part", partId, "with data:", updatedData);
+      
+      const { error } = await supabase
+        .from('car_parts')
+        .update(updatedData)
+        .eq('id', partId);
+
+      console.log("usePartManagement: Update result:", { error });
+
+      if (error) throw error;
+
+      setParts(prev => prev.map(part =>
+        part.id === partId ? { ...part, ...updatedData } : part
+      ));
+
+      toast({
+        title: "Success",
+        description: "Part updated successfully.",
+      });
+      
+      onRefresh?.();
+    } catch (error) {
+      console.error('Error updating part:', error);
+      toast({
+        title: "Error",
+        description: `Failed to update part: ${error.message || 'Unknown error'}`,
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return {
     parts,
     loading,
-    fetchMyParts,
     updatePartStatus,
     deletePart,
     updatePart

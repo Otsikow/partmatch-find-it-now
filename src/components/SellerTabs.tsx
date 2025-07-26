@@ -53,6 +53,7 @@ interface SupplierTabsProps {
   onWhatsAppContact: (phone: string, request: Request | Offer['request']) => void;
   onChatContact: (requestId: string, ownerId: string) => void;
   isSubmittingOffer: boolean;
+  onRefreshParts: () => void;
 }
 const SupplierTabs = ({
   activeTab,
@@ -63,7 +64,8 @@ const SupplierTabs = ({
   onOfferSubmit,
   onWhatsAppContact,
   onChatContact,
-  isSubmittingOffer
+  isSubmittingOffer,
+  onRefreshParts
 }: SupplierTabsProps) => {
   const [showPostForm, setShowPostForm] = useState(false);
   const {
@@ -129,7 +131,7 @@ const SupplierTabs = ({
             <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-1 text-sm sm:text-base">My Parts</h3>
             <p className="text-xs sm:text-sm text-blue-700 dark:text-blue-300">All the car parts you have listed for sale as a supplier. Use this to manage, edit, or remove your own listings (your inventory).</p>
           </div>
-          <MyPartsTab parts={myParts} onRefresh={() => {}} />
+          <MyPartsTab parts={myParts} onRefresh={onRefreshParts} />
         </TabsContent>
 
         <TabsContent value="offers" className="space-y-3 sm:space-y-4">

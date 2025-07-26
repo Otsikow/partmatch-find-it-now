@@ -22,8 +22,7 @@ const CarPartCardFooter = ({ partId, supplierId, onContact }: CarPartCardFooterP
       >
         Chat
       </ChatButton>
-feat/dashboard-button
- main
+
       {/* Secondary Actions Row */}
       <div className="flex gap-1.5 w-full">
         <SaveButton 

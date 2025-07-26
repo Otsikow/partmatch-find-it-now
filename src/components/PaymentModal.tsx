@@ -52,7 +52,7 @@ const PaymentModal = ({
       // Convert NGN to GHS for display
       try {
         console.log("Converting NGN to GHS for display");
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
+
 
         return convertFromNGN(amount, "GHS");
       } catch {
@@ -79,7 +79,7 @@ const PaymentModal = ({
       paymentMethod,
     });
 
-    let userMail = await localStorage.getItem("profiles");
+    const userMail = await localStorage.getItem("profiles");
     console.log("PaymentModal: User email from localStorage:", userMail);
     if (!userMail) {
       toast({
@@ -92,7 +92,7 @@ const PaymentModal = ({
       });
       return;
     }
-    let tempUser = JSON.parse(userMail);
+    const tempUser = JSON.parse(userMail);
     console.log("PaymentModal: Parsed user data:", tempUser);
     if (!paymentMethod) {
       toast({

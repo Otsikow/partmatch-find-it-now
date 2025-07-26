@@ -145,6 +145,9 @@ const EditPartModal = ({ part, isOpen, onClose, onUpdate }: EditPartModalProps) 
       const price = parseFloat(formData.price);
       const year = parseInt(formData.year);
 
+      console.log("EditPartModal: Starting update for part", part.id);
+      console.log("EditPartModal: Form data:", formData);
+
       const updateData = {
         title: formData.title.trim(),
         description: formData.description.trim() || null,
@@ -152,37 +155,20 @@ const EditPartModal = ({ part, isOpen, onClose, onUpdate }: EditPartModalProps) 
         model: formData.model.trim(),
         year: year,
         part_type: formData.part_type,
-        condition: formData.condition,
+        condition: formData.condition as 'New' | 'Used' | 'Refurbished',
         price: price,
         address: formData.address.trim(),
         updated_at: new Date().toISOString()
       };
 
-      const { error } = await supabase
-        .from('car_parts')
-        .update(updateData)
-        .eq('id', part.id);
+      console.log("EditPartModal: Update data prepared:", updateData);
 
-      if (error) throw error;
-
-      onUpdate(part.id, {
-        ...updateData,
-        condition: formData.condition as 'New' | 'Used' | 'Refurbished'
-      });
-
-      toast({
-        title: "Success",
-        description: "Part updated successfully.",
-      });
+      // Let usePartManagement handle the database update
+      await onUpdate(part.id, updateData);
 
       onClose();
     } catch (error) {
-      console.error('Error updating part:', error);
-      toast({
-        title: "Error",
-        description: "Failed to update part.",
-        variant: "destructive"
-      });
+      console.error('EditPartModal: Error updating part:', error);
     } finally {
       setLoading(false);
     }

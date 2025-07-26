@@ -15,10 +15,10 @@ export default function Success() {
   const saveToDB = async () => {
     console.log("Saving subscription data to DB...");
 
-    let userdata = await localStorage.getItem("profiles");
-    let userPaymentRaw = await localStorage.getItem("lastPayment");
-    let userPayment = userPaymentRaw ? JSON.parse(userPaymentRaw) : {};
-    let tempuser = userdata ? JSON.parse(userdata) : null;
+    const userdata = await localStorage.getItem("profiles");
+    const userPaymentRaw = await localStorage.getItem("lastPayment");
+    const userPayment = userPaymentRaw ? JSON.parse(userPaymentRaw) : {};
+    const tempuser = userdata ? JSON.parse(userdata) : null;
     console.log(11, tempuser);
     if (tempuser && tempuser.id) {
       // Update localStorage profile

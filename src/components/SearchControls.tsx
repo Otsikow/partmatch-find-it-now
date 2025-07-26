@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { mockParts } from "@/data/mockParts";
-import { getUniqueMakes, getUniqueModels, getUniqueYears } from "@/utils/partFilters";
+import { getUniqueMakes, getUniqueModels, getUniqueYears, getUniqueCategories } from "@/utils/partFilters";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface SearchControlsProps {
@@ -56,6 +56,7 @@ const SearchControls = ({
   const uniqueMakes = getUniqueMakes(mockParts);
   const uniqueModels = getUniqueModels(mockParts, filters.make);
   const uniqueYears = getUniqueYears(mockParts, filters.make, filters.model);
+  const uniqueCategories = getUniqueCategories(mockParts);
 
   // Combine database makes with popular makes, removing duplicates and sorting alphabetically
   const allMakes = Array.from(new Set([...uniqueMakes, ...popularMakesInGhana])).sort();
@@ -81,6 +82,13 @@ const SearchControls = ({
     onFiltersChange({
       ...filters,
       year
+    });
+  };
+
+  const handleCategoryChange = (category: string) => {
+    onFiltersChange({
+      ...filters,
+      category
     });
   };
 
@@ -124,6 +132,32 @@ const SearchControls = ({
           </div>
         )}
         
+        {/* Category Filter */}
+        <div>
+          <p className="text-xs sm:text-sm font-semibold text-foreground mb-2 sm:mb-3">Category</p>
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-1.5 sm:gap-2 max-h-32 sm:max-h-40 overflow-y-auto">
+            <Button
+              variant={filters.category === '' ? 'default' : 'outline'}
+              size={buttonSize}
+              onClick={() => handleCategoryChange('')}
+              className={`text-xs sm:text-sm ${filters.category === '' ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
+            >
+              All Categories
+            </Button>
+            {uniqueCategories.map(category => (
+              <Button
+                key={category}
+                variant={filters.category === category ? 'default' : 'outline'}
+                size={buttonSize}
+                onClick={() => handleCategoryChange(category)}
+                className={`text-xs sm:text-sm ${filters.category === category ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
+              >
+                {category}
+              </Button>
+            ))}
+          </div>
+        </div>
+
         {/* Make Filter */}
         <div>
           <p className="text-xs sm:text-sm font-semibold text-foreground mb-2 sm:mb-3">Make</p>

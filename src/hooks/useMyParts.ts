@@ -55,13 +55,20 @@ export const useMyParts = () => {
         `
         )
         .eq("supplier_id", user.id)
+        .in("status", ["available", "pending"])
         .order("created_at", { ascending: false });
 
+      console.log("=== useMyParts Debug ===");
+      console.log("Query executed for user:", user.id);
+      
       if (error) {
         console.error("Error fetching parts:", error);
         setError(error.message);
         return;
       }
+
+      console.log("Raw data received:", data?.length || 0, "parts");
+      console.log("First few parts:", data?.slice(0, 3));
 
       const transformedParts: CarPart[] = (data || []).map((part) => {
         let processedImages: string[] = [];
@@ -93,6 +100,8 @@ export const useMyParts = () => {
         };
       });
 
+      console.log("Transformed parts count:", transformedParts.length);
+      console.log("Setting parts state with", transformedParts.length, "parts");
       setParts(transformedParts);
     } catch (err) {
       console.error("Unexpected error:", err);
