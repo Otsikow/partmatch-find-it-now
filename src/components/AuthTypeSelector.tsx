@@ -1,10 +1,33 @@
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Shield, ShoppingCart, Store, ArrowLeft } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Shield, ShoppingCart, Store, ArrowLeft, Home, LogOut } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from '@/contexts/AuthContext';
+import { toast } from "sonner";
 
 const AuthTypeSelector = () => {
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast.success("Signed out successfully");
+      navigate('/');
+    } catch (error) {
+      toast.error("Failed to sign out");
+    }
+  };
+
+  const handleDashboard = () => {
+    if (user) {
+      navigate('/buyer-dashboard');
+    } else {
+      navigate('/auth');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/20 font-inter">
       <header className="relative bg-gradient-to-r from-primary via-primary/95 to-primary-foreground text-white shadow-lg border-b border-white/20">
@@ -31,6 +54,28 @@ const AuthTypeSelector = () => {
                 Select how you want to join our marketplace
               </p>
             </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button 
+              onClick={handleDashboard}
+              variant="ghost" 
+              size="sm" 
+              className="hover:bg-white/20 text-white hover:text-white"
+            >
+              <Home className="h-4 w-4 mr-2" />
+              Dashboard
+            </Button>
+            {user && (
+              <Button 
+                onClick={handleSignOut}
+                variant="ghost" 
+                size="sm" 
+                className="hover:bg-white/20 text-white hover:text-white"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Sign Out
+              </Button>
+            )}
           </div>
         </div>
       </header>
