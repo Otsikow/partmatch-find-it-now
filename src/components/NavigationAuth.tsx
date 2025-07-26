@@ -19,7 +19,7 @@ import { toast } from "@/hooks/use-toast";
 import { useUserDisplayName } from "@/hooks/useUserDisplayName";
 
 const NavigationAuth = () => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [isSigningOut, setIsSigningOut] = useState(false);
   const displayName = useUserDisplayName("User");
@@ -28,53 +28,10 @@ const NavigationAuth = () => {
   const handleSignOut = async () => {
     setIsSigningOut(true);
     try {
-      // Check if there's an active session before attempting signout
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      if (!session) {
-        // No active session, just redirect to home
-        console.log("No active session found, redirecting to home");
-        navigate("/");
-        return;
-      }
-
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        // If it's a session missing error, just redirect instead of showing error
-        if (
-          error.message.includes("Auth session missing") ||
-          error.message.includes("Session not found")
-        ) {
-          console.log("Session already expired, redirecting to home");
-          navigate("/");
-          return;
-        }
-        throw error;
-      }
-
+      await signOut();
       navigate("/");
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error signing out:", error);
-
-      // For session-related errors, just redirect without showing error toast
-      if (
-        error.message?.includes("Auth session missing") ||
-        error.message?.includes("Session not found") ||
-        error.name === "AuthSessionMissingError"
-      ) {
-        console.log("Session error during signout, redirecting to home");
-        navigate("/");
-        return;
-      }
-
-      // Only show error toast for other types of errors
-      toast({
-        title: "Error signing out",
-        description: "There was a problem signing you out. Please try again.",
-        variant: "destructive",
-      });
     } finally {
       setIsSigningOut(false);
     }
