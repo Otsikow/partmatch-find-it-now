@@ -13,7 +13,8 @@ export const useMyPartsCount = () => {
       const { count, error } = await supabase
         .from('car_parts')
         .select('*', { count: 'exact', head: true })
-        .eq('supplier_id', user.id);
+        .eq('supplier_id', user.id)
+        .in('status', ['available', 'pending']);
 
       if (error) throw error;
       setPartsCount(count || 0);
