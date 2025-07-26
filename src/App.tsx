@@ -23,7 +23,7 @@ import BuyerDashboard from "./pages/BuyerDashboard";
 import GuestDashboard from "./pages/GuestDashboard";
 import SellerDashboard from "./pages/SellerDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
-import DashboardRouter from "./components/DashboardRouter";
+import AuthRedirector from "./components/AuthRedirector";
 import RequestPart from "./pages/RequestPart";
 import PostPart from "./pages/PostPart";
 import ListingSuccess from "./pages/ListingSuccess";
@@ -121,7 +121,7 @@ function App() {
                       path="/dashboard"
                       element={
                         <ProtectedRoute>
-                          <DashboardRouter />
+                          <AuthRedirector />
                         </ProtectedRoute>
                       }
                     />
