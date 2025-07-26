@@ -421,7 +421,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return { error: emailError };
       }
       if (userType && data?.user) {
-        console.log("AuthProvider: Verifying user type");
+        console.log("AuthProvider: Verifying user type for:", userType);
 
         try {
           const { data: profile, error: profileError } = await supabase
@@ -430,49 +430,90 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             .eq("id", data.user.id)
             .maybeSingle();
 
-          if (profileError) {
-            throw profileError;
+          console.log("AuthProvider: Profile lookup result:", { profile, profileError });
+
+          // Get user type from both sources
+          const profileUserType = profile?.user_type;
+          const metadataUserType = data.user.user_metadata?.user_type;
+          
+          console.log("AuthProvider: User types found:", { 
+            profileUserType, 
+            metadataUserType, 
+            expectedType: userType 
+          });
+
+          // For seller login, check if user is supplier in metadata or profile
+          // Also allow if they're trying to login as supplier but currently marked as owner
+          if (userType === "supplier") {
+            const isSupplierInMetadata = metadataUserType === "supplier";
+            const isSupplierInProfile = profileUserType === "supplier";
+            const isOwnerButSigningUpAsSupplier = profileUserType === "owner" && metadataUserType === "supplier";
+            
+            if (!isSupplierInMetadata && !isSupplierInProfile && !isOwnerButSigningUpAsSupplier) {
+              console.log("AuthProvider: User is not a supplier, signing out");
+
+              await supabase.auth.signOut();
+
+              const accessError = new Error(
+                "Access denied. You are not registered as a seller."
+              );
+
+              toast({
+                title: "Access Denied",
+                description: "Only registered sellers can access this dashboard. Please register as a seller first.",
+                variant: "destructive",
+              });
+
+              return { error: accessError };
+            }
+            
+            // If user has supplier in metadata but owner in profile, update the profile
+            if (metadataUserType === "supplier" && profileUserType === "owner") {
+              console.log("AuthProvider: Updating profile user_type from owner to supplier");
+              
+              try {
+                await supabase
+                  .from("profiles")
+                  .update({ user_type: "supplier" })
+                  .eq("id", data.user.id);
+                  
+                console.log("AuthProvider: Profile updated successfully");
+              } catch (updateError) {
+                console.error("AuthProvider: Failed to update profile:", updateError);
+                // Don't fail the login for this, just log it
+              }
+            }
+          } else if (userType === "owner") {
+            // For buyer login, just check they're not admin
+            const userTypeToCheck = profileUserType || metadataUserType;
+            if (userTypeToCheck === "admin") {
+              console.log("AuthProvider: Admin trying to access buyer login");
+
+              await supabase.auth.signOut();
+
+              const accessError = new Error(
+                "Access denied. Admins cannot access buyer accounts."
+              );
+
+              toast({
+                title: "Access Denied",
+                description: "Admins cannot access buyer accounts.",
+                variant: "destructive",
+              });
+
+              return { error: accessError };
+            }
           }
 
-          const profileUserType =
-            profile?.user_type || data.user.user_metadata?.user_type;
-
-          if (profileUserType !== userType) {
-            console.log("AuthProvider: User type mismatch, signing out");
-
-            await supabase.auth.signOut();
-
-            const accessError = new Error(
-              "Access denied. You are not authorized to sign in from this page."
-            );
-
-            toast({
-              title: "Access Denied",
-              description:
-                "You are attempting to sign in from the wrong page.",
-              variant: "destructive",
-            });
-
-            return { error: accessError };
-          }
-
-          console.log("AuthProvider: User type verified");
+          console.log("AuthProvider: User type verification successful");
         } catch (verificationError) {
           console.error(
             "AuthProvider: Error verifying user type:",
             verificationError
           );
 
-          await supabase.auth.signOut();
-
-          const error = new Error("Unable to verify user type.");
-          toast({
-            title: "Verification Error",
-            description: "Unable to verify user type. Please try again.",
-            variant: "destructive",
-          });
-
-          return { error };
+          // Don't sign out for verification errors, just log them
+          console.log("AuthProvider: Continuing login despite verification error");
         }
       }
 
