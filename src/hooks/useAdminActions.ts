@@ -288,7 +288,15 @@ export const useAdminActions = (refetchData: () => void) => {
 
   const handleSuspendUser = async (userId: string, reason: string) => {
     try {
-      console.log('Suspending user:', userId, 'Reason:', reason);
+      console.log('🔧 ADMIN DEBUG: Suspending user:', userId, 'Reason:', reason);
+      
+      // Check current user authentication
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      
+      if (userError || !user) {
+        console.error('🔧 ADMIN DEBUG: Auth error in handleSuspendUser:', userError);
+        throw new Error('Not authenticated');
+      }
       
       const { error } = await supabase
         .from('profiles')
@@ -299,11 +307,11 @@ export const useAdminActions = (refetchData: () => void) => {
         .eq('id', userId);
 
       if (error) {
-        console.error('Error suspending user:', error);
+        console.error('🔧 ADMIN DEBUG: Error suspending user:', error);
         throw error;
       }
 
-      console.log('Successfully suspended user');
+      console.log('🔧 ADMIN DEBUG: Successfully suspended user');
 
       toast({
         title: "User Suspended!",
@@ -313,7 +321,7 @@ export const useAdminActions = (refetchData: () => void) => {
       await refetchData();
       
     } catch (error: any) {
-      console.error('Error suspending user:', error);
+      console.error('🔧 ADMIN DEBUG: Error suspending user:', error);
       toast({
         title: "Error",
         description: error.message || "Failed to suspend user. Please try again.",
@@ -324,19 +332,31 @@ export const useAdminActions = (refetchData: () => void) => {
 
   const handleDeleteUser = async (userId: string, reason: string) => {
     try {
-      console.log('Deleting user:', userId, 'Reason:', reason);
+      console.log('🔧 ADMIN DEBUG: Deleting user:', userId, 'Reason:', reason);
       
-      // Call the delete user edge function
+      // Get current user auth token for the edge function
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError || !session?.access_token) {
+        console.error('🔧 ADMIN DEBUG: Auth session error:', sessionError);
+        throw new Error('Authentication required');
+      }
+
+      console.log('🔧 ADMIN DEBUG: Calling delete-user edge function with token');
+      
+      // Call the delete user edge function with proper authentication
       const { data, error } = await supabase.functions.invoke('delete-user', {
-        body: { userId }
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        }
       });
 
       if (error) {
-        console.error('Error deleting user:', error);
+        console.error('🔧 ADMIN DEBUG: Edge function error:', error);
         throw error;
       }
 
-      console.log('Successfully deleted user');
+      console.log('🔧 ADMIN DEBUG: Successfully deleted user, response:', data);
 
       toast({
         title: "User Deleted!",
@@ -346,7 +366,7 @@ export const useAdminActions = (refetchData: () => void) => {
       await refetchData();
       
     } catch (error: any) {
-      console.error('Error deleting user:', error);
+      console.error('🔧 ADMIN DEBUG: Error deleting user:', error);
       toast({
         title: "Error",
         description: error.message || "Failed to delete user. Please try again.",
@@ -357,7 +377,15 @@ export const useAdminActions = (refetchData: () => void) => {
 
   const handleUnblockUser = async (userId: string) => {
     try {
-      console.log('Unblocking user:', userId);
+      console.log('🔧 ADMIN DEBUG: Unblocking user:', userId);
+      
+      // Check current user authentication
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      
+      if (userError || !user) {
+        console.error('🔧 ADMIN DEBUG: Auth error in handleUnblockUser:', userError);
+        throw new Error('Not authenticated');
+      }
       
       const { error } = await supabase
         .from('profiles')
@@ -368,11 +396,11 @@ export const useAdminActions = (refetchData: () => void) => {
         .eq('id', userId);
 
       if (error) {
-        console.error('Error unblocking user:', error);
+        console.error('🔧 ADMIN DEBUG: Error unblocking user:', error);
         throw error;
       }
 
-      console.log('Successfully unblocked user');
+      console.log('🔧 ADMIN DEBUG: Successfully unblocked user');
 
       toast({
         title: "User Unblocked!",
@@ -382,7 +410,7 @@ export const useAdminActions = (refetchData: () => void) => {
       await refetchData();
       
     } catch (error: any) {
-      console.error('Error unblocking user:', error);
+      console.error('🔧 ADMIN DEBUG: Error unblocking user:', error);
       toast({
         title: "Error",
         description: error.message || "Failed to unblock user. Please try again.",
@@ -393,7 +421,7 @@ export const useAdminActions = (refetchData: () => void) => {
 
   const handleViewUserDetails = (user: any) => {
     // This function will be handled by the AdminDashboard component
-    console.log("Viewing user details:", user);
+    console.log("🔧 ADMIN DEBUG: Viewing user details:", user);
   };
 
   return {
