@@ -155,7 +155,7 @@ const EditPartModal = ({ part, isOpen, onClose, onUpdate }: EditPartModalProps) 
         model: formData.model.trim(),
         year: year,
         part_type: formData.part_type,
-        condition: formData.condition,
+        condition: formData.condition as 'New' | 'Used' | 'Refurbished',
         price: price,
         address: formData.address.trim(),
         updated_at: new Date().toISOString()
@@ -163,33 +163,12 @@ const EditPartModal = ({ part, isOpen, onClose, onUpdate }: EditPartModalProps) 
 
       console.log("EditPartModal: Update data prepared:", updateData);
 
-      const { error } = await supabase
-        .from('car_parts')
-        .update(updateData)
-        .eq('id', part.id);
-
-      console.log("EditPartModal: Supabase update result:", { error });
-
-      if (error) throw error;
-
-      onUpdate(part.id, {
-        ...updateData,
-        condition: formData.condition as 'New' | 'Used' | 'Refurbished'
-      });
-
-      toast({
-        title: "Success",
-        description: "Part updated successfully.",
-      });
+      // Let usePartManagement handle the database update
+      await onUpdate(part.id, updateData);
 
       onClose();
     } catch (error) {
       console.error('EditPartModal: Error updating part:', error);
-      toast({
-        title: "Error",
-        description: `Failed to update part: ${error.message || 'Unknown error'}`,
-        variant: "destructive"
-      });
     } finally {
       setLoading(false);
     }
