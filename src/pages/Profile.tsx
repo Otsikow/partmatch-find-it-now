@@ -153,6 +153,20 @@ const Profile = () => {
             </CardContent>
           </Card>
         </div>
+
+        <div className="mt-12 text-center">
+          <Link to={userType === 'supplier' ? "/seller-dashboard" : "/buyer-dashboard"}>
+            <Button className="bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white shadow-lg hover:shadow-xl transition-all duration-300 mr-4">
+              Dashboard
+            </Button>
+          </Link>
+          <Button
+            onClick={handleSignOut}
+            className="bg-gradient-to-r from-red-600 to-orange-700 hover:from-red-700 hover:to-orange-800 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+          >
+            Sign Out
+          </Button>
+        </div>
       </main>
     </div>;
 };
