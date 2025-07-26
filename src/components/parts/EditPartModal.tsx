@@ -145,6 +145,9 @@ const EditPartModal = ({ part, isOpen, onClose, onUpdate }: EditPartModalProps) 
       const price = parseFloat(formData.price);
       const year = parseInt(formData.year);
 
+      console.log("EditPartModal: Starting update for part", part.id);
+      console.log("EditPartModal: Form data:", formData);
+
       const updateData = {
         title: formData.title.trim(),
         description: formData.description.trim() || null,
@@ -158,10 +161,14 @@ const EditPartModal = ({ part, isOpen, onClose, onUpdate }: EditPartModalProps) 
         updated_at: new Date().toISOString()
       };
 
+      console.log("EditPartModal: Update data prepared:", updateData);
+
       const { error } = await supabase
         .from('car_parts')
         .update(updateData)
         .eq('id', part.id);
+
+      console.log("EditPartModal: Supabase update result:", { error });
 
       if (error) throw error;
 
@@ -177,10 +184,10 @@ const EditPartModal = ({ part, isOpen, onClose, onUpdate }: EditPartModalProps) 
 
       onClose();
     } catch (error) {
-      console.error('Error updating part:', error);
+      console.error('EditPartModal: Error updating part:', error);
       toast({
         title: "Error",
-        description: "Failed to update part.",
+        description: `Failed to update part: ${error.message || 'Unknown error'}`,
         variant: "destructive"
       });
     } finally {

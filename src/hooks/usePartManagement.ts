@@ -76,10 +76,14 @@ export const usePartManagement = (initialParts: CarPart[] = [], onRefresh?: () =
   const updatePart = async (partId: string, updatedData: Partial<CarPart>) => {
     try {
       setLoading(true);
+      console.log("usePartManagement: Updating part", partId, "with data:", updatedData);
+      
       const { error } = await supabase
         .from('car_parts')
         .update(updatedData)
         .eq('id', partId);
+
+      console.log("usePartManagement: Update result:", { error });
 
       if (error) throw error;
 
@@ -97,7 +101,7 @@ export const usePartManagement = (initialParts: CarPart[] = [], onRefresh?: () =
       console.error('Error updating part:', error);
       toast({
         title: "Error",
-        description: "Failed to update part.",
+        description: `Failed to update part: ${error.message || 'Unknown error'}`,
         variant: "destructive"
       });
     } finally {
