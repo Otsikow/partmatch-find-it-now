@@ -46,8 +46,7 @@ const SellerPromotionDashboard = () => {
         .select('id, title, view_count, click_count, created_at, price, currency, is_featured, boosted_until, last_suggested_promotion')
         .eq('supplier_id', user.id)
         .eq('status', 'available')
-        .order('created_at', { ascending: false })
-        .limit(20);
+        .order('created_at', { ascending: false });
 
       if (error) {
         console.error('Error fetching listings:', error);
