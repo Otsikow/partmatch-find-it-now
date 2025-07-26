@@ -54,8 +54,14 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
 
         if (error) {
           console.error("SellerProtectedRoute: Error fetching profile:", error);
-          // No profile found and no supplier/admin metadata - deny access
-          setUserType("not_authorized");
+          // If profile fetch fails but we have valid metadata, use metadata
+          if (metadataUserType === "supplier" || metadataUserType === "admin") {
+            console.log("SellerProtectedRoute: Profile fetch failed, but using valid metadata:", metadataUserType);
+            setUserType(metadataUserType);
+          } else {
+            // No profile found and no supplier/admin metadata - deny access
+            setUserType("not_authorized");
+          }
         } else {
           console.log(
             "SellerProtectedRoute: Profile user_type:",
@@ -65,7 +71,13 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
         }
       } catch (error) {
         console.error("SellerProtectedRoute: Unexpected error:", error);
-        setUserType("not_authorized");
+        // If any error occurs but we have valid metadata, use metadata
+        if (metadataUserType === "supplier" || metadataUserType === "admin") {
+          console.log("SellerProtectedRoute: Unexpected error, but using valid metadata:", metadataUserType);
+          setUserType(metadataUserType);
+        } else {
+          setUserType("not_authorized");
+        }
       } finally {
         setProfileLoading(false);
       }
