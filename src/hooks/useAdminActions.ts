@@ -4,7 +4,16 @@ import { toast } from "@/hooks/use-toast";
 export const useAdminActions = (refetchData: () => void) => {
   const handleMatchSupplier = async (requestId: string) => {
     try {
-      console.log('Accepting offer for request:', requestId);
+      console.log('🔧 ADMIN DEBUG: Starting handleMatchSupplier for request:', requestId);
+      
+      // Check current user authentication and admin privileges
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      console.log('🔧 ADMIN DEBUG: Current user for handleMatchSupplier:', user?.email, 'ID:', user?.id);
+      
+      if (userError || !user) {
+        console.error('🔧 ADMIN DEBUG: Auth error in handleMatchSupplier:', userError);
+        throw new Error('Not authenticated');
+      }
       
       // Find the related offer
       const { data: offers } = await supabase
