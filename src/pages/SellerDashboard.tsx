@@ -108,6 +108,7 @@ const SellerDashboard = () => {
               onWhatsAppContact={handleWhatsAppContact}
               onChatContact={handleChatContact}
               isSubmittingOffer={isSubmittingOffer}
+              onRefreshParts={refetchParts}
             />
           </>
         )}
