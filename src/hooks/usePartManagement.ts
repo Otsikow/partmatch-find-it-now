@@ -53,6 +53,7 @@ export const usePartManagement = () => {
         title: "Success",
         description: "Part deleted successfully.",
       });
+      fetchMyParts();
     } catch (error) {
       console.error('Error deleting part:', error);
       toast({
@@ -63,10 +64,32 @@ export const usePartManagement = () => {
     }
   };
 
-  const updatePart = (partId: string, updatedData: Partial<CarPart>) => {
-    setParts(prev => prev.map(part => 
-      part.id === partId ? { ...part, ...updatedData } : part
-    ));
+  const updatePart = async (partId: string, updatedData: Partial<CarPart>) => {
+    try {
+      const { error } = await supabase
+        .from('car_parts')
+        .update(updatedData)
+        .eq('id', partId);
+
+      if (error) throw error;
+
+      setParts(prev => prev.map(part =>
+        part.id === partId ? { ...part, ...updatedData } : part
+      ));
+
+      toast({
+        title: "Success",
+        description: "Part updated successfully.",
+      });
+      fetchMyParts();
+    } catch (error) {
+      console.error('Error updating part:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update part.",
+        variant: "destructive"
+      });
+    }
   };
 
   return {
