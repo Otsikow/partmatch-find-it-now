@@ -14,7 +14,7 @@ interface MyPartsTabProps {
 
 const MyPartsTab = ({ parts, onRefresh }: MyPartsTabProps) => {
   const { hasBusinessSubscription } = useSubscriptionStatus();
-  const { loading, updatePartStatus, deletePart, updatePart, fetchMyParts } = usePartManagement();
+  const { loading, updatePartStatus, deletePart, updatePart } = usePartManagement(parts, onRefresh);
   const [selectedPartForBoost, setSelectedPartForBoost] = useState<string | null>(null);
   const [editingPart, setEditingPart] = useState<CarPart | null>(null);
   
