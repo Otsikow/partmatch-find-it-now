@@ -32,9 +32,9 @@ const SubscriptionManager = ({ sellerId }: SubscriptionManagerProps) => {
   };
 
   const handleSubscribe = async () => {
-    let userData = await localStorage.getItem("profiles");
+    const userData = await localStorage.getItem("profiles");
 
-    let tempuser = JSON.parse(userData || "{}");
+    const tempuser = JSON.parse(userData || "{}");
     console.log("User data:", tempuser.id);
     if (!tempuser.id) {
       toast({

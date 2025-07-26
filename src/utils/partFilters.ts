@@ -42,3 +42,13 @@ export const getUniqueYears = (parts: Part[], selectedMake: string, selectedMode
   
   return Array.from(years).sort((a, b) => parseInt(b) - parseInt(a));
 };
+
+export const getUniqueCategories = (parts: Part[]): string[] => {
+  const categories = new Set<string>();
+  parts.forEach(part => {
+    if (part.category) {
+      categories.add(part.category);
+    }
+  });
+  return Array.from(categories).sort();
+};

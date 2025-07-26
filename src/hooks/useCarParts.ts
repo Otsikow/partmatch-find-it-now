@@ -84,6 +84,9 @@ export const useCarParts = (params?: UseCarPartsParams) => {
         if (params.filters.year) {
           query = query.eq('year', parseInt(params.filters.year));
         }
+        if (params.filters.category) {
+          query = query.ilike('part_type', `%${params.filters.category}%`);
+        }
       }
 
       const { data, error } = await query;
