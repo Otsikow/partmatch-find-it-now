@@ -11,22 +11,16 @@ interface LogoProps {
 }
 
 const Logo: React.FC<LogoProps> = ({ className, isHero, onClick, disableDefaultLink }) => {
-  const { theme } = useTheme();
   const logoClasses = cn(
-    'w-auto object-contain',
+    'w-auto object-contain rounded-xl bg-primary/10 p-2 shadow-lg backdrop-blur-sm border border-primary/20',
     {
       'h-48 sm:h-56 md:h-64 lg:h-72': isHero,
+      'h-8 sm:h-10 lg:h-12': !isHero,
     },
     className
   );
 
-  const logoSrc = isHero
-    ? (theme === 'dark'
-      ? "/lovable-uploads/partmatch-hero-logo.png"
-      : "/lovable-uploads/0bb9488b-2f77-4f4c-b8b3-8aa9343b1d18.png")
-    : (theme === 'dark'
-      ? "/lovable-uploads/0bb9488b-2f77-4f4c-b8b3-8aa9343b1d18.png"
-      : "/lovable-uploads/partmatch-hero-logo.png");
+  const logoSrc = "/lovable-uploads/02ae2c2c-72fd-4678-8cef-3158e8e313f0.png";
 
   if (disableDefaultLink) {
     return (

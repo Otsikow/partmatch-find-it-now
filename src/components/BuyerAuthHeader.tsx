@@ -21,9 +21,9 @@ const BuyerAuthHeader = ({ isLogin, showPasswordReset }: BuyerAuthHeaderProps) =
         <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
           <Link to="/" className="bg-white/20 backdrop-blur-sm rounded-xl p-2 shadow-lg hover:bg-white/30 transition-colors">
             <img 
-              src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
+              src="/lovable-uploads/02ae2c2c-72fd-4678-8cef-3158e8e313f0.png" 
               alt="PartMatch Logo" 
-              className="h-6 w-auto sm:h-8 object-contain"
+              className="h-6 w-auto sm:h-8 object-contain rounded-lg"
             />
           </Link>
           <div className="min-w-0 flex-1">
