@@ -88,7 +88,12 @@ const MobileHeader = () => {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem 
                   className="flex items-center gap-2 cursor-pointer text-destructive focus:text-destructive"
-                  onClick={handleSignOut}
+                  onClick={(e) => {
+                    console.log('🚪 DropdownMenuItem: Sign out clicked!');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleSignOut();
+                  }}
                 >
                   <LogOut className="h-4 w-4" />
                   <span>{t('signOut')}</span>
