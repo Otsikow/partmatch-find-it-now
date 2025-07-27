@@ -18,52 +18,53 @@ const DashboardRouter = () => {
       return;
     }
 
-    const currentPath = window.location.pathname;
-    const dashboardPaths = ["/seller-dashboard", "/buyer-dashboard", "/admin"];
-    const isDashboardPage = dashboardPaths.some(path =>
-      currentPath.startsWith(path)
-    );
-
-    // ✅ 1. If we're not on a dashboard page, don't trigger redirects
-    if (!isDashboardPage) {
-      console.log("DashboardRouter: Not a dashboard page – skipping redirect logic");
-      return;
-    }
-
-    // ✅ 2. Gather user type info
+    // ✅ Gather user type info with priority order
     const metadataUserType = user.user_metadata?.user_type;
     const contextUserType = userType;
     const storedUserType = localStorage.getItem("userType");
     const finalUserType = metadataUserType || contextUserType || storedUserType;
 
+    // ✅ Persist user type to localStorage if not already stored
+    if (finalUserType && !storedUserType) {
+      localStorage.setItem("userType", finalUserType);
+      console.log("DashboardRouter: Stored user type in localStorage:", finalUserType);
+    }
+
     const isSupplier = finalUserType === "supplier";
     const isAdmin = finalUserType === "admin";
-    const isOwner = finalUserType === "owner";
+    const isOwner = finalUserType === "owner" || (!finalUserType); // Default to owner if no type
 
-    // ✅ 3. If user is already on correct dashboard, do nothing
-    if (currentPath.includes("seller-dashboard") && isSupplier) return;
-    if (currentPath.includes("admin") && isAdmin) return;
-    if (currentPath.includes("buyer-dashboard") && isOwner) return;
+    const currentPath = window.location.pathname;
+    console.log("DashboardRouter: Current path:", currentPath, "User type:", finalUserType);
 
-    // ✅ 4. Optional recovery: if on dashboard but a `part_draft` exists, go back to `/sell`
+    // ✅ Always redirect to correct dashboard based on user type
+    if (isSupplier && !currentPath.includes("seller-dashboard")) {
+      console.log("DashboardRouter: Redirecting supplier to /seller-dashboard");
+      navigate("/seller-dashboard", { replace: true });
+      return;
+    }
+    
+    if (isAdmin && !currentPath.includes("/admin")) {
+      console.log("DashboardRouter: Redirecting admin to /admin");
+      navigate("/admin", { replace: true });
+      return;
+    }
+    
+    if (isOwner && !currentPath.includes("buyer-dashboard")) {
+      console.log("DashboardRouter: Redirecting owner to /buyer-dashboard");
+      navigate("/buyer-dashboard", { replace: true });
+      return;
+    }
+
+    // ✅ Handle part draft recovery for sellers
     const partDraft = localStorage.getItem("part_draft");
-    if (partDraft && currentPath.includes("seller-dashboard")) {
+    if (partDraft && isSupplier && currentPath.includes("seller-dashboard")) {
       console.log("DashboardRouter: Found part draft – returning seller to /sell");
       navigate("/sell", { replace: true });
       return;
     }
 
-    // ✅ 5. Final redirect logic (if truly needed)
-    if (isSupplier) {
-      console.log("DashboardRouter: Redirecting supplier to /seller-dashboard");
-      navigate("/seller-dashboard", { replace: true });
-    } else if (isAdmin) {
-      console.log("DashboardRouter: Redirecting admin to /admin");
-      navigate("/admin", { replace: true });
-    } else {
-      console.log("DashboardRouter: Redirecting to /buyer-dashboard (default)");
-      navigate("/buyer-dashboard", { replace: true });
-    }
+    console.log("DashboardRouter: User is on correct dashboard");
   }, [user, navigate, authLoading, profileLoading, userType]);
 
   if (authLoading || profileLoading) {
