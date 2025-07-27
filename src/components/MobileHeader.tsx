@@ -31,16 +31,9 @@ const MobileHeader = () => {
   const handleSignOut = async () => {
     try {
       await signOut();
-      toast({
-        title: t('signOut'),
-        description: "You have been signed out of your account.",
-      });
+      // AuthContext already handles redirection and toast messages
     } catch (error) {
-      toast({
-        title: "Sign out failed",
-        description: "There was an error signing out. Please try again.",
-        variant: "destructive",
-      });
+      console.error('Sign out error in MobileHeader:', error);
     }
   };
 
