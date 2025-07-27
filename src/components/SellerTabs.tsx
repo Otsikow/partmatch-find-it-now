@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Package, Plus, Star, Settings, CreditCard } from "lucide-react";
-import EnhancedPostCarPartForm from "./EnhancedPostCarPartForm";
+import PostCarPartForm from "./PostCarPartForm";
 import MyPartsTab from "./MyPartsTab";
 import OffersTab from "./OffersTab";
 import RequestsTab from "./RequestsTab";
@@ -74,7 +74,8 @@ const SupplierTabs = ({
 
   const handlePartPosted = () => {
     setShowPostForm(false);
-    // You might want to call a refresh function here if available
+    // Refresh parts data after posting
+    onRefreshParts();
   };
   const handleViewRequests = () => {
     onTabChange('requests');
@@ -87,7 +88,7 @@ const SupplierTabs = ({
             Back to Dashboard
           </Button>
         </div>
-        <EnhancedPostCarPartForm onPartPosted={handlePartPosted} hasBusinessSubscription={hasBusinessSubscription} />
+        <PostCarPartForm onPartPosted={handlePartPosted} />
       </div>;
   }
   return <div className="w-full space-y-3 sm:space-y-4 lg:space-y-6">
