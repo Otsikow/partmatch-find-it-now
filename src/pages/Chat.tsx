@@ -15,8 +15,10 @@ const Chat = () => {
   );
 
   const handleChatSelect = (chatId: string) => {
+    console.log('🎯 Chat selected:', chatId);
     setSelectedChatId(chatId);
     setSearchParams({ id: chatId });
+    console.log('📍 URL params updated:', { id: chatId });
   };
 
   const handleBack = () => {

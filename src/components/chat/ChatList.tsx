@@ -190,7 +190,10 @@ const ChatList = ({ onChatSelect }: ChatListProps) => {
               return (
                 <div
                   key={chat.id}
-                  onClick={() => onChatSelect(chat.id)}
+                  onClick={() => {
+                    console.log('🖱️ Chat item clicked:', chat.id);
+                    onChatSelect(chat.id);
+                  }}
                   className="p-4 hover:bg-gray-50 cursor-pointer transition-colors"
                 >
                   <div className="flex items-start gap-3">
