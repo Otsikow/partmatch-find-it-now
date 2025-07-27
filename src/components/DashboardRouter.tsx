@@ -1,14 +1,82 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 const DashboardRouter = () => {
   const { user, loading: authLoading, profileLoading, userType } = useAuth();
   const navigate = useNavigate();
+  const [userTypeResolved, setUserTypeResolved] = useState(false);
+  const [resolvedUserType, setResolvedUserType] = useState<string | null>(null);
 
+  // Resolve user type from multiple sources
   useEffect(() => {
+    const resolveUserType = async () => {
+      if (!user) {
+        setUserTypeResolved(true);
+        return;
+      }
+
+      // Priority order for user type detection
+      let finalUserType = null;
+
+      // 1. Check user metadata first (most reliable)
+      if (user.user_metadata?.user_type) {
+        finalUserType = user.user_metadata.user_type;
+        console.log("DashboardRouter: Found userType in metadata:", finalUserType);
+      }
+      // 2. Check AuthContext userType
+      else if (userType) {
+        finalUserType = userType;
+        console.log("DashboardRouter: Found userType in context:", finalUserType);
+      }
+      // 3. Check localStorage
+      else {
+        const storedUserType = localStorage.getItem("userType");
+        if (storedUserType) {
+          finalUserType = storedUserType;
+          console.log("DashboardRouter: Found userType in localStorage:", finalUserType);
+        }
+      }
+
+      // 4. If still no userType found, query the database
+      if (!finalUserType) {
+        try {
+          console.log("DashboardRouter: Querying database for user type");
+          const { data: profile, error } = await supabase
+            .from('profiles')
+            .select('user_type')
+            .eq('id', user.id)
+            .single();
+
+          if (!error && profile?.user_type) {
+            finalUserType = profile.user_type;
+            console.log("DashboardRouter: Found userType in database:", finalUserType);
+          }
+        } catch (error) {
+          console.error("DashboardRouter: Error querying user type:", error);
+        }
+      }
+
+      // Store resolved userType
+      setResolvedUserType(finalUserType || 'owner'); // Default to owner
+      if (finalUserType) {
+        localStorage.setItem("userType", finalUserType);
+      }
+      setUserTypeResolved(true);
+    };
+
     if (authLoading || profileLoading) {
-      console.log("DashboardRouter: Waiting for auth/profile loading");
+      return;
+    }
+
+    resolveUserType();
+  }, [user, authLoading, profileLoading, userType]);
+
+  // Handle routing once user type is resolved
+  useEffect(() => {
+    if (authLoading || profileLoading || !userTypeResolved) {
+      console.log("DashboardRouter: Waiting for user type resolution");
       return;
     }
 
@@ -18,54 +86,31 @@ const DashboardRouter = () => {
       return;
     }
 
-    // ✅ Gather user type info with priority order
-    const metadataUserType = user.user_metadata?.user_type;
-    const contextUserType = userType;
-    const storedUserType = localStorage.getItem("userType");
-    const finalUserType = metadataUserType || contextUserType || storedUserType;
-
-    // ✅ Persist user type to localStorage if not already stored
-    if (finalUserType && !storedUserType) {
-      localStorage.setItem("userType", finalUserType);
-      console.log("DashboardRouter: Stored user type in localStorage:", finalUserType);
-    }
-
-    const isSupplier = finalUserType === "supplier";
-    const isAdmin = finalUserType === "admin";
-    const isOwner = finalUserType === "owner" || (!finalUserType); // Default to owner if no type
-
     const currentPath = window.location.pathname;
-    console.log("DashboardRouter: Current path:", currentPath, "User type:", finalUserType);
+    console.log("DashboardRouter: Routing decision - Path:", currentPath, "UserType:", resolvedUserType);
 
-    // ✅ Always redirect to correct dashboard based on user type
-    if (isSupplier && !currentPath.includes("seller-dashboard")) {
-      console.log("DashboardRouter: Redirecting supplier to /seller-dashboard");
-      navigate("/seller-dashboard", { replace: true });
-      return;
+    // Route based on resolved user type
+    switch (resolvedUserType) {
+      case 'supplier':
+        if (!currentPath.includes("seller-dashboard")) {
+          console.log("DashboardRouter: Redirecting supplier to /seller-dashboard");
+          navigate("/seller-dashboard", { replace: true });
+        }
+        break;
+      case 'admin':
+        if (!currentPath.includes("/admin")) {
+          console.log("DashboardRouter: Redirecting admin to /admin");
+          navigate("/admin", { replace: true });
+        }
+        break;
+      default: // 'owner' or any other type
+        if (!currentPath.includes("buyer-dashboard")) {
+          console.log("DashboardRouter: Redirecting to /buyer-dashboard (default)");
+          navigate("/buyer-dashboard", { replace: true });
+        }
+        break;
     }
-    
-    if (isAdmin && !currentPath.includes("/admin")) {
-      console.log("DashboardRouter: Redirecting admin to /admin");
-      navigate("/admin", { replace: true });
-      return;
-    }
-    
-    if (isOwner && !currentPath.includes("buyer-dashboard")) {
-      console.log("DashboardRouter: Redirecting owner to /buyer-dashboard");
-      navigate("/buyer-dashboard", { replace: true });
-      return;
-    }
-
-    // ✅ Handle part draft recovery for sellers
-    const partDraft = localStorage.getItem("part_draft");
-    if (partDraft && isSupplier && currentPath.includes("seller-dashboard")) {
-      console.log("DashboardRouter: Found part draft – returning seller to /sell");
-      navigate("/sell", { replace: true });
-      return;
-    }
-
-    console.log("DashboardRouter: User is on correct dashboard");
-  }, [user, navigate, authLoading, profileLoading, userType]);
+  }, [user, navigate, authLoading, profileLoading, userTypeResolved, resolvedUserType]);
 
   if (authLoading || profileLoading) {
     return (
