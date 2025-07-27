@@ -12,6 +12,7 @@ import enginePartsImage from "@/assets/engine-parts.jpg";
 import brakeSystemImage from "@/assets/brake-system.jpg";
 import suspensionImage from "@/assets/suspension.jpg";
 import bodyPartsImage from "@/assets/body-parts.jpg";
+import carAccessoriesImage from "@/assets/car-accessories.jpg";
 
 const MobileHomeContent = () => {
   const { t } = useTranslation();
@@ -33,7 +34,7 @@ const MobileHomeContent = () => {
     brake: brakeSystemImage,
     suspension: suspensionImage,
     body: bodyPartsImage,
-    accessories: "" // Use empty string for accessories, will show fallback icon
+    accessories: carAccessoriesImage
   };
 
   return (
