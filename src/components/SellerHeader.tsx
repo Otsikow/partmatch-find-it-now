@@ -100,9 +100,9 @@ const SellerHeader = () => {
           className="bg-white/30 backdrop-blur-md rounded-lg p-1.5 border border-white/50 shadow-lg hover:bg-white/40 transition-all duration-300 cursor-pointer"
         >
           <img 
-            src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
+            src="/lovable-uploads/02ae2c2c-72fd-4678-8cef-3158e8e313f0.png" 
             alt="PartMatch Logo" 
-            className="h-6 w-6 sm:h-7 sm:w-7"
+            className="h-6 w-6 sm:h-7 sm:w-7 rounded-md"
           />
         </Link>
       </div>
