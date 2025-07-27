@@ -48,7 +48,7 @@ const MobileHeader = () => {
       <div className="relative flex items-center justify-between px-4 py-3 min-h-[64px] safe-area-pt">
         <div className="flex items-center min-w-0 flex-1">
           <Link to="/" className="flex items-center gap-2 text-white">
-            <img src="/lovable-uploads/7e314d66-25f8-4630-bc86-a9b606c241cb.png" alt="PartMatch Logo" className="h-8 w-auto" />
+            <img src="/lovable-uploads/partmatch-hero-logo.png" alt="PartMatch Logo" className="h-8 w-auto" />
           </Link>
         </div>
         
