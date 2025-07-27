@@ -1,139 +1,68 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
 
 const DashboardRouter = () => {
-  const {
-    user,
-    loading: authLoading,
-    profileLoading,
-    userType,
-  } = useAuth();
+  const { user, loading: authLoading, profileLoading, userType } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Wait until auth and profile loading are finished
     if (authLoading || profileLoading) {
-      console.log(
-        "DashboardRouter: Waiting for auth and profile to load...",
-        { authLoading, profileLoading }
-      );
+      console.log("DashboardRouter: Waiting for auth/profile loading");
       return;
     }
 
-    // If no user, redirect to auth page
     if (!user) {
-      console.log("DashboardRouter: No user found, redirecting to auth");
+      console.log("DashboardRouter: No user – redirecting to /auth");
       navigate("/auth", { replace: true });
       return;
     }
 
-    // Check current path to avoid unnecessary redirects
     const currentPath = window.location.pathname;
-    
-    // Get user type from multiple sources with priority order
-    const metadataUserType = user.user_metadata?.user_type;
-    const contextUserType = userType;
-    
-    let storedUserType = null;
-    try {
-      storedUserType = localStorage.getItem("userType");
-    } catch (e) {
-      console.warn("DashboardRouter: Could not access localStorage", e);
-    }
-    
-    console.log(
-      "DashboardRouter: === DEBUGGING USER TYPE ===",
-      { 
-        metadataUserType,
-        contextUserType,
-        storedUserType,
-        email: user.email,
-        userMetadata: user.user_metadata,
-        currentPath,
-        fullUser: user
-      }
+    const dashboardPaths = ["/seller-dashboard", "/buyer-dashboard", "/admin"];
+    const isDashboardPage = dashboardPaths.some(path =>
+      currentPath.startsWith(path)
     );
 
-    // PREVENT UNNECESSARY REDIRECTS: Check if user is already on the correct page
-    const isSupplierAnywhere = metadataUserType === 'supplier' || contextUserType === 'supplier' || storedUserType === 'supplier';
-    const isAdminAnywhere = metadataUserType === 'admin' || contextUserType === 'admin' || storedUserType === 'admin';
-    const isOwnerAnywhere = metadataUserType === 'owner' || contextUserType === 'owner' || storedUserType === 'owner';
-    
-    // If user is already on the correct dashboard, don't redirect
-    if (currentPath.includes('seller-dashboard') && isSupplierAnywhere) {
-      console.log("DashboardRouter: User is already on seller dashboard, staying here");
-      return;
-    }
-    
-    if (currentPath.includes('admin') && isAdminAnywhere) {
-      console.log("DashboardRouter: User is already on admin dashboard, staying here");
-      return;
-    }
-    
-    if (currentPath.includes('buyer-dashboard') && (isOwnerAnywhere || (!isSupplierAnywhere && !isAdminAnywhere))) {
-      console.log("DashboardRouter: User is already on buyer dashboard, staying here");
+    // ✅ 1. If we're not on a dashboard page, don't trigger redirects
+    if (!isDashboardPage) {
+      console.log("DashboardRouter: Not a dashboard page – skipping redirect logic");
       return;
     }
 
-    // Only redirect if user is on a dashboard page that doesn't match their type
-    const isDashboardPath = currentPath.includes('-dashboard') || currentPath.includes('/admin');
-    
-    if (!isDashboardPath) {
-      console.log("DashboardRouter: User is not on a dashboard page, allowing navigation");
+    // ✅ 2. Gather user type info
+    const metadataUserType = user.user_metadata?.user_type;
+    const contextUserType = userType;
+    const storedUserType = localStorage.getItem("userType");
+    const finalUserType = metadataUserType || contextUserType || storedUserType;
+
+    const isSupplier = finalUserType === "supplier";
+    const isAdmin = finalUserType === "admin";
+    const isOwner = finalUserType === "owner";
+
+    // ✅ 3. If user is already on correct dashboard, do nothing
+    if (currentPath.includes("seller-dashboard") && isSupplier) return;
+    if (currentPath.includes("admin") && isAdmin) return;
+    if (currentPath.includes("buyer-dashboard") && isOwner) return;
+
+    // ✅ 4. Optional recovery: if on dashboard but a `part_draft` exists, go back to `/sell`
+    const partDraft = localStorage.getItem("part_draft");
+    if (partDraft && currentPath.includes("seller-dashboard")) {
+      console.log("DashboardRouter: Found part draft – returning seller to /sell");
+      navigate("/sell", { replace: true });
       return;
     }
 
-    // PRIORITY: Always check metadata first since it's most reliable
-    if (metadataUserType === 'supplier' && !currentPath.includes('seller-dashboard')) {
-      console.log("DashboardRouter: Found supplier in metadata, redirecting to seller dashboard");
+    // ✅ 5. Final redirect logic (if truly needed)
+    if (isSupplier) {
+      console.log("DashboardRouter: Redirecting supplier to /seller-dashboard");
       navigate("/seller-dashboard", { replace: true });
-      return;
-    }
-
-    if (metadataUserType === 'admin' && !currentPath.includes('admin')) {
-      console.log("DashboardRouter: Found admin in metadata, redirecting to admin dashboard");
+    } else if (isAdmin) {
+      console.log("DashboardRouter: Redirecting admin to /admin");
       navigate("/admin", { replace: true });
-      return;
-    }
-
-    // Fallback to context or stored user type
-    const finalUserType = contextUserType || storedUserType;
-
-    // Standard redirect logic (only if on wrong dashboard)
-    switch (finalUserType) {
-      case "supplier":
-        if (!currentPath.includes('seller-dashboard')) {
-          console.log("DashboardRouter: Redirecting supplier to seller dashboard (fallback)");
-          navigate("/seller-dashboard", { replace: true });
-        }
-        break;
-      case "admin":
-        if (!currentPath.includes('admin')) {
-          console.log("DashboardRouter: Redirecting admin to admin dashboard (fallback)");
-          navigate("/admin", { replace: true });
-        }
-        break;
-      case "owner":
-        if (!currentPath.includes('buyer-dashboard')) {
-          console.log("DashboardRouter: Redirecting to buyer dashboard");
-          navigate("/buyer-dashboard", { replace: true });
-        }
-        break;
-      default:
-        // Final fallback: if we have stored type but no other indicators
-        if (storedUserType === 'supplier' && !currentPath.includes('seller-dashboard')) {
-          console.log("DashboardRouter: Found supplier in localStorage (final fallback), redirecting to seller dashboard");
-          navigate("/seller-dashboard", { replace: true });
-        } else if ((metadataUserType === 'owner' || !finalUserType) && !currentPath.includes('buyer-dashboard')) {
-          console.log("DashboardRouter: Defaulting to buyer dashboard");
-          navigate("/buyer-dashboard", { replace: true });
-        } else if (!isDashboardPath) {
-          console.log("DashboardRouter: No valid user type found, redirecting to auth");
-          navigate("/auth", { replace: true });
-        }
-        break;
+    } else {
+      console.log("DashboardRouter: Redirecting to /buyer-dashboard (default)");
+      navigate("/buyer-dashboard", { replace: true });
     }
   }, [user, navigate, authLoading, profileLoading, userType]);
 
