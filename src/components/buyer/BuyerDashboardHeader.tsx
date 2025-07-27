@@ -53,11 +53,14 @@ export const BuyerDashboardHeader = () => {
   };
 
   const handleSignOut = async () => {
+    console.log('🚪 BuyerDashboard: handleSignOut clicked');
     try {
-      await signOut();
-      // AuthContext already handles redirection to /auth
+      console.log('🚪 BuyerDashboard: Calling supabase.auth.signOut directly');
+      await supabase.auth.signOut();
+      console.log('🚪 BuyerDashboard: signOut completed, navigating to /auth');
+      navigate('/auth');
     } catch (error) {
-      console.error('Sign out error:', error);
+      console.error('🚪 BuyerDashboard: Sign out error:', error);
     }
   };
 
