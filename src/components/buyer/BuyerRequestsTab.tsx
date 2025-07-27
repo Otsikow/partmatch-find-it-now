@@ -90,7 +90,19 @@ const BuyerRequestsTab = () => {
           onClick={() => handleRequestClick(request)}
         >
           <CardContent className="p-6">
-            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
+              {/* Part Image */}
+              {request.photo_url && (
+                <div className="flex-shrink-0 self-start">
+                  <img 
+                    src={request.photo_url} 
+                    alt={`${request.part_needed} for ${request.car_make} ${request.car_model}`}
+                    className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-lg border border-gray-200 shadow-sm"
+                  />
+                </div>
+              )}
+              
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 flex-1 min-w-0">
               <div className="flex-1 min-w-0">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   {request.car_make} {request.car_model} {request.car_year}
@@ -141,6 +153,7 @@ const BuyerRequestsTab = () => {
                    request.status === 'cancelled' ? 'Hidden' :
                    'Completed'}
                 </span>
+                </div>
               </div>
             </div>
           </CardContent>
