@@ -1,6 +1,6 @@
 import { Bell, LogIn, LogOut, User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { 
   DropdownMenu, 
@@ -49,6 +49,9 @@ const MobileHeader = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/5 to-indigo-600/10"></div>
       <div className="relative flex items-center justify-between px-4 py-3 min-h-[64px] safe-area-pt">
         <div className="flex items-center min-w-0 flex-1">
+          <Link to="/" className="flex items-center gap-2 text-white">
+            <img src="/lovable-uploads/partmatch-hero-logo.png" alt="PartMatch Logo" className="h-8 w-auto" />
+          </Link>
         </div>
         
         {user && (
@@ -103,14 +106,15 @@ const MobileHeader = () => {
           <div className="flex items-center space-x-2 flex-shrink-0">
             <ThemeToggle />
             <LanguageSelector showLabel={false} variant="button" />
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-white font-semibold"
-              onClick={() => window.location.href = '/auth'}
-            >
-              <LogIn className="h-6 w-6" />
-            </Button>
+            <Link to="/">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white font-semibold"
+              >
+                <LogIn className="h-6 w-6" />
+              </Button>
+            </Link>
           </div>
         )}
       </div>

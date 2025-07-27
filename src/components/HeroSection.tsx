@@ -157,7 +157,7 @@ const HeroSection = () => {
           </Link>
 
           <Button asChild size="lg" className="w-full sm:w-auto bg-gradient-to-r from-green-600 to-red-600 hover:from-green-700 hover:to-red-700 text-white shadow-lg ui-button-text">
-            <Link to="/post-part">
+            <Link to="/">
               <Package className="mr-2 h-5 w-5" />
               Sell Car Parts
             </Link>
