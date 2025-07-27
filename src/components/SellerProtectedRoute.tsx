@@ -120,6 +120,19 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
     return <Navigate to="/seller-auth" replace />;
   }
 
+  // Don't make any access decisions if we're still loading or userType is null
+  if (userType === null) {
+    console.log("SellerProtectedRoute: UserType still null, waiting for resolution");
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Verifying access...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (userType !== "supplier" && userType !== "admin") {
     console.log("SellerProtectedRoute: Access denied, userType:", userType);
     toast({
