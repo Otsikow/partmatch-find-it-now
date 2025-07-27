@@ -43,9 +43,9 @@ const MobileHomeContent = () => {
       <div className="text-center space-y-2">
         <Link to="/" className="mx-auto">
           <img 
-            src="/lovable-uploads/02ae2c2c-72fd-4678-8cef-3158e8e313f0.png" 
+            src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
             alt="PartMatch Logo" 
-            className="h-44 w-auto mx-auto rounded-2xl bg-primary/10 p-4 shadow-xl backdrop-blur-sm border border-primary/20" 
+            className="h-44 w-auto mx-auto" 
           />
         </Link>
         <div>
