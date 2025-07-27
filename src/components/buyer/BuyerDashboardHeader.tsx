@@ -70,7 +70,12 @@ export const BuyerDashboardHeader = () => {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => navigate('/')}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('🔙 Back button clicked, navigating to home');
+                navigate('/');
+              }}
               className="p-2 hover:bg-white/20 rounded-full text-white hover:text-white flex-shrink-0"
             >
               <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
