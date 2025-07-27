@@ -11,11 +11,22 @@ const DashboardRouter = () => {
 
   // Resolve user type from multiple sources
   useEffect(() => {
+    console.log("DashboardRouter: STEP 1 - Resolving user type", {
+      authLoading,
+      profileLoading,
+      user: user?.id,
+      userEmail: user?.email,
+      userMetadata: user?.user_metadata
+    });
+
     const resolveUserType = async () => {
       if (!user) {
+        console.log("DashboardRouter: STEP 1A - No user found");
         setUserTypeResolved(true);
         return;
       }
+
+      console.log("DashboardRouter: STEP 1B - User found, resolving type");
 
       // Priority order for user type detection
       let finalUserType = null;
@@ -23,35 +34,37 @@ const DashboardRouter = () => {
       // 1. Check user metadata first (most reliable)
       if (user.user_metadata?.user_type) {
         finalUserType = user.user_metadata.user_type;
-        console.log("DashboardRouter: Found userType in metadata:", finalUserType);
+        console.log("DashboardRouter: STEP 2A - Found userType in metadata:", finalUserType);
       }
       // 2. Check AuthContext userType
       else if (userType) {
         finalUserType = userType;
-        console.log("DashboardRouter: Found userType in context:", finalUserType);
+        console.log("DashboardRouter: STEP 2B - Found userType in context:", finalUserType);
       }
       // 3. Check localStorage
       else {
         const storedUserType = localStorage.getItem("userType");
         if (storedUserType) {
           finalUserType = storedUserType;
-          console.log("DashboardRouter: Found userType in localStorage:", finalUserType);
+          console.log("DashboardRouter: STEP 2C - Found userType in localStorage:", finalUserType);
         }
       }
 
       // 4. If still no userType found, query the database
       if (!finalUserType) {
         try {
-          console.log("DashboardRouter: Querying database for user type");
+          console.log("DashboardRouter: STEP 2D - Querying database for user type");
           const { data: profile, error } = await supabase
             .from('profiles')
             .select('user_type')
             .eq('id', user.id)
             .single();
 
+          console.log("DashboardRouter: Database query result:", { profile, error });
+
           if (!error && profile?.user_type) {
             finalUserType = profile.user_type;
-            console.log("DashboardRouter: Found userType in database:", finalUserType);
+            console.log("DashboardRouter: STEP 2E - Found userType in database:", finalUserType);
           }
         } catch (error) {
           console.error("DashboardRouter: Error querying user type:", error);
@@ -59,14 +72,20 @@ const DashboardRouter = () => {
       }
 
       // Store resolved userType
-      setResolvedUserType(finalUserType || 'owner'); // Default to owner
+      const resolvedType = finalUserType || 'owner'; // Default to owner
+      console.log("DashboardRouter: STEP 3 - Final resolved user type:", resolvedType);
+      
+      setResolvedUserType(resolvedType);
       if (finalUserType) {
         localStorage.setItem("userType", finalUserType);
+        console.log("DashboardRouter: STEP 3A - Stored in localStorage:", finalUserType);
       }
       setUserTypeResolved(true);
+      console.log("DashboardRouter: STEP 3B - User type resolution complete");
     };
 
     if (authLoading || profileLoading) {
+      console.log("DashboardRouter: STEP 0 - Still loading auth/profile");
       return;
     }
 

@@ -16,6 +16,7 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
   useEffect(() => {
     const checkUserAccess = async () => {
       if (!user) {
+        console.log("SellerProtectedRoute: No user found");
         setProfileLoading(false);
         return;
       }
@@ -23,34 +24,38 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
       console.log("SellerProtectedRoute: Checking access for user:", user.id);
       console.log("SellerProtectedRoute: User metadata:", user.user_metadata);
 
-      // First check user metadata directly
+      // First check user metadata directly (most reliable)
       const metadataUserType = user.user_metadata?.user_type;
-      console.log(
-        "SellerProtectedRoute: Metadata user_type:",
-        metadataUserType
-      );
+      console.log("SellerProtectedRoute: Metadata user_type:", metadataUserType);
 
       if (metadataUserType === "supplier" || metadataUserType === "admin") {
-        console.log(
-          "SellerProtectedRoute: User is supplier or admin based on metadata"
-        );
+        console.log("SellerProtectedRoute: User is supplier or admin based on metadata");
         setUserType(metadataUserType);
         setProfileLoading(false);
         return;
       }
 
-      // If no metadata, check profile table
+      // Check localStorage as backup
+      const storedUserType = localStorage.getItem("userType");
+      console.log("SellerProtectedRoute: localStorage userType:", storedUserType);
+      
+      if (storedUserType === "supplier" || storedUserType === "admin") {
+        console.log("SellerProtectedRoute: User is supplier or admin based on localStorage");
+        setUserType(storedUserType);
+        setProfileLoading(false);
+        return;
+      }
+
+      // If no metadata, check profile table as last resort
       try {
+        console.log("SellerProtectedRoute: Querying profile table for user type");
         const { data: profile, error } = await supabase
           .from("profiles")
           .select("user_type")
           .eq("id", user.id)
           .single();
 
-        console.log("SellerProtectedRoute: Profile query result:", {
-          profile,
-          error,
-        });
+        console.log("SellerProtectedRoute: Profile query result:", { profile, error });
 
         if (error) {
           console.error("SellerProtectedRoute: Error fetching profile:", error);
@@ -60,14 +65,19 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
             setUserType(metadataUserType);
           } else {
             // No profile found and no supplier/admin metadata - deny access
+            console.log("SellerProtectedRoute: No valid user type found - denying access");
             setUserType("not_authorized");
           }
         } else {
-          console.log(
-            "SellerProtectedRoute: Profile user_type:",
-            profile?.user_type
-          );
-          setUserType(profile?.user_type || "not_authorized");
+          const profileUserType = profile?.user_type;
+          console.log("SellerProtectedRoute: Profile user_type:", profileUserType);
+          setUserType(profileUserType || "not_authorized");
+          
+          // Store in localStorage for future use
+          if (profileUserType) {
+            localStorage.setItem("userType", profileUserType);
+            console.log("SellerProtectedRoute: Stored userType in localStorage:", profileUserType);
+          }
         }
       } catch (error) {
         console.error("SellerProtectedRoute: Unexpected error:", error);
