@@ -27,60 +27,68 @@ export const BuyerDashboardTabs = () => {
   };
 
   return (
-    <div className="p-3 sm:p-6">
+    <div className="w-full">
       <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-        <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 mb-6 sm:mb-8 bg-transparent p-0 gap-2 sm:gap-3 h-auto">
-          <TabsTrigger 
-            value="requests" 
-            className="flex-1 min-w-[80px] sm:min-w-[100px] text-xs sm:text-sm font-semibold px-2 sm:px-4 py-3 sm:py-4 rounded-xl bg-background border-2 border-primary/20 text-primary hover:border-primary/40 hover:bg-primary/5 data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary-foreground data-[state=active]:text-white data-[state=active]:border-primary data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25 transition-all duration-300 hover:scale-105 data-[state=active]:scale-105"
-          >
-            Requests
-          </TabsTrigger>
-          <TabsTrigger 
-            value="offers" 
-            className="flex-1 min-w-[80px] sm:min-w-[100px] text-xs sm:text-sm font-semibold px-2 sm:px-4 py-3 sm:py-4 rounded-xl bg-background border-2 border-primary/20 text-primary hover:border-primary/40 hover:bg-primary/5 data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary-foreground data-[state=active]:text-white data-[state=active]:border-primary data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25 transition-all duration-300 hover:scale-105 data-[state=active]:scale-105"
-          >
-            Offers
-          </TabsTrigger>
-          <TabsTrigger 
-            value="saved" 
-            className="flex-1 min-w-[80px] sm:min-w-[100px] text-xs sm:text-sm font-semibold px-2 sm:px-4 py-3 sm:py-4 rounded-xl bg-background border-2 border-primary/20 text-primary hover:border-primary/40 hover:bg-primary/5 data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary-foreground data-[state=active]:text-white data-[state=active]:border-primary data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25 transition-all duration-300 hover:scale-105 data-[state=active]:scale-105"
-          >
-            Saved
-          </TabsTrigger>
-          <TabsTrigger 
-            value="following" 
-            className="flex-1 min-w-[80px] sm:min-w-[100px] text-xs sm:text-sm font-semibold px-2 sm:px-4 py-3 sm:py-4 rounded-xl bg-background border-2 border-primary/20 text-primary hover:border-primary/40 hover:bg-primary/5 data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary-foreground data-[state=active]:text-white data-[state=active]:border-primary data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25 transition-all duration-300 hover:scale-105 data-[state=active]:scale-105"
-          >
-            Following
-          </TabsTrigger>
-          <TabsTrigger 
-            value="profile" 
-            className="flex-1 min-w-[80px] sm:min-w-[100px] text-xs sm:text-sm font-semibold px-2 sm:px-4 py-3 sm:py-4 rounded-xl bg-background border-2 border-primary/20 text-primary hover:border-primary/40 hover:bg-primary/5 data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary-foreground data-[state=active]:text-white data-[state=active]:border-primary data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25 transition-all duration-300 hover:scale-105 data-[state=active]:scale-105"
-          >
-            Profile
-          </TabsTrigger>
-        </TabsList>
+        {/* Professional Responsive Tab Navigation */}
+        <div className="w-full bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-40">
+          <div className="max-w-7xl mx-auto">
+            <TabsList className="w-full h-auto bg-transparent p-2 sm:p-4 grid grid-cols-5 gap-1 sm:gap-2">
+              <TabsTrigger 
+                value="requests" 
+                className="flex-1 h-12 sm:h-14 text-xs sm:text-sm font-medium px-2 sm:px-4 rounded-lg bg-card border border-border/50 text-muted-foreground hover:text-foreground hover:bg-accent/50 hover:border-primary/30 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-sm transition-all duration-200 whitespace-nowrap"
+              >
+                Requests
+              </TabsTrigger>
+              <TabsTrigger 
+                value="offers" 
+                className="flex-1 h-12 sm:h-14 text-xs sm:text-sm font-medium px-2 sm:px-4 rounded-lg bg-card border border-border/50 text-muted-foreground hover:text-foreground hover:bg-accent/50 hover:border-primary/30 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-sm transition-all duration-200 whitespace-nowrap"
+              >
+                Offers
+              </TabsTrigger>
+              <TabsTrigger 
+                value="saved" 
+                className="flex-1 h-12 sm:h-14 text-xs sm:text-sm font-medium px-2 sm:px-4 rounded-lg bg-card border border-border/50 text-muted-foreground hover:text-foreground hover:bg-accent/50 hover:border-primary/30 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-sm transition-all duration-200 whitespace-nowrap"
+              >
+                Saved
+              </TabsTrigger>
+              <TabsTrigger 
+                value="following" 
+                className="flex-1 h-12 sm:h-14 text-xs sm:text-sm font-medium px-2 sm:px-4 rounded-lg bg-card border border-border/50 text-muted-foreground hover:text-foreground hover:bg-accent/50 hover:border-primary/30 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-sm transition-all duration-200 whitespace-nowrap"
+              >
+                Following
+              </TabsTrigger>
+              <TabsTrigger 
+                value="profile" 
+                className="flex-1 h-12 sm:h-14 text-xs sm:text-sm font-medium px-2 sm:px-4 rounded-lg bg-card border border-border/50 text-muted-foreground hover:text-foreground hover:bg-accent/50 hover:border-primary/30 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-sm transition-all duration-200 whitespace-nowrap"
+              >
+                Profile
+              </TabsTrigger>
+            </TabsList>
+          </div>
+        </div>
         
-        <TabsContent value="requests" className="mt-6">
-          <BuyerRequestsTab />
-        </TabsContent>
-        
-        <TabsContent value="offers" className="mt-6">
-          <BuyerOffersTab />
-        </TabsContent>
-        
-        <TabsContent value="saved" className="mt-6">
-          <SavedParts />
-        </TabsContent>
-        
-        <TabsContent value="following" className="mt-6">
-          <FollowedSellers />
-        </TabsContent>
-        
-        <TabsContent value="profile" className="mt-6">
-          <BuyerProfile />
-        </TabsContent>
+        {/* Content Area - Optimized for All Screens */}
+        <div className="w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6">
+          <TabsContent value="requests" className="mt-0 focus-visible:outline-none">
+            <BuyerRequestsTab />
+          </TabsContent>
+          
+          <TabsContent value="offers" className="mt-0 focus-visible:outline-none">
+            <BuyerOffersTab />
+          </TabsContent>
+          
+          <TabsContent value="saved" className="mt-0 focus-visible:outline-none">
+            <SavedParts />
+          </TabsContent>
+          
+          <TabsContent value="following" className="mt-0 focus-visible:outline-none">
+            <FollowedSellers />
+          </TabsContent>
+          
+          <TabsContent value="profile" className="mt-0 focus-visible:outline-none">
+            <BuyerProfile />
+          </TabsContent>
+        </div>
       </Tabs>
     </div>
   );
