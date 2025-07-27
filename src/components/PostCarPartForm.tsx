@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -17,6 +17,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Package, Upload } from "lucide-react";
 import PhotoUpload from "./PhotoUpload";
 import { CAR_PART_CATEGORIES } from "@/constants/carPartCategories";
+import useListingDraft from "@/hooks/useListingDraft";
 
 interface CarPartFormData {
   title: string;
@@ -31,24 +32,35 @@ interface CarPartFormData {
   images: File[];
 }
 
+const initialFormData: CarPartFormData = {
+  title: "",
+  description: "",
+  make: "",
+  model: "",
+  year: "",
+  partType: "",
+  condition: "",
+  price: "",
+  address: "",
+  images: [],
+};
+
 const PostCarPartForm = ({ onPartPosted }: { onPartPosted: () => void }) => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [currentPhoto, setCurrentPhoto] = useState<File | null>(null);
-  const [formData, setFormData] = useState<CarPartFormData>({
-    title: "",
-    description: "",
-    make: "",
-    model: "",
-    year: "",
-    partType: "",
-    condition: "",
-    price: "",
-    address: "",
-    images: [],
-  });
+  
+  // Use the draft functionality
+  const { formData, setFormData, draftExists, clearDraft } = useListingDraft<CarPartFormData>(
+    "post-car-part-form", 
+    initialFormData
+  );
+
+  console.log("PostCarPartForm: draftExists", draftExists);
+  console.log("PostCarPartForm: formData", formData);
 
   const handleInputChange = (field: keyof CarPartFormData, value: string) => {
+    console.log("PostCarPartForm: updating field", field, "with value", value);
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -210,19 +222,9 @@ const PostCarPartForm = ({ onPartPosted }: { onPartPosted: () => void }) => {
           "Your car part has been posted and is now available for buyers.",
       });
 
-      // Reset form
-      setFormData({
-        title: "",
-        description: "",
-        make: "",
-        model: "",
-        year: "",
-        partType: "",
-        condition: "",
-        price: "",
-        address: "",
-        images: [],
-      });
+      // Clear the draft and reset form
+      clearDraft();
+      setFormData(initialFormData);
       setCurrentPhoto(null);
       onPartPosted();
     } catch (error: any) {
@@ -244,8 +246,30 @@ const PostCarPartForm = ({ onPartPosted }: { onPartPosted: () => void }) => {
         <CardTitle className="text-2xl font-bold text-orange-700 flex items-center gap-2">
           <Package className="h-6 w-6" />
           Post Car Part
+          {(draftExists || formData.title) && (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                clearDraft();
+                setFormData(initialFormData);
+                setCurrentPhoto(null);
+                toast({
+                  title: "Draft Cleared",
+                  description: "Form has been reset to start fresh.",
+                });
+              }}
+              className="ml-auto"
+            >
+              🗑 Clear Draft
+            </Button>
+          )}
         </CardTitle>
-        <p className="text-gray-600">Add a new car part to your inventory</p>
+        <p className="text-gray-600">
+          Add a new car part to your inventory
+          {draftExists && " (Draft restored)"}
+        </p>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
