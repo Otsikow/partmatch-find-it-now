@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useTranslation } from "react-i18next";
 import NotificationBell from "./NotificationBell";
+import Logo from './Logo';
 
 interface PageHeaderProps {
   title: string;
@@ -79,16 +80,7 @@ const PageHeader = ({
           </Button>
         )}
         
-        {/* Professional PartMatch Logo */}
-        <Link to="/" className="flex items-center gap-2 flex-shrink-0 hover:opacity-80 transition-opacity">
-          <div className="bg-white/20 backdrop-blur-sm rounded-xl p-2 shadow-lg">
-            <img 
-              src="/lovable-uploads/0bb9488b-2f77-4f4c-b8b3-8aa9343b1d18.png" 
-              alt="PartMatch - Car Parts Marketplace" 
-              className="h-6 w-auto sm:h-8 object-contain" 
-            />
-          </div>
-        </Link>
+        <Logo className="h-8 w-auto sm:h-10 object-contain" />
         
         <div className="flex flex-col min-w-0 flex-1 overflow-hidden">
           <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-white leading-tight break-words">
