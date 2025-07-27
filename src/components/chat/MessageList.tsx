@@ -31,8 +31,7 @@ const MessageList = ({ messages, currentUserId }: MessageListProps) => {
   }, [messages]);
 
   return (
-    <div className={`flex-1 overflow-y-auto ${isMobile ? 'px-3 py-4' : 'px-4 py-6'} bg-gradient-to-b from-gray-50 to-white`} 
-         style={{ maxHeight: isMobile ? 'calc(100vh - 180px)' : 'calc(100vh - 200px)' }}>
+    <div className="flex-1 overflow-y-auto px-3 sm:px-4 lg:px-6 py-4 bg-gradient-to-b from-gray-50 to-white">
       {messages.length === 0 ? (
         <div className="flex items-center justify-center h-full text-gray-500">
           <div className="text-center">
@@ -46,7 +45,7 @@ const MessageList = ({ messages, currentUserId }: MessageListProps) => {
           </div>
         </div>
       ) : (
-        <div className={`space-y-3 pb-4 ${isMobile ? 'pb-6' : ''}`}>
+        <div className="space-y-4 pb-4">
           {messages.map((message, index) => {
             const isCurrentUser = message.sender_id === currentUserId;
             const showTimestamp = index === 0 || 
@@ -62,7 +61,7 @@ const MessageList = ({ messages, currentUserId }: MessageListProps) => {
                   </div>
                 )}
                 <div className={`flex ${isCurrentUser ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`relative ${isMobile ? 'max-w-[280px]' : 'max-w-xs sm:max-w-md lg:max-w-lg'}`}>
+                  <div className="relative max-w-[85%] sm:max-w-md lg:max-w-lg xl:max-w-xl">
                     <div
                       className={`px-4 py-3 rounded-2xl shadow-sm transition-all duration-200 ${
                         isCurrentUser
@@ -82,13 +81,13 @@ const MessageList = ({ messages, currentUserId }: MessageListProps) => {
                             />
                           </div>
                           {message.content && message.content !== '📷 Image' && (
-                            <p className={`${isMobile ? 'text-sm' : 'text-sm'} leading-relaxed whitespace-pre-wrap break-words`}>
+                            <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">
                               {message.content}
                             </p>
                           )}
                         </div>
                       ) : (
-                        <p className={`${isMobile ? 'text-sm' : 'text-sm'} leading-relaxed whitespace-pre-wrap break-words`}>
+                        <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">
                           {message.content}
                         </p>
                       )}

@@ -44,10 +44,10 @@ const ChatInterface = ({ chatId, onBack }: ChatInterfaceProps) => {
   }
 
   return (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-full flex flex-col bg-white overflow-hidden">
       <ChatHeader otherUser={otherUser} onBack={onBack} />
 
-      <div className="flex-1 flex flex-col min-h-0">
+      <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
         <MessageList messages={messages} currentUserId={user?.id} />
         <MessageInput 
           chatId={chatId} 

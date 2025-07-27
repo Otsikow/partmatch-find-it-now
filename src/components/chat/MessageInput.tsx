@@ -207,7 +207,7 @@ const MessageInput = ({ chatId, userId, onTyping }: MessageInputProps) => {
   };
 
   return (
-    <div className={`border-t bg-white flex-shrink-0 ${isMobile ? 'p-3 pb-4' : 'p-4'}`}>
+    <div className="border-t bg-white flex-shrink-0 p-3 sm:p-4">
       {/* Image Preview */}
       {imagePreview && (
         <div className="mb-3 relative inline-block">
@@ -232,7 +232,7 @@ const MessageInput = ({ chatId, userId, onTyping }: MessageInputProps) => {
         </div>
       )}
 
-      <div className={`flex items-end gap-3 ${isMobile ? '' : 'max-w-4xl mx-auto'}`}>
+      <div className="flex items-end gap-2 sm:gap-3">
         <div className="flex-1">
           <Textarea
             value={newMessage}
@@ -242,11 +242,7 @@ const MessageInput = ({ chatId, userId, onTyping }: MessageInputProps) => {
             }}
             onKeyPress={handleKeyPress}
             placeholder={selectedImage ? "Add a caption (optional)..." : "Type your message..."}
-            className={`resize-none border-gray-300 focus:border-primary focus:ring-primary/20 rounded-xl transition-all duration-200 ${
-              isMobile 
-                ? 'min-h-[48px] max-h-24 text-base' 
-                : 'min-h-[48px] max-h-32'
-            }`}
+            className="resize-none border-gray-300 focus:border-primary focus:ring-primary/20 rounded-xl transition-all duration-200 min-h-[48px] max-h-24 sm:max-h-32 text-sm sm:text-base"
             disabled={loading || uploading}
             rows={1}
           />
@@ -257,10 +253,8 @@ const MessageInput = ({ chatId, userId, onTyping }: MessageInputProps) => {
           onClick={() => fileInputRef.current?.click()}
           disabled={loading || uploading}
           variant="outline"
-          size={isMobile ? "mobile-default" : "default"}
-          className={`border-gray-300 hover:border-gray-400 transition-all duration-200 ${
-            isMobile ? 'min-w-[48px] min-h-[48px] rounded-xl' : 'px-4 py-3 h-12 rounded-xl'
-          }`}
+          size="default"
+          className="border-gray-300 hover:border-gray-400 transition-all duration-200 min-w-[48px] min-h-[48px] rounded-xl px-3"
         >
           <ImageIcon className="h-5 w-5 text-gray-600" />
         </Button>
@@ -268,10 +262,8 @@ const MessageInput = ({ chatId, userId, onTyping }: MessageInputProps) => {
         <Button
           onClick={sendMessage}
           disabled={(!newMessage.trim() && !selectedImage) || loading || uploading}
-          size={isMobile ? "mobile-default" : "default"}
-          className={`bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-md transition-all duration-200 active:scale-95 ${
-            isMobile ? 'min-w-[48px] min-h-[48px] rounded-xl' : 'px-6 py-3 h-12 rounded-xl'
-          }`}
+          size="default"
+          className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-md transition-all duration-200 active:scale-95 min-w-[48px] min-h-[48px] rounded-xl px-4"
         >
           {loading || uploading ? (
             <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
