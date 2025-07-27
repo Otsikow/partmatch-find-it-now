@@ -54,10 +54,10 @@ const AuthTypeSelector = () => {
               />
             </div>
             <div className="min-w-0 flex-1">
-              <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-white leading-tight break-words">
+              <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-white leading-normal">
                 Choose Your Account Type
               </h1>
-              <p className="text-sm sm:text-base text-white/90 leading-tight break-words mt-1">
+              <p className="text-sm sm:text-base text-white/90 leading-normal mt-1">
                 Select how you want to join our marketplace
               </p>
             </div>
