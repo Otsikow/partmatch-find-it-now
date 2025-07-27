@@ -11,15 +11,15 @@ export const BuyerDashboardContent = () => {
     <div className="min-h-screen bg-background">
       <BuyerDashboardStats />
       
-      {/* Prominent Action Buttons */}
-      <div className="bg-background border-t border-border px-4 py-6 sm:px-6">
-        <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+      {/* Optimized Action Buttons - Fully Responsive */}
+      <div className="bg-background border-t border-border px-3 py-4 sm:px-6 sm:py-6">
+        <div className="flex flex-col xs:flex-row gap-3 sm:gap-4 max-w-2xl mx-auto">
           <Link to="/request-part" className="flex-1">
             <Button 
               size="lg" 
-              className="w-full bg-gradient-to-r from-primary to-primary-foreground hover:from-primary/90 hover:to-primary-foreground/90 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              className="w-full h-12 sm:h-14 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 text-sm sm:text-base font-medium"
             >
-              <Plus className="h-5 w-5 mr-2" />
+              <Plus className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
               Request Part
             </Button>
           </Link>
@@ -28,16 +28,17 @@ export const BuyerDashboardContent = () => {
             <Button 
               size="lg" 
               variant="outline" 
-              className="w-full border-2 border-primary text-primary hover:bg-primary hover:text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              className="w-full h-12 sm:h-14 border-2 border-primary/60 text-primary hover:bg-primary hover:text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 text-sm sm:text-base font-medium"
             >
-              <Search className="h-5 w-5 mr-2" />
+              <Search className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
               Browse Parts
             </Button>
           </Link>
         </div>
       </div>
       
-      <div className="bg-background border-t border-border">
+      {/* Tabs Container - Optimized for Mobile */}
+      <div className="bg-background">
         <BuyerDashboardTabs />
       </div>
     </div>
