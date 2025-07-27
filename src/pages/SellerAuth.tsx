@@ -58,7 +58,7 @@ const SellerAuth = () => {
           } else if (redirect) {
             navigate(redirect);
           } else {
-            navigate("/supplier");
+            navigate("/seller-dashboard");
           }
         }
       } else {
@@ -101,7 +101,7 @@ const SellerAuth = () => {
     } else if (redirect) {
       navigate(redirect);
     } else {
-      navigate("/supplier");
+      navigate("/seller-dashboard");
     }
   };
 
