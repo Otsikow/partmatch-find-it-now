@@ -82,6 +82,7 @@ export const BuyerDashboardHeader = () => {
             </Button>
             {/* Logo */}
             <Logo 
+              disableDefaultLink={true}
               className="h-8 w-auto sm:h-10 object-contain hover:opacity-80 transition-opacity cursor-pointer" 
               onClick={() => {
                 console.log('🏠 Logo clicked, navigating to home');
