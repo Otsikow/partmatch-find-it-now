@@ -1,6 +1,6 @@
 import { Bell, LogIn, LogOut, User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { 
   DropdownMenu, 
@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
+import { supabase } from "@/integrations/supabase/client";
 import NotificationBell from "./NotificationBell";
 import LanguageSelector from "./LanguageSelector";
 import CountryCurrencySelector from "./CountryCurrencySelector";
@@ -19,6 +20,7 @@ const MobileHeader = () => {
   const { user, signOut, userType } = useAuth();
   const { t } = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
   const isHomePage = location.pathname === '/';
 
   const dashboardUrl =
@@ -31,10 +33,10 @@ const MobileHeader = () => {
   const handleSignOut = async () => {
     console.log('🚪 MobileHeader: handleSignOut clicked');
     try {
-      console.log('🚪 MobileHeader: Calling signOut from AuthContext');
-      await signOut();
-      console.log('🚪 MobileHeader: signOut completed');
-      // AuthContext already handles redirection and toast messages
+      console.log('🚪 MobileHeader: Calling supabase.auth.signOut directly');
+      await supabase.auth.signOut();
+      console.log('🚪 MobileHeader: signOut completed, navigating to /auth');
+      navigate('/auth');
     } catch (error) {
       console.error('🚪 MobileHeader: Sign out error:', error);
     }
