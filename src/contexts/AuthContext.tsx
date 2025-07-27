@@ -7,6 +7,7 @@ import {
   logAdminSecurityEvent,
 } from "@/utils/adminSecurity";
 
+
 interface AuthContextType {
   user: User | null;
   session: Session | null;
@@ -680,7 +681,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
       } else {
         console.log("AuthProvider: Sign out successful");
+        toast({
+          title: "Signed Out",
+          description: "You have been signed out successfully.",
+        });
       }
+
+      // Redirect to auth page after successful sign out
+      window.location.href = "/auth";
     } catch (error) {
       console.error("AuthProvider: Sign out unexpected error:", error);
 
@@ -698,6 +706,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         title: "Signed Out",
         description: "You have been signed out.",
       });
+
+      // Redirect to auth page even on error
+      window.location.href = "/auth";
     }
   };
 
