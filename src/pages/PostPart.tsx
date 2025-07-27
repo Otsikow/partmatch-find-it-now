@@ -375,8 +375,13 @@ const PostPart = () => {
     e.preventDefault();
 
     if (!user) {
-      // Save form data and redirect to seller login
-      localStorage.setItem('draftPart', JSON.stringify(formData));
+      // Save current form data to guest draft before redirecting to login
+      const guestDraftKey = "listing-draft-post-part-guest";
+      localStorage.setItem(guestDraftKey, JSON.stringify(formData));
+      toast({
+        title: "Draft Saved",
+        description: "Your listing has been saved. Sign in to continue posting.",
+      });
       navigate('/seller-auth?redirect=/post-part');
       return;
     }
@@ -425,9 +430,28 @@ const PostPart = () => {
             <CardTitle className="text-2xl font-bold text-primary flex items-center gap-2">
               <Package className="h-6 w-6" />
               Post Your Car Part
+              {(draftExists || formData.title) && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    clearDraft();
+                    setFormData(initialFormData);
+                    toast({
+                      title: "Draft Cleared",
+                      description: "Form has been reset to start fresh.",
+                    });
+                  }}
+                  className="ml-auto"
+                >
+                  🗑 Clear Draft
+                </Button>
+              )}
             </CardTitle>
             <p className="text-muted-foreground">
               Fill in the details below to list your car part for sale.
+              {draftExists && " (Draft restored)"}
             </p>
           </CardHeader>
           <CardContent>
