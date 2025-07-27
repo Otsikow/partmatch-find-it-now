@@ -18,9 +18,9 @@ const AuthHeader = ({ isLogin }: AuthHeaderProps) => {
       <div className="flex items-center gap-2 sm:gap-3">
         <Link to="/" className="hover:opacity-80 transition-opacity">
           <img 
-            src="/lovable-uploads/02ae2c2c-72fd-4678-8cef-3158e8e313f0.png" 
+            src="/lovable-uploads/7e314d66-25f8-4630-bc86-a9b606c241cb.png" 
             alt="PartMatch Logo" 
-            className="h-6 w-auto sm:h-8 rounded-lg bg-primary/10 p-1.5 shadow-md backdrop-blur-sm border border-primary/20"
+            className="h-6 w-auto sm:h-8"
           />
         </Link>
         <h1 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">

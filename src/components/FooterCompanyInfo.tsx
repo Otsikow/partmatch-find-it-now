@@ -5,9 +5,9 @@ const FooterCompanyInfo = () => {
   return <div className="space-y-4">
       <Link to="/" className="flex items-center space-x-3">
         <img 
-          src="/lovable-uploads/02ae2c2c-72fd-4678-8cef-3158e8e313f0.png" 
+          src="/lovable-uploads/7e314d66-25f8-4630-bc86-a9b606c241cb.png" 
           alt="PartMatch - Car Parts Marketplace" 
-          className="h-10 w-auto rounded-xl bg-primary/10 p-2 shadow-lg backdrop-blur-sm border border-primary/20"
+          className="h-10 w-auto"
         />
         <span className="text-xl font-playfair font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
           PartMatch

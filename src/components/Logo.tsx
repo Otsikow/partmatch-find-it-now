@@ -12,7 +12,7 @@ interface LogoProps {
 
 const Logo: React.FC<LogoProps> = ({ className, isHero, onClick, disableDefaultLink }) => {
   const logoClasses = cn(
-    'w-auto object-contain rounded-xl bg-primary/10 p-2 shadow-lg backdrop-blur-sm border border-primary/20',
+    'w-auto object-contain',
     {
       'h-48 sm:h-56 md:h-64 lg:h-72': isHero,
       'h-8 sm:h-10 lg:h-12': !isHero,
@@ -20,7 +20,7 @@ const Logo: React.FC<LogoProps> = ({ className, isHero, onClick, disableDefaultL
     className
   );
 
-  const logoSrc = "/lovable-uploads/02ae2c2c-72fd-4678-8cef-3158e8e313f0.png";
+  const logoSrc = isHero ? "/lovable-uploads/02ae2c2c-72fd-4678-8cef-3158e8e313f0.png" : "/lovable-uploads/7e314d66-25f8-4630-bc86-a9b606c241cb.png";
 
   if (disableDefaultLink) {
     return (
