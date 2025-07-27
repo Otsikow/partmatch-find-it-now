@@ -60,19 +60,25 @@ const MobileHeader = () => {
             </div>
             
             {/* Direct Sign Out Button */}
-            <Button
-              onClick={(e) => {
-                console.log('🚪 Direct SignOut: Button clicked!');
-                e.preventDefault();
-                e.stopPropagation();
+            <button
+              onClick={() => {
+                console.log('🚪🚪🚪 DIRECT BUTTON CLICKED!!! 🚪🚪🚪');
+                alert('Sign out button clicked!');
                 handleSignOut();
               }}
-              variant="ghost"
-              size="icon"
-              className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center touch-manipulation active:scale-95 transition-all duration-200 hover:bg-white/30 hover:scale-105 shadow-lg border border-white/30"
+              style={{
+                width: '40px',
+                height: '40px',
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                borderRadius: '50%',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                color: 'white',
+                cursor: 'pointer',
+                zIndex: 9999
+              }}
             >
-              <LogOut className="h-5 w-5 text-white" />
-            </Button>
+              →
+            </button>
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
