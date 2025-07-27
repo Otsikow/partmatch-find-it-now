@@ -76,6 +76,7 @@ function App() {
                     <Route path="/auth" element={<AuthTypeSelector />} />
                     <Route path="/buyer-auth" element={<BuyerAuth />} />
                     <Route path="/seller-auth" element={<SellerAuth />} />
+                    <Route path="/supplier" element={<SellerAuth />} />
                     <Route path="/admin-auth" element={<AdminAuth />} />
                     <Route path="/guest-dashboard" element={<GuestDashboard />} />
                     <Route path="/request-part" element={<RequestPart />} />
