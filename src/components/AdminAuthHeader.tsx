@@ -19,13 +19,13 @@ const AdminAuthHeader = ({ isPasswordReset, showPasswordReset }: AdminAuthHeader
           </Button>
         </Link>
         <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-          <div className="bg-white/20 backdrop-blur-sm rounded-xl p-2 shadow-lg">
+          <Link to="/" className="bg-white/20 backdrop-blur-sm rounded-xl p-2 shadow-lg hover:bg-white/30 transition-colors">
             <img 
               src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
               alt="PartMatch Logo" 
               className="h-6 w-auto sm:h-8 object-contain"
             />
-          </div>
+          </Link>
           <div className="min-w-0 flex-1">
             <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-white leading-tight break-words">
               Admin {isPasswordReset ? 'Password Reset' : showPasswordReset ? 'Password Reset' : 'Sign In'}

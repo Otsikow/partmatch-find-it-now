@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -404,13 +404,13 @@ const PostPart = () => {
               >
                 <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
               </Button>
-              <div className="bg-white/20 backdrop-blur-sm rounded-xl p-2 shadow-lg">
+              <Link to="/" className="bg-white/20 backdrop-blur-sm rounded-xl p-2 shadow-lg hover:bg-white/30 transition-colors">
                 <img 
                   src="/lovable-uploads/bcd13b92-5d2a-4796-b9d3-29ff8bed43d9.png" 
                   alt="PartMatch Logo" 
                   className="h-6 w-auto sm:h-8 object-contain"
                 />
-              </div>
+              </Link>
               <div>
                 <h1 className="text-lg sm:text-xl lg:text-2xl font-bold">
                   Post Car Part
