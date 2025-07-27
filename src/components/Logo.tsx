@@ -6,9 +6,11 @@ import { useTheme } from '@/contexts/ThemeContext';
 interface LogoProps {
   className?: string;
   isHero?: boolean;
+  onClick?: () => void;
+  disableDefaultLink?: boolean;
 }
 
-const Logo: React.FC<LogoProps> = ({ className, isHero }) => {
+const Logo: React.FC<LogoProps> = ({ className, isHero, onClick, disableDefaultLink }) => {
   const { theme } = useTheme();
   const logoClasses = cn(
     'w-auto object-contain',
@@ -26,8 +28,20 @@ const Logo: React.FC<LogoProps> = ({ className, isHero }) => {
       ? "/lovable-uploads/0bb9488b-2f77-4f4c-b8b3-8aa9343b1d18.png"
       : "/lovable-uploads/partmatch-hero-logo.png");
 
+  if (disableDefaultLink) {
+    return (
+      <img
+        src={logoSrc}
+        alt="PartMatch - Car Parts Marketplace"
+        className={logoClasses}
+        onClick={onClick}
+        style={{ cursor: onClick ? 'pointer' : 'default' }}
+      />
+    );
+  }
+
   return (
-    <Link to="/">
+    <Link to="/" onClick={onClick}>
       <img
         src={logoSrc}
         alt="PartMatch - Car Parts Marketplace"

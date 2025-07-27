@@ -81,13 +81,13 @@ export const BuyerDashboardHeader = () => {
               <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
             </Button>
             {/* Logo */}
-            <Link 
-              to="/" 
-              state={{ explicitHomeNavigation: true }}
-              className="flex items-center gap-2 flex-shrink-0 hover:opacity-80 transition-opacity"
-            >
-              <Logo className="h-8 w-auto sm:h-10 object-contain" />
-            </Link>
+            <Logo 
+              className="h-8 w-auto sm:h-10 object-contain hover:opacity-80 transition-opacity cursor-pointer" 
+              onClick={() => {
+                console.log('🏠 Logo clicked, navigating to home');
+                navigate('/', { state: { explicitHomeNavigation: true } });
+              }}
+            />
             
             <div className="min-w-0 flex-1">
               <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-white leading-tight break-words">
