@@ -42,15 +42,10 @@ export const useSellerData = () => {
   const [myOffers, setMyOffers] = useState<Offer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const hasFetchedRef = useRef(false);
-  useEffect(() => {
-    if (user && !hasFetchedRef.current) {
-      hasFetchedRef.current = true;
-      fetchData();
-    } else if (!user) {
-      setLoading(false);
-    }
-  }, [user]);
+  
+  // Add basic caching to avoid unnecessary re-fetches
+  const lastFetchRef = useRef<number>(0);
+  const CACHE_DURATION = 30000; // 30 seconds cache
 
   const fetchRequests = async () => {
     try {
@@ -115,9 +110,17 @@ export const useSellerData = () => {
 
   const fetchData = async () => {
     try {
+      // Basic caching - avoid fetching if recently fetched
+      const now = Date.now();
+      if (now - lastFetchRef.current < CACHE_DURATION) {
+        console.log("useSellerData: Using cached data, skipping fetch");
+        return;
+      }
+
       setLoading(true);
       setError(null);
       console.log("useSellerData: Starting data fetch");
+      lastFetchRef.current = now;
 
       // Fetch both requests and offers in parallel
       const [requestsResult, offersResult] = await Promise.allSettled([
@@ -155,30 +158,15 @@ export const useSellerData = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (user) {
-  //     console.log('useSellerData: User found, fetching data for:', user.id);
-  //     fetchData();
-  //   } else {
-  //     console.log('useSellerData: No user found');
-  //     setLoading(false);
-  //   }
-  // }, [user]);
-
   useEffect(() => {
-    // Avoid calling fetchData multiple times if user hasn’t changed
-    let hasFetched = false;
-
-    if (user && !hasFetched) {
-      hasFetched = true;
+    if (user) {
       console.log("useSellerData: User found, fetching data for:", user.id);
       fetchData();
-    } else if (!user) {
+    } else {
       console.log("useSellerData: No user found");
       setLoading(false);
     }
-    // Only run once on initial mount (empty dependencies)
-  }, []);
+  }, [user?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Set up real-time subscription for offer updates
   useEffect(() => {
