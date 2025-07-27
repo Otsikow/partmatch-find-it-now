@@ -62,7 +62,10 @@ const NotificationDropdown = () => {
   };
 
   const handleClearAll = async () => {
+    console.log('🔔 NotificationDropdown: Clear All button clicked');
+    console.log('🔔 Current notifications count:', notifications.length);
     await clearAll();
+    console.log('🔔 Clear all completed, closing dropdown');
     setIsOpen(false);
   };
 
