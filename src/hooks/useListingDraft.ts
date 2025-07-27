@@ -24,8 +24,14 @@ const useListingDraft = <T,>(formId: string, initialData: T) => {
       localStorage.setItem(draftKey, guestDraft);
       setDraftExists(true);
     } else if (userDraft) {
+      // Load existing user draft
+      const parsedUserDraft = JSON.parse(userDraft);
+      setFormData(parsedUserDraft);
       setDraftExists(true);
     } else if (guestDraft) {
+      // Load existing guest draft
+      const parsedGuestDraft = JSON.parse(guestDraft);
+      setFormData(parsedGuestDraft);
       setDraftExists(true);
     }
   }, [draftKey, guestDraftKey, user]);
@@ -49,12 +55,8 @@ const useListingDraft = <T,>(formId: string, initialData: T) => {
 
   const saveDraft = useCallback(
     (data: T) => {
-      if (saveTimeout.current) {
-        clearTimeout(saveTimeout.current);
-      }
-      saveTimeout.current = setTimeout(() => {
-        localStorage.setItem(draftKey, JSON.stringify(data));
-      }, 5000);
+      // Save immediately instead of with delay
+      localStorage.setItem(draftKey, JSON.stringify(data));
     },
     [draftKey]
   );
