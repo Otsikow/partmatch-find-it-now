@@ -108,9 +108,9 @@ const AuthTypeSelector = () => {
                 </p>
               </div>
               <div className="mt-auto">
-                <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight mb-6">
-                  <span className="hidden sm:inline">Sign In / Register as Buyer</span>
-                  <span className="sm:hidden">Buyer Login</span>
+                <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm leading-tight mb-6">
+                  <span className="hidden md:inline">Sign In / Register as Buyer</span>
+                  <span className="md:hidden">Buyer Sign In</span>
                 </Button>
                 <div className="bg-primary/10 rounded-lg p-4 text-sm text-primary font-medium text-left">
                   ✓ Browse available parts<br/>
@@ -137,9 +137,9 @@ const AuthTypeSelector = () => {
                 </p>
               </div>
               <div className="mt-auto">
-                <Button className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight mb-6">
-                  <span className="hidden sm:inline">Sign In / Register as Seller</span>
-                  <span className="sm:hidden">Seller Login</span>
+                <Button className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm leading-tight mb-6">
+                  <span className="hidden md:inline">Sign In / Register as Seller</span>
+                  <span className="md:hidden">Seller Sign In</span>
                 </Button>
                 <div className="bg-destructive/10 rounded-lg p-4 text-sm text-destructive font-medium text-left">
                   ✓ List your inventory<br/>
