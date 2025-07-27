@@ -55,7 +55,7 @@ export const useMyParts = () => {
         `
         )
         .eq("supplier_id", user.id)
-        .in("status", ["available", "pending"])
+        .in("status", ["available", "pending", "hidden"])
         .order("created_at", { ascending: false });
 
       console.log("=== useMyParts Debug ===");

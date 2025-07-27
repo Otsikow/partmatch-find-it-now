@@ -78,9 +78,14 @@ const PartCard = ({
             <Badge>
               {part.condition}
             </Badge>
-            <Badge>
-              {part.status}
+            <Badge variant={part.status === 'hidden' ? 'secondary' : 'default'}>
+              {part.status === 'hidden' ? 'Hidden from public' : part.status}
             </Badge>
+            {part.status === 'hidden' && (
+              <Badge variant="outline" className="text-yellow-600 border-yellow-600">
+                Not visible to buyers
+              </Badge>
+            )}
           </div>
         </div>
         <div className="text-right ml-4">
