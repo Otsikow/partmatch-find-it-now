@@ -15,6 +15,7 @@ import NotificationBell from "./NotificationBell";
 import LanguageSelector from "./LanguageSelector";
 import CountryCurrencySelector from "./CountryCurrencySelector";
 import ThemeToggle from "./ThemeToggle";
+import Logo from "./Logo";
 const MobileHeader = () => {
   const { user, signOut, userType } = useAuth();
   const { t } = useTranslation();
@@ -49,6 +50,7 @@ const MobileHeader = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/5 to-indigo-600/10"></div>
       <div className="relative flex items-center justify-between px-4 py-3 min-h-[64px] safe-area-pt">
         <div className="flex items-center min-w-0 flex-1">
+          <Logo />
         </div>
         
         {user && (
