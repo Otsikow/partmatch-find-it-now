@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -10,6 +10,13 @@ interface LogoProps {
 
 const Logo: React.FC<LogoProps> = ({ className, isHero }) => {
   const { theme } = useTheme();
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
+
+  if (isHomePage) {
+    return null;
+  }
+
   const logoClasses = cn(
     'w-auto object-contain',
     {
