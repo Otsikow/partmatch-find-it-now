@@ -203,8 +203,13 @@ const MobileHomeContent = () => {
                           target.style.display = 'none';
                           const parent = target.parentElement;
                           if (parent) {
-                            parent.classList.add('bg-blue-100', 'flex', 'items-center', 'justify-center');
-                            parent.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue-600"><path d="M20 7h-9"></path><path d="M14 17H5"></path><circle cx="17" cy="17" r="3"></circle><circle cx="7" cy="7" r="3"></circle></svg>';
+                            parent.classList.add('bg-blue-100', 'dark:bg-blue-900', 'flex', 'items-center', 'justify-center');
+                            // Use Car icon for Car Accessories category
+                            if (category.name === "Car Accessories") {
+                              parent.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue-600 dark:text-blue-400"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18.4 10c-.4-.8-1.2-1.3-2.1-1.3H7.7c-.9 0-1.7.5-2.1 1.3L3.5 11.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2m0 0a2 2 0 1 0 4 0m10 0a2 2 0 1 0 4 0m-7-8v-2a2 2 0 0 0-2-2H9a2 2 0 0 0-2 2v2h7z"/></svg>';
+                            } else {
+                              parent.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue-600 dark:text-blue-400"><path d="M20 7h-9"></path><path d="M14 17H5"></path><circle cx="17" cy="17" r="3"></circle><circle cx="7" cy="7" r="3"></circle></svg>';
+                            }
                           }
                         }}
                       />
