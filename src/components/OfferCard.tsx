@@ -14,7 +14,7 @@ interface Offer {
   status: string;
   created_at: string;
   transaction_completed?: boolean;
-  supplier?: {
+  seller?: {
     id?: string;
     first_name?: string;
     last_name?: string;
@@ -56,12 +56,12 @@ const OfferCard = ({ offer, onContactUnlock, showActions = true, currentUserId }
     }
   };
 
-  const supplierName = offer.supplier 
-    ? `${offer.supplier.first_name || ''} ${offer.supplier.last_name || ''}`.trim() || 'Supplier'
-    : 'Supplier';
+  const sellerName = offer.seller 
+    ? `${offer.seller.first_name || ''} ${offer.seller.last_name || ''}`.trim() || 'Seller'
+    : 'Seller';
 
-  const canShowChat = offer.supplier?.id && currentUserId && offer.supplier.id !== currentUserId;
-  const canRate = offer.transaction_completed && offer.supplier?.id;
+  const canShowChat = offer.seller?.id && currentUserId && offer.seller.id !== currentUserId;
+  const canRate = offer.transaction_completed && offer.seller?.id;
 
   return (
     <>
@@ -69,7 +69,7 @@ const OfferCard = ({ offer, onContactUnlock, showActions = true, currentUserId }
         <CardHeader className="pb-3">
           <div className="flex justify-between items-start">
             <CardTitle className="text-lg font-semibold">
-              Offer from {supplierName}
+              Offer from {sellerName}
             </CardTitle>
             <Badge className={`${getStatusColor(offer.status)} border`}>
               {offer.status.charAt(0).toUpperCase() + offer.status.slice(1)}
@@ -115,20 +115,20 @@ const OfferCard = ({ offer, onContactUnlock, showActions = true, currentUserId }
             </div>
           )}
 
-          {/* Supplier Info */}
-          {offer.supplier && (
+          {/* Seller Info */}
+          {offer.seller && (
             <div className="flex items-center justify-between pt-2 border-t">
               <div className="flex items-center gap-2">
                 <div>
-                  <p className="font-medium text-sm">{supplierName}</p>
+                  <p className="font-medium text-sm">{sellerName}</p>
                   <div className="flex items-center gap-1 text-xs text-gray-500">
-                    {offer.supplier.location && (
+                    {offer.seller.location && (
                       <>
                         <MapPin className="h-3 w-3" />
-                        <span>{offer.supplier.location}</span>
+                        <span>{offer.seller.location}</span>
                       </>
                     )}
-                    {offer.supplier.is_verified && (
+                    {offer.seller.is_verified && (
                       <Badge variant="secondary" className="text-xs ml-2">
                         Verified
                       </Badge>
@@ -152,7 +152,7 @@ const OfferCard = ({ offer, onContactUnlock, showActions = true, currentUserId }
             <div className="flex gap-2 pt-3 border-t">
               {canShowChat && (
                 <ChatButton
-                  sellerId={offer.supplier!.id!}
+                  sellerId={offer.seller!.id!}
                   size="sm"
                   variant="outline"
                   className="flex-1 border-purple-600 text-purple-700 hover:bg-purple-50"
@@ -170,7 +170,7 @@ const OfferCard = ({ offer, onContactUnlock, showActions = true, currentUserId }
                 </Button>
               )}
               
-              {onContactUnlock && offer.supplier?.phone && (
+              {onContactUnlock && offer.seller?.phone && (
                 <Button
                   size="sm"
                   onClick={() => onContactUnlock(offer.id)}
@@ -180,10 +180,10 @@ const OfferCard = ({ offer, onContactUnlock, showActions = true, currentUserId }
                 </Button>
               )}
               
-              {offer.supplier?.phone && !onContactUnlock && (
+              {offer.seller?.phone && !onContactUnlock && (
                 <Button
                   size="sm"
-                  onClick={() => window.open(`tel:${offer.supplier!.phone}`, '_self')}
+                  onClick={() => window.open(`tel:${offer.seller!.phone}`, '_self')}
                   className="flex-1"
                 >
                   Call Now
@@ -195,13 +195,13 @@ const OfferCard = ({ offer, onContactUnlock, showActions = true, currentUserId }
       </Card>
 
       {/* Rating Modal */}
-      {showRatingModal && offer.supplier?.id && (
+      {showRatingModal && offer.seller?.id && (
         <RatingModal
           isOpen={showRatingModal}
           onClose={() => setShowRatingModal(false)}
           offerId={offer.id}
-          sellerId={offer.supplier.id}
-          sellerName={supplierName}
+          sellerId={offer.seller.id}
+          sellerName={sellerName}
           onRatingSubmitted={() => {
             setShowRatingModal(false);
             // Optionally refresh data or show success message

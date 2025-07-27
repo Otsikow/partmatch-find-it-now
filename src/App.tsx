@@ -11,6 +11,7 @@ import PartMatchHelpBot from "@/components/PartMatchHelpBot";
 import { LocationProvider } from "@/contexts/LocationContext";
 import { useGeolocation } from "./hooks/useGeolocation";
 import { useIsMobile } from "./hooks/use-mobile";
+import { useTrackPresence } from "./hooks/useUserPresence";
 import MobileBottomTabs from "./components/MobileBottomTabs";
 
 import Index from "./pages/Index";
@@ -57,6 +58,8 @@ const queryClient = new QueryClient();
 function App() {
   // Enable geolocation detection globally
   useGeolocation();
+  // Track user presence across the app
+  useTrackPresence();
   const isMobile = useIsMobile();
   return (
     <QueryClientProvider client={queryClient}>
@@ -155,7 +158,7 @@ function App() {
                       }
                     />
                     <Route
-                      path="/supplier"
+                      path="/seller"
                       element={
                         <SellerProtectedRoute>
                           <SellerDashboard />

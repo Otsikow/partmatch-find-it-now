@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Phone, MoreVertical, ArrowLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useUserPresence } from '@/hooks/useUserPresence';
 
 interface ChatUser {
   id: string;
@@ -20,8 +21,14 @@ interface ChatHeaderProps {
 }
 
 const ChatHeader = ({ otherUser, onBack }: ChatHeaderProps) => {
+  const isOnline = useUserPresence(otherUser?.id);
+  
   const getInitials = (firstName?: string, lastName?: string) => {
     return `${firstName?.[0] || ''}${lastName?.[0] || ''}`.toUpperCase() || 'U';
+  };
+
+  const getUserTypeDisplay = (userType: string) => {
+    return userType === 'supplier' ? 'Seller' : userType.charAt(0).toUpperCase() + userType.slice(1);
   };
 
   return (
@@ -54,7 +61,7 @@ const ChatHeader = ({ otherUser, onBack }: ChatHeaderProps) => {
             )}
           </div>
           <p className="text-sm text-gray-500 capitalize">
-            {otherUser?.user_type} • Online
+            {getUserTypeDisplay(otherUser?.user_type)} • {isOnline ? 'Online' : 'Offline'}
           </p>
         </div>
       </div>

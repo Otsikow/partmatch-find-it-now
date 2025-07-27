@@ -112,7 +112,7 @@ const DashboardRouter = () => {
     switch (resolvedUserType) {
       case 'supplier':
         if (!currentPath.includes("seller-dashboard")) {
-          console.log("DashboardRouter: Redirecting supplier to /seller-dashboard");
+          console.log("DashboardRouter: Redirecting seller to /seller-dashboard");
           navigate("/seller-dashboard", { replace: true });
         }
         break;
