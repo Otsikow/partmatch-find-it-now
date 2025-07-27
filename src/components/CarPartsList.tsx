@@ -1,31 +1,6 @@
 import React from 'react';
 import CarPartCardWithChat from './CarPartCardWithChat';
-
-interface CarPart {
-  id: string;
-  title: string;
-  make: string;
-  model: string;
-  year: number;
-  part_type: string;
-  condition: string;
-  price: number;
-  currency: string;
-  description?: string;
-  images?: string[];
-  address?: string;
-  created_at: string;
-  supplier_id: string;
-  profiles?: {
-    first_name?: string;
-    last_name?: string;
-    phone?: string;
-    is_verified?: boolean;
-    rating?: number;
-    total_ratings?: number;
-    profile_photo_url?: string;
-  };
-}
+import { CarPart } from '@/types/CarPart';
 
 interface CarPartsListProps {
   parts: CarPart[];

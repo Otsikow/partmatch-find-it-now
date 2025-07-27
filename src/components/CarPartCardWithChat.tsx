@@ -21,34 +21,8 @@ import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import ImageGallery from "./ImageGallery";
-
-interface CarPart {
-  id: string;
-  title: string;
-  make: string;
-  model: string;
-  year: number;
-  part_type: string;
-  condition: string;
-  price: number;
-  currency: string;
-  description?: string;
-  images?: string[];
-  address?: string;
-  latitude?: number;
-  longitude?: number;
-  created_at: string;
-  supplier_id: string;
-  profiles?: {
-    first_name?: string;
-    last_name?: string;
-    phone?: string;
-    is_verified?: boolean;
-    rating?: number;
-    total_ratings?: number;
-    profile_photo_url?: string;
-  };
-}
+import PriceComparisonSection from "./PriceComparisonSection";
+import { CarPart } from "@/types/CarPart";
 
 interface CarPartCardWithChatProps {
   part: CarPart;
@@ -447,6 +421,11 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
                 </p>
               </div>
             )}
+
+            {/* Price Comparison Section */}
+            <div className="border-t pt-4">
+              <PriceComparisonSection currentPart={part} />
+            </div>
 
             {/* Action Buttons */}
             <div className={`flex ${isMobile ? 'flex-col' : 'flex-col sm:flex-row'} gap-3 pt-4 border-t`}>

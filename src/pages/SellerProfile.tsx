@@ -10,6 +10,7 @@ import CarPartCardWithChat from '@/components/CarPartCardWithChat';
 import FollowSellerButton from '@/components/FollowSellerButton';
 import VerifiedBadge from '@/components/VerifiedBadge';
 import { toast } from '@/hooks/use-toast';
+import { CarPart } from '@/types/CarPart';
 
 interface SellerProfile {
   id: string;
@@ -24,33 +25,6 @@ interface SellerProfile {
   created_at: string;
 }
 
-interface CarPart {
-  id: string;
-  title: string;
-  make: string;
-  model: string;
-  year: number;
-  part_type: string;
-  condition: string;
-  price: number;
-  currency: string;
-  description?: string;
-  images?: string[];
-  address?: string;
-  latitude?: number;
-  longitude?: number;
-  created_at: string;
-  supplier_id: string;
-  profiles?: {
-    first_name?: string;
-    last_name?: string;
-    phone?: string;
-    is_verified?: boolean;
-    rating?: number;
-    total_ratings?: number;
-    profile_photo_url?: string;
-  };
-}
 
 const SellerProfile = () => {
   const { sellerId } = useParams<{ sellerId: string }>();
@@ -112,7 +86,11 @@ const SellerProfile = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setParts(data || []);
+      setParts((data || []).map(part => ({
+        ...part,
+        condition: part.condition as 'New' | 'Used' | 'Refurbished',
+        status: part.status as 'available' | 'sold' | 'hidden' | 'pending'
+      })));
     } catch (error) {
       console.error('Error fetching seller parts:', error);
       toast({
