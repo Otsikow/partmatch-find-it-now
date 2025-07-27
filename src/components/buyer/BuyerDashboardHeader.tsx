@@ -55,7 +55,7 @@ export const BuyerDashboardHeader = () => {
   const handleSignOut = async () => {
     try {
       await signOut();
-      navigate('/');
+      // AuthContext already handles redirection to /auth
     } catch (error) {
       console.error('Sign out error:', error);
     }
