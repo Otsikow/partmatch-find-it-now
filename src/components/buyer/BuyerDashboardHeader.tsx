@@ -74,7 +74,7 @@ export const BuyerDashboardHeader = () => {
                 e.preventDefault();
                 e.stopPropagation();
                 console.log('🔙 Back button clicked, navigating to home');
-                navigate('/');
+                navigate('/', { state: { explicitHomeNavigation: true } });
               }}
               className="p-2 hover:bg-white/20 rounded-full text-white hover:text-white flex-shrink-0"
             >
