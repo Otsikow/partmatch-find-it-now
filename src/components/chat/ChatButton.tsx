@@ -77,8 +77,25 @@ const ChatButton = ({
       console.log('Starting chat with user:', otherUserId, 'for part:', partId, 'offer:', offerId);
       
       // Determine buyer and seller based on who is initiating the chat
-      const chatBuyerId = buyerId ? user.id : (sellerId ? otherUserId : user.id);
-      const chatSellerId = sellerId ? (sellerId === user.id ? user.id : sellerId) : (buyerId ? buyerId : otherUserId);
+      // If sellerId is provided, current user is buyer, otherUser is seller
+      // If buyerId is provided, current user is seller, otherUser is buyer
+      let chatBuyerId, chatSellerId;
+      
+      if (sellerId) {
+        // Current user wants to chat with a seller (current user is buyer)
+        chatBuyerId = user.id;
+        chatSellerId = sellerId;
+      } else if (buyerId) {
+        // Current user is seller, wants to chat with a buyer
+        chatBuyerId = buyerId;
+        chatSellerId = user.id;
+      } else {
+        // Fallback: current user is buyer, other user is seller
+        chatBuyerId = user.id;
+        chatSellerId = otherUserId;
+      }
+      
+      console.log('Chat participants:', { chatBuyerId, chatSellerId, currentUser: user.id });
       
       // Search for existing chat
       let chatQuery = supabase
