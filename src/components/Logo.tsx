@@ -20,7 +20,7 @@ const Logo: React.FC<LogoProps> = ({ className, isHero, onClick, disableDefaultL
     className
   );
 
-  const logoSrc = "/lovable-uploads/02ae2c2c-72fd-4678-8cef-3158e8e313f0.png";
+  const logoSrc = isHero ? "/lovable-uploads/02ae2c2c-72fd-4678-8cef-3158e8e313f0.png" : "/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png";
 
   if (disableDefaultLink) {
     return (

@@ -16,9 +16,9 @@ const NavigationLogo = ({ onLinkClick }: NavigationLogoProps) => {
       onClick={onLinkClick}
     >
       <img 
-        src="/lovable-uploads/02ae2c2c-72fd-4678-8cef-3158e8e313f0.png" 
+        src="/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png" 
         alt="PartMatch - Car Parts Marketplace" 
-        className="h-10 sm:h-12 lg:h-14 w-auto flex-shrink-0 rounded-xl bg-primary/10 p-2 shadow-lg backdrop-blur-sm border border-primary/20"
+        className="h-10 sm:h-12 lg:h-14 w-auto flex-shrink-0 bg-white rounded-lg p-2 shadow-lg border border-gray-200"
       />
     </Link>
   );
