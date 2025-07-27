@@ -6,12 +6,26 @@ interface SellerStatsProps {
   totalOffers: number;
   pendingOffers: number;
   acceptedOffers: number;
+  totalParts: number;
   onNavigateToOffers?: () => void;
 }
 
-const SellerStats = ({ totalOffers, pendingOffers, acceptedOffers, onNavigateToOffers }: SellerStatsProps) => {
+const SellerStats = ({ totalOffers, pendingOffers, acceptedOffers, totalParts, onNavigateToOffers }: SellerStatsProps) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-4 sm:mb-6 lg:mb-8">
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-4 sm:mb-6 lg:mb-8">
+      <Card 
+        className="bg-card hover:bg-accent/50 border-border hover:shadow-lg transition-all duration-300 cursor-pointer hover:scale-105"
+      >
+        <CardContent className="p-3 sm:p-4 lg:p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs sm:text-sm text-muted-foreground font-medium">My Parts</p>
+              <p className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground">{totalParts}</p>
+            </div>
+            <Package className="h-5 w-5 sm:h-6 sm:w-6 lg:h-8 lg:w-8 text-primary" />
+          </div>
+        </CardContent>
+      </Card>
       <Card 
         className="bg-card hover:bg-accent/50 border-border hover:shadow-lg transition-all duration-300 cursor-pointer hover:scale-105"
         onClick={onNavigateToOffers}

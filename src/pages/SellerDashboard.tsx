@@ -95,6 +95,7 @@ const SellerDashboard = () => {
               totalOffers={stats.totalOffers}
               pendingOffers={stats.pendingOffers}
               acceptedOffers={stats.acceptedOffers}
+              totalParts={myParts.length}
               onNavigateToOffers={() => setActiveTab("offers")}
             />
 
