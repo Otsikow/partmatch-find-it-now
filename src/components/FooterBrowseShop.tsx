@@ -36,7 +36,7 @@ const FooterBrowseShop = () => {
         </li>
         <li>
           <Link 
-            to="/supplier" 
+            to="/seller-auth"
             className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm font-crimson flex items-center space-x-2"
           >
             <Shield className="h-3 w-3" />
