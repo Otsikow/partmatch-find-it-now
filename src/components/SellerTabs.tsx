@@ -67,13 +67,17 @@ const SupplierTabs = ({
   isSubmittingOffer,
   onRefreshParts
 }: SupplierTabsProps) => {
-  const [showPostForm, setShowPostForm] = useState(false);
+  const [showPostForm, setShowPostForm] = useState(() => {
+    // Persist the post form state in sessionStorage
+    return sessionStorage.getItem('showPostForm') === 'true';
+  });
   const {
     hasBusinessSubscription
   } = useSubscriptionStatus();
 
   const handlePartPosted = () => {
     setShowPostForm(false);
+    sessionStorage.removeItem('showPostForm');
     // Refresh parts data after posting
     onRefreshParts();
   };
@@ -84,7 +88,10 @@ const SupplierTabs = ({
     return <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold">Post New Car Part</h2>
-          <Button variant="outline" onClick={() => setShowPostForm(false)}>
+          <Button variant="outline" onClick={() => {
+            setShowPostForm(false);
+            sessionStorage.removeItem('showPostForm');
+          }}>
             Back to Dashboard
           </Button>
         </div>
@@ -94,7 +101,10 @@ const SupplierTabs = ({
   return <div className="w-full space-y-3 sm:space-y-4 lg:space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         
-        <Button onClick={() => setShowPostForm(true)} className="bg-orange-600 hover:bg-orange-700 text-white w-full sm:w-auto text-sm sm:text-base">
+        <Button onClick={() => {
+          setShowPostForm(true);
+          sessionStorage.setItem('showPostForm', 'true');
+        }} className="bg-orange-600 hover:bg-orange-700 text-white w-full sm:w-auto text-sm sm:text-base">
           <Plus className="h-4 w-4 mr-2" />
           Post New Part
         </Button>
