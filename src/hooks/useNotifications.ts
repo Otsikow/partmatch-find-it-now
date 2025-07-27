@@ -99,12 +99,17 @@ export const useNotifications = () => {
   const clearAll = async () => {
     if (!user) return;
 
+    console.log('Clearing all notifications for user:', user.id);
+
     const { error } = await supabase
       .from('user_notifications')
       .delete()
       .eq('user_id', user.id);
 
-    if (!error) {
+    if (error) {
+      console.error('Error clearing notifications:', error.message);
+    } else {
+      console.log('Successfully cleared all notifications');
       setNotifications([]);
     }
   };
