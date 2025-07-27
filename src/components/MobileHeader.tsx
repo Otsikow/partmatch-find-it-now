@@ -29,11 +29,14 @@ const MobileHeader = () => {
       : '/buyer-dashboard';
 
   const handleSignOut = async () => {
+    console.log('🚪 MobileHeader: handleSignOut clicked');
     try {
+      console.log('🚪 MobileHeader: Calling signOut from AuthContext');
       await signOut();
+      console.log('🚪 MobileHeader: signOut completed');
       // AuthContext already handles redirection and toast messages
     } catch (error) {
-      console.error('Sign out error in MobileHeader:', error);
+      console.error('🚪 MobileHeader: Sign out error:', error);
     }
   };
 
