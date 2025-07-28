@@ -11,6 +11,8 @@ export const useMyParts = () => {
 
   const fetchParts = async () => {
     if (!user) {
+      console.log("=== useMyParts Debug ===");
+      console.log("No user found, skipping fetch");
       setLoading(false);
       return;
     }
@@ -18,6 +20,10 @@ export const useMyParts = () => {
     try {
       setLoading(true);
       setError(null);
+      
+      console.log("=== useMyParts Debug ===");
+      console.log("Starting fetch for user:", user.id);
+      console.log("User object:", user);
 
       const { data, error } = await supabase
         .from("car_parts")
