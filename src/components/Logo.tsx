@@ -14,8 +14,8 @@ const Logo: React.FC<LogoProps> = ({ className, isHero, onClick, disableDefaultL
   const logoClasses = cn(
     'w-auto object-contain',
     {
-      'h-48 sm:h-56 md:h-64 lg:h-72 drop-shadow-2xl': isHero,
-      'h-8 sm:h-10 lg:h-12 bg-white rounded-lg p-2 shadow-lg border border-gray-200': !isHero,
+      'h-48 sm:h-56 md:h-64 lg:h-72 drop-shadow-2xl dark:brightness-0 dark:invert dark:sepia dark:saturate-200 dark:hue-rotate-45 dark:drop-shadow-[0_0_20px_rgba(255,215,0,0.5)]': isHero,
+      'h-8 sm:h-10 lg:h-12 bg-white dark:bg-gray-800 rounded-lg p-2 shadow-lg border border-gray-200 dark:border-gray-600': !isHero,
     },
     className
   );
