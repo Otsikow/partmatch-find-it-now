@@ -157,7 +157,7 @@ const SellerVerificationStatus = ({
   const isRejected = verification?.verification_status === 'rejected';
   const isPending = verification?.verification_status === 'pending';
 
-  // Call onVerificationRequired if user is not verified
+  // Always call useEffect, but conditionally execute the logic inside
   useEffect(() => {
     if (!isVerified && onVerificationRequired) {
       onVerificationRequired();
