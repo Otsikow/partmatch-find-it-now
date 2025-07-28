@@ -6,16 +6,10 @@ import { CarPart } from "@/types/CarPart";
 import { useMyParts } from "./useMyParts";
 
 export const useMyPartsData = () => {
-  const { user } = useAuth();
   const { parts, loading, error, refetch } = useMyParts();
-  const [myParts, setMyParts] = useState<CarPart[]>(parts);
-
-  useEffect(() => {
-    setMyParts(parts);
-  }, [parts]);
 
   return {
-    myParts,
+    myParts: parts, // Direct reference, no unnecessary state duplication
     loading,
     error,
     refetch,
