@@ -379,16 +379,19 @@ export const useAdminActions = (refetchData: () => void) => {
   const handleUnblockUser = async (userId: string) => {
     try {
       console.log('🔧 ADMIN DEBUG: Unblocking user:', userId);
+      alert('Starting unblock process for user: ' + userId);
       
       // Check current user authentication
       const { data: { user }, error: userError } = await supabase.auth.getUser();
       
       if (userError || !user) {
         console.error('🔧 ADMIN DEBUG: Auth error in handleUnblockUser:', userError);
+        alert('Auth error: ' + (userError?.message || 'No user'));
         throw new Error('Not authenticated');
       }
       
       console.log('🔧 ADMIN DEBUG: Current admin user ID:', user.id);
+      alert('Current admin user ID: ' + user.id);
       
       // Check if current user is admin
       const { data: adminProfile, error: adminError } = await supabase
@@ -398,13 +401,16 @@ export const useAdminActions = (refetchData: () => void) => {
         .single();
       
       console.log('🔧 ADMIN DEBUG: Admin profile:', adminProfile);
+      alert('Admin profile: ' + JSON.stringify(adminProfile));
       
       if (adminError || !adminProfile || adminProfile.user_type !== 'admin') {
         console.error('🔧 ADMIN DEBUG: Admin check failed:', adminError);
+        alert('Admin check failed: ' + (adminError?.message || 'Not admin'));
         throw new Error('Unauthorized: Not an admin');
       }
       
       console.log('🔧 ADMIN DEBUG: Attempting to unblock user:', userId);
+      alert('About to update profile...');
       
       const { error } = await supabase
         .from('profiles')
@@ -416,10 +422,12 @@ export const useAdminActions = (refetchData: () => void) => {
 
       if (error) {
         console.error('🔧 ADMIN DEBUG: Error unblocking user:', error);
+        alert('Update error: ' + error.message);
         throw error;
       }
 
       console.log('🔧 ADMIN DEBUG: Successfully unblocked user');
+      alert('Successfully unblocked user!');
 
       toast({
         title: "User Unblocked!",
@@ -430,6 +438,7 @@ export const useAdminActions = (refetchData: () => void) => {
       
     } catch (error: any) {
       console.error('🔧 ADMIN DEBUG: Error unblocking user:', error);
+      alert('Final error: ' + (error.message || 'Unknown error'));
       toast({
         title: "Error",
         description: error.message || "Failed to unblock user. Please try again.",
