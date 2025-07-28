@@ -14,9 +14,9 @@ const RequestHeader = () => {
       <div className="flex items-center gap-1 sm:gap-2 md:gap-3 min-w-0 flex-1">
         <Link to="/" className="hover:opacity-80 transition-opacity flex-shrink-0">
           <img 
-            src="/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png" 
+            src="/lovable-uploads/734b3dc6-3104-4232-88b5-ecdfdf766610.png" 
             alt="PartMatch Logo" 
-            className="h-5 w-auto sm:h-6 md:h-8 flex-shrink-0 bg-white rounded-lg p-1 shadow-md border border-gray-200"
+            className="h-5 w-auto sm:h-6 md:h-8 flex-shrink-0 bg-white dark:bg-gray-800 rounded-lg p-1 shadow-md dark:shadow-white/10 border border-gray-200 dark:border-gray-700"
           />
         </Link>
         <h1 className="text-base sm:text-lg md:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent truncate">Request a Part</h1>
