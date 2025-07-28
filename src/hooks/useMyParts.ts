@@ -10,8 +10,12 @@ export const useMyParts = () => {
   const [error, setError] = useState<string | null>(null);
 
   const fetchParts = async () => {
+    console.log("=== useMyParts Debug START ===");
+    console.log("User object:", user);
+    console.log("User ID:", user?.id);
+    console.log("Current URL:", window.location.href);
+    
     if (!user) {
-      console.log("=== useMyParts Debug ===");
       console.log("No user found, skipping fetch");
       setLoading(false);
       return;
