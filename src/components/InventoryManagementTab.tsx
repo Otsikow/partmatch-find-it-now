@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -28,13 +28,19 @@ interface InventoryManagementTabProps {
   onRefresh: () => void;
 }
 
-export const InventoryManagementTab = ({ parts, onRefresh }: InventoryManagementTabProps) => {
+export const InventoryManagementTab = ({ parts: initialParts, onRefresh }: InventoryManagementTabProps) => {
+  const [parts, setParts] = useState<CarPart[]>(initialParts);
   const [restockDialogOpen, setRestockDialogOpen] = useState(false);
   const [selectedPart, setSelectedPart] = useState<CarPart | null>(null);
   const [newQuantity, setNewQuantity] = useState<number>(1);
   const [updating, setUpdating] = useState(false);
   const [sortBy, setSortBy] = useState<'name' | 'quantity' | 'status'>('name');
   const { toast } = useToast();
+
+  // Sync local parts state with prop changes
+  useEffect(() => {
+    setParts(initialParts);
+  }, [initialParts]);
 
   const getStockStatus = (quantity: number, threshold: number = 2) => {
     if (quantity === 0) return { status: 'out', color: 'bg-red-500', label: 'Out of Stock' };
@@ -90,6 +96,15 @@ export const InventoryManagementTab = ({ parts, onRefresh }: InventoryManagement
 
       console.log('Restock successful:', data);
 
+      // Optimistically update local state immediately
+      setParts(prevParts => 
+        prevParts.map(p => 
+          p.id === selectedPart.id 
+            ? { ...p, quantity: newQuantity, last_restocked_at: new Date().toISOString() }
+            : p
+        )
+      );
+
       toast({
         title: "Stock Updated",
         description: `${selectedPart.title} quantity updated to ${newQuantity}`,
@@ -98,7 +113,11 @@ export const InventoryManagementTab = ({ parts, onRefresh }: InventoryManagement
       setRestockDialogOpen(false);
       setSelectedPart(null);
       setNewQuantity(1);
-      onRefresh();
+      
+      // Also refresh the parent data
+      setTimeout(() => {
+        onRefresh();
+      }, 100);
     } catch (error: any) {
       console.error('Restock failed:', error);
       toast({
