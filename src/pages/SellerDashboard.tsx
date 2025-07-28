@@ -84,7 +84,7 @@ const SellerDashboard = () => {
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-white dark:from-orange-900/20 dark:to-gray-900">
       <SellerHeader />
 
-      <main className="container mx-auto px-3 sm:px-4 md:px-6 py-3 sm:py-4 md:py-6 lg:py-8 max-w-full sm:max-w-2xl md:max-w-4xl lg:max-w-6xl xl:max-w-7xl">
+      <main className="container mx-auto px-2 sm:px-3 md:px-4 lg:px-6 py-2 sm:py-3 md:py-4 lg:py-6 xl:py-8 max-w-full sm:max-w-2xl md:max-w-4xl lg:max-w-6xl xl:max-w-7xl">
         {showMainDashboard ? (
           <SellerWelcomeDashboard
             onGoToSellerTools={() => setShowMainDashboard(false)}

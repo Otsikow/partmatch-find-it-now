@@ -104,36 +104,36 @@ const SupplierTabs = ({
         <Button onClick={() => {
           setShowPostForm(true);
           sessionStorage.setItem('showPostForm', 'true');
-        }} className="bg-orange-600 hover:bg-orange-700 text-white w-full sm:w-auto text-sm sm:text-base">
+        }} className="bg-primary hover:bg-primary/90 text-primary-foreground w-full sm:w-auto text-sm sm:text-base px-4 py-2 h-auto">
           <Plus className="h-4 w-4 mr-2" />
           Post New Part
         </Button>
       </div>
 
       <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
-        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-5 gap-1 h-auto p-1 bg-muted">
-          <TabsTrigger value="my-parts" className="flex flex-col items-center justify-center gap-1 text-xs px-1 py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground">
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-5 gap-0.5 sm:gap-1 h-auto p-1 bg-muted/50">
+          <TabsTrigger value="my-parts" className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-xs px-1 py-1.5 sm:py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground">
             <Package className="h-3 w-3 sm:h-4 sm:w-4" />
-            <span className="text-[9px] sm:text-[10px] leading-tight">My Parts</span>
+            <span className="text-[8px] sm:text-[10px] leading-tight">My Parts</span>
             <TabCountBadge count={myParts.length} />
           </TabsTrigger>
-          <TabsTrigger value="offers" className="flex flex-col items-center justify-center gap-1 text-xs px-1 py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground">
+          <TabsTrigger value="offers" className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-xs px-1 py-1.5 sm:py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground">
             <Star className="h-3 w-3 sm:h-4 sm:w-4" />
-            <span className="text-[9px] sm:text-[10px] leading-tight">Offers</span>
+            <span className="text-[8px] sm:text-[10px] leading-tight">Offers</span>
             <TabCountBadge count={offers.length} />
           </TabsTrigger>
-          <TabsTrigger value="requests" className="flex flex-col items-center justify-center gap-1 text-xs px-1 py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground">
+          <TabsTrigger value="requests" className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-xs px-1 py-1.5 sm:py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground">
             <Settings className="h-3 w-3 sm:h-4 sm:w-4" />
-            <span className="text-[9px] sm:text-[10px] leading-tight">Requests</span>
+            <span className="text-[8px] sm:text-[10px] leading-tight">Requests</span>
             <TabCountBadge count={requests.length} />
           </TabsTrigger>
-          <TabsTrigger value="subscription" className="flex flex-col items-center justify-center gap-1 text-xs px-1 py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground">
+          <TabsTrigger value="subscription" className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-xs px-1 py-1.5 sm:py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground">
             <CreditCard className="h-3 w-3 sm:h-4 sm:w-4" />
-            <span className="text-[9px] sm:text-[10px] leading-tight">Sub</span>
+            <span className="text-[8px] sm:text-[10px] leading-tight">Sub</span>
           </TabsTrigger>
-          <TabsTrigger value="profile" className="flex flex-col items-center justify-center gap-1 text-xs px-1 py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground">
+          <TabsTrigger value="profile" className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-xs px-1 py-1.5 sm:py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground">
             <Settings className="h-3 w-3 sm:h-4 sm:w-4" />
-            <span className="text-[9px] sm:text-[10px] leading-tight">Profile</span>
+            <span className="text-[8px] sm:text-[10px] leading-tight">Profile</span>
           </TabsTrigger>
         </TabsList>
 

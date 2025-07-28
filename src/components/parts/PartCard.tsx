@@ -50,53 +50,55 @@ const PartCard = ({
 
   return (
     <>
-      <Card className="p-4 sm:p-6 cursor-pointer hover:shadow-lg transition-shadow duration-200" onClick={handleCardClick}>
-        <div className="flex justify-between items-start mb-4">
-        <div className="flex-1">
-          <div className="flex items-center gap-2 mb-2">
-            <h3 className="font-semibold text-lg">{part.title}</h3>
-            {isPartFeatured(part) && (
-              <Badge>
-                <Star className="h-3 w-3 mr-1" />
-                Featured
-              </Badge>
-            )}
-            {isPartBoosted(part) && (
-              <Badge>
-                <TrendingUp className="h-3 w-3 mr-1" />
-                Boosted
-              </Badge>
-            )}
+      <Card className="p-3 sm:p-4 lg:p-6 cursor-pointer hover:shadow-lg transition-shadow duration-200" onClick={handleCardClick}>
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
+        <div className="flex-1 min-w-0">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 mb-2">
+            <h3 className="font-semibold text-base sm:text-lg truncate">{part.title}</h3>
+            <div className="flex flex-wrap gap-1 sm:gap-2">
+              {isPartFeatured(part) && (
+                <Badge className="text-xs">
+                  <Star className="h-3 w-3 mr-1" />
+                  Featured
+                </Badge>
+              )}
+              {isPartBoosted(part) && (
+                <Badge className="text-xs">
+                  <TrendingUp className="h-3 w-3 mr-1" />
+                  Boosted
+                </Badge>
+              )}
+            </div>
           </div>
-          <p className="text-gray-600 mb-2">
+          <p className="text-muted-foreground mb-2 text-sm sm:text-base">
             {part.make} {part.model} ({part.year}) - {part.part_type}
           </p>
           {part.description && (
-            <p className="text-sm text-gray-600 mb-3">{part.description}</p>
+            <p className="text-xs sm:text-sm text-muted-foreground mb-3 line-clamp-2">{part.description}</p>
           )}
-          <div className="flex flex-wrap gap-2 mb-3">
-            <Badge>
+          <div className="flex flex-wrap gap-1 sm:gap-2 mb-3">
+            <Badge className="text-xs">
               {part.condition}
             </Badge>
-            <Badge variant={part.status === 'hidden' ? 'secondary' : 'default'}>
+            <Badge variant={part.status === 'hidden' ? 'secondary' : 'default'} className="text-xs">
               {part.status === 'hidden' ? 'Hidden from public' : part.status}
             </Badge>
             {part.status === 'hidden' && (
-              <Badge variant="outline" className="text-yellow-600 border-yellow-600">
+              <Badge variant="outline" className="text-xs text-yellow-600 border-yellow-600">
                 Not visible to buyers
               </Badge>
             )}
           </div>
         </div>
-        <div className="text-right ml-4">
-          <p className="text-xl font-bold text-orange-600">
+        <div className="text-left sm:text-right sm:ml-4 shrink-0">
+          <p className="text-lg sm:text-xl font-bold text-primary">
             {part.currency} {part.price}
           </p>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-muted-foreground">
             Posted {new Date(part.created_at).toLocaleDateString()}
           </p>
           {(isPartFeatured(part) || isPartBoosted(part)) && (
-            <div className="mt-1 text-xs text-gray-500">
+            <div className="mt-1 text-xs text-muted-foreground">
               {isPartFeatured(part) && (
                 <div>Featured until {new Date(part.featured_until!).toLocaleDateString()}</div>
               )}
@@ -109,13 +111,13 @@ const PartCard = ({
       </div>
 
       {part.images && part.images.length > 0 && (
-        <div className="flex gap-2 mb-4 overflow-x-auto">
+        <div className="flex gap-2 mb-3 sm:mb-4 overflow-x-auto pb-2">
           {part.images.map((image, index) => (
             <img
               key={index}
               src={image}
               alt={`${part.title} ${index + 1}`}
-              className="w-20 h-20 object-cover rounded border flex-shrink-0"
+              className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded border border-border flex-shrink-0"
             />
           ))}
         </div>
@@ -135,7 +137,7 @@ const PartCard = ({
         </div>
       )}
 
-      <div className="grid grid-cols-2 sm:flex gap-2 pt-4 border-t">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-3 sm:pt-4 border-t border-border">
         <Button
           variant="outline"
           size="sm"
@@ -143,10 +145,10 @@ const PartCard = ({
             e.stopPropagation();
             onUpdateStatus(part.id, part.status === 'hidden' ? 'available' : 'hidden');
           }}
-          className="flex items-center justify-center gap-1 text-xs sm:text-sm"
+          className="flex items-center justify-center gap-1 text-xs px-2 py-1 h-auto"
         >
-          {part.status === 'hidden' ? <Eye className="h-3 w-3 sm:h-4 sm:w-4" /> : <EyeOff className="h-3 w-3 sm:h-4 sm:w-4" />}
-          <span className="hidden xs:inline">{part.status === 'hidden' ? 'Show' : 'Hide'}</span>
+          {part.status === 'hidden' ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
+          <span className="hidden sm:inline text-xs">{part.status === 'hidden' ? 'Show' : 'Hide'}</span>
         </Button>
         <Button
           variant="outline"
@@ -155,10 +157,10 @@ const PartCard = ({
             e.stopPropagation();
             onToggleBoost(selectedPartForBoost === part.id ? null : part.id);
           }}
-          className="flex items-center justify-center gap-1 text-xs sm:text-sm"
+          className="flex items-center justify-center gap-1 text-xs px-2 py-1 h-auto"
         >
-          <Crown className="h-3 w-3 sm:h-4 sm:w-4" />
-          <span className="hidden xs:inline">{selectedPartForBoost === part.id ? 'Hide' : 'Promote'}</span>
+          <Crown className="h-3 w-3" />
+          <span className="hidden sm:inline text-xs">{selectedPartForBoost === part.id ? 'Hide' : 'Promote'}</span>
         </Button>
         <Button
           variant="outline"
@@ -167,10 +169,10 @@ const PartCard = ({
             e.stopPropagation();
             onEdit(part);
           }}
-          className="flex items-center justify-center gap-1 text-xs sm:text-sm"
+          className="flex items-center justify-center gap-1 text-xs px-2 py-1 h-auto"
         >
-          <Edit className="h-3 w-3 sm:h-4 sm:w-4" />
-          <span className="hidden xs:inline">Edit</span>
+          <Edit className="h-3 w-3" />
+          <span className="hidden sm:inline text-xs">Edit</span>
         </Button>
         <Button
           variant="destructive"
@@ -179,10 +181,10 @@ const PartCard = ({
             e.stopPropagation();
             handleDelete();
           }}
-          className="flex items-center justify-center gap-1 text-xs sm:text-sm"
+          className="flex items-center justify-center gap-1 text-xs px-2 py-1 h-auto"
         >
-          <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
-          <span className="hidden xs:inline">Delete</span>
+          <Trash2 className="h-3 w-3" />
+          <span className="hidden sm:inline text-xs">Delete</span>
         </Button>
       </div>
       </Card>
