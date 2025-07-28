@@ -388,6 +388,24 @@ export const useAdminActions = (refetchData: () => void) => {
         throw new Error('Not authenticated');
       }
       
+      console.log('🔧 ADMIN DEBUG: Current admin user ID:', user.id);
+      
+      // Check if current user is admin
+      const { data: adminProfile, error: adminError } = await supabase
+        .from('profiles')
+        .select('user_type, id')
+        .eq('id', user.id)
+        .single();
+      
+      console.log('🔧 ADMIN DEBUG: Admin profile:', adminProfile);
+      
+      if (adminError || !adminProfile || adminProfile.user_type !== 'admin') {
+        console.error('🔧 ADMIN DEBUG: Admin check failed:', adminError);
+        throw new Error('Unauthorized: Not an admin');
+      }
+      
+      console.log('🔧 ADMIN DEBUG: Attempting to unblock user:', userId);
+      
       const { error } = await supabase
         .from('profiles')
         .update({ 
