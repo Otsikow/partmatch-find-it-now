@@ -61,7 +61,7 @@ export const useMyParts = () => {
         `
         )
         .eq("supplier_id", user.id)
-        .in("status", ["available", "pending", "hidden"])
+        .in("status", ["available", "pending", "hidden"]) // Include all parts so seller can manage them
         .order("created_at", { ascending: false });
 
       console.log("=== useMyParts Debug ===");
