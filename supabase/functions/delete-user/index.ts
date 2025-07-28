@@ -305,13 +305,25 @@ serve(async (req) => {
       );
     }
 
-    // Delete the user from Auth using admin privileges
+    // Delete the user from Auth using admin privileges - handle case where user might not exist
     const { error: deleteError } = await supabaseAdmin.auth.admin.deleteUser(userId);
 
     if (deleteError) {
+      // If user doesn't exist in auth (404), that's ok - we still cleaned up the profile
+      if (deleteError.message?.includes('User not found') || deleteError.status === 404) {
+        console.log('User not found in Auth (already deleted), but profile cleanup completed');
+        return new Response(
+          JSON.stringify({ success: true, message: 'User profile deleted successfully (user was already removed from auth)' }),
+          {
+            status: 200,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          }
+        );
+      }
+      
       console.error('Error deleting user from Auth:', deleteError);
       return new Response(
-        JSON.stringify({ error: 'Failed to delete user from authentication system' }),
+        JSON.stringify({ error: 'Failed to delete user from authentication system: ' + deleteError.message }),
         {
           status: 500,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
