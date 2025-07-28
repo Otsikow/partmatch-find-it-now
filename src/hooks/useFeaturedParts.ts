@@ -16,6 +16,9 @@ export const useFeaturedParts = () => {
       setLoading(true);
       setError(null);
 
+      console.log('useFeaturedParts: Starting fetch...');
+      console.log('useFeaturedParts: Current time:', new Date().toISOString());
+
       const { data, error } = await supabase
         .from('car_parts')
         .select(`
@@ -34,6 +37,9 @@ export const useFeaturedParts = () => {
         .gt('featured_until', new Date().toISOString())
         .order('created_at', { ascending: false })
         .limit(4);
+
+      console.log('useFeaturedParts: Query result:', { data, error });
+      console.log('useFeaturedParts: Found parts count:', data?.length || 0);
 
       if (error) {
         console.error('Error fetching featured parts:', error);
