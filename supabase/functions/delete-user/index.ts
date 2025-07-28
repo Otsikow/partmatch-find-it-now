@@ -29,10 +29,12 @@ serve(async (req) => {
       );
     }
 
-    if (adminUser.id === userId) {
-      console.error('Admin cannot delete themselves');
+    // Get the userId to delete from the request body
+    const { userId } = await req.json();
+    if (!userId) {
+      console.error('No userId provided in request body');
       return new Response(
-        JSON.stringify({ error: 'Admin cannot delete themselves' }),
+        JSON.stringify({ error: 'User ID to delete is required' }),
         {
           status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -89,12 +91,11 @@ serve(async (req) => {
       );
     }
 
-    // Get the userId to delete from the request body
-    const { userId } = await req.json();
-    if (!userId) {
-      console.error('No userId provided in request body');
+    // Prevent admin from deleting themselves
+    if (adminUser.id === userId) {
+      console.error('Admin cannot delete themselves');
       return new Response(
-        JSON.stringify({ error: 'User ID to delete is required' }),
+        JSON.stringify({ error: 'Admin cannot delete themselves' }),
         {
           status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -105,65 +106,8 @@ serve(async (req) => {
     console.log(`Admin ${adminUser.id} is deleting user: ${userId}`);
 
     // Clean up related records that would prevent user deletion
-    console.log('Cleaning up related records for user:', userId);
+    console.log('Cleaning up related records...');
     
- fix/admin-user-management
-    // Set verified_by to NULL in seller_verifications where this user was the verifier
-    const { error: verificationUpdateError } = await supabaseAdmin
-      .from('seller_verifications')
-      .update({ verified_by: null })
-      .eq('verified_by', userId);
-    
-    if (verificationUpdateError) {
-      console.error('Error updating seller verifications:', verificationUpdateError);
-    }
-
-    // Set admin_id to NULL in admin_notifications where this user was referenced
-    const { error: notificationUpdateError } = await supabaseAdmin
-      .from('admin_notifications')
-      .update({ admin_id: null })
-      .eq('admin_id', userId);
-    
-    if (notificationUpdateError) {
-      console.error('Error updating admin notifications:', notificationUpdateError);
-    }
-
-    // Delete user-specific records that should be removed when user is deleted
-    const { error: userNotificationsError } = await supabaseAdmin
-      .from('user_notifications')
-      .delete()
-      .eq('user_id', userId);
-    
-    if (userNotificationsError) {
-      console.error('Error deleting user notifications:', userNotificationsError);
-    }
-
-    const { error: savedPartsError } = await supabaseAdmin
-      .from('saved_parts')
-      .delete()
-      .eq('user_id', userId);
-    
-    if (savedPartsError) {
-      console.error('Error deleting saved parts:', savedPartsError);
-    }
-
-    const { error: subscriptionsError } = await supabaseAdmin
-      .from('business_subscriptions')
-      .delete()
-      .eq('user_id', userId);
-    
-    if (subscriptionsError) {
-      console.error('Error deleting business subscriptions:', subscriptionsError);
-    }
-
-    const { error: purchasesError } = await supabaseAdmin
-      .from('monetization_purchases')
-      .delete()
-      .eq('user_id', userId);
-    
-    if (purchasesError) {
-      console.error('Error deleting monetization purchases:', purchasesError);
-    }
     try {
       // Delete all records that reference this user (in order of dependencies)
       
@@ -171,7 +115,7 @@ serve(async (req) => {
       const { error: messagesError } = await supabaseAdmin
         .from('messages')
         .delete()
-        .eq('sender_id', user.id);
+        .eq('sender_id', userId);
       
       if (messagesError) {
         console.error('Error deleting messages:', messagesError);
@@ -181,7 +125,7 @@ serve(async (req) => {
       const { error: chatsError } = await supabaseAdmin
         .from('chats')
         .delete()
-        .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`);
+        .or(`buyer_id.eq.${userId},seller_id.eq.${userId}`);
       
       if (chatsError) {
         console.error('Error deleting chats:', chatsError);
@@ -191,7 +135,7 @@ serve(async (req) => {
       const { error: reviewsError } = await supabaseAdmin
         .from('reviews')
         .delete()
-        .or(`reviewer_id.eq.${user.id},seller_id.eq.${user.id}`);
+        .or(`reviewer_id.eq.${userId},seller_id.eq.${userId}`);
       
       if (reviewsError) {
         console.error('Error deleting reviews:', reviewsError);
@@ -201,7 +145,7 @@ serve(async (req) => {
       const { error: offersError } = await supabaseAdmin
         .from('offers')
         .delete()
-        .or(`buyer_id.eq.${user.id},supplier_id.eq.${user.id}`);
+        .or(`buyer_id.eq.${userId},supplier_id.eq.${userId}`);
       
       if (offersError) {
         console.error('Error deleting offers:', offersError);
@@ -211,7 +155,7 @@ serve(async (req) => {
       const { error: requestsError } = await supabaseAdmin
         .from('part_requests')
         .delete()
-        .eq('owner_id', user.id);
+        .eq('owner_id', userId);
       
       if (requestsError) {
         console.error('Error deleting part requests:', requestsError);
@@ -221,7 +165,7 @@ serve(async (req) => {
       const { error: partsError } = await supabaseAdmin
         .from('car_parts')
         .delete()
-        .eq('supplier_id', user.id);
+        .eq('supplier_id', userId);
       
       if (partsError) {
         console.error('Error deleting car parts:', partsError);
@@ -231,7 +175,7 @@ serve(async (req) => {
       const { error: savedPartsError } = await supabaseAdmin
         .from('saved_parts')
         .delete()
-        .eq('user_id', user.id);
+        .eq('user_id', userId);
       
       if (savedPartsError) {
         console.error('Error deleting saved parts:', savedPartsError);
@@ -241,7 +185,7 @@ serve(async (req) => {
       const { error: followsError } = await supabaseAdmin
         .from('seller_follows')
         .delete()
-        .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`);
+        .or(`buyer_id.eq.${userId},seller_id.eq.${userId}`);
       
       if (followsError) {
         console.error('Error deleting seller follows:', followsError);
@@ -251,7 +195,7 @@ serve(async (req) => {
       const { error: userNotificationsError } = await supabaseAdmin
         .from('user_notifications')
         .delete()
-        .eq('user_id', user.id);
+        .eq('user_id', userId);
       
       if (userNotificationsError) {
         console.error('Error deleting user notifications:', userNotificationsError);
@@ -261,7 +205,7 @@ serve(async (req) => {
       const { error: subscriptionsError } = await supabaseAdmin
         .from('business_subscriptions')
         .delete()
-        .eq('user_id', user.id);
+        .eq('user_id', userId);
       
       if (subscriptionsError) {
         console.error('Error deleting business subscriptions:', subscriptionsError);
@@ -271,7 +215,7 @@ serve(async (req) => {
       const { error: purchasesError } = await supabaseAdmin
         .from('monetization_purchases')
         .delete()
-        .eq('user_id', user.id);
+        .eq('user_id', userId);
       
       if (purchasesError) {
         console.error('Error deleting monetization purchases:', purchasesError);
@@ -281,7 +225,7 @@ serve(async (req) => {
       const { error: verificationsError } = await supabaseAdmin
         .from('seller_verifications')
         .delete()
-        .eq('user_id', user.id);
+        .eq('user_id', userId);
       
       if (verificationsError) {
         console.error('Error deleting seller verifications:', verificationsError);
@@ -291,24 +235,33 @@ serve(async (req) => {
       const { error: verificationUpdateError } = await supabaseAdmin
         .from('seller_verifications')
         .update({ verified_by: null })
-        .eq('verified_by', user.id);
+        .eq('verified_by', userId);
       
       if (verificationUpdateError) {
         console.error('Error updating seller verifications:', verificationUpdateError);
       }
- main
 
       // 14. Set admin_id to NULL in admin_notifications where this user was referenced
       const { error: notificationUpdateError } = await supabaseAdmin
         .from('admin_notifications')
         .update({ admin_id: null })
-        .eq('admin_id', user.id);
+        .eq('admin_id', userId);
       
       if (notificationUpdateError) {
         console.error('Error updating admin notifications:', notificationUpdateError);
       }
 
-      console.log('All related records cleaned up successfully');
+      // 15. Delete the user's profile last
+      const { error: profileError } = await supabaseAdmin
+        .from('profiles')
+        .delete()
+        .eq('id', userId);
+      
+      if (profileError) {
+        console.error('Error deleting profile:', profileError);
+      }
+
+      console.log('Related records cleaned up successfully');
 
     } catch (cleanupError) {
       console.error('Error during cleanup:', cleanupError);

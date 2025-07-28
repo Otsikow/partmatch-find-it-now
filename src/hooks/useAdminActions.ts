@@ -346,6 +346,7 @@ export const useAdminActions = (refetchData: () => void) => {
       
       // Call the delete user edge function with proper authentication
       const { data, error } = await supabase.functions.invoke('delete-user', {
+        body: { userId },
         headers: {
           Authorization: `Bearer ${session.access_token}`,
         }
