@@ -1438,6 +1438,13 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      cleanup_orphaned_profiles: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          deleted_profile_id: string
+          deleted_email: string
+        }[]
+      }
       expire_monetization_features: {
         Args: Record<PropertyKey, never>
         Returns: undefined
@@ -1456,6 +1463,10 @@ export type Database = {
       }
       is_authorized_admin_email: {
         Args: { email_to_check: string }
+        Returns: boolean
+      }
+      is_orphaned_profile: {
+        Args: { profile_id: string }
         Returns: boolean
       }
       log_admin_security_event: {

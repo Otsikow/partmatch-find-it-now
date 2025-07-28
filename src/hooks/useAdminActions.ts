@@ -406,6 +406,34 @@ export const useAdminActions = (refetchData: () => void) => {
       
       console.log('🔧 ADMIN DEBUG: Attempting to unblock user:', userId);
       
+      // Check if this is an orphaned profile first
+      const { data: isOrphaned } = await supabase.rpc('is_orphaned_profile', {
+        profile_id: userId
+      });
+      
+      if (isOrphaned) {
+        console.log('🔧 ADMIN DEBUG: Detected orphaned profile, cleaning up:', userId);
+        
+        // Clean up the orphaned profile
+        const { error: deleteError } = await supabase
+          .from('profiles')
+          .delete()
+          .eq('id', userId);
+          
+        if (deleteError) {
+          console.error('🔧 ADMIN DEBUG: Error cleaning up orphaned profile:', deleteError);
+          throw new Error('Failed to clean up orphaned profile: ' + deleteError.message);
+        }
+        
+        toast({
+          title: "Orphaned Profile Cleaned Up",
+          description: "The user profile was orphaned (auth account already deleted) and has been removed.",
+        });
+        
+        await refetchData();
+        return;
+      }
+      
       // First check if user profile exists
       const { data: targetUser, error: targetUserError } = await supabase
         .from('profiles')
@@ -463,6 +491,38 @@ export const useAdminActions = (refetchData: () => void) => {
     }
   };
 
+  const handleCleanupOrphanedProfiles = async () => {
+    try {
+      console.log('🔧 ADMIN DEBUG: Cleaning up orphaned profiles');
+      
+      const { data: deletedProfiles, error } = await supabase.rpc('cleanup_orphaned_profiles');
+      
+      if (error) {
+        console.error('🔧 ADMIN DEBUG: Error cleaning up orphaned profiles:', error);
+        throw error;
+      }
+      
+      const count = deletedProfiles?.length || 0;
+      
+      toast({
+        title: "Cleanup Complete",
+        description: `Removed ${count} orphaned profile(s) that had no corresponding auth accounts.`,
+      });
+      
+      if (count > 0) {
+        await refetchData();
+      }
+      
+    } catch (error: any) {
+      console.error('🔧 ADMIN DEBUG: Error cleaning up orphaned profiles:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to clean up orphaned profiles.",
+        variant: "destructive"
+      });
+    }
+  };
+
   const handleViewUserDetails = (user: any) => {
     // This function will be handled by the AdminDashboard component
     console.log("🔧 ADMIN DEBUG: Viewing user details:", user);
@@ -477,6 +537,7 @@ export const useAdminActions = (refetchData: () => void) => {
     handleSuspendUser,
     handleDeleteUser,
     handleUnblockUser,
-    handleViewUserDetails
+    handleViewUserDetails,
+    handleCleanupOrphanedProfiles
   };
 };
