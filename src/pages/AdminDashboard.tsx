@@ -16,6 +16,7 @@ import AnalyticsDashboard from "@/components/admin/AnalyticsDashboard";
 import ListingQualityManager from "@/components/admin/ListingQualityManager";
 import WeeklyInsightsDashboard from "@/components/admin/WeeklyInsightsDashboard";
 import BlogManager from "@/components/admin/BlogManager";
+import UserDetailsModal from "@/components/admin/UserDetailsModal";
 import { useAdminData } from "@/hooks/useAdminData";
 import { useAdminActions } from "@/hooks/useAdminActions";
 import { useState, useEffect, useRef, useMemo } from "react";
@@ -51,6 +52,8 @@ const AdminDashboard = () => {
 
   const [selectedVerification, setSelectedVerification] = useState<SellerVerification | null>(null);
   const [showVerificationDetails, setShowVerificationDetails] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [showUserDetails, setShowUserDetails] = useState(false);
   const [activeTab, setActiveTab] = useState("analytics");
   const [activeUserTab, setActiveUserTab] = useState("sellers");
   const isMobile = useIsMobile();
@@ -65,6 +68,12 @@ const AdminDashboard = () => {
   const handleViewVerificationDetails = (verification: SellerVerification) => {
     setSelectedVerification(verification);
     setShowVerificationDetails(true);
+  };
+
+  const handleViewUserDetails = (user: any) => {
+    console.log("🔧 ADMIN DEBUG: Opening user details modal for:", user);
+    setSelectedUser(user);
+    setShowUserDetails(true);
   };
 
   const handleNavigateToCategory = (category: string, filter?: string) => {
@@ -381,7 +390,7 @@ const AdminDashboard = () => {
                     onSuspend={handleSuspendUser}
                     onDelete={handleDeleteUser}
                     onUnblock={handleUnblockUser}
-                    onViewDetails={() => {}}
+                    onViewDetails={handleViewUserDetails}
                     activeTab={activeUserTab}
                     onTabChange={setActiveUserTab}
                   />
@@ -412,6 +421,16 @@ const AdminDashboard = () => {
             {selectedVerification && <UserDetailsCard user={selectedVerification} />}
           </DialogContent>
         </Dialog>
+        {/* User Details Modal */}
+        <UserDetailsModal
+          user={selectedUser}
+          open={showUserDetails}
+          onOpenChange={setShowUserDetails}
+          onApprove={handleApproveUser}
+          onSuspend={handleSuspendUser}
+          onDelete={handleDeleteUser}
+          onUnblock={handleUnblockUser}
+        />
       </main>
       <Footer />
     </div>
