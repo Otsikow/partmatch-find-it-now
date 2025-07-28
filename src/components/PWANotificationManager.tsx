@@ -21,14 +21,19 @@ const PWANotificationManager = () => {
       const notificationPromptHistory = localStorage.getItem('notification-prompt-history');
       const history = notificationPromptHistory ? JSON.parse(notificationPromptHistory) : [];
       const now = Date.now();
-      const oneWeek = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+      const twoWeeks = 14 * 24 * 60 * 60 * 1000; // 2 weeks in milliseconds
+      const oneDay = 24 * 60 * 60 * 1000; // 1 day in milliseconds
       
-      // Filter out old entries (older than 1 week)
-      const recentPrompts = history.filter((timestamp: number) => now - timestamp < oneWeek);
+      // Filter out old entries (older than 2 weeks)
+      const recentPrompts = history.filter((timestamp: number) => now - timestamp < twoWeeks);
       
-      // Show prompt if user is logged in, notifications not granted, and hasn't seen it more than twice in the past week
-      if (user && Notification.permission === 'default' && recentPrompts.length < 2) {
-        setTimeout(() => setShowNotificationPrompt(true), 3000);
+      // Only show if user hasn't seen it in the last day and no more than once every 2 weeks
+      const lastPrompt = recentPrompts.length > 0 ? Math.max(...recentPrompts) : 0;
+      const timeSinceLastPrompt = now - lastPrompt;
+      
+      // Show prompt if user is logged in, notifications not granted, hasn't seen it in the last day, and less than once every 2 weeks
+      if (user && Notification.permission === 'default' && timeSinceLastPrompt > oneDay && recentPrompts.length === 0) {
+        setTimeout(() => setShowNotificationPrompt(true), 5000);
       }
     }
   }, [user]);
