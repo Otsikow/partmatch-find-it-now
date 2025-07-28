@@ -149,11 +149,25 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
           </div>
           
           {/* Condition Badge */}
-          <div className="absolute top-2 left-2">
+          <div className="absolute top-2 left-2 flex gap-1">
             <Badge className={`${getConditionColor(part.condition)} text-xs font-semibold px-2 py-1`}>
               {part.condition}
             </Badge>
+            {part.status === 'hidden' && (
+              <Badge variant="secondary" className="text-xs font-semibold px-2 py-1">
+                Hidden from public
+              </Badge>
+            )}
           </div>
+          
+          {/* Additional status badge for hidden items */}
+          {part.status === 'hidden' && (
+            <div className="absolute top-2 left-2 mt-7">
+              <Badge variant="outline" className="text-xs text-yellow-600 border-yellow-600 bg-white/90">
+                Not visible to buyers
+              </Badge>
+            </div>
+          )}
           
           {/* Expand Button */}
           <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
