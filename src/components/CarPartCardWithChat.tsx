@@ -325,9 +325,9 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
 
       {/* Expanded View Dialog */}
       <Dialog open={isExpanded} onOpenChange={setIsExpanded}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-[95vw] sm:max-w-4xl max-h-[95vh] overflow-y-auto p-3 sm:p-6">
           <DialogHeader>
-            <DialogTitle className="text-lg sm:text-xl lg:text-2xl font-bold pr-8">{part.title}</DialogTitle>
+            <DialogTitle className="text-base sm:text-lg lg:text-2xl font-bold pr-8 line-clamp-2">{part.title}</DialogTitle>
           </DialogHeader>
           
           <div className="space-y-4 sm:space-y-6">
@@ -339,16 +339,16 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
                 className="mb-6"
               />
             ) : (
-              <div className="w-full h-48 sm:h-64 bg-gray-100 rounded-lg flex items-center justify-center">
+              <div className="w-full h-40 sm:h-48 lg:h-64 bg-gray-100 rounded-lg flex items-center justify-center">
                 <div className="text-center text-gray-500">
-                  <div className="text-4xl sm:text-6xl mb-4">📦</div>
-                  <p className="text-sm sm:text-base font-medium">No image available</p>
+                  <div className="text-3xl sm:text-4xl lg:text-6xl mb-2 sm:mb-4">📦</div>
+                  <p className="text-xs sm:text-sm lg:text-base font-medium">No image available</p>
                 </div>
               </div>
             )}
 
             {/* Details Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 lg:gap-6">
               <div className="space-y-3">
                 <div>
                   <h4 className="font-semibold text-gray-900 mb-2">Vehicle Details</h4>
@@ -428,7 +428,7 @@ const CarPartCardWithChat = ({ part }: CarPartCardWithChatProps) => {
             </div>
 
             {/* Action Buttons */}
-            <div className={`flex ${isMobile ? 'flex-col' : 'flex-col sm:flex-row'} gap-3 pt-4 border-t`}>
+            <div className={`flex ${isMobile ? 'flex-col' : 'flex-col sm:flex-row'} gap-2 sm:gap-3 pt-3 sm:pt-4 border-t`}>
               <ChatButton
                 sellerId={part.supplier_id}
                 partId={part.id}
