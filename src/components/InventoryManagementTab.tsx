@@ -64,17 +64,31 @@ export const InventoryManagementTab = ({ parts, onRefresh }: InventoryManagement
 
     setUpdating(true);
     try {
-      const { error } = await supabase
-        .from('car_parts')
-        .update({ 
-          quantity: newQuantity,
-          last_restocked_at: new Date().toISOString(),
-          // Reactivate part if it was hidden due to being out of stock
-          status: newQuantity > 0 && selectedPart.status === 'hidden' ? 'available' : selectedPart.status
-        })
-        .eq('id', selectedPart.id);
+      console.log('Restocking part:', selectedPart.id, 'with quantity:', newQuantity);
+      
+      const updateData: any = { 
+        quantity: newQuantity,
+        last_restocked_at: new Date().toISOString(),
+      };
 
-      if (error) throw error;
+      // Reactivate part if it was hidden due to being out of stock
+      if (newQuantity > 0 && selectedPart.status === 'hidden') {
+        updateData.status = 'available';
+      }
+
+      const { data, error } = await supabase
+        .from('car_parts')
+        .update(updateData)
+        .eq('id', selectedPart.id)
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Restock error:', error);
+        throw error;
+      }
+
+      console.log('Restock successful:', data);
 
       toast({
         title: "Stock Updated",
@@ -86,9 +100,10 @@ export const InventoryManagementTab = ({ parts, onRefresh }: InventoryManagement
       setNewQuantity(1);
       onRefresh();
     } catch (error: any) {
+      console.error('Restock failed:', error);
       toast({
-        title: "Update Failed",
-        description: error.message,
+        title: "Update Failed", 
+        description: error.message || "Failed to update stock",
         variant: "destructive",
       });
     } finally {
@@ -97,6 +112,7 @@ export const InventoryManagementTab = ({ parts, onRefresh }: InventoryManagement
   };
 
   const openRestockDialog = (part: CarPart) => {
+    console.log('Opening restock dialog for part:', part.title, 'current quantity:', part.quantity);
     setSelectedPart(part);
     setNewQuantity(part.quantity || 1);
     setRestockDialogOpen(true);
