@@ -78,11 +78,7 @@ const AdminDashboard = () => {
   };
 
   const handleGoBack = () => {
-    if (window.history.length > 1) {
-      navigate(-1);
-    } else {
-      navigate('/admin');
-    }
+    navigate('/');
   };
 
   const handleGoHome = () => {
