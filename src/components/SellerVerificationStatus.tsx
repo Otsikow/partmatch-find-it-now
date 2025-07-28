@@ -36,11 +36,24 @@ const SellerVerificationStatus = ({
   const [loading, setLoading] = useState(!propVerification);
   const [showForm, setShowForm] = useState(false);
 
+  // Calculate status variables first, before any early returns
+  const isVerified = verification?.verification_status === 'approved';
+  const isRejected = verification?.verification_status === 'rejected';
+  const isPending = verification?.verification_status === 'pending';
+
+  // ALL hooks must be called before any conditional returns
   useEffect(() => {
     if (!propVerification && user) {
       fetchVerificationStatus();
     }
   }, [user, propVerification]);
+
+  // Always call useEffect, but conditionally execute the logic inside
+  useEffect(() => {
+    if (!isVerified && onVerificationRequired) {
+      onVerificationRequired();
+    }
+  }, [isVerified, onVerificationRequired]);
 
   const fetchVerificationStatus = async () => {
     try {
@@ -65,6 +78,7 @@ const SellerVerificationStatus = ({
       setLoading(false);
     }
   };
+
   const getStatusIcon = () => {
     if (!verification) return <Upload className="h-5 w-5" />;
     
@@ -121,6 +135,7 @@ const SellerVerificationStatus = ({
     });
   };
 
+  // Now safe to have conditional returns after all hooks are called
   if (loading) {
     return (
       <Card>
@@ -152,17 +167,6 @@ const SellerVerificationStatus = ({
       </div>
     );
   }
-
-  const isVerified = verification?.verification_status === 'approved';
-  const isRejected = verification?.verification_status === 'rejected';
-  const isPending = verification?.verification_status === 'pending';
-
-  // Always call useEffect, but conditionally execute the logic inside
-  useEffect(() => {
-    if (!isVerified && onVerificationRequired) {
-      onVerificationRequired();
-    }
-  }, [isVerified, onVerificationRequired]);
 
   return (
     <Card className={showEnforcement ? "mb-6" : "max-w-2xl mx-auto"}>
