@@ -82,7 +82,7 @@ const AdminDashboard = () => {
   };
 
   const handleGoHome = () => {
-    navigate('/admin');
+    navigate('/');
   };
 
   // Auto-refresh disabled to prevent UI instability - data will refresh on user actions
