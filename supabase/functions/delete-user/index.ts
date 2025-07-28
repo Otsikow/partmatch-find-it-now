@@ -15,6 +15,8 @@ serve(async (req) => {
 
   try {
     console.log('Delete user function called');
+    console.log('Request method:', req.method);
+    console.log('Request headers:', Object.fromEntries(req.headers.entries()));
     
     // Get the authorization header to verify the user
     const authHeader = req.headers.get('Authorization');
@@ -30,7 +32,24 @@ serve(async (req) => {
     }
 
     // Get the userId to delete from the request body
-    const { userId } = await req.json();
+    let requestBody;
+    try {
+      const bodyText = await req.text();
+      console.log('Raw request body:', bodyText);
+      requestBody = JSON.parse(bodyText);
+      console.log('Parsed request body:', requestBody);
+    } catch (parseError) {
+      console.error('Error parsing request body:', parseError);
+      return new Response(
+        JSON.stringify({ error: 'Invalid JSON in request body' }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      );
+    }
+
+    const { userId } = requestBody;
     if (!userId) {
       console.error('No userId provided in request body');
       return new Response(
