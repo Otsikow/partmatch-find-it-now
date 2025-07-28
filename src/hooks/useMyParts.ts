@@ -52,6 +52,9 @@ export const useMyParts = () => {
           updated_at,
           status,
           is_featured,
+          quantity,
+          low_stock_threshold,
+          last_restocked_at,
           profiles!inner(
             first_name,
             last_name,
