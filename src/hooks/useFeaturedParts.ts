@@ -36,7 +36,7 @@ export const useFeaturedParts = () => {
         .eq('status', 'available')
         .gt('featured_until', new Date().toISOString())
         .order('created_at', { ascending: false })
-        .limit(4);
+        .limit(8);
 
       console.log('useFeaturedParts: Query result:', { data, error });
       console.log('useFeaturedParts: Found parts count:', data?.length || 0);
