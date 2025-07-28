@@ -122,9 +122,9 @@ const SellerAuth = () => {
           <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
             <div className="bg-white/20 backdrop-blur-sm rounded-xl p-2 shadow-lg">
               <img
-                src="/lovable-uploads/734b3dc6-3104-4232-88b5-ecdfdf766610.png"
+                src="/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png"
                 alt="PartMatch Logo"
-                className="h-6 w-auto sm:h-8 object-contain bg-white dark:bg-gray-800 rounded-lg p-1 border border-gray-200 dark:border-gray-700"
+                className="h-6 w-auto sm:h-8 object-contain bg-white rounded-lg p-1"
               />
             </div>
             <div className="min-w-0 flex-1">

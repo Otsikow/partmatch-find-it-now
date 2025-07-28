@@ -46,9 +46,9 @@ const AdminHeader = ({ onNavigateToVerifications, onGoBack, onGoHome }: AdminHea
         <div className="flex items-center gap-3 flex-1 justify-center">
           <Link to="/" onClick={onGoHome} className="flex items-center gap-2 bg-primary-foreground/10 backdrop-blur-sm rounded-xl px-3 py-1.5 border border-primary-foreground/20 shadow-lg hover:bg-primary-foreground/20 transition-colors">
             <img 
-              src="/lovable-uploads/734b3dc6-3104-4232-88b5-ecdfdf766610.png" 
+              src="/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png" 
               alt="PartMatch Logo" 
-              className="h-12 w-12 sm:h-14 sm:w-14 object-contain bg-white dark:bg-gray-800 rounded-lg p-2 border border-gray-200 dark:border-gray-700"
+              className="h-12 w-12 sm:h-14 sm:w-14 object-contain bg-white rounded-lg p-2"
             />
           </Link>
           <div className="flex flex-col min-w-0">
