@@ -220,12 +220,24 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         </CardHeader>
         <CardContent className={`space-y-1 ${isMobile ? 'px-3 pb-2' : 'space-y-2'}`}>
           <div className="flex items-center gap-2">
-            <Badge className={`bg-green-100 text-green-800 ${isMobile ? 'text-xs px-1 py-0' : 'text-xs'}`}>
+            <Badge 
+              className={`bg-green-100 text-green-800 hover:bg-green-200 cursor-pointer transition-colors ${isMobile ? 'text-xs px-1 py-0' : 'text-xs'}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                onNavigateToCategory('verified-sellers');
+              }}
+            >
               Verified: {stats.verifiedSellers}
             </Badge>
           </div>
           <div className="flex items-center gap-2">
-            <Badge className={`bg-yellow-100 text-yellow-800 ${isMobile ? 'text-xs px-1 py-0' : 'text-xs'}`}>
+            <Badge 
+              className={`bg-yellow-100 text-yellow-800 hover:bg-yellow-200 cursor-pointer transition-colors ${isMobile ? 'text-xs px-1 py-0' : 'text-xs'}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                onNavigateToCategory('pending-sellers');
+              }}
+            >
               Pending: {stats.unverifiedSellers}
             </Badge>
           </div>
