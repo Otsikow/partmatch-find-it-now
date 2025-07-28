@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -18,10 +19,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Package, AlertTriangle, CheckCircle2 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Package, AlertTriangle, CheckCircle2, SortAsc } from "lucide-react";
 import { CarPart } from "@/types/CarPart";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface InventoryManagementTabProps {
   parts: CarPart[];
@@ -137,150 +146,291 @@ export const InventoryManagementTab = ({ parts: initialParts, onRefresh }: Inven
     setRestockDialogOpen(true);
   };
 
+  const isMobile = useIsMobile();
+
+  const InventoryCard = ({ part }: { part: CarPart }) => {
+    const stock = getStockStatus(part.quantity || 0, part.low_stock_threshold);
+    
+    return (
+      <Card className="w-full">
+        <CardContent className="p-4">
+          <div className="flex items-start gap-3 mb-3">
+            {part.images && part.images.length > 0 ? (
+              <img
+                src={part.images[0]}
+                alt={part.title}
+                className="w-12 h-12 rounded object-cover flex-shrink-0"
+              />
+            ) : (
+              <div className="w-12 h-12 rounded bg-muted flex items-center justify-center flex-shrink-0">
+                <Package className="h-6 w-6 text-muted-foreground" />
+              </div>
+            )}
+            <div className="flex-1 min-w-0">
+              <h3 className="font-medium text-sm leading-tight mb-1 truncate">{part.title}</h3>
+              <p className="text-xs text-muted-foreground mb-2">
+                {part.make} {part.model} ({part.year})
+              </p>
+              <div className="flex items-center gap-2 mb-2">
+                <Badge variant="outline" className="text-xs">{part.part_type}</Badge>
+              </div>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-3 mb-3">
+            <div>
+              <p className="text-xs text-muted-foreground mb-1">Quantity</p>
+              <p className="font-semibold text-sm">{part.quantity || 0}</p>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground mb-1">Status</p>
+              <div className="flex items-center gap-1">
+                <div className={`w-2 h-2 rounded-full ${stock.color}`} />
+                <span className="text-xs">{stock.label}</span>
+                {stock.status === 'low' && (
+                  <AlertTriangle className="h-3 w-3 text-yellow-500" />
+                )}
+                {stock.status === 'out' && (
+                  <AlertTriangle className="h-3 w-3 text-red-500" />
+                )}
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-xs text-muted-foreground">Last Restocked</p>
+              <p className="text-xs">
+                {part.last_restocked_at
+                  ? new Date(part.last_restocked_at).toLocaleDateString()
+                  : 'Never'}
+              </p>
+            </div>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => openRestockDialog(part)}
+              className="text-xs px-3 py-1 h-8"
+            >
+              Restock
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  };
+
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-4 sm:space-y-6">
+      {/* Header */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
         <div className="flex items-center gap-2">
           <Package className="h-5 w-5 text-orange-600" />
-          <h2 className="text-xl font-semibold">Inventory Management</h2>
+          <h2 className="text-lg sm:text-xl font-semibold">Inventory Management</h2>
         </div>
-        <div className="flex gap-2">
-          <Button
-            variant={sortBy === 'name' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setSortBy('name')}
-          >
-            Sort by Name
-          </Button>
-          <Button
-            variant={sortBy === 'quantity' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setSortBy('quantity')}
-          >
-            Sort by Quantity
-          </Button>
-          <Button
-            variant={sortBy === 'status' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setSortBy('status')}
-          >
-            Low Stock First
-          </Button>
-        </div>
+        
+        {/* Sort Controls */}
+        {isMobile ? (
+          <div className="w-full sm:w-auto">
+            <Select value={sortBy} onValueChange={(value) => setSortBy(value as 'name' | 'quantity' | 'status')}>
+              <SelectTrigger className="w-full">
+                <SortAsc className="h-4 w-4 mr-2" />
+                <SelectValue placeholder="Sort by..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="name">Sort by Name</SelectItem>
+                <SelectItem value="quantity">Sort by Quantity</SelectItem>
+                <SelectItem value="status">Low Stock First</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        ) : (
+          <div className="flex gap-2">
+            <Button
+              variant={sortBy === 'name' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setSortBy('name')}
+            >
+              Sort by Name
+            </Button>
+            <Button
+              variant={sortBy === 'quantity' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setSortBy('quantity')}
+            >
+              Sort by Quantity
+            </Button>
+            <Button
+              variant={sortBy === 'status' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setSortBy('status')}
+            >
+              Low Stock First
+            </Button>
+          </div>
+        )}
       </div>
 
+      {/* Empty State */}
       {parts.length === 0 ? (
-        <div className="text-center py-8 text-muted-foreground">
+        <div className="text-center py-8 sm:py-12 text-muted-foreground">
           <Package className="h-12 w-12 mx-auto mb-4 opacity-50" />
-          <p>No parts in inventory yet</p>
+          <p className="text-sm sm:text-base">No parts in inventory yet</p>
         </div>
       ) : (
-        <div className="border rounded-lg">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Part</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Quantity</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Last Restocked</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {sortedParts.map((part) => {
-                const stock = getStockStatus(part.quantity || 0, part.low_stock_threshold);
-                return (
-                  <TableRow key={part.id}>
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                        {part.images && part.images.length > 0 ? (
-                          <img
-                            src={part.images[0]}
-                            alt={part.title}
-                            className="w-10 h-10 rounded object-cover"
-                          />
-                        ) : (
-                          <div className="w-10 h-10 rounded bg-gray-200 flex items-center justify-center">
-                            <Package className="h-5 w-5 text-gray-400" />
-                          </div>
-                        )}
-                        <div>
-                          <p className="font-medium">{part.title}</p>
-                          <p className="text-sm text-muted-foreground">
-                            {part.make} {part.model} ({part.year})
-                          </p>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{part.part_type}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <span className="font-semibold">{part.quantity || 0}</span>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <div className={`w-2 h-2 rounded-full ${stock.color}`} />
-                        <span className="text-sm">{stock.label}</span>
-                        {stock.status === 'low' && (
-                          <AlertTriangle className="h-4 w-4 text-yellow-500" />
-                        )}
-                        {stock.status === 'out' && (
-                          <AlertTriangle className="h-4 w-4 text-red-500" />
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <span className="text-sm text-muted-foreground">
-                        {part.last_restocked_at
-                          ? new Date(part.last_restocked_at).toLocaleDateString()
-                          : 'Never'}
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => openRestockDialog(part)}
-                      >
-                        Restock
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </div>
+        <>
+          {/* Mobile Card Layout */}
+          {isMobile ? (
+            <div className="grid gap-4">
+              {sortedParts.map((part) => (
+                <InventoryCard key={part.id} part={part} />
+              ))}
+            </div>
+          ) : (
+            /* Desktop Table Layout */
+            <div className="border rounded-lg overflow-hidden">
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="min-w-[250px]">Part</TableHead>
+                      <TableHead className="min-w-[120px]">Category</TableHead>
+                      <TableHead className="min-w-[100px]">Quantity</TableHead>
+                      <TableHead className="min-w-[140px]">Status</TableHead>
+                      <TableHead className="min-w-[120px]">Last Restocked</TableHead>
+                      <TableHead className="min-w-[100px]">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {sortedParts.map((part) => {
+                      const stock = getStockStatus(part.quantity || 0, part.low_stock_threshold);
+                      return (
+                        <TableRow key={part.id}>
+                          <TableCell>
+                            <div className="flex items-center gap-3">
+                              {part.images && part.images.length > 0 ? (
+                                <img
+                                  src={part.images[0]}
+                                  alt={part.title}
+                                  className="w-10 h-10 rounded object-cover flex-shrink-0"
+                                />
+                              ) : (
+                                <div className="w-10 h-10 rounded bg-muted flex items-center justify-center flex-shrink-0">
+                                  <Package className="h-5 w-5 text-muted-foreground" />
+                                </div>
+                              )}
+                              <div className="min-w-0">
+                                <p className="font-medium truncate">{part.title}</p>
+                                <p className="text-sm text-muted-foreground truncate">
+                                  {part.make} {part.model} ({part.year})
+                                </p>
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="outline" className="whitespace-nowrap">{part.part_type}</Badge>
+                          </TableCell>
+                          <TableCell>
+                            <span className="font-semibold">{part.quantity || 0}</span>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              <div className={`w-2 h-2 rounded-full ${stock.color}`} />
+                              <span className="text-sm whitespace-nowrap">{stock.label}</span>
+                              {stock.status === 'low' && (
+                                <AlertTriangle className="h-4 w-4 text-yellow-500 flex-shrink-0" />
+                              )}
+                              {stock.status === 'out' && (
+                                <AlertTriangle className="h-4 w-4 text-red-500 flex-shrink-0" />
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <span className="text-sm text-muted-foreground whitespace-nowrap">
+                              {part.last_restocked_at
+                                ? new Date(part.last_restocked_at).toLocaleDateString()
+                                : 'Never'}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => openRestockDialog(part)}
+                              className="whitespace-nowrap"
+                            >
+                              Restock
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
+          )}
+        </>
       )}
 
+      {/* Restock Dialog - Optimized for mobile */}
       <Dialog open={restockDialogOpen} onOpenChange={setRestockDialogOpen}>
-        <DialogContent>
+        <DialogContent className="w-[95vw] max-w-md mx-auto">
           <DialogHeader>
-            <DialogTitle>Update Stock - {selectedPart?.title}</DialogTitle>
+            <DialogTitle className="text-sm sm:text-base line-clamp-2">
+              Update Stock - {selectedPart?.title}
+            </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 pt-4">
-            <div>
-              <Label htmlFor="newQuantity">New Quantity</Label>
+            {selectedPart && (
+              <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
+                {selectedPart.images && selectedPart.images.length > 0 ? (
+                  <img
+                    src={selectedPart.images[0]}
+                    alt={selectedPart.title}
+                    className="w-12 h-12 rounded object-cover flex-shrink-0"
+                  />
+                ) : (
+                  <div className="w-12 h-12 rounded bg-background flex items-center justify-center flex-shrink-0">
+                    <Package className="h-6 w-6 text-muted-foreground" />
+                  </div>
+                )}
+                <div className="min-w-0">
+                  <p className="font-medium text-sm truncate">{selectedPart.title}</p>
+                  <p className="text-xs text-muted-foreground">
+                    Current: {selectedPart.quantity || 0} units
+                  </p>
+                </div>
+              </div>
+            )}
+            
+            <div className="space-y-2">
+              <Label htmlFor="newQuantity" className="text-sm">New Quantity</Label>
               <Input
                 id="newQuantity"
                 type="number"
                 min="0"
                 value={newQuantity}
                 onChange={(e) => setNewQuantity(parseInt(e.target.value) || 0)}
-                className="mt-1"
+                className="text-base" // Better for mobile input
+                autoFocus={!isMobile} // Avoid auto-focus on mobile to prevent keyboard issues
               />
             </div>
-            <div className="flex justify-end gap-2">
+            
+            <div className="flex flex-col-reverse sm:flex-row gap-3 sm:justify-end">
               <Button
                 variant="outline"
                 onClick={() => setRestockDialogOpen(false)}
                 disabled={updating}
+                className="w-full sm:w-auto"
               >
                 Cancel
               </Button>
-              <Button onClick={handleRestock} disabled={updating}>
+              <Button 
+                onClick={handleRestock} 
+                disabled={updating}
+                className="w-full sm:w-auto"
+              >
                 {updating ? "Updating..." : "Update Stock"}
               </Button>
             </div>
