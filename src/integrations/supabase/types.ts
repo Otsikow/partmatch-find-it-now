@@ -225,9 +225,11 @@ export type Database = {
           is_featured: boolean | null
           is_highlighted: boolean | null
           is_urgent: boolean | null
+          last_restocked_at: string | null
           last_suggested_promotion: string | null
           latitude: number | null
           longitude: number | null
+          low_stock_threshold: number | null
           make: string
           model: string
           part_type: string
@@ -236,6 +238,7 @@ export type Database = {
           quality_checked_at: string | null
           quality_feedback: string | null
           quality_score: number | null
+          quantity: number
           status: string
           supplier_id: string
           title: string
@@ -264,9 +267,11 @@ export type Database = {
           is_featured?: boolean | null
           is_highlighted?: boolean | null
           is_urgent?: boolean | null
+          last_restocked_at?: string | null
           last_suggested_promotion?: string | null
           latitude?: number | null
           longitude?: number | null
+          low_stock_threshold?: number | null
           make: string
           model: string
           part_type: string
@@ -275,6 +280,7 @@ export type Database = {
           quality_checked_at?: string | null
           quality_feedback?: string | null
           quality_score?: number | null
+          quantity?: number
           status?: string
           supplier_id: string
           title: string
@@ -303,9 +309,11 @@ export type Database = {
           is_featured?: boolean | null
           is_highlighted?: boolean | null
           is_urgent?: boolean | null
+          last_restocked_at?: string | null
           last_suggested_promotion?: string | null
           latitude?: number | null
           longitude?: number | null
+          low_stock_threshold?: number | null
           make?: string
           model?: string
           part_type?: string
@@ -314,6 +322,7 @@ export type Database = {
           quality_checked_at?: string | null
           quality_feedback?: string | null
           quality_score?: number | null
+          quantity?: number
           status?: string
           supplier_id?: string
           title?: string

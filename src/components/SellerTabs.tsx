@@ -9,6 +9,7 @@ import OffersTab from "./OffersTab";
 import RequestsTab from "./RequestsTab";
 import SellerProfileManagement from "./SellerProfileManagement";
 import SubscriptionManager from "./SubscriptionManager";
+import { InventoryManagementTab } from "./InventoryManagementTab";
 import { useSubscriptionStatus } from "@/hooks/useSubscriptionStatus";
 import { CarPart } from "@/types/CarPart";
 import TabCountBadge from "./TabCountBadge";
@@ -111,11 +112,15 @@ const SupplierTabs = ({
       </div>
 
       <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
-        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-5 gap-0.5 sm:gap-1 h-auto p-1 bg-muted/50">
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-6 gap-0.5 sm:gap-1 h-auto p-1 bg-muted/50">
           <TabsTrigger value="my-parts" className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-xs px-1 py-1.5 sm:py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground">
             <Package className="h-3 w-3 sm:h-4 sm:w-4" />
             <span className="text-[8px] sm:text-[10px] leading-tight">My Parts</span>
             <TabCountBadge count={myParts.length} />
+          </TabsTrigger>
+          <TabsTrigger value="inventory" className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-xs px-1 py-1.5 sm:py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground">
+            <Package className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="text-[8px] sm:text-[10px] leading-tight">Inventory</span>
           </TabsTrigger>
           <TabsTrigger value="offers" className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-xs px-1 py-1.5 sm:py-2 h-auto data-[state=active]:bg-background data-[state=active]:text-foreground">
             <Star className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -140,9 +145,17 @@ const SupplierTabs = ({
         <TabsContent value="my-parts" className="space-y-3 sm:space-y-4">
           <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 sm:p-4 mb-3 sm:mb-4">
             <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-1 text-sm sm:text-base">My Parts</h3>
-            <p className="text-xs sm:text-sm text-blue-700 dark:text-blue-300">All the car parts you have listed for sale as a supplier. Use this to manage, edit, or remove your own listings (your inventory).</p>
+            <p className="text-xs sm:text-sm text-blue-700 dark:text-blue-300">All the car parts you have listed for sale as a supplier. Use this to manage, edit, or remove your own listings.</p>
           </div>
           <MyPartsTab parts={myParts} onRefresh={onRefreshParts} />
+        </TabsContent>
+
+        <TabsContent value="inventory" className="space-y-3 sm:space-y-4">
+          <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3 sm:p-4 mb-3 sm:mb-4">
+            <h3 className="font-semibold text-green-900 dark:text-green-100 mb-1 text-sm sm:text-base">Inventory Management</h3>
+            <p className="text-xs sm:text-sm text-green-700 dark:text-green-300">Track stock levels, manage quantities, and receive low-stock alerts for your parts.</p>
+          </div>
+          <InventoryManagementTab parts={myParts} onRefresh={onRefreshParts} />
         </TabsContent>
 
         <TabsContent value="offers" className="space-y-3 sm:space-y-4">

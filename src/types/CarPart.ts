@@ -24,6 +24,10 @@ export interface CarPart {
   is_featured?: boolean;
   featured_until?: string;
   boosted_until?: string;
+  // Inventory management fields
+  quantity?: number;
+  low_stock_threshold?: number;
+  last_restocked_at?: string;
   // Seller profile information (joined from profiles table)
   profiles?: {
     first_name?: string;

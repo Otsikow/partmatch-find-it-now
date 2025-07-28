@@ -88,6 +88,27 @@ const PartCard = ({
                 Not visible to buyers
               </Badge>
             )}
+            {/* Inventory Status */}
+            <div className="flex items-center gap-1 text-xs">
+              <span className="font-medium">Stock:</span>
+              <span className={`${
+                (part.quantity || 0) === 0 ? 'text-red-600' :
+                (part.quantity || 0) <= (part.low_stock_threshold || 2) ? 'text-yellow-600' :
+                'text-green-600'
+              }`}>
+                {part.quantity || 0}
+              </span>
+              {(part.quantity || 0) <= (part.low_stock_threshold || 2) && (part.quantity || 0) > 0 && (
+                <Badge variant="outline" className="text-xs text-yellow-600 border-yellow-600">
+                  Low Stock
+                </Badge>
+              )}
+              {(part.quantity || 0) === 0 && (
+                <Badge variant="destructive" className="text-xs">
+                  Out of Stock
+                </Badge>
+              )}
+            </div>
           </div>
         </div>
         <div className="text-left sm:text-right sm:ml-4 shrink-0">

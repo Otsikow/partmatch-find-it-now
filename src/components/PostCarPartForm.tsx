@@ -28,6 +28,7 @@ interface CarPartFormData {
   partType: string;
   condition: string;
   price: string;
+  quantity: string;
   address: string;
   images: File[];
 }
@@ -41,6 +42,7 @@ const initialFormData: CarPartFormData = {
   partType: "",
   condition: "",
   price: "",
+  quantity: "1",
   address: "",
   images: [],
 };
@@ -189,6 +191,7 @@ const PostCarPartForm = ({ onPartPosted }: { onPartPosted: () => void }) => {
         part_type: formData.partType,
         condition: formData.condition,
         price: price,
+        quantity: parseInt(formData.quantity) || 1,
         currency: "GHS",
         address: formData.address.trim(),
         images: imageUrls.length > 0 ? imageUrls : null,
@@ -371,8 +374,8 @@ const PostCarPartForm = ({ onPartPosted }: { onPartPosted: () => void }) => {
             </div>
           </div>
 
-          {/* Price and Location */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Price, Quantity and Location */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <Label htmlFor="price">Price (GHS) *</Label>
               <Input
@@ -383,6 +386,18 @@ const PostCarPartForm = ({ onPartPosted }: { onPartPosted: () => void }) => {
                 placeholder="150.00"
                 min="0"
                 step="0.01"
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="quantity">Quantity Available *</Label>
+              <Input
+                id="quantity"
+                type="number"
+                value={formData.quantity}
+                onChange={(e) => handleInputChange("quantity", e.target.value)}
+                placeholder="1"
+                min="1"
                 required
               />
             </div>
