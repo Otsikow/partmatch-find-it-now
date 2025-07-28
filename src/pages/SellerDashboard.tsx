@@ -11,6 +11,7 @@ import SellerWelcomeDashboard from "@/components/SellerWelcomeDashboard";
 import { useSellerData } from "@/hooks/useSellerData";
 import { useMyPartsData } from "@/hooks/useMyPartsData";
 import { useOfferHandling } from "@/hooks/useOfferHandling";
+import SellerVerificationStatus from "@/components/SellerVerificationStatus";
 
 const SellerDashboard = () => {
   const { user } = useAuth();
@@ -91,6 +92,14 @@ const SellerDashboard = () => {
           />
         ) : (
           <>
+            {/* Seller Verification Status - always show at top of dashboard */}
+            <SellerVerificationStatus 
+              showEnforcement={true}
+              onVerificationRequired={() => {
+                console.log("Seller verification required - restricting access to seller features");
+              }}
+            />
+
             <SellerStats
               totalOffers={stats.totalOffers}
               pendingOffers={stats.pendingOffers}
