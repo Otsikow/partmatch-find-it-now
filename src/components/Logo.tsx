@@ -11,10 +11,14 @@ interface LogoProps {
 }
 
 const Logo: React.FC<LogoProps> = ({ className, isHero, onClick, disableDefaultLink }) => {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+  
   const logoClasses = cn(
     'w-auto object-contain transition-all duration-300',
     {
-      'h-48 sm:h-56 md:h-64 lg:h-72 drop-shadow-2xl dark:filter dark:brightness-0 dark:invert dark:contrast-200 dark:saturate-200 dark:hue-rotate-[45deg] dark:drop-shadow-[0_0_30px_rgba(255,215,0,0.8)]': isHero,
+      'h-48 sm:h-56 md:h-64 lg:h-72 drop-shadow-2xl': isHero && !isDark,
+      'h-48 sm:h-56 md:h-64 lg:h-72 drop-shadow-[0_0_30px_rgba(255,215,0,0.8)] filter brightness-0 invert sepia saturate-200 hue-rotate-[45deg]': isHero && isDark,
       'h-8 sm:h-10 lg:h-12 bg-white dark:bg-gray-800 rounded-lg p-2 shadow-lg border border-gray-200 dark:border-gray-600': !isHero,
     },
     className
