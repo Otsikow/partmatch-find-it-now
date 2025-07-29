@@ -95,21 +95,6 @@ const MyPartsTab = ({ parts, onRefresh }: MyPartsTabProps) => {
     return filteredParts.filter(part => part.status === 'hidden');
   }, [filteredParts]);
 
-  // Debug featured parts
-  console.log("=== Featured Parts Debug ===");
-  console.log("Total parts:", parts.length);
-  console.log("Filtered parts:", filteredParts.length);
-  console.log("Featured parts count:", featuredParts.length);
-  console.log("Parts with is_featured true:", parts.filter(p => p.is_featured).length);
-  console.log("Parts with featured_until:", parts.filter(p => p.featured_until).length);
-  featuredParts.forEach((part, index) => {
-    console.log(`Featured part ${index + 1}:`, {
-      title: part.title,
-      is_featured: part.is_featured,
-      featured_until: part.featured_until,
-      status: part.status
-    });
-  });
 
   const handleEditPart = (part: CarPart) => {
     setEditingPart(part);

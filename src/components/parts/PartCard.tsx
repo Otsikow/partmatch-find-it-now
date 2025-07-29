@@ -31,7 +31,7 @@ const PartCard = ({
   const [isExpanded, setIsExpanded] = useState(false);
 
   const isPartFeatured = (part: CarPart) => {
-    return part.featured_until && new Date(part.featured_until) > new Date();
+    return part.is_featured || (part.featured_until && new Date(part.featured_until) > new Date());
   };
 
   const isPartBoosted = (part: CarPart) => {
@@ -122,7 +122,12 @@ const PartCard = ({
           {(isPartFeatured(part) || isPartBoosted(part)) && (
             <div className="mt-1 text-xs text-muted-foreground">
               {isPartFeatured(part) && (
-                <div>Featured until {new Date(part.featured_until!).toLocaleDateString()}</div>
+                <div>
+                  {part.featured_until 
+                    ? `Featured until ${new Date(part.featured_until).toLocaleDateString()}`
+                    : 'Featured'
+                  }
+                </div>
               )}
               {isPartBoosted(part) && (
                 <div>Boosted until {new Date(part.boosted_until!).toLocaleDateString()}</div>
