@@ -51,6 +51,13 @@ const FeaturedListingsManager = () => {
     fetchAvailableListings();
   }, []);
 
+  // Add refresh button for testing
+  const handleRefresh = () => {
+    console.log('Manual refresh triggered');
+    fetchFeaturedListings();
+    fetchAvailableListings();
+  };
+
   const fetchFeaturedListings = async () => {
     try {
       console.log('FeaturedListingsManager: Fetching featured listings...');
@@ -188,6 +195,14 @@ const FeaturedListingsManager = () => {
     ? listings 
     : listings.filter(l => l.featured_country === selectedCountry);
 
+  console.log('FeaturedListingsManager: Current state:', {
+    selectedCountry,
+    totalListings: listings.length,
+    filteredListings: filteredListings.length,
+    allListings: listings,
+    countryFilter: selectedCountry
+  });
+
   const getCountryName = (code: string) => {
     const country = SUPPORTED_COUNTRIES.find(c => c.code === code);
     return country ? `${country.flag} ${country.name}` : code;
@@ -277,6 +292,9 @@ const FeaturedListingsManager = () => {
               ))}
             </SelectContent>
           </Select>
+          <Button variant="outline" onClick={handleRefresh}>
+            Refresh Data
+          </Button>
         </div>
 
         <Dialog open={showAddModal} onOpenChange={setShowAddModal}>
