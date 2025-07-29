@@ -63,20 +63,34 @@ export const useChatData = (chatId: string, userId: string | undefined) => {
 
   const fetchChatInfo = useCallback(async () => {
     try {
-      console.log('📥 Fetching chat info for:', chatId);
+      console.log('📥 Fetching chat info for:', { chatId, userId });
+      
+      if (!chatId) {
+        console.error('❌ No chatId provided');
+        return;
+      }
+      
+      if (!userId) {
+        console.error('❌ No userId provided');
+        return;
+      }
+      
       const { data: chatData, error: chatError } = await supabase
         .from('chats')
         .select('*')
         .eq('id', chatId)
         .single();
 
-      if (chatError) throw chatError;
+      if (chatError) {
+        console.error('❌ Chat fetch error:', chatError);
+        throw chatError;
+      }
       console.log('✅ Chat info fetched:', chatData);
       setChatInfo(chatData);
 
       // Fetch other user info
       const otherUserId = chatData.buyer_id === userId ? chatData.seller_id : chatData.buyer_id;
-      console.log('📥 Fetching other user info for:', otherUserId);
+      console.log('📥 Fetching other user info for:', { otherUserId, chatData });
       
       const { data: userData, error: userError } = await supabase
         .from('profiles')
@@ -84,11 +98,14 @@ export const useChatData = (chatId: string, userId: string | undefined) => {
         .eq('id', otherUserId)
         .single();
 
-      if (userError) throw userError;
+      if (userError) {
+        console.error('❌ User fetch error:', userError);
+        throw userError;
+      }
       console.log('✅ Other user info fetched:', userData);
       setOtherUser(userData);
     } catch (error) {
-      console.error('Error fetching chat info:', error);
+      console.error('❌ Error fetching chat info:', error);
       toast({
         title: "Error",
         description: "Failed to load chat information",
