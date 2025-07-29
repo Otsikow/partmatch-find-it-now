@@ -44,7 +44,7 @@ const MyPartsTab = ({ parts, onRefresh }: MyPartsTabProps) => {
 
   // Filter parts based on search term and filters
   const filteredParts = useMemo(() => {
-    const result = parts.filter(part => {
+    return parts.filter(part => {
       // Search term filter
       if (searchTerm) {
         const searchLower = searchTerm.toLowerCase();
@@ -75,15 +75,16 @@ const MyPartsTab = ({ parts, onRefresh }: MyPartsTabProps) => {
 
       return true;
     });
-    
-    console.log("=== MyPartsTab Debug ===");
-    console.log("Total parts passed to component:", parts.length);
-    console.log("Filtered parts count:", result.length);
-    console.log("Search term:", searchTerm);
-    console.log("Filters:", filters);
-    
-    return result;
   }, [parts, searchTerm, filters]);
+
+  // Split filtered parts into visible and hidden groups
+  const visibleParts = useMemo(() => {
+    return filteredParts.filter(part => part.status !== 'hidden');
+  }, [filteredParts]);
+
+  const hiddenParts = useMemo(() => {
+    return filteredParts.filter(part => part.status === 'hidden');
+  }, [filteredParts]);
 
   const handleEditPart = (part: CarPart) => {
     setEditingPart(part);
@@ -142,20 +143,73 @@ const MyPartsTab = ({ parts, onRefresh }: MyPartsTabProps) => {
           <p className="text-sm text-muted-foreground">Try adjusting your search or filters.</p>
         </Card>
       ) : (
-        <div className="space-y-4">
-          {filteredParts.map((part) => (
-            <PartCard
-              key={part.id}
-              part={part}
-              selectedPartForBoost={selectedPartForBoost}
-              hasBusinessSubscription={hasBusinessSubscription}
-              onEdit={handleEditPart}
-              onDelete={deletePart}
-              onUpdateStatus={updatePartStatus}
-              onToggleBoost={setSelectedPartForBoost}
-              onFeatureUpdate={onRefresh}
-            />
-          ))}
+        <div className="space-y-8">
+          {/* Active Listings Section */}
+          {visibleParts.length > 0 && (
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
+                Your Active Listings
+                <span className="text-sm font-normal text-muted-foreground">
+                  ({visibleParts.length})
+                </span>
+              </h2>
+              <div className="space-y-4">
+                {visibleParts.map((part) => (
+                  <PartCard
+                    key={part.id}
+                    part={part}
+                    selectedPartForBoost={selectedPartForBoost}
+                    hasBusinessSubscription={hasBusinessSubscription}
+                    onEdit={handleEditPart}
+                    onDelete={deletePart}
+                    onUpdateStatus={updatePartStatus}
+                    onToggleBoost={setSelectedPartForBoost}
+                    onFeatureUpdate={onRefresh}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Hidden Listings Section */}
+          {hiddenParts.length > 0 && (
+            <div className="space-y-4">
+              <div className="border-t pt-6">
+                <h2 className="text-xl font-semibold text-muted-foreground flex items-center gap-2 mb-2">
+                  Hidden from Buyers
+                  <span className="text-sm font-normal">
+                    ({hiddenParts.length})
+                  </span>
+                </h2>
+                <p className="text-sm text-muted-foreground mb-4">
+                  These parts are currently hidden from buyers. You can unhide them to make them public again.
+                </p>
+                <div className="space-y-4 opacity-75">
+                  {hiddenParts.map((part) => (
+                    <PartCard
+                      key={part.id}
+                      part={part}
+                      selectedPartForBoost={selectedPartForBoost}
+                      hasBusinessSubscription={hasBusinessSubscription}
+                      onEdit={handleEditPart}
+                      onDelete={deletePart}
+                      onUpdateStatus={updatePartStatus}
+                      onToggleBoost={setSelectedPartForBoost}
+                      onFeatureUpdate={onRefresh}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Empty state when no parts in either section */}
+          {visibleParts.length === 0 && hiddenParts.length === 0 && (
+            <Card className="p-8 text-center">
+              <p className="text-muted-foreground mb-2">No parts match your search criteria.</p>
+              <p className="text-sm text-muted-foreground">Try adjusting your search or filters.</p>
+            </Card>
+          )}
         </div>
       )}
 
