@@ -29,6 +29,7 @@ const CarPartCardImage = ({ partId, title, condition, images, isFeatured, onExpa
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             onError={(e) => {
               console.error('Image failed to load:', imageUrl);
+              console.error('Full error details:', e);
               // Show placeholder on error instead of hiding
               const target = e.currentTarget;
               target.style.display = 'none';
@@ -38,6 +39,7 @@ const CarPartCardImage = ({ partId, title, condition, images, isFeatured, onExpa
             onLoad={() => {
               console.log('Image loaded successfully:', imageUrl);
             }}
+            loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 items-center justify-center hidden">
             <div className="text-gray-400 text-center">
