@@ -81,7 +81,8 @@ const PartCard = ({
               {part.condition}
             </Badge>
             <Badge variant={part.status === 'hidden' ? 'secondary' : 'default'} className="text-xs">
-              {part.status === 'hidden' ? 'Hidden from public' : part.status}
+              {part.status === 'hidden' ? 'Hidden from public' : 
+               part.status === 'available' ? 'Available' : part.status}
             </Badge>
             {part.status === 'hidden' && (
               <Badge variant="outline" className="text-xs text-yellow-600 border-yellow-600">
@@ -149,13 +150,6 @@ const PartCard = ({
         </div>
       )}
 
-      {/* Debug info for images */}
-      <div className="text-xs text-gray-500 mb-2">
-        Images: {part.images ? part.images.length : 0} 
-        {part.images && part.images.length > 0 && (
-          <span> - First: {part.images[0].substring(0, 50)}...</span>
-        )}
-      </div>
 
       {/* Monetization Features */}
       {selectedPartForBoost === part.id && (
