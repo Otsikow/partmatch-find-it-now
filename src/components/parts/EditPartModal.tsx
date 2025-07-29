@@ -147,6 +147,23 @@ const EditPartModal = ({ part, isOpen, onClose, onUpdate }: EditPartModalProps) 
 
       console.log("EditPartModal: Starting update for part", part.id);
       console.log("EditPartModal: Form data:", formData);
+      console.log("EditPartModal: New images:", newImages);
+
+      // Upload new images if any
+      let imageUrls: string[] = [];
+      if (newImages.length > 0) {
+        try {
+          imageUrls = await uploadImages(newImages);
+          console.log("EditPartModal: Images uploaded:", imageUrls);
+        } catch (uploadError) {
+          console.error("EditPartModal: Failed to upload images:", uploadError);
+          toast({
+            title: "Image Upload Failed",
+            description: "Failed to upload images. Part will be updated without new images.",
+            variant: "destructive"
+          });
+        }
+      }
 
       const updateData = {
         title: formData.title.trim(),
@@ -158,7 +175,11 @@ const EditPartModal = ({ part, isOpen, onClose, onUpdate }: EditPartModalProps) 
         condition: formData.condition as 'New' | 'Used' | 'Refurbished',
         price: price,
         address: formData.address.trim(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
+        // Only update images if new ones were uploaded, otherwise preserve existing images
+        ...(imageUrls.length > 0 ? { 
+          images: [...(part.images || []), ...imageUrls] 
+        } : {})
       };
 
       console.log("EditPartModal: Update data prepared:", updateData);
