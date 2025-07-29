@@ -58,7 +58,8 @@ const EditPartModal = ({ part, isOpen, onClose, onUpdate }: EditPartModalProps) 
     
     const uploadPromises = images.map(async (image, index) => {
       const timestamp = Date.now();
-      const fileName = `${part?.id}/${timestamp}-${index}.${image.name.split('.').pop()}`;
+      // Use user ID for folder structure, not part ID, to match RLS policy
+      const fileName = `${part?.supplier_id}/${timestamp}-${index}.${image.name.split('.').pop()}`;
       
       const { data, error } = await supabase.storage
         .from('car-part-images')
