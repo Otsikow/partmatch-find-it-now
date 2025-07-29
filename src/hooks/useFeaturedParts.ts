@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { CarPart } from '@/types/CarPart';
 
-export const useFeaturedParts = () => {
+export const useFeaturedParts = (countryCode?: string) => {
   const [featuredParts, setFeaturedParts] = useState<CarPart[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchFeaturedParts();
-  }, []);
+  }, [countryCode]);
 
   const fetchFeaturedParts = async () => {
     try {
@@ -19,7 +19,7 @@ export const useFeaturedParts = () => {
       console.log('useFeaturedParts: Starting fetch...');
       console.log('useFeaturedParts: Current time:', new Date().toISOString());
 
-      const { data, error } = await supabase
+      let query = supabase
         .from('car_parts')
         .select(`
           *,
@@ -33,8 +33,17 @@ export const useFeaturedParts = () => {
           )
         `)
         .eq('is_featured', true)
-        .eq('status', 'available')
-        .gt('featured_until', new Date().toISOString())
+        .eq('status', 'available');
+
+      // Add country filter if provided
+      if (countryCode) {
+        query = query.eq('featured_country', countryCode);
+      }
+
+      // Add time filter - either no expiry or not yet expired
+      query = query.or('featured_until.is.null,featured_until.gt.' + new Date().toISOString());
+      
+      const { data, error } = await query
         .order('created_at', { ascending: false })
         .limit(8);
 
@@ -68,6 +77,7 @@ export const useFeaturedParts = () => {
         updated_at: part.updated_at,
         is_featured: part.is_featured,
         featured_until: part.featured_until,
+        featured_country: part.featured_country,
         boosted_until: part.boosted_until,
         profiles: part.profiles
       })) || [];

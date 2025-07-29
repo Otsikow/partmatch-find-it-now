@@ -17,6 +17,7 @@ import ListingQualityManager from "@/components/admin/ListingQualityManager";
 import WeeklyInsightsDashboard from "@/components/admin/WeeklyInsightsDashboard";
 import BlogManager from "@/components/admin/BlogManager";
 import UserDetailsModal from "@/components/admin/UserDetailsModal";
+import FeaturedListingsManager from "@/components/admin/FeaturedListingsManager";
 import { useAdminData } from "@/hooks/useAdminData";
 import { useAdminActions } from "@/hooks/useAdminActions";
 import { useState, useEffect, useRef, useMemo } from "react";
@@ -138,7 +139,7 @@ const AdminDashboard = () => {
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           {/* Desktop Tab Navigation */}
-          <TabsList className="hidden lg:grid lg:grid-cols-8 w-full bg-card backdrop-blur-sm border mb-4">
+          <TabsList className="hidden lg:grid lg:grid-cols-9 w-full bg-card backdrop-blur-sm border mb-4">
             <TabsTrigger value="insights" className="text-sm xl:text-base font-inter truncate">
               Weekly Insights
             </TabsTrigger>
@@ -150,6 +151,9 @@ const AdminDashboard = () => {
             </TabsTrigger>
             <TabsTrigger value="offers" className="text-sm xl:text-base font-inter truncate">
               Offers ({offers.length})
+            </TabsTrigger>
+            <TabsTrigger value="featured" className="text-sm xl:text-base font-inter truncate">
+              Featured Listings
             </TabsTrigger>
             <TabsTrigger value="quality" className="text-sm xl:text-base font-inter truncate">
               Quality Checker
@@ -181,7 +185,10 @@ const AdminDashboard = () => {
             </TabsTrigger>
           </TabsList>
 
-          <TabsList className="hidden md:grid lg:hidden md:grid-cols-4 w-full bg-card backdrop-blur-sm border mb-4">
+          <TabsList className="hidden md:grid lg:hidden md:grid-cols-5 w-full bg-card backdrop-blur-sm border mb-4">
+            <TabsTrigger value="featured" className="text-xs sm:text-sm font-inter truncate px-1">
+              Featured
+            </TabsTrigger>
             <TabsTrigger value="quality" className="text-xs sm:text-sm font-inter truncate px-1">
               Quality
             </TabsTrigger>
@@ -219,7 +226,10 @@ const AdminDashboard = () => {
             </TabsList>
             
             {/* Tertiary tabs */}
-            <TabsList className="grid grid-cols-4 w-full bg-card backdrop-blur-sm border">
+            <TabsList className="grid grid-cols-5 w-full bg-card backdrop-blur-sm border">
+              <TabsTrigger value="featured" className="text-xs font-inter truncate px-1">
+                Featured
+              </TabsTrigger>
               <TabsTrigger value="quality" className="text-xs font-inter truncate px-1">
                 Quality
               </TabsTrigger>
@@ -316,6 +326,18 @@ const AdminDashboard = () => {
                   </div>
                 ))
               )}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="featured" className="mt-4 sm:mt-6">
+            <div className="space-y-3 sm:space-y-4 lg:space-y-6">
+              <h2 className="text-lg sm:text-xl lg:text-2xl font-playfair font-semibold text-primary px-2 sm:px-0">
+                Featured Listings by Country
+              </h2>
+              
+              <div className="mx-2 sm:mx-0">
+                <FeaturedListingsManager />
+              </div>
             </div>
           </TabsContent>
 

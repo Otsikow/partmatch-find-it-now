@@ -23,6 +23,7 @@ export interface CarPart {
   // Monetization fields
   is_featured?: boolean;
   featured_until?: string;
+  featured_country?: string;
   boosted_until?: string;
   // Inventory management fields
   quantity?: number;

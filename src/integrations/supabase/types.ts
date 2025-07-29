@@ -217,6 +217,7 @@ export type Database = {
           currency: string
           description: string | null
           extra_photos_count: number | null
+          featured_country: string | null
           featured_until: string | null
           has_verified_badge: boolean | null
           highlighted_until: string | null
@@ -259,6 +260,7 @@ export type Database = {
           currency?: string
           description?: string | null
           extra_photos_count?: number | null
+          featured_country?: string | null
           featured_until?: string | null
           has_verified_badge?: boolean | null
           highlighted_until?: string | null
@@ -301,6 +303,7 @@ export type Database = {
           currency?: string
           description?: string | null
           extra_photos_count?: number | null
+          featured_country?: string | null
           featured_until?: string | null
           has_verified_badge?: boolean | null
           highlighted_until?: string | null

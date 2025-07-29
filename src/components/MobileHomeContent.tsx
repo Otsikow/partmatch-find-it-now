@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import CarPartCard from "@/components/CarPartCard";
-import { useFeaturedParts } from "@/hooks/useFeaturedParts";
+import { useLocationFeaturedParts } from "@/hooks/useLocationFeaturedParts";
 import { useRealTimeStats } from "@/hooks/useRealTimeStats";
 import { useBlogPosts } from "@/hooks/useBlogPosts";
 import { useTranslation } from 'react-i18next';
@@ -16,7 +16,7 @@ import carAccessoriesImage from "@/assets/car-accessories.jpg";
 
 const MobileHomeContent = () => {
   const { t } = useTranslation();
-  const { featuredParts, loading: featuredLoading } = useFeaturedParts();
+  const { featuredParts, loading: featuredLoading, currentCountryCode, detectedCountry } = useLocationFeaturedParts();
   const {
     activeParts,
     activeRequests,
@@ -122,7 +122,14 @@ const MobileHomeContent = () => {
       {/* Featured Parts */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-foreground">{t('featuredParts')}</h3>
+          <div className="flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-foreground">{t('featuredParts')}</h3>
+            {currentCountryCode && detectedCountry && (
+              <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
+                {detectedCountry.flag} {detectedCountry.name}
+              </span>
+            )}
+          </div>
           <Link to="/search-parts-with-map" className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
             {t('viewAll')}
           </Link>
