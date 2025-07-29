@@ -60,7 +60,9 @@ const FeaturedListingsManager = () => {
 
   const fetchFeaturedListings = async () => {
     try {
-      console.log('FeaturedListingsManager: Fetching featured listings...');
+      setLoading(true);
+      console.log('FeaturedListingsManager: Starting to fetch featured listings...');
+      
       const { data, error } = await supabase
         .from('car_parts')
         .select(`
@@ -72,7 +74,11 @@ const FeaturedListingsManager = () => {
         .eq('is_featured', true)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('FeaturedListingsManager: Error fetching listings:', error);
+        throw error;
+      }
+      
       console.log('FeaturedListingsManager: Fetched listings:', data);
       console.log('FeaturedListingsManager: Nigeria listings:', data?.filter(l => l.featured_country === 'NG'));
       setListings(data || []);
