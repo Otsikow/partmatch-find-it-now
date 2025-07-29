@@ -139,10 +139,23 @@ const PartCard = ({
               src={image}
               alt={`${part.title} ${index + 1}`}
               className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded border border-border flex-shrink-0"
+              onLoad={() => console.log('PartCard image loaded:', image)}
+              onError={(e) => {
+                console.error('PartCard image failed to load:', image);
+                console.error('Error details:', e);
+              }}
             />
           ))}
         </div>
       )}
+
+      {/* Debug info for images */}
+      <div className="text-xs text-gray-500 mb-2">
+        Images: {part.images ? part.images.length : 0} 
+        {part.images && part.images.length > 0 && (
+          <span> - First: {part.images[0].substring(0, 50)}...</span>
+        )}
+      </div>
 
       {/* Monetization Features */}
       {selectedPartForBoost === part.id && (
