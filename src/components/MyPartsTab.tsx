@@ -77,18 +77,39 @@ const MyPartsTab = ({ parts, onRefresh }: MyPartsTabProps) => {
     });
   }, [parts, searchTerm, filters]);
 
+  // Helper function to check if part is featured (consistent with PartCard)
+  const isPartFeatured = (part: CarPart) => {
+    return part.is_featured || (part.featured_until && new Date(part.featured_until) > new Date());
+  };
+
   // Split filtered parts into featured, visible, and hidden groups
   const featuredParts = useMemo(() => {
-    return filteredParts.filter(part => part.status !== 'hidden' && part.is_featured);
+    return filteredParts.filter(part => part.status !== 'hidden' && isPartFeatured(part));
   }, [filteredParts]);
 
   const visibleParts = useMemo(() => {
-    return filteredParts.filter(part => part.status !== 'hidden' && !part.is_featured);
+    return filteredParts.filter(part => part.status !== 'hidden' && !isPartFeatured(part));
   }, [filteredParts]);
 
   const hiddenParts = useMemo(() => {
     return filteredParts.filter(part => part.status === 'hidden');
   }, [filteredParts]);
+
+  // Debug featured parts
+  console.log("=== Featured Parts Debug ===");
+  console.log("Total parts:", parts.length);
+  console.log("Filtered parts:", filteredParts.length);
+  console.log("Featured parts count:", featuredParts.length);
+  console.log("Parts with is_featured true:", parts.filter(p => p.is_featured).length);
+  console.log("Parts with featured_until:", parts.filter(p => p.featured_until).length);
+  featuredParts.forEach((part, index) => {
+    console.log(`Featured part ${index + 1}:`, {
+      title: part.title,
+      is_featured: part.is_featured,
+      featured_until: part.featured_until,
+      status: part.status
+    });
+  });
 
   const handleEditPart = (part: CarPart) => {
     setEditingPart(part);
