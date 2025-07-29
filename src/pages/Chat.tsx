@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import ChatList from '@/components/chat/ChatList';
-import ChatInterface from '@/components/chat/ChatInterface';
+import GroupedChatInterface from '@/components/chat/GroupedChatInterface';
 import { useIsMobile } from '@/hooks/use-mobile';
 import PageHeader from '@/components/PageHeader';
 
@@ -10,20 +10,20 @@ const Chat = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-  const [selectedChatId, setSelectedChatId] = useState<string | null>(
-    searchParams.get('id')
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(
+    searchParams.get('userId')
   );
 
-  const handleChatSelect = (chatId: string) => {
-    console.log('🎯 Chat selected:', chatId);
-    setSelectedChatId(chatId);
-    setSearchParams({ id: chatId });
-    console.log('📍 URL params updated:', { id: chatId });
+  const handleChatSelect = (userId: string) => {
+    console.log('🎯 User selected for grouped chat:', userId);
+    setSelectedUserId(userId);
+    setSearchParams({ userId });
+    console.log('📍 URL params updated:', { userId });
   };
 
   const handleBack = () => {
     if (isMobile) {
-      setSelectedChatId(null);
+      setSelectedUserId(null);
       setSearchParams({});
     } else {
       // On desktop, navigate back to dashboard or previous page
@@ -45,27 +45,27 @@ const Chat = () => {
         <div className="w-full flex h-full">
           {/* Chat List - Responsive width and visibility */}
           <div className={`${
-            selectedChatId && isMobile 
+            selectedUserId && isMobile 
               ? 'hidden' 
-              : selectedChatId && !isMobile
+              : selectedUserId && !isMobile
                 ? 'w-80 xl:w-96'
                 : 'w-full sm:w-80 md:w-96 lg:w-80 xl:w-96'
           } border-r border-gray-200 bg-white flex-shrink-0 h-full`}>
             <ChatList onChatSelect={handleChatSelect} />
           </div>
           
-          {/* Chat Interface - Optimized for all screen sizes */}
-          {selectedChatId && (
+          {/* Grouped Chat Interface - Optimized for all screen sizes */}
+          {selectedUserId && (
             <div className="flex-1 bg-white min-w-0 h-full">
-              <ChatInterface 
-                chatId={selectedChatId} 
+              <GroupedChatInterface 
+                otherUserId={selectedUserId} 
                 onBack={handleBack}
               />
             </div>
           )}
           
           {/* Placeholder when no chat selected (desktop/tablet only) */}
-          {!selectedChatId && !isMobile && (
+          {!selectedUserId && !isMobile && (
             <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 min-w-0">
               <div className="text-center text-gray-500 max-w-sm mx-auto px-6">
                 <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">

@@ -32,8 +32,27 @@ interface ChatListItem {
   };
 }
 
+interface GroupedChat {
+  other_user: {
+    id: string;
+    first_name?: string;
+    last_name?: string;
+    user_type: string;
+    is_verified: boolean;
+  };
+  chats: ChatListItem[];
+  last_message?: string;
+  last_message_at?: string;
+  total_unread_count: number;
+  recent_part_info?: {
+    title: string;
+    make: string;
+    model: string;
+  };
+}
+
 interface ChatListProps {
-  onChatSelect: (chatId: string) => void;
+  onChatSelect: (userId: string) => void;
 }
 
 const ChatList = ({ onChatSelect }: ChatListProps) => {
@@ -132,22 +151,79 @@ const ChatList = ({ onChatSelect }: ChatListProps) => {
     };
   }, [user?.id, fetchChats]);
 
-  const filteredChats = chats.filter(chat => {
+  // Group chats by other user (WhatsApp style)
+  const groupedChats = chats.reduce((acc: { [key: string]: GroupedChat }, chat) => {
+    const otherUserId = chat.other_user.id;
+    
+    if (!acc[otherUserId]) {
+      acc[otherUserId] = {
+        other_user: chat.other_user,
+        chats: [],
+        last_message: chat.last_message,
+        last_message_at: chat.last_message_at,
+        total_unread_count: 0,
+        recent_part_info: chat.part_info
+      };
+    }
+    
+    acc[otherUserId].chats.push(chat);
+    
+    // Update with most recent message data
+    if (!acc[otherUserId].last_message_at || 
+        (chat.last_message_at && chat.last_message_at > acc[otherUserId].last_message_at!)) {
+      acc[otherUserId].last_message = chat.last_message;
+      acc[otherUserId].last_message_at = chat.last_message_at;
+      acc[otherUserId].recent_part_info = chat.part_info;
+    }
+    
+    // Sum up unread counts
+    const unreadCount = user?.id === chat.buyer_id ? chat.buyer_unread_count : chat.seller_unread_count;
+    acc[otherUserId].total_unread_count += unreadCount;
+    
+    return acc;
+  }, {});
+
+  // Convert to array and sort by most recent message
+  const sortedGroupedChats = Object.values(groupedChats).sort((a, b) => {
+    if (!a.last_message_at && !b.last_message_at) return 0;
+    if (!a.last_message_at) return 1;
+    if (!b.last_message_at) return -1;
+    return new Date(b.last_message_at).getTime() - new Date(a.last_message_at).getTime();
+  });
+
+  const filteredChats = sortedGroupedChats.filter(groupedChat => {
     if (!searchTerm) return true;
     
     const searchLower = searchTerm.toLowerCase();
-    const otherUserName = `${chat.other_user?.first_name || ''} ${chat.other_user?.last_name || ''}`.toLowerCase();
-    const partTitle = chat.part_info?.title?.toLowerCase() || '';
+    const otherUserName = `${groupedChat.other_user?.first_name || ''} ${groupedChat.other_user?.last_name || ''}`.toLowerCase();
+    const partTitle = groupedChat.recent_part_info?.title?.toLowerCase() || '';
     
-    return otherUserName.includes(searchLower) || partTitle.includes(searchLower);
+    // Also search through all part titles in the group
+    const allPartTitles = groupedChat.chats.map(chat => chat.part_info?.title?.toLowerCase() || '').join(' ');
+    
+    return otherUserName.includes(searchLower) || partTitle.includes(searchLower) || allPartTitles.includes(searchLower);
   });
 
   const getInitials = (firstName?: string, lastName?: string) => {
     return `${firstName?.[0] || ''}${lastName?.[0] || ''}`.toUpperCase() || 'U';
   };
 
-  const getUnreadCount = (chat: ChatListItem) => {
-    return user?.id === chat.buyer_id ? chat.buyer_unread_count : chat.seller_unread_count;
+  const getPartsSummary = (chats: ChatListItem[]) => {
+    if (chats.length === 1) {
+      const part = chats[0].part_info;
+      return part ? `${part.make} ${part.model} - ${part.title}` : 'Car Part Discussion';
+    }
+    
+    const uniqueParts = chats
+      .filter(chat => chat.part_info)
+      .map(chat => chat.part_info!.title)
+      .filter((title, index, arr) => arr.indexOf(title) === index);
+    
+    if (uniqueParts.length <= 2) {
+      return uniqueParts.join(', ');
+    }
+    
+    return `${uniqueParts.slice(0, 2).join(', ')} +${uniqueParts.length - 2} more`;
   };
 
   if (loading) {
@@ -184,15 +260,13 @@ const ChatList = ({ onChatSelect }: ChatListProps) => {
           </div>
         ) : (
           <div className="divide-y divide-gray-100">
-            {filteredChats.map((chat) => {
-              const unreadCount = getUnreadCount(chat);
-              
+            {filteredChats.map((groupedChat) => {
               return (
                 <div
-                  key={chat.id}
+                  key={groupedChat.other_user.id}
                   onClick={() => {
-                    console.log('🖱️ Chat item clicked:', chat.id);
-                    onChatSelect(chat.id);
+                    console.log('🖱️ Grouped chat clicked for user:', groupedChat.other_user.id);
+                    onChatSelect(groupedChat.other_user.id);
                   }}
                   className="p-4 hover:bg-gray-50 cursor-pointer transition-colors"
                 >
@@ -200,12 +274,12 @@ const ChatList = ({ onChatSelect }: ChatListProps) => {
                     <div className="relative">
                       <Avatar className="h-12 w-12 flex-shrink-0">
                         <AvatarFallback className="bg-purple-100 text-purple-700">
-                          {getInitials(chat.other_user?.first_name, chat.other_user?.last_name)}
+                          {getInitials(groupedChat.other_user?.first_name, groupedChat.other_user?.last_name)}
                         </AvatarFallback>
                       </Avatar>
-                      {unreadCount > 0 && (
+                      {groupedChat.total_unread_count > 0 && (
                         <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                          {unreadCount > 99 ? '99+' : unreadCount}
+                          {groupedChat.total_unread_count > 99 ? '99+' : groupedChat.total_unread_count}
                         </div>
                       )}
                     </div>
@@ -214,33 +288,31 @@ const ChatList = ({ onChatSelect }: ChatListProps) => {
                       <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-2">
                           <h4 className="font-semibold text-sm text-gray-900 truncate">
-                            {chat.other_user?.first_name} {chat.other_user?.last_name}
+                            {groupedChat.other_user?.first_name} {groupedChat.other_user?.last_name}
                           </h4>
-                          {chat.other_user?.is_verified && (
+                          {groupedChat.other_user?.is_verified && (
                             <Badge variant="secondary" className="text-xs bg-green-100 text-green-700">
                               Verified
                             </Badge>
                           )}
                         </div>
-                        {chat.last_message_at && (
+                        {groupedChat.last_message_at && (
                           <span className="text-xs text-gray-500 flex-shrink-0 ml-2">
-                            {formatDistanceToNow(new Date(chat.last_message_at), { addSuffix: true })}
+                            {formatDistanceToNow(new Date(groupedChat.last_message_at), { addSuffix: true })}
                           </span>
                         )}
                       </div>
                       
-                      {chat.part_info && (
-                        <p className="text-xs text-gray-500 mb-1">
-                          About: {chat.part_info.make} {chat.part_info.model} - {chat.part_info.title}
-                        </p>
-                      )}
+                      <p className="text-xs text-gray-500 mb-1">
+                        About: {getPartsSummary(groupedChat.chats)}
+                      </p>
                       
                       <p className="text-sm text-gray-600 truncate">
-                        {chat.last_message || 'No messages yet'}
+                        {groupedChat.last_message || 'No messages yet'}
                       </p>
                       
                       <span className="text-xs text-gray-500 capitalize mt-1 inline-block">
-                        {chat.other_user?.user_type}
+                        {groupedChat.other_user?.user_type}
                       </span>
                     </div>
                   </div>
