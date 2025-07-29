@@ -77,9 +77,13 @@ const MyPartsTab = ({ parts, onRefresh }: MyPartsTabProps) => {
     });
   }, [parts, searchTerm, filters]);
 
-  // Split filtered parts into visible and hidden groups
+  // Split filtered parts into featured, visible, and hidden groups
+  const featuredParts = useMemo(() => {
+    return filteredParts.filter(part => part.status !== 'hidden' && part.is_featured);
+  }, [filteredParts]);
+
   const visibleParts = useMemo(() => {
-    return filteredParts.filter(part => part.status !== 'hidden');
+    return filteredParts.filter(part => part.status !== 'hidden' && !part.is_featured);
   }, [filteredParts]);
 
   const hiddenParts = useMemo(() => {
@@ -128,6 +132,7 @@ const MyPartsTab = ({ parts, onRefresh }: MyPartsTabProps) => {
       <div className="flex items-center justify-between text-sm text-muted-foreground">
         <span>
           Showing {filteredParts.length} of {parts.length} parts
+          {featuredParts.length > 0 && ` (${featuredParts.length} featured)`}
         </span>
         {(searchTerm || Object.values(filters).some(Boolean)) && (
           <span className="text-primary font-medium">
@@ -144,6 +149,33 @@ const MyPartsTab = ({ parts, onRefresh }: MyPartsTabProps) => {
         </Card>
       ) : (
         <div className="space-y-8">
+          {/* Featured Listings Section */}
+          {featuredParts.length > 0 && (
+            <div className="space-y-4">
+              <h2 className="text-xl font-semibold text-amber-600 flex items-center gap-2">
+                ⭐ Featured Listings
+                <span className="text-sm font-normal text-muted-foreground">
+                  ({featuredParts.length})
+                </span>
+              </h2>
+              <div className="space-y-4">
+                {featuredParts.map((part) => (
+                  <PartCard
+                    key={part.id}
+                    part={part}
+                    selectedPartForBoost={selectedPartForBoost}
+                    hasBusinessSubscription={hasBusinessSubscription}
+                    onEdit={handleEditPart}
+                    onDelete={deletePart}
+                    onUpdateStatus={updatePartStatus}
+                    onToggleBoost={setSelectedPartForBoost}
+                    onFeatureUpdate={onRefresh}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Active Listings Section */}
           {visibleParts.length > 0 && (
             <div className="space-y-4">
@@ -203,8 +235,8 @@ const MyPartsTab = ({ parts, onRefresh }: MyPartsTabProps) => {
             </div>
           )}
 
-          {/* Empty state when no parts in either section */}
-          {visibleParts.length === 0 && hiddenParts.length === 0 && (
+          {/* Empty state when no parts in any section */}
+          {featuredParts.length === 0 && visibleParts.length === 0 && hiddenParts.length === 0 && (
             <Card className="p-8 text-center">
               <p className="text-muted-foreground mb-2">No parts match your search criteria.</p>
               <p className="text-sm text-muted-foreground">Try adjusting your search or filters.</p>
