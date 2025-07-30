@@ -180,7 +180,18 @@ const AuthTypeSelector = () => {
           </Link>
         </div>
 
-        <div className="text-center mt-8 sm:mt-12">
+        <div className="text-center mt-8 sm:mt-12 space-y-4">
+          <div className="bg-card rounded-lg border p-6 max-w-md mx-auto">
+            <h3 className="font-semibold text-lg mb-3 text-foreground">Quick Phone Sign-up</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Sign up or sign in instantly using your phone number with OTP verification
+            </p>
+            <Link to="/phone-auth">
+              <Button className="w-full bg-gradient-to-r from-green-600 to-teal-700 hover:from-green-700 hover:to-teal-800 text-white">
+                Sign In/Up with Phone
+              </Button>
+            </Link>
+          </div>
           <p className="body-text-small text-sm sm:text-base">
             Already have an account? Use the specific login page for your account type above.
           </p>

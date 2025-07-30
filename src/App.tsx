@@ -19,6 +19,7 @@ import AuthTypeSelector from "./components/AuthTypeSelector";
 import BuyerAuth from "./pages/BuyerAuth";
 import SellerAuth from "./pages/SellerAuth";
 import AdminAuth from "./pages/AdminAuth";
+import PhoneAuth from "./pages/PhoneAuth";
 import UserDashboard from "./pages/UserDashboard";
 import BuyerDashboard from "./pages/BuyerDashboard";
 import GuestDashboard from "./pages/GuestDashboard";
@@ -78,6 +79,7 @@ function App() {
                     <Route path="/seller-auth" element={<SellerAuth />} />
                     <Route path="/supplier" element={<SellerAuth />} />
                     <Route path="/admin-auth" element={<AdminAuth />} />
+                    <Route path="/phone-auth" element={<PhoneAuth />} />
                     <Route path="/guest-dashboard" element={<GuestDashboard />} />
                     <Route path="/request-part" element={<RequestPart />} />
                     <Route path="/request" element={<RequestPart />} />

@@ -882,6 +882,42 @@ export type Database = {
           },
         ]
       }
+      phone_otps: {
+        Row: {
+          action: string
+          attempts: number | null
+          created_at: string | null
+          expires_at: string
+          id: string
+          otp: string
+          phone: string
+          updated_at: string | null
+          verified: boolean | null
+        }
+        Insert: {
+          action: string
+          attempts?: number | null
+          created_at?: string | null
+          expires_at: string
+          id?: string
+          otp: string
+          phone: string
+          updated_at?: string | null
+          verified?: boolean | null
+        }
+        Update: {
+          action?: string
+          attempts?: number | null
+          created_at?: string | null
+          expires_at?: string
+          id?: string
+          otp?: string
+          phone?: string
+          updated_at?: string | null
+          verified?: boolean | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           address: string | null
@@ -1438,6 +1474,10 @@ export type Database = {
     }
     Functions: {
       auto_publish_scheduled_posts: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      cleanup_expired_otps: {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
