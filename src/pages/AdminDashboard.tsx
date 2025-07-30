@@ -138,107 +138,140 @@ const AdminDashboard = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          {/* Desktop Tab Navigation - Optimized Grid */}
-          <TabsList className="hidden lg:flex lg:w-full bg-card/95 backdrop-blur-md border shadow-sm mb-4 overflow-x-auto">
-            <div className="flex w-full min-w-fit">
-              <TabsTrigger value="insights" className="flex-1 min-w-[120px] text-sm xl:text-base font-medium whitespace-nowrap px-3">
-                Weekly Insights
-              </TabsTrigger>
-              <TabsTrigger value="analytics" className="flex-1 min-w-[130px] text-sm xl:text-base font-medium whitespace-nowrap px-3">
-                Analytics Dashboard
-              </TabsTrigger>
-              <TabsTrigger value="requests" className="flex-1 min-w-[100px] text-sm xl:text-base font-medium whitespace-nowrap px-3">
-                Requests ({requests.length})
-              </TabsTrigger>
-              <TabsTrigger value="offers" className="flex-1 min-w-[90px] text-sm xl:text-base font-medium whitespace-nowrap px-3">
-                Offers ({offers.length})
-              </TabsTrigger>
-              <TabsTrigger value="featured" className="flex-1 min-w-[110px] text-sm xl:text-base font-medium whitespace-nowrap px-3">
-                Featured Listings
-              </TabsTrigger>
-              <TabsTrigger value="quality" className="flex-1 min-w-[100px] text-sm xl:text-base font-medium whitespace-nowrap px-3">
-                Quality Checker
-              </TabsTrigger>
-              <TabsTrigger value="verifications" className="flex-1 min-w-[120px] text-sm xl:text-base font-medium whitespace-nowrap px-3">
-                Verifications ({verifications.length})
-              </TabsTrigger>
-              <TabsTrigger value="users" className="flex-1 min-w-[110px] text-sm xl:text-base font-medium whitespace-nowrap px-3">
-                User Management
-              </TabsTrigger>
-              <TabsTrigger value="blog" className="flex-1 min-w-[70px] text-sm xl:text-base font-medium whitespace-nowrap px-3">
-                Blog
-              </TabsTrigger>
-            </div>
-          </TabsList>
-
-          {/* Tablet Tab Navigation - Horizontal Scroll */}
-          <div className="hidden md:block lg:hidden mb-4">
-            <TabsList className="flex w-full bg-card/95 backdrop-blur-md border shadow-sm overflow-x-auto">
-              <div className="flex min-w-fit gap-1">
-                <TabsTrigger value="insights" className="min-w-[80px] text-xs font-medium whitespace-nowrap px-2">
-                  Insights
+          {/* Desktop Tab Navigation */}
+          <div className="hidden lg:block mb-6">
+            <div className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+              <TabsList className="h-12 w-full bg-transparent border-0 justify-start p-0">
+                <TabsTrigger 
+                  value="insights" 
+                  className="h-12 px-4 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-sm font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors"
+                >
+                  Weekly Insights
                 </TabsTrigger>
-                <TabsTrigger value="analytics" className="min-w-[80px] text-xs font-medium whitespace-nowrap px-2">
-                  Analytics
+                <TabsTrigger 
+                  value="analytics" 
+                  className="h-12 px-4 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-sm font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors"
+                >
+                  Analytics Dashboard
                 </TabsTrigger>
-                <TabsTrigger value="requests" className="min-w-[90px] text-xs font-medium whitespace-nowrap px-2">
+                <TabsTrigger 
+                  value="requests" 
+                  className="h-12 px-4 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-sm font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors"
+                >
                   Requests ({requests.length})
                 </TabsTrigger>
-                <TabsTrigger value="offers" className="min-w-[80px] text-xs font-medium whitespace-nowrap px-2">
+                <TabsTrigger 
+                  value="offers" 
+                  className="h-12 px-4 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-sm font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors"
+                >
                   Offers ({offers.length})
                 </TabsTrigger>
-                <TabsTrigger value="featured" className="min-w-[70px] text-xs font-medium whitespace-nowrap px-2">
-                  Featured
+                <TabsTrigger 
+                  value="featured" 
+                  className="h-12 px-4 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-sm font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors"
+                >
+                  Featured Listings
                 </TabsTrigger>
-                <TabsTrigger value="quality" className="min-w-[60px] text-xs font-medium whitespace-nowrap px-2">
-                  Quality
+                <TabsTrigger 
+                  value="quality" 
+                  className="h-12 px-4 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-sm font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors"
+                >
+                  Quality Checker
                 </TabsTrigger>
-                <TabsTrigger value="verifications" className="min-w-[90px] text-xs font-medium whitespace-nowrap px-2">
-                  Verify ({verifications.length})
+                <TabsTrigger 
+                  value="verifications" 
+                  className="h-12 px-4 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-sm font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors"
+                >
+                  Verifications ({verifications.length})
                 </TabsTrigger>
-                <TabsTrigger value="users" className="min-w-[50px] text-xs font-medium whitespace-nowrap px-2">
-                  Users
+                <TabsTrigger 
+                  value="users" 
+                  className="h-12 px-4 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-sm font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors"
+                >
+                  User Management
                 </TabsTrigger>
-                <TabsTrigger value="blog" className="min-w-[50px] text-xs font-medium whitespace-nowrap px-2">
+                <TabsTrigger 
+                  value="blog" 
+                  className="h-12 px-4 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-sm font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors"
+                >
                   Blog
                 </TabsTrigger>
-              </div>
-            </TabsList>
+              </TabsList>
+            </div>
           </div>
 
-          {/* Mobile Tab Navigation - Optimized Layout */}
-          <div className="md:hidden mb-4">
-            <TabsList className="flex w-full bg-card/95 backdrop-blur-md border shadow-sm overflow-x-auto mb-2">
-              <div className="flex min-w-fit gap-1">
-                <TabsTrigger value="insights" className="min-w-[70px] text-xs font-medium whitespace-nowrap px-2 py-2">
-                  Insights
-                </TabsTrigger>
-                <TabsTrigger value="analytics" className="min-w-[70px] text-xs font-medium whitespace-nowrap px-2 py-2">
-                  Analytics
-                </TabsTrigger>
-                <TabsTrigger value="requests" className="min-w-[80px] text-xs font-medium whitespace-nowrap px-2 py-2">
-                  Requests ({requests.length})
-                </TabsTrigger>
-                <TabsTrigger value="offers" className="min-w-[70px] text-xs font-medium whitespace-nowrap px-2 py-2">
-                  Offers ({offers.length})
-                </TabsTrigger>
-                <TabsTrigger value="featured" className="min-w-[60px] text-xs font-medium whitespace-nowrap px-2 py-2">
-                  Featured
-                </TabsTrigger>
-                <TabsTrigger value="quality" className="min-w-[55px] text-xs font-medium whitespace-nowrap px-2 py-2">
-                  Quality
-                </TabsTrigger>
-                <TabsTrigger value="verifications" className="min-w-[70px] text-xs font-medium whitespace-nowrap px-2 py-2">
-                  Verify ({verifications.length})
-                </TabsTrigger>
-                <TabsTrigger value="users" className="min-w-[50px] text-xs font-medium whitespace-nowrap px-2 py-2">
-                  Users
-                </TabsTrigger>
-                <TabsTrigger value="blog" className="min-w-[40px] text-xs font-medium whitespace-nowrap px-2 py-2">
-                  Blog
-                </TabsTrigger>
+          {/* Tablet Tab Navigation */}
+          <div className="hidden md:block lg:hidden mb-6">
+            <div className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+              <div className="overflow-x-auto">
+                <TabsList className="h-11 bg-transparent border-0 justify-start p-0 w-max min-w-full">
+                  <TabsTrigger value="insights" className="h-11 px-3 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-xs font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors whitespace-nowrap">
+                    Insights
+                  </TabsTrigger>
+                  <TabsTrigger value="analytics" className="h-11 px-3 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-xs font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors whitespace-nowrap">
+                    Analytics
+                  </TabsTrigger>
+                  <TabsTrigger value="requests" className="h-11 px-3 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-xs font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors whitespace-nowrap">
+                    Requests ({requests.length})
+                  </TabsTrigger>
+                  <TabsTrigger value="offers" className="h-11 px-3 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-xs font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors whitespace-nowrap">
+                    Offers ({offers.length})
+                  </TabsTrigger>
+                  <TabsTrigger value="featured" className="h-11 px-3 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-xs font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors whitespace-nowrap">
+                    Featured
+                  </TabsTrigger>
+                  <TabsTrigger value="quality" className="h-11 px-3 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-xs font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors whitespace-nowrap">
+                    Quality
+                  </TabsTrigger>
+                  <TabsTrigger value="verifications" className="h-11 px-3 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-xs font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors whitespace-nowrap">
+                    Verifications ({verifications.length})
+                  </TabsTrigger>
+                  <TabsTrigger value="users" className="h-11 px-3 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-xs font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors whitespace-nowrap">
+                    Users
+                  </TabsTrigger>
+                  <TabsTrigger value="blog" className="h-11 px-3 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-xs font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors whitespace-nowrap">
+                    Blog
+                  </TabsTrigger>
+                </TabsList>
               </div>
-            </TabsList>
+            </div>
+          </div>
+
+          {/* Mobile Tab Navigation */}
+          <div className="md:hidden mb-6">
+            <div className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+              <div className="overflow-x-auto">
+                <TabsList className="h-10 bg-transparent border-0 justify-start p-0 w-max min-w-full">
+                  <TabsTrigger value="insights" className="h-10 px-3 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-xs font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors whitespace-nowrap">
+                    Insights
+                  </TabsTrigger>
+                  <TabsTrigger value="analytics" className="h-10 px-3 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-xs font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors whitespace-nowrap">
+                    Analytics
+                  </TabsTrigger>
+                  <TabsTrigger value="requests" className="h-10 px-3 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-xs font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors whitespace-nowrap">
+                    Requests ({requests.length})
+                  </TabsTrigger>
+                  <TabsTrigger value="offers" className="h-10 px-3 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-xs font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors whitespace-nowrap">
+                    Offers ({offers.length})
+                  </TabsTrigger>
+                  <TabsTrigger value="featured" className="h-10 px-3 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-xs font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors whitespace-nowrap">
+                    Featured
+                  </TabsTrigger>
+                  <TabsTrigger value="quality" className="h-10 px-3 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-xs font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors whitespace-nowrap">
+                    Quality
+                  </TabsTrigger>
+                  <TabsTrigger value="verifications" className="h-10 px-3 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-xs font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors whitespace-nowrap">
+                    Verifications ({verifications.length})
+                  </TabsTrigger>
+                  <TabsTrigger value="users" className="h-10 px-3 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-xs font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors whitespace-nowrap">
+                    Users
+                  </TabsTrigger>
+                  <TabsTrigger value="blog" className="h-10 px-3 bg-transparent border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none text-xs font-medium text-muted-foreground data-[state=active]:text-primary hover:text-foreground transition-colors whitespace-nowrap">
+                    Blog
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+            </div>
           </div>
 
           <TabsContent value="insights" className="mt-4 sm:mt-6">
