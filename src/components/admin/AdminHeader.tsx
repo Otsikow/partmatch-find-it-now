@@ -1,23 +1,28 @@
-
 import React from 'react';
 import { LogOut, Home, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useUserDisplayName } from "@/hooks/useUserDisplayName";
 import AdminNotificationBell from "./AdminNotificationBell";
 import ThemeToggle from "@/components/ThemeToggle";
 
 interface AdminHeaderProps {
   onNavigateToVerifications?: () => void;
-  onGoBack: () => void;
-  onGoHome: () => void;
 }
 
-const AdminHeader = ({ onNavigateToVerifications, onGoBack, onGoHome }: AdminHeaderProps) => {
+const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
   const { signOut } = useAuth();
   const navigate = useNavigate();
   const displayName = useUserDisplayName('Admin');
+
+  const handleGoBack = () => {
+    navigate('/');
+  };
+
+  const handleGoHome = () => {
+    navigate('/');
+  };
 
   const handleSignOut = async () => {
     try {
@@ -35,7 +40,7 @@ const AdminHeader = ({ onNavigateToVerifications, onGoBack, onGoHome }: AdminHea
         <Button
           variant="ghost"
           size="icon"
-          onClick={onGoBack}
+          onClick={handleGoBack}
           className="h-10 w-10 bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground transition-colors backdrop-blur-sm border border-primary-foreground/20 shadow-lg"
           aria-label="Go back"
         >
@@ -44,7 +49,10 @@ const AdminHeader = ({ onNavigateToVerifications, onGoBack, onGoHome }: AdminHea
 
         {/* Center: Logo and Title */}
         <div className="flex items-center gap-3 flex-1 justify-center">
-          <button onClick={onGoHome} className="flex items-center gap-2 bg-primary-foreground/10 backdrop-blur-sm rounded-xl px-3 py-1.5 border border-primary-foreground/20 shadow-lg hover:bg-primary-foreground/20 transition-colors cursor-pointer">
+          <button 
+            onClick={handleGoHome} 
+            className="flex items-center gap-2 bg-primary-foreground/10 backdrop-blur-sm rounded-xl px-3 py-1.5 border border-primary-foreground/20 shadow-lg hover:bg-primary-foreground/20 transition-colors cursor-pointer"
+          >
             <img 
               src="/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png" 
               alt="PartMatch Logo" 
@@ -68,7 +76,7 @@ const AdminHeader = ({ onNavigateToVerifications, onGoBack, onGoHome }: AdminHea
           <Button
             variant="outline"
             size="sm"
-            onClick={onGoHome}
+            onClick={handleGoHome}
             className="hidden sm:flex bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground transition-colors backdrop-blur-sm border border-primary-foreground/20 shadow-lg"
           >
             <Home className="h-4 w-4 mr-1" />

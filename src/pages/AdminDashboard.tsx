@@ -87,14 +87,6 @@ const AdminDashboard = () => {
     setActiveTab("verifications");
   };
 
-  const handleGoBack = () => {
-    navigate('/');
-  };
-
-  const handleGoHome = () => {
-    navigate('/');
-  };
-
   // Auto-refresh disabled to prevent UI instability - data will refresh on user actions
   useEffect(() => {
     return () => {
@@ -120,8 +112,6 @@ const AdminDashboard = () => {
       {/* Single Modern Header */}
       <AdminHeader
         onNavigateToVerifications={handleNavigateToVerifications}
-        onGoBack={handleGoBack}
-        onGoHome={handleGoHome}
       />
 
       <main className="container mx-auto px-2 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8 max-w-7xl">

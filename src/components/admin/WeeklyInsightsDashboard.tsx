@@ -149,21 +149,10 @@ const WeeklyInsightsDashboard = () => {
   const insights = latestInsights.metadata.insights;
   const generatedDate = new Date(latestInsights.metadata.generated_at).toLocaleDateString();
 
-  const handleGoBack = () => {
-    if (window.history.length > 1) {
-      navigate(-1);
-    } else {
-      navigate('/admin-dashboard');
-    }
-  };
-
-  const handleGoHome = () => {
-    navigate('/admin-dashboard');
-  };
 
   return (
     <div className="space-y-6">
-      <AdminHeader onGoBack={handleGoBack} onGoHome={handleGoHome} />
+      <AdminHeader />
       {/* AI Summary */}
       <Card>
         <CardHeader>
