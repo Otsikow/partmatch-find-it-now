@@ -49,15 +49,16 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
     <header className="sticky top-0 z-50 bg-primary/90 text-primary-foreground backdrop-blur-lg border-b border-border/40 shadow-lg">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         {/* Left: Back Arrow */}
-        <button
+        <div
           onClick={() => {
-            console.log('🔧 Back button clicked');
-            window.history.back();
+            alert('Back button clicked!');
+            window.location.href = '/';
           }}
-          className="h-10 w-10 bg-white/20 hover:bg-white/30 text-white border border-white/30 rounded-lg flex items-center justify-center transition-colors"
+          className="h-12 w-12 bg-red-500 hover:bg-red-600 text-white border-2 border-yellow-300 rounded-lg flex items-center justify-center cursor-pointer z-50"
+          style={{ position: 'relative', zIndex: 9999 }}
         >
-          <ArrowLeft className="h-5 w-5" />
-        </button>
+          <ArrowLeft className="h-6 w-6" />
+        </div>
 
         {/* Center: Logo and Title */}
         <div className="flex items-center gap-3 flex-1 justify-center">
