@@ -50,18 +50,13 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         {/* Left: Back Arrow */}
         <button
-          onMouseDown={() => console.log('🔧 MOUSE DOWN on back button')}
-          onMouseUp={() => console.log('🔧 MOUSE UP on back button')}
-          onClick={(e) => {
-            console.log('🔧 CLICK EVENT FIRED on back button');
-            e.stopPropagation();
-            console.log('🔧 About to call navigate');
+          onClick={() => {
+            console.log('🔧 Back button clicked');
             window.history.back();
-            console.log('🔧 Called window.history.back()');
           }}
-          style={{ all: 'unset', cursor: 'pointer', padding: '8px', backgroundColor: 'white', color: 'black', border: '1px solid black', borderRadius: '4px' }}
+          className="h-10 w-10 bg-white/20 hover:bg-white/30 text-white border border-white/30 rounded-lg flex items-center justify-center transition-colors"
         >
-          ← BACK
+          <ArrowLeft className="h-5 w-5" />
         </button>
 
         {/* Center: Logo and Title */}
@@ -93,18 +88,15 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
         <div className="flex items-center gap-2">
           <AdminNotificationBell onNavigateToVerifications={onNavigateToVerifications} />
           <ThemeToggle />
-          <Button
-            variant="outline"
-            size="sm"
+          <button
             onClick={() => {
-              console.log('🔧 AdminHeader: Home button clicked!');
-              goHome();
+              console.log('🔧 Home button clicked');
+              window.location.href = '/';
             }}
-            className="hidden sm:flex bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground transition-colors backdrop-blur-sm border border-primary-foreground/20 shadow-lg cursor-pointer relative z-10"
+            className="h-10 w-10 bg-white/20 hover:bg-white/30 text-white border border-white/30 rounded-lg flex items-center justify-center transition-colors"
           >
-            <Home className="h-4 w-4 mr-1 pointer-events-none" />
-            <span className="pointer-events-none">Home</span>
-          </Button>
+            <Home className="h-4 w-4" />
+          </button>
           <Button
             variant="outline"
             size="sm"
