@@ -42,23 +42,33 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
         <Button
           variant="ghost"
           size="icon"
-          onClick={handleGoBack}
-          className="h-10 w-10 bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground transition-colors backdrop-blur-sm border border-primary-foreground/20 shadow-lg"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('🔧 AdminHeader: Back button clicked, navigating to /');
+            handleGoBack();
+          }}
+          className="h-10 w-10 bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground transition-colors backdrop-blur-sm border border-primary-foreground/20 shadow-lg cursor-pointer relative z-10"
           aria-label="Go back"
         >
-          <ArrowLeft className="h-5 w-5" />
+          <ArrowLeft className="h-5 w-5 pointer-events-none" />
         </Button>
 
         {/* Center: Logo and Title */}
         <div className="flex items-center gap-3 flex-1 justify-center">
           <button 
-            onClick={handleGoHome} 
-            className="flex items-center gap-2 bg-primary-foreground/10 backdrop-blur-sm rounded-xl px-3 py-1.5 border border-primary-foreground/20 shadow-lg hover:bg-primary-foreground/20 transition-colors cursor-pointer"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              console.log('🔧 AdminHeader: Logo clicked, navigating to /');
+              handleGoHome();
+            }}
+            className="flex items-center gap-2 bg-primary-foreground/10 backdrop-blur-sm rounded-xl px-3 py-1.5 border border-primary-foreground/20 shadow-lg hover:bg-primary-foreground/20 transition-colors cursor-pointer relative z-10"
           >
             <img 
               src="/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png" 
               alt="PartMatch Logo" 
-              className="h-12 w-12 sm:h-14 sm:w-14 object-contain bg-white rounded-lg p-2"
+              className="h-12 w-12 sm:h-14 sm:w-14 object-contain bg-white rounded-lg p-2 pointer-events-none"
             />
           </button>
           <div className="flex flex-col min-w-0">
@@ -78,11 +88,16 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
           <Button
             variant="outline"
             size="sm"
-            onClick={handleGoHome}
-            className="hidden sm:flex bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground transition-colors backdrop-blur-sm border border-primary-foreground/20 shadow-lg"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              console.log('🔧 AdminHeader: Home button clicked, navigating to /');
+              handleGoHome();
+            }}
+            className="hidden sm:flex bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground transition-colors backdrop-blur-sm border border-primary-foreground/20 shadow-lg cursor-pointer relative z-10"
           >
-            <Home className="h-4 w-4 mr-1" />
-            <span>Home</span>
+            <Home className="h-4 w-4 mr-1 pointer-events-none" />
+            <span className="pointer-events-none">Home</span>
           </Button>
           <Button
             variant="outline"
