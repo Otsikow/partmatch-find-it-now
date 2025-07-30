@@ -62,8 +62,9 @@ const FeaturedListingsManager = () => {
     try {
       setLoading(true);
       console.log('FeaturedListingsManager: Starting to fetch featured listings...');
+      console.log('FeaturedListingsManager: Current time:', new Date().toISOString());
       
-      const { data, error } = await supabase
+      let query = supabase
         .from('car_parts')
         .select(`
           id, title, price, currency, make, model, year, is_featured,
@@ -71,8 +72,12 @@ const FeaturedListingsManager = () => {
           created_at,
           profiles!car_parts_supplier_id_fkey (first_name, last_name)
         `)
-        .eq('is_featured', true)
-        .order('created_at', { ascending: false });
+        .eq('is_featured', true);
+
+      // Add time filter - either no expiry or not yet expired (same logic as useFeaturedParts)
+      query = query.or('featured_until.is.null,featured_until.gt.' + new Date().toISOString());
+      
+      const { data, error } = await query.order('created_at', { ascending: false });
 
       if (error) {
         console.error('FeaturedListingsManager: Error fetching listings:', error);
