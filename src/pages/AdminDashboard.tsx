@@ -138,110 +138,106 @@ const AdminDashboard = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          {/* Desktop Tab Navigation */}
-          <TabsList className="hidden lg:grid lg:grid-cols-9 w-full bg-card backdrop-blur-sm border mb-4">
-            <TabsTrigger value="insights" className="text-sm xl:text-base font-inter truncate">
-              Weekly Insights
-            </TabsTrigger>
-            <TabsTrigger value="analytics" className="text-sm xl:text-base font-inter truncate">
-              Analytics Dashboard
-            </TabsTrigger>
-            <TabsTrigger value="requests" className="text-sm xl:text-base font-inter truncate">
-              Requests ({requests.length})
-            </TabsTrigger>
-            <TabsTrigger value="offers" className="text-sm xl:text-base font-inter truncate">
-              Offers ({offers.length})
-            </TabsTrigger>
-            <TabsTrigger value="featured" className="text-sm xl:text-base font-inter truncate">
-              Featured Listings
-            </TabsTrigger>
-            <TabsTrigger value="quality" className="text-sm xl:text-base font-inter truncate">
-              Quality Checker
-            </TabsTrigger>
-            <TabsTrigger value="verifications" className="text-sm xl:text-base font-inter truncate">
-              Verifications ({verifications.length})
-            </TabsTrigger>
-            <TabsTrigger value="users" className="text-sm xl:text-base font-inter truncate">
-              User Management
-            </TabsTrigger>
-            <TabsTrigger value="blog" className="text-sm xl:text-base font-inter truncate">
-              Blog
-            </TabsTrigger>
-          </TabsList>
-
-          {/* Tablet Tab Navigation */}
-          <TabsList className="hidden md:grid lg:hidden md:grid-cols-4 w-full bg-card backdrop-blur-sm border mb-4">
-            <TabsTrigger value="insights" className="text-xs sm:text-sm font-inter truncate px-1">
-              Insights
-            </TabsTrigger>
-            <TabsTrigger value="analytics" className="text-xs sm:text-sm font-inter truncate px-1">
-              Analytics
-            </TabsTrigger>
-            <TabsTrigger value="requests" className="text-xs sm:text-sm font-inter truncate px-1">
-              Requests ({requests.length})
-            </TabsTrigger>
-            <TabsTrigger value="offers" className="text-xs sm:text-sm font-inter truncate px-1">
-              Offers ({offers.length})
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsList className="hidden md:grid lg:hidden md:grid-cols-5 w-full bg-card backdrop-blur-sm border mb-4">
-            <TabsTrigger value="featured" className="text-xs sm:text-sm font-inter truncate px-1">
-              Featured
-            </TabsTrigger>
-            <TabsTrigger value="quality" className="text-xs sm:text-sm font-inter truncate px-1">
-              Quality
-            </TabsTrigger>
-            <TabsTrigger value="verifications" className="text-xs sm:text-sm font-inter truncate px-1">
-              Verifications ({verifications.length})
-            </TabsTrigger>
-            <TabsTrigger value="users" className="text-xs sm:text-sm font-inter truncate px-1">
-              Users
-            </TabsTrigger>
-            <TabsTrigger value="blog" className="text-xs sm:text-sm font-inter truncate px-1">
-              Blog
-            </TabsTrigger>
-          </TabsList>
-
-          {/* Mobile Tab Navigation */}
-          <div className="md:hidden space-y-2 mb-4">
-            {/* Primary tabs */}
-            <TabsList className="grid grid-cols-2 w-full bg-card backdrop-blur-sm border">
-              <TabsTrigger value="insights" className="text-xs font-inter truncate px-1">
-                Insights
+          {/* Desktop Tab Navigation - Optimized Grid */}
+          <TabsList className="hidden lg:flex lg:w-full bg-card/95 backdrop-blur-md border shadow-sm mb-4 overflow-x-auto">
+            <div className="flex w-full min-w-fit">
+              <TabsTrigger value="insights" className="flex-1 min-w-[120px] text-sm xl:text-base font-medium whitespace-nowrap px-3">
+                Weekly Insights
               </TabsTrigger>
-              <TabsTrigger value="analytics" className="text-xs font-inter truncate px-1">
-                Analytics
+              <TabsTrigger value="analytics" className="flex-1 min-w-[130px] text-sm xl:text-base font-medium whitespace-nowrap px-3">
+                Analytics Dashboard
               </TabsTrigger>
-            </TabsList>
-            
-            {/* Secondary tabs */}
-            <TabsList className="grid grid-cols-2 w-full bg-card backdrop-blur-sm border">
-              <TabsTrigger value="requests" className="text-xs font-inter truncate px-1">
+              <TabsTrigger value="requests" className="flex-1 min-w-[100px] text-sm xl:text-base font-medium whitespace-nowrap px-3">
                 Requests ({requests.length})
               </TabsTrigger>
-              <TabsTrigger value="offers" className="text-xs font-inter truncate px-1">
+              <TabsTrigger value="offers" className="flex-1 min-w-[90px] text-sm xl:text-base font-medium whitespace-nowrap px-3">
                 Offers ({offers.length})
               </TabsTrigger>
-            </TabsList>
-            
-            {/* Tertiary tabs */}
-            <TabsList className="grid grid-cols-5 w-full bg-card backdrop-blur-sm border">
-              <TabsTrigger value="featured" className="text-xs font-inter truncate px-1">
-                Featured
+              <TabsTrigger value="featured" className="flex-1 min-w-[110px] text-sm xl:text-base font-medium whitespace-nowrap px-3">
+                Featured Listings
               </TabsTrigger>
-              <TabsTrigger value="quality" className="text-xs font-inter truncate px-1">
-                Quality
+              <TabsTrigger value="quality" className="flex-1 min-w-[100px] text-sm xl:text-base font-medium whitespace-nowrap px-3">
+                Quality Checker
               </TabsTrigger>
-              <TabsTrigger value="verifications" className="text-xs font-inter truncate px-1">
-                Verify ({verifications.length})
+              <TabsTrigger value="verifications" className="flex-1 min-w-[120px] text-sm xl:text-base font-medium whitespace-nowrap px-3">
+                Verifications ({verifications.length})
               </TabsTrigger>
-              <TabsTrigger value="users" className="text-xs font-inter truncate px-1">
-                Users
+              <TabsTrigger value="users" className="flex-1 min-w-[110px] text-sm xl:text-base font-medium whitespace-nowrap px-3">
+                User Management
               </TabsTrigger>
-              <TabsTrigger value="blog" className="text-xs font-inter truncate px-1">
+              <TabsTrigger value="blog" className="flex-1 min-w-[70px] text-sm xl:text-base font-medium whitespace-nowrap px-3">
                 Blog
               </TabsTrigger>
+            </div>
+          </TabsList>
+
+          {/* Tablet Tab Navigation - Horizontal Scroll */}
+          <div className="hidden md:block lg:hidden mb-4">
+            <TabsList className="flex w-full bg-card/95 backdrop-blur-md border shadow-sm overflow-x-auto">
+              <div className="flex min-w-fit gap-1">
+                <TabsTrigger value="insights" className="min-w-[80px] text-xs font-medium whitespace-nowrap px-2">
+                  Insights
+                </TabsTrigger>
+                <TabsTrigger value="analytics" className="min-w-[80px] text-xs font-medium whitespace-nowrap px-2">
+                  Analytics
+                </TabsTrigger>
+                <TabsTrigger value="requests" className="min-w-[90px] text-xs font-medium whitespace-nowrap px-2">
+                  Requests ({requests.length})
+                </TabsTrigger>
+                <TabsTrigger value="offers" className="min-w-[80px] text-xs font-medium whitespace-nowrap px-2">
+                  Offers ({offers.length})
+                </TabsTrigger>
+                <TabsTrigger value="featured" className="min-w-[70px] text-xs font-medium whitespace-nowrap px-2">
+                  Featured
+                </TabsTrigger>
+                <TabsTrigger value="quality" className="min-w-[60px] text-xs font-medium whitespace-nowrap px-2">
+                  Quality
+                </TabsTrigger>
+                <TabsTrigger value="verifications" className="min-w-[90px] text-xs font-medium whitespace-nowrap px-2">
+                  Verify ({verifications.length})
+                </TabsTrigger>
+                <TabsTrigger value="users" className="min-w-[50px] text-xs font-medium whitespace-nowrap px-2">
+                  Users
+                </TabsTrigger>
+                <TabsTrigger value="blog" className="min-w-[50px] text-xs font-medium whitespace-nowrap px-2">
+                  Blog
+                </TabsTrigger>
+              </div>
+            </TabsList>
+          </div>
+
+          {/* Mobile Tab Navigation - Optimized Layout */}
+          <div className="md:hidden mb-4">
+            <TabsList className="flex w-full bg-card/95 backdrop-blur-md border shadow-sm overflow-x-auto mb-2">
+              <div className="flex min-w-fit gap-1">
+                <TabsTrigger value="insights" className="min-w-[70px] text-xs font-medium whitespace-nowrap px-2 py-2">
+                  Insights
+                </TabsTrigger>
+                <TabsTrigger value="analytics" className="min-w-[70px] text-xs font-medium whitespace-nowrap px-2 py-2">
+                  Analytics
+                </TabsTrigger>
+                <TabsTrigger value="requests" className="min-w-[80px] text-xs font-medium whitespace-nowrap px-2 py-2">
+                  Requests ({requests.length})
+                </TabsTrigger>
+                <TabsTrigger value="offers" className="min-w-[70px] text-xs font-medium whitespace-nowrap px-2 py-2">
+                  Offers ({offers.length})
+                </TabsTrigger>
+                <TabsTrigger value="featured" className="min-w-[60px] text-xs font-medium whitespace-nowrap px-2 py-2">
+                  Featured
+                </TabsTrigger>
+                <TabsTrigger value="quality" className="min-w-[55px] text-xs font-medium whitespace-nowrap px-2 py-2">
+                  Quality
+                </TabsTrigger>
+                <TabsTrigger value="verifications" className="min-w-[70px] text-xs font-medium whitespace-nowrap px-2 py-2">
+                  Verify ({verifications.length})
+                </TabsTrigger>
+                <TabsTrigger value="users" className="min-w-[50px] text-xs font-medium whitespace-nowrap px-2 py-2">
+                  Users
+                </TabsTrigger>
+                <TabsTrigger value="blog" className="min-w-[40px] text-xs font-medium whitespace-nowrap px-2 py-2">
+                  Blog
+                </TabsTrigger>
+              </div>
             </TabsList>
           </div>
 
