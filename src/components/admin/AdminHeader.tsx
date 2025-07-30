@@ -17,10 +17,12 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
   const displayName = useUserDisplayName('Admin');
 
   const handleGoBack = () => {
+    console.log('🔧 AdminHeader: Back button clicked, navigating to /');
     navigate('/');
   };
 
   const handleGoHome = () => {
+    console.log('🔧 AdminHeader: Home button clicked, navigating to /');
     navigate('/');
   };
 
