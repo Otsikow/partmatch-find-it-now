@@ -77,7 +77,9 @@ serve(async (req) => {
       tokenExists: !!twilioToken,
       phoneExists: !!twilioPhone,
       sidLength: twilioSid?.length || 0,
-      tokenLength: twilioToken?.length || 0
+      tokenLength: twilioToken?.length || 0,
+      sidPrefix: twilioSid?.substring(0, 2),
+      phoneValue: twilioPhone
     })
 
     if (!twilioSid || !twilioToken || !twilioPhone) {
