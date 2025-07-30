@@ -16,14 +16,19 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
   const navigate = useNavigate();
   const displayName = useUserDisplayName('Admin');
 
-  const handleGoBack = () => {
-    console.log('🔧 AdminHeader: Back button clicked, navigating to /');
+  const goBack = () => {
+    console.log("🔧 AdminHeader: Navigating back");
+    navigate(-1);
+  };
+
+  const goHome = () => {
+    console.log("🔧 AdminHeader: Navigating to home");
     navigate('/');
   };
 
-  const handleGoHome = () => {
-    console.log('🔧 AdminHeader: Home button clicked, navigating to /');
-    navigate('/');
+  const goToAdminDashboard = () => {
+    console.log("🔧 AdminHeader: Navigating to admin dashboard");
+    navigate('/admin');
   };
 
   const handleSignOut = async () => {
@@ -66,11 +71,9 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
         {/* Center: Logo and Title */}
         <div className="flex items-center gap-3 flex-1 justify-center">
           <button 
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              console.log('🔧 AdminHeader: Logo clicked, navigating to /');
-              handleGoHome();
+            onClick={() => {
+              console.log('🔧 AdminHeader: Logo clicked!');
+              goHome();
             }}
             className="flex items-center gap-2 bg-primary-foreground/10 backdrop-blur-sm rounded-xl px-3 py-1.5 border border-primary-foreground/20 shadow-lg hover:bg-primary-foreground/20 transition-colors cursor-pointer relative z-10"
           >
@@ -97,11 +100,9 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
           <Button
             variant="outline"
             size="sm"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              console.log('🔧 AdminHeader: Home button clicked, navigating to /');
-              handleGoHome();
+            onClick={() => {
+              console.log('🔧 AdminHeader: Home button clicked!');
+              goHome();
             }}
             className="hidden sm:flex bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground transition-colors backdrop-blur-sm border border-primary-foreground/20 shadow-lg cursor-pointer relative z-10"
           >
