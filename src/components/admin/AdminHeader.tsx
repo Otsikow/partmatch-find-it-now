@@ -41,32 +41,16 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
   };
 
   return (
-    <header 
-      className="sticky top-0 z-50 bg-primary/90 text-primary-foreground backdrop-blur-lg border-b border-border/40 shadow-lg"
-      onPointerDown={(e) => console.log('🔧 Header pointer down:', e.target)}
-      onClick={(e) => console.log('🔧 Header clicked:', e.target)}
-    >
-      <div 
-        className="container mx-auto px-4 py-3 flex items-center justify-between"
-        onPointerDown={(e) => console.log('🔧 Container pointer down:', e.target)}
-        onClick={(e) => console.log('🔧 Container clicked:', e.target)}
-      >
+    <header className="sticky top-0 z-50 bg-primary/90 text-primary-foreground backdrop-blur-lg border-b border-border/40 shadow-lg">
+      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         {/* Left: Back Arrow */}
-        <div
-          onClick={() => {
-            console.log('🔧 BACK ARROW CLICKED!');
-            navigate('/');
-          }}
-          className="h-10 w-10 bg-white/20 hover:bg-white/30 text-white transition-colors border border-white/30 shadow-lg cursor-pointer flex items-center justify-center rounded-md"
-          style={{ 
-            zIndex: 9999, 
-            position: 'relative',
-            minHeight: '40px',
-            minWidth: '40px'
-          }}
+        <button
+          onClick={goBack}
+          className="h-10 w-10 bg-white text-purple-600 hover:bg-gray-100 transition-colors border border-gray-300 shadow-lg cursor-pointer flex items-center justify-center rounded-md"
+          title="Back"
         >
-          <ArrowLeft className="h-5 w-5" />
-        </div>
+          ←
+        </button>
 
         {/* Center: Logo and Title */}
         <div className="flex items-center gap-3 flex-1 justify-center">
