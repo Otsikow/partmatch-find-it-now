@@ -47,21 +47,21 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
         onClick={(e) => console.log('🔧 Container clicked:', e.target)}
       >
         {/* Left: Back Arrow */}
-        <button
-          onMouseDown={() => console.log('🔧 MOUSE DOWN: Back button')}
-          onMouseUp={() => console.log('🔧 MOUSE UP: Back button')}
-          onClick={(e) => {
-            console.log('🔧 CLICK: Back button clicked!', e);
-            e.preventDefault();
-            e.stopPropagation();
-            handleGoBack();
+        <div
+          onClick={() => {
+            console.log('🔧 BACK ARROW CLICKED!');
+            navigate('/');
           }}
-          className="h-10 w-10 bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground transition-colors backdrop-blur-sm border border-primary-foreground/20 shadow-lg cursor-pointer relative z-50 flex items-center justify-center rounded-md"
-          aria-label="Go back"
-          style={{ zIndex: 9999, position: 'relative' }}
+          className="h-10 w-10 bg-white/20 hover:bg-white/30 text-white transition-colors border border-white/30 shadow-lg cursor-pointer flex items-center justify-center rounded-md"
+          style={{ 
+            zIndex: 9999, 
+            position: 'relative',
+            minHeight: '40px',
+            minWidth: '40px'
+          }}
         >
-          <ArrowLeft className="h-5 w-5 pointer-events-none" />
-        </button>
+          <ArrowLeft className="h-5 w-5" />
+        </div>
 
         {/* Center: Logo and Title */}
         <div className="flex items-center gap-3 flex-1 justify-center">
