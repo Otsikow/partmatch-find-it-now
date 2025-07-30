@@ -50,11 +50,18 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         {/* Left: Back Arrow */}
         <button
-          onClick={goBack}
-          className="h-10 w-10 bg-white text-purple-600 hover:bg-gray-100 transition-colors border border-gray-300 shadow-lg cursor-pointer flex items-center justify-center rounded-md"
-          title="Back"
+          onMouseDown={() => console.log('🔧 MOUSE DOWN on back button')}
+          onMouseUp={() => console.log('🔧 MOUSE UP on back button')}
+          onClick={(e) => {
+            console.log('🔧 CLICK EVENT FIRED on back button');
+            e.stopPropagation();
+            console.log('🔧 About to call navigate');
+            window.history.back();
+            console.log('🔧 Called window.history.back()');
+          }}
+          style={{ all: 'unset', cursor: 'pointer', padding: '8px', backgroundColor: 'white', color: 'black', border: '1px solid black', borderRadius: '4px' }}
         >
-          ←
+          ← BACK
         </button>
 
         {/* Center: Logo and Title */}
