@@ -72,10 +72,22 @@ serve(async (req) => {
     const twilioToken = Deno.env.get('TWILIO_AUTH_TOKEN')
     const twilioPhone = Deno.env.get('TWILIO_PHONE_NUMBER')
 
+    console.log('Twilio credentials check:', {
+      sidExists: !!twilioSid,
+      tokenExists: !!twilioToken,
+      phoneExists: !!twilioPhone,
+      sidLength: twilioSid?.length || 0,
+      tokenLength: twilioToken?.length || 0
+    })
+
     if (!twilioSid || !twilioToken || !twilioPhone) {
-      console.error('Missing Twilio credentials')
+      console.error('Missing Twilio credentials:', {
+        TWILIO_ACCOUNT_SID: !!twilioSid,
+        TWILIO_AUTH_TOKEN: !!twilioToken,
+        TWILIO_PHONE_NUMBER: !!twilioPhone
+      })
       return new Response(
-        JSON.stringify({ error: 'SMS service not configured' }),
+        JSON.stringify({ error: 'SMS service not configured properly. Please check Twilio credentials.' }),
         { 
           status: 500, 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
@@ -84,6 +96,8 @@ serve(async (req) => {
     }
 
     const message = `Your PartMatch verification code is: ${otp}. Valid for 5 minutes.`
+
+    console.log('Sending SMS to:', phone, 'from:', twilioPhone)
     
     const twilioResponse = await fetch(
       `https://api.twilio.com/2010-04-01/Accounts/${twilioSid}/Messages.json`,
@@ -101,11 +115,27 @@ serve(async (req) => {
       }
     )
 
+    console.log('Twilio response status:', twilioResponse.status)
+
     if (!twilioResponse.ok) {
       const twilioError = await twilioResponse.text()
-      console.error('Twilio error:', twilioError)
+      console.error('Twilio error details:', {
+        status: twilioResponse.status,
+        statusText: twilioResponse.statusText,
+        error: twilioError,
+        phone: phone,
+        twilioPhone: twilioPhone
+      })
+      
+      let errorMessage = 'Failed to send SMS'
+      if (twilioResponse.status === 401) {
+        errorMessage = 'Twilio authentication failed. Please check your credentials.'
+      } else if (twilioResponse.status === 400) {
+        errorMessage = 'Invalid phone number or Twilio configuration.'
+      }
+      
       return new Response(
-        JSON.stringify({ error: 'Failed to send SMS' }),
+        JSON.stringify({ error: errorMessage, details: twilioError }),
         { 
           status: 500, 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
