@@ -36,8 +36,16 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-primary/90 text-primary-foreground backdrop-blur-lg border-b border-border/40 shadow-lg">
-      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+    <header 
+      className="sticky top-0 z-50 bg-primary/90 text-primary-foreground backdrop-blur-lg border-b border-border/40 shadow-lg"
+      onPointerDown={(e) => console.log('🔧 Header pointer down:', e.target)}
+      onClick={(e) => console.log('🔧 Header clicked:', e.target)}
+    >
+      <div 
+        className="container mx-auto px-4 py-3 flex items-center justify-between"
+        onPointerDown={(e) => console.log('🔧 Container pointer down:', e.target)}
+        onClick={(e) => console.log('🔧 Container clicked:', e.target)}
+      >
         {/* Left: Back Arrow */}
         <Button
           variant="ghost"
