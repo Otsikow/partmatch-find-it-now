@@ -17,18 +17,23 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
   const displayName = useUserDisplayName('Admin');
 
   const goBack = () => {
-    console.log("🔧 AdminHeader: Navigating back");
-    navigate(-1);
+    console.log("🔧 AdminHeader: Back button clicked - Navigating back");
+    try {
+      navigate(-1);
+      console.log("🔧 AdminHeader: navigate(-1) executed successfully");
+    } catch (error) {
+      console.error("🔧 AdminHeader: Error in navigate(-1):", error);
+    }
   };
 
   const goHome = () => {
-    console.log("🔧 AdminHeader: Navigating to home");
-    navigate('/');
-  };
-
-  const goToAdminDashboard = () => {
-    console.log("🔧 AdminHeader: Navigating to admin dashboard");
-    navigate('/admin');
+    console.log("🔧 AdminHeader: Home button clicked - Navigating to home");
+    try {
+      navigate('/');
+      console.log("🔧 AdminHeader: navigate('/') executed successfully");
+    } catch (error) {
+      console.error("🔧 AdminHeader: Error in navigate('/'):", error);
+    }
   };
 
   const handleSignOut = async () => {
