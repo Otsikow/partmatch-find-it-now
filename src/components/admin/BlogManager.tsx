@@ -53,12 +53,13 @@ const BlogManager = () => {
     const { data, error } = await supabase
       .from('blog_posts')
       .select('*')
-      .order('published_at', { ascending: false });
+      .order('created_at', { ascending: false });
 
     if (error) {
       console.error('Error fetching blog posts:', error);
     } else {
-      setPosts(data);
+      console.log('Fetched posts:', data);
+      setPosts(data || []);
     }
   };
 
