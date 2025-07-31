@@ -55,8 +55,14 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
         <Button
           variant="outline"
           size="icon"
-          onClick={goBack}
-          className="h-12 w-12 bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground border-primary-foreground/20"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log("🔧 AdminHeader: Back button CLICKED!");
+            goBack();
+          }}
+          className="h-12 w-12 bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground border-primary-foreground/20 cursor-pointer"
+          style={{ pointerEvents: 'auto', zIndex: 1000 }}
         >
           <ArrowLeft className="h-6 w-6" />
         </Button>
@@ -93,8 +99,14 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
           <Button
             variant="outline"
             size="icon"
-            onClick={goHome}
-            className="h-10 w-10 bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground border-primary-foreground/20"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              console.log("🔧 AdminHeader: Home button CLICKED!");
+              goHome();
+            }}
+            className="h-10 w-10 bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground border-primary-foreground/20 cursor-pointer"
+            style={{ pointerEvents: 'auto', zIndex: 1000 }}
           >
             <Home className="h-4 w-4" />
           </Button>
