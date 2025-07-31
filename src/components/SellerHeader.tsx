@@ -61,7 +61,7 @@ const SellerHeader = () => {
   }, [user]);
 
   const handleBackClick = () => {
-    navigate('/');
+    navigate('/', { state: { explicitHomeNavigation: true } });
   };
 
   const handleSignOut = async () => {

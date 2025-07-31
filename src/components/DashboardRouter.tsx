@@ -106,7 +106,14 @@ const DashboardRouter = () => {
     }
 
     const currentPath = window.location.pathname;
-    console.log("DashboardRouter: Routing decision - Path:", currentPath, "UserType:", resolvedUserType);
+    const navigationState = window.history.state?.usr;
+    console.log("DashboardRouter: Routing decision - Path:", currentPath, "UserType:", resolvedUserType, "NavigationState:", navigationState);
+
+    // Skip redirect if user explicitly navigated to home
+    if (currentPath === '/' && navigationState?.explicitHomeNavigation) {
+      console.log("DashboardRouter: Explicit home navigation detected, skipping redirect");
+      return;
+    }
 
     // Route based on resolved user type
     switch (resolvedUserType) {
