@@ -18,6 +18,7 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
 
   const goBack = () => {
     console.log("🔧 AdminHeader: Back button clicked - Navigating back");
+    console.log("🔧 AdminHeader: Current location:", window.location.pathname);
     try {
       navigate(-1);
       console.log("🔧 AdminHeader: navigate(-1) executed successfully");
@@ -28,6 +29,8 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
 
   const goHome = () => {
     console.log("🔧 AdminHeader: Home button clicked - Navigating to home");
+    console.log("🔧 AdminHeader: Current location:", window.location.pathname);
+    console.log("🔧 AdminHeader: navigate function:", typeof navigate);
     try {
       navigate('/');
       console.log("🔧 AdminHeader: navigate('/') executed successfully");
