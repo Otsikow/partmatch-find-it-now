@@ -92,10 +92,26 @@ const MobileHeader = () => {
                   </span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-gray-800 border shadow-lg z-50">
                 <DropdownMenuItem
                   className="flex items-center gap-2 cursor-pointer"
-                  onClick={() => window.location.href = '/blog'}
+                  onClick={() => {
+                    const dashboardUrl =
+                      userType === 'admin'
+                        ? '/admin'
+                        : userType === 'seller' || userType === 'supplier'
+                        ? '/seller-dashboard'
+                        : '/buyer-dashboard';
+                    navigate(dashboardUrl);
+                  }}
+                >
+                  <User className="h-4 w-4" />
+                  <span>Dashboard</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="flex items-center gap-2 cursor-pointer"
+                  onClick={() => navigate('/blog')}
                 >
                   <span className="h-4 w-4"></span>
                   <span>{t('Auto Insights')}</span>
