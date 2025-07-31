@@ -49,16 +49,14 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
     <header className="sticky top-0 z-50 bg-primary/90 text-primary-foreground backdrop-blur-lg border-b border-border/40 shadow-lg">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         {/* Left: Back Arrow */}
-        <div
-          onClick={() => {
-            alert('Back button clicked!');
-            window.location.href = '/';
-          }}
-          className="h-12 w-12 bg-red-500 hover:bg-red-600 text-white border-2 border-yellow-300 rounded-lg flex items-center justify-center cursor-pointer z-50"
-          style={{ position: 'relative', zIndex: 9999 }}
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={goBack}
+          className="h-12 w-12 bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground border-primary-foreground/20"
         >
           <ArrowLeft className="h-6 w-6" />
-        </div>
+        </Button>
 
         {/* Center: Logo and Title */}
         <div className="flex items-center gap-3 flex-1 justify-center">
@@ -89,15 +87,14 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
         <div className="flex items-center gap-2">
           <AdminNotificationBell onNavigateToVerifications={onNavigateToVerifications} />
           <ThemeToggle />
-          <button
-            onClick={() => {
-              console.log('🔧 Home button clicked');
-              window.location.href = '/';
-            }}
-            className="h-10 w-10 bg-white/20 hover:bg-white/30 text-white border border-white/30 rounded-lg flex items-center justify-center transition-colors"
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={goHome}
+            className="h-10 w-10 bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground border-primary-foreground/20"
           >
             <Home className="h-4 w-4" />
-          </button>
+          </Button>
           <Button
             variant="outline"
             size="sm"
