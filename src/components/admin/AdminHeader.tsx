@@ -32,8 +32,9 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
     console.log("🔧 AdminHeader: Current location:", window.location.pathname);
     console.log("🔧 AdminHeader: navigate function:", typeof navigate);
     try {
-      navigate('/');
-      console.log("🔧 AdminHeader: navigate('/') executed successfully");
+      // Navigate with state to prevent automatic redirect back to admin
+      navigate('/', { state: { explicitHomeNavigation: true } });
+      console.log("🔧 AdminHeader: navigate('/') executed successfully with explicitHomeNavigation flag");
     } catch (error) {
       console.error("🔧 AdminHeader: Error in navigate('/'):", error);
     }
