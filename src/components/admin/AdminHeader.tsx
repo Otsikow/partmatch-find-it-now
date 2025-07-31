@@ -69,7 +69,7 @@ const AdminHeader = ({ onNavigateToVerifications }: AdminHeaderProps) => {
         </Button>
 
         {/* Center: Logo and Title */}
-        <div className="flex items-center gap-3 flex-1 justify-center">
+        <div className="flex items-center gap-3 flex-1 justify-start ml-4">
           <button 
             onClick={() => {
               console.log('🔧 AdminHeader: Logo clicked!');
