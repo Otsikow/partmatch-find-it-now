@@ -174,31 +174,65 @@ const FeaturedListingsManager = () => {
 
   const handleUnfeatureListing = async (listingId: string) => {
     try {
-      const { error } = await supabase
+      console.log('🔄 Unfeaturing listing:', listingId);
+      
+      // Get current listing info for better feedback
+      const { data: currentListing } = await supabase
+        .from('car_parts')
+        .select('id, title, is_featured')
+        .eq('id', listingId)
+        .single();
+
+      // Check if already unfeatured
+      if (currentListing && !currentListing.is_featured) {
+        toast({
+          title: "Info",
+          description: "Listing is already unfeatured"
+        });
+        fetchFeaturedListings();
+        fetchAvailableListings();
+        return;
+      }
+
+      const { data, error } = await supabase
         .from('car_parts')
         .update({
           is_featured: false,
           featured_country: null,
           featured_until: null
         })
-        .eq('id', listingId);
+        .eq('id', listingId)
+        .select('id, title');
 
-      if (error) throw error;
+      if (error) {
+        console.error('Database error:', error);
+        throw new Error(error.message);
+      }
+
+      console.log('✅ Successfully unfeatured:', data);
 
       toast({
         title: "Success",
-        description: "Listing unfeatured successfully"
+        description: `${currentListing?.title || 'Listing'} unfeatured successfully`
       });
 
-      fetchFeaturedListings();
-      fetchAvailableListings();
+      // Immediate UI refresh
+      await Promise.all([
+        fetchFeaturedListings(),
+        fetchAvailableListings()
+      ]);
+
     } catch (error) {
-      console.error('Error unfeaturing listing:', error);
+      console.error('❌ Unfeature failed:', error);
       toast({
         title: "Error",
-        description: "Failed to unfeature listing",
+        description: `Failed to unfeature listing: ${error.message || 'Unknown error'}`,
         variant: "destructive"
       });
+      
+      // Try to refresh data anyway
+      fetchFeaturedListings();
+      fetchAvailableListings();
     }
   };
 
