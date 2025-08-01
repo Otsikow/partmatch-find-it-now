@@ -48,6 +48,8 @@ import Profile from "./pages/Profile";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
 import Testimonials from "./pages/Testimonials";
+import SavedParts from "./pages/SavedParts";
+import RecentViews from "./pages/RecentViews";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import SellerProtectedRoute from "./components/SellerProtectedRoute";
@@ -191,6 +193,22 @@ function App() {
                     <Route path="/blog" element={<Blog />} />
                     <Route path="/blog/:slug" element={<BlogPost />} />
                     <Route path="/testimonials" element={<Testimonials />} />
+                    <Route 
+                      path="/saved-parts" 
+                      element={
+                        <ProtectedRoute>
+                          <SavedParts />
+                        </ProtectedRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/recent-views" 
+                      element={
+                        <ProtectedRoute>
+                          <RecentViews />
+                        </ProtectedRoute>
+                      } 
+                    />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
 
