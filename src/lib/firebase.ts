@@ -14,7 +14,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getanalytics(app);
+const analytics = analytics(app);
 
 let messaging: Messaging | null = null;
 
