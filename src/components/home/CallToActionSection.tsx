@@ -52,7 +52,7 @@ const CallToActionSection = () => {
             </div>
             <div className="bg-white/10 dark:bg-white/5 backdrop-blur-sm rounded-lg p-6 border border-white/20 dark:border-white/10">
               <div className="text-white font-semibold text-lg mb-2">✓ Reach thousands</div>
-              <p className="text-white/80 dark:text-white/70">Connect with buyers worldwide</p>
+              <p className="text-white/80 dark:text-white/70">Connect with buyers in your region</p>
             </div>
             <div className="bg-white/10 dark:bg-white/5 backdrop-blur-sm rounded-lg p-6 border border-white/20 dark:border-white/10">
               <div className="text-white font-semibold text-lg mb-2">✓ Secure payments</div>
