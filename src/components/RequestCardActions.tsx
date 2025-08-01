@@ -85,7 +85,9 @@ const RequestCardActions = ({
       userId: user?.id,
       userType: userType,
       isOwner: user?.id === request.owner_id,
-      user: user
+      user: user,
+      elementExists: !!document.querySelector('[data-testid="make-offer-button"]'),
+      buttonElement: document.querySelector('[data-testid="make-offer-button"]')
     });
     
     handleAuthenticatedAction(
@@ -102,6 +104,7 @@ const RequestCardActions = ({
       <Button
         onClick={handleOfferClick}
         size="sm"
+        data-testid="make-offer-button"
         className="flex-1 min-w-[90px] bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
       >
         Make Offer
