@@ -35,7 +35,12 @@ export const useOfferHandling = (onOfferSubmitted?: () => void) => {
     setSubmittingOffer(requestId);
 
     try {
-      console.log('useOfferHandling: Submitting offer for request:', requestId);
+      console.log('useOfferHandling: Submitting offer for request:', requestId, {
+        supplier_id: user?.id,
+        price,
+        message,
+        location
+      });
       const { error } = await supabase
         .from('offers')
         .insert({
