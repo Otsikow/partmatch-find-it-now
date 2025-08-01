@@ -25,6 +25,9 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import ChatButton from "@/components/chat/ChatButton";
+import RequestCardActions from "./RequestCardActions";
+import RequestCardOfferForm from "./RequestCardOfferForm";
+import { useOfferHandling } from "@/hooks/useOfferHandling";
 
 interface PartRequest {
   id: string;
@@ -60,6 +63,11 @@ const RequestExpandedDialog = ({
   const [isLoading, setIsLoading] = useState(false);
   const [userProfile, setUserProfile] = useState<any>(null);
   const [buyerProfile, setBuyerProfile] = useState<any>(null);
+  const [offerPrice, setOfferPrice] = useState("");
+  const [offerMessage, setOfferMessage] = useState("");
+  const [offerLocation, setOfferLocation] = useState("");
+  
+  const { handleMakeOffer: submitOffer, handleWhatsAppContact, isSubmittingOffer } = useOfferHandling();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -109,15 +117,14 @@ const RequestExpandedDialog = ({
   const isOwner = user?.id === request.owner_id;
   const canModifyRequest = isAdmin || isOwner;
 
+  const [showOfferForm, setShowOfferForm] = useState(false);
+
   const handleMakeOffer = () => {
     if (!user) {
       navigate("/seller-auth");
       return;
     }
-    navigate("/seller-dashboard", {
-      state: { activeTab: "requests", highlightRequest: request.id },
-    });
-    onClose();
+    setShowOfferForm(true);
   };
 
   const handleContact = () => {
@@ -456,33 +463,52 @@ const RequestExpandedDialog = ({
 
           {/* Action Buttons - Only show for non-owners */}
           {request.status === 'pending' && !isOwner && (
-            <div className="flex flex-col sm:flex-row gap-3 pt-2 sm:pt-4">
-              <Button
-                onClick={handleMakeOffer}
-                className="w-full sm:flex-1 bg-primary hover:bg-primary/90 text-primary-foreground h-12 sm:h-auto text-sm font-medium"
-                size="lg"
-              >
-                Make Offer
-              </Button>
-              <div className="flex gap-3 sm:contents">
-                <ChatButton
-                  sellerId={request.owner_id}
-                  className="flex-1 sm:flex-1 bg-blue-600 hover:bg-blue-700 text-white border-blue-600 h-12 sm:h-auto text-sm font-medium"
-                  size="lg"
-                >
-                  <MessageCircle className="w-4 h-4 mr-1 sm:mr-2" />
-                  Chat
-                </ChatButton>
-                <Button
-                  variant="outline"
-                  onClick={handleContact}
-                  className="flex-1 sm:flex-1 bg-green-600 hover:bg-green-700 text-white border-green-600 h-12 sm:h-auto text-sm font-medium"
-                  size="lg"
-                >
-                  <MessageCircle className="w-4 h-4 mr-1 sm:mr-2" />
-                  WhatsApp
-                </Button>
-              </div>
+            <div className="pt-2 sm:pt-4">
+              {showOfferForm ? (
+                <RequestCardOfferForm
+                  requestId={request.id}
+                  offerPrice={offerPrice}
+                  setOfferPrice={setOfferPrice}
+                  offerMessage={offerMessage}
+                  setOfferMessage={setOfferMessage}
+                  offerLocation={offerLocation}
+                  setOfferLocation={setOfferLocation}
+                  onSubmit={async (requestId, price, message, location) => {
+                    await submitOffer(requestId, price, message, location);
+                    setShowOfferForm(false);
+                    setOfferPrice("");
+                    setOfferMessage("");
+                    setOfferLocation("");
+                    onClose();
+                  }}
+                  onCancel={() => {
+                    setShowOfferForm(false);
+                    setOfferPrice("");
+                    setOfferMessage("");
+                    setOfferLocation("");
+                  }}
+                  isSubmitting={isSubmittingOffer}
+                />
+              ) : (
+                <RequestCardActions
+                  request={{
+                    id: request.id,
+                    phone: request.phone,
+                    owner_id: request.owner_id
+                  }}
+                  onShowOfferForm={() => setShowOfferForm(true)}
+                  onChatContact={handleChatContact}
+                  onWhatsAppContact={(phone, req) => handleWhatsAppContact(phone, {
+                    id: req.id,
+                    car_make: request.car_make,
+                    car_model: request.car_model,
+                    car_year: request.car_year,
+                    part_needed: request.part_needed,
+                    location: request.location,
+                    phone: req.phone
+                  })}
+                />
+              )}
             </div>
           )}
         </div>
