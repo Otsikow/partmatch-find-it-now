@@ -3,12 +3,13 @@ import { initializeApp, getApps } from 'firebase/app';
 import { getMessaging, getToken, onMessage, type Messaging } from 'firebase/messaging';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD8B8K0qoqX8zUWU0QDY9Y1a2a3Xj8Z9Y4",
-  authDomain: "partmatch-notifications.firebaseapp.com",
-  projectId: "partmatch-notifications",
-  storageBucket: "partmatch-notifications.appspot.com",
-  messagingSenderId: "123456789012",
-  appId: "1:123456789012:web:abcdef123456789012"
+  apiKey: "AIzaSyBIGwoXEcYnmWepvG1Gf4bPCK4jFdNIHbI",
+  authDomain: "partmatch-79b1f.firebaseapp.com",
+  projectId: "partmatch-79b1f",
+  storageBucket: "partmatch-79b1f.firebasestorage.app",
+  messagingSenderId: "255124503700",
+  appId: "1:255124503700:web:d8ef74d281e1be63708881",
+  measurementId: "G-TZP1G061J1"
 };
 
 // Initialize Firebase
@@ -43,7 +44,7 @@ export const requestNotificationPermission = async (): Promise<string | null> =>
       
       // Get FCM token
       const token = await getToken(messaging, {
-        vapidKey: 'BJ8K9Xj2vQ3mF1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' // Replace with your VAPID key
+        vapidKey: 'BIhL8kXfIaXdLGvvrq2T0BwADPBGHRNCihPz7MAqL8Q-3SBPha5crVOjXugmOOHNjgWj4U5ofEAGNSsPWUEI4JM' // Replace with your VAPID key
       });
       
       console.log('FCM token obtained:', token);
