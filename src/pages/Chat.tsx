@@ -5,26 +5,67 @@ import ChatList from '@/components/chat/ChatList';
 import GroupedChatInterface from '@/components/chat/GroupedChatInterface';
 import { useIsMobile } from '@/hooks/use-mobile';
 import PageHeader from '@/components/PageHeader';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Chat = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-  const [selectedUserId, setSelectedUserId] = useState<string | null>(
-    searchParams.get('userId') || searchParams.get('id')
-  );
+  const { user } = useAuth();
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   // Extract part request context from URL parameters
   const requestId = searchParams.get('requestId');
   const partContext = searchParams.get('partContext');
 
-  // Auto-select user if coming from a request
+  // Handle both direct userId and chat id parameters
   useEffect(() => {
-    const userId = searchParams.get('userId') || searchParams.get('id');
-    if (userId && !selectedUserId) {
-      setSelectedUserId(userId);
-    }
-  }, [searchParams, selectedUserId]);
+    const handleUrlParams = async () => {
+      const userId = searchParams.get('userId');
+      const chatId = searchParams.get('id');
+      
+      if (userId) {
+        // Direct user ID provided
+        setSelectedUserId(userId);
+      } else if (chatId && user?.id) {
+        // Chat ID provided, need to find the other user
+        setLoading(true);
+        try {
+          console.log('🔍 Finding other user from chat ID:', chatId);
+          
+          const { data: chat, error } = await supabase
+            .from('chats')
+            .select('buyer_id, seller_id')
+            .eq('id', chatId)
+            .single();
+
+          if (error) throw error;
+          
+          // Determine the other user (not the current user)
+          const otherUserId = chat.buyer_id === user.id ? chat.seller_id : chat.buyer_id;
+          console.log('✅ Found other user:', otherUserId);
+          
+          setSelectedUserId(otherUserId);
+          
+          // Update URL to use userId format for consistency
+          const newSearchParams = new URLSearchParams(searchParams);
+          newSearchParams.delete('id');
+          newSearchParams.set('userId', otherUserId);
+          setSearchParams(newSearchParams, { replace: true });
+          
+        } catch (error) {
+          console.error('❌ Error finding other user from chat:', error);
+          navigate('/dashboard'); // Fallback to dashboard
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    handleUrlParams();
+  }, [searchParams, user?.id, navigate, setSearchParams]);
 
   const handleChatSelect = (userId: string) => {
     console.log('🎯 User selected for grouped chat:', userId);
@@ -42,6 +83,23 @@ const Chat = () => {
       navigate('/dashboard');
     }
   };
+
+  if (loading) {
+    return (
+      <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
+        <PageHeader 
+          title="Messages"
+          subtitle="Chat with buyers and sellers"
+          showBackButton={true}
+          backTo="/dashboard"
+          showHomeButton={true}
+        />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen bg-gray-50 flex flex-col overflow-hidden">
