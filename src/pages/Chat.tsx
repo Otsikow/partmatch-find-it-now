@@ -11,7 +11,7 @@ const Chat = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const [selectedUserId, setSelectedUserId] = useState<string | null>(
-    searchParams.get('userId')
+    searchParams.get('userId') || searchParams.get('id')
   );
 
   // Extract part request context from URL parameters
@@ -20,7 +20,7 @@ const Chat = () => {
 
   // Auto-select user if coming from a request
   useEffect(() => {
-    const userId = searchParams.get('userId');
+    const userId = searchParams.get('userId') || searchParams.get('id');
     if (userId && !selectedUserId) {
       setSelectedUserId(userId);
     }
