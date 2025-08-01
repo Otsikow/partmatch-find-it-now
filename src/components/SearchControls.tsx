@@ -5,7 +5,11 @@ import { Input } from "@/components/ui/input";
 import { mockParts } from "@/data/mockParts";
 import { getUniqueMakes, getUniqueModels, getUniqueYears } from "@/utils/partFilters";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { CAR_PART_CATEGORIES } from "@/constants/carPartCategories";
+import { RotateCcw, Search } from "lucide-react";
+import { DistanceFilter } from "./filters/DistanceFilter";
+import { CategoryFilter } from "./filters/CategoryFilter";
+import { MakeFilter } from "./filters/MakeFilter";
+import { ModelYearFilters } from "./filters/ModelYearFilters";
 
 interface SearchControlsProps {
   searchTerm: string;
@@ -57,9 +61,6 @@ const SearchControls = ({
   const uniqueMakes = getUniqueMakes(mockParts);
   const uniqueModels = getUniqueModels(mockParts, filters.make);
   const uniqueYears = getUniqueYears(mockParts, filters.make, filters.model);
-  
-  // Use the actual car part categories
-  const availableCategories = Array.from(CAR_PART_CATEGORIES);
 
   // Combine database makes with popular makes, removing duplicates and sorting alphabetically
   const allMakes = Array.from(new Set([...uniqueMakes, ...popularMakesInGhana])).sort();
@@ -95,155 +96,94 @@ const SearchControls = ({
     });
   };
 
-  const buttonSize = isMobile ? "sm" : "sm";
+  const handleDistanceChange = (distance: number) => {
+    onFiltersChange({
+      ...filters,
+      maxDistance: distance
+    });
+  };
+
+  const handleResetFilters = () => {
+    onSearchChange('');
+    onFiltersChange({
+      make: '',
+      model: '',
+      year: '',
+      category: '',
+      location: '',
+      priceRange: [0, 10000],
+      maxDistance: undefined
+    });
+  };
+
+  const hasActiveFilters = searchTerm || filters.make || filters.model || filters.year || 
+    filters.category || filters.maxDistance || filters.priceRange[0] > 0 || filters.priceRange[1] < 10000;
   
   return (  
-    <Card className="p-2 sm:p-4 md:p-6 mb-4 sm:mb-6 bg-gradient-to-br from-card/90 to-muted/50 backdrop-blur-sm shadow-lg border-0 hover:shadow-xl transition-all duration-300">
-      <div className="space-y-3 sm:space-y-4">
-        <div>
-          <Input
-            placeholder="Search parts (e.g. alternator, brake pads)"
-            value={searchTerm}
-            onChange={(e) => onSearchChange(e.target.value)}
-            className={`w-full border-border focus:border-primary focus:ring-primary/20 ${isMobile ? 'h-11 text-sm px-3' : 'h-10 text-sm'}`}
-          />
+    <div className="space-y-4 mb-4 sm:mb-6">
+      {/* Sticky Search Bar */}
+      <Card className="sticky top-0 z-10 p-4 bg-gradient-to-br from-card/95 to-muted/50 backdrop-blur-md shadow-lg border-0">
+        <div className="flex items-center gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search parts (e.g. alternator, brake pads)"
+              value={searchTerm}
+              onChange={(e) => onSearchChange(e.target.value)}
+              className="pl-10 w-full border-border focus:border-primary focus:ring-primary/20 h-11 text-sm"
+            />
+          </div>
+          
+          {/* Reset Filters Button */}
+          {hasActiveFilters && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleResetFilters}
+              className="flex items-center gap-2 text-xs sm:text-sm border-border hover:bg-accent hover:border-primary/30 transition-all duration-200"
+            >
+              <RotateCcw className="h-4 w-4" />
+              Reset
+            </Button>
+          )}
         </div>
-        
+      </Card>
+
+      {/* Filter Sections */}
+      <div className="space-y-4">
         {/* Distance Filter - Only show if showLocationFilters is true */}
         {showLocationFilters && (
-          <div>
-            <p className="text-xs sm:text-sm font-semibold text-foreground mb-2 sm:mb-3">Maximum Distance</p>
-            <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
-              {[50, 100, 200, 300].map(distance => (
-                <Button
-                  key={distance}
-                  variant={(filters.maxDistance === distance) ? 'default' : 'outline'}
-                  size={buttonSize}
-                  onClick={() => {
-                    console.log(`Setting distance to ${distance}`);
-                    onFiltersChange({
-                      ...filters,
-                      maxDistance: distance
-                    });
-                  }}
-                  className={`text-xs sm:text-sm ${(filters.maxDistance === distance) ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
-                >
-                  {distance} miles
-                </Button>
-              ))}
-            </div>
-          </div>
+          <DistanceFilter
+            maxDistance={filters.maxDistance}
+            onChange={handleDistanceChange}
+          />
         )}
         
         {/* Category Filter */}
-        <div>
-          <p className="text-xs sm:text-sm font-semibold text-foreground mb-2 sm:mb-3">Category</p>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-1.5 sm:gap-2 max-h-32 sm:max-h-40 overflow-y-auto">
-            <Button
-              variant={filters.category === '' ? 'default' : 'outline'}
-              size={buttonSize}
-              onClick={() => handleCategoryChange('')}
-              className={`text-xs sm:text-sm ${filters.category === '' ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
-            >
-              All Categories
-            </Button>
-            {availableCategories.map(category => (
-              <Button
-                key={category}
-                variant={filters.category === category ? 'default' : 'outline'}
-                size={buttonSize}
-                onClick={() => handleCategoryChange(category)}
-                className={`text-xs sm:text-sm ${filters.category === category ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
-              >
-                {category}
-              </Button>
-            ))}
-          </div>
-        </div>
+        <CategoryFilter
+          selectedCategory={filters.category}
+          onChange={handleCategoryChange}
+        />
 
         {/* Make Filter */}
-        <div>
-          <p className="text-xs sm:text-sm font-semibold text-foreground mb-2 sm:mb-3">Make</p>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-1.5 sm:gap-2 max-h-32 sm:max-h-40 overflow-y-auto">
-            <Button
-              variant={filters.make === '' ? 'default' : 'outline'}
-              size={buttonSize}
-              onClick={() => handleMakeChange('')}
-              className={`text-xs sm:text-sm ${filters.make === '' ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
-            >
-              All Makes
-            </Button>
-            {allMakes.map(make => (
-              <Button
-                key={make}
-                variant={filters.make === make ? 'default' : 'outline'}
-                size={buttonSize}
-                onClick={() => handleMakeChange(make)}
-                className={`text-xs sm:text-sm ${filters.make === make ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
-              >
-                {make}
-              </Button>
-            ))}
-          </div>
-        </div>
+        <MakeFilter
+          selectedMake={filters.make}
+          allMakes={allMakes}
+          onChange={handleMakeChange}
+        />
 
-        {/* Model Filter */}
-        {filters.make && (
-          <div>
-            <p className="text-xs sm:text-sm font-semibold text-foreground mb-2 sm:mb-3">Model</p>
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-1.5 sm:gap-2">
-              <Button
-                variant={filters.model === '' ? 'default' : 'outline'}
-                size={buttonSize}
-                onClick={() => handleModelChange('')}
-                className={`text-xs sm:text-sm ${filters.model === '' ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
-              >
-                All Models
-              </Button>
-              {uniqueModels.map(model => (
-                <Button
-                  key={model}
-                  variant={filters.model === model ? 'default' : 'outline'}
-                  size={buttonSize}
-                  onClick={() => handleModelChange(model)}
-                  className={`text-xs sm:text-sm ${filters.model === model ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
-                >
-                  {model}
-                </Button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Year Filter */}
-        {filters.make && filters.model && (
-          <div>
-            <p className="text-xs sm:text-sm font-semibold text-foreground mb-2 sm:mb-3">Year</p>
-            <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-1.5 sm:gap-2">
-              <Button
-                variant={filters.year === '' ? 'default' : 'outline'}
-                size={buttonSize}
-                onClick={() => handleYearChange('')}
-                className={`text-xs sm:text-sm ${filters.year === '' ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
-              >
-                All Years
-              </Button>
-              {uniqueYears.map(year => (
-                <Button
-                  key={year}
-                  variant={filters.year === year ? 'default' : 'outline'}
-                  size={buttonSize}
-                  onClick={() => handleYearChange(year)}
-                  className={`text-xs sm:text-sm ${filters.year === year ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" : "border-border hover:bg-accent hover:border-primary/30"}`}
-                >
-                  {year}
-                </Button>
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Model and Year Filters */}
+        <ModelYearFilters
+          selectedMake={filters.make}
+          selectedModel={filters.model}
+          selectedYear={filters.year}
+          uniqueModels={uniqueModels}
+          uniqueYears={uniqueYears}
+          onModelChange={handleModelChange}
+          onYearChange={handleYearChange}
+        />
       </div>
-    </Card>
+    </div>
   );
 };
 
