@@ -534,8 +534,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               }
             }
           } else if (userType === "owner") {
-            // For buyer login, just check they're not admin
+            // For buyer login, verify they are actually an owner/buyer
             const userTypeToCheck = profileUserType || metadataUserType;
+            
+            console.log("AuthProvider: Verifying buyer access:", { 
+              profileUserType, 
+              metadataUserType, 
+              userTypeToCheck 
+            });
+            
             if (userTypeToCheck === "admin") {
               console.log("AuthProvider: Admin trying to access buyer login");
 
@@ -552,6 +559,30 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
               });
 
               return { error: accessError };
+            }
+            
+            // Block suppliers from accessing buyer accounts
+            if (userTypeToCheck === "supplier") {
+              console.log("AuthProvider: Supplier trying to access buyer login");
+
+              await supabase.auth.signOut();
+
+              const accessError = new Error(
+                "Access denied. Sellers cannot access buyer accounts. Please use the seller login."
+              );
+
+              toast({
+                title: "Access Denied",
+                description: "Sellers cannot access buyer accounts. Please use the seller login.",
+                variant: "destructive",
+              });
+
+              return { error: accessError };
+            }
+            
+            // If no user type found, default to owner (for new users)
+            if (!userTypeToCheck) {
+              console.log("AuthProvider: No user type found, defaulting to owner for buyer login");
             }
           }
 
