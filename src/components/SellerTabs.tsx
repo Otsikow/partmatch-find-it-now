@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Package, Plus, Star, Settings, CreditCard } from "lucide-react";
+import { Package, Plus, Star, Settings, CreditCard, Bell } from "lucide-react";
 import PostCarPartForm from "./PostCarPartForm";
 import MyPartsTab from "./MyPartsTab";
 import OffersTab from "./OffersTab";
@@ -13,6 +13,8 @@ import { InventoryManagementTab } from "./InventoryManagementTab";
 import { useSubscriptionStatus } from "@/hooks/useSubscriptionStatus";
 import { CarPart } from "@/types/CarPart";
 import TabCountBadge from "./TabCountBadge";
+import NotificationCount from "./NotificationCount";
+import { useRealtimeRequestNotifications } from "@/hooks/useRealtimeRequestNotifications";
 interface Request {
   id: string;
   car_make: string;
@@ -76,6 +78,9 @@ const SupplierTabs = ({
     hasBusinessSubscription
   } = useSubscriptionStatus();
 
+  // Set up real-time notifications for new requests
+  useRealtimeRequestNotifications();
+
   const handlePartPosted = () => {
     setShowPostForm(false);
     sessionStorage.removeItem('showPostForm');
@@ -138,9 +143,12 @@ const SupplierTabs = ({
           </TabsTrigger>
           <TabsTrigger 
             value="requests" 
-            className="flex flex-col items-center justify-center gap-1 text-xs px-2 py-3 sm:py-4 h-16 sm:h-20 min-w-0 rounded-md bg-card border border-border/50 text-muted-foreground hover:text-foreground hover:bg-accent/50 hover:border-primary/30 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-md data-[state=active]:font-semibold transition-all duration-200"
+            className="flex flex-col items-center justify-center gap-1 text-xs px-2 py-3 sm:py-4 h-16 sm:h-20 min-w-0 rounded-md bg-card border border-border/50 text-muted-foreground hover:text-foreground hover:bg-accent/50 hover:border-primary/30 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-md data-[state=active]:font-semibold transition-all duration-200 relative"
           >
-            <Settings className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+            <div className="relative">
+              <Settings className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+              <NotificationCount type="new_request" className="absolute -top-2 -right-2" />
+            </div>
             <span className="text-[10px] sm:text-xs leading-tight text-center truncate w-full">Requests</span>
             <TabCountBadge count={requests.length} />
           </TabsTrigger>

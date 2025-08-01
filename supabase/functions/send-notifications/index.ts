@@ -67,6 +67,8 @@ const handler = async (req: Request): Promise<Response> => {
 };
 
 async function handleNewRequestNotification(requestId: string) {
+  console.log('Handling new request notification for request:', requestId);
+  
   // Get request details
   const { data: request } = await supabase
     .from('part_requests')
@@ -74,21 +76,44 @@ async function handleNewRequestNotification(requestId: string) {
     .eq('id', requestId)
     .single();
 
-  if (!request) return;
+  if (!request) {
+    console.log('Request not found:', requestId);
+    return;
+  }
 
-  // Find suppliers in the same location
+  console.log('Request details:', request);
+
+  // Find all verified suppliers (we'll notify all verified sellers)
   const { data: suppliers } = await supabase
     .from('profiles')
     .select('*')
     .eq('user_type', 'supplier')
-    .eq('is_blocked', false)
-    .ilike('location', `%${request.location}%`);
+    .eq('is_verified', true);
 
-  // Send notifications to matching suppliers
+  console.log('Found verified suppliers:', suppliers?.length);
+
+  // Create user notifications for all verified suppliers
   for (const supplier of suppliers || []) {
-    const message = `New part request: ${request.part_needed} for ${request.car_make} ${request.car_model} (${request.car_year}) in ${request.location}`;
+    const title = `New Part Request: ${request.part_needed}`;
+    const message = `${request.car_make} ${request.car_model} (${request.car_year}) - ${request.location}`;
     
-    await createNotification(supplier.id, 'whatsapp', supplier.phone, message);
+    await createUserNotification(
+      supplier.id, 
+      'new_request', 
+      title,
+      message,
+      {
+        requestId: requestId,
+        make: request.car_make,
+        model: request.car_model,
+        year: request.car_year,
+        part: request.part_needed,
+        location: request.location,
+        link: `/requests/${requestId}`
+      }
+    );
+    
+    console.log(`Notification created for supplier: ${supplier.id}`);
   }
 }
 
@@ -176,6 +201,37 @@ async function handleStatusUpdateNotification(requestId: string, message?: strin
   );
 }
 
+// Create user notification in the user_notifications table
+async function createUserNotification(
+  userId: string, 
+  type: string, 
+  title: string,
+  message: string, 
+  metadata?: any
+) {
+  try {
+    const { error } = await supabase
+      .from('user_notifications')
+      .insert({
+        user_id: userId,
+        type,
+        title,
+        message,
+        metadata,
+        read: false
+      });
+
+    if (error) {
+      console.error('Error creating user notification:', error);
+    } else {
+      console.log(`User notification created: ${type} for user ${userId}`);
+    }
+  } catch (error) {
+    console.error('Failed to create user notification:', error);
+  }
+}
+
+// Legacy function for backwards compatibility
 async function createNotification(userId: string, type: string, recipient: string, message: string) {
   await supabase
     .from('notifications')
@@ -187,7 +243,6 @@ async function createNotification(userId: string, type: string, recipient: strin
       sent: false
     });
 
-  // In a real implementation, you would integrate with WhatsApp Business API, SMS service, etc.
   console.log(`Notification queued: ${type} to ${recipient} - ${message}`);
 }
 

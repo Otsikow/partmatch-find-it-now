@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useMemo, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -16,8 +16,18 @@ import SellerVerificationStatus from "@/components/SellerVerificationStatus";
 const SellerDashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState("my-parts");
   const [showMainDashboard, setShowMainDashboard] = useState(false);
+
+  // Handle tab navigation from URL parameters (e.g., from notifications)
+  useEffect(() => {
+    const tabParam = searchParams.get('tab');
+    if (tabParam && ['my-parts', 'inventory', 'offers', 'requests', 'subscription', 'profile'].includes(tabParam)) {
+      setActiveTab(tabParam);
+      setShowMainDashboard(false); // Ensure we show the tabs, not the welcome dashboard
+    }
+  }, [searchParams]);
 
   const { requests, myOffers, loading, error, refetch } = useSellerData();
   const { myParts, loading: partsLoading, error: partsError, refetch: refetchParts } = useMyPartsData();

@@ -3,6 +3,7 @@ import { Package, LogOut, Search, ArrowLeft, MessageCircle } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom";
 import VerifiedBadge from "@/components/VerifiedBadge";
 import ChatNotificationBadge from "@/components/chat/ChatNotificationBadge";
+import NotificationBell from "@/components/NotificationBell";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -125,6 +126,9 @@ const SellerHeader = () => {
 
       {/* Right section - Action buttons */}
       <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+        <div className="relative">
+          <NotificationBell />
+        </div>
         <Button
           variant="outline"
           size="sm"

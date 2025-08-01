@@ -25,6 +25,9 @@ const NotificationDropdown = () => {
 
     // Enhanced navigation logic
     switch (notification.type) {
+      case 'new_request':
+        navigate('/seller-dashboard?tab=requests');
+        break;
       case 'new_message':
         navigate(`/chat?id=${notification.metadata?.chat_id}`);
         break;
