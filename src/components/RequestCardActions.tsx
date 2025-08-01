@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { MessageCircle, MessageSquare } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 
@@ -131,6 +131,7 @@ const RequestCardActions = ({
         }}
         className="flex-1 min-w-[60px] border-blue-600 text-blue-700 hover:bg-blue-50 hover:border-blue-700 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
       >
+        <MessageCircle className="h-4 w-4 mr-2" />
         Chat
       </Button>
       <Button
