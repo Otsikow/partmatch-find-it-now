@@ -1,19 +1,19 @@
 export const CAR_PART_CATEGORIES = [
-  'Engine & Transmission',
-  'Suspension & Steering', 
-  'Brakes & Brake System',
-  'Exhaust System',
-  'Electrical & Ignition',
-  'Cooling System',
-  'Fuel System',
   'Body Panels & Bumpers',
+  'Brakes & Brake System',
+  'Car Accessories',
+  'Clutch & Gearbox',
+  'Cooling System',
+  'ECU & Sensors',
+  'Electrical & Ignition',
+  'Engine & Transmission',
+  'Exhaust System',
+  'Fuel System',
+  'Interior Parts',
   'Lighting',
   'Mirrors & Glass',
-  'Interior Parts',
-  'Wheels & Tyres',
-  'Clutch & Gearbox',
-  'ECU & Sensors',
-  'Car Accessories'
+  'Suspension & Steering',
+  'Wheels & Tyres'
 ] as const;
 
 export type CarPartCategory = typeof CAR_PART_CATEGORIES[number];
