@@ -116,6 +116,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         userMetadata: session?.user?.user_metadata,
         emailConfirmed: session?.user?.email_confirmed_at,
       });
+      
+      // Debug: Check for auth errors
+      if (!session && event === 'SIGNED_OUT') {
+        console.log("AuthProvider: User signed out");
+      } else if (!session && event === 'TOKEN_REFRESHED') {
+        console.error("AuthProvider: Token refresh failed - session is null");
+      } else if (!session) {
+        console.warn("AuthProvider: No session available for event:", event);
+      }
 
       // Check if this is a password recovery session
       if (event === "PASSWORD_RECOVERY") {
