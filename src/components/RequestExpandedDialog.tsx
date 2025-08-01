@@ -19,7 +19,8 @@ import {
   Trash2, 
   Phone,
   Car,
-  Wrench
+  Wrench,
+  User
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
@@ -58,6 +59,7 @@ const RequestExpandedDialog = ({
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [userProfile, setUserProfile] = useState<any>(null);
+  const [buyerProfile, setBuyerProfile] = useState<any>(null);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -78,6 +80,27 @@ const RequestExpandedDialog = ({
 
     fetchUserProfile();
   }, [user]);
+
+  // Fetch buyer's profile information
+  useEffect(() => {
+    const fetchBuyerProfile = async () => {
+      if (!request?.owner_id) return;
+      
+      try {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('first_name, last_name, user_type, is_verified')
+          .eq('id', request.owner_id)
+          .single();
+        
+        setBuyerProfile(profile);
+      } catch (error) {
+        console.error('Error fetching buyer profile:', error);
+      }
+    };
+
+    fetchBuyerProfile();
+  }, [request?.owner_id]);
 
   if (!request) return null;
 
@@ -373,6 +396,39 @@ const RequestExpandedDialog = ({
                   <p className="text-gray-800 text-sm sm:text-base">{request.description}</p>
                 </div>
               )}
+            </CardContent>
+          </Card>
+
+          {/* Buyer Information */}
+          <Card>
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <User className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600" />
+                <h3 className="font-semibold text-base sm:text-lg">Requested By</h3>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="flex-1">
+                  {buyerProfile ? (
+                    <div className="flex items-center gap-2">
+                      <p className="font-medium text-sm sm:text-base">
+                        {buyerProfile.first_name} {buyerProfile.last_name}
+                      </p>
+                      {buyerProfile.is_verified && (
+                        <Badge variant="secondary" className="text-xs bg-green-100 text-green-700">
+                          Verified
+                        </Badge>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="animate-pulse">
+                      <div className="h-4 bg-gray-200 rounded w-32"></div>
+                    </div>
+                  )}
+                  <p className="text-xs sm:text-sm text-gray-600 capitalize">
+                    {buyerProfile?.user_type || 'Owner'}
+                  </p>
+                </div>
+              </div>
             </CardContent>
           </Card>
 
