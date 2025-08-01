@@ -58,15 +58,15 @@ const HowItWorksSection = () => {
           {/* For Sellers */}
           <Card className="bg-card border-0 shadow-lg">
             <CardHeader className="text-center pb-8">
-              <CardTitle className="text-2xl font-bold text-foreground">
+              <CardTitle className="text-2xl font-bold text-primary">
                 For Sellers
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               {sellerSteps.map((step, index) => (
                 <div key={index} className="flex items-start space-x-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center">
-                    <step.icon className="w-6 h-6 text-secondary" />
+                  <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                    <step.icon className="w-6 h-6 text-primary" />
                   </div>
                   <div className="flex-1">
                     <h4 className="font-semibold text-foreground mb-1">
