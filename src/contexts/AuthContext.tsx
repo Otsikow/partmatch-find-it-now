@@ -711,18 +711,31 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     console.log("🔐 AuthProvider: SignOut attempt started");
 
     try {
-      const { error } = await supabase.auth.signOut();
+      // Use signOut with scope 'global' to sign out from all sessions
+      const { error } = await supabase.auth.signOut({ scope: 'global' });
 
       console.log("AuthProvider: SignOut result:", { error });
 
-      // Clear local state immediately regardless of error
+      // Clear ALL local state and storage immediately
       setSession(null);
       setUser(null);
       setIsPasswordReset(false);
       setUserType(null);
       setFirstName(null);
-      // Clear localStorage on sign out
+      
+      // Clear all relevant localStorage items
       localStorage.removeItem("userType");
+      localStorage.removeItem("profiles");
+      
+      // Clear Supabase auth tokens from localStorage
+      const authKeys = Object.keys(localStorage).filter(key => 
+        key.includes('sb-ytgmzhevgcmvevuwkocz') || 
+        key.includes('auth-token') ||
+        key.includes('supabase')
+      );
+      authKeys.forEach(key => localStorage.removeItem(key));
+      
+      console.log("AuthProvider: Cleared localStorage keys:", authKeys);
 
       if (error) {
         // Log the error but don't throw it - handle gracefully
@@ -751,8 +764,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         });
       }
 
-      // Redirect to home page after successful sign out
-      window.location.href = "/";
+      // Force redirect to auth page to prevent automatic re-login
+      window.location.href = "/auth";
     } catch (error) {
       console.error("AuthProvider: Sign out unexpected error:", error);
 
@@ -762,8 +775,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setIsPasswordReset(false);
       setUserType(null);
       setFirstName(null);
-      // Clear localStorage on unexpected sign out
+      
+      // Clear all relevant localStorage items
       localStorage.removeItem("userType");
+      localStorage.removeItem("profiles");
+      
+      // Clear Supabase auth tokens from localStorage
+      const authKeys = Object.keys(localStorage).filter(key => 
+        key.includes('sb-ytgmzhevgcmvevuwkocz') || 
+        key.includes('auth-token') ||
+        key.includes('supabase')
+      );
+      authKeys.forEach(key => localStorage.removeItem(key));
 
       // Don't throw the error - handle gracefully
       toast({
