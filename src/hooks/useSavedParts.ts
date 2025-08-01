@@ -37,12 +37,9 @@ export const useSavedParts = () => {
 
   const fetchSavedParts = async () => {
     if (!user) {
-      console.log('useSavedParts: No user found');
       setLoading(false);
       return;
     }
-
-    console.log('useSavedParts: Fetching for user:', user.id);
 
     try {
       const { data, error } = await supabase
@@ -76,7 +73,6 @@ export const useSavedParts = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      console.log('useSavedParts: Query result:', data);
       setSavedParts(data || []);
     } catch (error) {
       console.error('Error fetching saved parts:', error);
