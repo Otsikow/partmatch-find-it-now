@@ -58,7 +58,7 @@ const HowItWorksSection = () => {
           {/* For Sellers */}
           <Card className="bg-card border-0 shadow-lg">
             <CardHeader className="text-center pb-8">
-              <CardTitle className="text-2xl font-bold text-secondary">
+              <CardTitle className="text-2xl font-bold text-foreground">
                 For Sellers
               </CardTitle>
             </CardHeader>
