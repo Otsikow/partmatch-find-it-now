@@ -34,6 +34,12 @@ const RequestCard = ({ request, onOfferSubmit, onWhatsAppContact, onChatContact,
   const [offerMessage, setOfferMessage] = useState('');
   const [offerLocation, setOfferLocation] = useState('');
 
+  console.log('🔄 RequestCard render:', {
+    requestId: request.id,
+    showOfferForm,
+    isSubmittingOffer
+  });
+
   const handleSubmitOffer = async (requestId: string, price: number, message: string, location: string) => {
     await onOfferSubmit(requestId, price, message, location);
     
@@ -78,7 +84,10 @@ const RequestCard = ({ request, onOfferSubmit, onWhatsAppContact, onChatContact,
         ) : (
           <RequestCardActions
             request={request}
-            onShowOfferForm={() => setShowOfferForm(true)}
+            onShowOfferForm={() => {
+              console.log('🟡 onShowOfferForm called for request:', request.id);
+              setShowOfferForm(true);
+            }}
             onChatContact={onChatContact}
             onWhatsAppContact={onWhatsAppContact}
           />

@@ -32,7 +32,17 @@ const RequestCardActions = ({
   }
 
   const handleAuthenticatedAction = (action: () => void, actionName: string) => {
+    console.log('🔐 handleAuthenticatedAction called:', {
+      user: user?.id,
+      userType,
+      actionName,
+      hasUser: !!user,
+      isSupplier: userType === 'supplier',
+      isAdmin: userType === 'admin'
+    });
+
     if (!user) {
+      console.log('❌ No user - showing sign in toast');
       toast({
         title: "Sign in required",
         description: `Please sign in to ${actionName.toLowerCase()} the buyer.`,
@@ -42,6 +52,7 @@ const RequestCardActions = ({
     }
 
     if (!userType || (userType !== 'supplier' && userType !== 'admin')) {
+      console.log('❌ User type not authorized:', userType);
       toast({
         title: "Access restricted",
         description: `Only sellers and admins can ${actionName.toLowerCase()} buyers.`,
@@ -50,6 +61,7 @@ const RequestCardActions = ({
       return;
     }
 
+    console.log('✅ Authentication passed, executing action');
     action();
   };
 
@@ -68,8 +80,18 @@ const RequestCardActions = ({
   };
 
   const handleOfferClick = () => {
+    console.log('🔵 Make Offer button clicked!', {
+      requestId: request.id,
+      userId: user?.id,
+      userType: userType,
+      isOwner: user?.id === request.owner_id
+    });
+    
     handleAuthenticatedAction(
-      onShowOfferForm,
+      () => {
+        console.log('🟢 Authentication passed, calling onShowOfferForm');
+        onShowOfferForm();
+      },
       "Make an offer to"
     );
   };
