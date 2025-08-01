@@ -93,7 +93,16 @@ export const useCarParts = (params?: UseCarPartsParams) => {
 
       if (error) {
         console.error('Error fetching parts:', error);
-        setError(error.message);
+        
+        const isServiceUnavailable = 
+          error.message?.includes('503') || 
+          error.message?.includes('timeout') || 
+          error.message?.includes('upstream connect error');
+          
+        setError(isServiceUnavailable 
+          ? "Service temporarily unavailable. Please check your connection and try again."
+          : error.message
+        );
         return;
       }
 
