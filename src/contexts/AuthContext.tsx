@@ -751,8 +751,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         });
       }
 
-      // Redirect to auth page after successful sign out
-      window.location.href = "/auth";
+      // Redirect to home page after successful sign out
+      window.location.href = "/";
     } catch (error) {
       console.error("AuthProvider: Sign out unexpected error:", error);
 
