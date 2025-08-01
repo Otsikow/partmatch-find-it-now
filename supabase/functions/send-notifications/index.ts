@@ -20,6 +20,53 @@ interface NotificationRequest {
   customMessage?: string;
 }
 
+interface FCMMessage {
+  notification: {
+    title: string;
+    body: string;
+    icon?: string;
+  };
+  data?: Record<string, string>;
+  token: string;
+}
+
+async function sendPushNotification(message: FCMMessage) {
+  try {
+    const serverKey = Deno.env.get('FCM_SERVER_KEY');
+    if (!serverKey) {
+      console.warn('FCM_SERVER_KEY not configured, skipping push notification');
+      return { success: false, error: 'FCM not configured' };
+    }
+
+    const response = await fetch('https://fcm.googleapis.com/fcm/send', {
+      method: 'POST',
+      headers: {
+        'Authorization': `key=${serverKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        to: message.token,
+        notification: message.notification,
+        data: message.data,
+        priority: 'high',
+        content_available: true,
+      }),
+    });
+
+    const result = await response.json();
+    
+    if (response.ok && result.success === 1) {
+      return { success: true, result };
+    } else {
+      console.error('FCM send failed:', result);
+      return { success: false, error: result.results?.[0]?.error || 'Unknown FCM error' };
+    }
+  } catch (error) {
+    console.error('Error sending push notification:', error);
+    return { success: false, error: error.message };
+  }
+}
+
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -83,20 +130,24 @@ async function handleNewRequestNotification(requestId: string) {
 
   console.log('Request details:', request);
 
-  // Find all verified suppliers (we'll notify all verified sellers)
+  // Find all verified suppliers (we'll notify all verified sellers)  
   const { data: suppliers } = await supabase
     .from('profiles')
-    .select('*')
+    .select('id, first_name, last_name, push_token, push_notifications_enabled')
     .eq('user_type', 'supplier')
     .eq('is_verified', true);
 
   console.log('Found verified suppliers:', suppliers?.length);
 
-  // Create user notifications for all verified suppliers
+  let pushNotificationsSent = 0;
+  let pushNotificationsFailed = 0;
+
+  // Create user notifications and send push notifications for all verified suppliers
   for (const supplier of suppliers || []) {
     const title = `New Part Request: ${request.part_needed}`;
     const message = `${request.car_make} ${request.car_model} (${request.car_year}) - ${request.location}`;
     
+    // Create in-app notification
     await createUserNotification(
       supplier.id, 
       'new_request', 
@@ -109,12 +160,57 @@ async function handleNewRequestNotification(requestId: string) {
         year: request.car_year,
         part: request.part_needed,
         location: request.location,
-        link: `/requests/${requestId}`
+        link: `/seller-dashboard?tab=requests`
       }
     );
     
+    // Send push notification if supplier has push token and enabled
+    if (supplier.push_token && supplier.push_notifications_enabled !== false) {
+      const pushMessage: FCMMessage = {
+        notification: {
+          title: '🔔 New Part Request',
+          body: `${request.part_needed} for ${request.car_make} ${request.car_model} (${request.car_year}) in ${request.location}`,
+          icon: '/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png'
+        },
+        data: {
+          url: `/seller-dashboard?tab=requests`,
+          request_id: requestId,
+          type: 'new_request'
+        },
+        token: supplier.push_token
+      };
+
+      const pushResult = await sendPushNotification(pushMessage);
+      
+      // Log push notification attempt
+      await supabase
+        .from('push_notification_logs')
+        .insert({
+          user_id: supplier.id,
+          notification_type: 'new_request',
+          title: pushMessage.notification.title,
+          body: pushMessage.notification.body,
+          status: pushResult.success ? 'sent' : 'failed',
+          error_message: pushResult.success ? null : pushResult.error,
+          metadata: {
+            request_id: requestId,
+            fcm_result: pushResult.result
+          }
+        });
+
+      if (pushResult.success) {
+        pushNotificationsSent++;
+        console.log(`Push notification sent to supplier: ${supplier.id}`);
+      } else {
+        pushNotificationsFailed++;
+        console.warn(`Push notification failed for supplier ${supplier.id}:`, pushResult.error);
+      }
+    }
+    
     console.log(`Notification created for supplier: ${supplier.id}`);
   }
+
+  console.log(`Push notifications summary: ${pushNotificationsSent} sent, ${pushNotificationsFailed} failed`);
 }
 
 async function handleNewOfferNotification(offerId: string) {

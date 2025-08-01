@@ -3,14 +3,19 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Bell, Smartphone, X } from 'lucide-react';
 import { requestNotificationPermission, showNotification, isPWA } from '@/utils/pwa';
+import { requestNotificationPermission as requestFCMPermission, onMessageListener } from '@/lib/firebase';
 import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 const PWANotificationManager = () => {
   const [showNotificationPrompt, setShowNotificationPrompt] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [pushToken, setPushToken] = useState<string | null>(null);
   const { user } = useAuth();
+  const { toast } = useToast();
 
   useEffect(() => {
     // Check notification permission status
@@ -36,6 +41,65 @@ const PWANotificationManager = () => {
         setTimeout(() => setShowNotificationPrompt(true), 5000);
       }
     }
+  }, [user]);
+
+  // Register Firebase service worker
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/firebase-messaging-sw.js')
+        .then((registration) => {
+          console.log('Firebase SW registered:', registration);
+        })
+        .catch((error) => {
+          console.error('Firebase SW registration failed:', error);
+        });
+    }
+  }, []);
+
+  // Listen for foreground Firebase messages
+  useEffect(() => {
+    const setupMessageListener = async () => {
+      try {
+        await onMessageListener();
+      } catch (error) {
+        // Handle message listening
+        console.log('Setting up message listener');
+      }
+    };
+
+    setupMessageListener();
+  }, []);
+
+  // Auto-request Firebase push permission for sellers
+  useEffect(() => {
+    const checkAndRequestPushPermission = async () => {
+      if (!user) return;
+      
+      try {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('user_type')
+          .eq('id', user.id)
+          .single();
+        
+        // Request push notifications for sellers who don't have a token yet
+        if (profile?.user_type === 'supplier' && Notification.permission === 'granted') {
+          const token = await requestFCMPermission();
+          if (token) {
+            setPushToken(token);
+            console.log('FCM token obtained for seller:', token);
+            
+            // TODO: Save token to profile once types are updated
+            // This will be enabled after the database migration is fully reflected
+          }
+        }
+      } catch (error) {
+        console.error('Error setting up push notifications:', error);
+      }
+    };
+
+    // Delay to avoid overwhelming the user
+    setTimeout(checkAndRequestPushPermission, 3000);
   }, [user]);
 
   useEffect(() => {
