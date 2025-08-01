@@ -21,7 +21,12 @@ const SavedPartsPage = () => {
   const { data: savedParts = [], isLoading, refetch } = useQuery({
     queryKey: ['saved-parts-page', user?.id],
     queryFn: async () => {
-      if (!user) return [];
+      if (!user) {
+        console.log('SavedParts: No user found');
+        return [];
+      }
+      
+      console.log('SavedParts: Fetching for user:', user.id);
       
       const { data, error } = await supabase
         .from('saved_parts')
@@ -53,6 +58,8 @@ const SavedPartsPage = () => {
         `)
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
+
+      console.log('SavedParts: Query result:', { data, error });
 
       if (error) {
         console.error('Error fetching saved parts:', error);
