@@ -27,7 +27,7 @@ const SellerHeader = () => {
           .from("seller_verifications")
           .select("full_name, business_name, verification_status")
           .eq("user_id", user.id)
-          .single();
+          .maybeSingle();
 
         if (verification) {
           const displayName =
@@ -40,7 +40,7 @@ const SellerHeader = () => {
             .from("profiles")
             .select("first_name, last_name, is_verified")
             .eq("id", user.id)
-            .single();
+            .maybeSingle();
 
           if (profile) {
             const displayName =

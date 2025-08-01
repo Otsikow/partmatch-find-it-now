@@ -103,7 +103,7 @@ const SellerProfileManagement = () => {
         .from("profiles")
         .select("first_name, last_name, phone, location, address, profile_photo_url")
         .eq("id", user?.id)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
 

@@ -53,7 +53,7 @@ const SellerProtectedRoute = ({ children }: SellerProtectedRouteProps) => {
           .from("profiles")
           .select("user_type")
           .eq("id", user.id)
-          .single();
+          .maybeSingle();
 
         console.log("SellerProtectedRoute: Profile query result:", { profile, error });
 
