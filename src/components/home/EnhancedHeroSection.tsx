@@ -49,8 +49,8 @@ const EnhancedHeroSection = () => {
             </Link>
           </Button>
           
-          <Button asChild size="lg" variant="outline" className="w-full sm:w-auto border-white text-white hover:bg-white hover:text-primary font-semibold shadow-lg">
-            <Link to="/request-part" className="text-white hover:text-primary">
+          <Button asChild size="lg" className="w-full sm:w-auto bg-white/20 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-primary font-semibold shadow-lg transition-all">
+            <Link to="/request-part">
               Request Part
             </Link>
           </Button>
