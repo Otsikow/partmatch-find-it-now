@@ -9,6 +9,27 @@ interface MakeFilterProps {
   onChange: (make: string) => void;
 }
 
+// Car make logo mapping
+const getCarLogo = (make: string): string | null => {
+  const logoMap: Record<string, string> = {
+    'Toyota': '/car-logos/toyota.png',
+    'Honda': '/car-logos/honda.png',
+    'Ford': '/car-logos/ford.png',
+    'Chevrolet': '/car-logos/chevrolet.png',
+    'BMW': '/car-logos/bmw.png',
+    'Mercedes-Benz': '/car-logos/mercedes-benz.png',
+    'Audi': '/car-logos/audi.png',
+    'Volkswagen': '/car-logos/volkswagen.png',
+    'Nissan': '/car-logos/nissan.png',
+    'Hyundai': '/car-logos/hyundai.png',
+    'Kia': '/car-logos/kia.png',
+    'Mazda': '/car-logos/mazda.png',
+    'Peugeot': '/car-logos/peugeot.png',
+    'Renault': '/car-logos/renault.png'
+  };
+  return logoMap[make] || null;
+};
+
 // Group makes by region for better organization
 const makeGroups = {
   Asian: ['Honda', 'Toyota', 'Hyundai', 'Kia', 'Nissan', 'Mazda', 'Mitsubishi', 'Subaru', 'Suzuki', 'Infiniti', 'Lexus', 'Acura'],
@@ -58,21 +79,34 @@ export const MakeFilter = ({ selectedMake, allMakes, onChange }: MakeFilterProps
           >
             All Makes
           </Button>
-          {displayMakes.map(make => (
-            <Button
-              key={make}
-              variant={selectedMake === make ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => onChange(make)}
-              className={`text-xs sm:text-sm transition-all duration-200 ${
-                selectedMake === make 
-                  ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" 
-                  : "border-border hover:bg-accent hover:border-primary/30 hover:shadow-sm"
-              }`}
-            >
-              {make}
-            </Button>
-          ))}
+          {displayMakes.map(make => {
+            const logo = getCarLogo(make);
+            return (
+              <Button
+                key={make}
+                variant={selectedMake === make ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => onChange(make)}
+                className={`text-xs sm:text-sm transition-all duration-200 flex items-center gap-1.5 ${
+                  selectedMake === make 
+                    ? "bg-gradient-to-r from-primary to-primary/80 shadow-md" 
+                    : "border-border hover:bg-accent hover:border-primary/30 hover:shadow-sm"
+                }`}
+              >
+                {logo && (
+                  <img
+                    src={logo}
+                    alt={`${make} logo`}
+                    className="w-4 h-4 object-contain flex-shrink-0"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                )}
+                <span className="truncate">{make}</span>
+              </Button>
+            );
+          })}
         </div>
         
         {!showAllMakes && allMakes.length > popularMakes.length && (
