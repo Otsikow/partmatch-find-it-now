@@ -75,8 +75,13 @@ const NotificationDropdown = () => {
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-5 w-5" />
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="bg-white/20 backdrop-blur-sm border-white/30 hover:bg-white/30 text-white hover:text-white transition-all duration-300 shadow-lg border p-2 sm:px-3 relative"
+        >
+          <Bell className="h-4 w-4 drop-shadow-lg" />
+          <span className="hidden md:inline ml-1 drop-shadow-lg">Alerts</span>
           {unreadCount > 0 && (
             <Badge
               variant="destructive"
