@@ -45,7 +45,7 @@ const BuyerProfileManagement = () => {
         .from('profiles')
         .select('first_name, last_name, phone, location, address')
         .eq('id', user?.id)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
 

@@ -81,33 +81,56 @@ const SellerProfileManagement = () => {
 
   const fetchVerificationStatus = async () => {
     try {
+      console.log("SellerProfileManagement: Fetching verification status for user:", user?.id);
+      
       const { data, error } = await supabase
         .from("seller_verifications")
         .select("*")
         .eq("user_id", user?.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
         .maybeSingle();
 
-      if (error && error.code !== "PGRST116") {
+      console.log("SellerProfileManagement: Verification query result:", { data, error });
+
+      if (error) {
+        console.error("SellerProfileManagement: Verification query error:", error);
         throw error;
       }
 
-      setVerification(data);
+      if (data) {
+        console.log("SellerProfileManagement: Found verification data:", data);
+        setVerification(data);
+      } else {
+        console.log("SellerProfileManagement: No verification data found");
+        setVerification(null);
+      }
     } catch (error) {
-      console.error("Error fetching verification status:", error);
+      console.error("SellerProfileManagement: Error fetching verification status:", error);
+      // Don't show error toast for verification fetch failures - just log them
+      setVerification(null);
     }
   };
 
   const fetchProfile = async () => {
     try {
+      console.log("SellerProfileManagement: Fetching profile for user:", user?.id);
+      
       const { data, error } = await supabase
         .from("profiles")
         .select("first_name, last_name, phone, location, address, profile_photo_url")
         .eq("id", user?.id)
         .maybeSingle();
 
-      if (error) throw error;
+      console.log("SellerProfileManagement: Profile query result:", { data, error });
+
+      if (error) {
+        console.error("SellerProfileManagement: Database error:", error);
+        throw error;
+      }
 
       if (data) {
+        console.log("SellerProfileManagement: Setting profile data:", data);
         setProfileData({
           first_name: data.first_name || "",
           last_name: data.last_name || "",
@@ -116,17 +139,42 @@ const SellerProfileManagement = () => {
           address: data.address || "",
           profile_photo_url: data.profile_photo_url || "",
         });
+      } else {
+        console.log("SellerProfileManagement: No profile data found, using empty defaults");
+        // Set empty defaults if no profile exists yet
+        setProfileData({
+          first_name: "",
+          last_name: "",
+          phone: "",
+          location: "",
+          address: "",
+          profile_photo_url: "",
+        });
       }
     } catch (error) {
-      console.error("Error fetching profile:", error);
-      toast({
-        title: t("error", "Error"),
-        description: t(
-          "sellerProfile.failedToLoad",
-          "Failed to load profile data."
-        ),
-        variant: "destructive",
-      });
+      console.error("SellerProfileManagement: Error fetching profile:", error);
+      
+      // Only show error toast for actual errors, not for missing data
+      if (error && error.message && !error.message.includes('No rows returned')) {
+        toast({
+          title: t("error", "Error"),
+          description: t(
+            "sellerProfile.failedToLoad",
+            "Failed to load profile data."
+          ),
+          variant: "destructive",
+        });
+      } else {
+        // If it's just missing data, set empty defaults
+        setProfileData({
+          first_name: "",
+          last_name: "",
+          phone: "",
+          location: "",
+          address: "",
+          profile_photo_url: "",
+        });
+      }
     }
   };
 
