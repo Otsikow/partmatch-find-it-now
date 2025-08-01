@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Car, ChevronDown, ChevronUp } from "lucide-react";
 import { FilterSection } from "./FilterSection";
+import { LogoProcessor } from "@/components/LogoProcessor";
 
 interface MakeFilterProps {
   selectedMake: string;
@@ -9,8 +10,16 @@ interface MakeFilterProps {
   onChange: (make: string) => void;
 }
 
-// Car make logo mapping
-const getCarLogo = (make: string): string | null => {
+// Get car logo with processed background removal support
+const getCarLogo = (make: string, processedLogos: Record<string, string>): string | null => {
+  const makeKey = make.toLowerCase().replace(/[^a-z0-9]/g, '-');
+  
+  // Return processed logo if available
+  if (processedLogos[makeKey]) {
+    return processedLogos[makeKey];
+  }
+  
+  // Fallback to original logo mapping
   const logoMap: Record<string, string> = {
     // Asian brands
     'Toyota': `/car-logos/toyota.png?v=${Date.now()}`,
@@ -85,6 +94,8 @@ const makeGroups = {
 
 export const MakeFilter = ({ selectedMake, allMakes, onChange }: MakeFilterProps) => {
   const [showAllMakes, setShowAllMakes] = useState(false);
+  const [processedLogos, setProcessedLogos] = useState<Record<string, string>>({});
+  const [showProcessor, setShowProcessor] = useState(false);
   
   // Categorize makes into groups
   const categorizedMakes = { ...makeGroups, Others: [] };
@@ -125,7 +136,7 @@ export const MakeFilter = ({ selectedMake, allMakes, onChange }: MakeFilterProps
             All Makes
           </Button>
           {displayMakes.map(make => {
-            const logo = getCarLogo(make);
+            const logo = getCarLogo(make, processedLogos);
             return (
               <Button
                 key={make}
@@ -142,7 +153,11 @@ export const MakeFilter = ({ selectedMake, allMakes, onChange }: MakeFilterProps
                   <img
                     src={logo}
                     alt={`${make} logo`}
-                    className="w-4 h-4 object-contain flex-shrink-0"
+                    className="w-4 h-4 object-contain flex-shrink-0 filter drop-shadow-sm"
+                    style={{ 
+                      imageRendering: 'crisp-edges',
+                      WebkitFontSmoothing: 'antialiased'
+                    }}
                     onError={(e) => {
                       e.currentTarget.style.display = 'none';
                     }}
@@ -176,6 +191,25 @@ export const MakeFilter = ({ selectedMake, allMakes, onChange }: MakeFilterProps
             <ChevronUp className="h-4 w-4 mr-1" />
             Show Less
           </Button>
+        )}
+        
+        {/* Professional Logo Processor */}
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setShowProcessor(!showProcessor)}
+          className="w-full text-xs text-muted-foreground hover:text-foreground"
+        >
+          {showProcessor ? 'Hide' : 'Show'} Logo Processor
+        </Button>
+        
+        {showProcessor && (
+          <LogoProcessor 
+            onProcessingComplete={(logos) => {
+              setProcessedLogos(logos);
+              setShowProcessor(false);
+            }}
+          />
         )}
       </div>
     </FilterSection>
