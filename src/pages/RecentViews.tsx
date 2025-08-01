@@ -12,6 +12,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import MobileBottomTabs from "@/components/MobileBottomTabs";
 import { useIsMobile } from "@/hooks/use-mobile";
+import PageHeader from "@/components/PageHeader";
 
 const RecentViewsPage = () => {
   const { user } = useAuth();
@@ -150,15 +151,12 @@ const RecentViewsPage = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background">
-        <Navigation />
+        <PageHeader 
+          title="Recent Views" 
+          subtitle="Your browsing history"
+          showBackButton 
+        />
         <div className="container mx-auto px-4 py-8">
-          <div className="flex items-center gap-4 mb-6">
-            <Button variant="ghost" onClick={() => navigate(-1)}>
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back
-            </Button>
-            <h1 className="text-2xl font-bold">Recent Views</h1>
-          </div>
           <div className="space-y-4">
             {[...Array(8)].map((_, index) => (
               <Card key={index} className="animate-pulse">
@@ -185,46 +183,28 @@ const RecentViewsPage = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
+      <PageHeader 
+        title="Recent Views" 
+        subtitle={`${recentViews.length} part${recentViews.length !== 1 ? 's' : ''} viewed recently`}
+        showBackButton 
+      />
       
       <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" onClick={() => navigate(-1)}>
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back
+        {recentViews.length > 0 && (
+          <div className="flex items-center justify-end mb-6">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={handleClearAll}
+              disabled={clearingAll}
+            >
+              {clearingAll ? (
+                <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin mr-2" />
+              ) : null}
+              Clear All
             </Button>
-            <div>
-              <h1 className="text-3xl font-bold">Recent Views</h1>
-              <p className="text-muted-foreground">
-                {recentViews.length} part{recentViews.length !== 1 ? 's' : ''} viewed recently
-              </p>
-            </div>
           </div>
-          
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Clock className="w-5 h-5 text-primary" />
-              <span className="text-sm text-muted-foreground">
-                Your browsing history
-              </span>
-            </div>
-            
-            {recentViews.length > 0 && (
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={handleClearAll}
-                disabled={clearingAll}
-              >
-                {clearingAll ? (
-                  <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin mr-2" />
-                ) : null}
-                Clear All
-              </Button>
-            )}
-          </div>
-        </div>
+        )}
 
         {recentViews.length === 0 ? (
           <Card className="text-center py-12">
