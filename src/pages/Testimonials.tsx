@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Star, Quote, ChevronLeft, ChevronRight, MapPin, Calendar, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
-import Navigation from "@/components/Navigation";
+import PageHeader from "@/components/PageHeader";
 import Footer from "@/components/Footer";
 
 const testimonials = [
@@ -108,19 +108,15 @@ const Testimonials = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
+      <PageHeader 
+        title="Customer Testimonials" 
+        subtitle="See what our customers say about their experience finding and selling car parts on PartMatch"
+        showBackButton 
+      />
       
-      {/* Hero Section */}
-      <div className="bg-gradient-to-br from-primary/10 via-background to-secondary/10 py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
-            Customer Testimonials
-          </h1>
-          <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            See what our customers say about their experience finding and selling car parts on PartMatch
-          </p>
-          
-          {/* Stats */}
+      {/* Stats Section */}
+      <div className="bg-gradient-to-br from-primary/10 via-background to-secondary/10 py-12">
+        <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="text-center">
               <div className="text-3xl font-bold text-primary mb-2">{averageRating.toFixed(1)}</div>
