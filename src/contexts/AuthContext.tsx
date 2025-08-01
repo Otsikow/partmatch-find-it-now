@@ -145,13 +145,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setLoading(false);
     });
 
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    // Get initial session with domain-specific debugging
+    const currentDomain = window.location.hostname;
+    console.log("AuthProvider: Getting initial session for domain:", currentDomain);
+    console.log("AuthProvider: localStorage check:", {
+      hasAuthToken: !!localStorage.getItem('sb-ytgmzhevgcmvevuwkocz-auth-token'),
+      hasUserType: !!localStorage.getItem('userType'),
+      domain: currentDomain,
+      localStorageKeys: Object.keys(localStorage).filter(key => key.includes('sb-ytgmzhevgcmvevuwkocz'))
+    });
+
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
       console.log("AuthProvider: Initial session check:", {
         userId: session?.user?.id,
         userEmail: session?.user?.email,
         userMetadata: session?.user?.user_metadata,
         emailConfirmed: session?.user?.email_confirmed_at,
+        domain: currentDomain,
+        hasAccessToken: !!session?.access_token,
+        tokenExpiry: session?.expires_at ? new Date(session.expires_at * 1000) : null,
+        error
       });
 
       setSession(session);
@@ -159,6 +172,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (session?.user) {
         fetchUserProfile(session.user.id);
+      } else if (currentDomain.includes('partmatch.app')) {
+        // For production domain, try to recover session from localStorage
+        console.log("AuthProvider: No session on production, checking localStorage recovery options");
+        const storedAuth = localStorage.getItem('sb-ytgmzhevgcmvevuwkocz-auth-token');
+        if (storedAuth) {
+          console.log("AuthProvider: Found stored auth token, attempting recovery");
+          try {
+            const authData = JSON.parse(storedAuth);
+            if (authData.access_token && authData.refresh_token) {
+              supabase.auth.setSession({
+                access_token: authData.access_token,
+                refresh_token: authData.refresh_token
+              }).then(({ data, error }) => {
+                console.log("AuthProvider: Session recovery result:", { success: !!data.session, error });
+              });
+            }
+          } catch (e) {
+            console.error("AuthProvider: Error parsing stored auth:", e);
+          }
+        }
       }
 
       setLoading(false);
