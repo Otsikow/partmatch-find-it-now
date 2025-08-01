@@ -112,51 +112,51 @@ const SupplierTabs = ({
       </div>
 
       <Tabs value={activeTab} onValueChange={onTabChange} className="w-full">
-        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-6 gap-1 sm:gap-2 h-auto p-2 bg-muted/30 rounded-lg">
+        <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 gap-1 sm:gap-2 h-auto p-2 bg-muted/30 rounded-lg">
           <TabsTrigger 
             value="my-parts" 
-            className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-xs px-2 py-2 sm:py-3 h-auto rounded-md bg-card border border-border/50 text-muted-foreground hover:text-foreground hover:bg-accent/50 hover:border-primary/30 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-md data-[state=active]:font-semibold transition-all duration-200"
+            className="flex flex-col items-center justify-center gap-1 text-xs px-2 py-3 sm:py-4 h-16 sm:h-20 min-w-0 rounded-md bg-card border border-border/50 text-muted-foreground hover:text-foreground hover:bg-accent/50 hover:border-primary/30 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-md data-[state=active]:font-semibold transition-all duration-200"
           >
-            <Package className="h-3 w-3 sm:h-4 sm:w-4" />
-            <span className="text-[8px] sm:text-[10px] leading-tight">My Parts</span>
+            <Package className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+            <span className="text-[10px] sm:text-xs leading-tight text-center truncate w-full">My Parts</span>
             <TabCountBadge count={myParts.length} />
           </TabsTrigger>
           <TabsTrigger 
             value="inventory" 
-            className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-xs px-2 py-2 sm:py-3 h-auto rounded-md bg-card border border-border/50 text-muted-foreground hover:text-foreground hover:bg-accent/50 hover:border-primary/30 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-md data-[state=active]:font-semibold transition-all duration-200"
+            className="flex flex-col items-center justify-center gap-1 text-xs px-2 py-3 sm:py-4 h-16 sm:h-20 min-w-0 rounded-md bg-card border border-border/50 text-muted-foreground hover:text-foreground hover:bg-accent/50 hover:border-primary/30 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-md data-[state=active]:font-semibold transition-all duration-200"
           >
-            <Package className="h-3 w-3 sm:h-4 sm:w-4" />
-            <span className="text-[8px] sm:text-[10px] leading-tight">Inventory</span>
+            <Package className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+            <span className="text-[10px] sm:text-xs leading-tight text-center truncate w-full">Inventory</span>
           </TabsTrigger>
           <TabsTrigger 
             value="offers" 
-            className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-xs px-2 py-2 sm:py-3 h-auto rounded-md bg-card border border-border/50 text-muted-foreground hover:text-foreground hover:bg-accent/50 hover:border-primary/30 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-md data-[state=active]:font-semibold transition-all duration-200"
+            className="flex flex-col items-center justify-center gap-1 text-xs px-2 py-3 sm:py-4 h-16 sm:h-20 min-w-0 rounded-md bg-card border border-border/50 text-muted-foreground hover:text-foreground hover:bg-accent/50 hover:border-primary/30 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-md data-[state=active]:font-semibold transition-all duration-200"
           >
-            <Star className="h-3 w-3 sm:h-4 sm:w-4" />
-            <span className="text-[8px] sm:text-[10px] leading-tight">Offers</span>
+            <Star className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+            <span className="text-[10px] sm:text-xs leading-tight text-center truncate w-full">Offers</span>
             <TabCountBadge count={offers.length} />
           </TabsTrigger>
           <TabsTrigger 
             value="requests" 
-            className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-xs px-2 py-2 sm:py-3 h-auto rounded-md bg-card border border-border/50 text-muted-foreground hover:text-foreground hover:bg-accent/50 hover:border-primary/30 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-md data-[state=active]:font-semibold transition-all duration-200"
+            className="flex flex-col items-center justify-center gap-1 text-xs px-2 py-3 sm:py-4 h-16 sm:h-20 min-w-0 rounded-md bg-card border border-border/50 text-muted-foreground hover:text-foreground hover:bg-accent/50 hover:border-primary/30 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-md data-[state=active]:font-semibold transition-all duration-200"
           >
-            <Settings className="h-3 w-3 sm:h-4 sm:w-4" />
-            <span className="text-[8px] sm:text-[10px] leading-tight">Requests</span>
+            <Settings className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+            <span className="text-[10px] sm:text-xs leading-tight text-center truncate w-full">Requests</span>
             <TabCountBadge count={requests.length} />
           </TabsTrigger>
           <TabsTrigger 
             value="subscription" 
-            className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-xs px-2 py-2 sm:py-3 h-auto rounded-md bg-card border border-border/50 text-muted-foreground hover:text-foreground hover:bg-accent/50 hover:border-primary/30 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-md data-[state=active]:font-semibold transition-all duration-200"
+            className="flex flex-col items-center justify-center gap-1 text-xs px-2 py-3 sm:py-4 h-16 sm:h-20 min-w-0 rounded-md bg-card border border-border/50 text-muted-foreground hover:text-foreground hover:bg-accent/50 hover:border-primary/30 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-md data-[state=active]:font-semibold transition-all duration-200"
           >
-            <CreditCard className="h-3 w-3 sm:h-4 sm:w-4" />
-            <span className="text-[8px] sm:text-[10px] leading-tight">Sub</span>
+            <CreditCard className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+            <span className="text-[10px] sm:text-xs leading-tight text-center truncate w-full">Sub</span>
           </TabsTrigger>
           <TabsTrigger 
             value="profile" 
-            className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-xs px-2 py-2 sm:py-3 h-auto rounded-md bg-card border border-border/50 text-muted-foreground hover:text-foreground hover:bg-accent/50 hover:border-primary/30 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-md data-[state=active]:font-semibold transition-all duration-200"
+            className="flex flex-col items-center justify-center gap-1 text-xs px-2 py-3 sm:py-4 h-16 sm:h-20 min-w-0 rounded-md bg-card border border-border/50 text-muted-foreground hover:text-foreground hover:bg-accent/50 hover:border-primary/30 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-primary data-[state=active]:shadow-md data-[state=active]:font-semibold transition-all duration-200"
           >
-            <Settings className="h-3 w-3 sm:h-4 sm:w-4" />
-            <span className="text-[8px] sm:text-[10px] leading-tight">Profile</span>
+            <Settings className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+            <span className="text-[10px] sm:text-xs leading-tight text-center truncate w-full">Profile</span>
           </TabsTrigger>
         </TabsList>
 
