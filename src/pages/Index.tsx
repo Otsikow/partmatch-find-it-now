@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import MobileHeader from "@/components/MobileHeader";
 import MobileBottomTabs from "@/components/MobileBottomTabs";
-import MobileHomeContent from "@/components/MobileHomeContent";
+import EnhancedHomePage from "@/components/home/EnhancedHomePage";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -88,7 +88,7 @@ const Index = () => {
     <div className="min-h-screen bg-background body-text">
       <MobileHeader />
       <div className="pb-20">
-        <MobileHomeContent />
+        <EnhancedHomePage />
       </div>
       <Footer />
       <MobileBottomTabs />
