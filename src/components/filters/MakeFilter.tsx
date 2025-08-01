@@ -13,7 +13,7 @@ interface MakeFilterProps {
 const getCarLogo = (make: string): string | null => {
   const logoMap: Record<string, string> = {
     // Asian brands
-    'Toyota': '/car-logos/toyota.png',
+    'Toyota': `/car-logos/toyota.png?v=${Date.now()}`,
     'Honda': '/car-logos/honda.png',
     'Nissan': `/car-logos/nissan.png?v=${Date.now()}`,
     'Hyundai': '/car-logos/hyundai.png',
@@ -25,6 +25,12 @@ const getCarLogo = (make: string): string | null => {
     'Infiniti': '/car-logos/infiniti.png',
     'Lexus': '/car-logos/lexus.png',
     'Acura': '/car-logos/acura.png',
+    'Genesis': '/car-logos/genesis.png',
+    'Isuzu': '/car-logos/isuzu.png',
+    'Daewoo': '/car-logos/daewoo.png',
+    'SsangYong': '/car-logos/ssangyong.png',
+    'Mahindra': '/car-logos/mahindra.png',
+    'Tata': '/car-logos/tata.png',
     // European brands
     'BMW': `/car-logos/bmw.png?v=${Date.now()}`,
     'Mercedes-Benz': '/car-logos/mercedes-benz.png',
@@ -49,6 +55,11 @@ const getCarLogo = (make: string): string | null => {
     'Rolls-Royce': '/car-logos/rolls-royce.png',
     'Vauxhall': '/car-logos/vauxhall.png',
     'Opel': '/car-logos/opel.png',
+    'Mini': '/car-logos/mini.png',
+    'Smart': '/car-logos/smart.png',
+    'Saab': '/car-logos/saab.png',
+    'Dacia': '/car-logos/dacia.png',
+    'Tesla': '/car-logos/tesla.png',
     // American brands
     'Ford': '/car-logos/ford.png',
     'Chevrolet': '/car-logos/chevrolet.png',
