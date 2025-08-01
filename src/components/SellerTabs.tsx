@@ -105,7 +105,7 @@ const SupplierTabs = ({
         <Button onClick={() => {
           setShowPostForm(true);
           sessionStorage.setItem('showPostForm', 'true');
-        }} className="bg-primary hover:bg-primary/90 text-primary-foreground w-full sm:w-auto text-sm sm:text-base px-4 py-2 h-auto">
+        }} className="bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white w-full sm:w-auto text-sm sm:text-base px-4 py-2 h-auto shadow-lg hover:shadow-xl transition-all duration-300">
           <Plus className="h-4 w-4 mr-2" />
           Post New Part
         </Button>
