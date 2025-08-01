@@ -938,6 +938,9 @@ export type Database = {
           notification_preferences: Json | null
           phone: string | null
           profile_photo_url: string | null
+          push_notifications_enabled: boolean | null
+          push_token: string | null
+          push_token_updated_at: string | null
           rating: number | null
           subscription_expiry: string | null
           subscription_type: string | null
@@ -966,6 +969,9 @@ export type Database = {
           notification_preferences?: Json | null
           phone?: string | null
           profile_photo_url?: string | null
+          push_notifications_enabled?: boolean | null
+          push_token?: string | null
+          push_token_updated_at?: string | null
           rating?: number | null
           subscription_expiry?: string | null
           subscription_type?: string | null
@@ -994,6 +1000,9 @@ export type Database = {
           notification_preferences?: Json | null
           phone?: string | null
           profile_photo_url?: string | null
+          push_notifications_enabled?: boolean | null
+          push_token?: string | null
+          push_token_updated_at?: string | null
           rating?: number | null
           subscription_expiry?: string | null
           subscription_type?: string | null
@@ -1061,6 +1070,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      push_notification_logs: {
+        Row: {
+          body: string
+          created_at: string | null
+          error_message: string | null
+          id: string
+          metadata: Json | null
+          notification_type: string
+          sent_at: string | null
+          status: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          notification_type: string
+          sent_at?: string | null
+          status?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          notification_type?: string
+          sent_at?: string | null
+          status?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       rating_reminders: {
         Row: {
@@ -1148,6 +1196,41 @@ export type Database = {
             columns: ["request_id"]
             isOneToOne: false
             referencedRelation: "part_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recent_views: {
+        Row: {
+          created_at: string
+          id: string
+          part_id: string
+          updated_at: string
+          user_id: string
+          viewed_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          part_id: string
+          updated_at?: string
+          user_id: string
+          viewed_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          part_id?: string
+          updated_at?: string
+          user_id?: string
+          viewed_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recent_views_part_id_fkey"
+            columns: ["part_id"]
+            isOneToOne: false
+            referencedRelation: "car_parts"
             referencedColumns: ["id"]
           },
         ]
@@ -1473,6 +1556,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      add_recent_view: {
+        Args: { user_id_param: string; part_id_param: string }
+        Returns: undefined
+      }
       auto_publish_scheduled_posts: {
         Args: Record<PropertyKey, never>
         Returns: undefined
