@@ -4,7 +4,7 @@ import { CheckCircle, Package } from "lucide-react";
 
 const CallToActionSection = () => {
   return (
-    <div className="py-20 bg-gradient-to-br from-primary to-primary/80 relative overflow-hidden">
+    <div className="py-20 bg-gradient-to-br from-primary to-primary/80 dark:from-primary dark:to-primary/90 relative overflow-hidden">
       {/* Background pattern */}
       <div className="absolute inset-0 bg-grid-white/10 bg-[size:20px_20px]" />
       <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent" />
@@ -26,7 +26,7 @@ const CallToActionSection = () => {
             <Button 
               asChild 
               size="lg" 
-              className="w-full sm:w-auto bg-white text-primary hover:bg-white/90 font-semibold text-lg px-8 py-4 h-auto shadow-lg"
+              className="w-full sm:w-auto bg-white text-primary hover:bg-white/90 dark:bg-white dark:text-primary dark:hover:bg-white/90 font-semibold text-lg px-8 py-4 h-auto shadow-lg"
             >
               <Link to="/post-part">
                 <Package className="mr-2 h-6 w-6" />
@@ -37,7 +37,7 @@ const CallToActionSection = () => {
             <Button 
               asChild 
               size="lg" 
-              className="w-full sm:w-auto bg-white/20 border-2 border-white text-white hover:bg-white hover:text-primary font-semibold text-lg px-8 py-4 h-auto backdrop-blur-sm"
+              className="w-full sm:w-auto bg-white/20 border-2 border-white text-white hover:bg-white hover:text-primary dark:bg-white/10 dark:border-white/50 dark:text-white dark:hover:bg-white dark:hover:text-primary font-semibold text-lg px-8 py-4 h-auto backdrop-blur-sm"
             >
               <Link to="/seller-auth">
                 Join as Seller
@@ -46,17 +46,17 @@ const CallToActionSection = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+            <div className="bg-white/10 dark:bg-white/5 backdrop-blur-sm rounded-lg p-6 border border-white/20 dark:border-white/10">
               <div className="text-white font-semibold text-lg mb-2">✓ No listing fees</div>
-              <p className="text-white/80">Post unlimited parts for free</p>
+              <p className="text-white/80 dark:text-white/70">Post unlimited parts for free</p>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+            <div className="bg-white/10 dark:bg-white/5 backdrop-blur-sm rounded-lg p-6 border border-white/20 dark:border-white/10">
               <div className="text-white font-semibold text-lg mb-2">✓ Reach thousands</div>
-              <p className="text-white/80">Connect with buyers across Ghana</p>
+              <p className="text-white/80 dark:text-white/70">Connect with buyers worldwide</p>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+            <div className="bg-white/10 dark:bg-white/5 backdrop-blur-sm rounded-lg p-6 border border-white/20 dark:border-white/10">
               <div className="text-white font-semibold text-lg mb-2">✓ Secure payments</div>
-              <p className="text-white/80">Safe and reliable transactions</p>
+              <p className="text-white/80 dark:text-white/70">Safe and reliable transactions</p>
             </div>
           </div>
         </div>
