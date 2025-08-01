@@ -111,7 +111,7 @@ const OfferCardDisplay = ({ offer, onWhatsAppContact }: OfferCardDisplayProps) =
               className="bg-green-600 hover:bg-green-700 text-white text-sm sm:text-base"
             >
               <MessageCircle className="h-4 w-4 mr-2" />
-              Contact Customer
+              WhatsApp
             </Button>
           )}
           
