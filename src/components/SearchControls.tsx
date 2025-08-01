@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { mockParts } from "@/data/mockParts";
 import { getUniqueMakes, getUniqueModels, getUniqueYears } from "@/utils/partFilters";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { CAR_PART_CATEGORIES } from "@/constants/carPartCategories";
 
 interface SearchControlsProps {
   searchTerm: string;
@@ -56,7 +57,9 @@ const SearchControls = ({
   const uniqueMakes = getUniqueMakes(mockParts);
   const uniqueModels = getUniqueModels(mockParts, filters.make);
   const uniqueYears = getUniqueYears(mockParts, filters.make, filters.model);
-  const uniqueCategories: string[] = [];
+  
+  // Use the actual car part categories
+  const availableCategories = Array.from(CAR_PART_CATEGORIES);
 
   // Combine database makes with popular makes, removing duplicates and sorting alphabetically
   const allMakes = Array.from(new Set([...uniqueMakes, ...popularMakesInGhana])).sort();
@@ -144,7 +147,7 @@ const SearchControls = ({
             >
               All Categories
             </Button>
-            {uniqueCategories.map(category => (
+            {availableCategories.map(category => (
               <Button
                 key={category}
                 variant={filters.category === category ? 'default' : 'outline'}
