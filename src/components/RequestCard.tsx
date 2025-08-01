@@ -26,9 +26,10 @@ interface RequestCardProps {
   onWhatsAppContact: (phone: string, request: Request) => void;
   onChatContact: (requestId: string, ownerId: string) => void;
   isSubmittingOffer: boolean;
+  onRequestClick?: (request: Request) => void;
 }
 
-const RequestCard = ({ request, onOfferSubmit, onWhatsAppContact, onChatContact, isSubmittingOffer }: RequestCardProps) => {
+const RequestCard = ({ request, onOfferSubmit, onWhatsAppContact, onChatContact, isSubmittingOffer, onRequestClick }: RequestCardProps) => {
   const [showOfferForm, setShowOfferForm] = useState(false);
   const [offerPrice, setOfferPrice] = useState('');
   const [offerMessage, setOfferMessage] = useState('');
@@ -58,7 +59,10 @@ const RequestCard = ({ request, onOfferSubmit, onWhatsAppContact, onChatContact,
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <Card 
+      className="overflow-hidden hover:shadow-lg transition-shadow duration-300 cursor-pointer" 
+      onClick={() => onRequestClick?.(request)}
+    >
       <RequestCardHeader request={request as Request & { photo_url?: string }} />
 
       <CardContent className="pt-0">

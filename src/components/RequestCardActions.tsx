@@ -112,7 +112,10 @@ const RequestCardActions = ({
   return (
     <div className="flex gap-2 w-full mt-4 -mx-2 px-2">
       <Button
-        onClick={handleOfferClick}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleOfferClick();
+        }}
         size="sm"
         data-testid="make-offer-button"
         className="flex-1 min-w-[90px] bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
@@ -122,7 +125,10 @@ const RequestCardActions = ({
       <Button
         variant="outline"
         size="sm"
-        onClick={handleChatClick}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleChatClick();
+        }}
         className="flex-1 min-w-[60px] border-blue-600 text-blue-700 hover:bg-blue-50 hover:border-blue-700 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
       >
         Chat
@@ -130,7 +136,10 @@ const RequestCardActions = ({
       <Button
         variant="outline"
         size="sm"
-        onClick={handleWhatsAppClick}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleWhatsAppClick();
+        }}
         className="flex-1 min-w-[80px] border-green-600 text-white bg-green-600 hover:bg-green-700 font-medium shadow-sm hover:shadow-md transition-all duration-200 text-xs h-9"
       >
         WhatsApp

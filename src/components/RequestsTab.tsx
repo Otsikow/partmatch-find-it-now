@@ -1,7 +1,9 @@
 
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Package } from "lucide-react";
 import RequestCard from "@/components/RequestCard";
+import RequestExpandedDialog from "@/components/RequestExpandedDialog";
 
 interface Request {
   id: string;
@@ -26,6 +28,19 @@ interface RequestsTabProps {
 }
 
 const RequestsTab = ({ requests, onOfferSubmit, onWhatsAppContact, onChatContact, isSubmittingOffer }: RequestsTabProps) => {
+  const [selectedRequest, setSelectedRequest] = useState<Request | null>(null);
+  const [isRequestDialogOpen, setIsRequestDialogOpen] = useState(false);
+
+  const handleRequestClick = (request: Request) => {
+    setSelectedRequest(request);
+    setIsRequestDialogOpen(true);
+  };
+
+  const handleRequestDialogClose = () => {
+    setIsRequestDialogOpen(false);
+    setSelectedRequest(null);
+  };
+
   return (
     <div className="space-y-3 sm:space-y-4 lg:space-y-6">
       {requests.map(request => (
@@ -36,6 +51,7 @@ const RequestsTab = ({ requests, onOfferSubmit, onWhatsAppContact, onChatContact
           onWhatsAppContact={onWhatsAppContact}
           onChatContact={onChatContact}
           isSubmittingOffer={isSubmittingOffer}
+          onRequestClick={handleRequestClick}
         />
       ))}
 
@@ -46,6 +62,12 @@ const RequestsTab = ({ requests, onOfferSubmit, onWhatsAppContact, onChatContact
           <p className="text-muted-foreground text-sm sm:text-base lg:text-lg">Check back later for new part requests from customers</p>
         </Card>
       )}
+
+      <RequestExpandedDialog
+        request={selectedRequest}
+        isOpen={isRequestDialogOpen}
+        onClose={handleRequestDialogClose}
+      />
     </div>
   );
 };
