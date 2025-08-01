@@ -15,7 +15,7 @@ const getCarLogo = (make: string): string | null => {
     // Asian brands
     'Toyota': '/car-logos/toyota.png',
     'Honda': '/car-logos/honda.png',
-    'Nissan': '/car-logos/nissan.png',
+    'Nissan': `/car-logos/nissan.png?v=${Date.now()}`,
     'Hyundai': '/car-logos/hyundai.png',
     'Kia': '/car-logos/kia.png',
     'Mazda': '/car-logos/mazda.png',
@@ -25,7 +25,7 @@ const getCarLogo = (make: string): string | null => {
     'Lexus': '/car-logos/lexus.png',
     'Acura': '/car-logos/acura.png',
     // European brands
-    'BMW': '/car-logos/bmw.png',
+    'BMW': `/car-logos/bmw.png?v=${Date.now()}`,
     'Mercedes-Benz': '/car-logos/mercedes-benz.png',
     'Audi': '/car-logos/audi.png',
     'Volkswagen': '/car-logos/volkswagen.png',
@@ -34,7 +34,7 @@ const getCarLogo = (make: string): string | null => {
     'Land Rover': '/car-logos/land-rover.png',
     'Volvo': '/car-logos/volvo.png',
     'Peugeot': '/car-logos/peugeot.png',
-    'Renault': '/car-logos/renault.png',
+    'Renault': `/car-logos/renault.png?v=${Date.now()}`,
     'Citroen': '/car-logos/citroen.png',
     'Skoda': '/car-logos/skoda.png',
     'Ferrari': '/car-logos/ferrari.png',
