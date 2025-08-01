@@ -15,7 +15,7 @@ interface EditPartModalProps {
   part: CarPart | null;
   isOpen: boolean;
   onClose: () => void;
-  onUpdate: (partId: string, updatedData: Partial<CarPart>) => void;
+  onUpdate: (partId: string, updatedData: Partial<CarPart>) => Promise<void>;
 }
 
 interface EditFormData {

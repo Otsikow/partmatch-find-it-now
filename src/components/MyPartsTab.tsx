@@ -100,8 +100,8 @@ const MyPartsTab = ({ parts, onRefresh }: MyPartsTabProps) => {
     setEditingPart(part);
   };
 
-  const handleUpdatePart = (partId: string, updatedData: Partial<CarPart>) => {
-    updatePart(partId, updatedData);
+  const handleUpdatePart = async (partId: string, updatedData: Partial<CarPart>) => {
+    await updatePart(partId, updatedData);
   };
 
   if (loading) {
