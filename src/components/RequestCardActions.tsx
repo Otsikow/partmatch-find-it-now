@@ -38,7 +38,11 @@ const RequestCardActions = ({
       actionName,
       hasUser: !!user,
       isSupplier: userType === 'supplier',
-      isAdmin: userType === 'admin'
+      isAdmin: userType === 'admin',
+      userTypeCheck: !userType || (userType !== 'supplier' && userType !== 'admin'),
+      userTypeTruthy: !!userType,
+      userTypeStringCheck: typeof userType,
+      userTypeValue: userType
     });
 
     if (!user) {
@@ -52,7 +56,13 @@ const RequestCardActions = ({
     }
 
     if (!userType || (userType !== 'supplier' && userType !== 'admin')) {
-      console.log('❌ User type not authorized:', userType);
+      console.log('❌ User type not authorized:', {
+        userType,
+        userTypeCheck: !userType || (userType !== 'supplier' && userType !== 'admin'),
+        notSupplier: userType !== 'supplier',
+        notAdmin: userType !== 'admin',
+        isFalsy: !userType
+      });
       toast({
         title: "Access restricted",
         description: `Only sellers and admins can ${actionName.toLowerCase()} buyers.`,
