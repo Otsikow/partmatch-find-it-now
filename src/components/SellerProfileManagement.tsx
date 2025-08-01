@@ -193,11 +193,26 @@ const SellerProfileManagement = () => {
   };
 
   const handleUpdateProfile = async () => {
+    if (!user?.id) {
+      toast({
+        title: t("error", "Error"),
+        description: t(
+          "sellerProfile.notSignedIn",
+          "You must be signed in to update your profile."
+        ),
+        variant: "destructive",
+      });
+      return;
+    }
+
     setLoading(true);
     try {
+      console.log("SellerProfileManagement: Updating profile for user:", user.id, profileData);
+      
       const { error } = await supabase
         .from("profiles")
-        .update({
+        .upsert({
+          id: user.id,
           first_name: profileData.first_name,
           last_name: profileData.last_name,
           phone: profileData.phone,
@@ -205,9 +220,14 @@ const SellerProfileManagement = () => {
           address: profileData.address,
           updated_at: new Date().toISOString(),
         })
-        .eq("id", user?.id);
+        .eq("id", user.id);
 
-      if (error) throw error;
+      console.log("SellerProfileManagement: Profile update result:", { error });
+
+      if (error) {
+        console.error("SellerProfileManagement: Profile update error:", error);
+        throw error;
+      }
 
       toast({
         title: t("profileUpdated", "Profile Updated"),
