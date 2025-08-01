@@ -11,77 +11,103 @@ const DashboardRouter = () => {
 
   // Resolve user type from multiple sources
   useEffect(() => {
+    const currentDomain = window.location.hostname;
     console.log("DashboardRouter: STEP 1 - Resolving user type", {
       authLoading,
       profileLoading,
       user: user?.id,
       userEmail: user?.email,
-      userMetadata: user?.user_metadata
+      userMetadata: user?.user_metadata,
+      currentDomain,
+      environment: currentDomain.includes('partmatch.app') ? 'production' : 'development'
     });
 
     const resolveUserType = async () => {
       if (!user) {
-        console.log("DashboardRouter: STEP 1A - No user found");
+        console.log("DashboardRouter: STEP 1A - No user found, domain:", currentDomain);
         setUserTypeResolved(true);
         return;
       }
 
-      console.log("DashboardRouter: STEP 1B - User found, resolving type");
+      console.log("DashboardRouter: STEP 1B - User found, resolving type for domain:", currentDomain);
 
-      // Priority order for user type detection
+      // Priority order for user type detection with enhanced logging
       let finalUserType = null;
 
       // 1. Check user metadata first (most reliable)
       if (user.user_metadata?.user_type) {
         finalUserType = user.user_metadata.user_type;
-        console.log("DashboardRouter: STEP 2A - Found userType in metadata:", finalUserType);
+        console.log("DashboardRouter: STEP 2A - Found userType in metadata:", finalUserType, "Domain:", currentDomain);
       }
       // 2. Check AuthContext userType
       else if (userType) {
         finalUserType = userType;
-        console.log("DashboardRouter: STEP 2B - Found userType in context:", finalUserType);
+        console.log("DashboardRouter: STEP 2B - Found userType in context:", finalUserType, "Domain:", currentDomain);
       }
-      // 3. Check localStorage
+      // 3. Check localStorage with domain-specific fallback
       else {
         const storedUserType = localStorage.getItem("userType");
-        if (storedUserType) {
+        const domainSpecificUserType = localStorage.getItem(`userType_${currentDomain}`);
+        
+        if (domainSpecificUserType) {
+          finalUserType = domainSpecificUserType;
+          console.log("DashboardRouter: STEP 2C1 - Found domain-specific userType:", finalUserType, "Domain:", currentDomain);
+        } else if (storedUserType) {
           finalUserType = storedUserType;
-          console.log("DashboardRouter: STEP 2C - Found userType in localStorage:", finalUserType);
+          console.log("DashboardRouter: STEP 2C2 - Found general userType in localStorage:", finalUserType, "Domain:", currentDomain);
         }
       }
 
-      // 4. If still no userType found, query the database
+      // 4. If still no userType found, query the database with retry for production
       if (!finalUserType) {
         try {
-          console.log("DashboardRouter: STEP 2D - Querying database for user type");
-          const { data: profile, error } = await supabase
-            .from('profiles')
-            .select('user_type')
-            .eq('id', user.id)
-            .single();
+          console.log("DashboardRouter: STEP 2D - Querying database for user type, Domain:", currentDomain);
+          
+          let attempts = currentDomain.includes('partmatch.app') ? 3 : 1; // Retry for production
+          let profile = null;
+          let error = null;
+          
+          while (attempts > 0 && !profile) {
+            const result = await supabase
+              .from('profiles')
+              .select('user_type')
+              .eq('id', user.id)
+              .single();
+            
+            profile = result.data;
+            error = result.error;
+            attempts--;
+            
+            if (!profile && attempts > 0) {
+              console.log(`DashboardRouter: Retrying database query, attempts left: ${attempts}`);
+              await new Promise(resolve => setTimeout(resolve, 500)); // Wait 500ms before retry
+            }
+          }
 
-          console.log("DashboardRouter: Database query result:", { profile, error });
+          console.log("DashboardRouter: Database query result:", { profile, error, domain: currentDomain });
 
           if (!error && profile?.user_type) {
             finalUserType = profile.user_type;
-            console.log("DashboardRouter: STEP 2E - Found userType in database:", finalUserType);
+            console.log("DashboardRouter: STEP 2E - Found userType in database:", finalUserType, "Domain:", currentDomain);
           }
         } catch (error) {
-          console.error("DashboardRouter: Error querying user type:", error);
+          console.error("DashboardRouter: Error querying user type:", error, "Domain:", currentDomain);
         }
       }
 
-      // Store resolved userType
+      // Store resolved userType with domain-specific backup
       const resolvedType = finalUserType || 'owner'; // Default to owner
-      console.log("DashboardRouter: STEP 3 - Final resolved user type:", resolvedType);
+      console.log("DashboardRouter: STEP 3 - Final resolved user type:", resolvedType, "Domain:", currentDomain);
       
       setResolvedUserType(resolvedType);
       if (finalUserType) {
+        // Store both general and domain-specific versions
         localStorage.setItem("userType", finalUserType);
-        console.log("DashboardRouter: STEP 3A - Stored in localStorage:", finalUserType);
+        localStorage.setItem(`userType_${currentDomain}`, finalUserType);
+        console.log("DashboardRouter: STEP 3A - Stored in localStorage:", finalUserType, "Domain:", currentDomain);
       }
       setUserTypeResolved(true);
-      console.log("DashboardRouter: STEP 3B - User type resolution complete");
+      console.log("DashboardRouter: STEP 3B - User type resolution complete for domain:", currentDomain);
     };
 
     if (authLoading || profileLoading) {
