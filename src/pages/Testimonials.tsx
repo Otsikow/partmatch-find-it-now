@@ -50,7 +50,7 @@ const testimonials = [
     id: 4,
     name: "Fatima Ibrahim",
     location: "Kano, Nigeria",
-    image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=150&h=150&fit=crop&crop=face",
+    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face",
     rating: 4,
     date: "2 months ago",
     verified: true,
