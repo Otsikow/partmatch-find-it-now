@@ -37,8 +37,7 @@ const CallToActionSection = () => {
             <Button 
               asChild 
               size="lg" 
-              variant="outline" 
-              className="w-full sm:w-auto border-2 border-white text-white hover:bg-white hover:text-primary font-semibold text-lg px-8 py-4 h-auto"
+              className="w-full sm:w-auto bg-white/20 border-2 border-white text-white hover:bg-white hover:text-primary font-semibold text-lg px-8 py-4 h-auto backdrop-blur-sm"
             >
               <Link to="/seller-auth">
                 Join as Seller
