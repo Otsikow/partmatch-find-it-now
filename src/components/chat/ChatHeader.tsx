@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -18,9 +17,10 @@ interface ChatUser {
 interface ChatHeaderProps {
   otherUser: ChatUser;
   onBack: () => void;
+  partContext?: string | null;
 }
 
-const ChatHeader = ({ otherUser, onBack }: ChatHeaderProps) => {
+const ChatHeader = ({ otherUser, onBack, partContext }: ChatHeaderProps) => {
   const isOnline = useUserPresence(otherUser?.id);
   
   const getInitials = (firstName?: string, lastName?: string) => {
@@ -32,60 +32,76 @@ const ChatHeader = ({ otherUser, onBack }: ChatHeaderProps) => {
   };
 
   return (
-    <div className="flex items-center justify-between p-4 border-b bg-white flex-shrink-0">
-      <div className="flex items-center gap-3">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onBack}
-          className="p-2 h-8 w-8 hover:bg-gray-100"
-        >
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-        
-        <Avatar className="h-10 w-10">
-          <AvatarFallback className="text-sm bg-purple-100 text-purple-700">
-            {getInitials(otherUser?.first_name, otherUser?.last_name)}
-          </AvatarFallback>
-        </Avatar>
-        
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <h3 className="text-lg font-semibold text-gray-900 truncate">
-              {otherUser?.first_name} {otherUser?.last_name}
-            </h3>
-            {otherUser?.is_verified && (
-              <Badge variant="secondary" className="text-xs bg-green-100 text-green-700">
-                Verified
-              </Badge>
-            )}
+    <div className="border-b bg-white flex-shrink-0">
+      <div className="flex items-center justify-between p-4">
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onBack}
+            className="p-2 h-8 w-8 hover:bg-gray-100"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+          
+          <Avatar className="h-10 w-10">
+            <AvatarFallback className="text-sm bg-purple-100 text-purple-700">
+              {getInitials(otherUser?.first_name, otherUser?.last_name)}
+            </AvatarFallback>
+          </Avatar>
+          
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-gray-900 truncate">
+                {otherUser?.first_name} {otherUser?.last_name}
+              </h3>
+              {otherUser?.is_verified && (
+                <Badge variant="secondary" className="text-xs bg-green-100 text-green-700">
+                  Verified
+                </Badge>
+              )}
+            </div>
+            <p className="text-sm text-gray-500 capitalize">
+              {getUserTypeDisplay(otherUser?.user_type)} • {isOnline ? 'Online' : 'Offline'}
+            </p>
           </div>
-          <p className="text-sm text-gray-500 capitalize">
-            {getUserTypeDisplay(otherUser?.user_type)} • {isOnline ? 'Online' : 'Offline'}
-          </p>
+        </div>
+        
+        <div className="flex items-center gap-2">
+          {otherUser?.phone && (
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="h-8 w-8 p-0 hover:bg-green-100"
+              onClick={() => {
+                const cleanPhone = otherUser.phone?.replace(/[^0-9]/g, '');
+                const message = `Hi ${otherUser.first_name}! I'd like to discuss about the part on PartMatch.`;
+                const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+              }}
+            >
+              <Phone className="h-4 w-4 text-green-600" />
+            </Button>
+          )}
+          <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-gray-100">
+            <MoreVertical className="h-4 w-4 text-gray-600" />
+          </Button>
         </div>
       </div>
       
-      <div className="flex items-center gap-2">
-        {otherUser?.phone && (
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="h-8 w-8 p-0 hover:bg-green-100"
-            onClick={() => {
-              const cleanPhone = otherUser.phone?.replace(/[^0-9]/g, '');
-              const message = `Hi ${otherUser.first_name}! I'd like to discuss about the part on PartMatch.`;
-              const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
-              window.open(whatsappUrl, '_blank');
-            }}
-          >
-            <Phone className="h-4 w-4 text-green-600" />
-          </Button>
-        )}
-        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-gray-100">
-          <MoreVertical className="h-4 w-4 text-gray-600" />
-        </Button>
-      </div>
+      {/* Part Request Context */}
+      {partContext && (
+        <div className="px-4 pb-3 border-t bg-gradient-to-r from-blue-50 to-indigo-50">
+          <div className="flex items-center gap-2 pt-3">
+            <Badge variant="outline" className="text-xs bg-blue-100 text-blue-700 border-blue-200">
+              Part Request
+            </Badge>
+            <span className="text-sm font-medium text-blue-800">
+              {partContext}
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

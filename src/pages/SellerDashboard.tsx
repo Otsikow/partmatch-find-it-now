@@ -25,8 +25,23 @@ const SellerDashboard = () => {
     useOfferHandling(refetch);
 
   const handleChatContact = (requestId: string, ownerId: string) => {
-    // Navigate to chat page with the buyer
-    navigate("/chat", { state: { requestId, buyerId: ownerId } });
+    // Find the request details to include in the chat context
+    const request = requests.find(r => r.id === requestId);
+    
+    // Navigate to chat page with the buyer using URL parameters
+    if (request) {
+      // Create search params with user ID and request context
+      const searchParams = new URLSearchParams({
+        userId: ownerId,
+        requestId: requestId,
+        partContext: `${request.car_make} ${request.car_model} ${request.car_year} - ${request.part_needed}`
+      });
+      
+      navigate(`/chat?${searchParams.toString()}`);
+    } else {
+      // Fallback if request not found
+      navigate(`/chat?userId=${ownerId}`);
+    }
   };
 
   // Calculate stats whenever offers change

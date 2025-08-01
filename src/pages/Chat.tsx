@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import ChatList from '@/components/chat/ChatList';
 import GroupedChatInterface from '@/components/chat/GroupedChatInterface';
@@ -13,6 +13,18 @@ const Chat = () => {
   const [selectedUserId, setSelectedUserId] = useState<string | null>(
     searchParams.get('userId')
   );
+
+  // Extract part request context from URL parameters
+  const requestId = searchParams.get('requestId');
+  const partContext = searchParams.get('partContext');
+
+  // Auto-select user if coming from a request
+  useEffect(() => {
+    const userId = searchParams.get('userId');
+    if (userId && !selectedUserId) {
+      setSelectedUserId(userId);
+    }
+  }, [searchParams, selectedUserId]);
 
   const handleChatSelect = (userId: string) => {
     console.log('🎯 User selected for grouped chat:', userId);
@@ -60,6 +72,8 @@ const Chat = () => {
               <GroupedChatInterface 
                 otherUserId={selectedUserId} 
                 onBack={handleBack}
+                requestId={requestId}
+                partContext={partContext}
               />
             </div>
           )}
