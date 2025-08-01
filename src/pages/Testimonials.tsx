@@ -38,7 +38,7 @@ const testimonials = [
     id: 3,
     name: "Samuel Mensah",
     location: "Kumasi, Ghana",
-    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=150&h=150&fit=crop&crop=face",
+    image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=150&h=150&fit=crop&crop=face",
     rating: 5,
     date: "3 weeks ago",
     verified: true,
