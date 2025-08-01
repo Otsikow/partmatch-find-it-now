@@ -4,28 +4,32 @@ import { CheckCircle, Package } from "lucide-react";
 
 const CallToActionSection = () => {
   return (
-    <div className="py-16 bg-gradient-to-r from-primary via-secondary to-accent text-white">
-      <div className="container mx-auto px-4 text-center">
-        <div className="max-w-3xl mx-auto">
-          <div className="flex items-center justify-center mb-4">
-            <CheckCircle className="w-12 h-12 mr-3" />
-            <h2 className="text-3xl md:text-4xl font-bold">
+    <div className="py-20 bg-gradient-to-br from-primary to-primary/80 relative overflow-hidden">
+      {/* Background pattern */}
+      <div className="absolute inset-0 bg-grid-white/10 bg-[size:20px_20px]" />
+      <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent" />
+      
+      <div className="container mx-auto px-4 text-center relative z-10">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center justify-center mb-6">
+            <CheckCircle className="w-16 h-16 mr-4 text-white" />
+            <h2 className="text-4xl md:text-5xl font-bold text-white">
               Got a Part to Sell?
             </h2>
           </div>
           
-          <p className="text-xl md:text-2xl mb-8 opacity-90">
+          <p className="text-2xl md:text-3xl mb-12 text-white/90 font-medium">
             List it in 2 minutes – It's FREE!
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center max-w-lg mx-auto mb-16">
             <Button 
               asChild 
               size="lg" 
-              className="w-full sm:w-auto bg-white text-primary hover:bg-gray-100 font-semibold"
+              className="w-full sm:w-auto bg-white text-primary hover:bg-white/90 font-semibold text-lg px-8 py-4 h-auto shadow-lg"
             >
               <Link to="/post-part">
-                <Package className="mr-2 h-5 w-5" />
+                <Package className="mr-2 h-6 w-6" />
                 Post Your Part
               </Link>
             </Button>
@@ -34,7 +38,7 @@ const CallToActionSection = () => {
               asChild 
               size="lg" 
               variant="outline" 
-              className="w-full sm:w-auto border-white text-white hover:bg-white hover:text-primary"
+              className="w-full sm:w-auto border-2 border-white text-white hover:bg-white hover:text-primary font-semibold text-lg px-8 py-4 h-auto"
             >
               <Link to="/seller-auth">
                 Join as Seller
@@ -42,18 +46,18 @@ const CallToActionSection = () => {
             </Button>
           </div>
           
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 text-sm opacity-90">
-            <div>
-              <strong>✓ No listing fees</strong>
-              <p>Post unlimited parts for free</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+              <div className="text-white font-semibold text-lg mb-2">✓ No listing fees</div>
+              <p className="text-white/80">Post unlimited parts for free</p>
             </div>
-            <div>
-              <strong>✓ Reach thousands</strong>
-              <p>Connect with buyers across Ghana</p>
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+              <div className="text-white font-semibold text-lg mb-2">✓ Reach thousands</div>
+              <p className="text-white/80">Connect with buyers across Ghana</p>
             </div>
-            <div>
-              <strong>✓ Secure payments</strong>
-              <p>Safe and reliable transactions</p>
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+              <div className="text-white font-semibold text-lg mb-2">✓ Secure payments</div>
+              <p className="text-white/80">Safe and reliable transactions</p>
             </div>
           </div>
         </div>
