@@ -47,28 +47,67 @@ export const useSellerData = () => {
   const lastFetchRef = useRef<number>(0);
   const CACHE_DURATION = 30000; // 30 seconds cache
 
+  const fetchWithRetry = async (fetchFn: () => Promise<any>, retries = 3): Promise<any> => {
+    for (let i = 0; i < retries; i++) {
+      try {
+        return await fetchFn();
+      } catch (error: any) {
+        const isLastAttempt = i === retries - 1;
+        const isRetryableError = 
+          error.message?.includes('503') || 
+          error.message?.includes('timeout') || 
+          error.message?.includes('upstream connect error') ||
+          error.code === 'PGRST301';
+
+        console.log(`Attempt ${i + 1}/${retries} failed:`, error.message);
+
+        if (isLastAttempt || !isRetryableError) {
+          throw error;
+        }
+
+        // Exponential backoff: wait 1s, 2s, 4s
+        const waitTime = Math.min(1000 * Math.pow(2, i), 8000);
+        console.log(`Retrying in ${waitTime}ms...`);
+        await new Promise(resolve => setTimeout(resolve, waitTime));
+      }
+    }
+  };
+
   const fetchRequests = async () => {
     try {
       console.log("useSellerData: Fetching requests");
-      const { data, error } = await supabase
-        .from("part_requests")
-        .select("*")
-        .eq("status", "pending")
-        .order("created_at", { ascending: false });
+      
+      const result = await fetchWithRetry(async () => {
+        const { data, error } = await supabase
+          .from("part_requests")
+          .select("*")
+          .eq("status", "pending")
+          .order("created_at", { ascending: false });
 
-      if (error) {
-        console.error("useSellerData: Error fetching requests:", error);
-        throw error;
-      }
+        if (error) {
+          console.error("useSellerData: Error fetching requests:", error);
+          throw error;
+        }
 
-      console.log("useSellerData: Fetched requests:", data?.length || 0);
-      setRequests(data || []);
-      return data;
-    } catch (error) {
-      console.error("useSellerData: Request fetch failed:", error);
+        return data;
+      });
+
+      console.log("useSellerData: Fetched requests:", result?.length || 0);
+      setRequests(result || []);
+      return result;
+    } catch (error: any) {
+      console.error("useSellerData: Request fetch failed after retries:", error);
+      
+      const isServiceUnavailable = 
+        error.message?.includes('503') || 
+        error.message?.includes('timeout') || 
+        error.message?.includes('upstream connect error');
+      
       toast({
-        title: "Error",
-        description: "Failed to load requests. Please try again.",
+        title: "Connection Error",
+        description: isServiceUnavailable 
+          ? "Service temporarily unavailable. Please check your connection and try again."
+          : "Failed to load requests. Please try again.",
         variant: "destructive",
       });
       throw error;
@@ -78,30 +117,43 @@ export const useSellerData = () => {
   const fetchMyOffers = async () => {
     try {
       console.log("useSellerData: Fetching offers for user:", user?.id);
-      const { data, error } = await supabase
-        .from("offers")
-        .select(
+      
+      const result = await fetchWithRetry(async () => {
+        const { data, error } = await supabase
+          .from("offers")
+          .select(
+            `
+            *,
+            request:part_requests(id, car_make, car_model, car_year, part_needed, phone, location, owner_id)
           `
-          *,
-          request:part_requests(id, car_make, car_model, car_year, part_needed, phone, location, owner_id)
-        `
-        )
-        .eq("supplier_id", user?.id)
-        .order("created_at", { ascending: false });
+          )
+          .eq("supplier_id", user?.id)
+          .order("created_at", { ascending: false });
 
-      if (error) {
-        console.error("useSellerData: Error fetching offers:", error);
-        throw error;
-      }
+        if (error) {
+          console.error("useSellerData: Error fetching offers:", error);
+          throw error;
+        }
 
-      console.log("useSellerData: Fetched offers:", data?.length || 0);
-      setMyOffers(data || []);
-      return data;
-    } catch (error) {
-      console.error("useSellerData: Offers fetch failed:", error);
+        return data;
+      });
+
+      console.log("useSellerData: Fetched offers:", result?.length || 0);
+      setMyOffers(result || []);
+      return result;
+    } catch (error: any) {
+      console.error("useSellerData: Offers fetch failed after retries:", error);
+      
+      const isServiceUnavailable = 
+        error.message?.includes('503') || 
+        error.message?.includes('timeout') || 
+        error.message?.includes('upstream connect error');
+      
       toast({
-        title: "Error",
-        description: "Failed to load your offers. Please try again.",
+        title: "Connection Error",
+        description: isServiceUnavailable 
+          ? "Service temporarily unavailable. Please check your connection and try again."
+          : "Failed to load your offers. Please try again.",
         variant: "destructive",
       });
       throw error;
