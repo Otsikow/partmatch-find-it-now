@@ -12,20 +12,40 @@ interface MakeFilterProps {
 // Car make logo mapping
 const getCarLogo = (make: string): string | null => {
   const logoMap: Record<string, string> = {
+    // Asian brands
     'Toyota': '/car-logos/toyota.png',
     'Honda': '/car-logos/honda.png',
-    'Ford': '/car-logos/ford.png',
-    'Chevrolet': '/car-logos/chevrolet.png',
-    'BMW': '/car-logos/bmw.png',
-    'Mercedes-Benz': '/car-logos/mercedes-benz.png',
-    'Audi': '/car-logos/audi.png',
-    'Volkswagen': '/car-logos/volkswagen.png',
     'Nissan': '/car-logos/nissan.png',
     'Hyundai': '/car-logos/hyundai.png',
     'Kia': '/car-logos/kia.png',
     'Mazda': '/car-logos/mazda.png',
+    'Mitsubishi': '/car-logos/mitsubishi.png',
+    'Subaru': '/car-logos/subaru.png',
+    'Infiniti': '/car-logos/infiniti.png',
+    'Lexus': '/car-logos/lexus.png',
+    'Acura': '/car-logos/acura.png',
+    // European brands
+    'BMW': '/car-logos/bmw.png',
+    'Mercedes-Benz': '/car-logos/mercedes-benz.png',
+    'Audi': '/car-logos/audi.png',
+    'Volkswagen': '/car-logos/volkswagen.png',
+    'Porsche': '/car-logos/porsche.png',
+    'Jaguar': '/car-logos/jaguar.png',
+    'Land Rover': '/car-logos/land-rover.png',
+    'Volvo': '/car-logos/volvo.png',
     'Peugeot': '/car-logos/peugeot.png',
-    'Renault': '/car-logos/renault.png'
+    'Renault': '/car-logos/renault.png',
+    'Citroen': '/car-logos/citroen.png',
+    'Skoda': '/car-logos/skoda.png',
+    'Ferrari': '/car-logos/ferrari.png',
+    'Lamborghini': '/car-logos/lamborghini.png',
+    // American brands
+    'Ford': '/car-logos/ford.png',
+    'Chevrolet': '/car-logos/chevrolet.png',
+    'Cadillac': '/car-logos/cadillac.png',
+    'Dodge': '/car-logos/dodge.png',
+    'Jeep': '/car-logos/jeep.png',
+    'Lincoln': '/car-logos/lincoln.png'
   };
   return logoMap[make] || null;
 };
