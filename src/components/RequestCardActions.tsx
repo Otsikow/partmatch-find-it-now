@@ -84,7 +84,8 @@ const RequestCardActions = ({
       requestId: request.id,
       userId: user?.id,
       userType: userType,
-      isOwner: user?.id === request.owner_id
+      isOwner: user?.id === request.owner_id,
+      user: user
     });
     
     handleAuthenticatedAction(
@@ -92,7 +93,7 @@ const RequestCardActions = ({
         console.log('🟢 Authentication passed, calling onShowOfferForm');
         onShowOfferForm();
       },
-      "Make an offer to"
+      "make an offer to"
     );
   };
 
