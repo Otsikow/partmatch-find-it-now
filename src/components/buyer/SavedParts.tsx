@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Heart, MapPin, DollarSign, Calendar, Trash2 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import ChatButton from '@/components/chat/ChatButton';
 
 const SavedParts = () => {
   const { user } = useAuth();
@@ -216,7 +217,13 @@ const SavedParts = () => {
                       <Trash2 className="h-4 w-4 mr-1" />
                       Remove
                     </Button>
-                    <Button size="sm">Contact seller</Button>
+                    <ChatButton
+                      sellerId={part.supplier_id}
+                      partId={part.id}
+                      size="sm"
+                    >
+                      Contact seller
+                    </ChatButton>
                   </div>
                 </div>
               </CardContent>
