@@ -34,7 +34,6 @@ const RecentViewsPage = () => {
             price,
             currency,
             images,
-            location,
             city,
             country,
             condition,
