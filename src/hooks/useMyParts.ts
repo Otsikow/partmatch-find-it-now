@@ -126,7 +126,7 @@ export const useMyParts = () => {
 
   useEffect(() => {
     fetchParts();
-  }, [user]);
+  }, [user?.id]); // Change dependency to user.id to be more specific
 
   return { parts, loading, error, refetch: fetchParts };
 };
