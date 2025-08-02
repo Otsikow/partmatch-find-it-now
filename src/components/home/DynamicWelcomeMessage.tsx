@@ -113,7 +113,7 @@ const DynamicWelcomeMessage = () => {
             {isSeller ? (
               // Seller buttons
               <>
-                <Button asChild size="sm" className="animate-scale-in">
+                <Button asChild size="sm" className="animate-scale-in bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white shadow-lg hover:shadow-xl transition-all duration-300">
                   <Link to="/post-part">
                     <Plus className="w-4 h-4 mr-1" />
                     Post New Part
