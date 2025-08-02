@@ -15,10 +15,14 @@ export const usePartManagement = (initialParts: CarPart[] = [], onRefresh?: () =
   const updatePartStatus = async (partId: string, newStatus: string) => {
     try {
       setLoading(true);
+      console.log("usePartManagement: Updating part status", { partId, newStatus });
+      
       const { error } = await supabase
         .from('car_parts')
         .update({ status: newStatus, updated_at: new Date().toISOString() })
         .eq('id', partId);
+
+      console.log("usePartManagement: Status update result:", { error });
 
       if (error) throw error;
 
@@ -31,6 +35,7 @@ export const usePartManagement = (initialParts: CarPart[] = [], onRefresh?: () =
         description: `Part ${newStatus === 'hidden' ? 'hidden' : 'made visible'} successfully.`,
       });
       
+      console.log("usePartManagement: Calling onRefresh");
       onRefresh?.();
     } catch (error) {
       console.error('Error updating part:', error);
