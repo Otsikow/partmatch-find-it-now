@@ -74,7 +74,7 @@ const PageHeader = ({
             variant="ghost" 
             size="icon" 
             onClick={handleBack} 
-            className="h-9 w-9 sm:h-10 sm:w-10 hover:bg-white/20 flex-shrink-0 text-white hover:text-white"
+            className="h-9 w-9 sm:h-10 sm:w-10 hover:bg-white/30 flex-shrink-0 text-white hover:text-white bg-white/10 border border-white/20 rounded-full transition-all duration-200"
           >
             <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
