@@ -35,9 +35,9 @@ export const useFeaturedParts = (countryCode?: string) => {
         .eq('is_featured', true)
         .eq('status', 'available');
 
-      // Add country filter if provided
+      // Add country filter if provided - include parts for this country OR parts without country restriction
       if (countryCode) {
-        query = query.eq('featured_country', countryCode);
+        query = query.or(`featured_country.eq.${countryCode},featured_country.is.null`);
       }
 
       // Add time filter - either no expiry or not yet expired
