@@ -175,16 +175,25 @@ const FeaturedListingsManager = () => {
   const handleUnfeatureListing = async (listingId: string) => {
     try {
       console.log('🔄 Unfeaturing listing:', listingId);
+      console.log('🔄 Button clicked - starting unfeature process');
       
       // Get current listing info for better feedback
-      const { data: currentListing } = await supabase
+      const { data: currentListing, error: fetchError } = await supabase
         .from('car_parts')
         .select('id, title, is_featured')
         .eq('id', listingId)
         .single();
 
+      if (fetchError) {
+        console.error('❌ Error fetching listing:', fetchError);
+        throw new Error(`Failed to fetch listing: ${fetchError.message}`);
+      }
+
+      console.log('📊 Current listing state:', currentListing);
+
       // Check if already unfeatured
       if (currentListing && !currentListing.is_featured) {
+        console.log('ℹ️ Listing already unfeatured');
         toast({
           title: "Info",
           description: "Listing is already unfeatured"
@@ -194,6 +203,7 @@ const FeaturedListingsManager = () => {
         return;
       }
 
+      console.log('🔄 Updating listing to unfeature...');
       const { data, error } = await supabase
         .from('car_parts')
         .update({
@@ -205,7 +215,13 @@ const FeaturedListingsManager = () => {
         .select('id, title');
 
       if (error) {
-        console.error('Database error:', error);
+        console.error('❌ Database error:', error);
+        console.error('❌ Error details:', {
+          code: error.code,
+          message: error.message,
+          details: error.details,
+          hint: error.hint
+        });
         throw new Error(error.message);
       }
 
@@ -216,21 +232,29 @@ const FeaturedListingsManager = () => {
         description: `${currentListing?.title || 'Listing'} unfeatured successfully`
       });
 
+      console.log('🔄 Refreshing data...');
       // Immediate UI refresh
       await Promise.all([
         fetchFeaturedListings(),
         fetchAvailableListings()
       ]);
+      console.log('✅ Data refresh complete');
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('❌ Unfeature failed:', error);
+      console.error('❌ Full error object:', {
+        name: error?.name,
+        message: error?.message,
+        stack: error?.stack
+      });
       toast({
         title: "Error",
-        description: `Failed to unfeature listing: ${error.message || 'Unknown error'}`,
+        description: `Failed to unfeature listing: ${error?.message || 'Unknown error'}`,
         variant: "destructive"
       });
       
       // Try to refresh data anyway
+      console.log('🔄 Attempting data refresh after error...');
       fetchFeaturedListings();
       fetchAvailableListings();
     }
