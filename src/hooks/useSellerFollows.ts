@@ -27,9 +27,15 @@ export const useSellerFollows = () => {
   const [loading, setLoading] = useState(true);
 
   const fetchFollowedSellers = async () => {
-    if (!user?.id) return;
+    if (!user?.id) {
+      console.log('useSellerFollows: No user ID available');
+      setLoading(false);
+      return;
+    }
 
     try {
+      console.log('useSellerFollows: Fetching followed sellers for user:', user.id);
+      
       const { data, error } = await supabase
         .from('seller_follows')
         .select(`
@@ -41,10 +47,25 @@ export const useSellerFollows = () => {
         .eq('buyer_id', user.id)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('useSellerFollows: Error fetching follows:', error);
+        throw error;
+      }
+
+      console.log('useSellerFollows: Follows data:', data);
+
+      // If no follows, set empty array and return
+      if (!data || data.length === 0) {
+        console.log('useSellerFollows: No follows found');
+        setFollowedSellers([]);
+        setLoading(false);
+        return;
+      }
 
       // Fetch seller details separately
-      const sellerIds = data?.map(follow => follow.seller_id) || [];
+      const sellerIds = data.map(follow => follow.seller_id);
+      console.log('useSellerFollows: Fetching seller details for IDs:', sellerIds);
+      
       const { data: sellersData, error: sellersError } = await supabase
         .from('profiles')
         .select(`
@@ -60,18 +81,25 @@ export const useSellerFollows = () => {
         `)
         .in('id', sellerIds);
 
-      if (sellersError) throw sellersError;
+      if (sellersError) {
+        console.error('useSellerFollows: Error fetching sellers:', sellersError);
+        throw sellersError;
+      }
+
+      console.log('useSellerFollows: Sellers data:', sellersData);
 
       // Combine the data
-      const followsWithSellers = data?.map(follow => ({
+      const followsWithSellers = data.map(follow => ({
         ...follow,
         seller: sellersData?.find(seller => seller.id === follow.seller_id)
-      })) || [];
+      }));
 
+      console.log('useSellerFollows: Combined data:', followsWithSellers);
       setFollowedSellers(followsWithSellers);
     } catch (error) {
-      console.error('Error fetching followed sellers:', error);
+      console.error('useSellerFollows: Error in fetchFollowedSellers:', error);
       toast.error('Failed to load followed sellers');
+      setFollowedSellers([]); // Set empty array on error
     } finally {
       setLoading(false);
     }
