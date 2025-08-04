@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import BlogCard from '@/components/BlogCard';
 import { useBlogPosts } from '@/hooks/useBlogPosts';
 import { ArrowLeft } from 'lucide-react';
@@ -34,9 +33,9 @@ const Blog: React.FC = () => {
       {!loading && !error && posts.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {posts.map((post) => (
-            <Link key={post.slug} to={`/blog/${post.slug}`}>
+            <div key={post.slug} onClick={() => window.location.href = `/blog/${post.slug}`} className="cursor-pointer">
               <BlogCard post={post} />
-            </Link>
+            </div>
           ))}
         </div>
       )}
