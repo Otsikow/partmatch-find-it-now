@@ -150,7 +150,7 @@ const DashboardRouter = () => {
         }
         break;
       case 'admin':
-        if (!currentPath.includes("/admin")) {
+        if (!currentPath.includes("admin")) {
           console.log("DashboardRouter: Redirecting admin to /admin");
           navigate("/admin", { replace: true });
         }

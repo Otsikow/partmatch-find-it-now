@@ -55,17 +55,19 @@ const AdminProtectedRoute = ({ children }: AdminProtectedRouteProps) => {
           .from('profiles')
           .select('user_type')
           .eq('id', user.id)
-          .single();
+          .maybeSingle();
 
         console.log('AdminProtectedRoute: Profile query result:', { profile, error });
 
-        if (error || !profile) {
-          console.error('AdminProtectedRoute: Error fetching profile or no profile found:', error);
+        if (error) {
+          console.error('AdminProtectedRoute: Error fetching profile:', error);
           setUserType('unauthorized');
+        } else if (profile?.user_type === 'admin') {
+          console.log('AdminProtectedRoute: Profile user_type is admin');
+          setUserType('admin');
         } else {
-          console.log('AdminProtectedRoute: Profile user_type:', profile?.user_type);
-          // Only use profile user_type if it's admin, otherwise deny access
-          setUserType(profile.user_type === 'admin' ? 'admin' : 'unauthorized');
+          console.log('AdminProtectedRoute: User is not admin. Profile user_type:', profile?.user_type);
+          setUserType('unauthorized');
         }
       } catch (error) {
         console.error('AdminProtectedRoute: Unexpected error:', error);
