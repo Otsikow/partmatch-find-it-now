@@ -65,6 +65,7 @@ const DynamicWelcomeMessage = () => {
   if (!user) return null;
 
   const isSeller = userType === 'supplier' || userType === 'seller';
+  const isAdmin = userType === 'admin';
 
   return (
     <div className="bg-gradient-to-r from-primary/5 via-secondary/5 to-accent/5 border-b backdrop-blur-sm">
@@ -74,13 +75,15 @@ const DynamicWelcomeMessage = () => {
             <h2 className="text-2xl font-bold text-foreground mb-2 animate-fade-in">
               Welcome back, {displayName}! 
               <span className={`ml-2 ${isWaving ? 'animate-bounce' : ''}`}>
-                {isSeller ? '🔧' : '👋'}
+                {isAdmin ? '👑' : isSeller ? '🔧' : '👋'}
               </span>
             </h2>
             <p className="text-lg text-muted-foreground animate-fade-in">
-              {isSeller 
-                ? "Let's help you sell more parts today." 
-                : "Ready to find your next car part?"
+              {isAdmin 
+                ? "Manage your platform and oversee operations." 
+                : isSeller 
+                  ? "Let's help you sell more parts today." 
+                  : "Ready to find your next car part?"
               }
             </p>
             
@@ -110,7 +113,23 @@ const DynamicWelcomeMessage = () => {
           </div>
           
           <div className="flex flex-wrap gap-3">
-            {isSeller ? (
+            {isAdmin ? (
+              // Admin buttons
+              <>
+                <Button asChild size="sm" className="animate-scale-in bg-gradient-to-r from-purple-600 to-indigo-700 hover:from-purple-700 hover:to-indigo-800 text-white shadow-lg hover:shadow-xl transition-all duration-300">
+                  <Link to="/admin">
+                    <User className="w-4 h-4 mr-1" />
+                    Admin Dashboard
+                  </Link>
+                </Button>
+                <Button asChild size="sm" variant="outline">
+                  <Link to="/blog">
+                    <Package className="w-4 h-4 mr-1" />
+                    Manage Content
+                  </Link>
+                </Button>
+              </>
+            ) : isSeller ? (
               // Seller buttons
               <>
                 <Button asChild size="sm" className="animate-scale-in bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white shadow-lg hover:shadow-xl transition-all duration-300">
