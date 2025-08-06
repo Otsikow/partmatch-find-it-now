@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'partmatch-find-it-now',
   webDir: 'dist',
   server: {
-    url: 'https://da5f3cd3-68ef-4174-8020-511e0e3ffc08.lovableproject.com?forceHideBadge=true',
+    url: 'https://da5f3cd3-68ef-4174-8020-511e0e3ffc08.lovableproject.com',
     cleartext: true
   },
   plugins: {
