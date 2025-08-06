@@ -22,8 +22,15 @@ const LocationPicker = ({ onLocationSelect, initialLocation }: LocationPickerPro
   useEffect(() => {
     if (!mapContainer.current) return;
 
+    // Get Mapbox token from environment variables
+    const mapboxToken = import.meta.env.VITE_MAPBOX_TOKEN || 'pk.eyJ1IjoibG92YWJsZS1kZXYiLCJhIjoiY2x6dzZkdXZiMDEyMzJqcGEwMzQyM2xlMSJ9.UKvTlBGGqFXJ9kEF7Q6GnA';
+    if (!mapboxToken) {
+      console.error('Mapbox token not configured');
+      return;
+    }
+
     // Initialize map with Ghana as center
-    mapboxgl.accessToken = 'pk.eyJ1IjoibG92YWJsZS1kZXYiLCJhIjoiY2x6dzZkdXZiMDEyMzJqcGEwMzQyM2xlMSJ9.UKvTlBGGqFXJ9kEF7Q6GnA';
+    mapboxgl.accessToken = mapboxToken;
     
     map.current = new mapboxgl.Map({
       container: mapContainer.current,

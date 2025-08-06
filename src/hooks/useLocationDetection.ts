@@ -24,7 +24,8 @@ interface UseLocationDetectionOptions {
   includeAddress?: boolean;
 }
 
-const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoibG92YWJsZS1kZXYiLCJhIjoiY2x6dzZkdXZiMDEyMzJqcGEwMzQyM2xlMSJ9.UKvTlBGGqFXJ9kEF7Q6GnA';
+// Get Mapbox token from environment variables with fallback
+const getMapboxToken = () => import.meta.env.VITE_MAPBOX_TOKEN || 'pk.eyJ1IjoibG92YWJsZS1kZXYiLCJhIjoiY2x6dzZkdXZiMDEyMzJqcGEwMzQyM2xlMSJ9.UKvTlBGGqFXJ9kEF7Q6GnA';
 
 export const useLocationDetection = (options: UseLocationDetectionOptions = {}) => {
   const {
@@ -44,9 +45,11 @@ export const useLocationDetection = (options: UseLocationDetectionOptions = {}) 
 
   // Reverse geocode coordinates to get address information
   const reverseGeocode = async (lat: number, lng: number): Promise<Partial<LocationData>> => {
+    const mapboxToken = getMapboxToken();
+    
     try {
       const response = await fetch(
-        `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${MAPBOX_ACCESS_TOKEN}&types=place,locality,district,region,country`
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json?access_token=${mapboxToken}&types=place,locality,district,region,country`
       );
       
       if (!response.ok) {

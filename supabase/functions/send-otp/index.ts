@@ -1,10 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+import { getCorsHeaders, checkRateLimit } from '../_shared/cors.ts'
 
 interface OTPRequest {
   phone: string
@@ -12,9 +8,25 @@ interface OTPRequest {
 }
 
 serve(async (req) => {
+  const corsHeaders = getCorsHeaders(req);
+  
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
+  }
+
+  // Rate limiting - max 5 OTP requests per 5 minutes per IP
+  const clientIP = req.headers.get('x-forwarded-for') || 'unknown';
+  const rateLimit = checkRateLimit(`otp_${clientIP}`, 5, 300000);
+  
+  if (!rateLimit.allowed) {
+    return new Response(
+      JSON.stringify({ error: 'Too many OTP requests. Please try again later.' }),
+      { 
+        status: 429, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      }
+    )
   }
 
   try {
@@ -72,14 +84,9 @@ serve(async (req) => {
     const twilioToken = Deno.env.get('TWILIO_AUTH_TOKEN')
     const twilioPhone = Deno.env.get('TWILIO_PHONE_NUMBER')
 
-    console.log('Twilio credentials check:', {
-      sidExists: !!twilioSid,
-      tokenExists: !!twilioToken,
-      phoneExists: !!twilioPhone,
-      sidLength: twilioSid?.length || 0,
-      tokenLength: twilioToken?.length || 0,
-      sidPrefix: twilioSid?.substring(0, 2),
-      phoneValue: twilioPhone
+    // Secure logging - don't expose credential details
+    console.log('Twilio credentials verification:', {
+      credentialsConfigured: !!(twilioSid && twilioToken && twilioPhone)
     })
 
     if (!twilioSid || !twilioToken || !twilioPhone) {

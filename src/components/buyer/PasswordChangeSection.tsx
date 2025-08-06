@@ -8,6 +8,36 @@ import { Key } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 
+// Strong password validation
+const validatePassword = (password: string): { valid: boolean; errors: string[] } => {
+  const errors: string[] = [];
+  
+  if (password.length < 12) {
+    errors.push('Password must be at least 12 characters long');
+  }
+  
+  if (!/[A-Z]/.test(password)) {
+    errors.push('Password must contain at least one uppercase letter');
+  }
+  
+  if (!/[a-z]/.test(password)) {
+    errors.push('Password must contain at least one lowercase letter');
+  }
+  
+  if (!/\d/.test(password)) {
+    errors.push('Password must contain at least one number');
+  }
+  
+  if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\?]/.test(password)) {
+    errors.push('Password must contain at least one special character');
+  }
+  
+  return {
+    valid: errors.length === 0,
+    errors
+  };
+};
+
 const PasswordChangeSection = () => {
   const [loading, setLoading] = useState(false);
   const [passwordData, setPasswordData] = useState({
@@ -28,10 +58,12 @@ const PasswordChangeSection = () => {
       return;
     }
 
-    if (passwordData.new_password.length < 6) {
+    // Strong password validation
+    const passwordValidation = validatePassword(passwordData.new_password);
+    if (!passwordValidation.valid) {
       toast({
-        title: "Error",
-        description: "Password must be at least 6 characters long.",
+        title: "Password Requirements Not Met",
+        description: passwordValidation.errors.join('. '),
         variant: "destructive",
       });
       return;

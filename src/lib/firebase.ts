@@ -2,15 +2,15 @@
 import { initializeApp, getApps } from 'firebase/app';
 import { getMessaging, getToken, onMessage, type Messaging } from 'firebase/messaging';
 
-// Firebase configuration
+// Firebase configuration - using environment variables for security
 const firebaseConfig = {
-  apiKey: "AIzaSyBIGwoXEcYnmWepvG1Gf4bPCK4jFdNIHbI",
-  authDomain: "partmatch-79b1f.firebaseapp.com",
-  projectId: "partmatch-79b1f",
-  storageBucket: "partmatch-79b1f.appspot.com", // ✅ fixed typo here
-  messagingSenderId: "255124503700",
-  appId: "1:255124503700:web:d8ef74d281e1be63708881",
-  measurementId: "G-TZP1G061J1"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyBIGwoXEcYnmWepvG1Gf4bPCK4jFdNIHbI",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "partmatch-79b1f.firebaseapp.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "partmatch-79b1f",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "partmatch-79b1f.appspot.com",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "255124503700",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:255124503700:web:d8ef74d281e1be63708881",
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "G-TZP1G061J1"
 };
 
 // Initialize Firebase app if not already initialized
@@ -43,11 +43,10 @@ export const requestNotificationPermission = async (): Promise<string | null> =>
       return null;
     }
 
-    const token = await getToken(messaging, {
-      vapidKey: 'BIhL8kXfIaXdLGvvrq2T0BwADPBGHRNCihPz7MAqL8Q-3SBPha5crVOjXugmOOHNjgWj4U5ofEAGNSsPWUEI4JM'
-    });
+    const vapidKey = import.meta.env.VITE_FIREBASE_VAPID_KEY || 'BIhL8kXfIaXdLGvvrq2T0BwADPBGHRNCihPz7MAqL8Q-3SBPha5crVOjXugmOOHNjgWj4U5ofEAGNSsPWUEI4JM';
+    const token = await getToken(messaging, { vapidKey });
 
-    console.log('FCM Token:', token);
+    console.log('FCM Token obtained successfully');
     return token;
   } catch (error) {
     console.error('Error getting token:', error);
@@ -60,7 +59,7 @@ export const onMessageListener = () => {
   if (!messaging) return Promise.reject('Messaging not initialized');
   return new Promise((resolve) => {
     onMessage(messaging, (payload) => {
-      console.log('Received foreground message:', payload);
+      console.log('Received foreground message');
       resolve(payload);
     });
   });
