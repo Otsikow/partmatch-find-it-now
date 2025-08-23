@@ -9,7 +9,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { Upload, FileText, MapPin, Store } from 'lucide-react';
+import { FileText, Store } from 'lucide-react';
+import VerificationFileUpload from './VerificationFileUpload';
 
 interface VerificationFormData {
   fullName: string;
@@ -56,14 +57,31 @@ const SellerVerificationForm = ({ onVerificationSubmitted }: { onVerificationSub
 
   const uploadFile = async (file: File, path: string): Promise<string | null> => {
     try {
+      console.log(`Uploading file to: ${path}`);
+      console.log(`File size: ${file.size} bytes`);
+      console.log(`File type: ${file.type}`);
+      
       const { data, error } = await supabase.storage
         .from('verification-documents')
-        .upload(path, file);
+        .upload(path, file, {
+          upsert: true,
+          contentType: file.type
+        });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Upload error:', error);
+        throw error;
+      }
+      
+      console.log('Upload successful:', data);
       return data.path;
-    } catch (error) {
+    } catch (error: any) {
       console.error('File upload error:', error);
+      toast({
+        title: "Upload Failed",
+        description: error.message || "Failed to upload file. Please try again.",
+        variant: "destructive"
+      });
       return null;
     }
   };
@@ -103,7 +121,7 @@ const SellerVerificationForm = ({ onVerificationSubmitted }: { onVerificationSub
         return;
       }
 
-      // Upload files
+      // Upload files with better error handling
       const timestamp = Date.now();
       const userFolder = user.id;
 
@@ -112,10 +130,18 @@ const SellerVerificationForm = ({ onVerificationSubmitted }: { onVerificationSub
         `${userFolder}/government-id-${timestamp}.${formData.governmentId.name.split('.').pop()}`
       );
 
+      if (!governmentIdPath) {
+        throw new Error("Failed to upload Government ID");
+      }
+
       const proofOfAddressPath = await uploadFile(
         formData.proofOfAddress,
         `${userFolder}/proof-of-address-${timestamp}.${formData.proofOfAddress.name.split('.').pop()}`
       );
+
+      if (!proofOfAddressPath) {
+        throw new Error("Failed to upload Proof of Address");
+      }
 
       let businessRegistrationPath = null;
       if (formData.businessRegistration) {
@@ -123,6 +149,10 @@ const SellerVerificationForm = ({ onVerificationSubmitted }: { onVerificationSub
           formData.businessRegistration,
           `${userFolder}/business-registration-${timestamp}.${formData.businessRegistration.name.split('.').pop()}`
         );
+        
+        if (!businessRegistrationPath) {
+          throw new Error("Failed to upload Business Registration");
+        }
       }
 
       let profilePhotoPath = null;
@@ -180,55 +210,6 @@ const SellerVerificationForm = ({ onVerificationSubmitted }: { onVerificationSub
       setLoading(false);
     }
   };
-
-  const FileUploadField = ({ 
-    label, 
-    required, 
-    file, 
-    onChange, 
-    accept = "image/*,.pdf",
-    helpText,
-    icon: Icon = FileText
-  }: { 
-    label: string; 
-    required?: boolean; 
-    file: File | null; 
-    onChange: (file: File | null) => void;
-    accept?: string;
-    helpText?: string;
-    icon?: React.ComponentType<any>;
-  }) => (
-    <div>
-      <Label className="text-sm font-medium text-gray-700">
-        {label} {required && <span className="text-red-500">*</span>}
-      </Label>
-      {helpText && (
-        <div className="mt-1 mb-2 p-3 bg-blue-50 border border-blue-200 rounded-md">
-          <p className="text-sm text-blue-700 flex items-start gap-2">
-            <Store className="h-4 w-4 mt-0.5 flex-shrink-0" />
-            {helpText}
-          </p>
-        </div>
-      )}
-      <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md hover:border-orange-400 transition-colors">
-        <div className="space-y-1 text-center">
-          <Icon className="mx-auto h-12 w-12 text-gray-400" />
-          <div className="flex text-sm text-gray-600">
-            <label className="relative cursor-pointer bg-white rounded-md font-medium text-orange-600 hover:text-orange-500">
-              <span>{file ? file.name : 'Upload a file'}</span>
-              <input
-                type="file"
-                className="sr-only"
-                accept={accept}
-                onChange={(e) => onChange(e.target.files?.[0] || null)}
-              />
-            </label>
-          </div>
-          <p className="text-xs text-gray-500">PNG, JPG, PDF up to 10MB</p>
-        </div>
-      </div>
-    </div>
-  );
 
   const showBusinessLocationMessage = formData.sellerType === 'Garage/Shop' || formData.sellerType === 'Supplier/Importer';
 
@@ -347,46 +328,52 @@ const SellerVerificationForm = ({ onVerificationSubmitted }: { onVerificationSub
           </div>
 
           {/* Document Uploads */}
-          <div className="space-y-4">
+          <div className="space-y-6">
             <h3 className="text-lg font-semibold text-gray-900">Required Documents</h3>
             
-            <FileUploadField
+            <VerificationFileUpload
               label="Government-issued Photo ID"
               required
               file={formData.governmentId}
               onChange={(file) => handleFileChange('governmentId', file)}
+              accept="image/*,.pdf"
+              helpText="Upload a clear photo of your national ID, passport, or driver's license"
             />
 
-            <FileUploadField
+            <VerificationFileUpload
               label="Proof of Address"
               required
               file={formData.proofOfAddress}
               onChange={(file) => handleFileChange('proofOfAddress', file)}
+              accept="image/*,.pdf"
+              helpText="Utility bill, bank statement, or official document showing your address (not older than 3 months)"
             />
 
             {formData.sellerType && formData.sellerType !== 'Individual' && (
-              <FileUploadField
+              <VerificationFileUpload
                 label="Business Registration Certificate"
                 required
                 file={formData.businessRegistration}
                 onChange={(file) => handleFileChange('businessRegistration', file)}
+                accept="image/*,.pdf"
+                helpText="Official business registration document from the registrar"
               />
             )}
 
-            <FileUploadField
+            <VerificationFileUpload
               label="Profile Photo/Logo (Optional)"
               file={formData.profilePhoto}
               onChange={(file) => handleFileChange('profilePhoto', file)}
               accept="image/*"
+              helpText="A professional photo or business logo to display on your profile"
             />
 
-            <FileUploadField
+            <VerificationFileUpload
               label="Shop, Garage, or Business Location Photo (Optional, but recommended for shops and garages)"
               file={formData.businessLocationPhoto}
               onChange={(file) => handleFileChange('businessLocationPhoto', file)}
               accept="image/*"
-              helpText={showBusinessLocationMessage ? "Uploading a photo of your shop helps buyers trust your business." : undefined}
-              icon={Store}
+              helpText={showBusinessLocationMessage ? "Uploading a photo of your shop helps buyers trust your business and increases sales." : "A photo of your business location or workshop"}
             />
           </div>
 
