@@ -65,8 +65,9 @@ const InventorySearchControls = ({
 
   const statusOptions = [
     "available",
-    "sold",
-    "pending"
+    "sold", 
+    "pending",
+    "hidden"
   ];
 
   const clearAllFilters = () => {
@@ -89,7 +90,7 @@ const InventorySearchControls = ({
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
-            placeholder="Search your inventory by title, make, model, or part type..."
+            placeholder="Search your inventory (supports 'tyres', 'tires', etc.)..."
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
             className="pl-10 pr-10 bg-background border-border focus:border-primary"

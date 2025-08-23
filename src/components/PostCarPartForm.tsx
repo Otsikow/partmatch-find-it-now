@@ -219,17 +219,28 @@ const PostCarPartForm = ({ onPartPosted }: { onPartPosted: () => void }) => {
 
       console.log("Car part posted successfully:", data);
 
-      toast({
-        title: "Part Posted Successfully!",
-        description:
-          "Your car part has been posted and is now available for buyers.",
-      });
-
       // Clear the draft and reset form
       clearDraft();
       setFormData(initialFormData);
       setCurrentPhoto(null);
-      onPartPosted();
+
+      // Show success message with redirect hint
+      toast({
+        title: "✅ Your part has been listed successfully!",
+        description: "Redirecting to your inventory...",
+        duration: 3000,
+      });
+
+      // Call the parent callback if provided
+      if (onPartPosted) {
+        onPartPosted();
+      }
+
+      // Small delay to let user see the success message, then trigger refresh
+      setTimeout(() => {
+        // Trigger a refresh to ensure the new part appears immediately
+        window.location.reload();
+      }, 1500);
     } catch (error: any) {
       console.error("Unexpected error during part posting:", error);
       toast({

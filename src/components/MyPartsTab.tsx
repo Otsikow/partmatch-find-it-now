@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { useSubscriptionStatus } from "@/hooks/useSubscriptionStatus";
 import { usePartManagement } from "@/hooks/usePartManagement";
 import { CarPart } from "@/types/CarPart";
@@ -42,20 +43,61 @@ const MyPartsTab = ({ parts, onRefresh }: MyPartsTabProps) => {
     return [...new Set(models)].sort();
   }, [parts, filters.make]);
 
+  // Helper function to normalize search terms for UK/US variations
+  const normalizeSearchTerm = (term: string) => {
+    const normalized = term.toLowerCase();
+    // Handle UK/US spelling variations and plurals
+    const variations: { [key: string]: string[] } = {
+      'tyre': ['tire', 'tyres', 'tires'],
+      'tire': ['tyre', 'tyres', 'tires'],
+      'tyres': ['tire', 'tyre', 'tires'],
+      'tires': ['tyre', 'tyres', 'tire'],
+      'colour': ['color'],
+      'color': ['colour'],
+      'centre': ['center'],
+      'center': ['centre'],
+      'aluminium': ['aluminum'],
+      'aluminum': ['aluminium'],
+    };
+    
+    // Get all variations for the search term
+    const searchVariations = [normalized];
+    Object.entries(variations).forEach(([key, values]) => {
+      if (normalized.includes(key)) {
+        values.forEach(variant => {
+          searchVariations.push(normalized.replace(key, variant));
+        });
+      }
+    });
+    
+    return searchVariations;
+  };
+
+  // Enhanced search function with fuzzy matching
+  const matchesSearchTerm = (part: CarPart, searchTerm: string) => {
+    if (!searchTerm) return true;
+    
+    const searchVariations = normalizeSearchTerm(searchTerm);
+    const searchFields = [
+      part.title || '',
+      part.make || '',
+      part.model || '',
+      part.part_type || '',
+      part.description || '',
+    ].map(field => field.toLowerCase());
+    
+    // Check if any search variation matches any field
+    return searchVariations.some(variation => 
+      searchFields.some(field => field.includes(variation))
+    );
+  };
+
   // Filter parts based on search term and filters
   const filteredParts = useMemo(() => {
     return parts.filter(part => {
-      // Search term filter
-      if (searchTerm) {
-        const searchLower = searchTerm.toLowerCase();
-        const matchesSearch = 
-          part.title?.toLowerCase().includes(searchLower) ||
-          part.make?.toLowerCase().includes(searchLower) ||
-          part.model?.toLowerCase().includes(searchLower) ||
-          part.part_type?.toLowerCase().includes(searchLower) ||
-          part.description?.toLowerCase().includes(searchLower);
-        
-        if (!matchesSearch) return false;
+      // Enhanced search term filter with UK/US variations
+      if (!matchesSearchTerm(part, searchTerm)) {
+        return false;
       }
 
       // Filter by make
@@ -102,6 +144,17 @@ const MyPartsTab = ({ parts, onRefresh }: MyPartsTabProps) => {
 
   const handleUpdatePart = async (partId: string, updatedData: Partial<CarPart>) => {
     await updatePart(partId, updatedData);
+  };
+
+  const clearAllFilters = () => {
+    setSearchTerm("");
+    setFilters({
+      make: "",
+      model: "",
+      category: "",
+      condition: "",
+      status: ""
+    });
   };
 
   if (loading) {
@@ -151,7 +204,16 @@ const MyPartsTab = ({ parts, onRefresh }: MyPartsTabProps) => {
       {filteredParts.length === 0 ? (
         <Card className="p-8 text-center">
           <p className="text-muted-foreground mb-2">No parts match your search criteria.</p>
-          <p className="text-sm text-muted-foreground">Try adjusting your search or filters.</p>
+          <p className="text-sm text-muted-foreground mb-4">Try adjusting your search or filters.</p>
+          {(searchTerm || Object.values(filters).some(Boolean)) && (
+            <Button
+              variant="outline"
+              onClick={clearAllFilters}
+              className="mx-auto"
+            >
+              Clear All Filters to See All Parts
+            </Button>
+          )}
         </Card>
       ) : (
         <div className="space-y-8">
