@@ -7,7 +7,7 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
@@ -1557,7 +1557,7 @@ export type Database = {
     }
     Functions: {
       add_recent_view: {
-        Args: { user_id_param: string; part_id_param: string }
+        Args: { part_id_param: string; user_id_param: string }
         Returns: undefined
       }
       auto_publish_scheduled_posts: {
@@ -1571,8 +1571,8 @@ export type Database = {
       cleanup_orphaned_profiles: {
         Args: Record<PropertyKey, never>
         Returns: {
-          deleted_profile_id: string
           deleted_email: string
+          deleted_profile_id: string
         }[]
       }
       expire_monetization_features: {
@@ -1601,8 +1601,8 @@ export type Database = {
       }
       log_admin_security_event: {
         Args: {
-          event_type: string
           event_details?: Json
+          event_type: string
           target_user_id?: string
         }
         Returns: undefined
@@ -1613,19 +1613,19 @@ export type Database = {
       }
       process_contact_unlock_payment: {
         Args: {
+          mobile_money_number_param?: string
+          mobile_money_provider_param?: string
           offer_id_param: string
           payment_method_param: string
-          mobile_money_provider_param?: string
-          mobile_money_number_param?: string
           payment_reference_param?: string
         }
         Returns: Json
       }
       update_supplier_verification: {
         Args: {
-          supplier_id_param: string
-          is_verified_param: boolean
           documents_param?: string[]
+          is_verified_param: boolean
+          supplier_id_param: string
         }
         Returns: boolean
       }
