@@ -1583,6 +1583,19 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
+      get_public_profile_data: {
+        Args: { profile_id: string }
+        Returns: {
+          city: string
+          country: string
+          created_at: string
+          first_name: string
+          id: string
+          is_verified: boolean
+          rating: number
+          total_ratings: number
+        }[]
+      }
       increment_click_count: {
         Args: { listing_id: string }
         Returns: undefined
