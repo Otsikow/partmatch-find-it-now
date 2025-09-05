@@ -13,7 +13,7 @@ const FeaturedPartsSection = () => {
   const filters = [
     { id: "engines", label: "Engines", icon: Wrench, category: "engine" },
     { id: "headlights", label: "Headlights", icon: Lightbulb, category: "lighting" },
-    { id: "tires", label: "Tires", icon: Circle, category: "tire" },
+    { id: "tires", label: "Tyres", icon: Circle, category: "tire" },
     { id: "all", label: "Show All", icon: Search, category: null }
   ];
 
