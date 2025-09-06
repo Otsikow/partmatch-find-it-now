@@ -60,24 +60,22 @@ const AuthFormFields = ({ isLogin, formData, onInputChange }: AuthFormFieldsProp
         <>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <Label htmlFor="firstName" className="text-sm sm:text-base font-inter">First Name *</Label>
+              <Label htmlFor="firstName" className="text-sm sm:text-base font-inter">First Name</Label>
               <Input
                 id="firstName"
                 placeholder="John"
                 value={formData.firstName}
                 onChange={(e) => onInputChange('firstName', e.target.value)}
-                required={!isLogin}
                 className="mt-1 text-base border-blue-200 focus:border-blue-400"
               />
             </div>
             <div>
-              <Label htmlFor="lastName" className="text-sm sm:text-base font-inter">Last Name *</Label>
+              <Label htmlFor="lastName" className="text-sm sm:text-base font-inter">Last Name</Label>
               <Input
                 id="lastName"
                 placeholder="Doe"
                 value={formData.lastName}
                 onChange={(e) => onInputChange('lastName', e.target.value)}
-                required={!isLogin}
                 className="mt-1 text-base border-blue-200 focus:border-blue-400"
               />
             </div>
@@ -86,7 +84,7 @@ const AuthFormFields = ({ isLogin, formData, onInputChange }: AuthFormFieldsProp
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
             <Label htmlFor="userType" className="text-sm sm:text-base font-inter font-semibold text-blue-800 flex items-center gap-2">
               <User className="h-4 w-4" />
-              Select Your Account Type *
+              Select Your Account Type
             </Label>
             <Select value={formData.userType} onValueChange={(value) => onInputChange('userType', value)}>
               <SelectTrigger className="mt-2 text-base border-blue-200 focus:border-blue-400 bg-background">
@@ -110,7 +108,7 @@ const AuthFormFields = ({ isLogin, formData, onInputChange }: AuthFormFieldsProp
           </div>
 
           <div>
-            <Label htmlFor="phone" className="text-sm sm:text-base font-inter">Phone/WhatsApp *</Label>
+            <Label htmlFor="phone" className="text-sm sm:text-base font-inter">Phone/WhatsApp</Label>
             <div className="relative">
               <Phone className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
               <Input
@@ -119,14 +117,13 @@ const AuthFormFields = ({ isLogin, formData, onInputChange }: AuthFormFieldsProp
                 placeholder="+233 20 123 4567"
                 value={formData.phone}
                 onChange={(e) => onInputChange('phone', e.target.value)}
-                required={!isLogin}
                 className="mt-1 pl-10 text-base border-blue-200 focus:border-blue-400"
               />
             </div>
           </div>
 
            <div>
-             <Label htmlFor="location" className="text-sm sm:text-base font-inter">Location *</Label>
+             <Label htmlFor="location" className="text-sm sm:text-base font-inter">Location</Label>
              <div className="relative">
                <MapPin className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
                <Input
@@ -134,7 +131,6 @@ const AuthFormFields = ({ isLogin, formData, onInputChange }: AuthFormFieldsProp
                  placeholder="e.g. Accra, Kumasi"
                  value={formData.location}
                  onChange={(e) => onInputChange('location', e.target.value)}
-                 required={!isLogin}
                  className="mt-1 pl-10 text-base border-blue-200 focus:border-blue-400"
                />
              </div>
@@ -149,7 +145,7 @@ const AuthFormFields = ({ isLogin, formData, onInputChange }: AuthFormFieldsProp
              
              <div className="space-y-3">
                <div>
-                 <Label htmlFor="country" className="text-sm font-inter">Country *</Label>
+                 <Label htmlFor="country" className="text-sm font-inter">Country</Label>
                  <div className="mt-1">
                    <CountrySelector
                      onCountrySelect={handleCountrySelect}
@@ -174,13 +170,12 @@ const AuthFormFields = ({ isLogin, formData, onInputChange }: AuthFormFieldsProp
                </div>
 
                <div>
-                 <Label htmlFor="city" className="text-sm font-inter">City *</Label>
+                 <Label htmlFor="city" className="text-sm font-inter">City</Label>
                  <Input
                    id="city"
                    placeholder="e.g. Accra, Lagos, Nairobi"
                    value={formData.city}
                    onChange={(e) => onInputChange('city', e.target.value)}
-                   required={!isLogin}
                    className="mt-1 text-base border-blue-200 focus:border-blue-400"
                  />
                </div>

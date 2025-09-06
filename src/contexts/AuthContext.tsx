@@ -213,12 +213,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [isPasswordReset]);
 
   const signUp = async (email: string, password: string, userData: any) => {
-    // Validate required fields
-    const requiredFields = ["first_name", "last_name", "phone", "location", "country", "city"];
-    const missingFields = requiredFields.filter(
-      (field) => !userData[field] || userData[field].trim() === ""
-    );
-
     if (!email || email.trim() === "") {
       const error = new Error("Email is required");
       toast({
@@ -229,25 +223,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       return { error };
     }
 
-    if (!password || password.length < 6) {
-      const error = new Error("Password must be at least 6 characters");
+    if (!password || password.length < 4) {
+      const error = new Error("Password must be at least 4 characters");
       toast({
         title: "Validation Error",
-        description: "Password must be at least 6 characters",
-        variant: "destructive",
-      });
-      return { error };
-    }
-
-    if (missingFields.length > 0) {
-      const error = new Error(
-        `Required fields missing: ${missingFields.join(", ")}`
-      );
-      toast({
-        title: "Validation Error",
-        description: `Please fill in all required fields: ${missingFields.join(
-          ", "
-        )}`,
+        description: "Password must be at least 4 characters",
         variant: "destructive",
       });
       return { error };
