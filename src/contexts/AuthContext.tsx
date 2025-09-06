@@ -214,7 +214,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signUp = async (email: string, password: string, userData: any) => {
     // Validate required fields
-    const requiredFields = ["first_name", "last_name", "phone", "location"];
+    const requiredFields = ["first_name", "last_name", "phone", "location", "country", "city"];
     const missingFields = requiredFields.filter(
       (field) => !userData[field] || userData[field].trim() === ""
     );
