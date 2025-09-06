@@ -1592,6 +1592,7 @@ export type Database = {
           first_name: string
           id: string
           is_verified: boolean
+          profile_photo_url: string
           rating: number
           total_ratings: number
         }[]
