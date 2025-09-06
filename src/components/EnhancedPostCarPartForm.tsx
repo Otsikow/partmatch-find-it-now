@@ -142,6 +142,26 @@ const EnhancedPostCarPartForm = ({
 
     const file = files[0];
 
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      toast({
+        title: "Invalid File Type",
+        description: "Please select an image file (PNG, JPG).",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: "File Too Large",
+        description: "File size should be less than 5MB.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (currentPhotos.length >= 10) {
       toast({
         title: "Photo Limit Reached",
