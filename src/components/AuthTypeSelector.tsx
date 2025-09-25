@@ -36,21 +36,21 @@ const AuthTypeSelector = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/20 font-inter">
-      <header className="relative bg-gradient-to-r from-primary via-primary/95 to-primary-foreground text-white shadow-lg border-b border-white/20">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/5 to-indigo-600/10"></div>
+    <div className="min-h-screen bg-background font-roboto">
+      <header className="relative bg-primary text-primary-foreground shadow-lg border-b border-primary/20">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-primary/5"></div>
         <div className="relative p-4 sm:p-6 flex items-center gap-3">
           <Link to="/">
-            <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 hover:bg-white/20 text-white hover:text-white">
+            <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 hover:bg-primary-foreground/20 text-primary-foreground hover:text-primary-foreground">
               <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
             </Button>
           </Link>
           <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-            <Link to="/" className="bg-white/20 backdrop-blur-sm rounded-xl p-2 shadow-lg hover:bg-white/30 transition-colors">
+            <Link to="/" className="bg-primary-foreground/20 backdrop-blur-sm rounded-xl p-2 shadow-lg hover:bg-primary-foreground/30 transition-colors">
               <img 
                 src="/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png" 
                 alt="PartMatch Logo" 
-                className="h-6 w-auto sm:h-8 object-contain bg-white rounded-lg p-1"
+                className="h-6 w-auto sm:h-8 object-contain bg-primary-foreground rounded-lg p-1"
               />
             </Link>
             <div className="min-w-0 flex-1">
@@ -62,7 +62,7 @@ const AuthTypeSelector = () => {
               onClick={handleDashboard}
               variant="ghost" 
               size="sm" 
-              className="hover:bg-white/20 text-white hover:text-white"
+              className="hover:bg-primary-foreground/20 text-primary-foreground hover:text-primary-foreground"
             >
               <Home className="h-4 w-4 mr-2" />
               Dashboard
@@ -72,7 +72,7 @@ const AuthTypeSelector = () => {
                 onClick={handleSignOut}
                 variant="ghost" 
                 size="sm" 
-                className="hover:bg-white/20 text-white hover:text-white"
+                className="hover:bg-primary-foreground/20 text-primary-foreground hover:text-primary-foreground"
               >
                 <LogOut className="h-4 w-4 mr-2" />
                 Sign Out
@@ -84,7 +84,7 @@ const AuthTypeSelector = () => {
 
       <main className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-4xl">
         <div className="text-center mb-8 sm:mb-12">
-          <h2 className="page-header text-2xl sm:text-3xl lg:text-4xl mb-4 text-foreground">
+          <h2 className="page-header text-2xl sm:text-3xl lg:text-4xl mb-4 text-primary">
             Choose your role to get started
           </h2>
           <p className="section-subtitle text-lg sm:text-xl max-w-2xl mx-auto mb-4">
@@ -95,12 +95,12 @@ const AuthTypeSelector = () => {
         <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
           {/* Buyer Card */}
           <Link to="/buyer-auth" className="block group">
-            <Card className="h-full p-6 sm:p-8 text-center bg-gradient-to-br from-card to-accent/10 hover:from-card hover:to-accent/20 transition-all duration-300 group-hover:shadow-xl group-hover:scale-105 border-2 border-primary/20 group-hover:border-primary/40 flex flex-col">
+            <Card className="h-full p-6 sm:p-8 text-center bg-card hover:bg-card/80 transition-all duration-300 group-hover:shadow-xl group-hover:scale-105 border-2 border-secondary/30 group-hover:border-secondary/50 flex flex-col">
               <div className="flex-grow">
-                <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full p-4 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                  <ShoppingCart className="h-10 w-10 sm:h-12 sm:w-12 text-white" />
+                <div className="bg-primary rounded-full p-4 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                  <ShoppingCart className="h-10 w-10 sm:h-12 sm:w-12 text-primary-foreground" />
                 </div>
-                <h3 className="section-title text-xl sm:text-2xl mb-3 text-blue-800">
+                <h3 className="section-title text-xl sm:text-2xl mb-3 text-secondary">
                   Buyer
                 </h3>
                 <p className="card-description text-sm sm:text-base mb-6">
@@ -108,11 +108,11 @@ const AuthTypeSelector = () => {
                 </p>
               </div>
               <div className="mt-auto">
-                <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm leading-tight mb-6">
+                <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm leading-tight mb-6">
                   <span className="hidden md:inline">Sign In / Register as Buyer</span>
                   <span className="md:hidden">Buyer Sign In</span>
                 </Button>
-                <div className="bg-primary/10 rounded-lg p-4 text-sm text-primary font-medium text-left">
+                <div className="bg-secondary/10 rounded-lg p-4 text-sm text-secondary font-medium text-left">
                   ✓ Browse available parts<br/>
                   ✓ Request specific parts<br/>
                   ✓ Connect with sellers<br/>
@@ -124,12 +124,12 @@ const AuthTypeSelector = () => {
 
           {/* Seller Card */}
           <Link to="/seller-auth" className="block group">
-            <Card className="h-full p-6 sm:p-8 text-center bg-gradient-to-br from-card to-destructive/10 hover:from-card hover:to-destructive/20 transition-all duration-300 group-hover:shadow-xl group-hover:scale-105 border-2 border-destructive/20 group-hover:border-destructive/40 flex flex-col">
+            <Card className="h-full p-6 sm:p-8 text-center bg-card hover:bg-card/80 transition-all duration-300 group-hover:shadow-xl group-hover:scale-105 border-2 border-secondary/30 group-hover:border-secondary/50 flex flex-col">
               <div className="flex-grow">
-                <div className="bg-gradient-to-br from-orange-500 to-red-600 rounded-full p-4 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                  <Store className="h-10 w-10 sm:h-12 sm:w-12 text-white" />
+                <div className="bg-secondary rounded-full p-4 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                  <Store className="h-10 w-10 sm:h-12 sm:w-12 text-secondary-foreground" />
                 </div>
-                <h3 className="section-title text-xl sm:text-2xl mb-3 text-foreground">
+                <h3 className="section-title text-xl sm:text-2xl mb-3 text-secondary">
                   Seller
                 </h3>
                 <p className="card-description text-sm sm:text-base mb-6">
@@ -137,11 +137,11 @@ const AuthTypeSelector = () => {
                 </p>
               </div>
               <div className="mt-auto">
-                <Button className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 text-white ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm leading-tight mb-6">
+                <Button className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm leading-tight mb-6">
                   <span className="hidden md:inline">Sign In / Register as Seller</span>
                   <span className="md:hidden">Seller Sign In</span>
                 </Button>
-                <div className="bg-destructive/10 rounded-lg p-4 text-sm text-destructive font-medium text-left">
+                <div className="bg-secondary/10 rounded-lg p-4 text-sm text-secondary font-medium text-left">
                   ✓ List your inventory<br/>
                   ✓ Respond to requests<br/>
                   ✓ Manage offers<br/>
@@ -153,12 +153,12 @@ const AuthTypeSelector = () => {
 
           {/* Guest Card */}
           <Link to="/guest-dashboard" className="block group">
-            <Card className="h-full p-6 sm:p-8 text-center bg-gradient-to-br from-card to-green-500/10 hover:from-card hover:to-green-500/20 transition-all duration-300 group-hover:shadow-xl group-hover:scale-105 border-2 border-green-500/20 group-hover:border-green-500/40 flex flex-col">
+            <Card className="h-full p-6 sm:p-8 text-center bg-card hover:bg-card/80 transition-all duration-300 group-hover:shadow-xl group-hover:scale-105 border-2 border-accent/30 group-hover:border-accent/50 flex flex-col">
               <div className="flex-grow">
-                <div className="bg-gradient-to-br from-green-500 to-teal-600 rounded-full p-4 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 sm:h-12 sm:w-12 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 10-4.5 4.5M14 14l6-6m-4-3-1-1-4 4-1-1-4 4 1 1 4-4 1 1 4-4Z"/><path d="M20.5 16.5 18 14l-4 4h6v-1.5Z"/><path d="m3.5 3.5 1 1"/><path d="m14 18 4-4"/><path d="m21 21-6-6"/></svg>
+                <div className="bg-accent rounded-full p-4 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 sm:h-12 sm:w-12 text-accent-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 10-4.5 4.5M14 14l6-6m-4-3-1-1-4 4-1-1-4 4 1 1 4-4 1 1 4-4Z"/><path d="M20.5 16.5 18 14l-4 4h6v-1.5Z"/><path d="m3.5 3.5 1 1"/><path d="m14 18 4-4"/><path d="m21 21-6-6"/></svg>
                 </div>
-                <h3 className="section-title text-xl sm:text-2xl mb-3 text-green-800">
+                <h3 className="section-title text-xl sm:text-2xl mb-3 text-secondary">
                   Guest
                 </h3>
                 <p className="card-description text-sm sm:text-base mb-6">
@@ -166,10 +166,10 @@ const AuthTypeSelector = () => {
                 </p>
               </div>
               <div className="mt-auto">
-                <Button className="w-full bg-gradient-to-r from-green-600 to-teal-700 hover:from-green-700 hover:to-teal-800 text-white ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight mb-6">
+                <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight mb-6">
                   Continue as Guest
                 </Button>
-                <div className="bg-green-500/10 rounded-lg p-4 text-sm text-green-700 font-medium text-left">
+                <div className="bg-accent/10 rounded-lg p-4 text-sm text-accent-foreground font-medium text-left">
                   ✓ Explore car parts<br/>
                   ✓ View seller profiles<br/>
                   ✓ No account needed to browse<br/>
@@ -187,7 +187,7 @@ const AuthTypeSelector = () => {
               Sign up or sign in instantly using your phone number with OTP verification
             </p>
             <Link to="/phone-auth">
-              <Button className="w-full bg-gradient-to-r from-green-600 to-teal-700 hover:from-green-700 hover:to-teal-800 text-white">
+              <Button className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground">
                 Sign In/Up with Phone
               </Button>
             </Link>
