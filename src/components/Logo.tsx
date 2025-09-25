@@ -39,7 +39,7 @@ const Logo: React.FC<LogoProps> = ({ className, isHero, onClick, disableDefaultL
       <img
         src={logoSrc}
         alt="PartMatch - Car Parts Marketplace"
-        className={logoClasses}
+        className={cn(logoClasses, "brightness-0 invert")}
       />
     </Link>
   );
