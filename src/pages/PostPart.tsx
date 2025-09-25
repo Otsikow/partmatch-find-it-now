@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import PostPartHeroSection from "@/components/PostPartHeroSection";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -391,38 +392,8 @@ const PostPart = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-gradient-accent to-gradient-secondary">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-primary via-primary/90 to-primary-foreground text-white shadow-lg">
-        <div className="px-4 py-6 sm:px-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3 sm:space-x-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => navigate('/')}
-                className="p-2 hover:bg-white/20 rounded-full text-white hover:text-white"
-              >
-                <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
-              </Button>
-              <Link to="/" className="bg-white/20 backdrop-blur-sm rounded-xl p-2 shadow-lg hover:bg-white/30 transition-colors">
-                <img 
-                  src="/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png" 
-                  alt="PartMatch Logo" 
-                  className="h-6 w-auto sm:h-8 object-contain bg-white rounded-lg p-1"
-                />
-              </Link>
-              <div>
-                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold">
-                  Post Car Part
-                </h1>
-                <p className="text-sm sm:text-base text-white/90">
-                  List your car parts for sale
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Hero Section */}
+      <PostPartHeroSection />
 
       <main className="container mx-auto px-4 py-8 pb-24 max-w-2xl">
         <Card>
