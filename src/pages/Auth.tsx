@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import AuthHeroSection from "@/components/AuthHeroSection";
+import AuthHeader from "@/components/AuthHeader";
 import AuthForm from "@/components/AuthForm";
 import Footer from "@/components/Footer";
 
@@ -9,7 +9,7 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted font-roboto">
-      <AuthHeroSection isLogin={isLogin} />
+      <AuthHeader isLogin={isLogin} />
       <AuthForm isLogin={isLogin} setIsLogin={setIsLogin} />
       <Footer />
     </div>

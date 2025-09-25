@@ -52,7 +52,7 @@ const MobileHeader = () => {
               <img 
                 src="/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png" 
                 alt="PartMatch Logo" 
-                className="h-8 w-auto object-contain transition-all duration-300 dark:brightness-0 dark:invert"
+                className="h-8 w-auto object-contain transition-all duration-300"
               />
             </div>
             <span className="text-gray-900 dark:text-gray-100 font-bold text-lg">PartMatch</span>
