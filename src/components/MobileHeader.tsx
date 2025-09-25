@@ -44,25 +44,25 @@ const MobileHeader = () => {
   };
 
   return (
-    <div className="relative top-0 left-0 right-0 header-gradient backdrop-blur-sm shadow-lg border-b border-primary/20 z-40">
+    <div className="relative top-0 left-0 right-0 bg-white dark:bg-gray-900 shadow-lg border-b border-gray-200 dark:border-gray-700 z-40">
       <div className="relative flex items-center justify-between px-4 py-3 min-h-[64px] safe-area-pt">
         <div className="flex items-center min-w-0 flex-1">
           <Link to="/" className="flex items-center gap-2">
-            <div className="bg-primary-foreground/20 backdrop-blur-sm rounded-xl p-2 shadow-lg hover:bg-primary-foreground/30 transition-colors">
+            <div className="flex items-center">
               <img 
                 src="/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png" 
                 alt="PartMatch Logo" 
-                className="h-8 w-auto object-contain bg-primary-foreground rounded-lg p-1 transition-all duration-300"
+                className="h-8 w-auto object-contain transition-all duration-300"
               />
             </div>
-            <span className="text-primary-foreground font-bold text-lg">PartMatch</span>
+            <span className="text-gray-900 dark:text-gray-100 font-bold text-lg">PartMatch</span>
           </Link>
         </div>
         
         {user && (
           <div className="flex items-center space-x-2 flex-shrink-0">
             <ThemeToggle />
-            <div className="flex items-center justify-center bg-primary-foreground/10 rounded-full p-1">
+            <div className="flex items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-full p-1">
               <NotificationBell />
             </div>
             
@@ -71,9 +71,9 @@ const MobileHeader = () => {
                 <Button 
                   variant="ghost" 
                   size="icon"
-                  className="w-10 h-10 bg-primary-foreground/20 backdrop-blur-sm rounded-full flex items-center justify-center touch-manipulation active:scale-95 transition-all duration-200 hover:bg-primary-foreground/30 hover:scale-105 shadow-lg border border-primary-foreground/30"
+                  className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center touch-manipulation active:scale-95 transition-all duration-200 hover:bg-gray-200 dark:hover:bg-gray-700 hover:scale-105 shadow-lg border border-gray-200 dark:border-gray-700"
                 >
-                  <span className="text-primary-foreground font-semibold text-sm">
+                  <span className="text-gray-900 dark:text-gray-100 font-semibold text-sm">
                     {user.email?.charAt(0).toUpperCase()}
                   </span>
                 </Button>
@@ -136,7 +136,7 @@ const MobileHeader = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-primary-foreground font-semibold hover:bg-primary-foreground/20"
+                className="text-gray-900 dark:text-gray-100 font-semibold hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <LogIn className="h-6 w-6" />
               </Button>

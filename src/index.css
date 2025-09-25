@@ -166,35 +166,35 @@
 
 /* Consistent Typography System */
 @layer components {
-  /* Logo Dark Mode Support */
+  /* Logo Dark Mode Support - Remove invert for natural colors */
   .logo-dark-invert {
-    @apply dark:brightness-0 dark:invert;
+    @apply transition-all duration-300;
   }
   
   .logo-hero-dark {
-    @apply dark:brightness-0 dark:invert;
+    @apply transition-all duration-300;
   }
 
-  /* Professional Navigation */
+  /* Professional Navigation - Clean white background */
   .nav-glass {
-    @apply bg-background/95 backdrop-blur-md border-b border-border/50;
+    @apply bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700;
   }
   
   .nav-item {
-    @apply text-muted-foreground hover:text-primary transition-colors duration-200 font-medium;
+    @apply text-gray-600 dark:text-gray-300 hover:text-primary transition-colors duration-200 font-medium;
   }
   
   .nav-item-active {
     @apply text-primary font-semibold;
   }
 
-  /* Modern Headers */
+  /* Modern Headers - Clean professional styling */
   .header-gradient {
-    @apply bg-gradient-to-r from-primary via-primary/95 to-primary text-primary-foreground;
+    @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-gray-700;
   }
   
   .header-glass {
-    @apply bg-background/95 backdrop-blur-md border-b border-border/50;
+    @apply bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700;
   }
 
   /* Brand Typography */

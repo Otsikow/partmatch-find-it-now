@@ -14,8 +14,8 @@ const Logo: React.FC<LogoProps> = ({ className, isHero, onClick, disableDefaultL
   const logoClasses = cn(
     'w-auto object-contain transition-all duration-300',
     {
-      'h-48 sm:h-56 md:h-64 lg:h-72 drop-shadow-2xl logo-hero-dark': isHero,
-      'h-8 sm:h-10 lg:h-12 bg-white dark:bg-transparent rounded-lg p-2 shadow-lg border border-gray-200 dark:border-transparent logo-dark-invert': !isHero,
+      'h-48 sm:h-56 md:h-64 lg:h-72 drop-shadow-2xl': isHero,
+      'h-8 sm:h-10 lg:h-12 p-1': !isHero,
     },
     className
   );
@@ -39,7 +39,7 @@ const Logo: React.FC<LogoProps> = ({ className, isHero, onClick, disableDefaultL
       <img
         src={logoSrc}
         alt="PartMatch - Car Parts Marketplace"
-        className={cn(logoClasses, "brightness-0 invert")}
+        className={logoClasses}
       />
     </Link>
   );

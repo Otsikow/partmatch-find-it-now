@@ -5,9 +5,9 @@ import { ArrowLeft } from "lucide-react";
 
 const RequestHeader = () => {
   return (
-    <header className="p-3 sm:p-4 md:p-6 flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-white/90 via-blue-50/80 to-white/90 backdrop-blur-lg shadow-lg border-b">
+    <header className="p-3 sm:p-4 md:p-6 flex items-center gap-2 sm:gap-3 bg-white dark:bg-gray-900 shadow-lg border-b border-gray-200 dark:border-gray-700">
       <Link to="/">
-        <Button variant="ghost" size="icon" className="h-7 w-7 sm:h-8 sm:w-8 md:h-10 md:w-10 hover:bg-white/50 flex-shrink-0">
+        <Button variant="ghost" size="icon" className="h-7 w-7 sm:h-8 sm:w-8 md:h-10 md:w-10 hover:bg-gray-100 dark:hover:bg-gray-800 flex-shrink-0">
           <ArrowLeft className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5" />
         </Button>
       </Link>
@@ -16,10 +16,10 @@ const RequestHeader = () => {
           <img 
             src="/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png" 
             alt="PartMatch Logo" 
-            className="h-5 w-auto sm:h-6 md:h-8 flex-shrink-0 bg-white rounded-lg p-1 shadow-md border border-gray-200"
+            className="h-5 w-auto sm:h-6 md:h-8 flex-shrink-0"
           />
         </Link>
-        <h1 className="text-base sm:text-lg md:text-2xl lg:text-3xl font-playfair font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent truncate">Request a Part</h1>
+        <h1 className="text-base sm:text-lg md:text-2xl lg:text-3xl font-playfair font-bold text-primary truncate">Request a Part</h1>
       </div>
     </header>
   );
