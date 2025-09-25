@@ -78,7 +78,7 @@ const NotificationDropdown = () => {
         <Button 
           variant="outline" 
           size="sm" 
-          className="bg-white/20 backdrop-blur-sm border-white/30 hover:bg-white/30 text-white hover:text-white transition-all duration-300 shadow-lg border p-2 sm:px-3 relative"
+          className="bg-card/80 backdrop-blur-sm border-border hover:bg-card text-foreground hover:text-foreground transition-all duration-300 shadow-lg border p-2 sm:px-3 relative"
         >
           <Bell className="h-4 w-4 drop-shadow-lg" />
           <span className="hidden md:inline ml-1 drop-shadow-lg">Alerts</span>
