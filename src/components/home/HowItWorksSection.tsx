@@ -6,7 +6,7 @@ const HowItWorksSection = () => {
     { icon: Search, title: "Browse or request a part", description: "Search our marketplace or post what you need" },
     { icon: MessageSquare, title: "Chat with seller", description: "Ask questions and negotiate directly" },
     { icon: DollarSign, title: "Make an offer", description: "Agree on price and payment terms" },
-    { icon: Truck, title: "Get it delivered", description: "Receive your part at your location" }
+    { icon: Truck, title: "Get it delivered or pick up", description: "Receive your part at your location" }
   ];
 
   const sellerSteps = [
