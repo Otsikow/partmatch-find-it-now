@@ -169,7 +169,7 @@ const AuthTypeSelector = () => {
                 <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight mb-6">
                   Continue as Guest
                 </Button>
-                <div className="bg-accent/10 rounded-lg p-4 text-sm text-accent-foreground font-medium text-left">
+                <div className="bg-accent/10 rounded-lg p-4 text-sm text-accent font-medium text-left">
                   ✓ Explore car parts<br/>
                   ✓ View seller profiles<br/>
                   ✓ No account needed to browse<br/>
