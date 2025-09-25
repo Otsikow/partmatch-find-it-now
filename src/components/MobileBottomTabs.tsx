@@ -39,7 +39,7 @@ const MobileBottomTabs = () => {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-card/98 backdrop-blur-md border-t border-border shadow-lg z-50 safe-area-pb">
+    <div className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-xl border-t border-border/50 shadow-xl z-50 safe-area-pb">
       <div className="flex items-center justify-around py-1 px-2 max-w-screen-sm mx-auto">
         {tabs.map((tab) => {
           const Icon = tab.icon;
@@ -53,11 +53,11 @@ const MobileBottomTabs = () => {
               state={tab.path === "/" ? { explicitHomeNavigation: true } : undefined}
               className={cn(
                 "flex flex-col items-center justify-center min-w-0 flex-1 py-2 px-1 relative touch-manipulation transition-all duration-300 rounded-xl group",
-                "hover:bg-secondary/10 active:scale-95",
+                "hover:bg-secondary/15 active:scale-95",
                 "min-h-[64px] max-w-[70px]",
-                active && "text-primary bg-primary/5",
-                !active && "text-muted-foreground hover:text-secondary",
-                isSpecial && !active && "text-primary/90"
+                active && "text-primary bg-primary/10 shadow-sm",
+                !active && "text-foreground/70 hover:text-foreground",
+                isSpecial && !active && "text-primary/95 hover:text-primary"
               )}
               aria-label={t(tab.labelKey)}
             >
@@ -65,34 +65,34 @@ const MobileBottomTabs = () => {
                 className={cn(
                   "relative mb-1 transition-all duration-300",
                   active && "scale-110",
-                  isSpecial && "p-1.5 bg-primary/15 rounded-full shadow-sm"
+                  isSpecial && "p-1.5 bg-primary/20 rounded-full shadow-md border border-primary/30"
                 )}
               >
                 <Icon
                   className={cn(
-                    "transition-all duration-300",
+                    "transition-all duration-300 drop-shadow-sm",
                     isSpecial ? "w-5 h-5" : "w-5 h-5",
-                    active && "text-primary",
-                    !active && isSpecial && "text-primary/90",
+                    active && "text-primary font-bold",
+                    !active && isSpecial && "text-primary/95",
                     !active &&
                       !isSpecial &&
-                      "text-muted-foreground group-hover:text-secondary"
+                      "text-foreground/70 group-hover:text-foreground"
                   )}
                 />
                 {active && (
-                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-primary rounded-full animate-scale-in shadow-sm" />
+                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-primary rounded-full animate-scale-in shadow-md border border-primary/50" />
                 )}
               </div>
 
               <span
                 className={cn(
-                  "text-xs font-medium leading-tight text-center transition-all duration-300",
+                  "text-xs font-medium leading-tight text-center transition-all duration-300 drop-shadow-sm",
                   "line-clamp-2 max-w-full font-roboto",
-                  active && "text-primary font-semibold",
-                  !active && isSpecial && "text-primary/90",
+                  active && "text-primary font-bold",
+                  !active && isSpecial && "text-primary/95 font-medium",
                   !active &&
                     !isSpecial &&
-                    "text-muted-foreground group-hover:text-secondary"
+                    "text-foreground/70 group-hover:text-foreground"
                 )}
                 style={{
                   fontSize: "0.7rem",
