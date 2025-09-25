@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import SearchControls from "@/components/SearchControls";
 import CarPartsList from "@/components/CarPartsList";
+import BrowsePartsHeroSection from "@/components/BrowsePartsHeroSection";
 import PageHeader from "@/components/PageHeader";
 import RequestExpandedDialog from "@/components/RequestExpandedDialog";
 import PendingRatingNotification from "@/components/PendingRatingNotification";
@@ -143,12 +144,8 @@ const SearchParts = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-accent/5 to-background">
-      <PageHeader
-        title="Browse Parts for Sale & Requested Parts"
-        subtitle="Find parts for sale and buyer requests"
-        showBackButton={true}
-        backTo="/"
-      />
+      {/* Hero Section */}
+      <BrowsePartsHeroSection onQuickSearch={setSearchTerm} />
 
       <main className="container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 pb-24 sm:pb-6">
         <PendingRatingNotification />
