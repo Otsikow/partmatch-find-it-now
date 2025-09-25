@@ -15,7 +15,7 @@ const Logo: React.FC<LogoProps> = ({ className, isHero, onClick, disableDefaultL
     'w-auto object-contain transition-all duration-300',
     {
       'h-48 sm:h-56 md:h-64 lg:h-72 drop-shadow-2xl brightness-0 invert': isHero,
-      'h-8 sm:h-10 lg:h-12 p-1': !isHero,
+      'h-8 sm:h-10 lg:h-12 p-1 dark:brightness-0 dark:invert': !isHero,
     },
     className
   );
