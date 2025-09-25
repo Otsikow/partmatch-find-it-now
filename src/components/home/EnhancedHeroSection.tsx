@@ -11,22 +11,18 @@ const heroBackgrounds = [
 ];
 
 const EnhancedHeroSection = () => {
-  const [currentBg, setCurrentBg] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentBg((prev) => (prev + 1) % heroBackgrounds.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <div 
       className="relative min-h-[60vh] flex items-center justify-center text-white overflow-hidden"
-      style={{ background: heroBackgrounds[currentBg] }}
+      style={{ 
+        backgroundImage: `url('/hero-car-parts.png')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
     >
-      {/* Animated background overlay */}
-      <div className="absolute inset-0 bg-black/20"></div>
+      {/* Professional overlay for text readability */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70"></div>
       
       {/* Hero content */}
       <div className="relative z-10 container mx-auto text-center px-4 py-12">
@@ -55,19 +51,6 @@ const EnhancedHeroSection = () => {
             </Link>
           </Button>
         </div>
-      </div>
-      
-      {/* Navigation dots */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-        {heroBackgrounds.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentBg(index)}
-            className={`w-2 h-2 rounded-full transition-all ${
-              index === currentBg ? 'bg-white' : 'bg-white/50'
-            }`}
-          />
-        ))}
       </div>
     </div>
   );
