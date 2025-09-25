@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Logo from '@/components/Logo';
 import { useAuth } from "@/contexts/AuthContext";
 import SearchControls from "@/components/SearchControls";
+import BrowsePartsHeroSection from "@/components/BrowsePartsHeroSection";
 import CarPartsList from "@/components/CarPartsList";
 import PageHeader from "@/components/PageHeader";
 import PendingRatingNotification from "@/components/PendingRatingNotification";
@@ -185,37 +186,8 @@ const SearchPartsWithMap = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-gradient-accent to-gradient-secondary">
-      {/* Header consistent with other pages */}
-      <div className="bg-gradient-to-r from-primary via-primary/90 to-primary-foreground text-white shadow-lg">
-        <div className="px-4 py-6 sm:px-6">
-          <div className="flex items-center justify-between">
-            {/* Left section with back button, logo and title */}
-            <div className="flex items-center space-x-3 sm:space-x-4 min-w-0 flex-1">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => navigate('/')}
-                className="p-2 hover:bg-white/20 rounded-full text-white hover:text-white flex-shrink-0"
-              >
-                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </Button>
-              {/* Logo */}
-              <Logo className="h-8 w-auto sm:h-10 object-contain" />
-              
-              <div className="min-w-0 flex-1">
-                <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-white leading-tight break-words">
-                  Browse Car Parts
-                </h1>
-                <p className="text-sm sm:text-base text-white/90 leading-tight break-words mt-1">
-                  Find parts near you with location and search
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Hero Section */}
+      <BrowsePartsHeroSection onQuickSearch={(term) => setSearchTerm(term)} />
       
       <main className="container mx-auto px-4 py-4 sm:py-6">
         <PendingRatingNotification />
