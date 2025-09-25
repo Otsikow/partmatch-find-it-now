@@ -132,6 +132,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       } else if (event === "SIGNED_IN" && isPasswordReset) {
         // Keep password reset mode active during password reset flow
         setIsPasswordReset(true);
+      } else if (event === "SIGNED_IN" && window.location.search.includes('verified=true')) {
+        // If user just verified their email, sign them out and redirect to login
+        console.log("AuthProvider: Email verification detected, signing out for security");
+        await supabase.auth.signOut();
+        window.location.href = '/auth?verified=true';
+        return;
       } else if (event === "SIGNED_OUT") {
         setIsPasswordReset(false);
         setUserType(null);
@@ -264,7 +270,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       user_type: userData.user_type || "owner", // Default to 'owner'
     };
 
-    const redirectUrl = `${window.location.origin}/`;
+    // Redirect to auth page after email verification to ensure secure login
+    const redirectUrl = `${window.location.origin}/auth?verified=true`;
 
     try {
       // Test Supabase connectivity first

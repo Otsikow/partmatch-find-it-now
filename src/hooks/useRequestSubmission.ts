@@ -48,7 +48,7 @@ export const useRequestSubmission = () => {
       const { error: magicLinkError } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/`
+          emailRedirectTo: `${window.location.origin}/auth?verified=true`
         }
       });
 
@@ -78,7 +78,7 @@ export const useRequestSubmission = () => {
           location: location,
           user_type: 'owner'
         },
-        emailRedirectTo: `${window.location.origin}/`
+        emailRedirectTo: `${window.location.origin}/auth?verified=true`
       }
     });
 

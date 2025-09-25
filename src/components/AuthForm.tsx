@@ -1,8 +1,9 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { User } from "lucide-react";
+import { User, CheckCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserRedirect } from "@/hooks/useUserRedirect";
 import AuthFormFields from "./AuthFormFields";
@@ -35,12 +36,24 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
   });
   const [loading, setLoading] = useState(false);
   const [showPasswordReset, setShowPasswordReset] = useState(false);
+  const [showVerificationSuccess, setShowVerificationSuccess] = useState(false);
   
   const { signUp, signIn, isPasswordReset } = useAuth();
   const navigate = useNavigate();
   
   // Use the redirect hook to handle post-authentication routing
   useUserRedirect();
+
+  // Check for email verification success
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('verified') === 'true') {
+      setShowVerificationSuccess(true);
+      setIsLogin(true); // Switch to login mode
+      // Clear the URL parameter
+      window.history.replaceState({}, '', '/auth');
+    }
+  }, [setIsLogin]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -121,6 +134,15 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
                   : `Create your ${getRoleDisplayName(formData.userType)} account`
                 }
               </p>
+              
+              {showVerificationSuccess && (
+                <Alert className="mt-4 border-green-200 bg-green-50 dark:bg-green-900/20 dark:border-green-800">
+                  <CheckCircle className="h-4 w-4 text-green-600" />
+                  <AlertDescription className="text-green-800 dark:text-green-200">
+                    ✅ Email verified successfully! Please sign in with your credentials.
+                  </AlertDescription>
+                </Alert>
+              )}
               {!isLogin && (
                 <>
                   <div className="mt-2 px-3 py-1 bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300 rounded-full text-xs font-medium inline-block">
