@@ -14,7 +14,7 @@ const ProfileHeroSection = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url('/profile-hero.png')`,
+          backgroundImage: `url('/hero-car-parts.png')`,
           filter: 'brightness(0.7)'
         }}
       >
