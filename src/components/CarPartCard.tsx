@@ -6,7 +6,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { CarPart } from "@/types/CarPart";
 import { useState, useEffect } from "react";
 import { useListingAnalytics } from "@/hooks/useListingAnalytics";
-import CarPartCardImage from "./CarPartCardImage";
+import EnhancedCarPartImage from "./EnhancedCarPartImage";
 import CarPartCardContent from "./CarPartCardContent";
 import CarPartCardFooter from "./CarPartCardFooter";
 import CarPartExpandedDialog from "./CarPartExpandedDialog";
@@ -44,7 +44,7 @@ const CarPartCard = ({ part, onContact }: CarPartCardProps) => {
   return (
     <>
       <Card className="w-full bg-card shadow-md hover:shadow-xl transition-all duration-300 border-0 overflow-hidden">
-        <CarPartCardImage
+        <EnhancedCarPartImage
           partId={part.id}
           title={part.title}
           condition={part.condition}
