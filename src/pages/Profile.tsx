@@ -1,13 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Search, Package, Plus, User, LayoutDashboard, LogOut } from "lucide-react";
-
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
-import ProfileHeader from "@/components/ProfileHeader";
+import ProfileHeroSection from "@/components/ProfileHeroSection";
 const Profile = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
@@ -62,8 +61,8 @@ const Profile = () => {
     const dashboardPath = userType === 'supplier' ? '/seller-dashboard' : '/buyer-dashboard';
     navigate(dashboardPath);
   };
-  return <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 font-inter">
-      <ProfileHeader />
+  return <div className="min-h-screen bg-gradient-to-br from-background via-background/95 to-background font-inter">
+      <ProfileHeroSection />
 
       {/* Main Content */}
       <main className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 pb-32 max-w-4xl min-h-screen">
