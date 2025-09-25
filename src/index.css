@@ -6,46 +6,47 @@
 
 @layer base {
   :root {
-    --background: 220 15% 97%;
-    --foreground: 222.2 84% 4.9%;
+    /* Professional Blue-Gray Palette */
+    --background: 210 11% 91%; /* #E6E9EC - Very light gray */
+    --foreground: 199 18% 18%; /* #263238 - Dark professional blue */
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 199 18% 18%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 199 18% 18%;
 
-    --primary: 262 83% 58%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 199 18% 46%; /* #607D8B - Muted blue-gray */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 210 11% 96%;
+    --secondary-foreground: 199 18% 18%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 210 11% 96%;
+    --muted-foreground: 199 18% 60%;
 
-    --accent: 216 92% 79%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 199 18% 65%;
+    --accent-foreground: 199 18% 18%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 262 83% 58%;
+    --border: 210 11% 85%;
+    --input: 210 11% 85%;
+    --ring: 199 18% 46%;
 
     /* Navigation colors */
     --nav-background: 0 0% 100%;
-    --nav-foreground: 222.2 84% 4.9%;
-    --nav-muted: 215.4 16.3% 46.9%;
-    --nav-accent: 262 83% 58%;
-    --nav-accent-hover: 262 83% 68%;
+    --nav-foreground: 199 18% 18%;
+    --nav-muted: 199 18% 60%;
+    --nav-accent: 199 18% 46%;
+    --nav-accent-hover: 199 18% 56%;
 
     /* Hero section colors */
-    --hero-background: 220 15% 97%;
-    --hero-accent: 216 92% 79%;
-    --hero-gradient-start: 262 83% 98%;
-    --hero-gradient-end: 216 92% 95%;
+    --hero-background: 210 11% 91%;
+    --hero-accent: 199 18% 65%;
+    --hero-gradient-start: 199 18% 96%;
+    --hero-gradient-end: 210 11% 96%;
 
     /* Modern gradient backgrounds */
     --gradient-primary: 262 83% 58%;
@@ -80,46 +81,46 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 199 18% 18%; /* Dark professional blue */
+    --foreground: 210 11% 91%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 199 18% 22%;
+    --card-foreground: 210 11% 91%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 199 18% 22%;
+    --popover-foreground: 210 11% 91%;
 
-    --primary: 262 83% 68%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 199 18% 65%;
+    --primary-foreground: 199 18% 18%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 199 18% 25%;
+    --secondary-foreground: 210 11% 91%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 199 18% 25%;
+    --muted-foreground: 199 18% 75%;
 
-    --accent: 216 92% 89%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 199 18% 75%;
+    --accent-foreground: 199 18% 18%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 262 83% 68%;
+    --border: 199 18% 25%;
+    --input: 199 18% 25%;
+    --ring: 199 18% 65%;
 
     /* Navigation colors - Dark Mode */
-    --nav-background: 222.2 84% 4.9%;
-    --nav-foreground: 210 40% 98%;
-    --nav-muted: 215 20.2% 65.1%;
-    --nav-accent: 262 83% 68%;
-    --nav-accent-hover: 262 83% 78%;
+    --nav-background: 199 18% 18%;
+    --nav-foreground: 210 11% 91%;
+    --nav-muted: 199 18% 75%;
+    --nav-accent: 199 18% 65%;
+    --nav-accent-hover: 199 18% 75%;
 
     /* Hero section colors - Dark Mode */
-    --hero-background: 222.2 84% 4.9%;
-    --hero-accent: 216 92% 89%;
-    --hero-gradient-start: 262 83% 8%;
-    --hero-gradient-end: 216 92% 12%;
+    --hero-background: 199 18% 18%;
+    --hero-accent: 199 18% 75%;
+    --hero-gradient-start: 199 18% 8%;
+    --hero-gradient-end: 199 18% 12%;
 
     /* Modern gradient backgrounds - Dark Mode */
     --gradient-primary: 262 83% 68%;
@@ -191,37 +192,37 @@
   }
   
   .section-subtitle {
-    @apply font-crimson text-muted-foreground text-base sm:text-lg;
+    @apply font-roboto text-muted-foreground text-base sm:text-lg;
   }
   
   /* Body Text */
   .body-text {
-    @apply font-inter text-foreground text-sm sm:text-base;
+    @apply font-roboto text-foreground text-sm sm:text-base;
   }
   
   .body-text-large {
-    @apply font-inter text-foreground text-base sm:text-lg;
+    @apply font-roboto text-foreground text-base sm:text-lg;
   }
   
   .body-text-small {
-    @apply font-inter text-muted-foreground text-xs sm:text-sm;
+    @apply font-roboto text-muted-foreground text-xs sm:text-sm;
   }
   
   /* UI Elements */
   .ui-label {
-    @apply font-inter font-medium text-foreground text-sm;
+    @apply font-roboto font-medium text-foreground text-sm;
   }
   
   .ui-button-text {
-    @apply font-inter font-semibold;
+    @apply font-roboto font-semibold;
   }
   
   /* Card Content */
   .card-title {
-    @apply font-playfair font-semibold text-foreground text-lg;
+    @apply font-roboto font-semibold text-foreground text-lg;
   }
   
   .card-description {
-    @apply font-crimson text-muted-foreground text-sm;
+    @apply font-roboto text-muted-foreground text-sm;
   }
 }

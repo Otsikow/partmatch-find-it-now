@@ -27,8 +27,8 @@ export default {
 				'xs': '475px',
 			},
 			fontFamily: {
+				'roboto': ['Roboto', 'sans-serif'],
 				'playfair': ['Playfair Display', 'serif'],
-				'crimson': ['Crimson Text', 'serif'],
 				'inter': ['Inter', 'sans-serif'],
 			},
 			colors: {

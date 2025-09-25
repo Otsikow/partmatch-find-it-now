@@ -12,7 +12,7 @@ const MobileBottomTabs = () => {
   const tabs = [
     {
       icon: Home,
-      labelKey: "home", // 👈 Matches your translation key
+      labelKey: "home",
       path: "/",
     },
     {
@@ -25,11 +25,6 @@ const MobileBottomTabs = () => {
       labelKey: "request",
       path: "/request-part",
       isSpecial: true,
-    },
-    {
-      icon: Package,
-      labelKey: "sell",
-      path: "/post-part",
     },
     {
       icon: User,
