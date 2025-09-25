@@ -42,6 +42,7 @@ import TermsOfService from "./pages/TermsOfService";
 import CookiePolicy from "./pages/CookiePolicy";
 import NotFound from "./pages/NotFound";
 import SimpleAuth from "./pages/SimpleAuth";
+import EmailVerification from "./pages/EmailVerification";
 import ButtonTestPage from "./pages/ButtonTestPage";
 import SellerProfile from "./pages/SellerProfile";
 import Profile from "./pages/Profile";
@@ -180,6 +181,7 @@ function App() {
                       }
                     />
                     <Route path="/simple-auth" element={<SimpleAuth />} />
+                    <Route path="/email-verification" element={<EmailVerification />} />
                     <Route path="/button-test" element={<ButtonTestPage />} />
                     <Route path="/success" element={<Success />} />
                     <Route

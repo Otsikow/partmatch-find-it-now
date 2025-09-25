@@ -185,9 +185,18 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
                   </button>
                 </div>
                 <div className="mt-4 p-3 bg-blue-50 border border-blue-200 dark:bg-blue-900/30 dark:border-blue-800/50 rounded-lg">
-                  <p className="text-xs text-blue-800 dark:text-blue-300 text-center">
+                  <p className="text-xs text-blue-800 dark:text-blue-300 text-center mb-2">
                     💡 If you just registered, check your email for a verification link before signing in
                   </p>
+                  <div className="text-center">
+                    <button
+                      type="button"
+                      onClick={() => navigate('/email-verification')}
+                      className="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 hover:underline transition-colors duration-300"
+                    >
+                      Didn't receive verification email? Get help →
+                    </button>
+                  </div>
                 </div>
               </>
             )}
