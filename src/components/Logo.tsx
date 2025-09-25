@@ -12,10 +12,10 @@ interface LogoProps {
 
 const Logo: React.FC<LogoProps> = ({ className, isHero, onClick, disableDefaultLink }) => {
   const logoClasses = cn(
-    'w-auto object-contain',
+    'w-auto object-contain transition-all duration-300',
     {
-      'h-48 sm:h-56 md:h-64 lg:h-72 drop-shadow-2xl brightness-0 invert': isHero,
-      'h-8 sm:h-10 lg:h-12 bg-white dark:bg-gray-800 rounded-lg p-2 shadow-lg border border-gray-200 dark:border-gray-600': !isHero,
+      'h-48 sm:h-56 md:h-64 lg:h-72 drop-shadow-2xl logo-hero-dark': isHero,
+      'h-8 sm:h-10 lg:h-12 bg-white dark:bg-transparent rounded-lg p-2 shadow-lg border border-gray-200 dark:border-transparent logo-dark-invert': !isHero,
     },
     className
   );

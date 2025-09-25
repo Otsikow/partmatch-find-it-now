@@ -25,7 +25,7 @@ const Navigation = () => {
   const showNavigationItems = !user || !isHomePage;
 
   return (
-    <nav className="bg-nav/95 backdrop-blur-md shadow-lg sticky top-0 z-50 border-b border-border">
+    <nav className="nav-glass sticky top-0 z-50 shadow-lg">
       <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
         <div className="flex justify-between items-center h-14 sm:h-16">
           <NavigationLogo />
@@ -36,21 +36,21 @@ const Navigation = () => {
               {/* Desktop Navigation Items with Translations */}
               <Link
                 to="/search-parts"
-                className="flex flex-col items-center gap-1 text-nav-muted hover:text-nav-accent font-medium transition-colors px-3 py-2 rounded-lg hover:bg-accent group"
+                className="nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg hover:bg-primary/10 group"
               >
                 <Search className="h-5 w-5" />
                 <span className="text-xs">{t("browse", "Browse Parts")}</span>
               </Link>
               <Link
                 to="/request-part"
-                className="flex flex-col items-center gap-1 text-nav-muted hover:text-nav-accent font-medium transition-colors px-3 py-2 rounded-lg hover:bg-accent group"
+                className="nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg hover:bg-primary/10 group"
               >
                 <Plus className="h-5 w-5" />
                 <span className="text-xs">{t("request", "Request Part")}</span>
               </Link>
               <Link
                 to="/post-part"
-                className="flex flex-col items-center gap-1 text-nav-muted hover:text-nav-accent font-medium transition-colors px-3 py-2 rounded-lg hover:bg-accent group"
+                className="nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg hover:bg-primary/10 group"
               >
                 <Plus className="h-5 w-5" />
                 <span className="text-xs">{t("sellPart", "Sell Part")}</span>
@@ -58,7 +58,7 @@ const Navigation = () => {
               {user && (
                 <Link
                   to="/chat"
-                  className="flex flex-col items-center gap-1 text-nav-muted hover:text-nav-accent font-medium transition-colors px-3 py-2 rounded-lg hover:bg-accent relative group"
+                  className="nav-item flex flex-col items-center gap-1 px-3 py-2 rounded-lg hover:bg-primary/10 relative group"
                 >
                   <MessageCircle className="h-5 w-5" />
                   <span className="text-xs">{t("messages", "Messages")}</span>
@@ -80,7 +80,7 @@ const Navigation = () => {
               variant="ghost"
               size="sm"
               onClick={toggleMobileMenu}
-              className="p-2 text-nav-foreground"
+              className="p-2 text-foreground hover:text-primary transition-colors"
             >
               {isMobileMenuOpen ? (
                 <X className="h-6 w-6" />

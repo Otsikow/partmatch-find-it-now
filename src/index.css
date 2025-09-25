@@ -166,23 +166,54 @@
 
 /* Consistent Typography System */
 @layer components {
+  /* Logo Dark Mode Support */
+  .logo-dark-invert {
+    @apply dark:brightness-0 dark:invert;
+  }
+  
+  .logo-hero-dark {
+    @apply dark:brightness-0 dark:invert;
+  }
+
+  /* Professional Navigation */
+  .nav-glass {
+    @apply bg-background/95 backdrop-blur-md border-b border-border/50;
+  }
+  
+  .nav-item {
+    @apply text-muted-foreground hover:text-primary transition-colors duration-200 font-medium;
+  }
+  
+  .nav-item-active {
+    @apply text-primary font-semibold;
+  }
+
+  /* Modern Headers */
+  .header-gradient {
+    @apply bg-gradient-to-r from-primary via-primary/95 to-primary text-primary-foreground;
+  }
+  
+  .header-glass {
+    @apply bg-background/95 backdrop-blur-md border-b border-border/50;
+  }
+
   /* Brand Typography */
   .brand-title {
-    @apply font-playfair font-bold text-primary; /* Dark blue for brand title */
+    @apply font-playfair font-bold text-primary;
   }
   
   /* Page Headers */
   .page-header {
-    @apply font-playfair font-bold text-secondary text-2xl sm:text-3xl md:text-4xl; /* Blue-gray for headers */
+    @apply font-playfair font-bold text-foreground text-2xl sm:text-3xl md:text-4xl;
   }
   
   .page-subheader {
-    @apply font-playfair font-semibold text-secondary text-xl sm:text-2xl; /* Blue-gray for subheaders */
+    @apply font-playfair font-semibold text-muted-foreground text-xl sm:text-2xl;
   }
   
   /* Section Headers */
   .section-title {
-    @apply font-playfair font-bold text-secondary text-lg sm:text-xl md:text-2xl; /* Blue-gray for section titles */
+    @apply font-playfair font-bold text-foreground text-lg sm:text-xl md:text-2xl;
   }
   
   .section-subtitle {
@@ -218,5 +249,18 @@
   
   .card-description {
     @apply font-roboto text-muted-foreground text-sm;
+  }
+
+  /* Professional Buttons */
+  .btn-primary {
+    @apply bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300;
+  }
+  
+  .btn-accent {
+    @apply bg-accent hover:bg-accent/90 text-accent-foreground font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300;
   }
 }

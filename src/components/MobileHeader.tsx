@@ -16,6 +16,7 @@ import NotificationBell from "./NotificationBell";
 import LanguageSelector from "./LanguageSelector";
 import CountryCurrencySelector from "./CountryCurrencySelector";
 import ThemeToggle from "./ThemeToggle";
+
 const MobileHeader = () => {
   const { user, signOut, userType } = useAuth();
   const { t } = useTranslation();
@@ -43,56 +44,41 @@ const MobileHeader = () => {
   };
 
   return (
-    <div className="relative top-0 left-0 right-0 bg-gradient-to-r from-primary via-primary to-primary/90 backdrop-blur-sm shadow-lg border-b border-white/20 z-40">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/5 to-indigo-600/10"></div>
+    <div className="relative top-0 left-0 right-0 header-gradient backdrop-blur-sm shadow-lg border-b border-primary/20 z-40">
       <div className="relative flex items-center justify-between px-4 py-3 min-h-[64px] safe-area-pt">
         <div className="flex items-center min-w-0 flex-1">
-          <Link to="/" className="flex items-center gap-2 text-white">
-            <img src="/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png" alt="PartMatch Logo" className="h-8 w-auto bg-white rounded-lg p-1" />
+          <Link to="/" className="flex items-center gap-2">
+            <div className="bg-primary-foreground/20 backdrop-blur-sm rounded-xl p-2 shadow-lg hover:bg-primary-foreground/30 transition-colors">
+              <img 
+                src="/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png" 
+                alt="PartMatch Logo" 
+                className="h-8 w-auto object-contain bg-primary-foreground rounded-lg p-1 transition-all duration-300"
+              />
+            </div>
+            <span className="text-primary-foreground font-bold text-lg">PartMatch</span>
           </Link>
         </div>
         
         {user && (
           <div className="flex items-center space-x-2 flex-shrink-0">
             <ThemeToggle />
-            <div className="flex items-center justify-center bg-white/10 rounded-full p-1">
+            <div className="flex items-center justify-center bg-primary-foreground/10 rounded-full p-1">
               <NotificationBell />
             </div>
-            
-            {/* Direct Sign Out Button */}
-            <button
-              onClick={() => {
-                console.log('🚪🚪🚪 DIRECT BUTTON CLICKED!!! 🚪🚪🚪');
-                alert('Sign out button clicked!');
-                handleSignOut();
-              }}
-              style={{
-                width: '40px',
-                height: '40px',
-                backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                borderRadius: '50%',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                color: 'white',
-                cursor: 'pointer',
-                zIndex: 9999
-              }}
-            >
-              →
-            </button>
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button 
                   variant="ghost" 
                   size="icon"
-                  className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center touch-manipulation active:scale-95 transition-all duration-200 hover:bg-white/30 hover:scale-105 shadow-lg border border-white/30"
+                  className="w-10 h-10 bg-primary-foreground/20 backdrop-blur-sm rounded-full flex items-center justify-center touch-manipulation active:scale-95 transition-all duration-200 hover:bg-primary-foreground/30 hover:scale-105 shadow-lg border border-primary-foreground/30"
                 >
-                  <span className="text-white font-semibold text-sm">
+                  <span className="text-primary-foreground font-semibold text-sm">
                     {user.email?.charAt(0).toUpperCase()}
                   </span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-gray-800 border shadow-lg z-50">
+              <DropdownMenuContent align="end" className="w-56 bg-background border shadow-lg z-50">
                 <DropdownMenuItem
                   className="flex items-center gap-2 cursor-pointer"
                   onClick={() => {
@@ -150,7 +136,7 @@ const MobileHeader = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-white font-semibold"
+                className="text-primary-foreground font-semibold hover:bg-primary-foreground/20"
               >
                 <LogIn className="h-6 w-6" />
               </Button>
@@ -161,4 +147,5 @@ const MobileHeader = () => {
     </div>
   );
 };
+
 export default MobileHeader;
