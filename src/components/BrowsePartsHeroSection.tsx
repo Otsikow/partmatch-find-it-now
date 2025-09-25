@@ -1,12 +1,14 @@
-import { Search, Filter, Package } from "lucide-react";
+import { Search, Filter, Package, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router-dom";
 
 interface BrowsePartsHeroSectionProps {
   onQuickSearch?: (term: string) => void;
 }
 
 const BrowsePartsHeroSection = ({ onQuickSearch }: BrowsePartsHeroSectionProps) => {
+  const navigate = useNavigate();
   const handleQuickSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -27,6 +29,16 @@ const BrowsePartsHeroSection = ({ onQuickSearch }: BrowsePartsHeroSectionProps) 
       >
         <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/95"></div>
       </div>
+      
+      {/* Back Arrow */}
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => navigate('/')}
+        className="absolute top-4 left-4 z-20 p-2 hover:bg-background/20 rounded-full text-foreground hover:text-foreground flex-shrink-0 bg-background/10 backdrop-blur-sm"
+      >
+        <ArrowLeft className="w-5 h-5" />
+      </Button>
       
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 py-12 text-center">
