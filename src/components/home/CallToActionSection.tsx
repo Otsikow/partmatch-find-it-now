@@ -4,10 +4,17 @@ import { CheckCircle, Package } from "lucide-react";
 
 const CallToActionSection = () => {
   return (
-    <div className="py-20 bg-gradient-to-br from-primary to-primary/80 dark:from-primary/90 dark:to-primary/70 relative overflow-hidden">
-      {/* Background pattern */}
-      <div className="absolute inset-0 bg-grid-white/10 bg-[size:20px_20px]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent" />
+    <div 
+      className="py-20 relative overflow-hidden"
+      style={{
+        backgroundImage: "url('/car-parts-bg3.png')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      {/* Professional overlay for text readability */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/85 to-primary/90"></div>
       
       <div className="container mx-auto px-4 text-center relative z-10">
         <div className="max-w-4xl mx-auto">
