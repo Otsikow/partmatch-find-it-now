@@ -6,143 +6,137 @@
 
 @layer base {
   :root {
-    /* Professional Blue-Gray Palette */
-    --background: 210 11% 91%; /* #E6E9EC - Light gray for main background */
-    --foreground: 199 18% 18%; /* #263238 - Dark blue for primary text */
+    /* Professional Color Palette */
+    --background: 0 0% 100%; /* Pure white background */
+    --foreground: 220 14% 20%; /* Dark charcoal for text */
 
-    --card: 0 0% 100%;
-    --card-foreground: 199 18% 18%;
+    --card: 0 0% 100%; /* White cards */
+    --card-foreground: 220 14% 20%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 199 18% 18%;
+    --popover-foreground: 220 14% 20%;
 
-    --primary: 199 18% 18%; /* #263238 - Dark blue for primary buttons */
+    /* Blue theme for buyers/primary */
+    --primary: 217 91% 60%; /* Professional blue #4F7FE6 */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 199 18% 46%; /* #607D8B - Blue-gray for headers/details */
+    /* Orange theme for sellers */
+    --secondary: 14 90% 53%; /* Professional orange #E67343 */
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 11% 96%;
-    --muted-foreground: 199 18% 46%; /* Blue-gray for subtle text */
+    --muted: 210 40% 96%; /* Very light gray */
+    --muted-foreground: 215 16% 47%; /* Medium gray text */
 
-    --accent: 199 18% 46%; /* Blue-gray for accents */
+    /* Green theme for actions/browse */
+    --accent: 142 76% 36%; /* Professional green #22C55E */
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 210 11% 85%;
-    --input: 210 11% 85%;
-    --ring: 199 18% 18%; /* Dark blue for focus rings */
+    --border: 210 40% 91%; /* Light border */
+    --input: 210 40% 91%; /* Light input background */
+    --ring: 217 91% 60%; /* Blue focus ring */
 
     /* Navigation colors */
     --nav-background: 0 0% 100%;
-    --nav-foreground: 199 18% 18%; /* Dark blue for nav text */
-    --nav-muted: 199 18% 46%; /* Blue-gray for muted nav items */
-    --nav-accent: 199 18% 18%; /* Dark blue for active nav */
-    --nav-accent-hover: 199 18% 46%; /* Blue-gray for hover */
+    --nav-foreground: 220 14% 20%;
+    --nav-muted: 215 16% 47%;
+    --nav-accent: 217 91% 60%;
+    --nav-accent-hover: 217 91% 50%;
 
     /* Hero section colors */
-    --hero-background: 210 11% 91%; /* Light gray background */
-    --hero-accent: 199 18% 46%; /* Blue-gray for accents */
-    --hero-gradient-start: 210 11% 96%;
-    --hero-gradient-end: 210 11% 91%;
+    --hero-background: 210 40% 96%;
+    --hero-accent: 217 91% 60%;
+    --hero-gradient-start: 210 40% 98%;
+    --hero-gradient-end: 210 40% 96%;
 
-    /* Modern gradient backgrounds */
-    --gradient-primary: 199 18% 18%; /* Dark blue */
-    --gradient-secondary: 199 18% 46%; /* Blue-gray */
-    --gradient-accent: 210 11% 91%; /* Light gray */
-    --gradient-warm: 45 100% 70%;
-    --gradient-cool: 200 100% 70%;
+    /* Professional brand colors */
+    --brand-blue: 217 91% 60%; /* #4F7FE6 */
+    --brand-orange: 14 90% 53%; /* #E67343 */
+    --brand-green: 142 76% 36%; /* #22C55E */
+    --brand-purple: 259 94% 51%; /* #8B5CF6 */
 
     /* Success/Error colors */
     --success: 142 76% 36%;
-    --success-foreground: 355 100% 97%;
+    --success-foreground: 0 0% 100%;
     --warning: 43 89% 38%;
-    --warning-foreground: 48 100% 96%;
+    --warning-foreground: 0 0% 100%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem; /* Slightly more rounded */
 
     --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-foreground: 220 14% 20%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 40% 96%;
+    --sidebar-accent-foreground: 220 14% 20%;
+    --sidebar-border: 210 40% 91%;
+    --sidebar-ring: 217 91% 60%;
   }
 
   .dark {
-    --background: 199 18% 18%; /* Dark professional blue */
-    --foreground: 210 11% 91%;
+    --background: 220 14% 4%; /* Very dark background */
+    --foreground: 210 40% 96%;
 
-    --card: 199 18% 22%;
-    --card-foreground: 210 11% 91%;
+    --card: 220 14% 8%;
+    --card-foreground: 210 40% 96%;
 
-    --popover: 199 18% 22%;
-    --popover-foreground: 210 11% 91%;
+    --popover: 220 14% 8%;
+    --popover-foreground: 210 40% 96%;
 
-    --primary: 199 18% 65%;
-    --primary-foreground: 199 18% 18%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 220 14% 4%;
 
-    --secondary: 199 18% 25%;
-    --secondary-foreground: 210 11% 91%;
+    --secondary: 14 90% 53%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 199 18% 25%;
-    --muted-foreground: 199 18% 75%;
+    --muted: 220 14% 12%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 199 18% 75%;
-    --accent-foreground: 199 18% 18%;
+    --accent: 142 76% 46%;
+    --accent-foreground: 220 14% 4%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 199 18% 25%;
-    --input: 199 18% 25%;
-    --ring: 199 18% 65%;
+    --border: 220 14% 12%;
+    --input: 220 14% 12%;
+    --ring: 217 91% 60%;
 
     /* Navigation colors - Dark Mode */
-    --nav-background: 199 18% 18%;
-    --nav-foreground: 210 11% 91%;
-    --nav-muted: 199 18% 75%;
-    --nav-accent: 199 18% 65%;
-    --nav-accent-hover: 199 18% 75%;
+    --nav-background: 220 14% 4%;
+    --nav-foreground: 210 40% 96%;
+    --nav-muted: 215 16% 47%;
+    --nav-accent: 217 91% 60%;
+    --nav-accent-hover: 217 91% 50%;
 
     /* Hero section colors - Dark Mode */
-    --hero-background: 199 18% 18%;
-    --hero-accent: 199 18% 75%;
-    --hero-gradient-start: 199 18% 8%;
-    --hero-gradient-end: 199 18% 12%;
+    --hero-background: 220 14% 4%;
+    --hero-accent: 217 91% 60%;
+    --hero-gradient-start: 220 14% 8%;
+    --hero-gradient-end: 220 14% 4%;
 
-    /* Modern gradient backgrounds - Dark Mode */
-    --gradient-primary: 262 83% 68%;
-    --gradient-secondary: 216 92% 89%;
-    --gradient-accent: 283 100% 14%;
-    --gradient-warm: 45 100% 80%;
-    --gradient-cool: 200 100% 80%;
+    /* Professional brand colors - Dark Mode */
+    --brand-blue: 217 91% 60%;
+    --brand-orange: 14 90% 53%;
+    --brand-green: 142 76% 46%;
+    --brand-purple: 259 94% 51%;
 
     /* Success/Error colors - Dark Mode */
     --success: 142 76% 46%;
-    --success-foreground: 0 0% 98%;
+    --success-foreground: 0 0% 100%;
     --warning: 43 89% 48%;
-    --warning-foreground: 0 0% 98%;
+    --warning-foreground: 0 0% 100%;
 
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-background: 220 14% 4%;
+    --sidebar-foreground: 210 40% 96%;
+    --sidebar-primary: 217 91% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 220 14% 12%;
+    --sidebar-accent-foreground: 210 40% 96%;
+    --sidebar-border: 220 14% 12%;
+    --sidebar-ring: 217 91% 60%;
   }
 }
 

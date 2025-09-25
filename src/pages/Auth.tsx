@@ -8,7 +8,7 @@ const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
 
   return (
-    <div className="min-h-screen bg-background font-roboto">
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted font-roboto">
       <AuthHeader isLogin={isLogin} />
       <AuthForm isLogin={isLogin} setIsLogin={setIsLogin} />
       <Footer />

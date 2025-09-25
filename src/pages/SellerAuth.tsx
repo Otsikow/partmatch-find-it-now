@@ -3,22 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Store,
-  ArrowLeft,
-  Mail,
-  Lock,
-  Phone,
-  MapPin,
-  Eye,
-  EyeOff,
-} from "lucide-react";
+import { Store, Mail, Lock, Phone, MapPin, Eye, EyeOff, ArrowLeft, Home } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import PasswordReset from "@/components/PasswordReset";
 import SetNewPassword from "@/components/SetNewPassword";
-import Footer from "@/components/Footer";
 
 const SellerAuth = () => {
   const [formData, setFormData] = useState({
@@ -44,11 +34,7 @@ const SellerAuth = () => {
 
     try {
       if (isLogin) {
-        const { error } = await signIn(
-          formData.email,
-          formData.password,
-          "supplier"
-        );
+        const { error } = await signIn(formData.email, formData.password, "supplier");
         if (!error) {
           const redirect = searchParams.get('redirect');
           const autoSubmit = searchParams.get('autoSubmit');
@@ -72,8 +58,7 @@ const SellerAuth = () => {
         if (!error) {
           toast({
             title: "Seller Account Created!",
-            description:
-              "Please check your email to verify your account, then sign in below.",
+            description: "Please check your email to verify your account, then sign in below.",
           });
           setIsLogin(true);
         }
@@ -106,273 +91,222 @@ const SellerAuth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-yellow-50 to-red-100 dark:from-orange-900/20 dark:via-yellow-900/20 dark:to-red-900/20 font-inter">
-      <header className="relative bg-gradient-to-r from-primary via-primary/95 to-primary-foreground text-white shadow-lg border-b border-white/20">
-        <div className="absolute inset-0 bg-gradient-to-br from-orange-600/10 via-red-600/5 to-indigo-600/10"></div>
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted font-roboto">
+      {/* Header */}
+      <header className="relative bg-secondary text-secondary-foreground shadow-lg">
+        <div className="absolute inset-0 bg-gradient-to-br from-secondary/10 via-transparent to-secondary/5"></div>
         <div className="relative p-4 sm:p-6 flex items-center gap-3">
           <Link to="/">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 sm:h-10 sm:w-10 hover:bg-white/20 text-white hover:text-white"
-            >
+            <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 hover:bg-secondary-foreground/20 text-secondary-foreground hover:text-secondary-foreground">
               <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
             </Button>
           </Link>
           <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-            <div className="bg-white/20 backdrop-blur-sm rounded-xl p-2 shadow-lg">
-              <img
-                src="/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png"
-                alt="PartMatch Logo"
-                className="h-6 w-auto sm:h-8 object-contain bg-white rounded-lg p-1"
+            <Link to="/" className="bg-secondary-foreground/20 backdrop-blur-sm rounded-xl p-2 shadow-lg hover:bg-secondary-foreground/30 transition-colors">
+              <img 
+                src="/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png" 
+                alt="PartMatch Logo" 
+                className="h-6 w-auto sm:h-8 object-contain bg-secondary-foreground rounded-lg p-1"
               />
-            </div>
-            <div className="min-w-0 flex-1">
-              <h1 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-white leading-tight break-words">
-                Seller{" "}
-                {isPasswordReset
-                  ? "Password Reset"
-                  : showPasswordReset
-                  ? "Password Reset"
-                  : isLogin
-                  ? "Sign In"
-                  : "Registration"}
-              </h1>
-              <p className="text-sm sm:text-base text-white/90 leading-tight break-words mt-1">
-                {isPasswordReset || showPasswordReset 
-                  ? "Reset your seller password to continue" 
-                  : isLogin 
-                  ? "Welcome back to your seller account" 
-                  : "Join our marketplace as a seller"}
-              </p>
-            </div>
+            </Link>
           </div>
+          <Link to="/">
+            <Button variant="ghost" size="sm" className="hover:bg-secondary-foreground/20 text-secondary-foreground hover:text-secondary-foreground">
+              <Home className="h-4 w-4 mr-2" />
+              Home
+            </Button>
+          </Link>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 sm:px-6 py-6 sm:py-8 max-w-md">
-        <Card className="p-6 sm:p-8 bg-gradient-to-br from-white/90 to-orange-50/50 dark:from-gray-800/90 dark:to-orange-900/20 backdrop-blur-sm shadow-2xl border-0">
-          {isPasswordReset ? (
-            <SetNewPassword
-              onSuccess={handlePasswordResetSuccess}
-              borderColor="border-orange-200"
-              focusColor="focus:border-orange-400"
-              buttonGradient="from-orange-600 to-red-700"
-              buttonHoverGradient="hover:from-orange-700 hover:to-red-800"
-            />
-          ) : showPasswordReset ? (
-            <PasswordReset
-              onBack={handleBackToLogin}
-              borderColor="border-orange-200"
-              focusColor="focus:border-orange-400"
-              buttonGradient="from-orange-600 to-red-700"
-              buttonHoverGradient="hover:from-orange-700 hover:to-red-800"
-            />
-          ) : (
-            <>
-              <div className="text-center mb-6 sm:mb-8">
-                <div className="bg-gradient-to-br from-orange-500 to-red-600 rounded-full p-4 w-fit mx-auto mb-4 sm:mb-6 shadow-lg">
-                  <Store className="h-10 w-10 sm:h-12 sm:w-12 text-white" />
-                </div>
-                <h2 className="text-xl sm:text-2xl lg:text-3xl font-playfair font-semibold mb-2 sm:mb-3 bg-gradient-to-r from-orange-700 to-red-700 bg-clip-text text-transparent">
-                  {isLogin ? "Welcome Back Seller" : "Join as a Seller"}
-                </h2>
-                <p className="text-muted-foreground text-sm sm:text-base font-crimson">
-                  {isLogin
-                    ? "Sign in to manage your inventory"
-                    : "Register to sell and supply car parts"}
-                </p>
-              </div>
-
-              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
-                {!isLogin && (
-                  <>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <Label
-                          htmlFor="firstName"
-                          className="text-sm sm:text-base font-inter"
-                        >
-                          First Name *
-                        </Label>
-                        <Input
-                          id="firstName"
-                          placeholder="John"
-                          value={formData.firstName}
-                          onChange={(e) =>
-                            handleInputChange("firstName", e.target.value)
-                          }
-                          required
-                          className="mt-1 text-base border-orange-200 focus:border-orange-400 dark:border-orange-800 dark:focus:border-orange-600"
-                        />
-                      </div>
-                      <div>
-                        <Label
-                          htmlFor="lastName"
-                          className="text-sm sm:text-base font-inter"
-                        >
-                          Last Name *
-                        </Label>
-                        <Input
-                          id="lastName"
-                          placeholder="Doe"
-                          value={formData.lastName}
-                          onChange={(e) =>
-                            handleInputChange("lastName", e.target.value)
-                          }
-                          required
-                          className="mt-1 text-base border-orange-200 focus:border-orange-400 dark:border-orange-800 dark:focus:border-orange-600"
-                        />
-                      </div>
+      {/* Main Content */}
+      <main className="flex items-center justify-center py-12 px-4">
+        <div className="w-full max-w-md">
+          <Card className="bg-white shadow-2xl border-0 rounded-2xl overflow-hidden">
+            <div className="p-8">
+              {isPasswordReset ? (
+                <SetNewPassword
+                  onSuccess={handlePasswordResetSuccess}
+                  borderColor="border-secondary/20"
+                  focusColor="focus:border-secondary"
+                  buttonGradient="from-secondary to-secondary/90"
+                  buttonHoverGradient="hover:from-secondary/90 hover:to-secondary"
+                />
+              ) : showPasswordReset ? (
+                <PasswordReset
+                  onBack={handleBackToLogin}
+                  borderColor="border-secondary/20"
+                  focusColor="focus:border-secondary"
+                  buttonGradient="from-secondary to-secondary/90"
+                  buttonHoverGradient="hover:from-secondary/90 hover:to-secondary"
+                />
+              ) : (
+                <>
+                  {/* Header */}
+                  <div className="text-center mb-8">
+                    <div className="bg-secondary rounded-full p-4 w-fit mx-auto mb-6 shadow-lg">
+                      <Store className="h-12 w-12 text-secondary-foreground" />
                     </div>
-
-                    <div>
-                      <Label
-                        htmlFor="phone"
-                        className="text-sm sm:text-base font-inter"
-                      >
-                        Phone/WhatsApp *
-                      </Label>
-                      <div className="relative">
-                        <Phone className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
-                        <Input
-                          id="phone"
-                          type="tel"
-                          placeholder="+233 20 123 4567"
-                          value={formData.phone}
-                          onChange={(e) =>
-                            handleInputChange("phone", e.target.value)
-                          }
-                          required
-                          className="mt-1 pl-10 text-base border-orange-200 focus:border-orange-400 dark:border-orange-800 dark:focus:border-orange-600"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <Label
-                        htmlFor="location"
-                        className="text-sm sm:text-base font-inter"
-                      >
-                        Location *
-                      </Label>
-                      <div className="relative">
-                        <MapPin className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
-                        <Input
-                          id="location"
-                          placeholder="e.g. Accra, Kumasi"
-                          value={formData.location}
-                          onChange={(e) =>
-                            handleInputChange("location", e.target.value)
-                          }
-                          required
-                          className="mt-1 pl-10 text-base border-orange-200 focus:border-orange-400 dark:border-orange-800 dark:focus:border-orange-600"
-                        />
-                      </div>
-                    </div>
-                  </>
-                )}
-
-                <div>
-                  <Label
-                    htmlFor="email"
-                    className="text-sm sm:text-base font-inter"
-                  >
-                    Email *
-                  </Label>
-                  <div className="relative">
-                    <Mail className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="seller@email.com"
-                      value={formData.email}
-                      onChange={(e) =>
-                        handleInputChange("email", e.target.value)
-                      }
-                      required
-                      className="mt-1 pl-10 text-base border-orange-200 focus:border-orange-400 dark:border-orange-800 dark:focus:border-orange-600"
-                    />
+                    <h2 className="text-2xl font-bold text-secondary mb-2">
+                      Welcome Back Seller
+                    </h2>
+                    <p className="text-muted-foreground">
+                      Sign in to manage your inventory
+                    </p>
                   </div>
-                </div>
 
-                <div>
-                  <Label
-                    htmlFor="password"
-                    className="text-sm sm:text-base font-inter"
-                  >
-                    Password *
-                  </Label>
-                  <div className="relative">
-                    <Lock className="h-4 w-4 absolute left-3 top-3 text-muted-foreground" />
-                    <Input
-                      id="password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="••••••••"
-                      value={formData.password}
-                      onChange={(e) =>
-                        handleInputChange("password", e.target.value)
-                      }
-                      required
-                      className="mt-1 pl-10 pr-10 text-base border-orange-200 focus:border-orange-400 dark:border-orange-800 dark:focus:border-orange-600"
-                    />
+                  {/* Form */}
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    {!isLogin && (
+                      <>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <Label htmlFor="firstName" className="text-sm font-medium">
+                              First Name *
+                            </Label>
+                            <Input
+                              id="firstName"
+                              placeholder="John"
+                              value={formData.firstName}
+                              onChange={(e) => handleInputChange("firstName", e.target.value)}
+                              required
+                              className="mt-1 border-input bg-muted/30 rounded-lg h-12"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="lastName" className="text-sm font-medium">
+                              Last Name *
+                            </Label>
+                            <Input
+                              id="lastName"
+                              placeholder="Doe"
+                              value={formData.lastName}
+                              onChange={(e) => handleInputChange("lastName", e.target.value)}
+                              required
+                              className="mt-1 border-input bg-muted/30 rounded-lg h-12"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <Label htmlFor="phone" className="text-sm font-medium">
+                            Phone/WhatsApp *
+                          </Label>
+                          <div className="relative">
+                            <Phone className="h-4 w-4 absolute left-3 top-4 text-muted-foreground" />
+                            <Input
+                              id="phone"
+                              type="tel"
+                              placeholder="+233 20 123 4567"
+                              value={formData.phone}
+                              onChange={(e) => handleInputChange("phone", e.target.value)}
+                              required
+                              className="mt-1 pl-10 border-input bg-muted/30 rounded-lg h-12"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <Label htmlFor="location" className="text-sm font-medium">
+                            Location *
+                          </Label>
+                          <div className="relative">
+                            <MapPin className="h-4 w-4 absolute left-3 top-4 text-muted-foreground" />
+                            <Input
+                              id="location"
+                              placeholder="e.g. Accra, Kumasi"
+                              value={formData.location}
+                              onChange={(e) => handleInputChange("location", e.target.value)}
+                              required
+                              className="mt-1 pl-10 border-input bg-muted/30 rounded-lg h-12"
+                            />
+                          </div>
+                        </div>
+                      </>
+                    )}
+
+                    <div>
+                      <Label htmlFor="email" className="text-sm font-medium">
+                        Email *
+                      </Label>
+                      <div className="relative">
+                        <Mail className="h-4 w-4 absolute left-3 top-4 text-muted-foreground" />
+                        <Input
+                          id="email"
+                          type="email"
+                          placeholder="seller@email.com"
+                          value={formData.email}
+                          onChange={(e) => handleInputChange("email", e.target.value)}
+                          required
+                          className="mt-1 pl-10 border-input bg-muted/30 rounded-lg h-12"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="password" className="text-sm font-medium">
+                        Password *
+                      </Label>
+                      <div className="relative">
+                        <Lock className="h-4 w-4 absolute left-3 top-4 text-muted-foreground" />
+                        <Input
+                          id="password"
+                          type={showPassword ? "text" : "password"}
+                          placeholder="••••••••"
+                          value={formData.password}
+                          onChange={(e) => handleInputChange("password", e.target.value)}
+                          required
+                          className="mt-1 pl-10 pr-10 border-input bg-muted/30 rounded-lg h-12"
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="absolute right-1 top-1 h-10 w-10 text-muted-foreground hover:text-foreground"
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        </Button>
+                      </div>
+                    </div>
+
                     <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      className="absolute right-1 top-1 h-8 w-8 text-muted-foreground hover:text-foreground"
-                      onClick={() => setShowPassword(!showPassword)}
+                      type="submit"
+                      className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground py-6 text-base font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                      disabled={loading}
                     >
-                      {showPassword ? (
-                        <EyeOff className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
+                      {loading ? "Please wait..." : isLogin ? "Sign In as Seller" : "Create Seller Account"}
                     </Button>
+                  </form>
+
+                  {/* Links */}
+                  <div className="text-center mt-6 space-y-3">
+                    <button
+                      type="button"
+                      onClick={() => setIsLogin(!isLogin)}
+                      className="text-secondary hover:text-secondary/80 hover:underline text-sm font-medium transition-colors duration-300"
+                    >
+                      {isLogin ? "Need a seller account? Register here" : "Already have an account? Sign in"}
+                    </button>
+                    
+                    {isLogin && (
+                      <div>
+                        <button
+                          type="button"
+                          onClick={() => setShowPasswordReset(true)}
+                          className="text-secondary hover:text-secondary/80 hover:underline text-sm transition-colors duration-300"
+                        >
+                          Forgot your password?
+                        </button>
+                      </div>
+                    )}
                   </div>
-                </div>
-
-                <Button
-                  type="submit"
-                  className="w-full bg-gradient-to-r from-orange-600 to-red-700 hover:from-orange-700 hover:to-red-800 py-3 sm:py-4 text-base sm:text-lg rounded-xl font-inter font-medium shadow-lg hover:shadow-xl transition-all duration-300"
-                  disabled={loading}
-                >
-                  {loading
-                    ? "Please wait..."
-                    : isLogin
-                    ? "Sign In as Seller"
-                    : "Create Seller Account"}
-                </Button>
-              </form>
-
-              <div className="text-center mt-6 sm:mt-8">
-                <button
-                  type="button"
-                  onClick={() => setIsLogin(!isLogin)}
-                  className="text-orange-600 hover:text-orange-800 hover:underline text-sm sm:text-base font-crimson transition-colors duration-300"
-                >
-                  {isLogin
-                    ? "Need a seller account? Register here"
-                    : "Already have an account? Sign in"}
-                </button>
-              </div>
-
-              {isLogin && (
-                <div className="text-center mt-4">
-                  <button
-                    type="button"
-                    onClick={() => setShowPasswordReset(true)}
-                    className="text-orange-600 hover:text-orange-800 hover:underline text-sm font-crimson transition-colors duration-300"
-                  >
-                    Forgot your password?
-                  </button>
-                </div>
+                </>
               )}
-            </>
-          )}
-        </Card>
+            </div>
+          </Card>
+        </div>
       </main>
-      <Footer />
     </div>
   );
 };

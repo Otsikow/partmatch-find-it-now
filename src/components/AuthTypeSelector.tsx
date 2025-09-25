@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Shield, ShoppingCart, Store, ArrowLeft, Home, LogOut } from "lucide-react";
@@ -36,7 +35,7 @@ const AuthTypeSelector = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background font-roboto">
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted font-roboto">
       <header className="relative bg-primary text-primary-foreground shadow-lg border-b border-primary/20">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-primary/5"></div>
         <div className="relative p-4 sm:p-6 flex items-center gap-3">
@@ -53,9 +52,6 @@ const AuthTypeSelector = () => {
                 className="h-6 w-auto sm:h-8 object-contain bg-primary-foreground rounded-lg p-1"
               />
             </Link>
-            <div className="min-w-0 flex-1">
-              {/* Header text removed to fix layout issues */}
-            </div>
           </div>
           <div className="flex items-center gap-2">
             <Button 
@@ -84,35 +80,37 @@ const AuthTypeSelector = () => {
 
       <main className="container mx-auto px-4 sm:px-6 py-8 sm:py-12 max-w-4xl">
         <div className="text-center mb-8 sm:mb-12">
-          <h2 className="page-header text-2xl sm:text-3xl lg:text-4xl mb-4 text-primary">
-            Choose your role to get started
+          <div className="bg-primary rounded-full p-4 w-fit mx-auto mb-6">
+            <Shield className="h-12 w-12 text-primary-foreground" />
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-foreground">
+            What would you like to do?
           </h2>
-          <p className="section-subtitle text-lg sm:text-xl max-w-2xl mx-auto mb-4">
-            Buyer or seller? Select the account type that fits you best so we can tailor your PartMatch experience.
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Choose an option below to get started
           </p>
         </div>
 
         <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
           {/* Buyer Card */}
           <Link to="/buyer-auth" className="block group">
-            <Card className="h-full p-6 sm:p-8 text-center bg-card hover:bg-card/80 transition-all duration-300 group-hover:shadow-xl group-hover:scale-105 border-2 border-secondary/30 group-hover:border-secondary/50 flex flex-col">
+            <Card className="h-full p-8 text-center bg-white hover:bg-white/80 transition-all duration-300 group-hover:shadow-2xl group-hover:scale-105 border-0 shadow-lg rounded-2xl flex flex-col">
               <div className="flex-grow">
-                <div className="bg-primary rounded-full p-4 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                  <ShoppingCart className="h-10 w-10 sm:h-12 sm:w-12 text-primary-foreground" />
+                <div className="bg-primary rounded-full p-6 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                  <ShoppingCart className="h-12 w-12 text-primary-foreground" />
                 </div>
-                <h3 className="section-title text-xl sm:text-2xl mb-3 text-secondary">
-                  Buyer
+                <h3 className="text-2xl font-bold mb-3 text-primary">
+                  Browse Car Parts
                 </h3>
-                <p className="card-description text-sm sm:text-base mb-6">
-                  Find and purchase car parts from verified sellers.
+                <p className="text-muted-foreground text-base mb-6">
+                  Search through available car parts from verified sellers
                 </p>
               </div>
               <div className="mt-auto">
-                <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm leading-tight mb-6">
-                  <span className="hidden md:inline">Sign In / Register as Buyer</span>
-                  <span className="md:hidden">Buyer Sign In</span>
+                <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-base font-medium mb-6">
+                  Start Browsing
                 </Button>
-                <div className="bg-secondary/10 rounded-lg p-4 text-sm text-secondary font-medium text-left">
+                <div className="bg-primary/5 rounded-lg p-4 text-sm text-primary font-medium text-left">
                   ✓ Browse available parts<br/>
                   ✓ Request specific parts<br/>
                   ✓ Connect with sellers<br/>
@@ -124,24 +122,23 @@ const AuthTypeSelector = () => {
 
           {/* Seller Card */}
           <Link to="/seller-auth" className="block group">
-            <Card className="h-full p-6 sm:p-8 text-center bg-card hover:bg-card/80 transition-all duration-300 group-hover:shadow-xl group-hover:scale-105 border-2 border-secondary/30 group-hover:border-secondary/50 flex flex-col">
+            <Card className="h-full p-8 text-center bg-white hover:bg-white/80 transition-all duration-300 group-hover:shadow-2xl group-hover:scale-105 border-0 shadow-lg rounded-2xl flex flex-col">
               <div className="flex-grow">
-                <div className="bg-secondary rounded-full p-4 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                  <Store className="h-10 w-10 sm:h-12 sm:w-12 text-secondary-foreground" />
+                <div className="bg-secondary rounded-full p-6 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                  <Store className="h-12 w-12 text-secondary-foreground" />
                 </div>
-                <h3 className="section-title text-xl sm:text-2xl mb-3 text-secondary">
-                  Seller
+                <h3 className="text-2xl font-bold mb-3 text-secondary">
+                  Sell Car Parts
                 </h3>
-                <p className="card-description text-sm sm:text-base mb-6">
-                  Sell and supply car parts to a wide audience of buyers.
+                <p className="text-muted-foreground text-base mb-6">
+                  List and manage your car parts inventory
                 </p>
               </div>
               <div className="mt-auto">
-                <Button className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm leading-tight mb-6">
-                  <span className="hidden md:inline">Sign In / Register as Seller</span>
-                  <span className="md:hidden">Seller Sign In</span>
+                <Button className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-base font-medium mb-6">
+                  Start Selling
                 </Button>
-                <div className="bg-secondary/10 rounded-lg p-4 text-sm text-secondary font-medium text-left">
+                <div className="bg-secondary/5 rounded-lg p-4 text-sm text-secondary font-medium text-left">
                   ✓ List your inventory<br/>
                   ✓ Respond to requests<br/>
                   ✓ Manage offers<br/>
@@ -153,23 +150,23 @@ const AuthTypeSelector = () => {
 
           {/* Guest Card */}
           <Link to="/guest-dashboard" className="block group">
-            <Card className="h-full p-6 sm:p-8 text-center bg-card hover:bg-card/80 transition-all duration-300 group-hover:shadow-xl group-hover:scale-105 border-2 border-accent/30 group-hover:border-accent/50 flex flex-col">
+            <Card className="h-full p-8 text-center bg-white hover:bg-white/80 transition-all duration-300 group-hover:shadow-2xl group-hover:scale-105 border-0 shadow-lg rounded-2xl flex flex-col">
               <div className="flex-grow">
-                <div className="bg-accent rounded-full p-4 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 sm:h-12 sm:w-12 text-accent-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 10-4.5 4.5M14 14l6-6m-4-3-1-1-4 4-1-1-4 4 1 1 4-4 1 1 4-4Z"/><path d="M20.5 16.5 18 14l-4 4h6v-1.5Z"/><path d="m3.5 3.5 1 1"/><path d="m14 18 4-4"/><path d="m21 21-6-6"/></svg>
+                <div className="bg-accent rounded-full p-6 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-accent-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
                 </div>
-                <h3 className="section-title text-xl sm:text-2xl mb-3 text-secondary">
-                  Guest
+                <h3 className="text-2xl font-bold mb-3 text-accent">
+                  Browse as Guest
                 </h3>
-                <p className="card-description text-sm sm:text-base mb-6">
-                  Browse the marketplace and see what’s available.
+                <p className="text-muted-foreground text-base mb-6">
+                  Explore the marketplace without creating an account
                 </p>
               </div>
               <div className="mt-auto">
-                <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground ui-button-text py-3 px-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-sm leading-tight mb-6">
+                <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground py-4 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 text-base font-medium mb-6">
                   Continue as Guest
                 </Button>
-                <div className="bg-accent/10 rounded-lg p-4 text-sm text-accent font-medium text-left">
+                <div className="bg-accent/5 rounded-lg p-4 text-sm text-accent font-medium text-left">
                   ✓ Explore car parts<br/>
                   ✓ View seller profiles<br/>
                   ✓ No account needed to browse<br/>
@@ -181,18 +178,18 @@ const AuthTypeSelector = () => {
         </div>
 
         <div className="text-center mt-8 sm:mt-12 space-y-4">
-          <div className="bg-card rounded-lg border p-6 max-w-md mx-auto">
+          <div className="bg-white rounded-2xl border-0 shadow-lg p-6 max-w-md mx-auto">
             <h3 className="font-semibold text-lg mb-3 text-foreground">Quick Phone Sign-up</h3>
             <p className="text-sm text-muted-foreground mb-4">
               Sign up or sign in instantly using your phone number with OTP verification
             </p>
             <Link to="/phone-auth">
-              <Button className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground">
+              <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-3 rounded-lg">
                 Sign In/Up with Phone
               </Button>
             </Link>
           </div>
-          <p className="body-text-small text-sm sm:text-base">
+          <p className="text-sm text-muted-foreground">
             Already have an account? Use the specific login page for your account type above.
           </p>
         </div>
