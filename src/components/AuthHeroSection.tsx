@@ -1,10 +1,14 @@
-import { ArrowLeft, Home, X, User } from "lucide-react";
+import { ArrowLeft, Home, X, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Logo from '@/components/Logo';
 
-const ProfileHeroSection = () => {
+interface AuthHeroSectionProps {
+  isLogin?: boolean;
+}
+
+const AuthHeroSection = ({ isLogin = true }: AuthHeroSectionProps) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -56,27 +60,33 @@ const ProfileHeroSection = () => {
         
         {/* Main Title */}
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 font-playfair drop-shadow-lg">
-          {t("profile.welcomeTitle", "Your Profile Dashboard")}
+          {isLogin 
+            ? t("auth.welcomeBack", "Welcome Back") 
+            : t("auth.joinToday", "Join PartMatch Today")
+          }
         </h1>
         
         {/* Subtitle */}
         <p className="text-lg md:text-xl text-white/90 mb-6 max-w-2xl mx-auto font-crimson drop-shadow-md">
-          {t("profile.subtitle", "Manage your account and explore PartMatch features")}
+          {isLogin 
+            ? t("auth.loginSubtitle", "Sign in to access your account and continue your journey")
+            : t("auth.signupSubtitle", "Create your account and start buying or selling car parts")
+          }
         </p>
 
         {/* Quick Info */}
         <div className="flex flex-wrap justify-center gap-4 text-sm text-white/80">
           <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full border border-white/20">
-            <User className="w-4 h-4" />
-            <span>Manage Profile</span>
+            <Shield className="w-4 h-4" />
+            <span>Secure Access</span>
           </div>
           <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full border border-white/20">
-            <span>📊</span>
-            <span>Track Activity</span>
+            <span>🚀</span>
+            <span>Quick Setup</span>
           </div>
           <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full border border-white/20">
-            <span>⚙️</span>
-            <span>Preferences</span>
+            <span>✨</span>
+            <span>Get Started</span>
           </div>
         </div>
       </div>
@@ -84,4 +94,4 @@ const ProfileHeroSection = () => {
   );
 };
 
-export default ProfileHeroSection;
+export default AuthHeroSection;
