@@ -9,7 +9,6 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import PWANotificationManager from "@/components/PWANotificationManager";
 import PartMatchHelpBot from "@/components/PartMatchHelpBot";
 import { LocationProvider } from "@/contexts/LocationContext";
-import { ImageEnhancementProvider } from "@/contexts/ImageEnhancementContext";
 import { useGeolocation } from "./hooks/useGeolocation";
 import { useIsMobile } from "./hooks/use-mobile";
 import { useTrackPresence } from "./hooks/useUserPresence";
@@ -71,9 +70,8 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <LocaleProvider>
-          <ImageEnhancementProvider>
-            <LocationProvider>
-              <ThemeProvider>
+          <LocationProvider>
+            <ThemeProvider>
               <TooltipProvider>
                 <Toaster />
                 <Sonner />
@@ -223,7 +221,6 @@ function App() {
               </TooltipProvider>
             </ThemeProvider>
           </LocationProvider>
-        </ImageEnhancementProvider>
         </LocaleProvider>
       </AuthProvider>
     </QueryClientProvider>
