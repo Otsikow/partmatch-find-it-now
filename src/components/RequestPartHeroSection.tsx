@@ -57,7 +57,7 @@ const RequestPartHeroSection = () => {
       <div className="relative z-10 container mx-auto px-4 py-12 text-center h-full flex flex-col justify-center">
         {/* Logo */}
         <Link to="/" className="flex justify-center mb-6">
-          <Logo className="h-12 w-auto object-contain filter brightness-0 invert" />
+          <Logo className="h-24 w-auto object-contain filter brightness-0 invert" />
         </Link>
         
         {/* Main Title */}
