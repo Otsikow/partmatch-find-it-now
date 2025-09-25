@@ -15,10 +15,10 @@ const RequestPartHeroSection = () => {
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: `url('/request-parts-hero.png')`,
-          filter: 'brightness(0.4)'
+          filter: 'brightness(0.7)'
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/95"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/40 to-background/60"></div>
       </div>
       
       {/* Back Arrow */}
