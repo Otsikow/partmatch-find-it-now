@@ -39,6 +39,6 @@ serve(async (_req) => {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (err) {
-    return new Response(String(err?.message ?? err), { status: 500 });
+    return new Response(String((err as any)?.message ?? err), { status: 500 });
   }
 });

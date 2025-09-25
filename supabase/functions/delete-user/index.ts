@@ -50,10 +50,10 @@ serve(async (req) => {
       
       requestBody = JSON.parse(bodyText);
       console.log('Parsed request body:', requestBody);
-    } catch (parseError) {
+    } catch (parseError: any) {
       console.error('Error parsing request body:', parseError);
       return new Response(
-        JSON.stringify({ error: 'Invalid JSON in request body: ' + parseError.message }),
+        JSON.stringify({ error: 'Invalid JSON in request body: ' + (parseError?.message || 'Parse error') }),
         {
           status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }

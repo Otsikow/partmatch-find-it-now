@@ -61,9 +61,9 @@ async function sendPushNotification(message: FCMMessage) {
       console.error('FCM send failed:', result);
       return { success: false, error: result.results?.[0]?.error || 'Unknown FCM error' };
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error sending push notification:', error);
-    return { success: false, error: error.message };
+    return { success: false, error: error?.message || 'Unknown error' };
   }
 }
 

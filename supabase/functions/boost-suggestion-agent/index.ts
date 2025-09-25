@@ -129,7 +129,7 @@ async function getListingWithAnalytics(listingId: string) {
 }
 
 async function evaluatePromotionSuggestions(listing: any) {
-  const suggestions = [];
+  const suggestions: any[] = [];
   const listingAge = Math.floor((new Date().getTime() - new Date(listing.created_at).getTime()) / (1000 * 60 * 60 * 24));
   const currency = listing.currency || 'GHS';
   const pricing = PROMOTION_PRICING[currency as keyof typeof PROMOTION_PRICING] || PROMOTION_PRICING.GHS;
