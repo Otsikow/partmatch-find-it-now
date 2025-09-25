@@ -61,26 +61,26 @@ const RequestPartHeroSection = () => {
         </Link>
         
         {/* Main Title */}
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4 font-playfair">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 font-playfair drop-shadow-lg">
           {t("requestPart.welcomeTitle", "Find Your Car Part")}
         </h1>
         
         {/* Subtitle */}
-        <p className="text-lg md:text-xl text-muted-foreground mb-6 max-w-2xl mx-auto font-crimson">
+        <p className="text-lg md:text-xl text-white/90 mb-6 max-w-2xl mx-auto font-crimson drop-shadow-md">
           {t("requestPart.subtitle", "Tell us what you need and we'll connect you with verified sellers")}
         </p>
 
         {/* Quick Info */}
-        <div className="flex flex-wrap justify-center gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2 bg-background/10 backdrop-blur-sm px-3 py-2 rounded-full">
+        <div className="flex flex-wrap justify-center gap-4 text-sm text-white/80">
+          <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full border border-white/20">
             <Search className="w-4 h-4" />
             <span>Free to Request</span>
           </div>
-          <div className="flex items-center gap-2 bg-background/10 backdrop-blur-sm px-3 py-2 rounded-full">
+          <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full border border-white/20">
             <span>✓</span>
             <span>Verified Sellers</span>
           </div>
-          <div className="flex items-center gap-2 bg-background/10 backdrop-blur-sm px-3 py-2 rounded-full">
+          <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full border border-white/20">
             <span>⚡</span>
             <span>Quick Response</span>
           </div>
