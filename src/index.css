@@ -7,8 +7,8 @@
 @layer base {
   :root {
     /* Professional Blue-Gray Palette */
-    --background: 210 11% 91%; /* #E6E9EC - Very light gray */
-    --foreground: 199 18% 18%; /* #263238 - Dark professional blue */
+    --background: 210 11% 91%; /* #E6E9EC - Light gray for main background */
+    --foreground: 199 18% 18%; /* #263238 - Dark blue for primary text */
 
     --card: 0 0% 100%;
     --card-foreground: 199 18% 18%;
@@ -16,42 +16,42 @@
     --popover: 0 0% 100%;
     --popover-foreground: 199 18% 18%;
 
-    --primary: 199 18% 46%; /* #607D8B - Muted blue-gray */
+    --primary: 199 18% 18%; /* #263238 - Dark blue for primary buttons */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 11% 96%;
-    --secondary-foreground: 199 18% 18%;
+    --secondary: 199 18% 46%; /* #607D8B - Blue-gray for headers/details */
+    --secondary-foreground: 0 0% 100%;
 
     --muted: 210 11% 96%;
-    --muted-foreground: 199 18% 60%;
+    --muted-foreground: 199 18% 46%; /* Blue-gray for subtle text */
 
-    --accent: 199 18% 65%;
-    --accent-foreground: 199 18% 18%;
+    --accent: 199 18% 46%; /* Blue-gray for accents */
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 210 11% 85%;
     --input: 210 11% 85%;
-    --ring: 199 18% 46%;
+    --ring: 199 18% 18%; /* Dark blue for focus rings */
 
     /* Navigation colors */
     --nav-background: 0 0% 100%;
-    --nav-foreground: 199 18% 18%;
-    --nav-muted: 199 18% 60%;
-    --nav-accent: 199 18% 46%;
-    --nav-accent-hover: 199 18% 56%;
+    --nav-foreground: 199 18% 18%; /* Dark blue for nav text */
+    --nav-muted: 199 18% 46%; /* Blue-gray for muted nav items */
+    --nav-accent: 199 18% 18%; /* Dark blue for active nav */
+    --nav-accent-hover: 199 18% 46%; /* Blue-gray for hover */
 
     /* Hero section colors */
-    --hero-background: 210 11% 91%;
-    --hero-accent: 199 18% 65%;
-    --hero-gradient-start: 199 18% 96%;
-    --hero-gradient-end: 210 11% 96%;
+    --hero-background: 210 11% 91%; /* Light gray background */
+    --hero-accent: 199 18% 46%; /* Blue-gray for accents */
+    --hero-gradient-start: 210 11% 96%;
+    --hero-gradient-end: 210 11% 91%;
 
     /* Modern gradient backgrounds */
-    --gradient-primary: 262 83% 58%;
-    --gradient-secondary: 216 92% 79%;
-    --gradient-accent: 283 100% 94%;
+    --gradient-primary: 199 18% 18%; /* Dark blue */
+    --gradient-secondary: 199 18% 46%; /* Blue-gray */
+    --gradient-accent: 210 11% 91%; /* Light gray */
     --gradient-warm: 45 100% 70%;
     --gradient-cool: 200 100% 70%;
 
@@ -174,21 +174,21 @@
 @layer components {
   /* Brand Typography */
   .brand-title {
-    @apply font-playfair font-bold bg-gradient-to-r from-red-600 to-green-700 bg-clip-text text-transparent;
+    @apply font-playfair font-bold text-primary; /* Dark blue for brand title */
   }
   
   /* Page Headers */
   .page-header {
-    @apply font-playfair font-bold text-foreground text-2xl sm:text-3xl md:text-4xl;
+    @apply font-playfair font-bold text-secondary text-2xl sm:text-3xl md:text-4xl; /* Blue-gray for headers */
   }
   
   .page-subheader {
-    @apply font-playfair font-semibold text-foreground text-xl sm:text-2xl;
+    @apply font-playfair font-semibold text-secondary text-xl sm:text-2xl; /* Blue-gray for subheaders */
   }
   
   /* Section Headers */
   .section-title {
-    @apply font-playfair font-bold text-foreground text-lg sm:text-xl md:text-2xl;
+    @apply font-playfair font-bold text-secondary text-lg sm:text-xl md:text-2xl; /* Blue-gray for section titles */
   }
   
   .section-subtitle {
