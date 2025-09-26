@@ -9,17 +9,23 @@ const ProfileHeroSection = () => {
   const { t } = useTranslation();
 
   return (
-    <div 
-      className="relative h-64 md:h-80 overflow-hidden bg-cover bg-center bg-no-repeat"
-      style={{
-        backgroundImage: `url('/profile-hero-bg.png')`
-      }}
-    >
-      {/* Dark overlay for better text readability */}
-      <div className="absolute inset-0 bg-black/30"></div>
+    <div className="relative h-64 md:h-80 overflow-hidden">
+      {/* Background Image using img tag for better reliability */}
+      <img 
+        src="/profile-hero-bg.png" 
+        alt="Profile background"
+        className="absolute inset-0 w-full h-full object-cover"
+        onError={(e) => {
+          console.log('Image failed to load');
+          e.currentTarget.style.display = 'none';
+        }}
+      />
       
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-background/20 via-transparent to-background/20"></div>
+      {/* Fallback gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-teal-600"></div>
+      
+      {/* Dark overlay for better text readability */}
+      <div className="absolute inset-0 bg-black/40"></div>
       
       {/* Back Arrow */}
       <Button
