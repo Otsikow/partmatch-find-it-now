@@ -9,17 +9,17 @@ const ProfileHeroSection = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="relative h-64 md:h-80 bg-gradient-to-br from-primary via-primary-glow to-primary overflow-hidden">
-      {/* Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url('/profile-hero-bg.png')`,
-          filter: 'brightness(0.8)'
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-background/40 via-background/20 to-background/40"></div>
-      </div>
+    <div 
+      className="relative h-64 md:h-80 overflow-hidden bg-cover bg-center bg-no-repeat"
+      style={{
+        backgroundImage: `url('/profile-hero-bg.png')`
+      }}
+    >
+      {/* Dark overlay for better text readability */}
+      <div className="absolute inset-0 bg-black/30"></div>
+      
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-background/20 via-transparent to-background/20"></div>
       
       {/* Back Arrow */}
       <Button
