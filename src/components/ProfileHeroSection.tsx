@@ -14,11 +14,11 @@ const ProfileHeroSection = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url('/profile-hero.png')`,
-          filter: 'brightness(0.7)'
+          backgroundImage: `url('/profile-hero-bg.png')`,
+          filter: 'brightness(0.8)'
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/40 to-background/60"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-background/40 via-background/20 to-background/40"></div>
       </div>
       
       {/* Back Arrow */}
