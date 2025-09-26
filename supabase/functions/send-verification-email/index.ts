@@ -141,7 +141,19 @@ const handler = async (req: Request): Promise<Response> => {
     if (!emailResponse.ok) {
       const errorData = await emailResponse.text();
       console.error('❌ Resend API error:', errorData);
-      throw new Error(`Failed to send email: ${emailResponse.status}`);
+      
+      // Parse the error to provide better messaging
+      let errorMessage = `Failed to send email: ${emailResponse.status}`;
+      try {
+        const parsedError = JSON.parse(errorData);
+        if (parsedError.message && parsedError.message.includes('verify a domain')) {
+          errorMessage = 'Email service is in testing mode. Please contact support for assistance.';
+        }
+      } catch (e) {
+        // Keep original error if parsing fails
+      }
+      
+      throw new Error(errorMessage);
     }
 
     const result = await emailResponse.json();

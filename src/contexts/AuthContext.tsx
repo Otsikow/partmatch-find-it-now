@@ -815,9 +815,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.log("AuthProvider: Password reset result:", { error });
 
       if (error) {
+        let errorMessage = error.message;
+        
+        // Provide better error messages for common issues
+        if (error.message.includes("hook: 500") || error.message.includes("testing mode")) {
+          errorMessage = "Password reset is temporarily unavailable. Please contact support for assistance.";
+        } else if (error.message.includes("rate limit")) {
+          errorMessage = "Too many password reset attempts. Please wait before trying again.";
+        } else if (error.message.includes("User not found")) {
+          errorMessage = "No account found with this email address.";
+        }
+        
         toast({
           title: "Password Reset Error",
-          description: error.message,
+          description: errorMessage,
           variant: "destructive",
         });
       } else {
