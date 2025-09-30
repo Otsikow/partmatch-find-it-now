@@ -61,7 +61,7 @@ This email was sent from the PartMatch contact form.
   `.trim();
 
   const emailData = {
-    from: 'onboarding@resend.dev',
+    from: 'info@partmatchgh.com',
     to: 'support@partmatchgh.com',
     subject: `Contact Form: ${formData.subject}`,
     text: emailContent,

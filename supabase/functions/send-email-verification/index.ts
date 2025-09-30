@@ -80,7 +80,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send email via Resend
     const { data, error } = await resend.emails.send({
-      from: 'PartMatch <onboarding@resend.dev>',
+      from: 'PartMatch <info@partmatchgh.com>',
       to: [email],
       subject: 'Welcome to PartMatch - Verify Your Email',
       html: emailContent,
