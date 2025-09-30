@@ -27,7 +27,7 @@ const BrowsePartsHeroSection = ({ onQuickSearch }: BrowsePartsHeroSectionProps) 
           backgroundImage: `url('/brake-hero-image.png')`,
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/95"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/40 to-background/60"></div>
       </div>
       
       {/* Back Arrow */}
