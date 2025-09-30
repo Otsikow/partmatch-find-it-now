@@ -48,7 +48,7 @@ const BrowsePartsHeroSection = ({ onQuickSearch }: BrowsePartsHeroSectionProps) 
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-foreground via-foreground/90 to-foreground/80 bg-clip-text text-transparent">
               Browse Premium Car Parts
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-foreground/90 max-w-2xl mx-auto">
               Discover high-quality automotive parts from verified sellers. Find exactly what you need with our advanced search and filtering system.
             </p>
           </div>
