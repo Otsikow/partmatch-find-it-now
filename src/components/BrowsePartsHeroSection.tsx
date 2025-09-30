@@ -74,15 +74,15 @@ const BrowsePartsHeroSection = ({ onQuickSearch }: BrowsePartsHeroSectionProps) 
 
           {/* Quick Stats */}
           <div className="flex flex-wrap justify-center gap-6 pt-4">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2 text-sm text-foreground/80">
               <Package className="h-4 w-4 text-primary" />
               <span className="font-medium">10,000+ Parts</span>
             </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2 text-sm text-foreground/80">
               <Filter className="h-4 w-4 text-primary" />
               <span className="font-medium">Advanced Filters</span>
             </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2 text-sm text-foreground/80">
               <Search className="h-4 w-4 text-primary" />
               <span className="font-medium">Smart Search</span>
             </div>
