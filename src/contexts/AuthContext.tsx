@@ -274,15 +274,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const redirectUrl = `${window.location.origin}/auth?verified=true`;
 
     try {
-      // Test Supabase connectivity first
-      console.log("AuthProvider: Testing Supabase connectivity...");
-      const { data: testData, error: testError } = await supabase
-        .from("profiles")
-        .select("count")
-        .limit(1);
-
       console.log("AuthProvider: Attempting Supabase signup...");
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -290,6 +283,45 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           data: finalUserData,
         },
       });
+
+      console.log("AuthProvider: SignUp result:", { data, error });
+
+      if (data?.user && !data.user.email_confirmed_at) {
+        // User created but email not confirmed yet
+        console.log("AuthProvider: User created, sending verification email...");
+        
+        // Send verification email using our custom edge function
+        try {
+          const { error: emailError } = await supabase.functions.invoke('send-email-verification', {
+            body: {
+              email: email,
+              firstName: finalUserData.first_name,
+              redirectUrl: window.location.origin,
+            }
+          });
+
+          if (emailError) {
+            console.error("AuthProvider: Error sending verification email:", emailError);
+            toast({
+              title: "Account Created",
+              description: "Your account has been created, but there was an issue sending the verification email. Please try resending it from the sign-in page.",
+              variant: "destructive",
+            });
+          } else {
+            console.log("AuthProvider: Verification email sent successfully");
+            toast({
+              title: "Account Created Successfully!",
+              description: "Please check your email and click the verification link to complete your registration.",
+            });
+          }
+        } catch (emailError) {
+          console.error("AuthProvider: Exception sending verification email:", emailError);
+          toast({
+            title: "Account Created",
+            description: "Your account has been created. You can sign in once your email is verified using the link on the sign-in page.",
+          });
+        }
+      }
 
       console.log("AuthProvider: SignUp result:", { error });
       console.log(
