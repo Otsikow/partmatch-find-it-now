@@ -82,7 +82,7 @@ const AuthTypeSelector = () => {
         {/* Hero Section with Image */}
         <section className="relative h-64 md:h-80 overflow-hidden">
           <img 
-            src="/auth-hero-bg.png" 
+            src="/auth-hero-car-parts.png" 
             alt="Security authentication"
             className="w-full h-full object-cover"
           />
