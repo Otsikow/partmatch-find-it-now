@@ -40,8 +40,9 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error('Email service not configured');
     }
 
-    // Build the verification URL
-    const verificationUrl = `${email_data.site_url}/auth/v1/verify?token=${email_data.token_hash}&type=${email_data.email_action_type}&redirect_to=${encodeURIComponent(email_data.redirect_to)}`;
+    // Build the verification URL - use Supabase URL for auth endpoint
+    const supabaseUrl = Deno.env.get('SUPABASE_URL') || '';
+    const verificationUrl = `${supabaseUrl}/auth/v1/verify?token=${email_data.token_hash}&type=${email_data.email_action_type}&redirect_to=${encodeURIComponent(email_data.redirect_to)}`;
     
     console.log('🔗 Verification URL generated:', verificationUrl);
 
@@ -61,7 +62,7 @@ const handler = async (req: Request): Promise<Response> => {
           <div style="background: #f8fafc; padding: 30px; border-radius: 8px; margin-bottom: 30px;">
             <h2 style="color: #2d3748; font-size: 20px; margin: 0 0 15px 0;">Almost There!</h2>
             <p style="color: #4a5568; font-size: 16px; line-height: 1.5; margin: 0 0 20px 0;">
-              Thank you for joining PartMatch, Ghana's premier car parts marketplace. To complete your registration and start buying or selling car parts, please verify your email address.
+              Thank you for joining PartMatch, your premier car parts marketplace. To complete your registration and start buying or selling car parts, please verify your email address.
             </p>
             
             <div style="text-align: center; margin: 30px 0;">
