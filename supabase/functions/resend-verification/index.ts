@@ -42,12 +42,16 @@ const handler = async (req: Request): Promise<Response> => {
 
     const resend = new Resend(resendApiKey);
 
+    // Get the origin from the request or use the production URL
+    const origin = req.headers.get('origin') || 'https://www.partmatchgh.com';
+    console.log('🌐 Using origin for redirect:', origin);
+
     // Generate a proper verification link using Supabase admin API
     const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
       type: 'signup',
       email: email,
       options: {
-        redirectTo: `${Deno.env.get('SUPABASE_URL')?.replace('.supabase.co', '.com')}/auth?verified=true`,
+        redirectTo: `${origin}/auth`,
       },
     });
     

@@ -45,12 +45,16 @@ const handler = async (req: Request): Promise<Response> => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
+    // Get the origin from the request or use the provided redirectUrl
+    const origin = redirectUrl || req.headers.get('origin') || 'https://www.partmatchgh.com';
+    console.log('🌐 Using origin for redirect:', origin);
+
     // Generate a proper verification link using Supabase admin API
     const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
       type: 'signup',
       email: email,
       options: {
-        redirectTo: `${redirectUrl || window.location.origin}/auth?verified=true`,
+        redirectTo: `${origin}/auth`,
       },
     });
     
