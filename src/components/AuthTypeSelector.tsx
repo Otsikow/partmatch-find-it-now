@@ -76,6 +76,8 @@ const AuthTypeSelector = () => {
             src="/auth-hero-car-parts.png" 
             alt="Security authentication"
             className="w-full h-full object-cover"
+            loading="eager"
+            fetchPriority="high"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/60"></div>
           <div className="absolute inset-0 flex items-center justify-center text-center">

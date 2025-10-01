@@ -10,9 +10,12 @@ const Auth = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted font-roboto relative overflow-hidden">
       {/* Hero Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
-        style={{ backgroundImage: "url('./auth-hero-car-parts.png')" }}
+      <img 
+        src="/auth-hero-car-parts.png" 
+        alt="Authentication background"
+        className="absolute inset-0 w-full h-full object-cover opacity-30"
+        loading="eager"
+        fetchPriority="high"
       />
       <div className="absolute inset-0 bg-gradient-to-br from-background/80 via-background/60 to-muted/80" />
       <div className="relative z-10">

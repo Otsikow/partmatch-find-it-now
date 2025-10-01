@@ -15,6 +15,8 @@ const ProfileHeroSection = () => {
         src="/profile-hero-bg.png" 
         alt="Profile background"
         className="absolute inset-0 w-full h-full object-cover"
+        loading="eager"
+        fetchPriority="high"
         onError={(e) => {
           console.log('Image failed to load');
           e.currentTarget.style.display = 'none';

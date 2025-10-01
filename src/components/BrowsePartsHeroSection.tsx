@@ -21,14 +21,14 @@ const BrowsePartsHeroSection = ({ onQuickSearch }: BrowsePartsHeroSectionProps) 
   return (
     <div className="relative min-h-[40vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-muted/50 to-background">
       {/* Hero Image with Overlay */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url('/brake-hero-image.png')`,
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/40 to-background/60"></div>
-      </div>
+      <img 
+        src="/brake-hero-image.png" 
+        alt="Browse car parts"
+        className="absolute inset-0 w-full h-full object-cover"
+        loading="eager"
+        fetchPriority="high"
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/40 to-background/60"></div>
       
       {/* Back Arrow */}
       <Button

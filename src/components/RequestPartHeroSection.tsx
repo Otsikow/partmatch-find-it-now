@@ -11,15 +11,14 @@ const RequestPartHeroSection = () => {
   return (
     <div className="relative h-64 md:h-80 bg-gradient-to-br from-primary via-primary-glow to-primary overflow-hidden">
       {/* Background Image */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url('/request-parts-hero.png')`,
-          filter: 'brightness(0.7)'
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/40 to-background/60"></div>
-      </div>
+      <img 
+        src="/request-parts-hero.png" 
+        alt="Request car parts"
+        className="absolute inset-0 w-full h-full object-cover brightness-[0.7]"
+        loading="eager"
+        fetchPriority="high"
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/40 to-background/60"></div>
       
       {/* Back Arrow */}
       <Button
