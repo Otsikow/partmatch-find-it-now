@@ -1,14 +1,15 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.50.2';
+import { Resend } from "npm:resend@4.0.0";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const supabase = createClient(
+const supabaseAdmin = createClient(
   Deno.env.get('SUPABASE_URL') ?? '',
-  Deno.env.get('SUPABASE_ANON_KEY') ?? ''
+  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
 );
 
 interface ResendRequest {
@@ -32,35 +33,93 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log('📧 Resending verification for email:', email);
 
-    // Use Supabase's resend method
-    const { error } = await supabase.auth.resend({
+    const resendApiKey = Deno.env.get('RESEND_API_KEY');
+    
+    if (!resendApiKey) {
+      console.error('❌ RESEND_API_KEY not found');
+      throw new Error('Email service not configured');
+    }
+
+    const resend = new Resend(resendApiKey);
+
+    // Generate a proper verification link using Supabase admin API
+    const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
       type: 'signup',
       email: email,
       options: {
-        emailRedirectTo: `${Deno.env.get('SUPABASE_URL')?.replace('supabase.co', 'partmatch.app')}/auth?verified=true`,
+        redirectTo: `${Deno.env.get('SUPABASE_URL')?.replace('.supabase.co', '.com')}/auth?verified=true`,
       },
+    });
+    
+    if (linkError) {
+      console.error('❌ Error generating verification link:', linkError);
+      
+      // Handle specific error cases
+      if (linkError.message.includes('Email not found') || linkError.message.includes('User not found')) {
+        throw new Error('No account found with this email address. Please sign up first.');
+      } else if (linkError.message.includes('Email already confirmed')) {
+        throw new Error('This email address is already verified. You can sign in directly.');
+      }
+      
+      throw new Error(`Failed to generate verification link: ${linkError.message}`);
+    }
+
+    const verificationUrl = linkData.properties.action_link;
+
+    // Send email via Resend
+    const emailContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="text-align: center; margin-bottom: 40px;">
+          <h1 style="color: #4F7FE6; font-size: 28px; margin: 0;">Verify Your PartMatch Email</h1>
+          <p style="color: #666; font-size: 16px; margin: 10px 0 0 0;">Click below to verify your account</p>
+        </div>
+        
+        <div style="background: #f8fafc; padding: 30px; border-radius: 8px; margin-bottom: 30px;">
+          <h2 style="color: #2d3748; font-size: 20px; margin: 0 0 15px 0;">Email Verification</h2>
+          <p style="color: #4a5568; font-size: 16px; line-height: 1.5; margin: 0 0 20px 0;">
+            Please verify your email address to complete your PartMatch registration and start buying or selling car parts.
+          </p>
+          
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${verificationUrl}" 
+               style="background: #4F7FE6; color: white; padding: 14px 30px; text-decoration: none; border-radius: 6px; font-size: 16px; font-weight: 600; display: inline-block;">
+              Verify Email Address
+            </a>
+          </div>
+          
+          <p style="color: #718096; font-size: 14px; margin: 20px 0 0 0;">
+            If the button doesn't work, copy and paste this link into your browser:<br>
+            <a href="${verificationUrl}" style="color: #4F7FE6; word-break: break-all;">${verificationUrl}</a>
+          </p>
+        </div>
+        
+        <div style="text-align: center; color: #9ca3af; font-size: 14px;">
+          <p>This verification link will expire in 24 hours.</p>
+          <p>If you didn't request this, you can safely ignore this email.</p>
+          <hr style="margin: 20px 0; border: none; border-top: 1px solid #e5e7eb;">
+          <p>© 2024 PartMatch. All rights reserved.</p>
+        </div>
+      </div>
+    `;
+
+    const { data, error } = await resend.emails.send({
+      from: 'PartMatch <info@partmatchgh.com>',
+      to: [email],
+      subject: 'Verify Your PartMatch Email',
+      html: emailContent,
     });
 
     if (error) {
-      console.error('❌ Failed to resend verification:', error);
-      
-      // Handle specific error cases
-      if (error.message.includes('Email not found') || error.message.includes('User not found')) {
-        throw new Error('No account found with this email address. Please sign up first.');
-      } else if (error.message.includes('Email already confirmed')) {
-        throw new Error('This email address is already verified. You can sign in directly.');
-      } else if (error.message.includes('Too many requests')) {
-        throw new Error('Too many requests. Please wait a few minutes before requesting another verification email.');
-      }
-      
-      throw new Error(`Failed to resend verification email: ${error.message}`);
+      console.error('❌ Resend API error:', error);
+      throw new Error(`Failed to send email: ${error.message}`);
     }
 
-    console.log('✅ Verification email resent successfully');
+    console.log('✅ Verification email resent successfully:', data);
 
     return new Response(JSON.stringify({ 
       success: true, 
-      message: 'Verification email sent successfully. Please check your inbox and spam folder.' 
+      message: 'Verification email sent successfully. Please check your inbox and spam folder.',
+      email_id: data?.id 
     }), {
       status: 200,
       headers: {

@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.50.2';
 import { Resend } from "npm:resend@4.0.0";
 
 const corsHeaders = {
@@ -38,10 +39,27 @@ const handler = async (req: Request): Promise<Response> => {
 
     const resend = new Resend(resendApiKey);
 
-    // Generate a simple verification token (in production, use a proper token)
-    const verificationToken = btoa(email + '-' + Date.now());
-    const baseUrl = redirectUrl || 'https://ytgmzhevgcmvevuwkocz.supabase.co';
-    const verificationUrl = `${baseUrl}/email-verification?token=${verificationToken}&email=${encodeURIComponent(email)}&verified=true`;
+    // Create Supabase admin client to generate proper verification link
+    const supabaseAdmin = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    );
+
+    // Generate a proper verification link using Supabase admin API
+    const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
+      type: 'signup',
+      email: email,
+      options: {
+        redirectTo: `${redirectUrl || window.location.origin}/auth?verified=true`,
+      },
+    });
+    
+    if (linkError || !linkData) {
+      console.error('❌ Error generating verification link:', linkError);
+      throw new Error('Failed to generate verification link');
+    }
+
+    const verificationUrl = linkData.properties.action_link;
 
     const emailContent = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
@@ -53,7 +71,7 @@ const handler = async (req: Request): Promise<Response> => {
         <div style="background: #f8fafc; padding: 30px; border-radius: 8px; margin-bottom: 30px;">
           <h2 style="color: #2d3748; font-size: 20px; margin: 0 0 15px 0;">Almost There${firstName ? ', ' + firstName : ''}!</h2>
           <p style="color: #4a5568; font-size: 16px; line-height: 1.5; margin: 0 0 20px 0;">
-            Thank you for joining PartMatch, Ghana's premier car parts marketplace. To complete your registration and start buying or selling car parts, please verify your email address.
+            Thank you for joining PartMatch, your premier car parts marketplace. To complete your registration and start buying or selling car parts, please verify your email address.
           </p>
           
           <div style="text-align: center; margin: 30px 0;">
