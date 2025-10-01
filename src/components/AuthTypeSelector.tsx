@@ -106,23 +106,23 @@ const AuthTypeSelector = () => {
           <div className="grid sm:grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
             {/* Buyer Card - Blue Theme */}
             <Link to="/buyer-auth" className="block group">
-              <Card className="h-full p-8 text-center bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-150 transition-all duration-300 group-hover:shadow-2xl group-hover:scale-105 border-0 shadow-lg rounded-2xl flex flex-col">
+              <Card className="h-full p-8 text-center bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/50 dark:to-blue-900/30 hover:from-blue-100 hover:to-blue-150 dark:hover:from-blue-900/60 dark:hover:to-blue-800/40 transition-all duration-300 group-hover:shadow-2xl group-hover:scale-105 border-0 shadow-lg rounded-2xl flex flex-col">
                 <div className="flex-grow">
-                  <div className="bg-blue-500 rounded-full p-6 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                  <div className="bg-blue-500 dark:bg-blue-600 rounded-full p-6 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
                     <ShoppingCart className="h-12 w-12 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold mb-3 text-blue-600">
+                  <h3 className="text-2xl font-bold mb-3 text-blue-600 dark:text-blue-400">
                     Browse Car Parts
                   </h3>
-                  <p className="text-gray-600 text-base mb-6">
+                  <p className="text-gray-600 dark:text-gray-300 text-base mb-6">
                     Search through available car parts from verified sellers
                   </p>
                 </div>
                 <div className="mt-auto">
-                  <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base font-medium mb-6">
+                  <Button className="w-full bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base font-medium mb-6">
                     Start Browsing
                   </Button>
-                  <div className="bg-blue-500/10 rounded-lg p-4 text-sm text-blue-600 font-medium text-left">
+                  <div className="bg-blue-500/10 dark:bg-blue-500/20 rounded-lg p-4 text-sm text-blue-600 dark:text-blue-300 font-medium text-left">
                     ✓ Browse available parts<br/>
                     ✓ Request specific parts<br/>
                     ✓ Connect with sellers<br/>
@@ -134,23 +134,23 @@ const AuthTypeSelector = () => {
 
             {/* Seller Card - Orange Theme */}
             <Link to="/seller-auth" className="block group">
-              <Card className="h-full p-8 text-center bg-gradient-to-br from-orange-50 to-orange-100 hover:from-orange-100 hover:to-orange-150 transition-all duration-300 group-hover:shadow-2xl group-hover:scale-105 border-0 shadow-lg rounded-2xl flex flex-col">
+              <Card className="h-full p-8 text-center bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/50 dark:to-orange-900/30 hover:from-orange-100 hover:to-orange-150 dark:hover:from-orange-900/60 dark:hover:to-orange-800/40 transition-all duration-300 group-hover:shadow-2xl group-hover:scale-105 border-0 shadow-lg rounded-2xl flex flex-col">
                 <div className="flex-grow">
-                  <div className="bg-orange-500 rounded-full p-6 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                  <div className="bg-orange-500 dark:bg-orange-600 rounded-full p-6 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
                     <Store className="h-12 w-12 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold mb-3 text-orange-600">
+                  <h3 className="text-2xl font-bold mb-3 text-orange-600 dark:text-orange-400">
                     Sell Car Parts
                   </h3>
-                  <p className="text-gray-600 text-base mb-6">
+                  <p className="text-gray-600 dark:text-gray-300 text-base mb-6">
                     List and manage your car parts inventory
                   </p>
                 </div>
                 <div className="mt-auto">
-                  <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base font-medium mb-6">
+                  <Button className="w-full bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700 text-white py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base font-medium mb-6">
                     Start Selling
                   </Button>
-                  <div className="bg-orange-500/10 rounded-lg p-4 text-sm text-orange-600 font-medium text-left">
+                  <div className="bg-orange-500/10 dark:bg-orange-500/20 rounded-lg p-4 text-sm text-orange-600 dark:text-orange-300 font-medium text-left">
                     ✓ List your inventory<br/>
                     ✓ Respond to requests<br/>
                     ✓ Manage offers<br/>
@@ -162,23 +162,23 @@ const AuthTypeSelector = () => {
 
             {/* Guest Card - Green Theme */}
             <Link to="/guest-dashboard" className="block group">
-              <Card className="h-full p-8 text-center bg-gradient-to-br from-green-50 to-green-100 hover:from-green-100 hover:to-green-150 transition-all duration-300 group-hover:shadow-2xl group-hover:scale-105 border-0 shadow-lg rounded-2xl flex flex-col">
+              <Card className="h-full p-8 text-center bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/50 dark:to-green-900/30 hover:from-green-100 hover:to-green-150 dark:hover:from-green-900/60 dark:hover:to-green-800/40 transition-all duration-300 group-hover:shadow-2xl group-hover:scale-105 border-0 shadow-lg rounded-2xl flex flex-col">
                 <div className="flex-grow">
-                  <div className="bg-green-500 rounded-full p-6 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+                  <div className="bg-green-500 dark:bg-green-600 rounded-full p-6 w-fit mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow duration-300">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
                   </div>
-                  <h3 className="text-2xl font-bold mb-3 text-green-600">
+                  <h3 className="text-2xl font-bold mb-3 text-green-600 dark:text-green-400">
                     Browse as Guest
                   </h3>
-                  <p className="text-gray-600 text-base mb-6">
+                  <p className="text-gray-600 dark:text-gray-300 text-base mb-6">
                     Explore the marketplace without creating an account
                   </p>
                 </div>
                 <div className="mt-auto">
-                  <Button className="w-full bg-green-500 hover:bg-green-600 text-white py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base font-medium mb-6">
+                  <Button className="w-full bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base font-medium mb-6">
                     Continue as Guest
                   </Button>
-                  <div className="bg-green-500/10 rounded-lg p-4 text-sm text-green-600 font-medium text-left">
+                  <div className="bg-green-500/10 dark:bg-green-500/20 rounded-lg p-4 text-sm text-green-600 dark:text-green-300 font-medium text-left">
                     ✓ Explore car parts<br/>
                     ✓ View seller profiles<br/>
                     ✓ No account needed to browse<br/>
@@ -190,9 +190,9 @@ const AuthTypeSelector = () => {
           </div>
 
           <div className="text-center mt-8 sm:mt-12 space-y-4">
-            <div className="bg-white rounded-2xl border-0 shadow-lg p-6 max-w-md mx-auto">
-              <h3 className="font-semibold text-lg mb-3 text-foreground">Quick Phone Sign-up</h3>
-              <p className="text-sm text-muted-foreground mb-4">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl border-0 shadow-lg p-6 max-w-md mx-auto">
+              <h3 className="font-semibold text-lg mb-3 text-foreground dark:text-gray-100">Quick Phone Sign-up</h3>
+              <p className="text-sm text-muted-foreground dark:text-gray-300 mb-4">
                 Sign up or sign in instantly using your phone number with OTP verification
               </p>
               <Link to="/phone-auth">
@@ -201,7 +201,7 @@ const AuthTypeSelector = () => {
                 </Button>
               </Link>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground dark:text-gray-300">
               Already have an account? Use the specific login page for your account type above.
             </p>
           </div>
