@@ -55,15 +55,6 @@ const AuthTypeSelector = () => {
               </Link>
             </div>
             <div className="flex items-center gap-2">
-              <Button 
-                onClick={handleDashboard}
-                variant="ghost" 
-                size="sm" 
-                className="hover:bg-primary-foreground/20 text-primary-foreground hover:text-primary-foreground"
-              >
-                <Home className="h-4 w-4 mr-2" />
-                Dashboard
-              </Button>
               {user && (
                 <Button 
                   onClick={handleSignOut}
