@@ -3,6 +3,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Star, Quote } from "lucide-react";
 import { Link } from "react-router-dom";
+import testimonialKwame from "@/assets/testimonial-kwame.jpg";
+import testimonialAmina from "@/assets/testimonial-amina.jpg";
+import testimonialSamuel from "@/assets/testimonial-samuel.jpg";
 
 const TestimonialsSection = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
@@ -12,19 +15,22 @@ const TestimonialsSection = () => {
       text: "Got a rare part in 48hrs from a trusted seller on PartMatch!",
       author: "Kwame",
       location: "Accra",
-      rating: 5
+      rating: 5,
+      image: testimonialKwame
     },
     {
       text: "Love the chat feature – made buying so easy!",
       author: "Amina",
       location: "Lagos",
-      rating: 5
+      rating: 5,
+      image: testimonialAmina
     },
     {
       text: "PartMatch helped me find parts for my vintage car. Amazing service!",
       author: "Samuel",
       location: "Kumasi",
-      rating: 5
+      rating: 5,
+      image: testimonialSamuel
     }
   ];
 
@@ -58,6 +64,14 @@ const TestimonialsSection = () => {
         <div className="max-w-4xl mx-auto">
           <Card className="bg-card border-0 shadow-xl relative overflow-hidden">
             <CardContent className="p-8 md:p-12 text-center">
+              <div className="flex justify-center mb-6">
+                <img 
+                  src={testimonials[currentTestimonial].image} 
+                  alt={testimonials[currentTestimonial].author}
+                  className="w-20 h-20 rounded-full object-cover border-4 border-primary/20 shadow-lg"
+                />
+              </div>
+              
               <Quote className="w-12 h-12 text-primary/20 mx-auto mb-6" />
               
               <blockquote className="text-xl md:text-2xl font-medium text-foreground mb-6 leading-relaxed">
