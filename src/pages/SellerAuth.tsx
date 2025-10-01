@@ -106,7 +106,7 @@ const SellerAuth = () => {
               <img 
                 src="/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png" 
                 alt="PartMatch Logo" 
-                className="h-6 w-auto sm:h-8 object-contain bg-secondary-foreground rounded-lg p-1"
+                className="h-6 w-auto sm:h-8 object-contain bg-secondary-foreground dark:bg-white rounded-lg p-1"
               />
             </Link>
           </div>

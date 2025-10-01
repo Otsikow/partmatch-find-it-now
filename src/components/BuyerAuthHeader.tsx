@@ -22,7 +22,7 @@ const BuyerAuthHeader = ({ isLogin, showPasswordReset }: BuyerAuthHeaderProps) =
             <img 
               src="/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png" 
               alt="PartMatch Logo" 
-              className="h-8 w-auto object-contain transition-all duration-300"
+              className="h-8 w-auto object-contain transition-all duration-300 dark:bg-white rounded-lg p-1"
             />
           </Link>
           <div>

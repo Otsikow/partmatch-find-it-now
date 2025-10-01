@@ -45,7 +45,7 @@ const MobileHomeContent = () => {
           <img 
             src="/lovable-uploads/cbdc7bde-3b9d-4c6a-a361-e5fcde8f5d7e.png" 
             alt="PartMatch Logo" 
-            className="h-44 w-auto mx-auto drop-shadow-lg" 
+            className="h-44 w-auto mx-auto drop-shadow-lg dark:brightness-0 dark:invert"
           />
         </Link>
         <div>
