@@ -485,18 +485,40 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         // Sign out the user immediately
         await supabase.auth.signOut();
 
-        const emailError = new Error(
-          "Please verify your email address before signing in. Check your inbox for a confirmation email."
-        );
+        // Try to resend verification email automatically
+        try {
+          console.log("AuthProvider: Automatically resending verification email");
+          await supabase.functions.invoke('resend-verification', {
+            body: { email: email }
+          });
+          
+          const emailError = new Error(
+            "EMAIL_NOT_VERIFIED|" + email // Special format to pass email to UI
+          );
 
-        toast({
-          title: "Email Verification Required",
-          description:
-            "Please verify your email address before signing in. Check your inbox for a confirmation email.",
-          variant: "destructive",
-        });
+          toast({
+            title: "Email Verification Required",
+            description:
+              "We've sent you a new verification email. Please check your inbox and spam folder, then click the link to verify your email.",
+          });
 
-        return { error: emailError };
+          return { error: emailError };
+        } catch (resendError) {
+          console.error("AuthProvider: Failed to resend verification:", resendError);
+          
+          const emailError = new Error(
+            "EMAIL_NOT_VERIFIED|" + email
+          );
+
+          toast({
+            title: "Email Verification Required",
+            description:
+              "Please verify your email address before signing in. Check your inbox for a confirmation email.",
+            variant: "destructive",
+          });
+
+          return { error: emailError };
+        }
       }
       if (userType && data?.user) {
         console.log("AuthProvider: Verifying user type for:", userType);

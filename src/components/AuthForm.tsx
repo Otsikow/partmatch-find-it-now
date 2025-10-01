@@ -61,7 +61,16 @@ const AuthForm = ({ isLogin, setIsLogin }: AuthFormProps) => {
     
     try {
       if (isLogin) {
-        await signIn(formData.email, formData.password);
+        const { error } = await signIn(formData.email, formData.password);
+        if (error && error.message.includes("EMAIL_NOT_VERIFIED")) {
+          // Extract email from error message
+          const email = error.message.split("|")[1] || formData.email;
+          toast({
+            title: "Verification Email Sent",
+            description: "We've sent you a new verification link. Please check your email (including spam folder) and click the link to verify your account.",
+            duration: 7000,
+          });
+        }
       } else {
         console.log('AuthForm: Signing up with user_type:', formData.userType);
         const { error } = await signUp(formData.email, formData.password, {
