@@ -478,48 +478,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return { error };
       }
 
-      // Check if email is confirmed
-      if (data?.user && !data.user.email_confirmed_at) {
-        console.log("AuthProvider: Email not confirmed, signing out user");
-
-        // Sign out the user immediately
-        await supabase.auth.signOut();
-
-        // Try to resend verification email automatically
-        try {
-          console.log("AuthProvider: Automatically resending verification email");
-          await supabase.functions.invoke('resend-verification', {
-            body: { email: email }
-          });
-          
-          const emailError = new Error(
-            "EMAIL_NOT_VERIFIED|" + email // Special format to pass email to UI
-          );
-
-          toast({
-            title: "Email Verification Required",
-            description:
-              "We've sent you a new verification email. Please check your inbox and spam folder, then click the link to verify your email.",
-          });
-
-          return { error: emailError };
-        } catch (resendError) {
-          console.error("AuthProvider: Failed to resend verification:", resendError);
-          
-          const emailError = new Error(
-            "EMAIL_NOT_VERIFIED|" + email
-          );
-
-          toast({
-            title: "Email Verification Required",
-            description:
-              "Please verify your email address before signing in. Check your inbox for a confirmation email.",
-            variant: "destructive",
-          });
-
-          return { error: emailError };
-        }
-      }
+      // Trust Supabase's authentication - if signInWithPassword succeeds,
+      // the user is authenticated. Supabase handles email verification requirements
+      // internally based on project settings.
+      console.log("AuthProvider: User authenticated successfully:", {
+        userId: data?.user?.id,
+        email: data?.user?.email,
+        emailConfirmed: data?.user?.email_confirmed_at
+      });
       if (userType && data?.user) {
         console.log("AuthProvider: Verifying user type for:", userType);
 

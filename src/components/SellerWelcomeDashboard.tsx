@@ -16,11 +16,11 @@ const SupplierWelcomeDashboard = ({ onGoToSellerTools }: SupplierWelcomeDashboar
         <div className="bg-gradient-to-br from-orange-500 to-red-600 rounded-full p-4 w-fit mx-auto mb-6 shadow-lg">
           <Package className="h-12 w-12 text-white" />
         </div>
-        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-playfair font-bold mb-4 bg-gradient-to-r from-orange-700 to-red-700 bg-clip-text text-transparent">
-          Seller Dashboard
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-playfair font-bold mb-2 bg-gradient-to-r from-orange-700 to-red-700 bg-clip-text text-transparent">
+          Welcome to Your Dashboard
         </h2>
         <p className="text-muted-foreground text-lg font-crimson">
-          What would you like to do?
+          What would you like to do today?
         </p>
       </div>
 
