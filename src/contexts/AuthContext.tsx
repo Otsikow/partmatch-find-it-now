@@ -96,8 +96,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const urlParams = new URLSearchParams(window.location.search);
     const accessToken = urlParams.get("access_token");
     const refreshToken = urlParams.get("refresh_token");
+    const urlType = urlParams.get("type");
 
-    if (accessToken && refreshToken) {
+    // Only set password reset mode if type=recovery is explicitly present
+    if (accessToken && refreshToken && urlType === "recovery") {
+      console.log("AuthProvider: Recovery tokens detected in URL");
       setIsPasswordReset(true);
       // Set the session from URL params
       supabase.auth.setSession({
