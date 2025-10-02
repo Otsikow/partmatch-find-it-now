@@ -186,7 +186,12 @@ const handler = async (req: Request): Promise<Response> => {
       }
 
       const supabaseUrl = Deno.env.get('SUPABASE_URL') || '';
-      const verificationUrl = `${supabaseUrl}/auth/v1/verify?token=${email_data.token_hash}&type=${email_data.email_action_type}&redirect_to=${encodeURIComponent(email_data.redirect_to)}`;
+      
+      // Add type=recovery to the redirect URL so it persists after Supabase redirect
+      const redirectUrl = new URL(email_data.redirect_to);
+      redirectUrl.searchParams.set('type', 'recovery');
+      
+      const verificationUrl = `${supabaseUrl}/auth/v1/verify?token=${email_data.token_hash}&type=${email_data.email_action_type}&redirect_to=${encodeURIComponent(redirectUrl.toString())}`;
       
       const emailContent = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
