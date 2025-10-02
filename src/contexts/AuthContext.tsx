@@ -92,32 +92,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     console.log("AuthProvider: Setting up auth state listener");
 
-    // CRITICAL: Check URL HASH (not query params) for password reset tokens
-    // Supabase puts recovery tokens in the hash fragment, not query params
-    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    const accessToken = hashParams.get("access_token");
-    const refreshToken = hashParams.get("refresh_token");
-    const urlType = hashParams.get("type");
-
-    // Store recovery mode in sessionStorage so it persists through redirects
-    if (accessToken && refreshToken && urlType === "recovery") {
-      console.log("AuthProvider: Recovery tokens detected in URL HASH - entering password reset mode");
-      sessionStorage.setItem("password_reset_mode", "true");
-      sessionStorage.setItem("recovery_access_token", accessToken);
-      sessionStorage.setItem("recovery_refresh_token", refreshToken);
-      setIsPasswordReset(true);
-      setUser(null);
-      setSession(null);
-      setLoading(false);
-      // DO NOT call setSession or allow Supabase to auto-login
-    } else if (sessionStorage.getItem("password_reset_mode") === "true") {
-      // Restore password reset mode if it was set
-      console.log("AuthProvider: Restoring password reset mode from sessionStorage");
-      setIsPasswordReset(true);
-      setUser(null);
-      setSession(null);
-      setLoading(false);
-    }
+    // Password reset via email link is disabled - users should change password in settings
+    // Clear any password reset mode that might have been set
+    sessionStorage.removeItem("password_reset_mode");
+    sessionStorage.removeItem("recovery_access_token");
+    sessionStorage.removeItem("recovery_refresh_token");
 
     // Set up auth state listener
     const {
@@ -128,70 +107,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         userEmail: session?.user?.email,
         userMetadata: session?.user?.user_metadata,
         emailConfirmed: session?.user?.email_confirmed_at,
-        isPasswordResetMode: sessionStorage.getItem("password_reset_mode") === "true",
       });
       
       // Debug: Check for auth errors
       if (!session && event === 'SIGNED_OUT') {
         console.log("AuthProvider: User signed out");
-        // Clear password reset mode on sign out
-        sessionStorage.removeItem("password_reset_mode");
       } else if (!session && event === 'TOKEN_REFRESHED') {
         console.error("AuthProvider: Token refresh failed - session is null");
       } else if (!session) {
         console.warn("AuthProvider: No session available for event:", event);
       }
 
-      // CRITICAL: Check if this SIGNED_IN is from a password recovery flow
-      // When user clicks recovery link, SIGNED_IN fires BEFORE PASSWORD_RECOVERY
-      const hashParams = new URLSearchParams(window.location.hash.substring(1));
-      const isRecoveryFlow = hashParams.get("type") === "recovery" || 
-                             sessionStorage.getItem("password_reset_mode") === "true";
-
-      if (event === "SIGNED_IN" && isRecoveryFlow) {
-        console.log("AuthProvider: SIGNED_IN from recovery link - entering password reset mode");
-        sessionStorage.setItem("password_reset_mode", "true");
-        setIsPasswordReset(true);
-        setUser(null); // Clear user to prevent dashboard redirect
-        setSession(null); // Clear session
-        setLoading(false);
-        return; // Don't process as normal login
-      }
-
-      // CRITICAL: Detect PASSWORD_RECOVERY event 
-      if (event === "PASSWORD_RECOVERY") {
-        console.log("AuthProvider: PASSWORD_RECOVERY event detected - staying in password reset mode");
-        sessionStorage.setItem("password_reset_mode", "true");
-        setIsPasswordReset(true);
-        setUser(null);
-        setSession(null);
-        setLoading(false);
-        return;
-      }
-
-      // Check if we're in password reset mode (from sessionStorage)
-      const inPasswordResetMode = sessionStorage.getItem("password_reset_mode") === "true";
+      // Password reset via email is disabled - ignore recovery events
+      // Users should change password in their dashboard settings
       
-      if (inPasswordResetMode) {
-        console.log("AuthProvider: In password reset mode - blocking normal auth flow");
-        setIsPasswordReset(true);
-        setUser(null); // Keep user null to prevent redirects
-        setSession(null); // Keep session null
-        setLoading(false);
-        return;
-      } else if (event === "SIGNED_IN" && window.location.search.includes('verified=true')) {
+      if (event === "SIGNED_IN" && window.location.search.includes('verified=true')) {
         // If user just verified their email, sign them out and redirect to login
         console.log("AuthProvider: Email verification detected, signing out for security");
         await supabase.auth.signOut();
         window.location.href = '/auth?verified=true';
         return;
-      } else if (event === "SIGNED_OUT") {
-        setIsPasswordReset(false);
-        setUserType(null);
-        setFirstName(null);
-        // Clear localStorage on sign out
-        localStorage.removeItem("userType");
-        sessionStorage.removeItem("password_reset_mode");
       }
 
       // Update session and user state
@@ -864,123 +799,36 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const resetPassword = async (email: string) => {
-    console.log("AuthProvider: Password reset attempt:", { email });
-
-    // Determine redirect URL based on current path
-    const isSellerAuth = window.location.pathname.includes("seller");
-    const isBuyerAuth = window.location.pathname.includes("buyer");
-    const redirectPath = isSellerAuth
-      ? "/seller-auth"
-      : isBuyerAuth
-      ? "/buyer-auth"
-      : "/buyer-auth";
-
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}${redirectPath}`,
-      });
-
-      console.log("AuthProvider: Password reset result:", { error });
-
-      if (error) {
-        let errorMessage = error.message;
-        
-        // Provide better error messages for common issues
-        if (error.message.includes("hook: 500") || error.message.includes("testing mode")) {
-          errorMessage = "Password reset is temporarily unavailable. Please contact support for assistance.";
-        } else if (error.message.includes("rate limit")) {
-          errorMessage = "Too many password reset attempts. Please wait before trying again.";
-        } else if (error.message.includes("User not found")) {
-          errorMessage = "No account found with this email address.";
-        }
-        
-        toast({
-          title: "Password Reset Error",
-          description: errorMessage,
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Password Reset Email Sent",
-          description:
-            "Please check your email for password reset instructions.",
-        });
+    // Password reset via email link is disabled
+    // Show a helpful message directing users to login and change password in settings
+    toast({
+      title: "Password Reset via Email Disabled",
+      description: "Please log in to your account and change your password in Settings → Profile.",
+      variant: "default",
+    });
+    
+    return { 
+      error: {
+        message: "Password reset via email is currently disabled. Please log in to your account and change your password in Settings → Profile.",
+        name: "PasswordResetDisabled"
       }
-
-      return { error };
-    } catch (error: any) {
-      console.error("AuthProvider: Password reset unexpected error:", error);
-      toast({
-        title: "Password Reset Error",
-        description: "An unexpected error occurred during password reset.",
-        variant: "destructive",
-      });
-      return { error };
-    }
+    };
   };
 
   const updatePassword = async (password: string) => {
-    console.log("AuthProvider: Password update attempt");
-
+    console.log("AuthProvider: Updating password for logged-in user");
+    
     try {
-      // Get current session (already established by Supabase from recovery link)
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        // Try to use stored recovery tokens as fallback
-        const accessToken = sessionStorage.getItem("recovery_access_token");
-        const refreshToken = sessionStorage.getItem("recovery_refresh_token");
-        
-        if (accessToken && refreshToken) {
-          await supabase.auth.setSession({
-            access_token: accessToken,
-            refresh_token: refreshToken,
-          });
-        } else {
-          throw new Error("No valid session found for password reset");
-        }
-      }
-
       const { error } = await supabase.auth.updateUser({
         password: password,
       });
 
-      console.log("AuthProvider: Password update result:", { error });
+      if (error) throw error;
 
-      if (error) {
-        toast({
-          title: "Password Update Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Password Updated Successfully",
-          description: "Your password has been updated successfully.",
-        });
-        setIsPasswordReset(false);
-        
-        // Clear password reset mode and recovery tokens from sessionStorage
-        sessionStorage.removeItem("password_reset_mode");
-        sessionStorage.removeItem("recovery_access_token");
-        sessionStorage.removeItem("recovery_refresh_token");
-        
-        // Clean up URL parameters after successful password reset
-        const url = new URL(window.location.href);
-        url.searchParams.delete('access_token');
-        url.searchParams.delete('refresh_token');
-        url.searchParams.delete('type');
-        window.history.replaceState({}, '', url.toString());
-      }
-
-      return { error };
+      console.log("AuthProvider: Password updated successfully");
+      return { error: null };
     } catch (error: any) {
-      console.error("AuthProvider: Password update unexpected error:", error);
-      toast({
-        title: "Password Update Error",
-        description: "An unexpected error occurred during password update.",
-        variant: "destructive",
-      });
+      console.error("Update password error:", error);
       return { error };
     }
   };

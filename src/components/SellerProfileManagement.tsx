@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import ProfilePhotoSection from "@/components/buyer/ProfilePhotoSection";
+import PasswordChangeSection from "@/components/buyer/PasswordChangeSection";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -579,6 +580,11 @@ const SellerProfileManagement = () => {
           </div>
         </CardContent>
       </Card>
+
+      <Separator />
+
+      {/* Password Change Section */}
+      <PasswordChangeSection />
     </div>
   );
 };
