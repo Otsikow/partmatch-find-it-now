@@ -92,21 +92,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     console.log("AuthProvider: Setting up auth state listener");
 
-    // Check URL for password reset
+    // Check URL for password reset FIRST before anything else
     const urlParams = new URLSearchParams(window.location.search);
     const accessToken = urlParams.get("access_token");
     const refreshToken = urlParams.get("refresh_token");
     const urlType = urlParams.get("type");
 
-    // Only set password reset mode if type=recovery is explicitly present
+    // Store recovery mode in sessionStorage so it persists through redirects
     if (accessToken && refreshToken && urlType === "recovery") {
-      console.log("AuthProvider: Recovery tokens detected in URL");
+      console.log("AuthProvider: Recovery tokens detected in URL - entering password reset mode");
+      sessionStorage.setItem("password_reset_mode", "true");
       setIsPasswordReset(true);
       // Set the session from URL params
       supabase.auth.setSession({
         access_token: accessToken,
         refresh_token: refreshToken,
       });
+    } else if (sessionStorage.getItem("password_reset_mode") === "true") {
+      // Restore password reset mode if it was set
+      console.log("AuthProvider: Restoring password reset mode from sessionStorage");
+      setIsPasswordReset(true);
     }
 
     // Set up auth state listener
@@ -118,26 +123,31 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         userEmail: session?.user?.email,
         userMetadata: session?.user?.user_metadata,
         emailConfirmed: session?.user?.email_confirmed_at,
+        isPasswordResetMode: sessionStorage.getItem("password_reset_mode") === "true",
       });
       
       // Debug: Check for auth errors
       if (!session && event === 'SIGNED_OUT') {
         console.log("AuthProvider: User signed out");
+        // Clear password reset mode on sign out
+        sessionStorage.removeItem("password_reset_mode");
       } else if (!session && event === 'TOKEN_REFRESHED') {
         console.error("AuthProvider: Token refresh failed - session is null");
       } else if (!session) {
         console.warn("AuthProvider: No session available for event:", event);
       }
 
-      // Check if this is a password recovery session
-      // Check both the event type AND the URL parameters for type=recovery
-      const urlParams = new URLSearchParams(window.location.search);
-      const urlType = urlParams.get("type");
-      const hasRecoveryTokens = urlParams.has("access_token") && urlParams.has("refresh_token");
+      // Check if we're in password reset mode (from sessionStorage)
+      const inPasswordResetMode = sessionStorage.getItem("password_reset_mode") === "true";
       
-      if (event === "PASSWORD_RECOVERY" || urlType === "recovery" || (event === "SIGNED_IN" && hasRecoveryTokens)) {
+      if (event === "PASSWORD_RECOVERY" || inPasswordResetMode) {
         console.log("AuthProvider: Password recovery session detected");
         setIsPasswordReset(true);
+        // Don't fetch profile or treat as normal login during password reset
+        setSession(session);
+        setUser(session?.user ?? null);
+        setLoading(false);
+        return;
       } else if (event === "SIGNED_IN" && window.location.search.includes('verified=true')) {
         // If user just verified their email, sign them out and redirect to login
         console.log("AuthProvider: Email verification detected, signing out for security");
@@ -150,6 +160,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setFirstName(null);
         // Clear localStorage on sign out
         localStorage.removeItem("userType");
+        sessionStorage.removeItem("password_reset_mode");
       }
 
       // Update session and user state
@@ -899,6 +910,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           description: "Your password has been updated successfully.",
         });
         setIsPasswordReset(false);
+        
+        // Clear password reset mode from sessionStorage
+        sessionStorage.removeItem("password_reset_mode");
         
         // Clean up URL parameters after successful password reset
         const url = new URL(window.location.href);
