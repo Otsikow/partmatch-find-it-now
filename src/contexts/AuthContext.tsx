@@ -253,11 +253,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       user_type: userData.user_type || "owner", // Default to 'owner'
     };
 
-    // Redirect to auth page after email verification to ensure secure login
+    // Redirect to auth page after email verification
     const redirectUrl = `${window.location.origin}/auth?verified=true`;
 
     try {
       console.log("AuthProvider: Attempting Supabase signup...");
+      
+      // Sign up with Supabase - this will trigger our custom email webhook
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -269,71 +271,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       console.log("AuthProvider: SignUp result:", { data, error });
 
-      if (data?.user && !data.user.email_confirmed_at) {
-        // User created but email not confirmed yet
-        console.log("AuthProvider: User created, sending verification email...");
-        
-        // Send verification email using our custom edge function
-        try {
-          const { error: emailError } = await supabase.functions.invoke('send-email-verification', {
-            body: {
-              email: email,
-              firstName: finalUserData.first_name,
-              redirectUrl: window.location.origin,
-            }
-          });
-
-          if (emailError) {
-            console.error("AuthProvider: Error sending verification email:", emailError);
-            toast({
-              title: "Account Created",
-              description: "Your account has been created, but there was an issue sending the verification email. Please try resending it from the sign-in page.",
-              variant: "destructive",
-            });
-          } else {
-            console.log("AuthProvider: Verification email sent successfully");
-            toast({
-              title: "Account Created Successfully!",
-              description: "Please check your email and click the verification link to complete your registration.",
-            });
-          }
-        } catch (emailError) {
-          console.error("AuthProvider: Exception sending verification email:", emailError);
-          toast({
-            title: "Account Created",
-            description: "Your account has been created. You can sign in once your email is verified using the link on the sign-in page.",
-          });
-        }
-      }
-
-      console.log("AuthProvider: SignUp result:", { error });
-      console.log(
-        "AuthProvider: Full error details:",
-        JSON.stringify(error, null, 2)
-      );
-
       if (error) {
+        // Handle signup errors immediately
         let errorMessage = error.message;
 
-        // Handle specific error cases with user-friendly messages
         if (error.message.includes("User already registered")) {
-          errorMessage =
-            "This email is already registered. Please use another email or try signing in.";
-        } else if (error.message.includes("Email not confirmed")) {
-          errorMessage =
-            "Please verify your email address before signing in. Check your inbox for a confirmation email.";
+          errorMessage = "This email is already registered. Please use another email or try signing in.";
         } else if (error.message.includes("Invalid email")) {
           errorMessage = "Please enter a valid email address.";
         } else if (error.message.includes("Weak password")) {
-          errorMessage =
-            "Password is too weak. Please choose a stronger password.";
-        } else if (error.message.includes("Database error saving new user")) {
-          console.error(
-            "AuthProvider: Database error during signup. Full error:",
-            error
-          );
-          errorMessage =
-            "Unable to create account due to a server error. Please try again in a moment.";
+          errorMessage = "Password is too weak. Please choose a stronger password.";
         }
 
         toast({
@@ -341,15 +288,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           description: errorMessage,
           variant: "destructive",
         });
-      } else {
+        
+        return { error };
+      }
+
+      // If user was created successfully, show success message
+      if (data?.user) {
+        console.log("AuthProvider: User created successfully, email confirmation pending");
+        
         toast({
           title: "Registration Successful!",
-          description:
-            "Please check your email and click the verification link before signing in.",
+          description: "Please check your email (including spam folder) and click the verification link to activate your account.",
+          duration: 7000,
         });
       }
 
-      return { error };
+      return { error: null };
     } catch (error: any) {
       console.error("AuthProvider: SignUp unexpected error:", error);
       console.error(

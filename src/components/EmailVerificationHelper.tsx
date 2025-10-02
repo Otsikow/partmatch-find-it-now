@@ -23,10 +23,21 @@ const EmailVerificationHelper: React.FC<EmailVerificationHelperProps> = ({
   const [canResend, setCanResend] = useState(true);
 
   const handleResendVerification = async () => {
-    if (!email) {
+    if (!email || !email.trim()) {
       toast({
         title: 'Email Required',
         description: 'Please enter your email address',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast({
+        title: 'Invalid Email',
+        description: 'Please enter a valid email address',
         variant: 'destructive',
       });
       return;
@@ -48,12 +59,14 @@ const EmailVerificationHelper: React.FC<EmailVerificationHelperProps> = ({
     setCanResend(false);
 
     try {
-      console.log('🔄 Resending verification email for:', email);
+      console.log('📧 Resending verification email for:', email);
       
       // Call our custom resend function
-      const { error } = await supabase.functions.invoke('resend-verification', {
+      const { data, error } = await supabase.functions.invoke('resend-verification', {
         body: { email }
       });
+
+      console.log('📬 Resend response:', { data, error });
 
       if (error) {
         console.error('❌ Resend verification error:', error);
@@ -62,9 +75,12 @@ const EmailVerificationHelper: React.FC<EmailVerificationHelperProps> = ({
 
       setLastSentTime(now);
       
+      console.log('✅ Verification email sent successfully');
+      
       toast({
         title: 'Verification Email Sent!',
-        description: 'Please check your inbox and spam folder for the verification email.',
+        description: 'Please check your inbox and spam folder. The email may take 2-3 minutes to arrive.',
+        duration: 7000,
       });
 
       if (onSuccess) {
@@ -81,12 +97,21 @@ const EmailVerificationHelper: React.FC<EmailVerificationHelperProps> = ({
       
       let errorMessage = 'Failed to resend verification email. Please try again.';
       
-      if (error.message.includes('not found')) {
+      if (error.message.includes('not found') || error.message.includes('No account')) {
         errorMessage = 'No account found with this email. Please sign up first.';
-      } else if (error.message.includes('already confirmed')) {
+      } else if (error.message.includes('already confirmed') || error.message.includes('already verified')) {
         errorMessage = 'Your email is already verified! You can sign in directly.';
-      } else if (error.message.includes('Too many requests')) {
+        toast({
+          title: 'Already Verified',
+          description: errorMessage,
+        });
+        setCanResend(true);
+        setIsLoading(false);
+        return;
+      } else if (error.message.includes('Too many requests') || error.message.includes('rate limit')) {
         errorMessage = 'Too many requests. Please wait a few minutes before trying again.';
+      } else if (error.message.includes('Email service not configured')) {
+        errorMessage = 'Email service is temporarily unavailable. Please contact support at info@partmatchgh.com';
       }
 
       toast({
@@ -163,10 +188,10 @@ const EmailVerificationHelper: React.FC<EmailVerificationHelperProps> = ({
         <div className="text-center text-sm text-muted-foreground">
           <p>Still having trouble? Contact support at:</p>
           <a 
-            href="mailto:support@partmatch.app" 
+            href="mailto:info@partmatchgh.com" 
             className="text-primary hover:underline"
           >
-            support@partmatch.app
+            info@partmatchgh.com
           </a>
         </div>
       </CardContent>
