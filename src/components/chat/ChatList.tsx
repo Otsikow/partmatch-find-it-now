@@ -153,6 +153,12 @@ const ChatList = ({ onChatSelect }: ChatListProps) => {
 
   // Group chats by other user (WhatsApp style)
   const groupedChats = chats.reduce((acc: { [key: string]: GroupedChat }, chat) => {
+    // Skip chats where the other user is null (profile doesn't exist)
+    if (!chat.other_user || !chat.other_user.id) {
+      console.warn('Chat has no other_user, skipping:', chat);
+      return acc;
+    }
+    
     const otherUserId = chat.other_user.id;
     
     if (!acc[otherUserId]) {
