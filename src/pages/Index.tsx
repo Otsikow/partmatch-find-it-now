@@ -20,7 +20,11 @@ const Index = () => {
       // Check if there's a state indicating explicit navigation
       const isExplicitNavigation = location.state?.explicitHomeNavigation;
       
-      if (!user || loading || hasRedirected || isExplicitNavigation) return;
+      // Don't redirect if in password reset mode
+      const urlParams = new URLSearchParams(window.location.search);
+      const isPasswordReset = urlParams.get("type") === "recovery" || sessionStorage.getItem("password_reset_mode") === "true";
+      
+      if (!user || loading || hasRedirected || isExplicitNavigation || isPasswordReset) return;
 
       try {
         console.log('Index: Checking authenticated user type for:', user.id);

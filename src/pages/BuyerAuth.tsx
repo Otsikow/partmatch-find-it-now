@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -26,6 +26,17 @@ const BuyerAuth = () => {
   
   const { signUp, signIn, isPasswordReset } = useAuth();
   const navigate = useNavigate();
+  
+  // Check if we're in password reset mode on mount
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlType = urlParams.get("type");
+    const inResetMode = urlType === "recovery" || sessionStorage.getItem("password_reset_mode") === "true";
+    
+    if (inResetMode && !isPasswordReset) {
+      sessionStorage.setItem("password_reset_mode", "true");
+    }
+  }, [isPasswordReset]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

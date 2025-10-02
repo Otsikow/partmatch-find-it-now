@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +15,17 @@ const AdminAuth = () => {
   const [showPasswordReset, setShowPasswordReset] = useState(false);
   const { isPasswordReset } = useAuth();
   const navigate = useNavigate();
+  
+  // Check if we're in password reset mode on mount
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlType = urlParams.get("type");
+    const inResetMode = urlType === "recovery" || sessionStorage.getItem("password_reset_mode") === "true";
+    
+    if (inResetMode && !isPasswordReset) {
+      sessionStorage.setItem("password_reset_mode", "true");
+    }
+  }, [isPasswordReset]);
 
   const handleBackToLogin = () => {
     setShowPasswordReset(false);
