@@ -137,15 +137,28 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         console.warn("AuthProvider: No session available for event:", event);
       }
 
+      // CRITICAL: Detect PASSWORD_RECOVERY event FIRST before anything else
+      if (event === "PASSWORD_RECOVERY") {
+        console.log("AuthProvider: PASSWORD_RECOVERY event detected - entering password reset mode");
+        sessionStorage.setItem("password_reset_mode", "true");
+        setIsPasswordReset(true);
+        setUser(null); // Clear user state to prevent dashboard redirect
+        setSession(null); // Clear session state
+        setLoading(false);
+        
+        // Sign out locally to clear the session Supabase auto-created
+        supabase.auth.signOut({ scope: 'local' });
+        return;
+      }
+
       // Check if we're in password reset mode (from sessionStorage)
       const inPasswordResetMode = sessionStorage.getItem("password_reset_mode") === "true";
       
-      if (event === "PASSWORD_RECOVERY" || inPasswordResetMode) {
-        console.log("AuthProvider: Password recovery session detected");
+      if (inPasswordResetMode) {
+        console.log("AuthProvider: In password reset mode - blocking normal auth flow");
         setIsPasswordReset(true);
-        // Don't fetch profile or treat as normal login during password reset
-        setSession(session);
-        setUser(session?.user ?? null);
+        setUser(null); // Keep user null to prevent redirects
+        setSession(null); // Keep session null
         setLoading(false);
         return;
       } else if (event === "SIGNED_IN" && window.location.search.includes('verified=true')) {
@@ -892,15 +905,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     console.log("AuthProvider: Password update attempt");
 
     try {
-      // First, establish the session using the recovery tokens
-      const accessToken = sessionStorage.getItem("recovery_access_token");
-      const refreshToken = sessionStorage.getItem("recovery_refresh_token");
+      // Get current session (already established by Supabase from recovery link)
+      const { data: { session } } = await supabase.auth.getSession();
       
-      if (accessToken && refreshToken) {
-        await supabase.auth.setSession({
-          access_token: accessToken,
-          refresh_token: refreshToken,
-        });
+      if (!session) {
+        // Try to use stored recovery tokens as fallback
+        const accessToken = sessionStorage.getItem("recovery_access_token");
+        const refreshToken = sessionStorage.getItem("recovery_refresh_token");
+        
+        if (accessToken && refreshToken) {
+          await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          });
+        } else {
+          throw new Error("No valid session found for password reset");
+        }
       }
 
       const { error } = await supabase.auth.updateUser({
