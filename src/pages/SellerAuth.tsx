@@ -86,16 +86,12 @@ const SellerAuth = () => {
   };
 
   const handlePasswordResetSuccess = () => {
-    const redirect = searchParams.get('redirect');
-    const autoSubmit = searchParams.get('autoSubmit');
-    
-    if (redirect && autoSubmit) {
-      navigate(`${redirect}?autoSubmit=true`);
-    } else if (redirect) {
-      navigate(redirect);
-    } else {
-      navigate("/seller-dashboard");
-    }
+    // After password reset, sign out and show login form
+    setIsLogin(true);
+    toast({
+      title: "Password Updated",
+      description: "Please sign in with your new password.",
+    });
   };
 
   return (

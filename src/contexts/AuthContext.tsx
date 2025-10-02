@@ -127,10 +127,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       // Check if this is a password recovery session
-      if (event === "PASSWORD_RECOVERY") {
-        setIsPasswordReset(true);
-      } else if (event === "SIGNED_IN" && isPasswordReset) {
-        // Keep password reset mode active during password reset flow
+      // Check both the event type AND the URL parameters for type=recovery
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlType = urlParams.get("type");
+      const hasRecoveryTokens = urlParams.has("access_token") && urlParams.has("refresh_token");
+      
+      if (event === "PASSWORD_RECOVERY" || urlType === "recovery" || (event === "SIGNED_IN" && hasRecoveryTokens)) {
+        console.log("AuthProvider: Password recovery session detected");
         setIsPasswordReset(true);
       } else if (event === "SIGNED_IN" && window.location.search.includes('verified=true')) {
         // If user just verified their email, sign them out and redirect to login
@@ -893,6 +896,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           description: "Your password has been updated successfully.",
         });
         setIsPasswordReset(false);
+        
+        // Clean up URL parameters after successful password reset
+        const url = new URL(window.location.href);
+        url.searchParams.delete('access_token');
+        url.searchParams.delete('refresh_token');
+        url.searchParams.delete('type');
+        window.history.replaceState({}, '', url.toString());
       }
 
       return { error };

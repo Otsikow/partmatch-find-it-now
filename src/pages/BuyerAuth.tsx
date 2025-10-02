@@ -76,7 +76,12 @@ const BuyerAuth = () => {
   };
 
   const handlePasswordResetSuccess = () => {
-    navigate("/buyer-dashboard");
+    // After password reset, show login form
+    setIsLogin(true);
+    toast({
+      title: "Password Updated",
+      description: "Please sign in with your new password.",
+    });
   };
 
   return (

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { toast } from "@/hooks/use-toast";
 import AdminAuthHeader from "@/components/AdminAuthHeader";
 import AdminAuthForm from "@/components/AdminAuthForm";
 import AdminSecurityAlert from "@/components/AdminSecurityAlert";
@@ -20,7 +21,12 @@ const AdminAuth = () => {
   };
 
   const handlePasswordResetSuccess = () => {
-    navigate('/admin');
+    // After password reset, show login form
+    setShowPasswordReset(false);
+    toast({
+      title: "Password Updated",
+      description: "Please sign in with your new password.",
+    });
   };
 
   const handlePasswordResetClick = () => {
