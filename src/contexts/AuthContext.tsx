@@ -102,16 +102,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (accessToken && refreshToken && urlType === "recovery") {
       console.log("AuthProvider: Recovery tokens detected in URL - entering password reset mode");
       sessionStorage.setItem("password_reset_mode", "true");
+      sessionStorage.setItem("recovery_access_token", accessToken);
+      sessionStorage.setItem("recovery_refresh_token", refreshToken);
       setIsPasswordReset(true);
-      // Set the session from URL params
-      supabase.auth.setSession({
-        access_token: accessToken,
-        refresh_token: refreshToken,
-      });
+      setLoading(false);
+      // DON'T set session here - we want to show password reset form, not log them in
     } else if (sessionStorage.getItem("password_reset_mode") === "true") {
       // Restore password reset mode if it was set
       console.log("AuthProvider: Restoring password reset mode from sessionStorage");
       setIsPasswordReset(true);
+      setLoading(false);
     }
 
     // Set up auth state listener
@@ -892,6 +892,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     console.log("AuthProvider: Password update attempt");
 
     try {
+      // First, establish the session using the recovery tokens
+      const accessToken = sessionStorage.getItem("recovery_access_token");
+      const refreshToken = sessionStorage.getItem("recovery_refresh_token");
+      
+      if (accessToken && refreshToken) {
+        await supabase.auth.setSession({
+          access_token: accessToken,
+          refresh_token: refreshToken,
+        });
+      }
+
       const { error } = await supabase.auth.updateUser({
         password: password,
       });
@@ -911,8 +922,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         });
         setIsPasswordReset(false);
         
-        // Clear password reset mode from sessionStorage
+        // Clear password reset mode and recovery tokens from sessionStorage
         sessionStorage.removeItem("password_reset_mode");
+        sessionStorage.removeItem("recovery_access_token");
+        sessionStorage.removeItem("recovery_refresh_token");
         
         // Clean up URL parameters after successful password reset
         const url = new URL(window.location.href);
