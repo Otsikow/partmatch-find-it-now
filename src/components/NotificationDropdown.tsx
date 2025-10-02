@@ -29,12 +29,19 @@ const NotificationDropdown = () => {
         navigate('/seller-dashboard?tab=requests');
         break;
       case 'new_message':
-        // Navigate to chat with the sender's userId
-        const senderId = notification.metadata?.sender_id || notification.metadata?.user_id;
+        // Navigate to chat with the sender to continue the conversation
+        const senderId = notification.metadata?.sender_id || notification.metadata?.user_id || notification.metadata?.chat_id;
+        console.log('📬 Message notification clicked:', { senderId, metadata: notification.metadata });
         if (senderId) {
           navigate(`/chat?userId=${senderId}`);
         } else {
-          navigate('/chat');
+          // If no sender ID, try to use chat_id
+          const chatId = notification.metadata?.chat_id;
+          if (chatId) {
+            navigate(`/chat?id=${chatId}`);
+          } else {
+            navigate('/chat');
+          }
         }
         break;
       case 'new_offer':
