@@ -29,7 +29,13 @@ const NotificationDropdown = () => {
         navigate('/seller-dashboard?tab=requests');
         break;
       case 'new_message':
-        navigate(`/chat?id=${notification.metadata?.chat_id}`);
+        // Navigate to chat with the sender's userId
+        const senderId = notification.metadata?.sender_id || notification.metadata?.user_id;
+        if (senderId) {
+          navigate(`/chat?userId=${senderId}`);
+        } else {
+          navigate('/chat');
+        }
         break;
       case 'new_offer':
         navigate('/buyer-dashboard?tab=offers');
