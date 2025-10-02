@@ -92,25 +92,30 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     console.log("AuthProvider: Setting up auth state listener");
 
-    // Check URL for password reset FIRST before anything else
-    const urlParams = new URLSearchParams(window.location.search);
-    const accessToken = urlParams.get("access_token");
-    const refreshToken = urlParams.get("refresh_token");
-    const urlType = urlParams.get("type");
+    // CRITICAL: Check URL HASH (not query params) for password reset tokens
+    // Supabase puts recovery tokens in the hash fragment, not query params
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const accessToken = hashParams.get("access_token");
+    const refreshToken = hashParams.get("refresh_token");
+    const urlType = hashParams.get("type");
 
     // Store recovery mode in sessionStorage so it persists through redirects
     if (accessToken && refreshToken && urlType === "recovery") {
-      console.log("AuthProvider: Recovery tokens detected in URL - entering password reset mode");
+      console.log("AuthProvider: Recovery tokens detected in URL HASH - entering password reset mode");
       sessionStorage.setItem("password_reset_mode", "true");
       sessionStorage.setItem("recovery_access_token", accessToken);
       sessionStorage.setItem("recovery_refresh_token", refreshToken);
       setIsPasswordReset(true);
+      setUser(null);
+      setSession(null);
       setLoading(false);
-      // DON'T set session here - we want to show password reset form, not log them in
+      // DO NOT call setSession or allow Supabase to auto-login
     } else if (sessionStorage.getItem("password_reset_mode") === "true") {
       // Restore password reset mode if it was set
       console.log("AuthProvider: Restoring password reset mode from sessionStorage");
       setIsPasswordReset(true);
+      setUser(null);
+      setSession(null);
       setLoading(false);
     }
 
@@ -137,17 +142,30 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         console.warn("AuthProvider: No session available for event:", event);
       }
 
-      // CRITICAL: Detect PASSWORD_RECOVERY event FIRST before anything else
-      if (event === "PASSWORD_RECOVERY") {
-        console.log("AuthProvider: PASSWORD_RECOVERY event detected - entering password reset mode");
+      // CRITICAL: Check if this SIGNED_IN is from a password recovery flow
+      // When user clicks recovery link, SIGNED_IN fires BEFORE PASSWORD_RECOVERY
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
+      const isRecoveryFlow = hashParams.get("type") === "recovery" || 
+                             sessionStorage.getItem("password_reset_mode") === "true";
+
+      if (event === "SIGNED_IN" && isRecoveryFlow) {
+        console.log("AuthProvider: SIGNED_IN from recovery link - entering password reset mode");
         sessionStorage.setItem("password_reset_mode", "true");
         setIsPasswordReset(true);
-        setUser(null); // Clear user state to prevent dashboard redirect
-        setSession(null); // Clear session state
+        setUser(null); // Clear user to prevent dashboard redirect
+        setSession(null); // Clear session
         setLoading(false);
-        
-        // Sign out locally to clear the session Supabase auto-created
-        supabase.auth.signOut({ scope: 'local' });
+        return; // Don't process as normal login
+      }
+
+      // CRITICAL: Detect PASSWORD_RECOVERY event 
+      if (event === "PASSWORD_RECOVERY") {
+        console.log("AuthProvider: PASSWORD_RECOVERY event detected - staying in password reset mode");
+        sessionStorage.setItem("password_reset_mode", "true");
+        setIsPasswordReset(true);
+        setUser(null);
+        setSession(null);
+        setLoading(false);
         return;
       }
 
