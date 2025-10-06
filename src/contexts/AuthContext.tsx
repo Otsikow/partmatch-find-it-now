@@ -135,9 +135,40 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       // Fetch user profile if user is logged in
       if (session?.user) {
-        setTimeout(() => {
-          fetchUserProfile(session.user.id);
-        }, 0);
+        // Check if this is a new Google OAuth user that needs user_type set
+        const pendingUserType = localStorage.getItem('pending_google_user_type');
+        
+        if (pendingUserType && event === 'SIGNED_IN') {
+          console.log("AuthProvider: New Google OAuth user detected, setting user_type:", pendingUserType);
+          
+          // Update the user's profile with the selected user type
+          setTimeout(async () => {
+            try {
+              const { error } = await supabase
+                .from('profiles')
+                .update({ 
+                  user_type: pendingUserType as 'owner' | 'supplier',
+                })
+                .eq('id', session.user.id);
+              
+              if (error) {
+                console.error("AuthProvider: Error updating user type:", error);
+              } else {
+                console.log("AuthProvider: Successfully updated user type to:", pendingUserType);
+                localStorage.removeItem('pending_google_user_type');
+              }
+              
+              // Fetch the updated profile
+              fetchUserProfile(session.user.id);
+            } catch (err) {
+              console.error("AuthProvider: Exception updating user type:", err);
+            }
+          }, 0);
+        } else {
+          setTimeout(() => {
+            fetchUserProfile(session.user.id);
+          }, 0);
+        }
       }
 
       setLoading(false);

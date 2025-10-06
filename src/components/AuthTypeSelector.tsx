@@ -6,11 +6,20 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+
 
 const AuthTypeSelector = () => {
   const { user, userType, signOut } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [showUserTypeDialog, setShowUserTypeDialog] = useState(false);
 
   const handleSignOut = async () => {
     try {
@@ -37,9 +46,13 @@ const AuthTypeSelector = () => {
     }
   };
 
-  const handleGoogleSignIn = async () => {
+  const handleGoogleSignIn = async (selectedUserType: 'owner' | 'supplier') => {
     try {
       setLoading(true);
+      
+      // Store the user type in localStorage to retrieve after OAuth redirect
+      localStorage.setItem('pending_google_user_type', selectedUserType);
+      
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -54,12 +67,15 @@ const AuthTypeSelector = () => {
       if (error) {
         console.error('Google sign-in error:', error);
         toast.error("Google Sign-In Failed: " + (error.message || "Unable to sign in with Google"));
+        localStorage.removeItem('pending_google_user_type');
       }
     } catch (error: any) {
       console.error('Google sign-in error:', error);
       toast.error("An unexpected error occurred. Please try again.");
+      localStorage.removeItem('pending_google_user_type');
     } finally {
       setLoading(false);
+      setShowUserTypeDialog(false);
     }
   };
 
@@ -228,7 +244,7 @@ const AuthTypeSelector = () => {
                 Sign in or create an account instantly with your Google account
               </p>
               <Button 
-                onClick={handleGoogleSignIn}
+                onClick={() => setShowUserTypeDialog(true)}
                 disabled={loading}
                 className="w-full bg-white hover:bg-gray-50 text-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white border-2 border-gray-300 dark:border-gray-600 py-3 rounded-lg flex items-center justify-center gap-3 shadow-md hover:shadow-lg transition-all"
               >
@@ -271,6 +287,56 @@ const AuthTypeSelector = () => {
             </p>
           </div>
         </main>
+
+        {/* User Type Selection Dialog */}
+        <Dialog open={showUserTypeDialog} onOpenChange={setShowUserTypeDialog}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle className="text-2xl font-bold text-center">Choose Your Account Type</DialogTitle>
+              <DialogDescription className="text-center pt-2">
+                Select how you want to use PartMatch with your Google account
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid grid-cols-2 gap-4 py-4">
+              {/* Buyer Option */}
+              <button
+                onClick={() => handleGoogleSignIn('owner')}
+                disabled={loading}
+                className="group relative p-6 border-2 border-blue-200 dark:border-blue-800 rounded-xl hover:border-blue-500 dark:hover:border-blue-500 hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/50 dark:to-blue-900/30 hover:scale-105"
+              >
+                <div className="flex flex-col items-center gap-3">
+                  <div className="bg-blue-500 dark:bg-blue-600 rounded-full p-4 group-hover:scale-110 transition-transform">
+                    <ShoppingCart className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="font-bold text-lg text-blue-700 dark:text-blue-400">Buyer</h3>
+                  <p className="text-xs text-gray-600 dark:text-gray-300 text-center">
+                    Browse & buy car parts
+                  </p>
+                </div>
+              </button>
+
+              {/* Seller Option */}
+              <button
+                onClick={() => handleGoogleSignIn('supplier')}
+                disabled={loading}
+                className="group relative p-6 border-2 border-orange-200 dark:border-orange-800 rounded-xl hover:border-orange-500 dark:hover:border-orange-500 hover:shadow-lg transition-all duration-300 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/50 dark:to-orange-900/30 hover:scale-105"
+              >
+                <div className="flex flex-col items-center gap-3">
+                  <div className="bg-orange-500 dark:bg-orange-600 rounded-full p-4 group-hover:scale-110 transition-transform">
+                    <Store className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="font-bold text-lg text-orange-700 dark:text-orange-400">Seller</h3>
+                  <p className="text-xs text-gray-600 dark:text-gray-300 text-center">
+                    Sell your car parts
+                  </p>
+                </div>
+              </button>
+            </div>
+            <p className="text-xs text-center text-muted-foreground">
+              You can change this later in your profile settings
+            </p>
+          </DialogContent>
+        </Dialog>
     </div>
   );
 };
