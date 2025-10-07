@@ -60,17 +60,17 @@ const PostPartHeroSection = () => {
         </Link>
         
         {/* Main Title */}
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 font-playfair drop-shadow-lg">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4 font-playfair drop-shadow-lg">
           {t("postPart.welcomeTitle", "Sell Your Car Parts")}
         </h1>
         
         {/* Subtitle */}
-        <p className="text-lg md:text-xl text-white/90 mb-6 max-w-2xl mx-auto font-crimson drop-shadow-md">
+        <p className="text-lg md:text-xl text-foreground/90 mb-6 max-w-2xl mx-auto font-crimson drop-shadow-md">
           {t("postPart.subtitle", "Connect with buyers and turn your spare parts into cash")}
         </p>
 
         {/* Quick Info */}
-        <div className="flex flex-wrap justify-center gap-4 text-sm text-white/80">
+        <div className="flex flex-wrap justify-center gap-4 text-sm text-foreground/80">
           <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-2 rounded-full border border-white/20">
             <Package className="w-4 h-4" />
             <span>Free to List</span>
