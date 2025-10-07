@@ -28,14 +28,14 @@ const BrowsePartsHeroSection = ({ onQuickSearch }: BrowsePartsHeroSectionProps) 
         loading="eager"
         fetchPriority="high"
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/40 to-background/60"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/60 to-black/70"></div>
       
       {/* Back Arrow */}
       <Button
         variant="ghost"
         size="sm"
         onClick={() => navigate('/')}
-        className="absolute top-4 left-4 z-20 p-2 hover:bg-background/20 rounded-full text-foreground hover:text-foreground flex-shrink-0 bg-background/10 backdrop-blur-sm"
+        className="absolute top-4 left-4 z-20 p-2 hover:bg-white/20 rounded-full text-white hover:text-white flex-shrink-0 bg-white/10 backdrop-blur-sm"
       >
         <ArrowLeft className="w-5 h-5" />
       </Button>
@@ -45,10 +45,10 @@ const BrowsePartsHeroSection = ({ onQuickSearch }: BrowsePartsHeroSectionProps) 
         <div className="max-w-4xl mx-auto space-y-6">
           {/* Title and Description */}
           <div className="space-y-4">
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-foreground via-foreground/90 to-foreground/80 bg-clip-text text-transparent">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg">
               Browse Premium Car Parts
             </h1>
-            <p className="text-lg md:text-xl text-foreground/90 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto drop-shadow-md">
               Discover high-quality automotive parts from verified sellers. Find exactly what you need with our advanced search and filtering system.
             </p>
           </div>
@@ -74,16 +74,16 @@ const BrowsePartsHeroSection = ({ onQuickSearch }: BrowsePartsHeroSectionProps) 
 
           {/* Quick Stats */}
           <div className="flex flex-wrap justify-center gap-6 pt-4">
-            <div className="flex items-center gap-2 text-sm text-foreground/80">
-              <Package className="h-4 w-4 text-primary" />
+            <div className="flex items-center gap-2 text-sm text-white/80">
+              <Package className="h-4 w-4 text-white" />
               <span className="font-medium">10,000+ Parts</span>
             </div>
-            <div className="flex items-center gap-2 text-sm text-foreground/80">
-              <Filter className="h-4 w-4 text-primary" />
+            <div className="flex items-center gap-2 text-sm text-white/80">
+              <Filter className="h-4 w-4 text-white" />
               <span className="font-medium">Advanced Filters</span>
             </div>
-            <div className="flex items-center gap-2 text-sm text-foreground/80">
-              <Search className="h-4 w-4 text-primary" />
+            <div className="flex items-center gap-2 text-sm text-white/80">
+              <Search className="h-4 w-4 text-white" />
               <span className="font-medium">Smart Search</span>
             </div>
           </div>
