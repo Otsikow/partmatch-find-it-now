@@ -44,8 +44,8 @@ const MobileHeader = () => {
   };
 
   return (
-    <div className="relative top-0 left-0 right-0 bg-transparent z-40">
-      <div className="relative flex items-center justify-between px-4 py-3 min-h-[64px] safe-area-pt">
+    <div className="absolute top-0 left-0 right-0 z-40 pointer-events-none">
+      <div className="relative flex items-center justify-between px-4 py-3 pointer-events-auto">
         <div className="flex items-center min-w-0 flex-1">
           <Link to="/" className="flex items-center gap-2">
             <div className="flex items-center">
