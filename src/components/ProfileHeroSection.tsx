@@ -40,7 +40,7 @@ const ProfileHeroSection = () => {
       </Button>
 
       {/* Action Buttons */}
-      <div className="absolute top-4 right-4 z-20 flex items-center space-x-2">
+      <div className="absolute top-4 right-4 z-20 hidden md:flex items-center space-x-2">
         <Button
           variant="ghost"
           size="sm"
