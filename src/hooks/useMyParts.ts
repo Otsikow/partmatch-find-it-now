@@ -89,20 +89,26 @@ export const useMyParts = () => {
           processedImages = part.images
             .filter((img) => typeof img === "string" && img.trim() !== "")
             .map((img) => {
+              // Already a full URL
               if (img.startsWith("http")) {
                 return img;
               }
-              if (img.includes("/")) {
-                const {
-                  data: { publicUrl },
-                } = supabase.storage
-                  .from("car-part-images")
-                  .getPublicUrl(img);
-                return publicUrl;
-              }
-              return img;
+              // Generate public URL for storage path
+              const {
+                data: { publicUrl },
+              } = supabase.storage
+                .from("car-part-images")
+                .getPublicUrl(img);
+              return publicUrl;
             });
         }
+
+        console.log('Part image processing:', {
+          partId: part.id,
+          title: part.title,
+          rawImages: part.images,
+          processedImages
+        });
 
         return {
           ...part,

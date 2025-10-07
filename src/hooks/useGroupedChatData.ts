@@ -134,9 +134,19 @@ export const useGroupedChatData = (otherUserId: string, userId: string | undefin
         .from('profiles')
         .select('*')
         .eq('id', otherUserId)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      
+      if (!data) {
+        console.error('❌ User profile not found for ID:', otherUserId);
+        toast({
+          title: "Error",
+          description: "User profile not found",
+          variant: "destructive"
+        });
+        return;
+      }
       
       console.log('✅ Other user info fetched:', data);
       setOtherUser(data);

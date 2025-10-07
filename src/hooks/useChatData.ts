@@ -96,12 +96,18 @@ export const useChatData = (chatId: string, userId: string | undefined) => {
         .from('profiles')
         .select('*')
         .eq('id', otherUserId)
-        .single();
+        .maybeSingle();
 
       if (userError) {
         console.error('❌ User fetch error:', userError);
         throw userError;
       }
+      
+      if (!userData) {
+        console.error('❌ User profile not found for ID:', otherUserId);
+        throw new Error('User profile not found');
+      }
+      
       console.log('✅ Other user info fetched:', userData);
       setOtherUser(userData);
     } catch (error) {
