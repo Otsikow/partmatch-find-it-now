@@ -44,7 +44,7 @@ const MobileHeader = () => {
   };
 
   return (
-    <div className="relative top-0 left-0 right-0 bg-white dark:bg-gray-900 shadow-lg border-b border-gray-200 dark:border-gray-700 z-40">
+    <div className="relative top-0 left-0 right-0 bg-transparent z-40">
       <div className="relative flex items-center justify-between px-4 py-3 min-h-[64px] safe-area-pt">
         <div className="flex items-center min-w-0 flex-1">
           <Link to="/" className="flex items-center gap-2">
@@ -55,14 +55,14 @@ const MobileHeader = () => {
                 className="h-8 w-auto object-contain transition-all duration-300 dark:bg-white rounded-lg p-1"
               />
             </div>
-            <span className="text-gray-900 dark:text-gray-100 font-bold text-lg">PartMatch</span>
+            <span className="text-white font-bold text-lg drop-shadow-lg">PartMatch</span>
           </Link>
         </div>
         
         {user && (
           <div className="flex items-center space-x-2 flex-shrink-0">
             <ThemeToggle />
-            <div className="flex items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-full p-1">
+            <div className="flex items-center justify-center bg-white/20 backdrop-blur-sm rounded-full p-1">
               <NotificationBell />
             </div>
             
@@ -71,9 +71,9 @@ const MobileHeader = () => {
                 <Button 
                   variant="ghost" 
                   size="icon"
-                  className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center touch-manipulation active:scale-95 transition-all duration-200 hover:bg-gray-200 dark:hover:bg-gray-700 hover:scale-105 shadow-lg border border-gray-200 dark:border-gray-700"
+                  className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center touch-manipulation active:scale-95 transition-all duration-200 hover:bg-white/30 hover:scale-105 shadow-lg border border-white/30"
                 >
-                  <span className="text-gray-900 dark:text-gray-100 font-semibold text-sm">
+                  <span className="text-white font-semibold text-sm">
                     {user.email?.charAt(0).toUpperCase()}
                   </span>
                 </Button>
@@ -136,7 +136,7 @@ const MobileHeader = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-gray-900 dark:text-gray-100 font-semibold hover:bg-gray-100 dark:hover:bg-gray-800"
+                className="text-white font-semibold hover:bg-white/20 backdrop-blur-sm"
               >
                 <LogIn className="h-6 w-6" />
               </Button>
