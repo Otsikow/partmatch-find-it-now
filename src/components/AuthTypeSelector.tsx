@@ -81,38 +81,21 @@ const AuthTypeSelector = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted font-roboto">
-      {/* Header */}
-      <header className="relative bg-background/80 backdrop-blur-sm border-b border-border">
-        <div className="relative p-4 sm:p-6 flex items-center gap-3">
-          <Link to="/">
-            <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 hover:bg-accent text-foreground">
-              <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
-            </Button>
-          </Link>
-          <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-            <Link to="/" className="bg-accent/20 backdrop-blur-sm rounded-xl p-2 shadow-lg hover:bg-accent/30 transition-colors">
-                <img 
-                  src="/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png" 
-                  alt="PartMatch Logo" 
-                  className="h-6 w-auto sm:h-8 object-contain rounded-lg p-1"
-                />
-              </Link>
-            </div>
-            <div className="flex items-center gap-2">
-              {user && (
-                <Button 
-                  onClick={handleSignOut}
-                  variant="ghost" 
-                  size="sm" 
-                  className="hover:bg-accent text-foreground"
-                >
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Sign Out
-                </Button>
-              )}
-            </div>
-          </div>
-        </header>
+      {/* Back Arrow and Logo - No Bar */}
+      <div className="absolute top-4 left-4 z-10 flex items-center gap-3">
+        <Link to="/">
+          <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 hover:bg-accent text-foreground bg-background/80 backdrop-blur-sm">
+            <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
+          </Button>
+        </Link>
+        <Link to="/" className="bg-background/80 backdrop-blur-sm rounded-xl p-2 shadow-lg hover:bg-accent/30 transition-colors">
+          <img 
+            src="/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png" 
+            alt="PartMatch Logo" 
+            className="h-6 w-auto sm:h-8 object-contain rounded-lg p-1"
+          />
+        </Link>
+      </div>
 
         {/* Hero Section with Image */}
         <section className="relative h-64 md:h-80 overflow-hidden">
