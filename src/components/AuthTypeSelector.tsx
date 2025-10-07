@@ -109,9 +109,6 @@ const AuthTypeSelector = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/60"></div>
           <div className="absolute inset-0 flex items-center justify-center text-center">
             <div>
-              <div className="bg-primary/90 backdrop-blur-sm rounded-full p-4 w-fit mx-auto mb-6 shadow-xl">
-                <Shield className="h-12 w-12 text-primary-foreground" />
-              </div>
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 drop-shadow-lg">
                 Secure Authentication
               </h1>
