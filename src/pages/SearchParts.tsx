@@ -151,10 +151,10 @@ const SearchParts = () => {
         <PendingRatingNotification />
 
         <Tabs defaultValue="parts" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 mb-4 sm:mb-6 bg-background border-2 border-border p-1 sm:p-2 h-auto rounded-lg">
+          <TabsList className="inline-flex w-full justify-center gap-3 mb-4 sm:mb-6 bg-transparent p-0 h-auto">
             <TabsTrigger
               value="parts"
-              className="flex items-center gap-1 sm:gap-2 h-10 sm:h-12 text-sm sm:text-base font-semibold bg-secondary text-secondary-foreground hover:bg-secondary/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200 px-2 sm:px-3"
+              className="flex items-center gap-1 sm:gap-2 h-10 sm:h-12 text-sm sm:text-base font-semibold bg-secondary text-secondary-foreground hover:bg-secondary/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200 px-4 sm:px-6 rounded-lg border-2 border-transparent data-[state=active]:border-primary/20"
             >
               <Package className="w-4 h-4 sm:w-5 sm:h-5" />
               <span className="hidden xs:inline">{t("partsForSale")}</span>
@@ -162,7 +162,7 @@ const SearchParts = () => {
             </TabsTrigger>
             <TabsTrigger
               value="requests"
-              className="flex items-center gap-1 sm:gap-2 h-10 sm:h-12 text-sm sm:text-base font-semibold bg-secondary text-secondary-foreground hover:bg-secondary/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200 px-2 sm:px-3"
+              className="flex items-center gap-1 sm:gap-2 h-10 sm:h-12 text-sm sm:text-base font-semibold bg-secondary text-secondary-foreground hover:bg-secondary/80 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg transition-all duration-200 px-4 sm:px-6 rounded-lg border-2 border-transparent data-[state=active]:border-primary/20"
             >
               <ClipboardList className="w-4 h-4 sm:w-5 sm:h-5" />
               <span className="hidden xs:inline">{t("requestedParts")}</span>
