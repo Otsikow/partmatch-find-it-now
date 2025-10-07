@@ -46,23 +46,18 @@ const MobileHeader = () => {
   return (
     <div className="absolute top-0 left-0 right-0 z-40 pointer-events-none">
       <div className="relative flex items-center justify-between px-4 py-3 pointer-events-auto">
-        <div className="flex items-center min-w-0 flex-1">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="flex items-center">
-              <img 
-                src="/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png" 
-                alt="PartMatch Logo" 
-                className="h-8 w-auto object-contain transition-all duration-300 brightness-0 invert"
-              />
-            </div>
-            <span className="text-white font-bold text-lg drop-shadow-lg">PartMatch</span>
-          </Link>
-        </div>
+        <Link to="/" className="flex items-center gap-2">
+          <img 
+            src="/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png" 
+            alt="PartMatch Logo" 
+            className="h-8 w-auto object-contain transition-all duration-300 brightness-0 invert"
+          />
+          <span className="text-white font-bold text-base md:text-lg drop-shadow-lg">PartMatch</span>
+        </Link>
         
-        {user && (
-          <div className="flex items-center space-x-2 flex-shrink-0">
-            <ThemeToggle />
-            <div className="flex items-center justify-center bg-white/20 backdrop-blur-sm rounded-full p-1">
+        {user ? (
+          <div className="flex items-center gap-2">
+            <div className="bg-white/10 backdrop-blur-sm rounded-full p-1">
               <NotificationBell />
             </div>
             
@@ -71,74 +66,43 @@ const MobileHeader = () => {
                 <Button 
                   variant="ghost" 
                   size="icon"
-                  className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center touch-manipulation active:scale-95 transition-all duration-200 hover:bg-white/30 hover:scale-105 shadow-lg border border-white/30"
+                  className="w-9 h-9 bg-white/10 backdrop-blur-sm rounded-full hover:bg-white/20 transition-all"
                 >
                   <span className="text-white font-semibold text-sm">
                     {user.email?.charAt(0).toUpperCase()}
                   </span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 bg-background border shadow-lg z-50">
-                <DropdownMenuItem
-                  className="flex items-center gap-2 cursor-pointer"
-                  onClick={() => {
-                    const dashboardUrl =
-                      userType === 'admin'
-                        ? '/admin'
-                        : userType === 'seller' || userType === 'supplier'
-                        ? '/seller-dashboard'
-                        : '/buyer-dashboard';
-                    navigate(dashboardUrl);
-                  }}
-                >
-                  <User className="h-4 w-4" />
-                  <span>Dashboard</span>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem onClick={() => navigate(dashboardUrl)}>
+                  <User className="h-4 w-4 mr-2" />
+                  Dashboard
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="flex items-center gap-2 cursor-pointer"
-                  onClick={() => navigate('/blog')}
-                >
-                  <span className="h-4 w-4"></span>
-                  <span>{t('Auto Insights')}</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <div className="p-2">
+                <div className="px-2 py-1.5">
                   <LanguageSelector showLabel={false} variant="select" />
                 </div>
                 <DropdownMenuSeparator />
-                <div className="p-2">
-                  <CountryCurrencySelector trigger="button" showCurrencyInfo={true} />
-                </div>
-                <DropdownMenuSeparator />
                 <DropdownMenuItem 
-                  className="flex items-center gap-2 cursor-pointer text-destructive focus:text-destructive"
-                  onClick={(e) => {
-                    console.log('🚪 DropdownMenuItem: Sign out clicked!');
-                    e.preventDefault();
-                    e.stopPropagation();
-                    handleSignOut();
-                  }}
+                  className="text-destructive focus:text-destructive"
+                  onClick={handleSignOut}
                 >
-                  <LogOut className="h-4 w-4" />
-                  <span>{t('signOut')}</span>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  {t('signOut')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-        )}
-        
-        {!user && (
-          <div className="flex items-center space-x-2 flex-shrink-0">
-            <ThemeToggle />
+        ) : (
+          <div className="flex items-center gap-2">
             <LanguageSelector showLabel={false} variant="button" />
             <Link to="/auth">
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-white font-semibold hover:bg-white/20 backdrop-blur-sm"
+                className="w-9 h-9 text-white hover:bg-white/10 backdrop-blur-sm rounded-full transition-all"
               >
-                <LogIn className="h-6 w-6" />
+                <LogIn className="h-5 w-5" />
               </Button>
             </Link>
           </div>
