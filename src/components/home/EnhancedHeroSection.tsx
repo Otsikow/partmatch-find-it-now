@@ -24,7 +24,7 @@ const EnhancedHeroSection = () => {
         </div>
         
         <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight">
-          Find Car Parts Fast
+          Buy & Sell Car Parts Fast
         </h1>
         
         <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto opacity-90">Compare prices, chat with sellers, and pick up or get parts delivered to your door.</p>
