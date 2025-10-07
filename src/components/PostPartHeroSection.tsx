@@ -25,7 +25,7 @@ const PostPartHeroSection = () => {
         variant="ghost"
         size="sm"
         onClick={() => navigate('/')}
-        className="absolute top-4 left-4 z-20 p-2 hover:bg-background/20 rounded-full text-foreground hover:text-foreground flex-shrink-0 bg-background/10 backdrop-blur-sm"
+        className="absolute top-4 left-4 z-20 p-2 hover:bg-white/20 rounded-full text-white hover:text-white flex-shrink-0 bg-white/10 backdrop-blur-sm"
       >
         <ArrowLeft className="w-5 h-5" />
       </Button>
@@ -36,7 +36,7 @@ const PostPartHeroSection = () => {
           variant="ghost"
           size="sm"
           onClick={() => navigate('/')}
-          className="flex items-center space-x-2 text-foreground hover:bg-background/20 backdrop-blur-sm bg-background/10 border border-border/20"
+          className="flex items-center space-x-2 text-white hover:bg-white/20 backdrop-blur-sm bg-white/10 border border-white/20"
         >
           <Home className="h-4 w-4" />
           <span className="hidden sm:inline font-medium">Home</span>
@@ -46,7 +46,7 @@ const PostPartHeroSection = () => {
           variant="ghost"
           size="sm"
           onClick={() => navigate('/')}
-          className="p-2 text-foreground hover:bg-background/20 rounded-full backdrop-blur-sm bg-background/10 border border-border/20"
+          className="p-2 text-white hover:bg-white/20 rounded-full backdrop-blur-sm bg-white/10 border border-white/20"
         >
           <X className="h-4 w-4" />
         </Button>
