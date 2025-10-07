@@ -55,7 +55,7 @@ const RequestPartHeroSection = () => {
       <div className="relative z-10 container mx-auto px-4 py-12 text-center h-full flex flex-col justify-center">
         {/* Main Title */}
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 font-playfair drop-shadow-lg">
-          {t("requestPart.welcomeTitle", "Request Your Car Part")}
+          {t("requestPart.welcomeTitle", "Request a Car Part")}
         </h1>
         
         {/* Subtitle */}
