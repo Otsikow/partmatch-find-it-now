@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import PasswordReset from "@/components/PasswordReset";
 import SetNewPassword from "@/components/SetNewPassword";
+import GoogleSignInButton from "@/components/GoogleSignInButton";
 
 const SellerAuth = () => {
   const [formData, setFormData] = useState({
@@ -301,6 +302,25 @@ const SellerAuth = () => {
                       {loading ? "Please wait..." : isLogin ? "Sign In as Seller" : "Create Seller Account"}
                     </Button>
                   </form>
+
+                  {/* Divider */}
+                  <div className="relative my-6">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                      <span className="px-4 bg-white text-gray-500 font-medium">
+                        Or continue with
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Google Sign-In Button */}
+                  <GoogleSignInButton
+                    userType="supplier"
+                    redirectTo={`${window.location.origin}/seller-dashboard`}
+                    disabled={loading}
+                  />
 
                   {/* Links */}
                   <div className="text-center mt-6 space-y-3">
