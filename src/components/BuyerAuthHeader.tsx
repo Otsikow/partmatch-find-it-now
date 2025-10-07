@@ -10,10 +10,10 @@ interface BuyerAuthHeaderProps {
 
 const BuyerAuthHeader = ({ isLogin, showPasswordReset }: BuyerAuthHeaderProps) => {
   return (
-    <header className="header-gradient shadow-lg border-b border-gray-200 dark:border-gray-700">
+    <header className="bg-background/80 backdrop-blur-sm border-b border-border">
       <div className="p-4 sm:p-6 flex items-center gap-3">
         <Link to="/">
-          <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-gray-100">
+          <Button variant="ghost" size="icon" className="h-8 w-8 sm:h-10 sm:w-10 hover:bg-accent text-foreground">
             <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
         </Link>
@@ -26,10 +26,10 @@ const BuyerAuthHeader = ({ isLogin, showPasswordReset }: BuyerAuthHeaderProps) =
             />
           </Link>
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">
+            <h1 className="text-xl sm:text-2xl font-bold text-foreground">
               {showPasswordReset ? "Reset Password" : isLogin ? "Welcome Back Buyer" : "Join as Buyer"}
             </h1>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-sm text-muted-foreground">
               {showPasswordReset ? "Reset your password to continue" : isLogin ? "Sign in to find car parts" : "Create your buyer account"}
             </p>
           </div>
