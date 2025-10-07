@@ -88,11 +88,11 @@ const AuthTypeSelector = () => {
             <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
           </Button>
         </Link>
-        <Link to="/" className="bg-background/80 backdrop-blur-sm rounded-xl p-2 shadow-lg hover:bg-accent/30 transition-colors">
+        <Link to="/" className="hover:opacity-80 transition-opacity">
           <img 
             src="/lovable-uploads/967579eb-1ffe-4731-ab56-b38a24cbc330.png" 
             alt="PartMatch Logo" 
-            className="h-6 w-auto sm:h-8 object-contain rounded-lg p-1"
+            className="h-6 w-auto sm:h-8 object-contain brightness-0 invert"
           />
         </Link>
       </div>
