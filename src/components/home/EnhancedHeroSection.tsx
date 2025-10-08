@@ -15,7 +15,7 @@ const EnhancedHeroSection = () => {
         fetchPriority="high"
       />
       {/* Professional overlay for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/85 to-white/90"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70"></div>
       
       {/* Hero content */}
       <div className="relative z-10 container mx-auto text-center px-4 py-12">
@@ -23,20 +23,20 @@ const EnhancedHeroSection = () => {
           <HeroLogo />
         </div>
         
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold font-playfair mb-4 drop-shadow-lg text-black">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold font-playfair mb-4 drop-shadow-lg">
           Buy & Sell Car Parts Fast
         </h1>
         
-        <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto opacity-90 text-black">Compare prices, chat with sellers, and pick up or get parts delivered to your door.</p>
+        <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto opacity-90">Compare prices, chat with sellers, and pick up or get parts delivered to your door.</p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto">
-          <Button asChild size="lg" className="w-full sm:w-auto bg-primary text-white hover:bg-primary/90">
+          <Button asChild size="lg" className="w-full sm:w-auto bg-white text-primary hover:bg-gray-100">
             <Link to="/search-parts-with-map">
               Browse Parts
             </Link>
           </Button>
           
-          <Button asChild size="lg" className="w-full sm:w-auto bg-black/10 backdrop-blur-sm border-2 border-black text-black hover:bg-black hover:text-white font-semibold shadow-lg transition-all">
+          <Button asChild size="lg" className="w-full sm:w-auto bg-white/20 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-primary font-semibold shadow-lg transition-all">
             <Link to="/request-part">
               Request Part
             </Link>
