@@ -249,18 +249,6 @@ const AuthTypeSelector = () => {
               </Button>
             </div>
 
-            {/* Phone Sign-In */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl border-0 shadow-lg p-6 max-w-md mx-auto">
-              <h3 className="font-semibold text-lg mb-3 text-foreground dark:text-gray-100">Quick Phone Sign-up</h3>
-              <p className="text-sm text-muted-foreground dark:text-gray-300 mb-4">
-                Sign up or sign in instantly using your phone number with OTP verification
-              </p>
-              <Link to="/phone-auth">
-                <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-3 rounded-lg">
-                  Sign In/Up with Phone
-                </Button>
-              </Link>
-            </div>
             <p className="text-sm text-muted-foreground dark:text-gray-300">
               Already have an account? Use the specific login page for your account type above.
             </p>
