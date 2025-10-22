@@ -66,6 +66,8 @@ const RequestExpandedDialog = ({
   const [offerPrice, setOfferPrice] = useState("");
   const [offerMessage, setOfferMessage] = useState("");
   const [offerLocation, setOfferLocation] = useState("");
+  // Ensure hooks are called unconditionally before any early return
+  const [showOfferForm, setShowOfferForm] = useState(false);
   
   const { handleMakeOffer: submitOffer, handleWhatsAppContact, isSubmittingOffer } = useOfferHandling();
 
@@ -117,7 +119,7 @@ const RequestExpandedDialog = ({
   const isOwner = user?.id === request.owner_id;
   const canModifyRequest = isAdmin || isOwner;
 
-  const [showOfferForm, setShowOfferForm] = useState(false);
+  
 
   const handleMakeOffer = () => {
     if (!user) {

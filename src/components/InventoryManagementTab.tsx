@@ -60,15 +60,18 @@ export const InventoryManagementTab = ({ parts: initialParts, onRefresh }: Inven
   const sortedParts = useMemo(() => {
     const sorted = [...parts].sort((a, b) => {
       switch (sortBy) {
-        case 'quantity':
+        case 'quantity': {
           return (a.quantity || 0) - (b.quantity || 0);
-        case 'status':
+        }
+        case 'status': {
           const statusA = getStockStatus(a.quantity || 0).status;
           const statusB = getStockStatus(b.quantity || 0).status;
-          const statusOrder = { out: 0, low: 1, in: 2 };
+          const statusOrder = { out: 0, low: 1, in: 2 } as const;
           return statusOrder[statusA as keyof typeof statusOrder] - statusOrder[statusB as keyof typeof statusOrder];
-        default:
+        }
+        default: {
           return a.title.localeCompare(b.title);
+        }
       }
     });
     return sorted;

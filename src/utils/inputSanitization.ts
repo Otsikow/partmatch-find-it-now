@@ -68,8 +68,8 @@ export function sanitizeEmail(email: string): string {
 export function sanitizeText(text: string, maxLength: number = 1000): string {
   if (!text) return '';
   
-  // Remove null bytes and control characters
-  let cleaned = text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+  // Remove null bytes and control characters using Unicode property escapes
+  let cleaned = text.replace(/[\p{Cc}]/gu, '');
   
   // Limit length
   if (cleaned.length > maxLength) {
