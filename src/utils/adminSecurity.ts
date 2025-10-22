@@ -72,7 +72,8 @@ export const validateAdminPassword = (password: string): { valid: boolean; error
     errors.push('Password must contain at least one number');
   }
   
-  if (PASSWORD_REQUIREMENTS.requireSpecialChars && !/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\?]/.test(password)) {
+  // Require at least one non-letter and non-digit (symbol/punctuation)
+  if (PASSWORD_REQUIREMENTS.requireSpecialChars && !/[^\p{L}\p{N}]/u.test(password)) {
     errors.push('Password must contain at least one special character');
   }
   

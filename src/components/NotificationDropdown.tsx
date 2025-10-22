@@ -25,10 +25,11 @@ const NotificationDropdown = () => {
 
     // Enhanced navigation logic
     switch (notification.type) {
-      case 'new_request':
+      case 'new_request': {
         navigate('/seller-dashboard?tab=requests');
         break;
-      case 'new_message':
+      }
+      case 'new_message': {
         // Navigate to chat with the sender to continue the conversation
         const senderId = notification.metadata?.sender_id || notification.metadata?.user_id || notification.metadata?.chat_id;
         console.log('📬 Message notification clicked:', { senderId, metadata: notification.metadata });
@@ -44,22 +45,28 @@ const NotificationDropdown = () => {
           }
         }
         break;
-      case 'new_offer':
+      }
+      case 'new_offer': {
         navigate('/buyer-dashboard?tab=offers');
         break;
-      case 'offer_accepted':
+      }
+      case 'offer_accepted': {
         navigate('/seller-dashboard?tab=offers');
         break;
-      case 'item_shipped':
+      }
+      case 'item_shipped': {
         navigate('/buyer-dashboard?tab=orders');
         break;
-      case 'new_review':
+      }
+      case 'new_review': {
         navigate('/seller-dashboard?tab=reviews');
         break;
-      case 'new_part_request':
+      }
+      case 'new_part_request': {
         navigate('/requested-car-parts');
         break;
-      default:
+      }
+      default: {
         if (notification.metadata?.user_role === 'seller') {
           navigate('/seller-dashboard');
         } else if (notification.metadata?.user_role === 'buyer') {
@@ -68,6 +75,7 @@ const NotificationDropdown = () => {
           navigate('/dashboard');
         }
         break;
+      }
     }
 
     setIsOpen(false);

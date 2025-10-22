@@ -52,17 +52,22 @@ const PriceComparisonSection = ({ currentPart }: PriceComparisonSectionProps) =>
 
     const sorted = [...filtered].sort((a, b) => {
       switch (sortBy) {
-        case 'price-asc':
+        case 'price-asc': {
           return a.price - b.price;
-        case 'price-desc':
+        }
+        case 'price-desc': {
           return b.price - a.price;
-        case 'condition':
-          const conditionOrder = { 'New': 0, 'Refurbished': 1, 'Used': 2 };
-          return conditionOrder[a.condition] - conditionOrder[b.condition];
-        case 'location':
+        }
+        case 'condition': {
+          const conditionOrder = { 'New': 0, 'Refurbished': 1, 'Used': 2 } as const;
+          return conditionOrder[a.condition as keyof typeof conditionOrder] - conditionOrder[b.condition as keyof typeof conditionOrder];
+        }
+        case 'location': {
           return (a.address || '').localeCompare(b.address || '');
-        default:
+        }
+        default: {
           return 0;
+        }
       }
     });
 
@@ -120,7 +125,6 @@ const PriceComparisonSection = ({ currentPart }: PriceComparisonSectionProps) =>
           <div className="text-center py-8">
             <div className="text-amber-600 text-lg mb-2">⚠️ Unable to load similar products</div>
             <p className="text-gray-600 text-sm mb-4">{error}</p>
-feat/dashboard-button
             <Button
               onClick={() => window.location.reload()}
               variant="outline"

@@ -28,7 +28,7 @@ const validatePassword = (password: string): { valid: boolean; errors: string[] 
     errors.push('Password must contain at least one number');
   }
   
-  if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\?]/.test(password)) {
+  if (!/[^\p{L}\p{N}]/u.test(password)) {
     errors.push('Password must contain at least one special character');
   }
   
