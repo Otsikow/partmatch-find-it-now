@@ -1,10 +1,21 @@
-import { pipeline, env } from '@huggingface/transformers';
-
-// Configure transformers.js
-env.allowLocalModels = false;
-env.useBrowserCache = false;
-
 const MAX_IMAGE_DIMENSION = 512;
+const COLOR_DISTANCE_THRESHOLD = 48;
+const EDGE_FADE_DISTANCE = 24;
+
+type RGB = { r: number; g: number; b: number };
+
+const CAR_LOGOS = [
+  'toyota', 'honda', 'nissan', 'hyundai', 'kia', 'mazda', 'mitsubishi', 'subaru',
+  'suzuki', 'infiniti', 'lexus', 'acura', 'genesis', 'isuzu', 'daewoo', 'ssangyong',
+  'mahindra', 'tata', 'bmw', 'mercedes-benz', 'audi', 'volkswagen', 'porsche',
+  'jaguar', 'land-rover', 'volvo', 'peugeot', 'renault', 'citroen', 'skoda',
+  'seat', 'fiat', 'alfa-romeo', 'lancia', 'ferrari', 'lamborghini', 'maserati',
+  'bentley', 'rolls-royce', 'vauxhall', 'opel', 'mini', 'smart', 'saab', 'dacia',
+  'tesla', 'ford', 'chevrolet', 'cadillac', 'gmc', 'dodge', 'chrysler', 'jeep',
+  'ram', 'buick', 'lincoln'
+] as const;
+
+export const CAR_LOGO_COUNT = CAR_LOGOS.length;
 
 function resizeImageIfNeeded(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, image: HTMLImageElement) {
   let width = image.naturalWidth;
@@ -47,46 +58,25 @@ export const removeLogoBackground = async (imageUrl: string): Promise<string> =>
 
     const { width, height } = resizeImageIfNeeded(canvas, ctx, img);
     
-    // Initialize the segmentation model
-    const segmenter = await pipeline('image-segmentation', 'Xenova/segformer-b0-finetuned-ade-512-512', {
-      device: 'webgpu',
-    });
-    
-    // Get image data as base64
-    const imageData = canvas.toDataURL('image/png', 1.0);
-    
-    // Process with segmentation model
-    const result = await segmenter(imageData);
-    
-    if (!result || !Array.isArray(result) || result.length === 0 || !result[0].mask) {
-      throw new Error('Invalid segmentation result');
+    const baseImageData = ctx.getImageData(0, 0, width, height);
+    const hasAlpha = baseImageData.data.some((value, index) => index % 4 === 3 && value < 250);
+
+    if (hasAlpha) {
+      // Already transparent, no processing needed
+      return canvas.toDataURL('image/png', 1.0);
     }
-    
-    // Create output canvas with transparency
+
+    const backgroundColors = collectBackgroundColors(baseImageData);
+    const cleanedImageData = createTransparencyMask(baseImageData, backgroundColors);
+
     const outputCanvas = document.createElement('canvas');
     outputCanvas.width = width;
     outputCanvas.height = height;
     const outputCtx = outputCanvas.getContext('2d');
     if (!outputCtx) throw new Error('Could not get output canvas context');
-    
-    // Draw original image
-    outputCtx.drawImage(canvas, 0, 0);
-    
-    // Apply mask for background removal
-    const outputImageData = outputCtx.getImageData(0, 0, width, height);
-    const data = outputImageData.data;
-    
-    // Apply sophisticated masking for logo preservation
-    for (let i = 0; i < result[0].mask.data.length; i++) {
-      const maskValue = result[0].mask.data[i];
-      // Keep the subject (logo) and remove background
-      const alpha = maskValue > 0.1 ? 255 : 0; // Threshold for clean edges
-      data[i * 4 + 3] = alpha;
-    }
-    
-    outputCtx.putImageData(outputImageData, 0, 0);
-    
-    // Return processed image as data URL
+
+    outputCtx.putImageData(cleanedImageData, 0, 0);
+
     return outputCanvas.toDataURL('image/png', 1.0);
   } catch (error) {
     console.error('Error processing logo:', error);
@@ -95,21 +85,75 @@ export const removeLogoBackground = async (imageUrl: string): Promise<string> =>
   }
 };
 
-export const processAllCarLogos = async (): Promise<Record<string, string>> => {
-  const logos = [
-    'toyota', 'honda', 'nissan', 'hyundai', 'kia', 'mazda', 'mitsubishi', 'subaru', 
-    'suzuki', 'infiniti', 'lexus', 'acura', 'genesis', 'isuzu', 'daewoo', 'ssangyong', 
-    'mahindra', 'tata', 'bmw', 'mercedes-benz', 'audi', 'volkswagen', 'porsche', 
-    'jaguar', 'land-rover', 'volvo', 'peugeot', 'renault', 'citroen', 'skoda', 
-    'seat', 'fiat', 'alfa-romeo', 'lancia', 'ferrari', 'lamborghini', 'maserati', 
-    'bentley', 'rolls-royce', 'vauxhall', 'opel', 'mini', 'smart', 'saab', 'dacia', 
-    'tesla', 'ford', 'chevrolet', 'cadillac', 'gmc', 'dodge', 'chrysler', 'jeep', 
-    'ram', 'buick', 'lincoln'
+const collectBackgroundColors = (imageData: ImageData): RGB[] => {
+  const width = imageData.width;
+  const height = imageData.height;
+  const maxX = Math.max(width - 1, 0);
+  const maxY = Math.max(height - 1, 0);
+
+  const samplePoints = [
+    { x: 0, y: 0 },
+    { x: maxX, y: 0 },
+    { x: 0, y: maxY },
+    { x: maxX, y: maxY },
+    { x: Math.floor(width / 2), y: 0 },
+    { x: Math.floor(width / 2), y: maxY },
+    { x: 0, y: Math.floor(height / 2) },
+    { x: maxX, y: Math.floor(height / 2) }
   ];
-  
+
+  const colors = samplePoints.map((point) => getPixelColor(imageData, point.x, point.y));
+
+  const averageColor = colors.reduce<RGB>((acc, color) => ({
+    r: acc.r + color.r / colors.length,
+    g: acc.g + color.g / colors.length,
+    b: acc.b + color.b / colors.length,
+  }), { r: 0, g: 0, b: 0 });
+
+  colors.push(averageColor);
+  return colors;
+};
+
+const getPixelColor = (imageData: ImageData, x: number, y: number): RGB => {
+  const index = (y * imageData.width + x) * 4;
+  const { data } = imageData;
+  return {
+    r: data[index],
+    g: data[index + 1],
+    b: data[index + 2],
+  };
+};
+
+const colorDistance = (a: RGB, b: RGB) => {
+  const dr = a.r - b.r;
+  const dg = a.g - b.g;
+  const db = a.b - b.b;
+  return Math.sqrt(dr * dr + dg * dg + db * db);
+};
+
+const createTransparencyMask = (imageData: ImageData, backgroundColors: RGB[]): ImageData => {
+  const { data } = imageData;
+  for (let i = 0; i < data.length; i += 4) {
+    const pixel: RGB = { r: data[i], g: data[i + 1], b: data[i + 2] };
+    const minDistance = backgroundColors.reduce((min, color) => Math.min(min, colorDistance(pixel, color)), Infinity);
+
+    if (minDistance <= COLOR_DISTANCE_THRESHOLD) {
+      data[i + 3] = 0;
+    } else if (minDistance <= COLOR_DISTANCE_THRESHOLD + EDGE_FADE_DISTANCE) {
+      const fadeRatio = (minDistance - COLOR_DISTANCE_THRESHOLD) / EDGE_FADE_DISTANCE;
+      data[i + 3] = Math.max(0, Math.min(255, Math.round(data[i + 3] * fadeRatio)));
+    }
+  }
+  return imageData;
+};
+
+export const processAllCarLogos = async (
+  onProgress?: (processed: number, total: number) => void,
+): Promise<Record<string, string>> => {
   const processedLogos: Record<string, string> = {};
-  
-  for (const logo of logos) {
+
+  for (let i = 0; i < CAR_LOGOS.length; i++) {
+    const logo = CAR_LOGOS[i];
     try {
       const originalUrl = `/car-logos/${logo}.png`;
       const processedUrl = await removeLogoBackground(originalUrl);
@@ -119,7 +163,8 @@ export const processAllCarLogos = async (): Promise<Record<string, string>> => {
       console.error(`Failed to process ${logo}:`, error);
       processedLogos[logo] = `/car-logos/${logo}.png`;
     }
+    onProgress?.(i + 1, CAR_LOGOS.length);
   }
-  
+
   return processedLogos;
 };
