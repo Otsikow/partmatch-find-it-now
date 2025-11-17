@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,137 +8,172 @@
 
 @layer base {
   :root {
-    /* Professional Color Palette */
-    --background: 0 0% 100%; /* Pure white background */
-    --foreground: 220 14% 20%; /* Dark charcoal for text */
+    /* Font System */
+    --font-sans: "Inter", "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI",
+      system-ui, sans-serif;
+    --font-letterspacing-tight: -0.01em;
+    --font-letterspacing-wide: 0.02em;
 
-    --card: 0 0% 100%; /* White cards */
-    --card-foreground: 220 14% 20%;
+    /* Typography scale */
+    --text-h1: 32px;
+    --text-h2: 24px;
+    --text-h3: 20px;
+    --text-body: 16px;
+    --text-small: 14px;
+    --text-badge: 12px;
+    --line-tight: 1.15;
+    --line-relaxed: 1.5;
+
+    /* Spacing scale */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 12px;
+    --space-lg: 16px;
+    --space-xl: 24px;
+    --space-2xl: 32px;
+    --space-3xl: 48px;
+
+    /* Light mode palette (PARTMATCH Light) */
+    --background: 216 56% 98%; /* #F8FAFD */
+    --foreground: 220 48% 10%; /* #0D1525 */
+
+    --card: 0 0% 100%; /* #FFFFFF */
+    --card-foreground: 220 48% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 14% 20%;
+    --popover-foreground: 220 48% 10%;
 
-    /* Blue theme for buyers/primary */
-    --primary: 217 91% 60%; /* Professional blue #4F7FE6 */
+    --primary: 220 100% 59%; /* #2D72FF */
     --primary-foreground: 0 0% 100%;
 
-    /* Orange theme for sellers */
-    --secondary: 14 90% 53%; /* Professional orange #E67343 */
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 213 36% 95%; /* #EEF2F7 */
+    --secondary-foreground: 220 48% 10%;
 
-    --muted: 210 40% 96%; /* Very light gray */
-    --muted-foreground: 215 16% 47%; /* Medium gray text */
+    --muted: 217 12% 54%; /* #7C8799 */
+    --muted-foreground: 217 17% 37%; /* #4E5A6E */
 
-    /* Green theme for actions/browse */
-    --accent: 142 76% 36%; /* Professional green #22C55E */
-    --accent-foreground: 0 0% 100%;
+    --accent: 189 100% 62%; /* Cyan neon */
+    --accent-foreground: 220 48% 10%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 100% 65%; /* #FF4D4D */
     --destructive-foreground: 0 0% 100%;
 
-    --border: 210 40% 91%; /* Light border */
-    --input: 210 40% 91%; /* Light input background */
-    --ring: 217 91% 60%; /* Blue focus ring */
-
-    /* Navigation colors */
-    --nav-background: 0 0% 100%;
-    --nav-foreground: 220 14% 20%;
-    --nav-muted: 215 16% 47%;
-    --nav-accent: 217 91% 60%;
-    --nav-accent-hover: 217 91% 50%;
-
-    /* Hero section colors */
-    --hero-background: 210 40% 96%;
-    --hero-accent: 217 91% 60%;
-    --hero-gradient-start: 210 40% 98%;
-    --hero-gradient-end: 210 40% 96%;
-
-    /* Professional brand colors */
-    --brand-blue: 217 91% 60%; /* #4F7FE6 */
-    --brand-orange: 14 90% 53%; /* #E67343 */
-    --brand-green: 142 76% 36%; /* #22C55E */
-    --brand-purple: 259 94% 51%; /* #8B5CF6 */
-
-    /* Success/Error colors */
-    --success: 142 76% 36%;
+    --success: 155 76% 44%; /* #1BC47D */
     --success-foreground: 0 0% 100%;
-    --warning: 43 89% 38%;
-    --warning-foreground: 0 0% 100%;
 
-    --radius: 0.75rem; /* Slightly more rounded */
+    --warning: 36 100% 64%; /* #FFB547 */
+    --warning-foreground: 24 100% 20%;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 220 14% 20%;
-    --sidebar-primary: 217 91% 60%;
+    --border: 222 32% 92%; /* #E4E8F1 */
+    --input: 213 36% 95%; /* #EEF2F7 */
+    --ring: 220 100% 59%;
+
+    /* Navigation + layout */
+    --nav-background: 0 0% 100%;
+    --nav-foreground: 220 48% 10%;
+    --nav-muted: 217 17% 37%;
+    --nav-accent: 220 100% 59%;
+    --nav-accent-hover: 220 100% 65%;
+
+    /* Hero + surfaces */
+    --hero-background: 213 36% 95%;
+    --hero-accent: 220 100% 59%;
+    --hero-gradient-start: 216 56% 98%;
+    --hero-gradient-end: 213 36% 95%;
+
+    /* Brand accents */
+    --brand-blue: 220 100% 59%;
+    --brand-cyan: 189 100% 62%;
+    --brand-purple: 253 100% 63%;
+    --brand-green: 155 76% 44%;
+    --brand-orange: 36 100% 64%;
+    --brand-red: 0 100% 65%;
+
+    --radius: 1rem; /* 16px cards */
+    --radius-button: 0.75rem; /* 12px buttons */
+
+    /* Sidebar surfaces */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 48% 10%;
+    --sidebar-primary: 220 100% 59%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 40% 96%;
-    --sidebar-accent-foreground: 220 14% 20%;
-    --sidebar-border: 210 40% 91%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-accent: 213 36% 95%;
+    --sidebar-accent-foreground: 217 17% 37%;
+    --sidebar-border: 222 32% 92%;
+    --sidebar-ring: 220 100% 59%;
+
+    /* Shadows & glows */
+    --shadow-card: 0 15px 40px rgba(13, 17, 28, 0.08);
+    --shadow-card-glow: 0 0 40px rgba(45, 114, 255, 0.12);
+    --shadow-button: 0 10px 30px rgba(45, 114, 255, 0.25);
   }
 
   .dark {
-    --background: 220 14% 4%; /* Very dark background */
-    --foreground: 210 40% 96%;
+    /* Dark palette */
+    --background: 224 37% 8%; /* #0D111C */
+    --foreground: 0 0% 100%;
 
-    --card: 220 14% 8%;
-    --card-foreground: 210 40% 96%;
+    --card: 223 31% 15%; /* #1B2233 */
+    --card-foreground: 0 0% 100%;
 
-    --popover: 220 14% 8%;
-    --popover-foreground: 210 40% 96%;
+    --popover: 223 31% 15%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 217 91% 60%;
-    --primary-foreground: 220 14% 4%;
+    --primary: 220 100% 59%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 14 90% 53%;
+    --secondary: 221 31% 12%; /* #151B28 */
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 220 14% 12%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 217 13% 48%; /* #6A768A */
+    --muted-foreground: 217 20% 72%; /* #A9B4C6 */
 
-    --accent: 142 76% 46%;
-    --accent-foreground: 220 14% 4%;
+    --accent: 253 100% 63%; /* Purple highlight for glow states */
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 100% 65%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 14% 12%;
-    --input: 220 14% 12%;
-    --ring: 217 91% 60%;
-
-    /* Navigation colors - Dark Mode */
-    --nav-background: 220 14% 4%;
-    --nav-foreground: 210 40% 96%;
-    --nav-muted: 215 16% 47%;
-    --nav-accent: 217 91% 60%;
-    --nav-accent-hover: 217 91% 50%;
-
-    /* Hero section colors - Dark Mode */
-    --hero-background: 220 14% 4%;
-    --hero-accent: 217 91% 60%;
-    --hero-gradient-start: 220 14% 8%;
-    --hero-gradient-end: 220 14% 4%;
-
-    /* Professional brand colors - Dark Mode */
-    --brand-blue: 217 91% 60%;
-    --brand-orange: 14 90% 53%;
-    --brand-green: 142 76% 46%;
-    --brand-purple: 259 94% 51%;
-
-    /* Success/Error colors - Dark Mode */
-    --success: 142 76% 46%;
+    --success: 155 76% 44%;
     --success-foreground: 0 0% 100%;
-    --warning: 43 89% 48%;
+
+    --warning: 36 100% 64%;
     --warning-foreground: 0 0% 100%;
 
-    --sidebar-background: 220 14% 4%;
-    --sidebar-foreground: 210 40% 96%;
-    --sidebar-primary: 217 91% 60%;
+    --border: 219 30% 18%; /* #202A3C */
+    --input: 221 31% 12%;
+    --ring: 220 100% 59%;
+
+    --nav-background: 222 39% 8%; /* #0F1522 */
+    --nav-foreground: 0 0% 100%;
+    --nav-muted: 217 13% 48%;
+    --nav-accent: 220 100% 59%;
+    --nav-accent-hover: 220 100% 65%;
+
+    --hero-background: 221 31% 12%;
+    --hero-accent: 220 100% 59%;
+    --hero-gradient-start: 222 39% 8%;
+    --hero-gradient-end: 223 31% 15%;
+
+    --brand-blue: 220 100% 59%;
+    --brand-cyan: 189 100% 62%;
+    --brand-purple: 253 100% 63%;
+    --brand-green: 155 76% 44%;
+    --brand-orange: 36 100% 64%;
+    --brand-red: 0 100% 65%;
+
+    --sidebar-background: 224 37% 8%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 220 100% 59%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 14% 12%;
-    --sidebar-accent-foreground: 210 40% 96%;
-    --sidebar-border: 220 14% 12%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-accent: 221 31% 12%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 219 30% 18%;
+    --sidebar-ring: 220 100% 59%;
+
+    --shadow-card: 0 30px 60px rgba(2, 6, 23, 0.6);
+    --shadow-card-glow: 0 0 50px rgba(63, 224, 255, 0.25);
+    --shadow-button: 0 20px 40px rgba(45, 114, 255, 0.35);
   }
 }
 
@@ -146,7 +183,11 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--line-relaxed);
+    letter-spacing: var(--font-letterspacing-tight);
+    @apply bg-background text-foreground antialiased;
   }
 }
 
@@ -166,6 +207,45 @@
 
 /* Consistent Typography System */
 @layer components {
+  h1,
+  .text-h1 {
+    font-size: var(--text-h1);
+    font-weight: 700;
+    letter-spacing: var(--font-letterspacing-wide);
+    line-height: var(--line-tight);
+  }
+
+  h2,
+  .text-h2 {
+    font-size: var(--text-h2);
+    font-weight: 600;
+  }
+
+  h3,
+  .text-h3 {
+    font-size: var(--text-h3);
+    font-weight: 600;
+  }
+
+  p,
+  .text-body {
+    font-size: var(--text-body);
+    font-weight: 400;
+  }
+
+  small,
+  .text-small {
+    font-size: var(--text-small);
+    font-weight: 400;
+    color: hsl(var(--muted));
+  }
+
+  .text-badge {
+    font-size: var(--text-badge);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+  }
+
   /* Logo Dark Mode Support - Remove invert for natural colors */
   .logo-dark-invert {
     @apply transition-all duration-300;
@@ -175,92 +255,243 @@
     @apply transition-all duration-300;
   }
 
-  /* Professional Navigation - Clean white background */
+  /* Professional Navigation */
   .nav-glass {
-    @apply bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700;
+    background: rgba(248, 250, 253, 0.95);
+    border-bottom: 1px solid hsl(var(--border));
+    backdrop-filter: blur(18px);
+    color: hsl(var(--nav-foreground));
   }
-  
+
+  .dark .nav-glass {
+    background: rgba(13, 17, 28, 0.85);
+  }
+
   .nav-item {
-    @apply text-gray-600 dark:text-gray-300 hover:text-primary transition-colors duration-200 font-medium;
+    color: hsl(var(--nav-muted));
+    transition: color 200ms ease;
+    font-weight: 500;
   }
-  
+
+  .nav-item:hover {
+    color: hsl(var(--nav-accent));
+  }
+
   .nav-item-active {
-    @apply text-primary font-semibold;
+    color: hsl(var(--nav-accent));
+    font-weight: 600;
   }
 
-  /* Modern Headers - Clean professional styling */
+  /* Modern Headers */
   .header-gradient {
-    @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-gray-700;
-  }
-  
-  .header-glass {
-    @apply bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700;
+    background: linear-gradient(135deg, hsla(var(--hero-gradient-start) / 1), hsla(var(--hero-gradient-end) / 1));
+    color: hsl(var(--foreground));
+    border-bottom: 1px solid hsl(var(--border));
   }
 
-  /* Brand Typography */
-  .brand-title {
-    @apply font-playfair font-bold text-primary;
+  .header-glass {
+    background: hsl(var(--hero-background));
+    border-bottom: 1px solid hsl(var(--border));
   }
-  
+
+  /* Buttons */
+  .btn-base {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: 14px 24px;
+    border-radius: var(--radius-button);
+    font-size: var(--text-body);
+    font-weight: 600;
+    transition: transform 150ms ease, box-shadow 200ms ease, background-color 200ms ease,
+      color 200ms ease;
+  }
+
+  .btn-base:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(45, 114, 255, 0.35);
+  }
+
+  .btn-primary {
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    box-shadow: var(--shadow-button);
+  }
+
+  .btn-primary:hover {
+    background: hsl(220 100% 65%);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    border: 1px solid hsl(var(--primary));
+    color: hsl(var(--primary));
+  }
+
+  .btn-secondary:hover {
+    background: rgba(45, 114, 255, 0.1);
+  }
+
+  .btn-ghost {
+    background: hsl(var(--secondary));
+    color: hsl(var(--secondary-foreground));
+  }
+
+  .btn-ghost:hover {
+    background: hsl(213 30% 90%);
+  }
+
+  .btn-danger {
+    background: hsl(var(--destructive));
+    color: hsl(var(--destructive-foreground));
+  }
+
+  .btn-danger:hover {
+    background: hsl(0 100% 70%);
+  }
+
+  .btn-accent {
+    background: linear-gradient(135deg, #2d72ff, #6a40ff);
+    color: #fff;
+    box-shadow: var(--shadow-card-glow);
+  }
+
+  .btn-accent:hover {
+    background: linear-gradient(135deg, #3a7cff, #7c54ff);
+  }
+
+  /* Cards */
+  .card-premium {
+    background: hsl(var(--card));
+    color: hsl(var(--card-foreground));
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border));
+    padding: var(--space-xl);
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-premium:after {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    border-radius: calc(var(--radius) - 2px);
+    pointer-events: none;
+    box-shadow: inset 0 0 25px rgba(63, 224, 255, 0.08);
+  }
+
+  .card-premium.dark-card {
+    box-shadow: var(--shadow-card-glow);
+  }
+
+  .card-title {
+    font-size: var(--text-h3);
+    font-weight: 600;
+    color: hsl(var(--foreground));
+  }
+
+  .card-description {
+    margin-top: var(--space-sm);
+    color: hsl(var(--muted));
+  }
+
+  .icon-pill {
+    width: 48px;
+    height: 48px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #2d72ff, #6a40ff);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    box-shadow: 0 10px 25px rgba(106, 64, 255, 0.35);
+  }
+
+  .chart-surface {
+    background: transparent;
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border));
+    padding: var(--space-xl);
+  }
+
+  .chart-grid {
+    stroke: rgba(255, 255, 255, 0.05);
+  }
+
+  .stat-glow {
+    border-radius: calc(var(--radius) - 4px);
+    background: radial-gradient(circle at top, rgba(63, 224, 255, 0.12), transparent 60%);
+  }
+
+  .brand-title {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    letter-spacing: var(--font-letterspacing-wide);
+    color: hsl(var(--primary));
+  }
+
   /* Page Headers */
   .page-header {
-    @apply font-playfair font-bold text-foreground text-2xl sm:text-3xl md:text-4xl;
-  }
-  
-  .page-subheader {
-    @apply font-playfair font-semibold text-muted-foreground text-xl sm:text-2xl;
-  }
-  
-  /* Section Headers */
-  .section-title {
-    @apply font-playfair font-bold text-foreground text-lg sm:text-xl md:text-2xl;
-  }
-  
-  .section-subtitle {
-    @apply font-roboto text-muted-foreground text-base sm:text-lg;
-  }
-  
-  /* Body Text */
-  .body-text {
-    @apply font-roboto text-foreground text-sm sm:text-base;
-  }
-  
-  .body-text-large {
-    @apply font-roboto text-foreground text-base sm:text-lg;
-  }
-  
-  .body-text-small {
-    @apply font-roboto text-muted-foreground text-xs sm:text-sm;
-  }
-  
-  /* UI Elements */
-  .ui-label {
-    @apply font-roboto font-medium text-foreground text-sm;
-  }
-  
-  .ui-button-text {
-    @apply font-roboto font-semibold;
-  }
-  
-  /* Card Content */
-  .card-title {
-    @apply font-roboto font-semibold text-foreground text-lg;
-  }
-  
-  .card-description {
-    @apply font-roboto text-muted-foreground text-sm;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: clamp(28px, 5vw, 36px);
+    color: hsl(var(--foreground));
   }
 
-  /* Professional Buttons */
-  .btn-primary {
-    @apply bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300;
+  .page-subheader {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: clamp(18px, 4vw, 24px);
+    color: hsl(var(--muted));
   }
-  
-  .btn-secondary {
-    @apply bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300;
+
+  /* Section Headers */
+  .section-title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(18px, 3vw, 24px);
+    color: hsl(var(--foreground));
   }
-  
-  .btn-accent {
-    @apply bg-accent hover:bg-accent/90 text-accent-foreground font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300;
+
+  .section-subtitle {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    color: hsl(var(--muted));
+  }
+
+  /* Body Text */
+  .body-text {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    color: hsl(var(--foreground));
+  }
+
+  .body-text-large {
+    font-family: var(--font-sans);
+    font-size: 18px;
+    color: hsl(var(--foreground));
+  }
+
+  .body-text-small {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: hsl(var(--muted));
+  }
+
+  /* UI Elements */
+  .ui-label {
+    font-family: var(--font-sans);
+    font-size: var(--text-small);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .ui-button-text {
+    font-family: var(--font-sans);
+    font-weight: 600;
   }
 }
