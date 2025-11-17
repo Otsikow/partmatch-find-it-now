@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { processAllCarLogos } from '@/utils/logoProcessor';
+import { useState } from 'react';
+import { processAllCarLogos, CAR_LOGO_COUNT } from '@/utils/logoProcessor';
 import { Button } from '@/components/ui/button';
 import { Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 
@@ -17,12 +17,15 @@ export const LogoProcessor = ({ onProcessingComplete }: LogoProcessorProps) => {
   const handleProcessLogos = async () => {
     setIsProcessing(true);
     setProcessedCount(0);
-    setTotalCount(55); // Total number of logos
+    setTotalCount(CAR_LOGO_COUNT);
     setError(null);
     setIsComplete(false);
 
     try {
-      const processedLogos = await processAllCarLogos();
+      const processedLogos = await processAllCarLogos((processed, total) => {
+        setProcessedCount(processed);
+        setTotalCount(total);
+      });
       setIsComplete(true);
       onProcessingComplete?.(processedLogos);
     } catch (err) {
