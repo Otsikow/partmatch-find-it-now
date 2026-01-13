@@ -2,12 +2,12 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Users, 
-  UserCheck, 
-  UserX, 
-  Shield, 
-  ShoppingCart, 
+import {
+  Users,
+  UserCheck,
+  UserX,
+  Shield,
+  ShoppingCart,
   User,
   AlertTriangle
 } from "lucide-react";
@@ -27,13 +27,8 @@ interface UserManagementStatsProps {
 
 const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStatsProps) => {
   const isMobile = useIsMobile();
-  console.log('UserManagementStats received users:', users.length);
-  console.log('Users breakdown:', users.map(u => ({ 
-    id: u.id.slice(0, 8), 
-    type: u.user_type, 
-    verified: u.is_verified, 
-    blocked: u.is_blocked 
-  })));
+  // Log removed for production
+  // Log removed for production
 
   // Fix the calculation logic to properly count verified users
   const stats = React.useMemo(() => ({
@@ -53,24 +48,24 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
     verifiedBuyers: users.filter(u => u.user_type === 'owner' && u.is_verified).length,
   }), [users]);
 
-  console.log('Calculated stats:', stats);
+  // Log removed for production
 
-  const StatCard = ({ 
-    title, 
-    value, 
-    icon: Icon, 
-    color, 
+  const StatCard = ({
+    title,
+    value,
+    icon: Icon,
+    color,
     bgColor,
     onClick
-  }: { 
-    title: string; 
-    value: number; 
-    icon: any; 
-    color: string; 
+  }: {
+    title: string;
+    value: number;
+    icon: any;
+    color: string;
     bgColor: string;
     onClick?: () => void;
   }) => (
-    <Card 
+    <Card
       className={`${bgColor} border-0 shadow-lg hover:shadow-xl transition-all duration-300 ${onClick ? 'cursor-pointer hover:scale-105' : ''} ${isMobile ? 'h-24' : 'h-auto'}`}
       onClick={onClick}
     >
@@ -95,7 +90,7 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         color="text-blue-600"
         bgColor="bg-gradient-to-br from-blue-50 to-blue-100"
         onClick={() => {
-          console.log('Total Users clicked - navigating to show all users');
+          // Log removed for production
           // Navigate to the tab with the most users to show all
           if (stats.buyers >= stats.sellers && stats.buyers >= stats.admins) {
             onNavigateToCategory('buyers');
@@ -106,7 +101,7 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
           }
         }}
       />
-      
+
       <StatCard
         title="Sellers"
         value={stats.sellers}
@@ -114,11 +109,11 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         color="text-purple-600"
         bgColor="bg-gradient-to-br from-purple-50 to-purple-100"
         onClick={() => {
-          console.log('Sellers clicked - navigating to sellers tab');
+          // Log removed for production
           onNavigateToCategory('sellers');
         }}
       />
-      
+
       <StatCard
         title="Buyers"
         value={stats.buyers}
@@ -126,11 +121,11 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         color="text-green-600"
         bgColor="bg-gradient-to-br from-green-50 to-green-100"
         onClick={() => {
-          console.log('Buyers clicked - navigating to buyers tab');
+          // Log removed for production
           onNavigateToCategory('buyers');
         }}
       />
-      
+
       <StatCard
         title="Admins"
         value={stats.admins}
@@ -138,11 +133,11 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         color="text-indigo-600"
         bgColor="bg-gradient-to-br from-indigo-50 to-indigo-100"
         onClick={() => {
-          console.log('Admins clicked - navigating to admins tab');
+          // Log removed for production
           onNavigateToCategory('admins');
         }}
       />
-      
+
       <StatCard
         title="Verified"
         value={stats.verified}
@@ -150,15 +145,11 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         color="text-emerald-600"
         bgColor="bg-gradient-to-br from-emerald-50 to-emerald-100"
         onClick={() => {
-          console.log('Verified clicked - showing verified users. Stats:', {
-            verified: stats.verified,
-            verifiedSellers: stats.verifiedSellers,
-            verifiedBuyers: users.filter(u => u.user_type === 'owner' && u.is_verified && !u.is_blocked).length
-          });
+          // Log removed for production
           // Navigate to the category with most verified users
           const verifiedBuyers = users.filter(u => u.user_type === 'owner' && u.is_verified && !u.is_blocked).length;
           const verifiedAdmins = users.filter(u => u.user_type === 'admin' && u.is_verified && !u.is_blocked).length;
-          
+
           if (stats.verifiedSellers >= verifiedBuyers && stats.verifiedSellers >= verifiedAdmins) {
             onNavigateToCategory('sellers');
           } else if (verifiedBuyers >= verifiedAdmins) {
@@ -168,7 +159,7 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
           }
         }}
       />
-      
+
       <StatCard
         title="Unverified"
         value={stats.unverified}
@@ -176,10 +167,10 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         color="text-yellow-600"
         bgColor="bg-gradient-to-br from-yellow-50 to-yellow-100"
         onClick={() => {
-          console.log('Unverified clicked - showing unverified users');
+          // Log removed for production
           // Navigate to the category with most unverified users
           const unverifiedBuyers = users.filter(u => u.user_type === 'owner' && !u.is_verified && !u.is_blocked).length;
-          
+
           if (stats.unverifiedSellers >= unverifiedBuyers) {
             onNavigateToCategory('sellers');
           } else {
@@ -187,7 +178,7 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
           }
         }}
       />
-      
+
       <StatCard
         title="Suspended"
         value={stats.suspended}
@@ -195,11 +186,11 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         color="text-red-600"
         bgColor="bg-gradient-to-br from-red-50 to-red-100"
         onClick={() => {
-          console.log('Suspended clicked - showing suspended users');
+          // Log removed for production
           // Navigate to the category with most suspended users
           const suspendedSellers = users.filter(u => u.user_type === 'supplier' && u.is_blocked).length;
           const suspendedBuyers = users.filter(u => u.user_type === 'owner' && u.is_blocked).length;
-          
+
           if (suspendedSellers >= suspendedBuyers) {
             onNavigateToCategory('sellers');
           } else {
@@ -207,12 +198,12 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
           }
         }}
       />
-      
+
       <Card className={`bg-gradient-to-br from-gray-50 to-gray-100 border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer hover:scale-105 ${isMobile ? 'h-24' : 'h-auto'}`}
-            onClick={() => {
-              console.log('Seller breakdown card clicked');
-              onNavigateToCategory('sellers');
-            }}>
+        onClick={() => {
+          // Log removed for production
+          onNavigateToCategory('sellers');
+        }}>
         <CardHeader className={`flex flex-col space-y-1.5 ${isMobile ? 'pb-1 pt-2 px-3' : 'pb-2'}`}>
           <CardTitle className={`${isMobile ? 'text-xs' : 'text-xs'} text-gray-500 font-medium`}>
             Seller Breakdown
@@ -220,7 +211,7 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
         </CardHeader>
         <CardContent className={`space-y-1 ${isMobile ? 'px-3 pb-2' : 'space-y-2'}`}>
           <div className="flex items-center gap-2">
-            <Badge 
+            <Badge
               className={`bg-green-100 text-green-800 hover:bg-green-200 cursor-pointer transition-colors ${isMobile ? 'text-xs px-1 py-0' : 'text-xs'}`}
               onClick={(e) => {
                 e.stopPropagation();
@@ -231,7 +222,7 @@ const UserManagementStats = ({ users, onNavigateToCategory }: UserManagementStat
             </Badge>
           </div>
           <div className="flex items-center gap-2">
-            <Badge 
+            <Badge
               className={`bg-yellow-100 text-yellow-800 hover:bg-yellow-200 cursor-pointer transition-colors ${isMobile ? 'text-xs px-1 py-0' : 'text-xs'}`}
               onClick={(e) => {
                 e.stopPropagation();

@@ -72,13 +72,15 @@ const AdminDashboard = () => {
   };
 
   const handleViewUserDetails = (user: any) => {
-    console.log("🔧 ADMIN DEBUG: Opening user details modal for:", user);
+// Log removed for production
+    // console.log("🔧 ADMIN DEBUG: Opening user details modal for:", user);
     setSelectedUser(user);
     setShowUserDetails(true);
   };
 
   const handleNavigateToCategory = (category: string, filter?: string) => {
-    console.log('Navigating to category:', category, 'with filter:', filter);
+// Log removed for production
+    // console.log('Navigating to category:', category, 'with filter:', filter);
     setActiveTab("users");
     setActiveUserTab(category);
   };

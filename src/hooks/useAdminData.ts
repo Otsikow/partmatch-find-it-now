@@ -73,18 +73,18 @@ export const useAdminData = () => {
 
   const fetchData = async () => {
     try {
-      console.log('🔧 ADMIN DEBUG: Starting fetchData...');
+      // Log removed for production
       setLoading(true);
-      
+
       // Check current user authentication
       const { data: { user }, error: userError } = await supabase.auth.getUser();
-      console.log('🔧 ADMIN DEBUG: Current user:', user?.email, 'ID:', user?.id);
-      
+      // Log removed for production
+
       if (userError) {
         console.error('🔧 ADMIN DEBUG: Auth error:', userError);
         throw userError;
       }
-      
+
       // Fetch real requests from database
       const { data: requestsData, error: requestsError } = await supabase
         .from('part_requests')
@@ -123,7 +123,7 @@ export const useAdminData = () => {
       }
 
       // Fetch users from profiles table - buyers are now auto-verified
-      console.log('Fetching users from profiles...');
+      // Log removed for production
       const { data: usersData, error: usersError } = await supabase
         .from('profiles')
         .select('*')
@@ -134,13 +134,7 @@ export const useAdminData = () => {
         throw usersError;
       }
 
-      console.log('Raw users data:', usersData?.length || 0, 'users fetched');
-      console.log('Sample user data:', usersData?.slice(0, 3).map(u => ({ 
-        id: u.id.slice(0, 8), 
-        user_type: u.user_type, 
-        is_verified: u.is_verified, 
-        is_blocked: u.is_blocked 
-      })));
+      // Log removed for production
 
       // Transform users data - buyers are auto-verified, only suppliers need manual verification
       const transformedUsers: UserProfile[] = (usersData || []).map(user => ({
@@ -149,12 +143,7 @@ export const useAdminData = () => {
         user_type: user.user_type as 'owner' | 'supplier' | 'admin'
       }));
 
-      console.log('Transformed users:', transformedUsers.length);
-      console.log('User types breakdown:', {
-        suppliers: transformedUsers.filter(u => u.user_type === 'supplier').length,
-        owners: transformedUsers.filter(u => u.user_type === 'owner').length,
-        admins: transformedUsers.filter(u => u.user_type === 'admin').length
-      });
+      // Log removed for production
 
       // Log detailed statistics - note buyers are now auto-verified
       const userStats = {
@@ -170,8 +159,8 @@ export const useAdminData = () => {
         // Buyers are auto-verified, so we track them separately
         autoVerifiedBuyers: transformedUsers.filter(u => u.user_type === 'owner' && u.is_verified && !u.is_blocked).length,
       };
-      
-      console.log('Fresh user statistics (buyers auto-verified):', userStats);
+
+      // Log removed for production
 
       // Transform requests data
       const transformedRequests: Request[] = (requestsData || []).map(req => ({
@@ -213,7 +202,7 @@ export const useAdminData = () => {
       setVerifications(transformedVerifications);
       setUsers(transformedUsers);
 
-      console.log('Admin data updated successfully with fresh data (buyers auto-verified)');
+      // Log removed for production
     } catch (error) {
       console.error('Error fetching admin data:', error);
       toast({
