@@ -29,7 +29,7 @@ export const useCarParts = (params?: UseCarPartsParams) => {
     try {
       setLoading(true);
       setError(null);
-      
+
       let query = supabase
         .from('car_parts')
         .select(`
@@ -52,7 +52,7 @@ export const useCarParts = (params?: UseCarPartsParams) => {
           updated_at,
           status,
           is_featured,
-          profiles!inner(
+          profiles:profiles!car_parts_supplier_id_fkey(
             first_name,
             last_name,
             phone,
@@ -93,13 +93,13 @@ export const useCarParts = (params?: UseCarPartsParams) => {
 
       if (error) {
         console.error('Error fetching parts:', error);
-        
-        const isServiceUnavailable = 
-          error.message?.includes('503') || 
-          error.message?.includes('timeout') || 
+
+        const isServiceUnavailable =
+          error.message?.includes('503') ||
+          error.message?.includes('timeout') ||
           error.message?.includes('upstream connect error');
-          
-        setError(isServiceUnavailable 
+
+        setError(isServiceUnavailable
           ? "Service temporarily unavailable. Please check your connection and try again."
           : error.message
         );
@@ -113,17 +113,17 @@ export const useCarParts = (params?: UseCarPartsParams) => {
         maxDistance: params?.filters?.maxDistance,
         totalPartsBeforeFilter: filteredParts.length
       });
-      
+
       if (params?.userLocation && params.filters?.maxDistance) {
         console.log('User location:', params.userLocation);
         console.log('Max distance filter:', params.filters.maxDistance);
-        
+
         filteredParts = filteredParts.filter(part => {
           if (!part.latitude || !part.longitude) {
             console.log(`Part ${part.id} has no coordinates, skipping`);
             return false;
           }
-          
+
           const withinDistance = isWithinDistance(
             params.userLocation!.latitude,
             params.userLocation!.longitude,
@@ -131,14 +131,14 @@ export const useCarParts = (params?: UseCarPartsParams) => {
             part.longitude,
             params.filters.maxDistance!
           );
-          
+
           if (!withinDistance) {
             console.log(`Part ${part.id} is outside the distance range of ${params.filters.maxDistance} miles`);
           }
-          
+
           return withinDistance;
         });
-        
+
         console.log(`Filtered to ${filteredParts.length} parts within ${params.filters.maxDistance} miles`);
 
         // Sort by distance
@@ -182,7 +182,7 @@ export const useCarParts = (params?: UseCarPartsParams) => {
               return img;
             });
         }
-        
+
         return {
           ...part,
           condition: part.condition as 'New' | 'Used' | 'Refurbished',
