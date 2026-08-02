@@ -23,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 import RequestCard from "@/components/RequestCard";
 import { useOfferHandling } from "@/hooks/useOfferHandling";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
+import { withRequestTimeout } from "@/lib/withRequestTimeout";
 
 interface PartRequest {
   id: string;
@@ -98,11 +99,13 @@ const SearchParts = () => {
     setRequestsLoading(true);
     setRequestsError(null);
     try {
-      const { data, error } = await supabase
-        .from("part_requests")
-        .select("*")
-        .eq("status", "pending")
-        .order("created_at", { ascending: false });
+      const { data, error } = await withRequestTimeout(
+        supabase
+          .from("part_requests")
+          .select("*")
+          .eq("status", "pending")
+          .order("created_at", { ascending: false })
+      );
 
       if (error) throw error;
       setRequests(data || []);

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { CarPart } from '@/types/CarPart';
+import { withRequestTimeout } from '@/lib/withRequestTimeout';
 
 export const useFeaturedParts = (countryCode?: string) => {
   const [featuredParts, setFeaturedParts] = useState<CarPart[]>([]);
@@ -40,9 +41,11 @@ export const useFeaturedParts = (countryCode?: string) => {
       // Add time filter - either no expiry or not yet expired
       query = query.or('featured_until.is.null,featured_until.gt.' + new Date().toISOString());
       
-      const { data, error } = await query
-        .order('created_at', { ascending: false })
-        .limit(8);
+      const { data, error } = await withRequestTimeout(
+        query
+          .order('created_at', { ascending: false })
+          .limit(8)
+      );
 
       if (error) {
         console.error('Error fetching featured parts:', error);

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { CarPart } from "@/types/CarPart";
 import { calculateDistance, isWithinDistance } from "@/utils/distanceUtils";
+import { withRequestTimeout } from "@/lib/withRequestTimeout";
 
 interface UseCarPartsParams {
   searchTerm?: string;
@@ -89,7 +90,7 @@ export const useCarParts = (params?: UseCarPartsParams) => {
         }
       }
 
-      const { data, error } = await query;
+      const { data, error } = await withRequestTimeout(query);
 
       if (error) {
         console.error('Error fetching parts:', error);
