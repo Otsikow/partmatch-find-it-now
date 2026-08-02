@@ -31,7 +31,7 @@ interface AuthContextType {
   updatePassword: (password: string) => Promise<{ error: any }>;
 }
 
-const AuthContext = createContext<AuthContextType>({} as AuthContextType);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -133,42 +133,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setSession(session);
       setUser(session?.user ?? null);
 
-      // Fetch user profile if user is logged in
+      // Fetch the authoritative profile. Google role finalisation happens on
+      // /auth/callback so established accounts are never rewritten here.
       if (session?.user) {
-        // Check if this is a new Google OAuth user that needs user_type set
-        const pendingUserType = localStorage.getItem('pending_google_user_type');
-        
-        if (pendingUserType && event === 'SIGNED_IN') {
-          console.log("AuthProvider: New Google OAuth user detected, setting user_type:", pendingUserType);
-          
-          // Update the user's profile with the selected user type
-          setTimeout(async () => {
-            try {
-              const { error } = await supabase
-                .from('profiles')
-                .update({ 
-                  user_type: pendingUserType as 'owner' | 'supplier',
-                })
-                .eq('id', session.user.id);
-              
-              if (error) {
-                console.error("AuthProvider: Error updating user type:", error);
-              } else {
-                console.log("AuthProvider: Successfully updated user type to:", pendingUserType);
-                localStorage.removeItem('pending_google_user_type');
-              }
-              
-              // Fetch the updated profile
-              fetchUserProfile(session.user.id);
-            } catch (err) {
-              console.error("AuthProvider: Exception updating user type:", err);
-            }
-          }, 0);
-        } else {
-          setTimeout(() => {
-            fetchUserProfile(session.user.id);
-          }, 0);
-        }
+        setTimeout(() => {
+          fetchUserProfile(session.user.id);
+        }, 0);
       }
 
       setLoading(false);

@@ -1,9 +1,6 @@
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import HeroLogo from "../HeroLogo";
-const heroBackgrounds = ["linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%)", "linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--primary)) 100%)", "linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(var(--accent)) 100%)"];
 const EnhancedHeroSection = () => {
   return <div className="relative min-h-[60vh] flex items-center justify-center text-white overflow-hidden">
       {/* Hero Background Image */}
@@ -12,7 +9,6 @@ const EnhancedHeroSection = () => {
         alt="Car parts marketplace"
         className="absolute inset-0 w-full h-full object-cover"
         loading="eager"
-        fetchPriority="high"
       />
       {/* Professional overlay for text readability */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70"></div>
@@ -23,7 +19,7 @@ const EnhancedHeroSection = () => {
           <HeroLogo />
         </div>
         
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold font-playfair mb-4 drop-shadow-lg">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold tracking-[-0.04em] mb-4 drop-shadow-lg">
           Buy & Sell Car Parts Fast
         </h1>
         

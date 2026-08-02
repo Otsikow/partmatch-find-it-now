@@ -318,7 +318,6 @@ const SellerAuth = () => {
                   {/* Google Sign-In Button */}
                   <GoogleSignInButton
                     userType="supplier"
-                    redirectTo={`${window.location.origin}/seller-dashboard`}
                     disabled={loading}
                   />
 

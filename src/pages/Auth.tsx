@@ -84,7 +84,6 @@ const Auth = () => {
         alt="Authentication background"
         className="absolute inset-0 w-full h-full object-cover opacity-30"
         loading="eager"
-        fetchPriority="high"
       />
       <div className="absolute inset-0 bg-gradient-to-br from-background/80 via-background/60 to-muted/80" />
       <div className="relative z-10">

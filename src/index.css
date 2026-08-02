@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,9 +7,8 @@
 @layer base {
   :root {
     /* Font System */
-    --font-sans: "Inter", "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI",
-      system-ui, sans-serif;
-    --font-letterspacing-tight: -0.01em;
+    --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+    --font-letterspacing-tight: -0.012em;
     --font-letterspacing-wide: 0.02em;
 
     /* Typography scale */
@@ -34,8 +31,8 @@
     --space-3xl: 48px;
 
     /* Light mode palette (PARTMATCH Light) */
-    --background: 216 56% 98%; /* #F8FAFD */
-    --foreground: 220 48% 10%; /* #0D1525 */
+    --background: 240 20% 98%; /* Apple system grouped background */
+    --foreground: 240 6% 10%;
 
     --card: 0 0% 100%; /* #FFFFFF */
     --card-foreground: 220 48% 10%;
@@ -43,14 +40,14 @@
     --popover: 0 0% 100%;
     --popover-foreground: 220 48% 10%;
 
-    --primary: 220 100% 59%; /* #2D72FF */
+    --primary: 211 100% 50%; /* Apple system blue #007AFF */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 213 36% 95%; /* #EEF2F7 */
+    --secondary: 240 11% 95%;
     --secondary-foreground: 220 48% 10%;
 
-    --muted: 217 12% 54%; /* #7C8799 */
-    --muted-foreground: 217 17% 37%; /* #4E5A6E */
+    --muted: 240 4% 56%;
+    --muted-foreground: 240 4% 40%;
 
     --accent: 189 100% 62%; /* Cyan neon */
     --accent-foreground: 220 48% 10%;
@@ -64,9 +61,9 @@
     --warning: 36 100% 64%; /* #FFB547 */
     --warning-foreground: 24 100% 20%;
 
-    --border: 222 32% 92%; /* #E4E8F1 */
-    --input: 213 36% 95%; /* #EEF2F7 */
-    --ring: 220 100% 59%;
+    --border: 240 6% 89%;
+    --input: 240 11% 95%;
+    --ring: 211 100% 50%;
 
     /* Navigation + layout */
     --nav-background: 0 0% 100%;
@@ -89,8 +86,8 @@
     --brand-orange: 36 100% 64%;
     --brand-red: 0 100% 65%;
 
-    --radius: 1rem; /* 16px cards */
-    --radius-button: 0.75rem; /* 12px buttons */
+    --radius: 1.125rem;
+    --radius-button: 0.75rem;
 
     /* Sidebar surfaces */
     --sidebar-background: 0 0% 100%;
@@ -103,9 +100,9 @@
     --sidebar-ring: 220 100% 59%;
 
     /* Shadows & glows */
-    --shadow-card: 0 15px 40px rgba(13, 17, 28, 0.08);
-    --shadow-card-glow: 0 0 40px rgba(45, 114, 255, 0.12);
-    --shadow-button: 0 10px 30px rgba(45, 114, 255, 0.25);
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.03), 0 14px 40px rgba(15, 23, 42, 0.07);
+    --shadow-card-glow: 0 18px 50px rgba(0, 122, 255, 0.12);
+    --shadow-button: 0 8px 24px rgba(0, 122, 255, 0.2);
   }
 
   .dark {
@@ -188,6 +185,13 @@
     line-height: var(--line-relaxed);
     letter-spacing: var(--font-letterspacing-tight);
     @apply bg-background text-foreground antialiased;
+    min-width: 320px;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: hsla(var(--primary) / 0.2);
   }
 }
 
@@ -257,14 +261,16 @@
 
   /* Professional Navigation */
   .nav-glass {
-    background: rgba(248, 250, 253, 0.95);
-    border-bottom: 1px solid hsl(var(--border));
-    backdrop-filter: blur(18px);
+    background: rgba(250, 250, 252, 0.78);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.72);
+    backdrop-filter: saturate(180%) blur(24px);
+    -webkit-backdrop-filter: saturate(180%) blur(24px);
     color: hsl(var(--nav-foreground));
   }
 
   .dark .nav-glass {
-    background: rgba(13, 17, 28, 0.85);
+    background: rgba(18, 18, 20, 0.78);
+    border-bottom-color: rgba(255, 255, 255, 0.08);
   }
 
   .nav-item {
@@ -493,5 +499,25 @@
   .ui-button-text {
     font-family: var(--font-sans);
     font-weight: 600;
+  }
+
+  .apple-surface {
+    border: 1px solid hsla(var(--border) / 0.72);
+    border-radius: 1.25rem;
+    background: hsla(var(--card) / 0.86);
+    box-shadow: var(--shadow-card);
+    backdrop-filter: saturate(160%) blur(24px);
+    -webkit-backdrop-filter: saturate(160%) blur(24px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

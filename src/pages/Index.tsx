@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import MobileHeader from "@/components/MobileHeader";
-import MobileBottomTabs from "@/components/MobileBottomTabs";
+import Navigation from "@/components/Navigation";
 import EnhancedHomePage from "@/components/home/EnhancedHomePage";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
@@ -90,12 +90,16 @@ const Index = () => {
   // Show home page content for both authenticated and unauthenticated users
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted body-text">
-      <MobileHeader />
+      <div className="md:hidden">
+        <MobileHeader />
+      </div>
+      <div className="hidden md:block">
+        <Navigation />
+      </div>
       <div className="pb-20">
         <EnhancedHomePage />
       </div>
       <Footer />
-      <MobileBottomTabs />
     </div>
   );
 };

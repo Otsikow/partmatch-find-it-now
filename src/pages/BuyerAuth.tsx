@@ -300,7 +300,6 @@ const BuyerAuth = () => {
                   {/* Google Sign-In Button */}
                   <GoogleSignInButton
                     userType="owner"
-                    redirectTo={`${window.location.origin}/buyer-dashboard`}
                     disabled={loading}
                   />
 
