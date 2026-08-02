@@ -3,55 +3,54 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { lazy, Suspense } from "react";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { LocaleProvider } from "@/contexts/LocaleContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
-import PWANotificationManager from "@/components/PWANotificationManager";
-import PartMatchHelpBot from "@/components/PartMatchHelpBot";
 import { LocationProvider } from "@/contexts/LocationContext";
-import { useGeolocation } from "./hooks/useGeolocation";
 import { useIsMobile } from "./hooks/use-mobile";
 import { useTrackPresence } from "./hooks/useUserPresence";
 import MobileBottomTabs from "./components/MobileBottomTabs";
+import AppRouteFallback from "./components/AppRouteFallback";
 
-import Index from "./pages/Index";
-import AuthTypeSelector from "./components/AuthTypeSelector";
-import BuyerAuth from "./pages/BuyerAuth";
-import SellerAuth from "./pages/SellerAuth";
-import AdminAuth from "./pages/AdminAuth";
-import PhoneAuth from "./pages/PhoneAuth";
-import UserDashboard from "./pages/UserDashboard";
-import BuyerDashboard from "./pages/BuyerDashboard";
-import GuestDashboard from "./pages/GuestDashboard";
-import SellerDashboard from "./pages/SellerDashboard";
-import AdminDashboard from "./pages/AdminDashboard";
-import DashboardRouter from "./components/DashboardRouter";
-import RequestPart from "./pages/RequestPart";
-import PostPart from "./pages/PostPart";
-import ListingSuccess from "./pages/ListingSuccess";
-import RequestedCarParts from "./pages/RequestedCarParts";
-import SearchParts from "./pages/SearchParts";
-import SearchPartsWithMap from "./pages/SearchPartsWithMap";
-import Chat from "./pages/Chat";
-import About from "./pages/About";
-import FAQ from "./pages/FAQ";
-import Contact from "./pages/Contact";
-import Services from "./pages/Services";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import TermsOfService from "./pages/TermsOfService";
-import CookiePolicy from "./pages/CookiePolicy";
-import NotFound from "./pages/NotFound";
-import SimpleAuth from "./pages/SimpleAuth";
-import EmailVerification from "./pages/EmailVerification";
-import ButtonTestPage from "./pages/ButtonTestPage";
-import SellerProfile from "./pages/SellerProfile";
-import Profile from "./pages/Profile";
-import Blog from "./pages/Blog";
-import BlogPost from "./pages/BlogPost";
-import Testimonials from "./pages/Testimonials";
-import SavedParts from "./pages/SavedParts";
-import RecentViews from "./pages/RecentViews";
-import OAuthCallback from "./pages/OAuthCallback";
+const Index = lazy(() => import("./pages/Index"));
+const AuthTypeSelector = lazy(() => import("./components/AuthTypeSelector"));
+const BuyerAuth = lazy(() => import("./pages/BuyerAuth"));
+const SellerAuth = lazy(() => import("./pages/SellerAuth"));
+const AdminAuth = lazy(() => import("./pages/AdminAuth"));
+const PhoneAuth = lazy(() => import("./pages/PhoneAuth"));
+const BuyerDashboard = lazy(() => import("./pages/BuyerDashboard"));
+const GuestDashboard = lazy(() => import("./pages/GuestDashboard"));
+const SellerDashboard = lazy(() => import("./pages/SellerDashboard"));
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+const DashboardRouter = lazy(() => import("./components/DashboardRouter"));
+const RequestPart = lazy(() => import("./pages/RequestPart"));
+const PostPart = lazy(() => import("./pages/PostPart"));
+const ListingSuccess = lazy(() => import("./pages/ListingSuccess"));
+const RequestedCarParts = lazy(() => import("./pages/RequestedCarParts"));
+const SearchParts = lazy(() => import("./pages/SearchParts"));
+const SearchPartsWithMap = lazy(() => import("./pages/SearchPartsWithMap"));
+const Chat = lazy(() => import("./pages/Chat"));
+const About = lazy(() => import("./pages/About"));
+const FAQ = lazy(() => import("./pages/FAQ"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Services = lazy(() => import("./pages/Services"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const TermsOfService = lazy(() => import("./pages/TermsOfService"));
+const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const SimpleAuth = lazy(() => import("./pages/SimpleAuth"));
+const EmailVerification = lazy(() => import("./pages/EmailVerification"));
+const ButtonTestPage = lazy(() => import("./pages/ButtonTestPage"));
+const SellerProfile = lazy(() => import("./pages/SellerProfile"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Blog = lazy(() => import("./pages/Blog"));
+const BlogPost = lazy(() => import("./pages/BlogPost"));
+const Testimonials = lazy(() => import("./pages/Testimonials"));
+const SavedParts = lazy(() => import("./pages/SavedParts"));
+const RecentViews = lazy(() => import("./pages/RecentViews"));
+const OAuthCallback = lazy(() => import("./pages/OAuthCallback"));
+const PWANotificationManager = lazy(() => import("@/components/PWANotificationManager"));
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import SellerProtectedRoute from "./components/SellerProtectedRoute";
@@ -67,8 +66,6 @@ const PresenceTracker = () => {
 };
 
 function App() {
-  // Enable geolocation detection globally
-  useGeolocation();
   const isMobile = useIsMobile();
   return (
     <QueryClientProvider client={queryClient}>
@@ -81,6 +78,7 @@ function App() {
                 <Toaster />
                 <Sonner />
                 <BrowserRouter>
+                  <Suspense fallback={<AppRouteFallback />}>
                   <Routes>
                     <Route path="/" element={<Index />} />
                     <Route path="/auth" element={<AuthTypeSelector />} />
@@ -211,10 +209,12 @@ function App() {
                     />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
+                  </Suspense>
 
                   {isMobile && <MobileBottomTabs />}
-                  <PWANotificationManager />
-                  {/* <PartMatchHelpBot /> */}
+                  <Suspense fallback={null}>
+                    <PWANotificationManager />
+                  </Suspense>
                 </BrowserRouter>
               </TooltipProvider>
             </ThemeProvider>

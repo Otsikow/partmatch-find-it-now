@@ -40,19 +40,19 @@
     --popover: 0 0% 100%;
     --popover-foreground: 220 48% 10%;
 
-    --primary: 211 100% 50%; /* Apple system blue #007AFF */
+    --primary: 210 100% 40%; /* Accessible Apple-style blue #0066CC */
     --primary-foreground: 0 0% 100%;
 
     --secondary: 240 11% 95%;
     --secondary-foreground: 220 48% 10%;
 
-    --muted: 240 4% 56%;
-    --muted-foreground: 240 4% 40%;
+    --muted: 240 6% 94%;
+    --muted-foreground: 240 5% 34%;
 
     --accent: 189 100% 62%; /* Cyan neon */
     --accent-foreground: 220 48% 10%;
 
-    --destructive: 0 100% 65%; /* #FF4D4D */
+    --destructive: 354 100% 42%; /* Accessible Apple-style red #D70015 */
     --destructive-foreground: 0 0% 100%;
 
     --success: 155 76% 44%; /* #1BC47D */
@@ -63,23 +63,23 @@
 
     --border: 240 6% 89%;
     --input: 240 11% 95%;
-    --ring: 211 100% 50%;
+    --ring: 210 100% 40%;
 
     /* Navigation + layout */
     --nav-background: 0 0% 100%;
     --nav-foreground: 220 48% 10%;
     --nav-muted: 217 17% 37%;
-    --nav-accent: 220 100% 59%;
-    --nav-accent-hover: 220 100% 65%;
+    --nav-accent: 210 100% 40%;
+    --nav-accent-hover: 210 100% 34%;
 
     /* Hero + surfaces */
     --hero-background: 213 36% 95%;
-    --hero-accent: 220 100% 59%;
+    --hero-accent: 210 100% 40%;
     --hero-gradient-start: 216 56% 98%;
     --hero-gradient-end: 213 36% 95%;
 
     /* Brand accents */
-    --brand-blue: 220 100% 59%;
+    --brand-blue: 210 100% 40%;
     --brand-cyan: 189 100% 62%;
     --brand-purple: 253 100% 63%;
     --brand-green: 155 76% 44%;
@@ -92,17 +92,17 @@
     /* Sidebar surfaces */
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 220 48% 10%;
-    --sidebar-primary: 220 100% 59%;
+    --sidebar-primary: 210 100% 40%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 213 36% 95%;
     --sidebar-accent-foreground: 217 17% 37%;
     --sidebar-border: 222 32% 92%;
-    --sidebar-ring: 220 100% 59%;
+    --sidebar-ring: 210 100% 40%;
 
     /* Shadows & glows */
     --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.03), 0 14px 40px rgba(15, 23, 42, 0.07);
-    --shadow-card-glow: 0 18px 50px rgba(0, 122, 255, 0.12);
-    --shadow-button: 0 8px 24px rgba(0, 122, 255, 0.2);
+    --shadow-card-glow: 0 18px 50px rgba(0, 102, 204, 0.12);
+    --shadow-button: 0 8px 24px rgba(0, 102, 204, 0.2);
   }
 
   .dark {
@@ -116,20 +116,20 @@
     --popover: 223 31% 15%;
     --popover-foreground: 0 0% 100%;
 
-    --primary: 220 100% 59%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 211 100% 55%;
+    --primary-foreground: 224 37% 8%;
 
     --secondary: 221 31% 12%; /* #151B28 */
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 217 13% 48%; /* #6A768A */
-    --muted-foreground: 217 20% 72%; /* #A9B4C6 */
+    --muted: 220 18% 18%;
+    --muted-foreground: 217 20% 74%;
 
     --accent: 253 100% 63%; /* Purple highlight for glow states */
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 100% 65%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 3 100% 70%;
+    --destructive-foreground: 224 37% 8%;
 
     --success: 155 76% 44%;
     --success-foreground: 0 0% 100%;
@@ -143,7 +143,7 @@
 
     --nav-background: 222 39% 8%; /* #0F1522 */
     --nav-foreground: 0 0% 100%;
-    --nav-muted: 217 13% 48%;
+    --nav-muted: 217 18% 66%;
     --nav-accent: 220 100% 59%;
     --nav-accent-hover: 220 100% 65%;
 
@@ -162,7 +162,7 @@
     --sidebar-background: 224 37% 8%;
     --sidebar-foreground: 0 0% 100%;
     --sidebar-primary: 220 100% 59%;
-    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-primary-foreground: 224 37% 8%;
     --sidebar-accent: 221 31% 12%;
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 219 30% 18%;
@@ -241,7 +241,7 @@
   .text-small {
     font-size: var(--text-small);
     font-weight: 400;
-    color: hsl(var(--muted));
+    color: hsl(var(--muted-foreground));
   }
 
   .text-badge {
@@ -326,7 +326,7 @@
   }
 
   .btn-primary:hover {
-    background: hsl(220 100% 65%);
+    background: hsl(var(--nav-accent-hover));
   }
 
   .btn-secondary {
@@ -400,7 +400,7 @@
 
   .card-description {
     margin-top: var(--space-sm);
-    color: hsl(var(--muted));
+    color: hsl(var(--muted-foreground));
   }
 
   .icon-pill {
@@ -450,7 +450,7 @@
     font-family: var(--font-sans);
     font-weight: 500;
     font-size: clamp(18px, 4vw, 24px);
-    color: hsl(var(--muted));
+    color: hsl(var(--muted-foreground));
   }
 
   /* Section Headers */
@@ -464,7 +464,7 @@
   .section-subtitle {
     font-family: var(--font-sans);
     font-size: 16px;
-    color: hsl(var(--muted));
+    color: hsl(var(--muted-foreground));
   }
 
   /* Body Text */
@@ -483,7 +483,7 @@
   .body-text-small {
     font-family: var(--font-sans);
     font-size: 13px;
-    color: hsl(var(--muted));
+    color: hsl(var(--muted-foreground));
   }
 
   /* UI Elements */

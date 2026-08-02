@@ -16,9 +16,6 @@ export const useFeaturedParts = (countryCode?: string) => {
       setLoading(true);
       setError(null);
 
-      console.log('useFeaturedParts: Starting fetch...');
-      console.log('useFeaturedParts: Current time:', new Date().toISOString());
-
       let query = supabase
         .from('car_parts')
         .select(`
@@ -47,12 +44,13 @@ export const useFeaturedParts = (countryCode?: string) => {
         .order('created_at', { ascending: false })
         .limit(8);
 
-      console.log('useFeaturedParts: Query result:', { data, error });
-      console.log('useFeaturedParts: Found parts count:', data?.length || 0);
-
       if (error) {
         console.error('Error fetching featured parts:', error);
-        setError(error.message);
+        setError(
+          /failed to fetch|network|timeout|503|upstream/i.test(error.message || '')
+            ? 'The marketplace service is temporarily unavailable.'
+            : 'Featured parts could not be loaded.'
+        );
         return;
       }
 
@@ -85,7 +83,12 @@ export const useFeaturedParts = (countryCode?: string) => {
       setFeaturedParts(transformedParts);
     } catch (err) {
       console.error('Error in fetchFeaturedParts:', err);
-      setError('Failed to fetch featured parts');
+      const message = err instanceof Error ? err.message : '';
+      setError(
+        /failed to fetch|network|timeout/i.test(message)
+          ? 'The marketplace service is temporarily unavailable.'
+          : 'Featured parts could not be loaded.'
+      );
     } finally {
       setLoading(false);
     }

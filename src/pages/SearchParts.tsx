@@ -6,27 +6,23 @@ import { useAuth } from "@/contexts/AuthContext";
 import SearchControls from "@/components/SearchControls";
 import CarPartsList from "@/components/CarPartsList";
 import BrowsePartsHeroSection from "@/components/BrowsePartsHeroSection";
-import PageHeader from "@/components/PageHeader";
 import RequestExpandedDialog from "@/components/RequestExpandedDialog";
 import PendingRatingNotification from "@/components/PendingRatingNotification";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import {
   Search,
-  MapPin,
-  Calendar,
-  MessageCircle,
   Package,
   ClipboardList,
+  CloudOff,
+  RefreshCw,
 } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
-import ChatButton from "@/components/chat/ChatButton";
 import RequestCard from "@/components/RequestCard";
 import { useOfferHandling } from "@/hooks/useOfferHandling";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 
 interface PartRequest {
   id: string;
@@ -49,6 +45,7 @@ const SearchParts = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchTerm = useDebouncedValue(searchTerm);
   const [filters, setFilters] = useState({
     make: "",
     model: "",
@@ -63,12 +60,15 @@ const SearchParts = () => {
     parts,
     loading: partsLoading,
     error: partsError,
-  } = useCarParts({ searchTerm, filters });
+    refetch: refetchParts,
+  } = useCarParts({ searchTerm: debouncedSearchTerm, filters });
 
   // For part requests
   const [requests, setRequests] = useState<PartRequest[]>([]);
   const [requestsLoading, setRequestsLoading] = useState(true);
+  const [requestsError, setRequestsError] = useState<string | null>(null);
   const [requestSearchTerm, setRequestSearchTerm] = useState("");
+  const debouncedRequestSearchTerm = useDebouncedValue(requestSearchTerm);
   const [filteredRequests, setFilteredRequests] = useState<PartRequest[]>([]);
   const [selectedRequest, setSelectedRequest] = useState<PartRequest | null>(null);
   const [isRequestDialogOpen, setIsRequestDialogOpen] = useState(false);
@@ -82,19 +82,21 @@ const SearchParts = () => {
       (request) =>
         request.part_needed
           .toLowerCase()
-          .includes(requestSearchTerm.toLowerCase()) ||
+          .includes(debouncedRequestSearchTerm.toLowerCase()) ||
         request.car_make
           .toLowerCase()
-          .includes(requestSearchTerm.toLowerCase()) ||
+          .includes(debouncedRequestSearchTerm.toLowerCase()) ||
         request.car_model
           .toLowerCase()
-          .includes(requestSearchTerm.toLowerCase()) ||
-        request.location.toLowerCase().includes(requestSearchTerm.toLowerCase())
+          .includes(debouncedRequestSearchTerm.toLowerCase()) ||
+        request.location.toLowerCase().includes(debouncedRequestSearchTerm.toLowerCase())
     );
     setFilteredRequests(filtered);
-  }, [requestSearchTerm, requests]);
+  }, [debouncedRequestSearchTerm, requests]);
 
   const fetchRequests = async () => {
+    setRequestsLoading(true);
+    setRequestsError(null);
     try {
       const { data, error } = await supabase
         .from("part_requests")
@@ -106,11 +108,7 @@ const SearchParts = () => {
       setRequests(data || []);
     } catch (error) {
       console.error("Error fetching requests:", error);
-      toast({
-        title: t("error"),
-        description: "Failed to load requests",
-        variant: "destructive",
-      });
+      setRequestsError("Requests are temporarily unavailable. Please try again.");
     } finally {
       setRequestsLoading(false);
     }
@@ -127,19 +125,6 @@ const SearchParts = () => {
   const handleChatContact = (requestId: string, ownerId: string) => {
     // Navigate to chat with the request owner
     navigate(`/chat?sellerId=${ownerId}`);
-  };
-
-  const handleContact = (phone: string, request: PartRequest) => {
-    const message = `Hi! I saw your request for ${request.part_needed} for ${request.car_make} ${request.car_model} (${request.car_year}). I may have what you're looking for.`;
-    const whatsappUrl = `https://wa.me/${phone.replace(
-      /[^0-9]/g,
-      ""
-    )}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, "_blank");
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString();
   };
 
   return (
@@ -184,6 +169,7 @@ const SearchParts = () => {
               parts={parts}
               loading={partsLoading}
               error={partsError}
+              onRetry={refetchParts}
             />
           </TabsContent>
 
@@ -214,6 +200,18 @@ const SearchParts = () => {
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
                   <p className="text-muted-foreground">{t("loading")}...</p>
                 </div>
+              ) : requestsError ? (
+                <Card className="apple-surface mx-auto max-w-lg">
+                  <CardContent className="p-8 text-center" role="alert">
+                    <CloudOff className="mx-auto mb-4 h-10 w-10 text-muted-foreground" aria-hidden="true" />
+                    <h3 className="mb-2 text-lg font-semibold text-foreground">Requests temporarily unavailable</h3>
+                    <p className="text-sm text-muted-foreground">{requestsError}</p>
+                    <Button type="button" variant="outline" className="mt-5" onClick={fetchRequests}>
+                      <RefreshCw className="mr-2 h-4 w-4" aria-hidden="true" />
+                      Try again
+                    </Button>
+                  </CardContent>
+                </Card>
               ) : filteredRequests.length === 0 ? (
                 <Card>
                   <CardContent className="p-6 text-center">
