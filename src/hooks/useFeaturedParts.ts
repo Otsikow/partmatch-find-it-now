@@ -23,7 +23,7 @@ export const useFeaturedParts = (countryCode?: string) => {
         .from('car_parts')
         .select(`
           *,
-          profiles (
+          profiles:profiles!car_parts_supplier_id_fkey (
             first_name,
             last_name,
             is_verified,

@@ -4,8 +4,8 @@ import { Shield, ShoppingCart, Store, ArrowLeft, Home, LogOut } from "lucide-rea
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { beginGoogleSignIn } from "@/lib/googleAuth";
 import {
   Dialog,
   DialogContent,
@@ -20,6 +20,15 @@ const AuthTypeSelector = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [showUserTypeDialog, setShowUserTypeDialog] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const oauthError = params.get("oauth_error");
+    if (!oauthError) return;
+
+    toast.error(`Google sign-in could not be completed: ${oauthError}`);
+    window.history.replaceState({}, "", "/auth");
+  }, []);
 
   const handleSignOut = async () => {
     try {
@@ -50,29 +59,15 @@ const AuthTypeSelector = () => {
     try {
       setLoading(true);
       
-      // Store the user type in localStorage to retrieve after OAuth redirect
-      localStorage.setItem('pending_google_user_type', selectedUserType);
-      
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/auth`,
-          queryParams: {
-            access_type: 'offline',
-            prompt: 'consent',
-          },
-        },
-      });
+      const { error } = await beginGoogleSignIn(selectedUserType);
 
       if (error) {
         console.error('Google sign-in error:', error);
         toast.error("Google Sign-In Failed: " + (error.message || "Unable to sign in with Google"));
-        localStorage.removeItem('pending_google_user_type');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Google sign-in error:', error);
       toast.error("An unexpected error occurred. Please try again.");
-      localStorage.removeItem('pending_google_user_type');
     } finally {
       setLoading(false);
       setShowUserTypeDialog(false);
@@ -104,7 +99,6 @@ const AuthTypeSelector = () => {
             alt="Security authentication"
             className="w-full h-full object-cover"
             loading="eager"
-            fetchPriority="high"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/60"></div>
           <div className="absolute inset-0 flex items-center justify-center text-center">

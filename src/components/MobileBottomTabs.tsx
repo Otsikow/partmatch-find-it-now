@@ -39,7 +39,7 @@ const MobileBottomTabs = () => {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-xl border-t border-border/50 shadow-xl z-50 safe-area-pb">
+    <nav aria-label="Primary mobile navigation" className="fixed md:hidden bottom-0 left-0 right-0 bg-card/80 backdrop-blur-2xl border-t border-white/40 dark:border-white/10 shadow-[0_-8px_32px_rgba(15,23,42,0.08)] z-50 safe-area-pb">
       <div className="flex items-center justify-around py-1 px-2 max-w-screen-sm mx-auto">
         {tabs.map((tab) => {
           const Icon = tab.icon;
@@ -108,7 +108,7 @@ const MobileBottomTabs = () => {
           );
         })}
       </div>
-    </div>
+    </nav>
   );
 };
 

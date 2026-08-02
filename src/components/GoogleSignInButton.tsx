@@ -1,18 +1,16 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import { beginGoogleSignIn } from "@/lib/googleAuth";
 
 interface GoogleSignInButtonProps {
   userType?: 'owner' | 'supplier';
-  redirectTo?: string;
   className?: string;
   disabled?: boolean;
 }
 
 const GoogleSignInButton = ({ 
   userType, 
-  redirectTo = `${window.location.origin}/auth`,
   className = "",
   disabled = false 
 }: GoogleSignInButtonProps) => {
@@ -22,21 +20,7 @@ const GoogleSignInButton = ({
     try {
       setLoading(true);
       
-      // Store the user type in localStorage to retrieve after OAuth redirect
-      if (userType) {
-        localStorage.setItem('pending_google_user_type', userType);
-      }
-      
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo,
-          queryParams: {
-            access_type: 'offline',
-            prompt: 'consent',
-          },
-        },
-      });
+      const { error } = await beginGoogleSignIn(userType ?? "owner");
 
       if (error) {
         console.error('Google sign-in error:', error);
@@ -46,7 +30,7 @@ const GoogleSignInButton = ({
           variant: "destructive",
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Google sign-in error:', error);
       toast({
         title: "Google Sign-In Error",
@@ -63,7 +47,7 @@ const GoogleSignInButton = ({
       type="button"
       onClick={handleGoogleSignIn}
       variant="outline"
-      className={`w-full py-6 text-base rounded-lg font-medium border-2 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 flex items-center justify-center gap-3 ${className}`}
+      className={`w-full py-6 text-base rounded-xl font-medium border border-border/80 bg-card hover:bg-secondary/70 transition-all duration-200 flex items-center justify-center gap-3 ${className}`}
       disabled={disabled || loading}
     >
       <svg className="w-5 h-5" viewBox="0 0 24 24">

@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
-import { supabase } from "@/integrations/supabase/client";
 import NotificationBell from "./NotificationBell";
 import LanguageSelector from "./LanguageSelector";
 import CountryCurrencySelector from "./CountryCurrencySelector";
@@ -26,18 +25,14 @@ const MobileHeader = () => {
 
   const dashboardUrl =
     userType === 'admin'
-      ? '/admin-dashboard'
+      ? '/admin'
       : userType === 'seller' || userType === 'supplier'
       ? '/seller-dashboard'
       : '/buyer-dashboard';
 
   const handleSignOut = async () => {
-    console.log('🚪 MobileHeader: handleSignOut clicked');
     try {
-      console.log('🚪 MobileHeader: Calling supabase.auth.signOut directly');
-      await supabase.auth.signOut();
-      console.log('🚪 MobileHeader: signOut completed, navigating to /auth');
-      navigate('/auth');
+      await signOut();
     } catch (error) {
       console.error('🚪 MobileHeader: Sign out error:', error);
     }

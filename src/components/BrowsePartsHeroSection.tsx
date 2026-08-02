@@ -26,7 +26,6 @@ const BrowsePartsHeroSection = ({ onQuickSearch }: BrowsePartsHeroSectionProps) 
         alt="Browse car parts"
         className="absolute inset-0 w-full h-full object-cover"
         loading="eager"
-        fetchPriority="high"
       />
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/60 to-black/70"></div>
       

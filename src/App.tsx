@@ -51,6 +51,7 @@ import BlogPost from "./pages/BlogPost";
 import Testimonials from "./pages/Testimonials";
 import SavedParts from "./pages/SavedParts";
 import RecentViews from "./pages/RecentViews";
+import OAuthCallback from "./pages/OAuthCallback";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import SellerProtectedRoute from "./components/SellerProtectedRoute";
@@ -60,15 +61,19 @@ import RequestSuccess from "./pages/RequestSuccess";
 
 const queryClient = new QueryClient();
 
+const PresenceTracker = () => {
+  useTrackPresence();
+  return null;
+};
+
 function App() {
   // Enable geolocation detection globally
   useGeolocation();
-  // Track user presence across the app
-  useTrackPresence();
   const isMobile = useIsMobile();
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
+        <PresenceTracker />
         <LocaleProvider>
           <LocationProvider>
             <ThemeProvider>
@@ -79,6 +84,7 @@ function App() {
                   <Routes>
                     <Route path="/" element={<Index />} />
                     <Route path="/auth" element={<AuthTypeSelector />} />
+                    <Route path="/auth/callback" element={<OAuthCallback />} />
                     <Route path="/buyer-auth" element={<BuyerAuth />} />
                     <Route path="/seller-auth" element={<SellerAuth />} />
                     <Route path="/supplier" element={<SellerAuth />} />
@@ -150,14 +156,6 @@ function App() {
                     />
                     <Route
                       path="/seller-dashboard"
-                      element={
-                        <SellerProtectedRoute>
-                          <SellerDashboard />
-                        </SellerProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/seller"
                       element={
                         <SellerProtectedRoute>
                           <SellerDashboard />

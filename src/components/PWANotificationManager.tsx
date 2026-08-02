@@ -45,7 +45,7 @@ const PWANotificationManager = () => {
 
   // Register Firebase service worker
   useEffect(() => {
-    if ('serviceWorker' in navigator) {
+    if (!import.meta.env.DEV && 'serviceWorker' in navigator) {
       navigator.serviceWorker.register('/firebase-messaging-sw.js')
         .then((registration) => {
           console.log('Firebase SW registered:', registration);
@@ -111,21 +111,24 @@ const PWANotificationManager = () => {
       const handleBeforeInstallPrompt = (e: any) => {
         e.preventDefault();
         setDeferredPrompt(e);
-        setShowInstallPrompt(true);
+
+        const visitCount = Number(localStorage.getItem('partmatch-visit-count') ?? '0') + 1;
+        localStorage.setItem('partmatch-visit-count', String(visitCount));
+
+        // Respect the first visit. Offer installation only to returning users
+        // after they have had time to experience the marketplace.
+        if (visitCount >= 2) {
+          window.setTimeout(() => setShowInstallPrompt(true), 15000);
+        }
       };
 
       window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
       
-      // Show prompt even without beforeinstallprompt for broader compatibility
-      if (!deferredPrompt) {
-        setTimeout(() => setShowInstallPrompt(true), 2000);
-      }
-
       return () => {
         window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
       };
     }
-  }, [deferredPrompt]);
+  }, []);
 
   // Auto-hide install prompt after 7 seconds
   useEffect(() => {
@@ -301,7 +304,7 @@ const PWANotificationManager = () => {
       )}
 
       {/* Debug: Test Notification Button (only in development) */}
-      {process.env.NODE_ENV === 'development' && notificationsEnabled && (
+      {import.meta.env.DEV && notificationsEnabled && (
         <Button
           onClick={testNotification}
           className="fixed bottom-20 right-4 z-50"
