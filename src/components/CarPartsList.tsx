@@ -1,11 +1,14 @@
 import React from 'react';
 import CarPartCardWithChat from './CarPartCardWithChat';
 import { CarPart } from '@/types/CarPart';
+import { Button } from '@/components/ui/button';
+import { CloudOff, RefreshCw } from 'lucide-react';
 
 interface CarPartsListProps {
   parts: CarPart[];
   loading?: boolean;
   error?: string | null;
+  onRetry?: () => void;
   userLocation?: {
     latitude: number;
     longitude: number;
@@ -16,7 +19,7 @@ interface CarPartsListProps {
   } | null;
 }
 
-const CarPartsList = ({ parts, loading, error, userLocation }: CarPartsListProps) => {
+const CarPartsList = ({ parts, loading, error, onRetry, userLocation }: CarPartsListProps) => {
   if (loading) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
@@ -37,9 +40,16 @@ const CarPartsList = ({ parts, loading, error, userLocation }: CarPartsListProps
   
   if (error) {
     return (
-      <div className="text-center py-6 sm:py-8 lg:py-12 px-3 sm:px-4">
-        <div className="text-destructive text-sm sm:text-base lg:text-lg mb-2 font-medium">Error loading parts</div>
-        <div className="text-muted-foreground text-xs sm:text-sm">{error}</div>
+      <div className="apple-surface mx-auto max-w-lg px-6 py-10 text-center" role="alert">
+        <CloudOff className="mx-auto mb-4 h-10 w-10 text-muted-foreground" aria-hidden="true" />
+        <div className="mb-2 text-lg font-semibold text-foreground">Marketplace temporarily unavailable</div>
+        <div className="text-sm text-muted-foreground">{error}</div>
+        {onRetry && (
+          <Button type="button" variant="outline" className="mt-5" onClick={onRetry}>
+            <RefreshCw className="mr-2 h-4 w-4" aria-hidden="true" />
+            Try again
+          </Button>
+        )}
       </div>
     );
   }

@@ -25,7 +25,10 @@ export const useLocationFeaturedParts = () => {
 
   return {
     featuredParts,
-    loading: countryLoading || userLoading || partsLoading,
+    // Location enrichment must never block the marketplace content. Parts load
+    // immediately, then refresh if a country becomes available.
+    loading: partsLoading,
+    locationLoading: countryLoading || userLoading,
     error,
     refetch,
     currentCountryCode,

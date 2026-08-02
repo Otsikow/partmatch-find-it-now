@@ -139,7 +139,7 @@ const AuthTypeSelector = () => {
                   </p>
                 </div>
                 <div className="mt-auto">
-                  <Button className="w-full bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base font-medium mb-6">
+                  <Button className="w-full bg-blue-700 hover:bg-blue-800 dark:bg-blue-500 dark:hover:bg-blue-400 dark:text-slate-950 text-white py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base font-semibold mb-6">
                     Start Browsing
                   </Button>
                   <div className="bg-blue-500/10 dark:bg-blue-500/20 rounded-lg p-4 text-sm text-blue-600 dark:text-blue-300 font-medium text-left">
@@ -167,7 +167,7 @@ const AuthTypeSelector = () => {
                   </p>
                 </div>
                 <div className="mt-auto">
-                  <Button className="w-full bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700 text-white py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base font-medium mb-6">
+                  <Button className="w-full bg-orange-700 hover:bg-orange-800 dark:bg-orange-400 dark:hover:bg-orange-300 dark:text-slate-950 text-white py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base font-semibold mb-6">
                     Start Selling
                   </Button>
                   <div className="bg-orange-500/10 dark:bg-orange-500/20 rounded-lg p-4 text-sm text-orange-600 dark:text-orange-300 font-medium text-left">
@@ -195,7 +195,7 @@ const AuthTypeSelector = () => {
                   </p>
                 </div>
                 <div className="mt-auto">
-                  <Button className="w-full bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base font-medium mb-6">
+                  <Button className="w-full bg-green-700 hover:bg-green-800 dark:bg-green-400 dark:hover:bg-green-300 dark:text-slate-950 text-white py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-base font-semibold mb-6">
                     Continue as Guest
                   </Button>
                   <div className="bg-green-500/10 dark:bg-green-500/20 rounded-lg p-4 text-sm text-green-600 dark:text-green-300 font-medium text-left">

@@ -95,12 +95,14 @@ export const useCarParts = (params?: UseCarPartsParams) => {
         console.error('Error fetching parts:', error);
 
         const isServiceUnavailable =
+          error.message?.includes('Failed to fetch') ||
+          error.message?.includes('NetworkError') ||
           error.message?.includes('503') ||
           error.message?.includes('timeout') ||
           error.message?.includes('upstream connect error');
 
         setError(isServiceUnavailable
-          ? "Service temporarily unavailable. Please check your connection and try again."
+          ? "The marketplace service is temporarily unavailable. Please try again."
           : error.message
         );
         return;
@@ -195,7 +197,12 @@ export const useCarParts = (params?: UseCarPartsParams) => {
       setParts(transformedParts);
     } catch (err) {
       console.error('Unexpected error:', err);
-      setError('An unexpected error occurred');
+      const message = err instanceof Error ? err.message : '';
+      setError(
+        /failed to fetch|network|timeout/i.test(message)
+          ? 'The marketplace service is temporarily unavailable. Please try again.'
+          : 'We could not load the marketplace. Please try again.'
+      );
     } finally {
       setLoading(false);
     }

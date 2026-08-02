@@ -26,13 +26,13 @@ const EnhancedHeroSection = () => {
         <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto opacity-90">Compare prices, chat with sellers, and pick up or get parts delivered to your door.</p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto">
-          <Button asChild size="lg" className="w-full sm:w-auto bg-white text-primary hover:bg-gray-100">
+          <Button asChild size="lg" className="w-full sm:w-auto bg-white text-[#0066CC] hover:bg-gray-100">
             <Link to="/search-parts-with-map">
               Browse Parts
             </Link>
           </Button>
           
-          <Button asChild size="lg" className="w-full sm:w-auto bg-white/20 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-primary font-semibold shadow-lg transition-all">
+          <Button asChild size="lg" className="w-full sm:w-auto bg-white/20 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-[#0066CC] font-semibold shadow-lg transition-all">
             <Link to="/request-part">
               Request Part
             </Link>

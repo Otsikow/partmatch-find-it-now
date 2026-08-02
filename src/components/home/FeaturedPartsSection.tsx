@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Package, Wrench, Lightbulb, Circle, Search } from "lucide-react";
+import { Package, Wrench, Lightbulb, Circle, Search, CloudOff, RefreshCw } from "lucide-react";
 import { Link } from "react-router-dom";
 import CarPartCard from "@/components/CarPartCard";
 import { useLocationFeaturedParts } from "@/hooks/useLocationFeaturedParts";
 
 const FeaturedPartsSection = () => {
   const [activeFilter, setActiveFilter] = useState("all");
-  const { featuredParts, loading, currentCountryCode, detectedCountry } = useLocationFeaturedParts();
+  const { featuredParts, loading, error, refetch, currentCountryCode, detectedCountry } = useLocationFeaturedParts();
 
   const filters = [
     { id: "engines", label: "Engines", icon: Wrench, category: "engine" },
@@ -77,6 +77,18 @@ const FeaturedPartsSection = () => {
               </Card>
             ))}
           </div>
+        ) : error ? (
+          <Card className="apple-surface mx-auto max-w-2xl">
+            <CardContent className="p-8 text-center" role="alert">
+              <CloudOff className="mx-auto mb-4 h-12 w-12 text-muted-foreground" aria-hidden="true" />
+              <h3 className="mb-2 text-lg font-semibold text-foreground">Featured parts are temporarily unavailable</h3>
+              <p className="text-muted-foreground">{error}</p>
+              <Button type="button" variant="outline" className="mt-5" onClick={refetch}>
+                <RefreshCw className="mr-2 h-4 w-4" aria-hidden="true" />
+                Try again
+              </Button>
+            </CardContent>
+          </Card>
         ) : filteredParts.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredParts.slice(0, 8).map((part) => (
