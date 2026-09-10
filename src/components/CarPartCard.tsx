@@ -1,8 +1,4 @@
-
 import { Card } from "@/components/ui/card";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp } from "lucide-react";
 import { CarPart } from "@/types/CarPart";
 import { useState, useEffect } from "react";
 import { useListingAnalytics } from "@/hooks/useListingAnalytics";
@@ -16,34 +12,27 @@ interface CarPartCardProps {
   onContact?: () => void;
 }
 
-const CarPartCard = ({ part, onContact }: CarPartCardProps) => {
+export const CarPartCard = ({ part, onContact }: CarPartCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isCollapsibleOpen, setIsCollapsibleOpen] = useState(false);
   const { trackListingView, trackListingClick } = useListingAnalytics();
 
-  // Track view when component mounts
   useEffect(() => {
     trackListingView(part.id);
   }, [part.id, trackListingView]);
 
   const handleCardClick = () => {
-    trackListingClick(part.id, 'card_click');
+    trackListingClick(part.id, "card_click");
     setIsExpanded(true);
   };
 
   const handleContactClick = () => {
-    trackListingClick(part.id, 'contact_click');
+    trackListingClick(part.id, "contact_click");
     if (onContact) onContact();
-  };
-
-  const handleToggleCollapsible = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsCollapsibleOpen(!isCollapsibleOpen);
   };
 
   return (
     <>
-      <Card className="w-full bg-card shadow-md hover:shadow-xl transition-all duration-300 border-0 overflow-hidden">
+      <Card className="w-full bg-card/90 backdrop-blur-md shadow-sm hover:shadow-xl transition-all duration-300 border border-border/40 hover:border-border/80 rounded-2xl overflow-hidden flex flex-col justify-between">
         <CarPartCardImage
           partId={part.id}
           title={part.title}
@@ -53,13 +42,11 @@ const CarPartCard = ({ part, onContact }: CarPartCardProps) => {
           onExpand={handleCardClick}
         />
 
-        <div onClick={handleCardClick} className="cursor-pointer">
-          <CarPartCardContent
-            part={part}
-            onExpand={handleCardClick}
-          />
+        <div onClick={handleCardClick} className="cursor-pointer flex-1">
+          <CarPartCardContent part={part} onExpand={handleCardClick} />
         </div>
-        <div className="px-3 pb-3">
+
+        <div className="p-4 pt-0">
           <CarPartCardFooter
             partId={part.id}
             supplierId={part.supplier_id}
